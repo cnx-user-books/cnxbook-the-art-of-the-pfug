@@ -1,0 +1,197 @@
+<document xmlns="http://cnx.rice.edu/cnxml" xmlns:m="http://www.w3.org/1998/Math/MathML">
+  <title>Analysis of miRNA and mRNA associated with Epithelial Mesenchymal Transition</title>
+<metadata xmlns:md="http://cnx.rice.edu/mdml">
+  <md:content-id>m36053</md:content-id>
+  <md:title>Analysis of miRNA and mRNA associated with Epithelial Mesenchymal Transition</md:title>
+  <md:abstract/>
+  <md:uuid>45283c3f-c8cc-4659-94b5-d2faa9c2cf2f</md:uuid>
+</metadata>
+
+<content>
+    <para id="id62166">
+</para>
+    <para id="id62176">Bioinformatics PFUG
+</para>
+    <para id="id62184">Lauren Kirton</para>
+    <para id="id62189">July 2010</para>
+    <para id="id62195">Special thanks to:</para>
+    <para id="id62200">This Connexions module describes work conducted as part 
+of Rice University's VIGRE program, supported by National Science Foundation 
+grant DMS–0739420.</para>
+    <para id="id62543">Dr. Rudy Guerra</para>
+    <para id="id62548">Dr. Sendurai Mani</para>
+    <para id="id62554">Joe Taube</para>
+    <!--empty paragraphs get left behind.-->
+    <section id="cid1">
+      <title>Introduction</title>
+      <para id="id62571"> One of the most prominent areas of research today is 
+that of cancer
+study. There exists thousands of studies relating to the causes and cures of 
+cancer. Molecular
+biologists at the M.D. Anderson Cancer Center research lab believe they have 
+found a breakthrough in the cause of metastatic cancer. This breakthrough 
+potentially answers the most important question of cancer research-how can we 
+prevent cancer? The research at the M.D. Anderson Cancer Center involves a focus 
+on the genetic level, with biological functions discovered only in the past few 
+years. More information can be found in Ref. <link target-id="bid0"/>.</para>
+    </section>
+    <section id="cid2">
+      <title>Introduction to Cancer</title>
+      <para id="id62601"> Over 80% of reported cancer cases are carcinomas. A 
+carcinoma is an invasive malignant tumor composed of transformed, mutated 
+epithelial cells.</para>
+      <figure id="uid1">
+        <media id="uid1_media" alt="">
+          <image mime-type="image/png" src="../../media/normalcells.png" id="uid1_onlineimage" width="126"><!-- NOTE: attribute width changes image size 
+online (pixels). original width is 126. --></image>
+          <image mime-type="application/postscript" for="pdf" src="../../media/normalcells.eps" id="uid1_printimage"/>
+        </media>
+        <caption>Example of Normal Cells</caption>
+      </figure>
+      <para id="id62619"> Normal epithelial cells line the cavities and surfaces 
+of the structures that make up the body. These cells are strict and rigid in 
+structure, held tight together by intercellular junctions. Epithelial cells are 
+specialized, meaning they are made for a specific purpose or structure (i.e. 
+skin tissue, organ tissue, etc.).</para>
+      <para id="id62627"> A carcinoma forms when mutated epithelial cells begin 
+to form a tumor in a localized region. There are five stages of carcinoma, 
+describing the extent or severity of an individual's cancer. Common elements of 
+staging systems include location of the primary tumor, tumor size and number of 
+tumors, lymph node involvement, cell type and tumor grade, and presence of 
+metastasis.</para>
+      <para id="id62635">
+        <figure id="id62638"><media id="id62638_media" alt="">
+            <image mime-type="image/png" src="../../media/stagesofcancer.png" id="id62638_onlineimage" height="300" width="350"><!-- NOTE: attribute width changes image 
+size online (pixels). original width is 900. --></image>
+            <image mime-type="application/postscript" for="pdf" src="../../media/stagesofcancer.eps" id="id62638_printimage"/>
+          </media>
+        </figure>
+      </para>
+      <para id="id62645"> In higher stages of carcinoma, a higher chance of 
+metastasis that is likely to occur. Carcinoma is very treatable or curable. 
+Carcinoma tumors can be removed with surgery, or killed with radiation, 
+chemotherapy and hormonal therapy.</para>
+      <figure id="uid2">
+        <media id="uid2_media" alt="">
+          <image mime-type="image/png" src="../../media/mesenchymalcells.png" id="uid2_onlineimage" width="144"><!-- NOTE: attribute width changes image size 
+online (pixels). original width is 144. --></image>
+          <image mime-type="application/postscript" for="pdf" src="../../media/mesenchymalcells.eps" id="uid2_printimage"/>
+        </media>
+        <caption>Example of Mesenchymal Cells</caption>
+      </figure>
+      <para id="id62663"> Fatality associated with cancer stems from metastasis 
+of the cancer. Metastatic cancer refers to cancer cells that spread from a 
+primary epithelial based tumor to another location in the body where these cells 
+form a metastatic based tumor. These cells, known as mesenchymal cells, possess 
+stem cell like properties and can differentiate into a variety of cell types. 
+These cells are spindly-like and very spread apart, allowing for easy transfer 
+throughout the body. Mesenchymal cells have long proliferation and are 
+unspecialized, making the spread of cancer elsewhere in the body fairly 
+easy.</para>
+    </section>
+    <section id="cid3">
+      <title>Epithelial Mesenchymal Transition (EMT)</title>
+      <para id="id62683">Epithelial Mesenchymal Transition (EMT) is a process 
+of biological cells in which epithelial cells express losses of cell adhesion, 
+repression of E-cadherin expression and allow the cells increased mobility. 
+There are several transcription factors that induced EMT. Transcriptional 
+factors Snail and Slug are repressors of E-cadherin, and the expression of these 
+two transcription factors induces EMT. The transcription factors S, T, G and B are known to induce EMT. When these four transcription 
+factors undergo EMT, expression of FOXC2 is observed, an important factor known 
+to induce EMT and regulate metastasis.
+The process of EMT begins when epithelial cells in a high stage carcinoma 
+undergo some process that mutate these cells into mesenchymal cells. These 
+mesenchymal cells then enter the blood stream through capillaries that cover the 
+tumor and travel throughout the body. These cells can then exit the bloodstream 
+and return to the carcinogenic epithelial cells and begin to form a second tumor 
+elsewhere in the body.</para>
+      <figure id="uid3"><media id="uid3_media" alt="">
+          <image mime-type="image/png" src="../../media/emt.png" id="uid3_onlineimage" height="300" width="350"><!-- NOTE: attribute width changes image size online (pixels). 
+original width is 1200. --></image>
+          <image mime-type="application/postscript" for="pdf" src="../../media/emt.eps" id="uid3_printimage"/>
+        </media>
+        
+      <caption>The Process of EMT</caption></figure>
+      <para id="id62717">It is known that there are several main causes of 
+cancer and metastasis. Environment and lifestyle habits are among the leading 
+causes of cancer in patients. Genetics also plays an important role in the cause 
+of cancer in metastasis. Looking deeper into the genes known to cause 
+metastasis, molecular biologists at M.D. Anderson Cancer Center hope to zero-in 
+on what induces metastasis.</para>
+    </section>
+    <section id="cid4">
+      <title>The Central Dogma</title>
+      <para id="id62733"> The Central Dogma deals with the transfer of sequences 
+that code genetic information and forms the backbone of molecular biology. The 
+Central Dogma is characterized by four main steps: replication, transcription, 
+translation and splicing.</para>
+      <para id="id62740"> The central dogma of molecular biology begins with 
+transcription, the process in which information in a section of DNA is 
+transferred to a messenger RNA (mRNA). DNA sequence is copied by RNA polymerase 
+to produce a complementary RNA strand. This strand replaces the thymine of DNA 
+with uracil, a main difference between RNA and DNA. Transcription is usually the 
+first step that leads to the expression of genes. Following transcription is 
+translation, where the mRNA is translated, following the unique genetic code, 
+into a functional protein. This protein is what regulates genes expression, 
+overall controlling EMT.</para>
+      <para id="id62751">
+        <figure id="id62756">
+          <media id="id62756_media" alt="">
+            <image mime-type="image/png" src="../../media/centraldogma.png" id="id62756_onlineimage" width="156"><!-- NOTE: attribute width changes image 
+size online (pixels). original width is 156. --></image>
+            <image mime-type="application/postscript" for="pdf" src="../../media/centraldogma.eps" id="id62756_printimage"/>
+          </media>
+        </figure>
+      </para>
+      <para id="id62762"> It is believed that microRNA (miRNA) can control EMT 
+ultimately by regulating the proteins that induce or repress the EMT process. 
+These miRNA are short post-transcriptional regulators that bind to target 
+messenger RNA, most commonly resulting in gene-silencing. These miRNA are on 
+average 20-24 nucleotides in length, but play an important role in genetic 
+processes. In short, these bind to complementary strands of messengerRNA, 
+preventing the functional protein from being formed, controlling the regulation 
+of EMT.</para>
+      <figure id="uid4">
+        <media id="uid4_media" alt="">
+          <image mime-type="image/png" src="../../media/mirna.png" id="uid4_onlineimage" width="360"><!-- NOTE: attribute width changes image size online (pixels). 
+original width is 360. --></image>
+          <image mime-type="application/postscript" for="pdf" src="../../media/mirna.eps" id="uid4_printimage"/>
+        </media>
+        <caption>Protein Inhibition with miRNA</caption>
+      </figure>
+    </section>
+    <section id="cid5">
+      <title>The Project</title>
+      <para id="id62792">M.D. Anderson used a database to compile the 
+interactions between different miRNA and mRNA for four particular genes known to 
+induce EMT. The compiled data 
+gave the specific target mRNA, miRNA, the location of the mRNA-miRNA interaction 
+on the gene, and the interaction energy between the mRNA and miRNA. The 
+interaction energy measures how well an miRNA binds to the mRNA site. For this 
+study, an interaction <m:math overflow="scroll"><m:mo>≥</m:mo></m:math> abs(x) 
+was considered useful information. The constant, x, being a certain cutoff limit.  The compiled data can contain multiple mRNA-
+miRNA interactions. Each gene has a dataset for miRNAs that are up-regulated, 
+implying that the greater amount of miRNA will have more protein inhibition, 
+repressing the gene, and a dataset for down-regulated miRNAs, in which the 
+miRNAs are repressed, implying greater gene expression since the protein 
+inhibition did not occur. We want to determine which miRNA's and mRNA's are 
+significant for further research.</para>
+      <para id="id62814">Using the program, R, I sorted each dataset to have 
+each unique miRNA then number of mRNA that interact with each miRNA. From this 
+new data, i then sorted the data into unique miRNA and the unique corresponding 
+mRNA. Applying a filter to exclude interaction energies <m:math overflow="scroll"><m:mo>≤</m:mo></m:math> abs(x), the number of unique miRNA-
+unique mRNA interactions drastically reduced. Our hypothesis that certain miRNA-mRNA interactions appear significant is hard to validate-the datasets themselves lack similar data between them.  We also have only one set of data as a whole to compare, and thus cannot have inference to which we cannot prove that some data is statistically significant.  Comparing these results to other data from different samples will allow such hypothesis to be confirmed or rejected.  
+</para>
+      
+      
+      
+      
+      
+      <!--Table that contain tables are not converted.-->
+      <!--Table that contain tables are not converted.-->
+      <!--Table that contain tables are not converted.-->
+      <!--Table that contain tables are not converted.-->
+    </section>
+    
+  </content>
+</document>

@@ -1,0 +1,1460 @@
+<document xmlns="http://cnx.rice.edu/cnxml" xmlns:m="http://www.w3.org/1998/Math/MathML">
+  <title>Optimizing Transient Finger Damping on a Driven String</title>
+<metadata xmlns:md="http://cnx.rice.edu/mdml">
+  <md:content-id>m34828</md:content-id>
+  <md:title>Optimizing Transient Finger Damping on a Driven String</md:title>
+  <md:abstract>This report summarizes work done as part of the Physics of Strings PFUG under Rice University's Summer 2010 VIGRE program. VIGRE is a program of Vertically Integrated Grants for Research and Education in the Mathematical Sciences under the direction of the National Science Foundation. A PFUG is a group of Postdocs, Faculty, Undergraduates and Graduate students formed round the study of a common problem. This module explains a method for optimizing the harmonics of a vibrating string by using the best pointwise finger damping.</md:abstract>
+  <md:uuid>85483e24-773b-44f2-b5a3-72a81a21539f</md:uuid>
+</metadata>
+
+<content>
+    <section id="cid1">
+      <title>Introduction</title>
+      <para id="id165626">The topic of vibrating strings has long been discussed by the great minds of the Enlightenment. The study of the harmonic overtones of strings, however, seemed to have been neglected for over a hundred years. The ideas of D'Alembert, Rameau, and Rayleigh pertaining to the production of these overtones, or partials, have only recently been analyzed mathematically by Bamberger <emphasis effect="italics">et al.</emphasis> [1]. We will take their lead and proceed with a string of length <m:math overflow="scroll"><m:mi>ℓ</m:mi></m:math> fixed at both ends. The harmonic modes can be coaxed by pressing lightly on the string with the finger at <m:math overflow="scroll"><m:mrow><m:msub><m:mi>x</m:mi><m:mi>c</m:mi></m:msub><m:mo>=</m:mo><m:mfrac><m:mn>1</m:mn><m:mn>4</m:mn></m:mfrac><m:mi>ℓ</m:mi></m:mrow></m:math> and driving the string with frictional forces of a bow at <m:math overflow="scroll"><m:mrow><m:msub><m:mi>x</m:mi><m:mi>b</m:mi></m:msub><m:mo>=</m:mo><m:mfrac><m:mn>5</m:mn><m:mn>8</m:mn></m:mfrac><m:mi>ℓ</m:mi><m:mo>.</m:mo></m:mrow></m:math> The preceding will produce the fourth mode of vibration. In our formulation we assume the string to have constant linear density and uniform tension. We only consider vertical displacements in the string and assume that these displacements are small. Our goal is to achieve the best sound by optimizing the damping coefficient <m:math overflow="scroll"><m:mrow><m:mi>c</m:mi><m:mo>(</m:mo><m:mi>t</m:mi><m:mo>)</m:mo></m:mrow></m:math> in the following one dimensional wave equation</para>
+      <equation id="uid1">
+        <m:math overflow="scroll" mode="display">
+          <m:mrow>
+            <m:mi>ρ</m:mi>
+            <m:msub>
+              <m:mi>u</m:mi>
+              <m:mrow>
+                <m:mi>t</m:mi>
+                <m:mi>t</m:mi>
+              </m:mrow>
+            </m:msub>
+            <m:mrow>
+              <m:mo>(</m:mo>
+              <m:mi>x</m:mi>
+              <m:mo>,</m:mo>
+              <m:mi>t</m:mi>
+              <m:mo>)</m:mo>
+            </m:mrow>
+            <m:mo>-</m:mo>
+            <m:mi>τ</m:mi>
+            <m:msub>
+              <m:mi>u</m:mi>
+              <m:mrow>
+                <m:mi>x</m:mi>
+                <m:mi>x</m:mi>
+              </m:mrow>
+            </m:msub>
+            <m:mrow>
+              <m:mo>(</m:mo>
+              <m:mi>x</m:mi>
+              <m:mo>,</m:mo>
+              <m:mi>t</m:mi>
+              <m:mo>)</m:mo>
+            </m:mrow>
+            <m:mo>+</m:mo>
+            <m:mi>c</m:mi>
+            <m:mrow>
+              <m:mo>(</m:mo>
+              <m:mi>t</m:mi>
+              <m:mo>)</m:mo>
+            </m:mrow>
+            <m:mi>δ</m:mi>
+            <m:mrow>
+              <m:mo>(</m:mo>
+              <m:mi>x</m:mi>
+              <m:mo>-</m:mo>
+              <m:msub>
+                <m:mi>x</m:mi>
+                <m:mi>c</m:mi>
+              </m:msub>
+              <m:mo>)</m:mo>
+            </m:mrow>
+            <m:msub>
+              <m:mi>u</m:mi>
+              <m:mi>t</m:mi>
+            </m:msub>
+            <m:mo>=</m:mo>
+            <m:mi>b</m:mi>
+            <m:mrow>
+              <m:mo>(</m:mo>
+              <m:mi>t</m:mi>
+              <m:mo>)</m:mo>
+            </m:mrow>
+            <m:mi>δ</m:mi>
+            <m:mrow>
+              <m:mo>(</m:mo>
+              <m:mi>x</m:mi>
+              <m:mo>-</m:mo>
+              <m:msub>
+                <m:mi>x</m:mi>
+                <m:mi>b</m:mi>
+              </m:msub>
+              <m:mo>)</m:mo>
+            </m:mrow>
+          </m:mrow>
+        </m:math>
+      </equation>
+      <para id="id166370">that induces the purest waveform–one that best resembles a sine curve. The displacement <m:math overflow="scroll"><m:mi>u</m:mi></m:math> depends both on time and space in the <m:math overflow="scroll"><m:mi>x</m:mi></m:math> direction.
+Here <m:math overflow="scroll"><m:mi>ρ</m:mi></m:math> is the linear mass density, <m:math overflow="scroll"><m:mi>τ</m:mi></m:math> represents tension, <m:math overflow="scroll"><m:mrow><m:mi>b</m:mi><m:mo>(</m:mo><m:mi>t</m:mi><m:mo>)</m:mo></m:mrow></m:math> is the driving force simulating bow pressure, and <m:math overflow="scroll"><m:mrow><m:mi>c</m:mi><m:mo>(</m:mo><m:mi>t</m:mi><m:mo>)</m:mo></m:mrow></m:math> is the damping coefficient we are interested in. The <m:math overflow="scroll"><m:mi>δ</m:mi></m:math> functions are present to simulate a pointwise footprint at <m:math overflow="scroll"><m:msub><m:mi>x</m:mi><m:mi>c</m:mi></m:msub></m:math> and <m:math overflow="scroll"><m:msub><m:mi>x</m:mi><m:mi>b</m:mi></m:msub></m:math>. More precisely,</para>
+      <equation id="id166474">
+        <m:math overflow="scroll" mode="display">
+          <m:mrow>
+            <m:msubsup>
+              <m:mo>∫</m:mo>
+              <m:mrow>
+                <m:mo>-</m:mo>
+                <m:mi>∞</m:mi>
+              </m:mrow>
+              <m:mi>∞</m:mi>
+            </m:msubsup>
+            <m:mi>δ</m:mi>
+            <m:mrow>
+              <m:mo>(</m:mo>
+              <m:mi>x</m:mi>
+              <m:mo>)</m:mo>
+            </m:mrow>
+            <m:mi>d</m:mi>
+            <m:mi>x</m:mi>
+            <m:mo>=</m:mo>
+            <m:mn>1</m:mn>
+          </m:mrow>
+        </m:math>
+      </equation>
+      <para id="id166515">where <m:math overflow="scroll"><m:mrow><m:mi>δ</m:mi><m:mo>(</m:mo><m:mi>x</m:mi><m:mo>)</m:mo><m:mo>=</m:mo><m:mn>0</m:mn></m:mrow></m:math> for all <m:math overflow="scroll"><m:mrow><m:mi>x</m:mi><m:mo>≠</m:mo><m:mn>0</m:mn></m:mrow></m:math>. At <m:math overflow="scroll"><m:mrow><m:mi>x</m:mi><m:mo>=</m:mo><m:mn>0</m:mn></m:mrow></m:math>, <m:math overflow="scroll"><m:mrow><m:mi>δ</m:mi><m:mo>(</m:mo><m:mi>x</m:mi><m:mo>)</m:mo></m:mrow></m:math> is infinitely large, but for numerical purposes, we will set this to the reciprocal of our spacial step increment.</para>
+    </section>
+    <section id="cid2">
+      <title>Finite Difference Methods</title>
+      <para id="id166592">The first method of the two finite difference methods used to solve the wave equation is the forward Euler method, in which (1) is solved incrementally through both time and space given the following initial conditions</para>
+      <equation id="id166597">
+        <m:math overflow="scroll" mode="display">
+          <m:mrow>
+            <m:mi>u</m:mi>
+            <m:mrow>
+              <m:mo>(</m:mo>
+              <m:mi>x</m:mi>
+              <m:mo>,</m:mo>
+              <m:mn>0</m:mn>
+              <m:mo>)</m:mo>
+            </m:mrow>
+            <m:mo>=</m:mo>
+            <m:mn>0</m:mn>
+            <m:mo>,</m:mo>
+            <m:msub>
+              <m:mi>u</m:mi>
+              <m:mi>t</m:mi>
+            </m:msub>
+            <m:mrow>
+              <m:mo>(</m:mo>
+              <m:mi>x</m:mi>
+              <m:mo>,</m:mo>
+              <m:mn>0</m:mn>
+              <m:mo>)</m:mo>
+            </m:mrow>
+            <m:mo>=</m:mo>
+            <m:mn>0</m:mn>
+            <m:mo>,</m:mo>
+            <m:mi>u</m:mi>
+            <m:mrow>
+              <m:mo>(</m:mo>
+              <m:mn>0</m:mn>
+              <m:mo>,</m:mo>
+              <m:mi>t</m:mi>
+              <m:mo>)</m:mo>
+            </m:mrow>
+            <m:mo>=</m:mo>
+            <m:mi>u</m:mi>
+            <m:mrow>
+              <m:mo>(</m:mo>
+              <m:mi>ℓ</m:mi>
+              <m:mo>,</m:mo>
+              <m:mi>t</m:mi>
+              <m:mo>)</m:mo>
+            </m:mrow>
+            <m:mo>=</m:mo>
+            <m:mn>0</m:mn>
+          </m:mrow>
+        </m:math>
+      </equation>
+      <para id="id166686">In order to solve this equation for <m:math overflow="scroll"><m:mi>u</m:mi></m:math> we must approximate the partial derivatives <m:math overflow="scroll"><m:msub><m:mi>u</m:mi><m:mrow><m:mi>t</m:mi><m:mi>t</m:mi></m:mrow></m:msub></m:math>, <m:math overflow="scroll"><m:msub><m:mi>u</m:mi><m:mrow><m:mi>x</m:mi><m:mi>x</m:mi></m:mrow></m:msub></m:math>, and <m:math overflow="scroll"><m:msub><m:mi>u</m:mi><m:mi>t</m:mi></m:msub></m:math>. We first approximate <m:math overflow="scroll"><m:msub><m:mi>u</m:mi><m:mi>t</m:mi></m:msub></m:math> by taking the slope of <m:math overflow="scroll"><m:mrow><m:mi>u</m:mi><m:mo>(</m:mo><m:mi>x</m:mi><m:mo>,</m:mo><m:mi>t</m:mi><m:mo>)</m:mo></m:mrow></m:math> with respect to time using time step <m:math overflow="scroll"><m:mrow><m:mi>d</m:mi><m:mi>t</m:mi></m:mrow></m:math>. When approximating <m:math overflow="scroll"><m:msub><m:mi>u</m:mi><m:mrow><m:mi>t</m:mi><m:mi>t</m:mi></m:mrow></m:msub></m:math>, we use a similar process, where the slope of <m:math overflow="scroll"><m:msub><m:mi>u</m:mi><m:mi>t</m:mi></m:msub></m:math> is taken with respect to time. The time step <m:math overflow="scroll"><m:mrow><m:mi>d</m:mi><m:mi>t</m:mi></m:mrow></m:math> must be squared in order to account for the process of taking two derivatives. The same process is performed to approximate <m:math overflow="scroll"><m:msub><m:mi>u</m:mi><m:mrow><m:mi>x</m:mi><m:mi>x</m:mi></m:mrow></m:msub></m:math>, where the derivative of <m:math overflow="scroll"><m:mi>u</m:mi></m:math> is evaluated twice with respect to space using the space step <m:math overflow="scroll"><m:mrow><m:mi>d</m:mi><m:mi>x</m:mi></m:mrow></m:math>. The results of our approximation process are as follows:</para>
+      <equation id="id166869">
+        <m:math overflow="scroll" mode="display">
+          <m:mrow>
+            <m:msub>
+              <m:mi>u</m:mi>
+              <m:mi>t</m:mi>
+            </m:msub>
+            <m:mo>≈</m:mo>
+            <m:mfrac>
+              <m:mrow>
+                <m:mi>u</m:mi>
+                <m:mo>(</m:mo>
+                <m:mi>x</m:mi>
+                <m:mo>,</m:mo>
+                <m:mi>t</m:mi>
+                <m:mo>+</m:mo>
+                <m:mi>d</m:mi>
+                <m:mi>t</m:mi>
+                <m:mo>)</m:mo>
+                <m:mo>-</m:mo>
+                <m:mi>u</m:mi>
+                <m:mo>(</m:mo>
+                <m:mi>x</m:mi>
+                <m:mo>,</m:mo>
+                <m:mi>t</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mrow>
+                <m:mi>d</m:mi>
+                <m:mi>t</m:mi>
+              </m:mrow>
+            </m:mfrac>
+          </m:mrow>
+        </m:math>
+      </equation>
+      <equation id="id166930">
+        <m:math overflow="scroll" mode="display">
+          <m:mrow>
+            <m:msub>
+              <m:mi>u</m:mi>
+              <m:mrow>
+                <m:mi>t</m:mi>
+                <m:mi>t</m:mi>
+              </m:mrow>
+            </m:msub>
+            <m:mo>≈</m:mo>
+            <m:mfrac>
+              <m:mrow>
+                <m:mi>u</m:mi>
+                <m:mo>(</m:mo>
+                <m:mi>x</m:mi>
+                <m:mo>,</m:mo>
+                <m:mi>t</m:mi>
+                <m:mo>+</m:mo>
+                <m:mi>d</m:mi>
+                <m:mi>t</m:mi>
+                <m:mo>)</m:mo>
+                <m:mo>-</m:mo>
+                <m:mn>2</m:mn>
+                <m:mi>u</m:mi>
+                <m:mo>(</m:mo>
+                <m:mi>x</m:mi>
+                <m:mo>,</m:mo>
+                <m:mi>t</m:mi>
+                <m:mo>)</m:mo>
+                <m:mo>+</m:mo>
+                <m:mi>u</m:mi>
+                <m:mo>(</m:mo>
+                <m:mi>x</m:mi>
+                <m:mo>,</m:mo>
+                <m:mi>t</m:mi>
+                <m:mo>-</m:mo>
+                <m:mi>d</m:mi>
+                <m:mi>t</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mrow>
+                <m:mi>d</m:mi>
+                <m:msup>
+                  <m:mi>t</m:mi>
+                  <m:mn>2</m:mn>
+                </m:msup>
+              </m:mrow>
+            </m:mfrac>
+          </m:mrow>
+        </m:math>
+      </equation>
+      <equation id="id167023">
+        <m:math overflow="scroll" mode="display">
+          <m:mrow>
+            <m:msub>
+              <m:mi>u</m:mi>
+              <m:mrow>
+                <m:mi>x</m:mi>
+                <m:mi>x</m:mi>
+              </m:mrow>
+            </m:msub>
+            <m:mo>≈</m:mo>
+            <m:mfrac>
+              <m:mrow>
+                <m:mi>u</m:mi>
+                <m:mo>(</m:mo>
+                <m:mi>x</m:mi>
+                <m:mo>+</m:mo>
+                <m:mi>d</m:mi>
+                <m:mi>x</m:mi>
+                <m:mo>,</m:mo>
+                <m:mi>t</m:mi>
+                <m:mo>)</m:mo>
+                <m:mo>-</m:mo>
+                <m:mn>2</m:mn>
+                <m:mi>u</m:mi>
+                <m:mo>(</m:mo>
+                <m:mi>x</m:mi>
+                <m:mo>,</m:mo>
+                <m:mi>t</m:mi>
+                <m:mo>)</m:mo>
+                <m:mo>+</m:mo>
+                <m:mi>u</m:mi>
+                <m:mo>(</m:mo>
+                <m:mi>x</m:mi>
+                <m:mo>-</m:mo>
+                <m:mi>d</m:mi>
+                <m:mi>x</m:mi>
+                <m:mo>,</m:mo>
+                <m:mi>t</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mrow>
+                <m:mi>d</m:mi>
+                <m:msup>
+                  <m:mi>x</m:mi>
+                  <m:mn>2</m:mn>
+                </m:msup>
+              </m:mrow>
+            </m:mfrac>
+          </m:mrow>
+        </m:math>
+      </equation>
+      <para id="id167116">These approximations may be substituted into our original partial differential equation in order to solve for <m:math overflow="scroll"><m:mrow><m:mi>u</m:mi><m:mo>(</m:mo><m:mi>x</m:mi><m:mo>,</m:mo><m:mi>t</m:mi><m:mo>)</m:mo></m:mrow></m:math>.</para>
+      <para id="id167142">The second finite difference method used to solve the wave equation is the trapezoidal approximation method, where we have the system of equations</para>
+      <equation id="id167148">
+        <m:math overflow="scroll" mode="display">
+          <m:mrow>
+            <m:msub>
+              <m:mfenced separators="" open="(" close=")">
+                <m:mtable>
+                  <m:mtr>
+                    <m:mtd>
+                      <m:mi>u</m:mi>
+                    </m:mtd>
+                  </m:mtr>
+                  <m:mtr>
+                    <m:mtd>
+                      <m:msub>
+                        <m:mi>u</m:mi>
+                        <m:mi>t</m:mi>
+                      </m:msub>
+                    </m:mtd>
+                  </m:mtr>
+                </m:mtable>
+              </m:mfenced>
+              <m:mi>t</m:mi>
+            </m:msub>
+            <m:mo>=</m:mo>
+            <m:mfenced separators="" open="(" close=")">
+              <m:mtable>
+                <m:mtr>
+                  <m:mtd>
+                    <m:mn>0</m:mn>
+                  </m:mtd>
+                  <m:mtd>
+                    <m:mi>I</m:mi>
+                  </m:mtd>
+                </m:mtr>
+                <m:mtr>
+                  <m:mtd>
+                    <m:msub>
+                      <m:mi>∂</m:mi>
+                      <m:mrow>
+                        <m:mi>x</m:mi>
+                        <m:mi>x</m:mi>
+                      </m:mrow>
+                    </m:msub>
+                  </m:mtd>
+                  <m:mtd>
+                    <m:mrow>
+                      <m:mo>-</m:mo>
+                      <m:mi>c</m:mi>
+                      <m:mrow>
+                        <m:mo>(</m:mo>
+                        <m:mi>t</m:mi>
+                        <m:mo>)</m:mo>
+                      </m:mrow>
+                      <m:mi>δ</m:mi>
+                      <m:mrow>
+                        <m:mo>(</m:mo>
+                        <m:mi>x</m:mi>
+                        <m:mo>-</m:mo>
+                        <m:msub>
+                          <m:mi>x</m:mi>
+                          <m:mi>c</m:mi>
+                        </m:msub>
+                        <m:mo>)</m:mo>
+                      </m:mrow>
+                    </m:mrow>
+                  </m:mtd>
+                </m:mtr>
+              </m:mtable>
+            </m:mfenced>
+            <m:mfenced separators="" open="(" close=")">
+              <m:mtable>
+                <m:mtr>
+                  <m:mtd>
+                    <m:mi>u</m:mi>
+                  </m:mtd>
+                </m:mtr>
+                <m:mtr>
+                  <m:mtd>
+                    <m:msub>
+                      <m:mi>u</m:mi>
+                      <m:mi>t</m:mi>
+                    </m:msub>
+                  </m:mtd>
+                </m:mtr>
+              </m:mtable>
+            </m:mfenced>
+            <m:mo>+</m:mo>
+            <m:mfenced separators="" open="(" close=")">
+              <m:mtable>
+                <m:mtr>
+                  <m:mtd>
+                    <m:mn>0</m:mn>
+                  </m:mtd>
+                </m:mtr>
+                <m:mtr>
+                  <m:mtd>
+                    <m:mrow>
+                      <m:mi>b</m:mi>
+                      <m:mrow>
+                        <m:mo>(</m:mo>
+                        <m:mi>t</m:mi>
+                        <m:mo>)</m:mo>
+                      </m:mrow>
+                      <m:mi>δ</m:mi>
+                      <m:mrow>
+                        <m:mo>(</m:mo>
+                        <m:mi>x</m:mi>
+                        <m:mo>-</m:mo>
+                        <m:msub>
+                          <m:mi>x</m:mi>
+                          <m:mi>b</m:mi>
+                        </m:msub>
+                        <m:mo>)</m:mo>
+                      </m:mrow>
+                    </m:mrow>
+                  </m:mtd>
+                </m:mtr>
+              </m:mtable>
+            </m:mfenced>
+          </m:mrow>
+        </m:math>
+      </equation>
+      <para id="id167319">which we will denote as</para>
+      <equation id="id167324">
+        <m:math overflow="scroll" mode="display">
+          <m:mrow>
+            <m:msup>
+              <m:mi>V</m:mi>
+              <m:mo>'</m:mo>
+            </m:msup>
+            <m:mrow>
+              <m:mo>(</m:mo>
+              <m:mi>t</m:mi>
+              <m:mo>)</m:mo>
+            </m:mrow>
+            <m:mo>=</m:mo>
+            <m:mi>A</m:mi>
+            <m:mrow>
+              <m:mo>(</m:mo>
+              <m:mi>t</m:mi>
+              <m:mo>)</m:mo>
+            </m:mrow>
+            <m:mi>V</m:mi>
+            <m:mrow>
+              <m:mo>(</m:mo>
+              <m:mi>t</m:mi>
+              <m:mo>)</m:mo>
+            </m:mrow>
+            <m:mo>+</m:mo>
+            <m:mi>B</m:mi>
+            <m:mrow>
+              <m:mo>(</m:mo>
+              <m:mi>t</m:mi>
+              <m:mo>)</m:mo>
+            </m:mrow>
+          </m:mrow>
+        </m:math>
+      </equation>
+      <para id="id167381">where <m:math overflow="scroll"><m:mi>I</m:mi></m:math> represents the identity matrix. The <m:math overflow="scroll"><m:msub><m:mi>∂</m:mi><m:mrow><m:mi>x</m:mi><m:mi>x</m:mi></m:mrow></m:msub></m:math> operator is a tridiagonal matrix with -2 along the diagonal and ones along the superdiagonal and subdiagonal. The approximating integral equation</para>
+      <equation id="id167412">
+        <m:math overflow="scroll" mode="display">
+          <m:mrow>
+            <m:msubsup>
+              <m:mo>∫</m:mo>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>j</m:mi>
+                <m:mo>-</m:mo>
+                <m:mn>1</m:mn>
+                <m:mo>)</m:mo>
+                <m:mi>d</m:mi>
+                <m:mi>t</m:mi>
+              </m:mrow>
+              <m:mrow>
+                <m:mi>j</m:mi>
+                <m:mi>d</m:mi>
+                <m:mi>t</m:mi>
+              </m:mrow>
+            </m:msubsup>
+            <m:msup>
+              <m:mi>V</m:mi>
+              <m:mo>'</m:mo>
+            </m:msup>
+            <m:mrow>
+              <m:mo>(</m:mo>
+              <m:mi>t</m:mi>
+              <m:mo>)</m:mo>
+            </m:mrow>
+            <m:mspace width="0.166667em"/>
+            <m:mi>d</m:mi>
+            <m:mi>t</m:mi>
+            <m:mo>=</m:mo>
+            <m:msubsup>
+              <m:mo>∫</m:mo>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>j</m:mi>
+                <m:mo>-</m:mo>
+                <m:mn>1</m:mn>
+                <m:mo>)</m:mo>
+                <m:mi>d</m:mi>
+                <m:mi>t</m:mi>
+              </m:mrow>
+              <m:mrow>
+                <m:mi>j</m:mi>
+                <m:mi>d</m:mi>
+                <m:mi>t</m:mi>
+              </m:mrow>
+            </m:msubsup>
+            <m:mrow>
+              <m:mo>(</m:mo>
+              <m:mi>A</m:mi>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>t</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mi>V</m:mi>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>t</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>+</m:mo>
+              <m:mi>B</m:mi>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>t</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>)</m:mo>
+            </m:mrow>
+            <m:mspace width="0.166667em"/>
+            <m:mi>d</m:mi>
+            <m:mi>t</m:mi>
+          </m:mrow>
+        </m:math>
+      </equation>
+      <para id="id167548">is solved to reveal a solution for <m:math overflow="scroll"><m:mrow><m:mi>u</m:mi><m:mo>(</m:mo><m:mi>j</m:mi><m:mi>d</m:mi><m:mi>t</m:mi><m:mo>)</m:mo></m:mrow></m:math>. The trapezoidal integration method turns out to be the more accurate of the two solution methods, since its error is less than the error of the forward Euler method. Real values for the string's tension, density, and length were used to evaluate the solution for the trapezoidal method, but gave us unintelligible results when used for the forward Euler method. Both methods were used to evaluate the solution using arbitrary values.</para>
+    </section>
+    <section id="cid3">
+      <title>Optimization</title>
+      <para id="id167586">With all the preliminary work established, we can move on to the optimization problem. We investigated two objective functions for optimization. The first objective function considered was the following</para>
+      <equation id="id167591">
+        <m:math overflow="scroll" mode="display">
+          <m:mrow>
+            <m:mi>J</m:mi>
+            <m:mrow>
+              <m:mo>(</m:mo>
+              <m:mi>c</m:mi>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>t</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>)</m:mo>
+            </m:mrow>
+            <m:mo>=</m:mo>
+            <m:msubsup>
+              <m:mo>∫</m:mo>
+              <m:mn>0</m:mn>
+              <m:mi>ℓ</m:mi>
+            </m:msubsup>
+            <m:msup>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>u</m:mi>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mi>x</m:mi>
+                  <m:mo>,</m:mo>
+                  <m:mi>T</m:mi>
+                  <m:mo>;</m:mo>
+                  <m:mi>c</m:mi>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:mi>t</m:mi>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mo>-</m:mo>
+                <m:msub>
+                  <m:mi>u</m:mi>
+                  <m:mn>0</m:mn>
+                </m:msub>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mi>x</m:mi>
+                  <m:mo>,</m:mo>
+                  <m:mi>T</m:mi>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mn>2</m:mn>
+            </m:msup>
+            <m:mi>d</m:mi>
+            <m:mi>x</m:mi>
+            <m:mo>.</m:mo>
+          </m:mrow>
+        </m:math>
+      </equation>
+      <para id="id167694">Here a suitable time <m:math overflow="scroll"><m:mi>T</m:mi></m:math> is preordained. It is legitimate to do this since damping should not affect the periodic details of the waveform. The <m:math overflow="scroll"><m:mrow><m:mi>u</m:mi><m:mo>(</m:mo><m:mi>x</m:mi><m:mo>,</m:mo><m:mi>T</m:mi><m:mo>)</m:mo></m:mrow></m:math> is solved with the given <m:math overflow="scroll"><m:mrow><m:mi>c</m:mi><m:mo>(</m:mo><m:mi>t</m:mi><m:mo>)</m:mo></m:mrow></m:math> and fitted to <m:math overflow="scroll"><m:mrow><m:msub><m:mi>u</m:mi><m:mn>0</m:mn></m:msub><m:mrow><m:mo>(</m:mo><m:mi>x</m:mi><m:mo>,</m:mo><m:mi>T</m:mi><m:mo>)</m:mo></m:mrow><m:mo>=</m:mo><m:mo form="prefix">sin</m:mo><m:mrow><m:mo>(</m:mo><m:mfrac><m:mrow><m:mn>4</m:mn><m:mi>π</m:mi><m:mi>x</m:mi></m:mrow><m:mi>ℓ</m:mi></m:mfrac><m:mo>)</m:mo></m:mrow></m:mrow></m:math>. We parameterize</para>
+      <equation id="id167792">
+        <m:math overflow="scroll" mode="display">
+          <m:mrow>
+            <m:mi>c</m:mi>
+            <m:mrow>
+              <m:mo>(</m:mo>
+              <m:mi>t</m:mi>
+              <m:mo>)</m:mo>
+            </m:mrow>
+            <m:mo>=</m:mo>
+            <m:msup>
+              <m:mi>e</m:mi>
+              <m:mrow>
+                <m:mo>-</m:mo>
+                <m:msub>
+                  <m:mi>c</m:mi>
+                  <m:mn>1</m:mn>
+                </m:msub>
+                <m:mi>t</m:mi>
+              </m:mrow>
+            </m:msup>
+            <m:mo>-</m:mo>
+            <m:msup>
+              <m:mi>e</m:mi>
+              <m:mrow>
+                <m:mo>-</m:mo>
+                <m:msub>
+                  <m:mi>c</m:mi>
+                  <m:mn>2</m:mn>
+                </m:msub>
+                <m:mi>t</m:mi>
+              </m:mrow>
+            </m:msup>
+          </m:mrow>
+        </m:math>
+      </equation>
+      <para id="id167851">which acts at one point on the string with a shape similar to the following.</para>
+      <para id="id167857">
+        <figure id="id167860">
+          <media id="id167860_media" alt="">
+            <image mime-type="image/png" src="../../media/cexamp.png" id="id167860_onlineimage" width="560"><!-- NOTE: attribute width changes image size online (pixels). original width is 560. --></image>
+            <image mime-type="application/postscript" for="pdf" src="../../media/cexamp.eps" id="id167860_printimage" print-width=".75">
+              <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+            </image>
+          </media>
+        </figure>
+      </para>
+      <para id="id167868">It is important also that <m:math overflow="scroll"><m:mrow><m:msub><m:mi>c</m:mi><m:mn>1</m:mn></m:msub><m:mo>&lt;</m:mo><m:msub><m:mi>c</m:mi><m:mn>2</m:mn></m:msub></m:mrow></m:math> to guarantee the above shape.
+Our control problem then, is to</para>
+      <equation id="uid2">
+        <m:math overflow="scroll" mode="display">
+          <m:mtable displaystyle="true">
+            <m:mtr>
+              <m:mtd/>
+              <m:mtd columnalign="left">
+                <m:munder>
+                  <m:mo movablelimits="true" form="prefix">min</m:mo>
+                  <m:mrow>
+                    <m:msub>
+                      <m:mi>c</m:mi>
+                      <m:mn>1</m:mn>
+                    </m:msub>
+                    <m:mo>,</m:mo>
+                    <m:msub>
+                      <m:mi>c</m:mi>
+                      <m:mn>2</m:mn>
+                    </m:msub>
+                  </m:mrow>
+                </m:munder>
+              </m:mtd>
+              <m:mtd columnalign="right">
+                <m:mspace width="1.em"/>
+              </m:mtd>
+              <m:mtd columnalign="left">
+                <m:mrow>
+                  <m:msubsup>
+                    <m:mo>∫</m:mo>
+                    <m:mn>0</m:mn>
+                    <m:mi>ℓ</m:mi>
+                  </m:msubsup>
+                  <m:msup>
+                    <m:mrow>
+                      <m:mo>(</m:mo>
+                      <m:mi>u</m:mi>
+                      <m:mrow>
+                        <m:mo>(</m:mo>
+                        <m:mi>x</m:mi>
+                        <m:mo>,</m:mo>
+                        <m:mi>T</m:mi>
+                        <m:mo>;</m:mo>
+                        <m:mi>c</m:mi>
+                        <m:mrow>
+                          <m:mo>(</m:mo>
+                          <m:mi>t</m:mi>
+                          <m:mo>)</m:mo>
+                        </m:mrow>
+                        <m:mo>)</m:mo>
+                      </m:mrow>
+                      <m:mo>-</m:mo>
+                      <m:msub>
+                        <m:mi>u</m:mi>
+                        <m:mn>0</m:mn>
+                      </m:msub>
+                      <m:mrow>
+                        <m:mo>(</m:mo>
+                        <m:mi>x</m:mi>
+                        <m:mo>,</m:mo>
+                        <m:mi>T</m:mi>
+                        <m:mo>)</m:mo>
+                      </m:mrow>
+                      <m:mo>)</m:mo>
+                    </m:mrow>
+                    <m:mn>2</m:mn>
+                  </m:msup>
+                  <m:mi>d</m:mi>
+                  <m:mi>x</m:mi>
+                </m:mrow>
+              </m:mtd>
+            </m:mtr>
+          </m:mtable>
+        </m:math>
+      </equation>
+      <para id="id168026">
+subject to <m:math overflow="scroll"><m:mrow><m:mi>u</m:mi><m:mo>(</m:mo><m:mi>x</m:mi><m:mo>,</m:mo><m:mi>T</m:mi><m:mo>;</m:mo><m:mi>c</m:mi><m:mo>(</m:mo><m:mi>t</m:mi><m:mo>)</m:mo><m:mo>)</m:mo></m:mrow></m:math> solving our wave equation with the same initial and boundary conditions. There is a scaling issue since <m:math overflow="scroll"><m:mrow><m:mi>u</m:mi><m:mo>(</m:mo><m:mi>x</m:mi><m:mo>,</m:mo><m:mi>T</m:mi><m:mo>)</m:mo></m:mrow></m:math> is small (on the order of <m:math overflow="scroll"><m:msup><m:mn>10</m:mn><m:mrow><m:mo>-</m:mo><m:mn>5</m:mn></m:mrow></m:msup></m:math>) at times. To correct this we scale our target <m:math overflow="scroll"><m:msub><m:mi>u</m:mi><m:mn>0</m:mn></m:msub></m:math> so that the two waveforms are comparable before we run the optimization. Normalizing <m:math overflow="scroll"><m:mi>u</m:mi></m:math> instead, would be cumbersome since the maximum amplitude depends on time. To expedite the optimizer, we supply the gradient of our objective</para>
+      <equation id="id168122">
+        <m:math overflow="scroll" mode="display">
+          <m:mrow>
+            <m:mi>∇</m:mi>
+            <m:mi>J</m:mi>
+            <m:mrow>
+              <m:mo>(</m:mo>
+              <m:mi>c</m:mi>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>t</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>)</m:mo>
+            </m:mrow>
+            <m:mo>=</m:mo>
+            <m:mrow>
+              <m:mo>(</m:mo>
+              <m:mfrac>
+                <m:mrow>
+                  <m:mi>∂</m:mi>
+                  <m:mi>J</m:mi>
+                  <m:mo>(</m:mo>
+                  <m:mi>c</m:mi>
+                  <m:mo>(</m:mo>
+                  <m:mi>t</m:mi>
+                  <m:mo>)</m:mo>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mrow>
+                  <m:mi>∂</m:mi>
+                  <m:msub>
+                    <m:mi>c</m:mi>
+                    <m:mn>1</m:mn>
+                  </m:msub>
+                </m:mrow>
+              </m:mfrac>
+              <m:mo>,</m:mo>
+              <m:mfrac>
+                <m:mrow>
+                  <m:mi>∂</m:mi>
+                  <m:mi>J</m:mi>
+                  <m:mo>(</m:mo>
+                  <m:mi>c</m:mi>
+                  <m:mo>(</m:mo>
+                  <m:mi>t</m:mi>
+                  <m:mo>)</m:mo>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mrow>
+                  <m:mi>∂</m:mi>
+                  <m:msub>
+                    <m:mi>c</m:mi>
+                    <m:mn>2</m:mn>
+                  </m:msub>
+                </m:mrow>
+              </m:mfrac>
+              <m:mo>)</m:mo>
+            </m:mrow>
+            <m:mo>.</m:mo>
+          </m:mrow>
+        </m:math>
+      </equation>
+      <para id="id168224">The equations for the partial derivatives are as follows.</para>
+      <equation id="id168230">
+        <m:math overflow="scroll" mode="display">
+          <m:mrow>
+            <m:mfrac>
+              <m:mrow>
+                <m:mi>∂</m:mi>
+                <m:mi>J</m:mi>
+                <m:mo>(</m:mo>
+                <m:mi>c</m:mi>
+                <m:mo>(</m:mo>
+                <m:mi>t</m:mi>
+                <m:mo>)</m:mo>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mrow>
+                <m:mi>∂</m:mi>
+                <m:msub>
+                  <m:mi>c</m:mi>
+                  <m:mn>1</m:mn>
+                </m:msub>
+              </m:mrow>
+            </m:mfrac>
+            <m:mo>=</m:mo>
+            <m:mn>2</m:mn>
+            <m:msubsup>
+              <m:mo>∫</m:mo>
+              <m:mn>0</m:mn>
+              <m:mi>ℓ</m:mi>
+            </m:msubsup>
+            <m:mrow>
+              <m:mo>(</m:mo>
+              <m:mi>u</m:mi>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>x</m:mi>
+                <m:mo>,</m:mo>
+                <m:mi>T</m:mi>
+                <m:mo>;</m:mo>
+                <m:mi>c</m:mi>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mi>t</m:mi>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>-</m:mo>
+              <m:msub>
+                <m:mi>u</m:mi>
+                <m:mn>0</m:mn>
+              </m:msub>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>x</m:mi>
+                <m:mo>,</m:mo>
+                <m:mi>T</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>)</m:mo>
+            </m:mrow>
+            <m:mrow>
+              <m:mo>(</m:mo>
+              <m:mfrac>
+                <m:mrow>
+                  <m:mi>∂</m:mi>
+                  <m:mi>u</m:mi>
+                  <m:mo>(</m:mo>
+                  <m:mi>x</m:mi>
+                  <m:mo>,</m:mo>
+                  <m:mi>T</m:mi>
+                  <m:mo>,</m:mo>
+                  <m:mi>c</m:mi>
+                  <m:mo>(</m:mo>
+                  <m:mi>t</m:mi>
+                  <m:mo>)</m:mo>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mrow>
+                  <m:mi>∂</m:mi>
+                  <m:msub>
+                    <m:mi>c</m:mi>
+                    <m:mn>1</m:mn>
+                  </m:msub>
+                </m:mrow>
+              </m:mfrac>
+              <m:mo>)</m:mo>
+            </m:mrow>
+            <m:mi>d</m:mi>
+            <m:mi>x</m:mi>
+            <m:mo>,</m:mo>
+          </m:mrow>
+        </m:math>
+      </equation>
+      <equation id="id168388">
+        <m:math overflow="scroll" mode="display">
+          <m:mrow>
+            <m:mfrac>
+              <m:mrow>
+                <m:mi>∂</m:mi>
+                <m:mi>J</m:mi>
+                <m:mo>(</m:mo>
+                <m:mi>c</m:mi>
+                <m:mo>(</m:mo>
+                <m:mi>t</m:mi>
+                <m:mo>)</m:mo>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mrow>
+                <m:mi>∂</m:mi>
+                <m:msub>
+                  <m:mi>c</m:mi>
+                  <m:mn>2</m:mn>
+                </m:msub>
+              </m:mrow>
+            </m:mfrac>
+            <m:mo>=</m:mo>
+            <m:mn>2</m:mn>
+            <m:msubsup>
+              <m:mo>∫</m:mo>
+              <m:mn>0</m:mn>
+              <m:mi>ℓ</m:mi>
+            </m:msubsup>
+            <m:mrow>
+              <m:mo>(</m:mo>
+              <m:mi>u</m:mi>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>x</m:mi>
+                <m:mo>,</m:mo>
+                <m:mi>T</m:mi>
+                <m:mo>;</m:mo>
+                <m:mi>c</m:mi>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mi>t</m:mi>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>-</m:mo>
+              <m:msub>
+                <m:mi>u</m:mi>
+                <m:mn>0</m:mn>
+              </m:msub>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>x</m:mi>
+                <m:mo>,</m:mo>
+                <m:mi>T</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>)</m:mo>
+            </m:mrow>
+            <m:mrow>
+              <m:mo>(</m:mo>
+              <m:mfrac>
+                <m:mrow>
+                  <m:mi>∂</m:mi>
+                  <m:mi>u</m:mi>
+                  <m:mo>(</m:mo>
+                  <m:mi>x</m:mi>
+                  <m:mo>,</m:mo>
+                  <m:mi>T</m:mi>
+                  <m:mo>,</m:mo>
+                  <m:mi>c</m:mi>
+                  <m:mo>(</m:mo>
+                  <m:mi>t</m:mi>
+                  <m:mo>)</m:mo>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mrow>
+                  <m:mi>∂</m:mi>
+                  <m:msub>
+                    <m:mi>c</m:mi>
+                    <m:mn>2</m:mn>
+                  </m:msub>
+                </m:mrow>
+              </m:mfrac>
+              <m:mo>)</m:mo>
+            </m:mrow>
+            <m:mi>d</m:mi>
+            <m:mi>x</m:mi>
+          </m:mrow>
+        </m:math>
+      </equation>
+      <para id="id168544">The inner partial derivatives will be approximated by the same finite difference method we used above.</para>
+      <para id="id168550">One of the main difficulties with this objective function is that it requires a <m:math overflow="scroll"><m:mi>T</m:mi></m:math> to be found beforehand and thus we can only optimize with respect to our spacial dimension. Optimizing over both space and time would rid us of needing to find a good <m:math overflow="scroll"><m:mi>T</m:mi></m:math> but complicates our objective function and retards our optimizer. Another concern with this objective is that it takes into account the sign of the target waveform, but whether the waveform is <m:math overflow="scroll"><m:mrow><m:mo form="prefix">sin</m:mo><m:mo>(</m:mo><m:mi>x</m:mi><m:mo>)</m:mo></m:mrow></m:math> or <m:math overflow="scroll"><m:mrow><m:mo>-</m:mo><m:mo form="prefix">sin</m:mo><m:mo>(</m:mo><m:mi>x</m:mi><m:mo>)</m:mo></m:mrow></m:math> is no matter to the musician. Along the same lines we have the scaling difficulty. Another objective function we have explored is the following energy minimization problem. We note that <m:math overflow="scroll"><m:mrow><m:mi>u</m:mi><m:mo>(</m:mo><m:mi>x</m:mi><m:mo>,</m:mo><m:mi>t</m:mi><m:mo>)</m:mo></m:mrow></m:math> can be represented as a combination of sinusoids. For a given <m:math overflow="scroll"><m:mi>T</m:mi></m:math> we have</para>
+      <equation id="id168642">
+        <m:math overflow="scroll" mode="display">
+          <m:mrow>
+            <m:mi>u</m:mi>
+            <m:mrow>
+              <m:mo>(</m:mo>
+              <m:mi>x</m:mi>
+              <m:mo>,</m:mo>
+              <m:mi>T</m:mi>
+              <m:mo>)</m:mo>
+            </m:mrow>
+            <m:mo>=</m:mo>
+            <m:munderover>
+              <m:mo>∑</m:mo>
+              <m:mrow>
+                <m:mi>n</m:mi>
+                <m:mo>=</m:mo>
+                <m:mn>1</m:mn>
+              </m:mrow>
+              <m:mi>N</m:mi>
+            </m:munderover>
+            <m:msub>
+              <m:mi>u</m:mi>
+              <m:mi>n</m:mi>
+            </m:msub>
+            <m:mo form="prefix">sin</m:mo>
+            <m:mrow>
+              <m:mo>(</m:mo>
+              <m:mfrac>
+                <m:mrow>
+                  <m:mn>2</m:mn>
+                  <m:mi>n</m:mi>
+                  <m:mi>π</m:mi>
+                  <m:mi>x</m:mi>
+                </m:mrow>
+                <m:mi>ℓ</m:mi>
+              </m:mfrac>
+              <m:mo>)</m:mo>
+            </m:mrow>
+            <m:mo>.</m:mo>
+          </m:mrow>
+        </m:math>
+      </equation>
+      <para id="id168716">Here each <m:math overflow="scroll"><m:msub><m:mi>u</m:mi><m:mi>n</m:mi></m:msub></m:math> represents the nth Fourier coefficient that corresponds to the expression of the nth mode in the total wave. Since we are interested in expressing only the fourth mode, our optimization problem will try to minimize all other modes</para>
+      <equation id="uid3">
+        <m:math overflow="scroll" mode="display">
+          <m:mtable displaystyle="true">
+            <m:mtr>
+              <m:mtd/>
+              <m:mtd columnalign="left">
+                <m:munder>
+                  <m:mo movablelimits="true" form="prefix">min</m:mo>
+                  <m:mrow>
+                    <m:msub>
+                      <m:mi>c</m:mi>
+                      <m:mn>1</m:mn>
+                    </m:msub>
+                    <m:mo>,</m:mo>
+                    <m:msub>
+                      <m:mi>c</m:mi>
+                      <m:mn>2</m:mn>
+                    </m:msub>
+                  </m:mrow>
+                </m:munder>
+              </m:mtd>
+              <m:mtd columnalign="right">
+                <m:mspace width="1.em"/>
+              </m:mtd>
+              <m:mtd columnalign="left">
+                <m:mrow>
+                  <m:mspace width="4pt"/>
+                  <m:mi>F</m:mi>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:mi>c</m:mi>
+                    <m:mrow>
+                      <m:mo>(</m:mo>
+                      <m:mi>t</m:mi>
+                      <m:mo>)</m:mo>
+                    </m:mrow>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                  <m:mo>=</m:mo>
+                  <m:msubsup>
+                    <m:mo>∫</m:mo>
+                    <m:mn>0</m:mn>
+                    <m:msub>
+                      <m:mi>T</m:mi>
+                      <m:mrow>
+                        <m:mi>f</m:mi>
+                        <m:mi>i</m:mi>
+                        <m:mi>n</m:mi>
+                      </m:mrow>
+                    </m:msub>
+                  </m:msubsup>
+                  <m:mfenced separators="" open="(" close=")">
+                    <m:munderover>
+                      <m:mo>∑</m:mo>
+                      <m:mrow>
+                        <m:mrow>
+                          <m:mi>n</m:mi>
+                          <m:mo>=</m:mo>
+                          <m:mn>1</m:mn>
+                          <m:mo>,</m:mo>
+                          <m:mi>n</m:mi>
+                          <m:mo>≠</m:mo>
+                          <m:mn>4</m:mn>
+                        </m:mrow>
+                      </m:mrow>
+                      <m:mn>10</m:mn>
+                    </m:munderover>
+                    <m:mfenced open="[" close="]">
+                      <m:msup>
+                        <m:mfenced separators="" open="(" close=")">
+                          <m:msubsup>
+                            <m:mo>∫</m:mo>
+                            <m:mn>0</m:mn>
+                            <m:mi>ℓ</m:mi>
+                          </m:msubsup>
+                          <m:mrow>
+                            <m:mo>(</m:mo>
+                            <m:mi>u</m:mi>
+                            <m:mrow>
+                              <m:mo>(</m:mo>
+                              <m:mi>x</m:mi>
+                              <m:mo>,</m:mo>
+                              <m:mi>t</m:mi>
+                              <m:mo>;</m:mo>
+                              <m:mi>c</m:mi>
+                              <m:mrow>
+                                <m:mo>(</m:mo>
+                                <m:mi>t</m:mi>
+                                <m:mo>)</m:mo>
+                              </m:mrow>
+                              <m:mo>)</m:mo>
+                            </m:mrow>
+                            <m:mo form="prefix">sin</m:mo>
+                          </m:mrow>
+                          <m:mfenced open="(" close=")">
+                            <m:mfrac>
+                              <m:mrow>
+                                <m:mi>n</m:mi>
+                                <m:mi>π</m:mi>
+                                <m:mi>x</m:mi>
+                              </m:mrow>
+                              <m:mi>ℓ</m:mi>
+                            </m:mfrac>
+                          </m:mfenced>
+                          <m:mi>d</m:mi>
+                          <m:mi>x</m:mi>
+                        </m:mfenced>
+                        <m:mn>2</m:mn>
+                      </m:msup>
+                    </m:mfenced>
+                  </m:mfenced>
+                  <m:mi>d</m:mi>
+                  <m:mi>t</m:mi>
+                </m:mrow>
+              </m:mtd>
+            </m:mtr>
+          </m:mtable>
+        </m:math>
+      </equation>
+      <para id="id168967">
+subject to our wave equation with the same conditions. We decide on clearing up the first ten modes (except the fourth) to ensure that we are left with a waveform closest to our target. Like before we supply the gradient.</para>
+      <equation id="id168974">
+        <m:math overflow="scroll" mode="display">
+          <m:mrow>
+            <m:mfrac>
+              <m:mrow>
+                <m:mi>∂</m:mi>
+                <m:mi>F</m:mi>
+                <m:mo>(</m:mo>
+                <m:mi>c</m:mi>
+                <m:mo>(</m:mo>
+                <m:mi>t</m:mi>
+                <m:mo>)</m:mo>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mrow>
+                <m:mi>∂</m:mi>
+                <m:msub>
+                  <m:mi>c</m:mi>
+                  <m:mn>1</m:mn>
+                </m:msub>
+              </m:mrow>
+            </m:mfrac>
+            <m:mo>=</m:mo>
+            <m:mn>2</m:mn>
+            <m:msubsup>
+              <m:mo>∫</m:mo>
+              <m:mn>0</m:mn>
+              <m:msub>
+                <m:mi>T</m:mi>
+                <m:mrow>
+                  <m:mi>f</m:mi>
+                  <m:mi>i</m:mi>
+                  <m:mi>n</m:mi>
+                </m:mrow>
+              </m:msub>
+            </m:msubsup>
+            <m:mfenced separators="" open="(" close=")">
+              <m:munderover>
+                <m:mo>∑</m:mo>
+                <m:mrow>
+                  <m:mrow>
+                    <m:mi>n</m:mi>
+                    <m:mo>=</m:mo>
+                    <m:mn>1</m:mn>
+                    <m:mo>,</m:mo>
+                    <m:mi>n</m:mi>
+                    <m:mo>≠</m:mo>
+                    <m:mn>4</m:mn>
+                  </m:mrow>
+                </m:mrow>
+                <m:mn>10</m:mn>
+              </m:munderover>
+              <m:msubsup>
+                <m:mo>∫</m:mo>
+                <m:mn>0</m:mn>
+                <m:mi>ℓ</m:mi>
+              </m:msubsup>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>u</m:mi>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mi>x</m:mi>
+                  <m:mo>,</m:mo>
+                  <m:mi>t</m:mi>
+                  <m:mo>;</m:mo>
+                  <m:mi>c</m:mi>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:mi>t</m:mi>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mo form="prefix">sin</m:mo>
+              </m:mrow>
+              <m:mfenced open="(" close=")">
+                <m:mfrac>
+                  <m:mrow>
+                    <m:mi>n</m:mi>
+                    <m:mi>π</m:mi>
+                    <m:mi>x</m:mi>
+                  </m:mrow>
+                  <m:mi>ℓ</m:mi>
+                </m:mfrac>
+              </m:mfenced>
+              <m:mfrac>
+                <m:mrow>
+                  <m:mi>∂</m:mi>
+                  <m:mi>u</m:mi>
+                  <m:mo>(</m:mo>
+                  <m:mi>x</m:mi>
+                  <m:mo>,</m:mo>
+                  <m:mi>t</m:mi>
+                  <m:mo>,</m:mo>
+                  <m:mi>c</m:mi>
+                  <m:mo>(</m:mo>
+                  <m:mi>t</m:mi>
+                  <m:mo>)</m:mo>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mrow>
+                  <m:mi>∂</m:mi>
+                  <m:msub>
+                    <m:mi>c</m:mi>
+                    <m:mn>1</m:mn>
+                  </m:msub>
+                </m:mrow>
+              </m:mfrac>
+              <m:mi>d</m:mi>
+              <m:mi>x</m:mi>
+            </m:mfenced>
+            <m:mi>d</m:mi>
+            <m:mi>t</m:mi>
+            <m:mo>,</m:mo>
+          </m:mrow>
+        </m:math>
+      </equation>
+      <equation id="id169193">
+        <m:math overflow="scroll" mode="display">
+          <m:mrow>
+            <m:mfrac>
+              <m:mrow>
+                <m:mi>∂</m:mi>
+                <m:mi>F</m:mi>
+                <m:mo>(</m:mo>
+                <m:mi>c</m:mi>
+                <m:mo>(</m:mo>
+                <m:mi>t</m:mi>
+                <m:mo>)</m:mo>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mrow>
+                <m:mi>∂</m:mi>
+                <m:msub>
+                  <m:mi>c</m:mi>
+                  <m:mn>2</m:mn>
+                </m:msub>
+              </m:mrow>
+            </m:mfrac>
+            <m:mo>=</m:mo>
+            <m:mn>2</m:mn>
+            <m:msubsup>
+              <m:mo>∫</m:mo>
+              <m:mn>0</m:mn>
+              <m:msub>
+                <m:mi>T</m:mi>
+                <m:mrow>
+                  <m:mi>f</m:mi>
+                  <m:mi>i</m:mi>
+                  <m:mi>n</m:mi>
+                </m:mrow>
+              </m:msub>
+            </m:msubsup>
+            <m:mfenced separators="" open="(" close=")">
+              <m:munderover>
+                <m:mo>∑</m:mo>
+                <m:mrow>
+                  <m:mrow>
+                    <m:mi>n</m:mi>
+                    <m:mo>=</m:mo>
+                    <m:mn>1</m:mn>
+                    <m:mo>,</m:mo>
+                    <m:mi>n</m:mi>
+                    <m:mo>≠</m:mo>
+                    <m:mn>4</m:mn>
+                  </m:mrow>
+                </m:mrow>
+                <m:mn>10</m:mn>
+              </m:munderover>
+              <m:msubsup>
+                <m:mo>∫</m:mo>
+                <m:mn>0</m:mn>
+                <m:mi>ℓ</m:mi>
+              </m:msubsup>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>u</m:mi>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mi>x</m:mi>
+                  <m:mo>,</m:mo>
+                  <m:mi>t</m:mi>
+                  <m:mo>;</m:mo>
+                  <m:mi>c</m:mi>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:mi>t</m:mi>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mo form="prefix">sin</m:mo>
+              </m:mrow>
+              <m:mfenced open="(" close=")">
+                <m:mfrac>
+                  <m:mrow>
+                    <m:mi>n</m:mi>
+                    <m:mi>π</m:mi>
+                    <m:mi>x</m:mi>
+                  </m:mrow>
+                  <m:mi>ℓ</m:mi>
+                </m:mfrac>
+              </m:mfenced>
+              <m:mfrac>
+                <m:mrow>
+                  <m:mi>∂</m:mi>
+                  <m:mi>u</m:mi>
+                  <m:mo>(</m:mo>
+                  <m:mi>x</m:mi>
+                  <m:mo>,</m:mo>
+                  <m:mi>t</m:mi>
+                  <m:mo>,</m:mo>
+                  <m:mi>c</m:mi>
+                  <m:mo>(</m:mo>
+                  <m:mi>t</m:mi>
+                  <m:mo>)</m:mo>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mrow>
+                  <m:mi>∂</m:mi>
+                  <m:msub>
+                    <m:mi>c</m:mi>
+                    <m:mn>2</m:mn>
+                  </m:msub>
+                </m:mrow>
+              </m:mfrac>
+              <m:mi>d</m:mi>
+              <m:mi>x</m:mi>
+            </m:mfenced>
+            <m:mi>d</m:mi>
+            <m:mi>t</m:mi>
+            <m:mo>.</m:mo>
+          </m:mrow>
+        </m:math>
+      </equation>
+      <para id="id169412">This objective function solves the sign and amplitude problems of the first. Additionally we are now optimizing over time so we need not specify a <m:math overflow="scroll"><m:mi>T</m:mi></m:math>. One may wish to reset the bounds of the time integral through a different interval.</para>
+    </section>
+    <section id="cid4">
+      <title>Results</title>
+      <para id="id169439">This is the result of our optimizer given a certain driving force <m:math overflow="scroll"><m:mrow><m:mi>b</m:mi><m:mo>(</m:mo><m:mi>t</m:mi><m:mo>)</m:mo></m:mrow></m:math> using our first objective function.</para>
+      <para id="id169460">
+        <figure id="id169463">
+          <media id="id169463_media" alt="">
+            <image mime-type="image/png" src="../../media/fourthmode1.png" id="id169463_onlineimage" width="560"><!-- NOTE: attribute width changes image size online (pixels). original width is 560. --></image>
+            <image mime-type="application/postscript" for="pdf" src="../../media/fourthmode1.eps" id="id169463_printimage" print-width=".5">
+              <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+            </image>
+          </media>
+        </figure>
+      </para>
+      <para id="id169471">This is the result of our optimizer at a certain time using the energy minimization objective. Since we optimized over space and time, we express this as a three dimensional plot.</para>
+      <para id="id169476">
+        <figure id="id169479">
+          <media id="id169479_media" alt="">
+            <image mime-type="image/png" src="../../media/trapzplot.png" id="id169479_onlineimage" width="560"><!-- NOTE: attribute width changes image size online (pixels). original width is 560. --></image>
+            <image mime-type="application/postscript" for="pdf" src="../../media/trapzplot.eps" id="id169479_printimage" print-width=".5">
+              <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+            </image>
+          </media>
+        </figure>
+      </para>
+      <para id="id169487">For the energy minimization objective function using multiple dampings, we have this result.</para>
+      <para id="id169491">
+        <figure id="id169495">
+          <media id="id169495_media" alt="">
+            <image mime-type="image/png" src="../../media/multplot.png" id="id169495_onlineimage" width="560"><!-- NOTE: attribute width changes image size online (pixels). original width is 560. --></image>
+            <image mime-type="application/postscript" for="pdf" src="../../media/multplot.eps" id="id169495_printimage" print-width=".5">
+              <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+            </image>
+          </media>
+        </figure>
+      </para>
+      <para id="id169503">Comparatively, the values of the objective function for single and multiple dampings are on the same order of magnitude, with the value for the single dampings being slightly smaller. Therefore the optimization process for a single damping is more effective, but not by much.</para>
+    </section>
+    <section id="cid5">
+      <title>Acknowledgments</title>
+      <para id="id169519">We would like to give a big thanks to Dr. Steve Cox for his guidance and support throughout the course of the project. This paper describes work completed with the support of the NSF.</para>
+    </section>
+    <section id="cid6">
+      <title>Appendix</title>
+      <para id="id169534">All of the codes used in this project are available on our website at</para>
+      <para id="id169538">http://www.owlnet.rice.edu/ mlg6/strings/.</para>
+    </section>
+    <section id="id169545">
+      <title>References</title>
+      <list id="id169552" display="block" list-type="enumerated">
+        <item id="uid4"><label/>Bamerger, A., J. Rauch and M. Taylor. <emphasis effect="italics">A model for harmonics on stringed instruments</emphasis>. Arch. Rational Mech. Anal. 79(1982) 267-290.
+</item>
+        <item id="uid5"><label/>Cheney, E. W., and David Kincaid. <emphasis effect="italics">Numerical Mathematics and Computing</emphasis>. Pacific Grove, CA: Brooks/Cole Pub., 1994. Print.
+</item>
+        <item id="uid6"><label/>Cox, S., and Antoine Hernot. <emphasis effect="italics">Eliciting Harmonics on Strings</emphasis>. ESAIM: COCV 14(2008) 657-677.
+</item>
+        <item id="uid7"><label/>Fletcher, Neville H., and Thomas D. Rossing. <emphasis effect="italics">The Physics of Musical Instruments</emphasis>. New York: Springer-Verlag, 1991. Print.
+</item>
+        <item id="uid8"><label/>Knobel, Roger. <emphasis effect="italics">An Introduction to the Mathematical Theory of Waves</emphasis>. Providence, RI: American Mathematical Society, 2000. Print.
+</item>
+        <item id="uid9"><label/>Rayleigh, John William Strutt, and Robert Bruce Lindsay. <emphasis effect="italics">The Theory of Sound</emphasis>. New York: Dover, 1945. Print.
+</item>
+      </list>
+    </section>
+  </content>
+</document>

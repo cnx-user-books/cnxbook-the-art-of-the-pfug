@@ -1,0 +1,350 @@
+<document xmlns="http://cnx.rice.edu/cnxml" xmlns:m="http://www.w3.org/1998/Math/MathML" xmlns:md="http://cnx.rice.edu/mdml" xmlns:bib="http://bibtexml.sf.net/">
+  <title>A Combinatorial Algorithm for Finding Maximum Cuts</title>
+  <metadata>
+  <md:content-id>m30982</md:content-id><md:title>A Combinatorial Algorithm for Finding Maximum Cuts</md:title>
+  <md:abstract>This report summarizes work done as part of the Wavelet Based Image Analysis PFUG under Rice University's VIGRE program. VIGRE is a program of Vertically Integrated Grants for Research and Education in the Mathematical Sciences under the direction of the National Science Foundation.  A PFUG is a group of Postdocs, Faculty, Undergraduates and Graduate students formed round the study of a common problem.
+This module provides mathematical background on the maxcut problem and develops an exact branch and bound algorithm for the maximum cut of unweighted graphs that is designed for improved performance on sparse graphs.</md:abstract>
+  <md:uuid>c0456219-6ec0-40fb-84d6-7729a6214d55</md:uuid>
+</metadata>
+
+<content>
+    <para id="id203436">
+      <figure id="id203439">
+        <media id="id203439_media" alt="">
+          <image mime-type="image/png" src="../../media/maxcut.png" id="id203439_onlineimage" width="600"><!-- NOTE: attribute width changes image size online (pixels). original width is 1956. --></image>
+          <image for="pdf" mime-type="application/postscript" src="../../media/maxcut.eps" id="id203439_printimage" print-width="4.5in">
+            <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+          </image>
+        </media>
+      </figure>
+    </para>
+    <section id="cid1">
+      <title>Introduction</title>
+      <para id="id203456">Finding the maximum cut of a graph is a difficult to compute problem in combinatorial optimization with several applications in the world of engineering and physics. This research develops and evaluates an exact branch and bound algorithm for the maximum cut of unweighted graphs that is designed for improved performance on sparse graphs.</para>
+      <para id="id203462">The module provides a general overview of the problem along with necessary mathematical background in <link target-id="cid2">"The Maxcut Problem"</link> and a brief note on various approaches to the problem in <link target-id="cid3">"Several Algorithms"</link>. <link target-id="cid4">"A New Algorithm"</link> describes a new algorithm for finding maximum cuts. Results of empirical performance evaluation appear in <link target-id="cid5">"Empirical Testing"</link>, which <link target-id="cid6">"Conclusion"</link> further discusses.</para>
+    </section>
+    <section id="cid2">
+      <title>The Maxcut Problem</title>
+      <para id="id203497">Before discussing the maxcut problem, it is necessary to provide some background information regarding relevant concepts in graph theory, the most fundamental of which is the graph itself. A graph <m:math overflow="scroll"><m:mrow><m:mi>G</m:mi><m:mo>(</m:mo><m:mi>V</m:mi><m:mo>,</m:mo><m:mi>E</m:mi><m:mo>)</m:mo></m:mrow></m:math> is an ordered pair comprised of a set of vertices <emphasis effect="italics">V</emphasis> and a set of edges <emphasis effect="italics">E</emphasis> that connect pairs of distinct vertices in <emphasis effect="italics">V</emphasis>. Two examples are shown in <link target-id="uid1"/>. Graphs may be either weighted, in which a real value is assigned to each edge, or unweighted, in which all edges have equal value. Although the former is more broadly applicable, further discussion will focus almost exclusively on the latter.</para>
+      <figure id="uid1">
+        <media id="uid1_media" alt="">
+          <image mime-type="image/png" src="../../media/graph_example.png" id="uid1_onlineimage" width="600"><!-- NOTE: attribute width changes image size online (pixels). original width is 767. --></image>
+          <image for="pdf" mime-type="application/postscript" src="../../media/graph_example.eps" id="uid1_printimage" print-width="3in">
+            <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+          </image>
+        </media>
+        <caption>Two example graphs appear above.</caption>
+      </figure>
+      <para id="id203566">Unsurprisingly, a subgraph <m:math overflow="scroll"><m:mrow><m:msub><m:mi>G</m:mi><m:mn>1</m:mn></m:msub><m:mrow><m:mo>(</m:mo><m:msub><m:mi>V</m:mi><m:mn>1</m:mn></m:msub><m:mo>,</m:mo><m:msub><m:mi>E</m:mi><m:mn>1</m:mn></m:msub><m:mo>)</m:mo></m:mrow></m:mrow></m:math> of graph <m:math overflow="scroll"><m:mrow><m:mi>G</m:mi><m:mo>(</m:mo><m:mi>V</m:mi><m:mo>,</m:mo><m:mi>E</m:mi><m:mo>)</m:mo></m:mrow></m:math> is a graph with vertex set <m:math overflow="scroll"><m:mrow><m:msub><m:mi>V</m:mi><m:mn>1</m:mn></m:msub><m:mo>⊆</m:mo><m:mi>V</m:mi></m:mrow></m:math> and edge set <m:math overflow="scroll"><m:mrow><m:msub><m:mi>E</m:mi><m:mn>1</m:mn></m:msub><m:mo>⊆</m:mo><m:mi>E</m:mi></m:mrow></m:math>. Of particular usefulness will be the subgraph of <m:math overflow="scroll"><m:mrow><m:mi>G</m:mi><m:mo>(</m:mo><m:mi>V</m:mi><m:mo>,</m:mo><m:mi>E</m:mi><m:mo>)</m:mo></m:mrow></m:math> induced by a given set of edges <m:math overflow="scroll"><m:mrow><m:msub><m:mi>E</m:mi><m:mn>1</m:mn></m:msub><m:mo>⊆</m:mo><m:mi>E</m:mi></m:mrow></m:math>, known as edge induced subgraph, which consists of that given set of edges <emphasis effect="italics">E<sub>1</sub></emphasis> along with all vertices <m:math overflow="scroll"><m:mrow><m:msub><m:mi>V</m:mi><m:mn>1</m:mn></m:msub><m:mo>=</m:mo><m:mfenced separators="" open="{" close="}"><m:mrow><m:mi>v</m:mi><m:mo>|</m:mo><m:mrow><m:mo>(</m:mo><m:mi>u</m:mi><m:mo>,</m:mo><m:mi>v</m:mi><m:mo>)</m:mo></m:mrow><m:mo>∈</m:mo></m:mrow><m:msub><m:mi>E</m:mi><m:mn>1</m:mn></m:msub><m:mo>,</m:mo><m:mi>u</m:mi><m:mo>∈</m:mo><m:mi>V</m:mi></m:mfenced></m:mrow></m:math> that occur as an endpoint of at least one edge in <emphasis effect="italics">E<sub>1</sub></emphasis>. An example of an edge induced subgraph is shown in <link target-id="uid2"/>.</para>
+      <figure id="uid2">
+        <media id="uid2_media" alt="">
+          <image mime-type="image/png" src="../../media/subgraph_example.png" id="uid2_onlineimage" width="600"><!-- NOTE: attribute width changes image size online (pixels). original width is 767. --></image>
+          <image for="pdf" mime-type="application/postscript" src="../../media/subgraph_example.eps" id="uid2_printimage" print-width="3in">
+            <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+          </image>
+        </media>
+        <caption>The subgraph induced by the red colored edges is shown on the right.</caption>
+      </figure>
+      <para id="id203807">One class of graphs that will be especially important to discussion of the maxcut problem is bipartite graphs. A graph <m:math overflow="scroll"><m:mrow><m:mi>G</m:mi><m:mo>(</m:mo><m:mi>V</m:mi><m:mo>,</m:mo><m:mi>E</m:mi><m:mo>)</m:mo></m:mrow></m:math> is bipartite, like the example in <link target-id="uid3"/>, if there are sets <m:math overflow="scroll"><m:mrow><m:msub><m:mi>V</m:mi><m:mn>1</m:mn></m:msub><m:mo>,</m:mo><m:msub><m:mi>V</m:mi><m:mn>2</m:mn></m:msub><m:mo>⊆</m:mo><m:mi>V</m:mi></m:mrow></m:math> such that <m:math overflow="scroll"><m:mrow><m:msub><m:mi>V</m:mi><m:mn>1</m:mn></m:msub><m:mo>∪</m:mo><m:msub><m:mi>V</m:mi><m:mn>2</m:mn></m:msub><m:mo>=</m:mo><m:mi>V</m:mi></m:mrow></m:math>, <m:math overflow="scroll"><m:mrow><m:msub><m:mi>V</m:mi><m:mn>1</m:mn></m:msub><m:mo>∩</m:mo><m:msub><m:mi>V</m:mi><m:mn>2</m:mn></m:msub><m:mo>=</m:mo><m:mi>∅</m:mi></m:mrow></m:math>, and <m:math overflow="scroll"><m:mrow><m:mo>(</m:mo><m:mi>u</m:mi><m:mo>,</m:mo><m:mi>v</m:mi><m:mo>)</m:mo><m:mo>∈</m:mo><m:mi>E</m:mi></m:mrow></m:math> only if <m:math overflow="scroll"><m:mrow><m:mi>u</m:mi><m:mo>∈</m:mo><m:msub><m:mi>V</m:mi><m:mn>1</m:mn></m:msub><m:mo>,</m:mo><m:mi>v</m:mi><m:mo>∈</m:mo><m:msub><m:mi>V</m:mi><m:mn>2</m:mn></m:msub></m:mrow></m:math> or <m:math overflow="scroll"><m:mrow><m:mi>v</m:mi><m:mo>∈</m:mo><m:msub><m:mi>V</m:mi><m:mn>1</m:mn></m:msub><m:mo>,</m:mo><m:mi>u</m:mi><m:mo>∈</m:mo><m:msub><m:mi>V</m:mi><m:mn>2</m:mn></m:msub></m:mrow></m:math>. Additionally, a graph is bipartite if and only if it has no subgraph that is a cycle of odd length.</para>
+      <figure id="uid3">
+        <media id="uid3_media" alt="">
+          <image mime-type="image/png" src="../../media/bipartite_example.png" id="uid3_onlineimage" width="600"><!-- NOTE: attribute width changes image size online (pixels). original width is 767. --></image>
+          <image for="pdf" mime-type="application/postscript" src="../../media/bipartite_example.eps" id="uid3_printimage" print-width="3in">
+            <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+          </image>
+        </media>
+        <caption>In the above bipartite graph, the vertices are colored red or blue to highlight the vertex partitions.</caption>
+      </figure>
+      <para id="id204022">A cut of a graph can be informally understood and visualized as a closed curve crossing some realization of the graph where each edge can be crossed at most once, as seen in <link target-id="uid4"/>. Notice that the curve partitions the graph vertices into two disjoint subsets located to each side of the curve.</para>
+      <figure id="uid4">
+        <media id="uid4_media" alt="">
+          <image mime-type="image/png" src="../../media/cut_example_1.png" id="uid4_onlineimage" width="600"><!-- NOTE: attribute width changes image size online (pixels). original width is 767. --></image>
+          <image for="pdf" mime-type="application/postscript" src="../../media/cut_example_1.eps" id="uid4_printimage" print-width="3in">
+            <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+          </image>
+        </media>
+        <caption>The closed curve represented by the dotted line crossing the graph corresponds to a cut of the graph.</caption>
+      </figure>
+      <para id="id202887">Formally, a cut of a graph <m:math overflow="scroll"><m:mrow><m:mi>G</m:mi><m:mo>(</m:mo><m:mi>V</m:mi><m:mo>,</m:mo><m:mi>E</m:mi><m:mo>)</m:mo></m:mrow></m:math> is a partition of the graph vertices into subsets <m:math overflow="scroll"><m:mrow><m:msub><m:mi>V</m:mi><m:mn>1</m:mn></m:msub><m:mo>,</m:mo><m:msub><m:mi>V</m:mi><m:mn>2</m:mn></m:msub><m:mo>⊆</m:mo><m:mi>V</m:mi></m:mrow></m:math> such that <m:math overflow="scroll"><m:mrow><m:msub><m:mi>V</m:mi><m:mn>1</m:mn></m:msub><m:mo>∪</m:mo><m:msub><m:mi>V</m:mi><m:mn>2</m:mn></m:msub><m:mo>=</m:mo><m:mi>V</m:mi></m:mrow></m:math> and <m:math overflow="scroll"><m:mrow><m:msub><m:mi>V</m:mi><m:mn>1</m:mn></m:msub><m:mo>∩</m:mo><m:msub><m:mi>V</m:mi><m:mn>2</m:mn></m:msub><m:mo>=</m:mo><m:mi>∅</m:mi></m:mrow></m:math>, as demonstrated by <link target-id="uid5"/>. The corresponding cut set is the set of edges <emphasis effect="italics">C</emphasis> such that <m:math overflow="scroll"><m:mrow><m:mi>C</m:mi><m:mo>=</m:mo><m:mfenced separators="" open="{" close="}"><m:mrow><m:mrow><m:mo>(</m:mo><m:mi>u</m:mi><m:mo>,</m:mo><m:mi>v</m:mi><m:mo>)</m:mo></m:mrow><m:mo>∈</m:mo><m:mi>E</m:mi><m:mo>|</m:mo><m:mi>u</m:mi><m:mo>∈</m:mo></m:mrow><m:msub><m:mi>V</m:mi><m:mn>1</m:mn></m:msub><m:mo>,</m:mo><m:mi>v</m:mi><m:mo>∈</m:mo><m:msub><m:mi>V</m:mi><m:mn>2</m:mn></m:msub></m:mfenced></m:mrow></m:math>. Hence, the cut set induces a bipartite subgraph.</para>
+      <figure id="uid5">
+        <media id="uid5_media" alt="">
+          <image mime-type="image/png" src="../../media/cut_example_2.png" id="uid5_onlineimage" width="600"><!-- NOTE: attribute width changes image size online (pixels). original width is 767. --></image>
+          <image for="pdf" mime-type="application/postscript" src="../../media/cut_example_2.eps" id="uid5_printimage" print-width="3in">
+            <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+          </image>
+        </media>
+        <caption>The partitions of graph vertices that correspond to this cut are highlighted in red and blue.</caption>
+      </figure>
+      <para id="id204424">The size of a cut equals the sum of the weights of edges in the cut set, which in the case of unweighted graphs is simply the number of edges in the cut set. With this definition of size, the maximum cut of a graph, like those shown in <link target-id="uid6"/>, is a cut not smaller than any other cut in the graph, and it corresponds to the largest bipartite subgraph of the graph. The maximum cut of a graph is not necessarily unique and is not unique in either of the examples.</para>
+      <figure id="uid6">
+        <media id="uid6_media" alt="">
+          <image mime-type="image/png" src="../../media/maxcut_example_1.png" id="uid6_onlineimage" width="600"><!-- NOTE: attribute width changes image size online (pixels). original width is 767. --></image>
+          <image for="pdf" mime-type="application/postscript" src="../../media/maxcut_example_1.eps" id="uid6_printimage" print-width="3in">
+            <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+          </image>
+        </media>
+        <caption>Maximum cuts for the two example graphs are shown above.</caption>
+      </figure>
+      <para id="id204449">Alternatively, the problem can be formulated in terms of the edges in the complement of the cut set. The complement of a set of edges that intersects every odd cycle in a graph induces a graph with no subgraphs that are odd cycles, which is therefore a bipartite graph. Thus, the complement of the minimum set of edges intersecting every odd cycle induces the largest bipartite subgraph of the graph and hence is the maximum cut set, as illustrated in <link target-id="uid7"/>.</para>
+      <figure id="uid7">
+        <media id="uid7_media" alt="">
+          <image mime-type="image/png" src="../../media/maxcut_example_2.png" id="uid7_onlineimage" width="600"><!-- NOTE: attribute width changes image size online (pixels). original width is 767. --></image>
+          <image for="pdf" mime-type="application/postscript" src="../../media/maxcut_example_2.eps" id="uid7_printimage" print-width="3in">
+            <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+          </image>
+        </media>
+        <caption>The complement of the minimum set (red) of edges intersecting all odd cycles of a graph is the maximum cut set.</caption>
+      </figure>
+      <para id="id204475">Finding the maximum cut of a graph was one of the earliest problems proven to be np-complete, which, ignoring the formal details of what that means, indicates that no currently known algorithms terminate in a polynomial bounded number of operations in all cases <link target-id="bid0"/>. There are, however, several types of graphs for which polynomial bounded solutions are known, such as graphs embeddable on the plane <link target-id="bid1"/>. Since computing the maxcut of large graphs often requires extremely long lengths of time, randomized <emphasis effect="italics">ρ</emphasis>-approximation algorithms, such as that of Goemans and Williamson, may be employed for situations in which optimality is not required and a good estimate will suffice <link target-id="bid2"/>.</para>
+      <para id="id204507">Applications of the maxcut problem include minimization of number of holes on circuit boards or number of chip contacts in VLSI circuit layout design, energy minimization problems in computer vision programs, and modeling of the interactions of spin glasses with magnetic fields in statistical physics <link target-id="bid3"/>.</para>
+    </section>
+    <section id="cid3">
+      <title>Several Algorithms</title>
+      <para id="id203318">The most direct and straightforward way to find maximum cuts of a graph would be to perform an exhaustive search of all bipartitions of the graph vertices. The maximum cut may be found by iterating over all distinct bipartitions of the graph vertices, summing the weights of edges connecting vertices in opposite partitions to calculate the size of the corresponding cut, comparing this value to the largest cut size previously found, and updating the maximum accordingly.</para>
+      <para id="id203326">The exhaustive algorithm, which has computational complexity <m:math overflow="scroll"><m:mrow><m:mi>O</m:mi><m:mo>(</m:mo><m:mo>|</m:mo><m:mi>E</m:mi><m:mo>|</m:mo><m:msup><m:mn>2</m:mn><m:mrow><m:mo>|</m:mo><m:mi>V</m:mi><m:mo>|</m:mo></m:mrow></m:msup><m:mo>)</m:mo></m:mrow></m:math>, examines the same number of bipartitions for a tree, for which the maximum cut always equals the number of edges, as it does for a complete graph on the same number of vertices. Thus, it is clear that the exhaustive algorithm is not completely satisfactory, especially for graphs with few edges relative to other graphs with a given number of vertices.</para>
+      <para id="id203367">Several researchers have published algorithms that attempt to improve performance, especially focusing on sparse graphs. Notable approaches include those of Wheeler with <m:math overflow="scroll"><m:mrow><m:msup><m:mi>O</m:mi><m:mo>*</m:mo></m:msup><m:mrow><m:mo>(</m:mo><m:msup><m:mn>2</m:mn><m:mrow><m:mo>|</m:mo><m:mi>V</m:mi><m:mo>|</m:mo></m:mrow></m:msup><m:mo>)</m:mo></m:mrow></m:mrow></m:math><link target-id="bid4"/>, Fedin and Kulikov with <m:math overflow="scroll"><m:mrow><m:msup><m:mi>O</m:mi><m:mo>*</m:mo></m:msup><m:mrow><m:mo>(</m:mo><m:msup><m:mn>2</m:mn><m:mrow><m:mo>|</m:mo><m:mi>E</m:mi><m:mo>|</m:mo><m:mo>/</m:mo><m:mn>4</m:mn></m:mrow></m:msup><m:mo>)</m:mo></m:mrow></m:mrow></m:math><link target-id="bid5"/>, Croce, Kaminski, and Paschos with <m:math overflow="scroll"><m:mrow><m:msup><m:mi>O</m:mi><m:mo>*</m:mo></m:msup><m:mrow><m:mo>(</m:mo><m:msup><m:mn>2</m:mn><m:mrow><m:mo>|</m:mo><m:mi>V</m:mi><m:mo>|</m:mo><m:mo>|</m:mo><m:mi>E</m:mi><m:mo>|</m:mo><m:mo>/</m:mo><m:mo>|</m:mo><m:mi>V</m:mi><m:mo>|</m:mo><m:mo>+</m:mo><m:mo>|</m:mo><m:mi>E</m:mi><m:mo>|</m:mo></m:mrow></m:msup><m:mo>)</m:mo></m:mrow></m:mrow></m:math>, and Williams with <m:math overflow="scroll"><m:mrow><m:msup><m:mi>O</m:mi><m:mo>*</m:mo></m:msup><m:mrow><m:mo>(</m:mo><m:msup><m:mn>2</m:mn><m:mrow><m:mi>ω</m:mi><m:mo>|</m:mo><m:mi>V</m:mi><m:mo>|</m:mo><m:mo>/</m:mo><m:mn>3</m:mn></m:mrow></m:msup><m:mo>)</m:mo></m:mrow></m:mrow></m:math>, <m:math overflow="scroll"><m:mrow><m:mi>ω</m:mi><m:mo>&lt;</m:mo><m:mn>2</m:mn><m:mo>.</m:mo><m:mn>376</m:mn></m:mrow></m:math><link target-id="bid1"/>. Although the last algorithm has the best computational complexity, it requires exponential space while the others require only polynomial bounded space. Due to limited memory storage capacity, algorithms requiring only polynomial bounded space are highly preferable.</para>
+    </section>
+    <section id="cid4">
+      <title>A New Algorithm</title>
+      <para id="id204858">In attempt to improve performance for sparse graphs, this research presents a new exact algorithm for finding maximum cuts of unweighted graphs that will now be described. It requires polynomial bounded space and has computational complexity <m:math overflow="scroll"><m:mrow><m:mi>O</m:mi><m:mo>(</m:mo><m:mo>|</m:mo><m:mi>E</m:mi><m:mo>|</m:mo><m:msup><m:mn>2</m:mn><m:mrow><m:mo>|</m:mo><m:mi>E</m:mi><m:mo>|</m:mo></m:mrow></m:msup><m:mo>)</m:mo></m:mrow></m:math>. The general approach that this algorithm takes is to separate the graph into its connected components and calculate initial upper and lower bounds for the maximum cut of each connected component. Those initial bounds are then used with a branch and bound algorithm to find a maximum cut of each connected component, and the maximum cuts of the connected components are be combined to find the maximum cut of the original graph.</para>
+      <para id="id204900">In order to accomplish this, let <emphasis effect="italics">I</emphasis> be the set of edge induced subgraphs of graph <m:math overflow="scroll"><m:mrow><m:mi>G</m:mi><m:mo>(</m:mo><m:mi>V</m:mi><m:mo>,</m:mo><m:mi>E</m:mi><m:mo>)</m:mo></m:mrow></m:math>. Let <emphasis effect="italics">E</emphasis> be indexed by <m:math overflow="scroll"><m:mrow><m:mi mathvariant="double-struck">Z</m:mi><m:mo>[</m:mo><m:mn>1</m:mn><m:mo>,</m:mo><m:mo>|</m:mo><m:mi>E</m:mi><m:mo>|</m:mo><m:mo>]</m:mo></m:mrow></m:math> according to some ordering. Let I be indexed by <m:math overflow="scroll"><m:mrow><m:mi mathvariant="double-struck">Z</m:mi><m:mo>[</m:mo><m:mn>0</m:mn><m:mo>,</m:mo><m:msup><m:mn>2</m:mn><m:mrow><m:mo>|</m:mo><m:mi>E</m:mi><m:mo>|</m:mo></m:mrow></m:msup><m:mo>-</m:mo><m:mn>1</m:mn><m:mo>]</m:mo></m:mrow></m:math> according to the bijective function <m:math overflow="scroll"><m:mrow><m:mi>f</m:mi><m:mo>:</m:mo><m:mi mathvariant="double-struck">Z</m:mi><m:mo>[</m:mo><m:mn>0</m:mn><m:mo>,</m:mo><m:msup><m:mn>2</m:mn><m:mrow><m:mo>|</m:mo><m:mi>E</m:mi><m:mo>|</m:mo></m:mrow></m:msup><m:mo>-</m:mo><m:mn>1</m:mn><m:mo>]</m:mo><m:mo>→</m:mo><m:mi>I</m:mi></m:mrow></m:math> such that</para>
+      <equation id="id205047">
+        <m:math overflow="scroll" mode="display">
+          <m:mrow>
+            <m:msup>
+              <m:mi>f</m:mi>
+              <m:mrow>
+                <m:mo>-</m:mo>
+                <m:mn>1</m:mn>
+              </m:mrow>
+            </m:msup>
+            <m:mrow>
+              <m:mo>(</m:mo>
+              <m:msub>
+                <m:mi>G</m:mi>
+                <m:mn>1</m:mn>
+              </m:msub>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:msub>
+                  <m:mi>V</m:mi>
+                  <m:mn>1</m:mn>
+                </m:msub>
+                <m:mo>,</m:mo>
+                <m:msub>
+                  <m:mi>E</m:mi>
+                  <m:mn>1</m:mn>
+                </m:msub>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>)</m:mo>
+            </m:mrow>
+            <m:mo>=</m:mo>
+            <m:munderover>
+              <m:mo>∑</m:mo>
+              <m:mrow>
+                <m:mi>i</m:mi>
+                <m:mo>=</m:mo>
+                <m:mn>1</m:mn>
+              </m:mrow>
+              <m:mrow>
+                <m:mo>|</m:mo>
+                <m:mi>E</m:mi>
+                <m:mo>|</m:mo>
+              </m:mrow>
+            </m:munderover>
+            <m:mfenced separators="" open="{" close="">
+              <m:mtable>
+                <m:mtr>
+                  <m:mtd>
+                    <m:mn>0</m:mn>
+                  </m:mtd>
+                  <m:mtd columnalign="left">
+                    <m:mrow>
+                      <m:msub>
+                        <m:mi>e</m:mi>
+                        <m:mi>i</m:mi>
+                      </m:msub>
+                      <m:mo>∈</m:mo>
+                      <m:msub>
+                        <m:mi>E</m:mi>
+                        <m:mn>1</m:mn>
+                      </m:msub>
+                    </m:mrow>
+                  </m:mtd>
+                </m:mtr>
+                <m:mtr>
+                  <m:mtd>
+                    <m:msup>
+                      <m:mn>2</m:mn>
+                      <m:mrow>
+                        <m:mo>|</m:mo>
+                        <m:mi>E</m:mi>
+                        <m:mo>|</m:mo>
+                        <m:mo>-</m:mo>
+                        <m:mi>i</m:mi>
+                      </m:mrow>
+                    </m:msup>
+                  </m:mtd>
+                  <m:mtd columnalign="left">
+                    <m:mrow>
+                      <m:msub>
+                        <m:mi>e</m:mi>
+                        <m:mi>i</m:mi>
+                      </m:msub>
+                      <m:mo>∉</m:mo>
+                      <m:msub>
+                        <m:mi>E</m:mi>
+                        <m:mn>1</m:mn>
+                      </m:msub>
+                    </m:mrow>
+                  </m:mtd>
+                </m:mtr>
+              </m:mtable>
+            </m:mfenced>
+          </m:mrow>
+        </m:math>
+      </equation>
+      <para id="id205202">This indexing provides the advantage
+that the size of each element is the number of zeros in the binary representation of the index. Thus, it enables the use of the edge and graph indices to rapidly eliminate subgraphs that cannot be bipartite and surpass the current lower bound for the maximum cut.</para>
+      <para id="id205210">Within this framework, the algorithm searches for the lowest indexed element of <emphasis effect="italics">I</emphasis> that is bipartite and larger than the current lower bound by iterating over the edges in order, adding each edge to the cut set if it passes a parity check and stopping when the final edge is reached or the number of edges not cut ensures the result will not exceed the lower bound. If such an element is found, the size of the graph is a new lower bound for the maximum cut, and the search continues by removing last cut edge with at least one vertex not colored by a lesser indexed edge before last two edges not in cut set. Continue iterating from that edge if such an edge is found, but terminate if no such edge exists or a cut equal to the upper bound is reached. Otherwise, the search ends and the final lower bound is the size of the maximum cut.</para>
+      <para id="id205227">This process can be visualized as a directed graph, like those in <link target-id="uid8"/>, <link target-id="uid9"/>, and <link target-id="uid10"/>, where each step represents a decision whether to include an edge in the cut set. A movement directly downward from a node indicates that the corresponding edge is not cut, while a movement diagonally downward indicates that the corresponding edge is cut. Each path from the top node to one of the bottom nodes corresponds to an edge induced subgraph of the graph being examined. The number of the final node reached (from left to right starting with 0) is the number of edges included. The algorithm seeks to find a path corresponding to a bipartite subgraph that leads farthest to the right. The red line to the left represents the lower bound, and all nodes below this line cannot be part of a path that leads farther right than the lower bound. The red line to the right represents the upper bound, and all nodes to the right of this line can only be a part of paths that exceed the upper bound. Therefore these regions need not be explored. An illustrative example, corresponding to an instance of <emphasis effect="italics">K<sub>4</sub></emphasis> with an edge ordering conductive to demonstration where a lower bound of 2 and an upper bound of 4 have been initially calculated (poor lower bound chosen for purpose of demonstration), is shown in <link target-id="uid8"/>, <link target-id="uid9"/>, and <link target-id="uid10"/>.</para>
+      <figure id="uid8">
+        <media id="uid8_media" alt="">
+          <image mime-type="image/png" src="../../media/illustration1.png" id="uid8_onlineimage" width="600"><!-- NOTE: attribute width changes image size online (pixels). original width is 1082. --></image>
+          <image for="pdf" mime-type="application/postscript" src="../../media/illustration1.eps" id="uid8_printimage" print-width="3in">
+            <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+          </image>
+        </media>
+        <caption>This image illustrates the process for a <emphasis effect="italics">K<sub>4</sub></emphasis> (with poorly estimated lower bound for purposes of demonstration). Each step represents a decision on including the corresponding edge. Each path from top to bottom, like that in blue, corresponds to an edge induced subgraph. The red lines correspond to upper and lower bounds.</caption>
+      </figure>
+      <figure id="uid9">
+        <media id="uid9_media" alt="">
+          <image mime-type="image/png" src="../../media/illustration2.png" id="uid9_onlineimage" width="600"><!-- NOTE: attribute width changes image size online (pixels). original width is 1082. --></image>
+          <image for="pdf" mime-type="application/postscript" src="../../media/illustration2.eps" id="uid9_printimage" print-width="3in">
+            <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+          </image>
+        </media>
+        <caption>The algorithm searches for paths that lead further to the right than previously found. There is no need to search in regions beyond the red lines indicating bounds, which have been updated from the initial lower bound after finding a larger solution in the previous figure.</caption>
+      </figure>
+      <figure id="uid10">
+        <media id="uid10_media" alt="">
+          <image mime-type="image/png" src="../../media/illustration3.png" id="uid10_onlineimage" width="600"><!-- NOTE: attribute width changes image size online (pixels). original width is 1082. --></image>
+          <image for="pdf" mime-type="application/postscript" src="../../media/illustration3.eps" id="uid10_printimage" print-width="3in">
+            <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+          </image>
+        </media>
+        <caption>Finally, a solution leading further right is found. Because this solution is of equal size to the upper bound, the search ends since there cannot be a larger cut.</caption>
+      </figure>
+    </section>
+    <section id="cid5">
+      <title>Empirical Testing</title>
+      <para id="id205357">This new algorithm was compared to the exhaustive algorithm for performance in empirical testing as shown in <link target-id="uid11"/>. The image shows a plot of average runtime for graphs with <m:math overflow="scroll"><m:mrow><m:mo>|</m:mo><m:mi>V</m:mi><m:mo>|</m:mo><m:mo>=</m:mo><m:mn>20</m:mn></m:mrow></m:math> nodes and numbers of edges between 0 and <m:math overflow="scroll"><m:mrow><m:mn>3</m:mn><m:mo>|</m:mo><m:mi>V</m:mi><m:mo>|</m:mo><m:mo>=</m:mo><m:mn>60</m:mn></m:mrow></m:math>. Each data point for each algorithm is the average of runtimes for five randomly generated graphs with the same number of vertices. In the testing, the new algorithm outperformed the exhaustive algorithm at low densities about until <m:math overflow="scroll"><m:mrow><m:mo>|</m:mo><m:mi>E</m:mi><m:mo>|</m:mo><m:mo>&lt;</m:mo><m:mn>2</m:mn><m:mo>.</m:mo><m:mn>5</m:mn><m:mo>|</m:mo><m:mi>V</m:mi><m:mo>|</m:mo></m:mrow></m:math>, successfully improving performance over the exhaustive algorithm at sufficiently low densities. However, no comparison to other algorithms developed by other researchers has been performed, and the algorithm is not expected to match or improve upon their performance.</para>
+      <figure id="uid11">
+        <media id="uid11_media" alt="">
+          <image mime-type="image/png" src="../../media/test.png" id="uid11_onlineimage" width="600"><!-- NOTE: attribute width changes image size online (pixels). original width is 692. --></image>
+          <image for="pdf" mime-type="application/postscript" src="../../media/test.eps" id="uid11_printimage" print-width="4in">
+            <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+          </image>
+        </media>
+        <caption>This image shows a plot of average runtime for graphs with <m:math overflow="scroll"><m:mrow><m:mo>|</m:mo><m:mi>V</m:mi><m:mo>|</m:mo><m:mo>=</m:mo><m:mn>20</m:mn></m:mrow></m:math> nodes and numbers of edges between 0 and <m:math overflow="scroll"><m:mrow><m:mn>3</m:mn><m:mo>|</m:mo><m:mi>V</m:mi><m:mo>|</m:mo><m:mo>=</m:mo><m:mn>60</m:mn></m:mrow></m:math>. Each data point for each algorithm is the average of runtimes for five randomly generated graphs with the same number of vertices.</caption>
+      </figure>
+    </section>
+    <section id="cid6">
+      <title>Conclusion</title>
+      <para id="id205498">Finding the maximum cut of a graph is a difficult to compute problem in combinatorial optimization with several applications in the world of engineering and physics. This research develops and evaluates an exact branch and bound algorithm for the maximum cut of unweighted graphs that was designed for improved performance on sparse graphs. Although the algorithm developed provides a performance improvement over the exhaustive algorithm, it is not expected to perform as well or better than other algorithms developed by other researchers. Thus, further improvement of the algorithm, focusing on investigating the effect of edge orderings on the performance of the algorithm and finding additional measures to reduce the number of edge induced subgraphs traversed by the algorithm, and more extensive empirical evaluation are necessary.</para>
+    </section>
+  </content>
+  <bib:file>
+    <bib:entry id="bid3">
+      <bib:article>
+        <!--required fields-->
+        <bib:author>Barahona, Francisco et al</bib:author>
+        <bib:title>An Application of Combinatorial Optimization to Statistical Physics and Circuit Layout Design</bib:title>
+        <bib:journal/>
+        <bib:year>1988</bib:year>
+        <!--optional fields-->
+        <bib:volume/>
+        <bib:number/>
+        <bib:pages/>
+        <bib:month/>
+        <bib:note/>
+      </bib:article>
+    </bib:entry>
+    <bib:entry id="bid1">
+      <bib:article>
+        <!--required fields-->
+        <bib:author>Croce, Frederico and al, et</bib:author>
+        <bib:title>An Exact Algorithm for Maxcut in Sparse Graphs</bib:title>
+        <bib:journal/>
+        <bib:year>2006</bib:year>
+        <!--optional fields-->
+        <bib:volume/>
+        <bib:number/>
+        <bib:pages/>
+        <bib:month/>
+        <bib:note/>
+      </bib:article>
+    </bib:entry>
+    <bib:entry id="bid5">
+      <bib:article>
+        <!--required fields-->
+        <bib:author>Fedin, Sergey and Kulikov, Alexander</bib:author>
+        <bib:title><!--no math allowed in bib entries--> Time Algorithm for Max-cut</bib:title>
+        <bib:journal/>
+        <bib:year>2002</bib:year>
+        <!--optional fields-->
+        <bib:volume/>
+        <bib:number/>
+        <bib:pages/>
+        <bib:month/>
+        <bib:note/>
+      </bib:article>
+    </bib:entry>
+    <bib:entry id="bid2">
+      <bib:article>
+        <!--required fields-->
+        <bib:author>Goemans, Michael and Williamson, David</bib:author>
+        <bib:title>Improved Approximation Algorithms for Maximum Cut and Satisfiability Problems Using Semidefinite Programming</bib:title>
+        <bib:journal/>
+        <bib:year>1995</bib:year>
+        <!--optional fields-->
+        <bib:volume/>
+        <bib:number/>
+        <bib:pages/>
+        <bib:month/>
+        <bib:note/>
+      </bib:article>
+    </bib:entry>
+    <bib:entry id="bid0">
+      <bib:article>
+        <!--required fields-->
+        <bib:author>Karp, Richard</bib:author>
+        <bib:title>Reducibility Among Combinatorial Problems</bib:title>
+        <bib:journal/>
+        <bib:year>1972</bib:year>
+        <!--optional fields-->
+        <bib:volume/>
+        <bib:number/>
+        <bib:pages/>
+        <bib:month/>
+        <bib:note/>
+      </bib:article>
+    </bib:entry>
+    <bib:entry id="bid4">
+      <bib:article>
+        <!--required fields-->
+        <bib:author>Wheeler, John</bib:author>
+        <bib:title>An Investigation of the Maxcut Problem</bib:title>
+        <bib:journal/>
+        <bib:year>2004</bib:year>
+        <!--optional fields-->
+        <bib:volume/>
+        <bib:number/>
+        <bib:pages/>
+        <bib:month/>
+        <bib:note/>
+      </bib:article>
+    </bib:entry>
+  </bib:file>
+</document>

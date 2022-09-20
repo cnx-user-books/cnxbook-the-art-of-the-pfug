@@ -1,0 +1,376 @@
+<document xmlns="http://cnx.rice.edu/cnxml" xmlns:m="http://www.w3.org/1998/Math/MathML" xmlns:bib="http://bibtexml.sf.net/">
+  <title>Cell Assembly Enumeration in Random Graphs</title>
+<metadata xmlns:md="http://cnx.rice.edu/mdml">
+  <md:content-id>m34843</md:content-id>
+  <md:title>Cell Assembly Enumeration in Random Graphs</md:title>
+  <md:abstract>This report summarizes work done as part of the Computational Neuroscience PFUG under Rice University's VIGRE program. VIGRE is a program of Vertically Integrated Grants for Research and Education in the Mathematical Sciences under the direction of the National Science Foundation. A PFUG is a group of Postdocs, Faculty, Undergraduates and Graduate students formed round the study of a common problem. This module reproduces the work G. Palm "Towards a Theory of Cell Assemblies". This work was studied in the Rice University VIGRE/REU program in the Summer of 2010. This module builds an algorithm to find cell assemblies by Palm's definition and discusses some preliminary employment of that algorithm.</md:abstract>
+  <md:uuid>b0396a7f-59af-4d1a-ab11-8f000b10d721</md:uuid>
+</metadata>
+
+<content>
+    <section id="cid1">
+      <title>Introduction</title>
+      <section id="uid1">
+        <title>History</title>
+        <para id="id185260">Models of individual neurons vary in complexity, but in general, neurons tend to behave like this:</para>
+        <list id="id185264" display="block" list-type="bulleted">
+          <item id="uid2">A neuron is either excited or not excited.
+</item>
+          <item id="uid3">When excited, a neuron will stimulate neurons to which it has an outgoing connection. Otherwise, it will not stimulate other neurons.
+</item>
+          <item id="uid4">A neuron becomes excited when it receives a sufficient amount of stimulation from other neurons.
+</item>
+        </list>
+        <para id="id185642">When modeling the brain, see seek to model the collective behavior of neurons. The fundamental type of collective behavior is, by the Donald Hebb model of the brain, the cell assembly.</para>
+        <para id="id185647">First introduced by Hebb, the cell assembly is, "a diffuse structure comprising cells... capable of acting briefly as a closed system, delivering facilitation to other such systems and usually having a specific motor facilitation" <link target-id="bid0"/>. A cell assembly is a particular arrangement of a group of neurons with certain properties. The most salient of these properties is that a certain fractional portion of the assembly will excite the entire assembly.</para>
+        <para id="id185661">By Hebb's proposal, a cell assembly represents a single concept in the brain. For instance, Hebb proposes that the corner of an abstract triangle may be represented by a cell assembly <link target-id="bid0"/></para>
+        <para id="id185671">Since Hebb first discussed the concept of a cell assembly, there has been some amount of biological research supporting his ideas. For instance, the work of György Buzsáki suggests that groups of cells that fire during a given time period are correlated <link target-id="bid1"/>.</para>
+      </section>
+      <section id="uid5">
+        <title>Definitions</title>
+        <figure id="uid6">
+          <media id="uid6_media" alt="">
+            <image mime-type="image/png" src="../../media/exneighbor.png" id="uid6_onlineimage" width="665"><!-- NOTE: attribute width changes image size online (pixels). original width is 665. --></image>
+            <image mime-type="application/postscript" for="pdf" src="../../media/exneighbor.eps" id="uid6_printimage" print-width="0.5">
+              <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+            </image>
+          </media>
+          <caption>Node 1 (bright green) has the neighborhood {2, 3, 4, 5} (dark blue)</caption>
+        </figure>
+        <figure id="uid7">
+          <media id="uid7_media" alt="">
+            <image mime-type="image/png" src="../../media/excore.png" id="uid7_onlineimage" width="458"><!-- NOTE: attribute width changes image size online (pixels). original width is 458. --></image>
+            <image mime-type="application/postscript" for="pdf" src="../../media/excore.eps" id="uid7_printimage" print-width="0.5">
+              <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+            </image>
+          </media>
+          <caption>A k-core for which k=3</caption>
+        </figure>
+        <figure id="uid8">
+          <media id="uid8_media" alt="">
+            <image mime-type="image/png" src="../../media/excl.png" id="uid8_onlineimage" width="850"><!-- NOTE: attribute width changes image size online (pixels). original width is 850. --></image>
+            <image mime-type="application/postscript" for="pdf" src="../../media/excl.eps" id="uid8_printimage" print-width="0.5">
+              <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+            </image>
+          </media>
+          <caption>The process of closure for k=2: in step 2, an arbitrary 3 vertices are activated. Through each subsequent step, those vertices having at least 2 neighbors in the active set are activated in turn. After step 5, there are no more vertices to activate, so the vertices highlighted in step 5. are the closure of the vertices highlighted in step 2.</caption>
+        </figure>
+        <para id="id185738">Gunther Palm defined Hebb's assembly in the concrete language of graph theory <link target-id="bid2"/>. In brief, Palm's discussion constructs, or depends upon, the following definitions:</para>
+        <list id="id185748" display="block" list-type="bulleted">
+          <item id="uid9"><emphasis effect="italics">graph:</emphasis> A graph <m:math overflow="scroll"><m:mi>G</m:mi></m:math> has a vertex set, <m:math overflow="scroll"><m:mrow><m:mi>V</m:mi><m:mo>(</m:mo><m:mi>G</m:mi><m:mo>)</m:mo><m:mo>,</m:mo></m:mrow></m:math> and a set of edges, <m:math overflow="scroll"><m:mrow><m:mi>E</m:mi><m:mo>(</m:mo><m:mi>G</m:mi><m:mo>)</m:mo><m:mo>⊆</m:mo><m:mi>V</m:mi><m:mo>(</m:mo><m:mi>G</m:mi><m:mo>)</m:mo><m:mo>×</m:mo><m:mi>V</m:mi><m:mo>(</m:mo><m:mi>G</m:mi><m:mo>)</m:mo><m:mo>.</m:mo></m:mrow></m:math> If <m:math overflow="scroll"><m:mrow><m:mi>u</m:mi><m:mo>,</m:mo><m:mi>v</m:mi><m:mo>∈</m:mo><m:mi>V</m:mi><m:mo>(</m:mo><m:mi>G</m:mi><m:mo>)</m:mo></m:mrow></m:math> and <m:math overflow="scroll"><m:mrow><m:mi>u</m:mi><m:mi>v</m:mi><m:mo>∈</m:mo><m:mi>E</m:mi><m:mo>(</m:mo><m:mi>G</m:mi><m:mo>)</m:mo><m:mo>,</m:mo></m:mrow></m:math> we say that the graph <m:math overflow="scroll"><m:mi>G</m:mi></m:math> has an edge directed from the vertex <m:math overflow="scroll"><m:mi>u</m:mi></m:math> toward the vertex <m:math overflow="scroll"><m:mrow><m:mi>v</m:mi><m:mo>.</m:mo></m:mrow></m:math> Vertices are labeled with integers by convention.
+</item>
+          <item id="uid10"><emphasis effect="italics">neighborhood:</emphasis> We define the neighborhood of some vertex <m:math overflow="scroll"><m:mrow><m:mi>v</m:mi><m:mo>∈</m:mo><m:mi>V</m:mi><m:mo>(</m:mo><m:mi>G</m:mi><m:mo>)</m:mo></m:mrow></m:math> with respect to <m:math overflow="scroll"><m:mrow><m:mi>G</m:mi><m:mo>,</m:mo></m:mrow></m:math> call it <m:math overflow="scroll"><m:mrow><m:mi>N</m:mi><m:mo>(</m:mo><m:mi>v</m:mi><m:mo>,</m:mo><m:mi>G</m:mi><m:mo>)</m:mo><m:mo>,</m:mo></m:mrow></m:math> as <m:math overflow="scroll"><m:mrow><m:mo>{</m:mo><m:mi>u</m:mi><m:mo>:</m:mo><m:mo>∃</m:mo><m:mi>u</m:mi><m:mi>v</m:mi><m:mo>∈</m:mo><m:mi>E</m:mi><m:mo>(</m:mo><m:mi>G</m:mi><m:mo>)</m:mo><m:mo>}</m:mo></m:mrow></m:math> (<link target-id="uid6"/>).
+</item>
+          <item id="uid11"><emphasis effect="italics">degree:</emphasis> The degree of a vertex <m:math overflow="scroll"><m:mrow><m:mi>v</m:mi><m:mo>∈</m:mo><m:mi>V</m:mi><m:mo>(</m:mo><m:mi>G</m:mi><m:mo>)</m:mo></m:mrow></m:math> with respect to <m:math overflow="scroll"><m:mrow><m:mi>G</m:mi><m:mo>,</m:mo></m:mrow></m:math> call it <m:math overflow="scroll"><m:mrow><m:mi>D</m:mi><m:mo>(</m:mo><m:mi>v</m:mi><m:mo>,</m:mo><m:mi>G</m:mi><m:mo>)</m:mo><m:mo>,</m:mo></m:mrow></m:math> is <m:math overflow="scroll"><m:mrow><m:mo>|</m:mo><m:mi>N</m:mi><m:mo>(</m:mo><m:mi>v</m:mi><m:mo>,</m:mo><m:mi>G</m:mi><m:mo>)</m:mo><m:mo>|</m:mo><m:mo>.</m:mo></m:mrow></m:math></item>
+          <item id="uid12"><emphasis effect="italics">subgraph:</emphasis> A graph <m:math overflow="scroll"><m:mi>g</m:mi></m:math> is a subgraph of <m:math overflow="scroll"><m:mi>G</m:mi></m:math> iff <m:math overflow="scroll"><m:mrow><m:mi>V</m:mi><m:mo>(</m:mo><m:mi>g</m:mi><m:mo>)</m:mo><m:mo>⊆</m:mo><m:mi>V</m:mi><m:mo>(</m:mo><m:mi>G</m:mi><m:mo>)</m:mo></m:mrow></m:math> and <m:math overflow="scroll"><m:mrow><m:mi>E</m:mi><m:mo>(</m:mo><m:mi>g</m:mi><m:mo>)</m:mo><m:mo>⊆</m:mo><m:mi>E</m:mi><m:mo>(</m:mo><m:mi>G</m:mi><m:mo>)</m:mo><m:mo>.</m:mo></m:mrow></m:math> Further, <m:math overflow="scroll"><m:mi>g</m:mi></m:math> is an induced subgraph of <m:math overflow="scroll"><m:mi>G</m:mi></m:math> iff <m:math overflow="scroll"><m:mi>g</m:mi></m:math> is a subgraph of <m:math overflow="scroll"><m:mi>G</m:mi></m:math> and <m:math overflow="scroll"><m:mrow><m:mo>∀</m:mo><m:mi>e</m:mi><m:mo>∈</m:mo><m:mi>E</m:mi><m:mo>(</m:mo><m:mi>G</m:mi><m:mo>)</m:mo><m:mo>∩</m:mo><m:mo>(</m:mo><m:mi>V</m:mi><m:mo>(</m:mo><m:mi>g</m:mi><m:mo>)</m:mo><m:mo>×</m:mo><m:mi>V</m:mi><m:mo>(</m:mo><m:mi>g</m:mi><m:mo>)</m:mo><m:mo>)</m:mo><m:mo>,</m:mo><m:mspace width="0.277778em"/><m:mi>e</m:mi><m:mo>∈</m:mo><m:mi>E</m:mi><m:mo>(</m:mo><m:mi>g</m:mi><m:mo>)</m:mo><m:mo>.</m:mo></m:mrow></m:math></item>
+          <item id="uid13"><emphasis effect="italics">k-core:</emphasis> A subgraph <m:math overflow="scroll"><m:mi>g</m:mi></m:math> of <m:math overflow="scroll"><m:mi>G</m:mi></m:math> is a <m:math overflow="scroll"><m:mi>k</m:mi></m:math>-core iff <m:math overflow="scroll"><m:mrow><m:mo>∀</m:mo><m:mi>v</m:mi><m:mo>∈</m:mo><m:mi>V</m:mi><m:mo>(</m:mo><m:mi>g</m:mi><m:mo>)</m:mo><m:mo>,</m:mo><m:mo>|</m:mo><m:mi>X</m:mi><m:mo>|</m:mo><m:mo>≥</m:mo><m:mi>k</m:mi><m:mo>,</m:mo></m:mrow></m:math> where <m:math overflow="scroll"><m:mrow><m:mi>X</m:mi><m:mo>=</m:mo><m:mi>N</m:mi><m:mo>(</m:mo><m:mi>v</m:mi><m:mo>)</m:mo><m:mo>∩</m:mo><m:mi>V</m:mi><m:mo>(</m:mo><m:mi>g</m:mi><m:mo>)</m:mo></m:mrow></m:math> (<link target-id="uid7"/>).
+</item>
+          <item id="uid14"><emphasis effect="italics">minimal k-core</emphasis> A subgraph <m:math overflow="scroll"><m:mi>g</m:mi></m:math> of <m:math overflow="scroll"><m:mi>G</m:mi></m:math> is a minimal k-core iff it has no induced subgraphs which are k-cores.
+</item>
+          <item id="uid15"><emphasis effect="italics">maximum k-core</emphasis> A subgraph <m:math overflow="scroll"><m:mi>g</m:mi></m:math> of <m:math overflow="scroll"><m:mi>G</m:mi></m:math> is a maximum k-core iff <m:math overflow="scroll"><m:mi>G</m:mi></m:math> contains no k-cores <m:math overflow="scroll"><m:mi>h</m:mi></m:math> for which the <m:math overflow="scroll"><m:mrow><m:mo>|</m:mo><m:mi>V</m:mi><m:mo>(</m:mo><m:mi>h</m:mi><m:mo>)</m:mo><m:mo>|</m:mo><m:mo>&gt;</m:mo><m:mo>|</m:mo><m:mi>V</m:mi><m:mo>(</m:mo><m:mi>g</m:mi><m:mo>)</m:mo><m:mo>|</m:mo><m:mo>.</m:mo></m:mrow></m:math></item>
+          <item id="uid16"><emphasis effect="italics">activation:</emphasis> We say that a vertex <m:math overflow="scroll"><m:mrow><m:mi>v</m:mi><m:mo>∈</m:mo><m:mi>V</m:mi><m:mo>(</m:mo><m:mi>G</m:mi><m:mo>)</m:mo></m:mrow></m:math> can be either active or inactive. We generally say that, initially, an arbitrary subset of vertices <m:math overflow="scroll"><m:mrow><m:mi>M</m:mi><m:mo>⊆</m:mo><m:mi>V</m:mi><m:mo>(</m:mo><m:mi>G</m:mi><m:mo>)</m:mo></m:mrow></m:math> are active and the rest inactive. We further define a map <m:math overflow="scroll"><m:mrow><m:msub><m:mi>f</m:mi><m:mi>k</m:mi></m:msub><m:mrow><m:mo>(</m:mo><m:mi>M</m:mi><m:mo>,</m:mo><m:mi>G</m:mi><m:mo>)</m:mo></m:mrow><m:mo>:</m:mo><m:mrow><m:mo>(</m:mo><m:mtext>sets</m:mtext><m:mspace width="4.pt"/><m:mtext>of</m:mtext><m:mspace width="4.pt"/><m:mtext>vertices</m:mtext><m:mo>,</m:mo><m:mtext>graphs</m:mtext><m:mo>)</m:mo></m:mrow><m:mo>→</m:mo><m:mrow><m:mo>(</m:mo><m:mtext>sets</m:mtext><m:mspace width="4.pt"/><m:mtext>of</m:mtext><m:mspace width="4.pt"/><m:mtext>vertices</m:mtext><m:mo>)</m:mo></m:mrow></m:mrow></m:math> which performs the following operation:
+<list id="id186821" display="block" list-type="bulleted"><item id="uid17">Take a graph <m:math overflow="scroll"><m:mrow><m:mi>G</m:mi><m:mo>,</m:mo></m:mrow></m:math> and a set of vertices, <m:math overflow="scroll"><m:mrow><m:mi>M</m:mi><m:mo>,</m:mo></m:mrow></m:math> where <m:math overflow="scroll"><m:mrow><m:mi>M</m:mi><m:mo>⊆</m:mo><m:mi>V</m:mi><m:mo>(</m:mo><m:mi>G</m:mi><m:mo>)</m:mo><m:mo>.</m:mo></m:mrow></m:math></item><item id="uid18"><m:math overflow="scroll"><m:mrow><m:mo>∀</m:mo><m:mi>v</m:mi><m:mo>∈</m:mo><m:mi>V</m:mi><m:mo>(</m:mo><m:mi>G</m:mi><m:mo>)</m:mo></m:mrow></m:math>:
+<list id="id186910" display="block" list-type="bulleted"><item id="uid19">let <m:math overflow="scroll"><m:mrow><m:mi>Y</m:mi><m:mo>=</m:mo><m:mi>M</m:mi><m:mo>∩</m:mo><m:mi>N</m:mi><m:mo>(</m:mo><m:mi>v</m:mi><m:mo>,</m:mo><m:mi>G</m:mi><m:mo>)</m:mo></m:mrow></m:math></item><item id="uid20">iff <m:math overflow="scroll"><m:mrow><m:mo>|</m:mo><m:mi>Y</m:mi><m:mo>|</m:mo><m:mo>≥</m:mo><m:mi>k</m:mi><m:mo>,</m:mo></m:mrow></m:math> then <m:math overflow="scroll"><m:mrow><m:mi>v</m:mi><m:mo>∈</m:mo><m:mi>R</m:mi></m:mrow></m:math></item></list></item><item id="uid21">Return <m:math overflow="scroll"><m:mrow><m:mi>R</m:mi><m:mo>.</m:mo></m:mrow></m:math></item></list>
+For convenience, we add a superscript <m:math overflow="scroll"><m:mrow><m:msubsup><m:mi>f</m:mi><m:mi>k</m:mi><m:mi>n</m:mi></m:msubsup><m:mrow><m:mo>(</m:mo><m:mi>M</m:mi><m:mo>,</m:mo><m:mi>G</m:mi><m:mo>)</m:mo></m:mrow><m:mo>,</m:mo></m:mrow></m:math> where <m:math overflow="scroll"><m:mrow><m:msubsup><m:mi>f</m:mi><m:mi>k</m:mi><m:mn>2</m:mn></m:msubsup><m:mrow><m:mo>(</m:mo><m:mi>M</m:mi><m:mo>,</m:mo><m:mi>G</m:mi><m:mo>)</m:mo></m:mrow><m:mo>=</m:mo><m:msub><m:mi>f</m:mi><m:mi>k</m:mi></m:msub><m:mrow><m:mo>(</m:mo><m:msub><m:mi>f</m:mi><m:mi>k</m:mi></m:msub><m:mrow><m:mo>(</m:mo><m:mi>M</m:mi><m:mo>,</m:mo><m:mi>G</m:mi><m:mo>)</m:mo></m:mrow><m:mo>,</m:mo><m:mi>G</m:mi><m:mo>)</m:mo></m:mrow><m:mo>,</m:mo><m:mspace width="0.277778em"/><m:msubsup><m:mi>f</m:mi><m:mi>k</m:mi><m:mn>3</m:mn></m:msubsup><m:mrow><m:mo>(</m:mo><m:mi>M</m:mi><m:mo>,</m:mo><m:mi>G</m:mi><m:mo>)</m:mo></m:mrow><m:mo>=</m:mo><m:msub><m:mi>f</m:mi><m:mi>k</m:mi></m:msub><m:mrow><m:mo>(</m:mo><m:msub><m:mi>f</m:mi><m:mi>k</m:mi></m:msub><m:mrow><m:mo>(</m:mo><m:msub><m:mi>f</m:mi><m:mi>k</m:mi></m:msub><m:mrow><m:mo>(</m:mo><m:mi>M</m:mi><m:mo>,</m:mo><m:mi>G</m:mi><m:mo>)</m:mo></m:mrow><m:mo>,</m:mo><m:mi>G</m:mi><m:mo>)</m:mo></m:mrow><m:mo>,</m:mo><m:mi>G</m:mi><m:mo>)</m:mo></m:mrow><m:mo>,</m:mo></m:mrow></m:math> etc.
+</item>
+          <item id="uid22"><emphasis effect="italics">closure:</emphasis> We say that the closure of a set of active nodes <m:math overflow="scroll"><m:mi>M</m:mi></m:math> with respect to the graph <m:math overflow="scroll"><m:mrow><m:mi>G</m:mi><m:mo>,</m:mo></m:mrow></m:math> call it <m:math overflow="scroll"><m:mrow><m:mi>c</m:mi><m:msub><m:mi>l</m:mi><m:mi>k</m:mi></m:msub><m:mrow><m:mo>(</m:mo><m:mi>M</m:mi><m:mo>,</m:mo><m:mi>G</m:mi><m:mo>)</m:mo></m:mrow></m:mrow></m:math>, is equal to <m:math overflow="scroll"><m:mrow><m:msubsup><m:mi>f</m:mi><m:mi>k</m:mi><m:mi>∞</m:mi></m:msubsup><m:mrow><m:mo>(</m:mo><m:mi>M</m:mi><m:mo>,</m:mo><m:mi>G</m:mi><m:mo>)</m:mo></m:mrow><m:mo>.</m:mo></m:mrow></m:math> If <m:math overflow="scroll"><m:mrow><m:msubsup><m:mi>f</m:mi><m:mi>k</m:mi><m:mi>n</m:mi></m:msubsup><m:mrow><m:mo>(</m:mo><m:mi>M</m:mi><m:mo>,</m:mo><m:mi>G</m:mi><m:mo>)</m:mo></m:mrow></m:mrow></m:math> does not converge for some sufficiently large <m:math overflow="scroll"><m:mrow><m:mi>n</m:mi><m:mo>,</m:mo></m:mrow></m:math> then the closure of <m:math overflow="scroll"><m:mi>M</m:mi></m:math> is undefined (<link target-id="uid8"/>).
+</item>
+          <item id="uid23"><emphasis effect="italics">k-tight:</emphasis> A k-core <m:math overflow="scroll"><m:mrow><m:mi>T</m:mi><m:mo>,</m:mo></m:mrow></m:math> which is an induced subgraph of <m:math overflow="scroll"><m:mrow><m:mi>G</m:mi><m:mo>,</m:mo></m:mrow></m:math> is k-tight iff it satisfies the following condition:
+<list id="id187394" display="block" list-type="bulleted"><item id="uid24"><m:math overflow="scroll"><m:mrow><m:mo>∀</m:mo><m:mi>K</m:mi></m:mrow></m:math> where <m:math overflow="scroll"><m:mi>K</m:mi></m:math> is an induced subgraph of <m:math overflow="scroll"><m:mi>T</m:mi></m:math> and a k-core:
+<list id="id187438" display="block" list-type="bulleted"><item id="uid25"><m:math overflow="scroll"><m:mrow><m:mi>c</m:mi><m:mi>l</m:mi><m:mo>(</m:mo><m:mi>V</m:mi><m:mo>(</m:mo><m:mi>K</m:mi><m:mo>)</m:mo><m:mo>,</m:mo><m:mi>G</m:mi><m:mo>)</m:mo><m:mo>⊇</m:mo><m:mi>V</m:mi><m:mo>(</m:mo><m:mi>T</m:mi><m:mo>)</m:mo><m:mo>,</m:mo></m:mrow></m:math> or,
+</item><item id="uid26"><m:math overflow="scroll"><m:mrow><m:mi>c</m:mi><m:mi>l</m:mi><m:mo>(</m:mo><m:mi>V</m:mi><m:mo>(</m:mo><m:mi>T</m:mi><m:mo>)</m:mo><m:mo>∖</m:mo><m:mi>V</m:mi><m:mo>(</m:mo><m:mi>K</m:mi><m:mo>)</m:mo><m:mo>,</m:mo><m:mi>G</m:mi><m:mo>)</m:mo><m:mo>=</m:mo><m:mi>∅</m:mi></m:mrow></m:math></item></list></item></list></item>
+          <item id="uid27"><emphasis effect="italics">k-assembly:</emphasis> An induced subgraph <m:math overflow="scroll"><m:mi>A</m:mi></m:math> of <m:math overflow="scroll"><m:mi>G</m:mi></m:math> is a k-assembly iff <m:math overflow="scroll"><m:mrow><m:mi>V</m:mi><m:mo>(</m:mo><m:mi>A</m:mi><m:mo>)</m:mo><m:mo>=</m:mo><m:mi>c</m:mi><m:mi>l</m:mi><m:mo>(</m:mo><m:mi>V</m:mi><m:mo>(</m:mo><m:mi>T</m:mi><m:mo>)</m:mo><m:mo>,</m:mo><m:mi>G</m:mi><m:mo>)</m:mo></m:mrow></m:math> where <m:math overflow="scroll"><m:mi>T</m:mi></m:math> is a k-tight induced subgraph of <m:math overflow="scroll"><m:mrow><m:mi>G</m:mi><m:mo>.</m:mo></m:mrow></m:math></item>
+        </list>
+      </section>
+    </section>
+    <section id="cid2">
+      <title>Goal</title>
+      <para id="id187656">We seek to understand Palm's definition of cell assembly in context. In particular, we seek to determine whether a brain-sized random graph can contain a realistic number of assemblies by Palm's definition.</para>
+      <para id="id187661">In this report, we describe the process of k-assembly enumeration and explain some preliminary experimentation using that algorithm.</para>
+      <para id="id187665">The report exists in two forms. The abridged version includes the material described above, while the full version goes on to include more trend examples, an extensive collection of visual examples of k-Assemblies, and implementation.</para><para id="eip-537">This is the abridged version. The full version is available <link resource="fullreport.pdf">here</link>.</para>
+    </section>
+    <section id="cid3">
+      <title>Finding k-Assemblies</title>
+      <para id="id187680">Finding k-assemblies takes place in two steps: k-core enumeration and k-assembly confirmation:</para>
+      <section id="uid28">
+        <title>k-Core Enumeration</title>
+        <para id="id187693">The process of k-Core enumeration follows the general form of a branch and bound algorithm. That is, it follows the process:</para>
+        <list id="id187697" display="block" list-type="enumerated">
+          <item id="uid29">If possible, solve the problem, otherwise:
+</item>
+          <item id="uid30">Break the problem into several smaller problems, for each of these smaller problems, go to step 1.
+</item>
+        </list>
+        <para id="id187728">Applied to our problem, the general algorithm looks like this, given some input graph <m:math overflow="scroll"><m:mi>G</m:mi></m:math> (<link target-id="uid31"/>):</para>
+        <figure id="uid31">
+          <media id="uid31_media" alt="">
+            <image mime-type="image/png" src="../../media/branchsm.png" id="uid31_onlineimage" width="904"><!-- NOTE: attribute width changes image size online (pixels). original width is 904. --></image>
+            <image mime-type="application/postscript" for="pdf" src="../../media/branchsm.eps" id="uid31_printimage" print-width="0.30">
+              <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+            </image>
+          </media>
+          <caption>An exhaustive 2-core enumeration: Ultimately, every induced subgraph is enumerated except those that are not 2-cores.</caption>
+        </figure>
+        <figure id="uid32">
+          <media id="uid32_media" alt="">
+            <image mime-type="image/png" src="../../media/maxcoresm.png" id="uid32_onlineimage" width="937"><!-- NOTE: attribute width changes image size online (pixels). original width is 937. --></image>
+            <image mime-type="application/postscript" for="pdf" src="../../media/maxcoresm.eps" id="uid32_printimage" print-width="0.30">
+              <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+            </image>
+          </media>
+          <caption>The maximum k-core algorithm for a 3-core: 1,2) A vertex is eliminated from the graph, leaving an induced subgraph which is not a minimal 3-core. 3,4) All vertices which have insufficient degree with respect to the new subgraph graph (less than 3 in this case) are eliminated. 5,6) Again, a vertex without sufficient degree is eliminated. The subgraph pictured in step 6 has no vertices of less than k degree, so the process is completed.</caption>
+        </figure>
+        <list id="id187782" display="block" list-type="enumerated">
+          <item id="uid33">If <m:math overflow="scroll"><m:mi>G</m:mi></m:math> is a minimal k-core, stop, otherwise:
+</item>
+          <item id="uid34">Dissect <m:math overflow="scroll"><m:mi>G</m:mi></m:math> as follows:
+<list id="id187828" display="block" list-type="enumerated"><item id="uid35">Find the maximum k-core that is an induced subgraph of <m:math overflow="scroll"><m:mrow><m:mi>G</m:mi><m:mo>,</m:mo></m:mrow></m:math> call it <m:math overflow="scroll"><m:mi>H</m:mi></m:math> (<link target-id="uid32"/>).
+</item><item id="uid36">For each vertex <m:math overflow="scroll"><m:mrow><m:mi>v</m:mi><m:mo>⊂</m:mo><m:mi>V</m:mi><m:mo>(</m:mo><m:mi>H</m:mi><m:mo>)</m:mo><m:mo>,</m:mo></m:mrow></m:math> go to step 1, using for the new <m:math overflow="scroll"><m:mi>G</m:mi></m:math> and induced subgraph of <m:math overflow="scroll"><m:mi>H</m:mi></m:math> such that <m:math overflow="scroll"><m:mrow><m:mi>V</m:mi><m:mo>(</m:mo><m:mi>G</m:mi><m:mo>)</m:mo><m:mo>=</m:mo><m:mi>V</m:mi><m:mo>(</m:mo><m:mi>H</m:mi><m:mo>)</m:mo><m:mo>∖</m:mo><m:mi>v</m:mi><m:mo>.</m:mo></m:mrow></m:math></item></list></item>
+        </list>
+        <para id="id187956">This process finds all k-cores in the original <m:math overflow="scroll"><m:mrow><m:mi>G</m:mi><m:mo>.</m:mo></m:mrow></m:math> To sketch a proof:</para>
+        <list id="id187972" display="block" list-type="bulleted">
+          <item id="uid37">An algorithm that finds all induced subgraphs in <m:math overflow="scroll"><m:mi>G</m:mi></m:math> and then filters k-cores from the rest will trivially enumerate all induced k-cores in <m:math overflow="scroll"><m:mrow><m:mi>G</m:mi><m:mo>.</m:mo></m:mrow></m:math></item>
+          <item id="uid38">The k-core enumeration algorithm described is equivalent to such an algorithm. By in turn eliminating every vertex from a graph, the algorithm find all induced subgraphs except for those it skips. The skipped subgraphs will never generate k-cores not already generated:
+<list id="id188022" display="block" list-type="bulleted"><item id="uid39">Skipped subgraphs have at least one vertex of degree less than <m:math overflow="scroll"><m:mrow><m:mi>k</m:mi><m:mo>,</m:mo></m:mrow></m:math> with respect to that subgraph; call this vertex set <m:math overflow="scroll"><m:mrow><m:msub><m:mi>W</m:mi><m:mn>1</m:mn></m:msub><m:mo>.</m:mo></m:mrow></m:math> The subgraph may contain vertices that would have degrees less than <m:math overflow="scroll"><m:mi>k</m:mi></m:math> if excluding the vertices in <m:math overflow="scroll"><m:mrow><m:msub><m:mi>W</m:mi><m:mn>1</m:mn></m:msub><m:mo>;</m:mo></m:mrow></m:math> call this set <m:math overflow="scroll"><m:mrow><m:msub><m:mi>W</m:mi><m:mn>2</m:mn></m:msub><m:mo>.</m:mo></m:mrow></m:math> There may also be vertices dependent on the vertices in <m:math overflow="scroll"><m:msub><m:mi>W</m:mi><m:mn>1</m:mn></m:msub></m:math> and <m:math overflow="scroll"><m:msub><m:mi>W</m:mi><m:mn>2</m:mn></m:msub></m:math> to maintain a degree of <m:math overflow="scroll"><m:mi>k</m:mi></m:math>; call those <m:math overflow="scroll"><m:mrow><m:msub><m:mi>W</m:mi><m:mn>3</m:mn></m:msub><m:mo>.</m:mo></m:mrow></m:math> We can continue forming these sets until <m:math overflow="scroll"><m:mrow><m:mi>G</m:mi><m:mo>∖</m:mo><m:mo>(</m:mo><m:msub><m:mi>W</m:mi><m:mn>1</m:mn></m:msub><m:mo>∪</m:mo><m:msub><m:mi>W</m:mi><m:mn>2</m:mn></m:msub><m:mo>∪</m:mo><m:mo>.</m:mo><m:mo>.</m:mo><m:mo>.</m:mo><m:mo>∪</m:mo><m:msub><m:mi>W</m:mi><m:mi>n</m:mi></m:msub><m:mo>)</m:mo></m:mrow></m:math> is a k-core for some positive integer <m:math overflow="scroll"><m:mrow><m:mi>n</m:mi><m:mo>.</m:mo></m:mrow></m:math> Define <m:math overflow="scroll"><m:mi>W</m:mi></m:math> as <m:math overflow="scroll"><m:mrow><m:mo>(</m:mo><m:msub><m:mi>W</m:mi><m:mn>1</m:mn></m:msub><m:mo>∪</m:mo><m:msub><m:mi>V</m:mi><m:mn>2</m:mn></m:msub><m:mo>∪</m:mo><m:mo>.</m:mo><m:mo>.</m:mo><m:mo>.</m:mo><m:mo>∪</m:mo><m:msub><m:mi>W</m:mi><m:mi>n</m:mi></m:msub><m:mo>)</m:mo></m:mrow></m:math></item><item id="uid40">Trivially, take some induced subgraph of <m:math overflow="scroll"><m:mi>G</m:mi></m:math> called <m:math overflow="scroll"><m:mrow><m:mi>g</m:mi><m:mo>.</m:mo><m:mspace width="0.277778em"/><m:mo>∀</m:mo><m:mi>v</m:mi><m:mo>∈</m:mo><m:mi>V</m:mi><m:mo>(</m:mo><m:mi>g</m:mi><m:mo>)</m:mo><m:mo>,</m:mo><m:mspace width="0.277778em"/><m:mi>D</m:mi><m:mo>(</m:mo><m:mi>v</m:mi><m:mo>,</m:mo><m:mi>g</m:mi><m:mo>)</m:mo><m:mo>≤</m:mo><m:mi>D</m:mi><m:mo>(</m:mo><m:mi>v</m:mi><m:mo>,</m:mo><m:mi>G</m:mi><m:mo>)</m:mo></m:mrow></m:math></item><item id="uid41">Consequently, no induced subgraph of <m:math overflow="scroll"><m:mi>G</m:mi></m:math> will contain a k-core including any vertices in <m:math overflow="scroll"><m:mrow><m:mi>W</m:mi><m:mo>,</m:mo></m:mrow></m:math> since no vertex in <m:math overflow="scroll"><m:mi>W</m:mi></m:math> has gained degree upon finding an induced subgraph, and, consequently, the collective <m:math overflow="scroll"><m:mi>W</m:mi></m:math> still cannot meet the degree threshold to be included in a k-core.
+</item><item id="uid42">Subgraphs are skipped iff they contain vertices in <m:math overflow="scroll"><m:mrow><m:mi>W</m:mi><m:mo>.</m:mo></m:mrow></m:math></item></list></item>
+        </list>
+        <section id="uid43">
+          <title>Complexity</title>
+          <para id="id188457">The algorithm described above runs in approximately exponential <m:math overflow="scroll"><m:mrow><m:mo>(</m:mo><m:mi>O</m:mi><m:mo>(</m:mo><m:mi>n</m:mi><m:mo>!</m:mo><m:mo>)</m:mo><m:mo>)</m:mo></m:mrow></m:math> time, which is to be expected since it solves an NP-hard problem.</para>
+          <figure id="uid44">
+            <media id="uid44_media" alt="">
+              <image mime-type="image/png" src="../../media/exclique.png" id="uid44_onlineimage" width="448"><!-- NOTE: attribute width changes image size online (pixels). original width is 448. --></image>
+              <image mime-type="application/postscript" for="pdf" src="../../media/exclique.eps" id="uid44_printimage" print-width="0.45">
+                <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+              </image>
+            </media>
+            <caption>A clique for which <m:math overflow="scroll"><m:mrow><m:mi>k</m:mi><m:mo>=</m:mo><m:mn>4</m:mn></m:mrow></m:math></caption>
+          </figure>
+          <para id="id188512">The enumeration of k-cores reduces to the NP complete clique problem <link target-id="bid3"/> as follows:</para>
+          <list id="id188522" display="block" list-type="bulleted">
+            <item id="uid45">A clique is a k-core for which the number of vertices in the core is equal to <m:math overflow="scroll"><m:mrow><m:mi>k</m:mi><m:mo>+</m:mo><m:mn>1</m:mn></m:mrow></m:math> (<link target-id="uid44"/>).
+</item>
+            <item id="uid46">The clique problem is: determine whether an arbitrary graph contains a clique of at least size <m:math overflow="scroll"><m:mrow><m:mi>n</m:mi><m:mo>.</m:mo></m:mrow></m:math></item>
+            <item id="uid47">If we could accomplish k-core enumeration in polynomial time, say <m:math overflow="scroll"><m:mrow><m:mi>O</m:mi><m:mo>(</m:mo><m:msup><m:mi>n</m:mi><m:mi>k</m:mi></m:msup><m:mo>)</m:mo><m:mo>,</m:mo></m:mrow></m:math> where <m:math overflow="scroll"><m:mi>n</m:mi></m:math> is the number of nodes in the graph, then:
+<list id="id188627" display="block" list-type="bulleted"><item id="uid48">We could find cores of all <m:math overflow="scroll"><m:mi>k</m:mi></m:math> in, at most, <m:math overflow="scroll"><m:mrow><m:mi>O</m:mi><m:mrow><m:mo>(</m:mo><m:mi>n</m:mi><m:mo>×</m:mo><m:msup><m:mi>n</m:mi><m:mi>k</m:mi></m:msup><m:mo>)</m:mo></m:mrow><m:mo>=</m:mo><m:mi>O</m:mi><m:mrow><m:mo>(</m:mo><m:msup><m:mi>n</m:mi><m:mrow><m:mi>k</m:mi><m:mo>+</m:mo><m:mn>1</m:mn></m:mrow></m:msup><m:mo>)</m:mo></m:mrow></m:mrow></m:math> time, because there is no <m:math overflow="scroll"><m:mi>k</m:mi></m:math> core in a given graph for which <m:math overflow="scroll"><m:mi>k</m:mi></m:math> exceeds <m:math overflow="scroll"><m:mrow><m:mi>n</m:mi><m:mo>.</m:mo></m:mrow></m:math></item><item id="uid49">Without increasing fundamental run-time, we could flag each of those k-cores which is a clique. In doing so, we find all cliques.
+</item><item id="uid50">By simply finding the largest of this group of cliques, we have solved the clique problem in polynomial time.
+</item></list></item>
+          </list>
+          <para id="id188757">Consequently, k-core enumeration belongs to the class of NP-hard problems, meaning that it is not clear whether an algorithm that runs significantly faster than exponential time can be devised.</para>
+          <para id="id188762">That is not to say, however, that the algorithm cannot be improved upon at all. For instance, one of our implementations takes advantage of the fact that, if we form an induced subgraph <m:math overflow="scroll"><m:mi>H</m:mi></m:math> by removing some vertex <m:math overflow="scroll"><m:mi>v</m:mi></m:math> from a graph <m:math overflow="scroll"><m:mrow><m:mi>G</m:mi><m:mo>,</m:mo></m:mrow></m:math> if <m:math overflow="scroll"><m:mi>v</m:mi></m:math> is not in a k-core, then the graph <m:math overflow="scroll"><m:mi>I</m:mi></m:math> resulting from removing any of <m:math overflow="scroll"><m:mi>v</m:mi></m:math>'s neighbors that are not in a k-core from <m:math overflow="scroll"><m:mi>G</m:mi></m:math> will have the same maximum k-core as <m:math overflow="scroll"><m:mrow><m:mi>H</m:mi><m:mo>.</m:mo></m:mrow></m:math> Also, our algorithm takes care not to revisit previously enumerated branches. Different approaches can certainly speed up an algorithm to solve the problem, but it is not clear that any approach will make the algorithm run in sub-exponential time.</para>
+        </section>
+      </section>
+      <section id="uid51">
+        <title>Assembly Enumeration</title>
+        <figure id="uid52">
+          <media id="uid52_media" alt="">
+            <image mime-type="image/png" src="../../media/assemblyDiagram2.png" id="uid52_onlineimage" width="641"><!-- NOTE: attribute width changes image size online (pixels). original width is 641. --></image>
+            <image mime-type="application/postscript" for="pdf" src="../../media/assemblyDiagram2.eps" id="uid52_printimage" print-width="0.45">
+              <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+            </image>
+          </media>
+          <caption>k-Assembly enumeration on a reduced set of k-cores.</caption>
+        </figure>
+        <para id="id188871">Upon enumerating all k-cores, every unique closure of a k-core is analyzed to determine whether any one of the k-cores that closes to that closure is tight (<link target-id="uid52"/>). Checking tightness involves nothing more clever than simply verifying the above definition of tight. If at least one of the cores that closes to a given closure is tight, then that closure is a collected into the set of k-assemblies, otherwise, it is ignored.</para>
+      </section>
+    </section>
+    <section id="cid4">
+      <title>Experimentation</title>
+      <para id="id188894">After devising an algorithm to find every k-assembly, we attempted to discover attributes about k-assemblies through, first, generating random graphs, and then, enumerating the assemblies contained in those graphs.</para>
+      <section id="uid53">
+        <title>Random Graph Generation</title>
+        <para id="id188907">We employed two primary types of random graphs.</para>
+        <figure id="uid54">
+          <media id="uid54_media" alt="">
+            <image mime-type="image/png" src="../../media/exbor.png" id="uid54_onlineimage" width="458"><!-- NOTE: attribute width changes image size online (pixels). original width is 458. --></image>
+            <image mime-type="application/postscript" for="pdf" src="../../media/exbor.eps" id="uid54_printimage" print-width="0.5">
+              <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+            </image>
+          </media>
+          <caption>A Bernoulli random graph</caption>
+        </figure>
+        <figure id="uid55">
+          <media id="uid55_media" alt="">
+            <image mime-type="image/png" src="../../media/excf.png" id="uid55_onlineimage" width="756"><!-- NOTE: attribute width changes image size online (pixels). original width is 756. --></image>
+            <image mime-type="application/postscript" for="pdf" src="../../media/excf.eps" id="uid55_printimage" print-width="0.5">
+              <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+            </image>
+          </media>
+          <caption>A scale-free Cooper-Frieze random graph</caption>
+        </figure>
+        <list id="id188940" display="block" list-type="enumerated">
+          <item id="uid56">The classical Bernoulli random graph (<link target-id="uid54"/>):
+<list id="id188960" display="block" list-type="bulleted"><item id="uid57">Pick some probability <m:math overflow="scroll"><m:mrow><m:mi>p</m:mi><m:mo>,</m:mo></m:mrow></m:math> and a number of vertices, <m:math overflow="scroll"><m:mrow><m:mi>n</m:mi><m:mo>.</m:mo></m:mrow></m:math> Create a graph <m:math overflow="scroll"><m:mrow><m:mi>G</m:mi><m:mo>,</m:mo></m:mrow></m:math> for which <m:math overflow="scroll"><m:mrow><m:mi>V</m:mi><m:mo>(</m:mo><m:mi>G</m:mi><m:mo>)</m:mo><m:mo>=</m:mo><m:mrow><m:mn>1</m:mn><m:mo>,</m:mo><m:mn>2</m:mn><m:mo>,</m:mo><m:mo>.</m:mo><m:mo>.</m:mo><m:mo>.</m:mo><m:mi>n</m:mi></m:mrow><m:mo>.</m:mo></m:mrow></m:math></item><item id="uid58">For all pairs of vertices, <m:math overflow="scroll"><m:mrow><m:mo>(</m:mo><m:mi>i</m:mi><m:mo>,</m:mo><m:mi>j</m:mi><m:mo>)</m:mo><m:mo>,</m:mo></m:mrow></m:math> where <m:math overflow="scroll"><m:mrow><m:mi>i</m:mi><m:mo>≠</m:mo><m:mi>j</m:mi></m:mrow></m:math> and <m:math overflow="scroll"><m:mrow><m:mn>0</m:mn><m:mo>&lt;</m:mo><m:mi>i</m:mi><m:mo>,</m:mo><m:mi>j</m:mi><m:mo>≤</m:mo><m:mi>n</m:mi><m:mo>,</m:mo><m:mo>∃</m:mo></m:mrow></m:math> an edge <m:math overflow="scroll"><m:mrow><m:mi>i</m:mi><m:mi>j</m:mi><m:mo>∈</m:mo><m:mi>E</m:mi><m:mo>(</m:mo><m:mi>G</m:mi><m:mo>)</m:mo></m:mrow></m:math> with probability <m:math overflow="scroll"><m:mrow><m:mi>p</m:mi><m:mo>.</m:mo></m:mrow></m:math></item></list></item>
+          <item id="uid59">The scale-free Cooper-Frieze random graph (<link target-id="uid55"/>) <link target-id="bid4"/>. As we implement it:
+<list id="id189183" display="block" list-type="bulleted"><item id="uid60">pick some positive integer <m:math overflow="scroll"><m:mi>T</m:mi></m:math>; <m:math overflow="scroll"><m:mrow><m:mi>α</m:mi><m:mo>,</m:mo><m:mi>β</m:mi><m:mo>,</m:mo><m:mi>γ</m:mi><m:mo>,</m:mo><m:mi>δ</m:mi><m:mo>∈</m:mo><m:mo>[</m:mo><m:mn>0</m:mn><m:mo>,</m:mo><m:mn>1</m:mn><m:mo>]</m:mo></m:mrow></m:math>; <m:math overflow="scroll"><m:mrow><m:mi>P</m:mi><m:mo>,</m:mo><m:mi>Q</m:mi><m:mo>,</m:mo></m:mrow></m:math> which are 1-indexed lists.
+<m:math overflow="scroll"><m:mrow><m:mi>P</m:mi><m:mo>=</m:mo><m:mo>(</m:mo><m:msub><m:mi>p</m:mi><m:mn>1</m:mn></m:msub><m:mo>,</m:mo><m:msub><m:mi>p</m:mi><m:mn>2</m:mn></m:msub><m:mo>,</m:mo><m:mo>.</m:mo><m:mo>.</m:mo><m:mo>.</m:mo><m:mo>,</m:mo><m:msub><m:mi>p</m:mi><m:mi>n</m:mi></m:msub><m:mo>)</m:mo><m:mo>,</m:mo></m:mrow></m:math> where <m:math overflow="scroll"><m:mstyle scriptlevel="0" displaystyle="true"><m:mrow><m:munderover><m:mo>∑</m:mo><m:mrow><m:mi>i</m:mi><m:mo>=</m:mo><m:mn>1</m:mn></m:mrow><m:mi>n</m:mi></m:munderover><m:mi>p</m:mi><m:mo>=</m:mo><m:mn>1</m:mn><m:mo>,</m:mo></m:mrow></m:mstyle></m:math> and <m:math overflow="scroll"><m:mrow><m:msub><m:mi>p</m:mi><m:mi>i</m:mi></m:msub><m:mo>∈</m:mo><m:mrow><m:mo>[</m:mo><m:mn>0</m:mn><m:mo>,</m:mo><m:mn>1</m:mn><m:mo>]</m:mo></m:mrow><m:mo>∀</m:mo><m:mi>i</m:mi><m:mo>∈</m:mo><m:mrow><m:mo>{</m:mo><m:mn>1</m:mn><m:mo>,</m:mo><m:mn>2</m:mn><m:mo>,</m:mo><m:mo>.</m:mo><m:mo>.</m:mo><m:mo>.</m:mo><m:mo>,</m:mo><m:mi>n</m:mi><m:mo>}</m:mo></m:mrow><m:mo>.</m:mo></m:mrow></m:math><m:math overflow="scroll"><m:mrow><m:mi>Q</m:mi><m:mo>=</m:mo><m:mo>(</m:mo><m:msub><m:mi>q</m:mi><m:mn>1</m:mn></m:msub><m:mo>,</m:mo><m:msub><m:mi>q</m:mi><m:mn>2</m:mn></m:msub><m:mo>,</m:mo><m:mo>.</m:mo><m:mo>.</m:mo><m:mo>.</m:mo><m:mo>,</m:mo><m:msub><m:mi>q</m:mi><m:mi>m</m:mi></m:msub><m:mo>)</m:mo><m:mo>,</m:mo></m:mrow></m:math> where <m:math overflow="scroll"><m:mstyle scriptlevel="0" displaystyle="true"><m:mrow><m:munderover><m:mo>∑</m:mo><m:mrow><m:mi>i</m:mi><m:mo>=</m:mo><m:mn>1</m:mn></m:mrow><m:mi>m</m:mi></m:munderover><m:mi>q</m:mi><m:mo>=</m:mo><m:mn>1</m:mn><m:mo>,</m:mo></m:mrow></m:mstyle></m:math> and <m:math overflow="scroll"><m:mrow><m:msub><m:mi>p</m:mi><m:mi>i</m:mi></m:msub><m:mo>∈</m:mo><m:mrow><m:mo>[</m:mo><m:mn>0</m:mn><m:mo>,</m:mo><m:mn>1</m:mn><m:mo>]</m:mo></m:mrow><m:mo>∀</m:mo><m:mi>i</m:mi><m:mo>∈</m:mo><m:mrow><m:mo>{</m:mo><m:mn>1</m:mn><m:mo>,</m:mo><m:mn>2</m:mn><m:mo>,</m:mo><m:mo>.</m:mo><m:mo>.</m:mo><m:mo>.</m:mo><m:mo>,</m:mo><m:mi>m</m:mi><m:mo>}</m:mo></m:mrow><m:mo>.</m:mo></m:mrow></m:math></item><item id="uid61">Begin with a graph <m:math overflow="scroll"><m:mrow><m:mi>G</m:mi><m:mo>,</m:mo></m:mrow></m:math> where <m:math overflow="scroll"><m:mrow><m:mi>V</m:mi><m:mo>(</m:mo><m:mi>G</m:mi><m:mo>)</m:mo><m:mo>=</m:mo><m:mo>{</m:mo><m:mn>1</m:mn><m:mo>}</m:mo><m:mo>,</m:mo></m:mrow></m:math> and <m:math overflow="scroll"><m:mrow><m:mi>E</m:mi><m:mo>(</m:mo><m:mi>G</m:mi><m:mo>)</m:mo><m:mo>=</m:mo><m:mo>{</m:mo><m:mn>11</m:mn><m:mo>}</m:mo><m:mo>.</m:mo></m:mrow></m:math> (That is, G is a graph with a single vertex which has a single edge connected to itself).
+</item><item id="uid62"><m:math overflow="scroll"><m:mrow><m:mo>∀</m:mo><m:mi>t</m:mi><m:mo>∈</m:mo><m:mo>{</m:mo><m:mn>0</m:mn><m:mo>,</m:mo><m:mn>1</m:mn><m:mo>,</m:mo><m:mn>2</m:mn><m:mo>,</m:mo><m:mo>.</m:mo><m:mo>.</m:mo><m:mo>.</m:mo><m:mo>,</m:mo><m:mi>T</m:mi><m:mo>}</m:mo><m:mo>:</m:mo></m:mrow></m:math><list id="id189708" display="block" list-type="bulleted"><item id="uid63">Do the "Old" procedure with probability <m:math overflow="scroll"><m:mrow><m:mi>α</m:mi><m:mo>,</m:mo></m:mrow></m:math> otherwise, do the procedure "New."
+</item><item id="uid64">Do the procedure "Add Edges."
+</item></list></item><item id="uid65"><emphasis effect="italics">Old:</emphasis><list id="id189765" display="block" list-type="bulleted"><item id="uid66">with probability <m:math overflow="scroll"><m:mrow><m:mi>δ</m:mi><m:mo>,</m:mo></m:mrow></m:math> choose the vertex <m:math overflow="scroll"><m:mi mathvariant="italic">start</m:mi></m:math> from among the set of vertices in <m:math overflow="scroll"><m:mrow><m:mi>V</m:mi><m:mo>(</m:mo><m:mi>G</m:mi><m:mo>)</m:mo></m:mrow></m:math> randomly, giving each vertex an even chance. Otherwise, choose <m:math overflow="scroll"><m:mi mathvariant="italic">start</m:mi></m:math> with the probability for each vertex proportional to the the degree of that vertex with respect to G.
+</item><item id="uid67">with probability <m:math overflow="scroll"><m:mi>γ</m:mi></m:math> set the boolean variable <m:math overflow="scroll"><m:mi mathvariant="italic">terminateUniformly</m:mi></m:math> to <m:math overflow="scroll"><m:mrow><m:mi mathvariant="italic">true</m:mi><m:mo>.</m:mo></m:mrow></m:math> Otherwise, set the variable to <m:math overflow="scroll"><m:mrow><m:mi mathvariant="italic">false</m:mi><m:mo>.</m:mo></m:mrow></m:math></item><item id="uid68">choose an index of <m:math overflow="scroll"><m:mi>Q</m:mi></m:math> so that the index <m:math overflow="scroll"><m:mi>i</m:mi></m:math> has a probability <m:math overflow="scroll"><m:msub><m:mi>q</m:mi><m:mi>i</m:mi></m:msub></m:math> of being chosen. Set the integer variable <m:math overflow="scroll"><m:mi mathvariant="italic">numberOfEdges</m:mi></m:math> to this chosen index.
+</item></list></item><item id="uid69"><emphasis effect="italics">New:</emphasis><list id="id189965" display="block" list-type="bulleted"><item id="uid70">Add a new vertex <m:math overflow="scroll"><m:mi>v</m:mi></m:math> to <m:math overflow="scroll"><m:mrow><m:mi>V</m:mi><m:mo>(</m:mo><m:mi>G</m:mi><m:mo>)</m:mo><m:mo>.</m:mo></m:mrow></m:math> Call that vertex <m:math overflow="scroll"><m:mrow><m:mi mathvariant="italic">start</m:mi><m:mo>.</m:mo></m:mrow></m:math></item><item id="uid71">With probability <m:math overflow="scroll"><m:mi>β</m:mi></m:math> set the boolean variable <m:math overflow="scroll"><m:mi mathvariant="italic">terminateUniformly</m:mi></m:math> to <m:math overflow="scroll"><m:mrow><m:mi mathvariant="italic">true</m:mi><m:mo>.</m:mo></m:mrow></m:math> Otherwise, set the variable to <m:math overflow="scroll"><m:mrow><m:mi mathvariant="italic">false</m:mi><m:mo>.</m:mo></m:mrow></m:math></item><item id="uid72">choose an index of <m:math overflow="scroll"><m:mi>P</m:mi></m:math> so that the index <m:math overflow="scroll"><m:mi>i</m:mi></m:math> has a probability <m:math overflow="scroll"><m:msub><m:mi>p</m:mi><m:mi>i</m:mi></m:msub></m:math> of being chosen. Set the integer variable <m:math overflow="scroll"><m:mi mathvariant="italic">numberOfEdges</m:mi></m:math> to this chosen index.
+</item></list></item><item id="uid73"><emphasis effect="italics">Add Edges:</emphasis><list id="id190153" display="block" list-type="bulleted"><item id="uid74">Create the set <m:math overflow="scroll"><m:mi mathvariant="italic">END</m:mi></m:math> by choosing <m:math overflow="scroll"><m:mi mathvariant="italic">numberOfEdges</m:mi></m:math> vertices from <m:math overflow="scroll"><m:mrow><m:mi>G</m:mi><m:mo>.</m:mo></m:mrow></m:math> The vertices are chosen randomly, either with uniform probability if <m:math overflow="scroll"><m:mi mathvariant="italic">terminateUniformly</m:mi></m:math> is <m:math overflow="scroll"><m:mrow><m:mi mathvariant="italic">true</m:mi><m:mo>,</m:mo></m:mrow></m:math> or in proportion to degree otherwise.
+</item><item id="uid75"><m:math overflow="scroll"><m:mo>∀</m:mo></m:math> vertices <m:math overflow="scroll"><m:mrow><m:mi>e</m:mi><m:mo>∈</m:mo><m:mi mathvariant="italic">END</m:mi><m:mo>,</m:mo></m:mrow></m:math> add to <m:math overflow="scroll"><m:mi>G</m:mi></m:math> an edge directed from <m:math overflow="scroll"><m:mi mathvariant="italic">start</m:mi></m:math> to <m:math overflow="scroll"><m:mrow><m:mi>e</m:mi><m:mo>.</m:mo></m:mrow></m:math></item></list></item></list></item>
+        </list>
+        <para id="id190303">It should be noted that throughout the book, only scale-free graphs are allowed either:</para>
+        <list id="id190309" display="block" list-type="bulleted">
+          <item id="uid76">Edges with weights greater than 1 (That is, there may exist more than one edge <m:math overflow="scroll"><m:mrow><m:mi>u</m:mi><m:mi>v</m:mi><m:mo>∈</m:mo><m:mi>E</m:mi><m:mo>(</m:mo><m:mi>G</m:mi><m:mo>)</m:mo></m:mrow></m:math> where <m:math overflow="scroll"><m:mi>u</m:mi></m:math> and <m:math overflow="scroll"><m:mi>v</m:mi></m:math> are vertices in <m:math overflow="scroll"><m:mrow><m:mi>V</m:mi><m:mo>(</m:mo><m:mi>G</m:mi><m:mo>)</m:mo><m:mo>.</m:mo></m:mrow></m:math>)
+</item>
+          <item id="uid77">"Loops" which connect nodes to themselves (That is, edges of the form <m:math overflow="scroll"><m:mrow><m:mi>u</m:mi><m:mi>u</m:mi><m:mo>.</m:mo></m:mrow></m:math>)
+</item>
+        </list>
+        <para id="id190412">We allow these exceptions so that our graphs will be in full compliance with the Cooper-Frieze model.</para>
+      </section>
+      <section id="uid78">
+        <title>Data</title>
+        <para id="id190427">After generating a number of random graphs, we investigated a number of relationships between cell assemblies vs. other features in random graphs. We speculate on a few of these relationships here.</para>
+        <para id="id190432">When we vary the probability that any given pair of vertices has an edge between them over a number of undirected, Bernoulli random graphs, we can see a number of distinct phases in the number of cell assemblies that these graphs will have, on average (<link target-id="uid79"/>).</para>
+        <figure id="uid79">
+          <media id="uid79_media" alt="">
+            <image mime-type="image/png" src="../../media/Assembly_enum11,3.png" id="uid79_onlineimage" width="448"><!-- NOTE: attribute width changes image size online (pixels). original width is 448. --></image>
+            <image mime-type="application/postscript" for="pdf" src="../../media/Assembly_enum11,3.eps" id="uid79_printimage" print-width="0.55">
+              <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+            </image>
+          </media>
+          <caption>Bernoulli random graphs appear to undergo phase changes when varying edge probability</caption>
+        </figure>
+        <para id="id190457">First, edge probability is insufficient to form even one assembly, then the number of assemblies increases to a peak as the graph becomes more dense. Past that peak, the closure of all tight sets converges to a single cell assembly. It would be interesting to find a method for predicting the probability at which this peak occurs, and then comparing that value to biology.</para>
+        <para id="id190463">The Cooper-Frieze scale-free graph has no parameter to directly adjust edge density, but varying the related parameter, <m:math overflow="scroll"><m:mrow><m:mi>α</m:mi><m:mo>,</m:mo></m:mrow></m:math> does have similar effects.</para>
+        <para id="id190481">A fairly promising, although ostensibly not very accurate, indicator of the number of k-cores is the maximum eigenvalue of a graph's adjacency matrix (<link target-id="uid80"/>).</para>
+        <figure id="uid80"><media id="uid80_media" alt="">
+            <image mime-type="image/png" src="../../media/Eig_Core_Comparea.png" id="uid80_onlineimage"/>
+            <image mime-type="application/postscript" for="pdf" src="../../media/Eig_Core_Comparea.eps" id="uid80_printimage" print-width="0.55">
+              <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+            </image>
+          </media>
+          
+        <caption>Maximum eigenvalues apparently have a positive correlation with number of assemblies in a Bernoulli random graph. <m:math overflow="scroll"><m:mrow><m:mo>(</m:mo><m:mi>r</m:mi><m:mo>=</m:mo><m:mn>0</m:mn><m:mo>.</m:mo><m:mn>7309</m:mn><m:mo>)</m:mo></m:mrow></m:math></caption></figure>
+        <para id="id190527">On undirected Bernoulli random graphs, the two variables appear to have a nontrivial, positive correlation. However, here we see that the method of graph construction is extremely important to any such observations, since on directed scale-free graphs, we see a relationship that is not nearly as clear (<link target-id="uid81"/>).</para>
+        <figure id="uid81"><media id="uid81_media" alt="">
+            <image mime-type="image/png" src="../../media/Eig_Core_Compareb.png" id="uid81_onlineimage"/>
+            <image mime-type="application/postscript" for="pdf" src="../../media/Eig_Core_Compareb.eps" id="uid81_printimage" print-width="0.55">
+              <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+            </image>
+          </media>
+          
+        <caption>For Cooper-Frieze random graphs, this correlation is much more dubious. <m:math overflow="scroll"><m:mrow><m:mo>(</m:mo><m:mi>r</m:mi><m:mo>=</m:mo><m:mo>-</m:mo><m:mn>0</m:mn><m:mo>.</m:mo><m:mn>1315</m:mn><m:mo>)</m:mo></m:mrow></m:math></caption></figure>
+      </section>
+    </section>
+    <section id="cid5">
+      <title>Future Work</title>
+      <list id="id190585" display="block" list-type="bulleted">
+        <item id="uid82">On commodity hardware, the k-core enumeration algorithm terminates in a few minutes on graphs on the order of 10 nodes. It can process larger graphs given a low density of edges or a large k. Consequently, it is not clear that strict enumeration will be useful on human-brain-sized graphs with approximately 100 billion neurons and 1000 connections per neuron, but it may be useful for smaller graphs. For instance, a honey bee has fewer than 1 million neurons <link target-id="bid5"/>.
+</item>
+        <item id="uid83">If strict enumeration fails even in smaller cases, it would perhaps be possible to take advantage of certain knowledge about the structure of brains in order to speed up enumeration by restricting the types of graphs that need to be enumerated. For instance, if we could safely use a bipartite model for a brain, the algorithm could likely be optimized for bipartite graphs.
+</item>
+        <item id="uid84">Also, cell assembly enumeration could proceed further from a statistical standpoint, as hinted at in the "Data" section. Perhaps some function could be devised that maps some more easily discerned information about a graph to the probability that that graph will contain a given number of cell assemblies.
+</item>
+        <item id="uid85">The definition of cell assemblies, as presented here, is fairly cumbersome. If certain aspects of the definition, such as closure, could be simplified, perhaps an easier approach to cell assemblies may become apparent.
+</item>
+        <item id="uid86">Cell assemblies should theoretically have far more function than simply existing as static structures in random graphs. Studying the interaction of cell assemblies and the learning processes that create cell assemblies may yield interesting insights into neuroscience in general.
+</item>
+      </list>
+    </section>
+    <section id="cid6">
+      <title>Conclusion</title>
+      <para id="id190679">Our approach to enumeration of cell assemblies in arbitrary graphs probably runs insufficiently fast to explore the problem as an end in itself. However, it does give us a useful tool to help us understand cell assemblies. We can now find an unlimited number of examples of cell assemblies which we may use as tools to explore general trends and gain insight into the structure of cell assemblies. Perhaps with enough work on the subject, we may find a viable way to understand the workings of the brain through random graph theory.</para>
+    </section>
+  </content>
+  <bib:file>
+    <bib:entry id="bid4">
+      <bib:incollection>
+        <!--required fields-->
+        <bib:author>Bollobás, Béla and Riordan, Oliver</bib:author>
+        <bib:title>Mathematical Results on Scale-free Random Graphs</bib:title>
+        <bib:booktitle>Handbook of Graphs and Networks: From the Genome to the Internet</bib:booktitle>
+        <bib:publisher>Wiley</bib:publisher>
+        <bib:year>2003</bib:year>
+        <!--optional fields-->
+        <bib:editor/>
+        <bib:number/>
+        <bib:series/>
+        <bib:type/>
+        <bib:chapter/>
+        <bib:pages>1-32</bib:pages>
+        <bib:address>Weinheim</bib:address>
+        <bib:edition/>
+        <bib:month/>
+        <bib:note/>
+      </bib:incollection>
+    </bib:entry>
+    <bib:entry id="bid1">
+      <bib:book>
+        <!--required fields-->
+        <bib:author>Buzsáki, György</bib:author>
+        <bib:title>Rhythms of the Brain</bib:title>
+        <bib:publisher>Oxford University Press</bib:publisher>
+        <bib:year>2006</bib:year>
+        <!--optional fields-->
+        <bib:volume/>
+        <bib:series/>
+        <bib:address/>
+        <bib:edition/>
+        <bib:month/>
+        <bib:note/>
+      </bib:book>
+    </bib:entry>
+    <bib:entry id="bid5">
+      <bib:misc>
+        <!--required fields-->
+        <!--optional fields-->
+        <bib:author>Chudler, Eric H.</bib:author>
+        <bib:title>Brain Facts and Figures</bib:title>
+        <bib:howpublished>http://faculty.washington.edu/chudler/facts.html</bib:howpublished>
+        <bib:month/>
+        <bib:year/>
+        <bib:note>Retrieved 21 Jul 2010</bib:note>
+      </bib:misc>
+    </bib:entry>
+    <bib:entry id="bid0">
+      <bib:book>
+        <!--required fields-->
+        <bib:author>Hebb, D. O.</bib:author>
+        <bib:title>The Organization of Behavior</bib:title>
+        <bib:publisher>Lawrence Erlbaum Associates</bib:publisher>
+        <bib:year>1949</bib:year>
+        <!--optional fields-->
+        <bib:volume/>
+        <bib:series/>
+        <bib:address>Mahwah</bib:address>
+        <bib:edition/>
+        <bib:month/>
+        <bib:note/>
+      </bib:book>
+    </bib:entry>
+    <bib:entry id="bid3">
+      <bib:article>
+        <!--required fields-->
+        <bib:author>Karp, Richard M. and Miller, Raymond E. and Thatcher, James W.</bib:author>
+        <bib:title>Reducibility Among Combinatorial Problems.</bib:title>
+        <bib:journal>The Journal of Symbolic Logic</bib:journal>
+        <bib:year>1975</bib:year>
+        <!--optional fields-->
+        <bib:volume>40</bib:volume>
+        <bib:number>4</bib:number>
+        <bib:pages>85-103</bib:pages>
+        <bib:month/>
+        <bib:note/>
+      </bib:article>
+    </bib:entry>
+    <bib:entry id="bid2">
+      <bib:article>
+        <!--required fields-->
+        <bib:author>Palm, Gunther</bib:author>
+        <bib:title>Towards a Theory of Cell Assemblies</bib:title>
+        <bib:journal>Biological Cybernetics</bib:journal>
+        <bib:year>1981</bib:year>
+        <!--optional fields-->
+        <bib:volume>39</bib:volume>
+        <bib:number/>
+        <bib:pages>181-194</bib:pages>
+        <bib:month/>
+        <bib:note/>
+      </bib:article>
+    </bib:entry>
+  </bib:file>
+</document>

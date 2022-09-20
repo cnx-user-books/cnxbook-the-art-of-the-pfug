@@ -1,0 +1,2436 @@
+<document xmlns="http://cnx.rice.edu/cnxml" xmlns:m="http://www.w3.org/1998/Math/MathML">
+  <title>An Introduction to the Analysis of Brain Waves</title>
+<metadata xmlns:md="http://cnx.rice.edu/mdml">
+  <md:content-id>m36946</md:content-id>
+  <md:title>An Introduction to the Analysis of Brain Waves</md:title>
+  <md:abstract>This module builds the tools necessary for the frequency analysis of brain waves as recording by an electroencephalograph. We proceed from the Pythagorean Theorem to sine waves, the trapezoid rule and finally to Fourier decomposition.</md:abstract>
+  <md:uuid>6092a0ce-a7a6-4a80-8ddc-37bba0c632f9</md:uuid>
+</metadata>
+
+<content>
+    <section id="eip-997"><title>Table of Contents</title><para id="eip-674">0. Background</para><para id="eip-828">1. Sine and Cosine Waves</para><para id="eip-89">2. Trapezoid Rule for estimating area</para><para id="eip-311">3. Fourier Method for decomposing signals</para><para id="eip-427">4. Spectrogram application to analyzing brain waves</para></section><section id="id62159">
+      <title>Background: Brain Waves and the EEG</title>
+      <para id="id62165">Signals are sent through the brain using both chemical and electrical means. The synchronized electrical activity of individual neurons adds up to something big enough to detect on from outside the head. To measure it, we use a set of electrical nodes called an electroencephalogam (EEG). The measured activity reflects different states of the brain which in turn tell us something about the mindset of the person. Our goal in this module is to decompose an EEG signal into its different frequencies, which is intuitively the most meaningful piece of information.</para>
+    </section>
+    <section id="cid1">
+      <title>Sine and Cosine Waves</title>
+      <para id="id62182">Brainwaves have complex shapes that are not easily interpreted. In order to study these waves, we need to develop some mathematical tools that will tell us about different waves. To outline, we begin by talking about pure (sine or cosine) waves, then move to the trapezoid rule for estimating area under a curve. Next, we develop Fourier analysis for picking out the frequencies in a jumbled signal, and finally use these tools to create spectrograms, which allow us to track different frequencies over time.</para>
+      <section id="uid1">
+        <title>Sine Waves</title>
+        <para id="id62198">The sine wave is a mathematical function. It describes many physical phenomena, including sound waves and oscillation. It looks just like a wave. MATLAB uses the <code display="inline">sin</code> function to make sin waves. For example, to make Figure 1, we use the code:</para>
+        <code id="id62548" display="block">&gt;&gt;t = 0:.01:1;
+&gt;&gt;y = sin(2*pi*t);
+&gt;&gt;plot(t,y);
+</code>
+        <para id="id62573">The sine wave is defined by the lengths and angles of a triangle. Run <code display="inline">sincirc.m</code> (copied below) to see how the sine and cosine values relate to the angle <m:math overflow="scroll"><m:mi>ϕ</m:mi></m:math> of the triangle. As you can see, if <m:math overflow="scroll"><m:mi>ϕ</m:mi></m:math> is the angle of a right triangle with hypotenuse 1 (illustrated by the circle) , <m:math overflow="scroll"><m:mrow><m:mo form="prefix">sin</m:mo><m:mo>(</m:mo><m:mi>ϕ</m:mi><m:mo>)</m:mo></m:mrow></m:math> is the height of the triangle and <m:math overflow="scroll"><m:mrow><m:mo form="prefix">cos</m:mo><m:mo>(</m:mo><m:mi>ϕ</m:mi><m:mo>)</m:mo></m:mrow></m:math> is the base of it:</para>
+
+<figure id="figure-2" orient="horizontal">
+   <subfigure id="subfigure-1">
+      <title>A Sin wave</title>
+      <media id="sub_example" alt="An envelope with a blue page">          
+         <image mime-type="image/png" src="../../media/simple_sin.png" width="500"/>
+      </media>
+   </subfigure>
+   <subfigure id="subfigure-2">
+      <title>The relation of sine and cosine to a triangle and unit circle</title>
+      <media id="sub_example2" alt="An envelope with a white page">
+         <image mime-type="image/png" src="../../media/circsinpic.png" width="500"/>
+      </media>
+   </subfigure>
+   <caption>Two illustrations of the sine function.</caption>
+</figure>
+
+
+
+
+        <code id="id62635" display="block">% sincirc.m
+%
+% sincirc.m illustrates the relation of the sin and cosine waves to the circle.
+
+%define parameters
+Nturns = 2;
+steps_per_turn = 9;
+step_inc = 2*pi/steps_per_turn;
+
+%set up points for circle
+circ_x = cos(0:.01:2*pi);
+circ_y = sin(0:.01:2*pi);
+axis equal
+
+%loop over triangles with different angles
+for n = 1:Nturns * steps_per_turn;
+    phi = n * step_inc + pi/4;
+
+    %plot circle, then triangle, then text
+    plot(circ_x, circ_y);
+    axis([-1 1 -1 1] * 1.5);
+    line([0 cos(phi)], [0 sin(phi)]);
+    line([1 1] * cos(phi), [0 sin(phi)]);
+    line([0 cos(phi)], [0 0]);
+    text(cos(phi)/2 , -.1*sign(sin(phi)),'cos(\varphi)')
+    text(cos(phi) + .1*(sign(cos(phi))-.5), sin(phi)/2, 'sin(\varphi)')
+    text(cos(phi)*.2, sin(phi)*.1,'\varphi');
+    pause(.5);
+end
+</code>
+      </section>
+      <section id="uid2">
+        <title>Characteristics of the Sine Wave</title>
+        <para id="id62915">The sin wave has three primary characteristics:</para>
+        <section id="id62919">
+          <title>1.</title>
+          <para id="id62925"><emphasis effect="bold">Frequency</emphasis> measures how often a wave passes. We can make a wave with frequency <m:math overflow="scroll"><m:mi>ω</m:mi></m:math> by writing:</para>
+          <equation id="id62941">
+            <m:math overflow="scroll" mode="display">
+              <m:mrow>
+                <m:mo form="prefix">sin</m:mo>
+                <m:mfenced separators="" open="(" close=")">
+                  <m:mn>2</m:mn>
+                  <m:mi>π</m:mi>
+                  <m:mi>ω</m:mi>
+                  <m:mi>t</m:mi>
+                </m:mfenced>
+              </m:mrow>
+            </m:math>
+          </equation>
+          <para id="id62970"><emphasis effect="italics">Aside</emphasis>: The wave described by <m:math overflow="scroll"><m:mrow><m:mo form="prefix">sin</m:mo><m:mo>(</m:mo><m:mi>t</m:mi><m:mo>)</m:mo></m:mrow></m:math> has frequency <m:math overflow="scroll"><m:mrow><m:mn>1</m:mn><m:mo>/</m:mo><m:mn>2</m:mn><m:mi>π</m:mi></m:mrow></m:math>. If we instead write <m:math overflow="scroll"><m:mrow><m:mo form="prefix">sin</m:mo><m:mo>(</m:mo><m:mn>2</m:mn><m:mi>π</m:mi><m:mi>t</m:mi><m:mo>)</m:mo></m:mrow></m:math>, we will have a wave with frequency 1, which is easier to work with.</para>
+          <para id="id63034">We can express the same information in terms of wavelength. Wavelength is how close neighboring waves are to each other. It is inversely proportional to frequency, which means that the higher the frequency, the smaller the wavelength. If <m:math overflow="scroll"><m:mi>ℓ</m:mi></m:math> is wavelength, we write this in the following way:</para>
+          <equation id="id63050">
+            <m:math overflow="scroll" mode="display">
+              <m:mrow>
+                <m:mi>ℓ</m:mi>
+                <m:mo>=</m:mo>
+                <m:mfrac>
+                  <m:mn>1</m:mn>
+                  <m:mi>ω</m:mi>
+                </m:mfrac>
+              </m:mrow>
+            </m:math>
+          </equation>
+          <para id="id63069">A wave with wavelength <m:math overflow="scroll"><m:mi>ℓ</m:mi></m:math> is written as <m:math overflow="scroll"><m:mrow><m:mo form="prefix">sin</m:mo><m:mo>(</m:mo><m:mfrac><m:mrow><m:mn>2</m:mn><m:mi>π</m:mi><m:mi>t</m:mi></m:mrow><m:mi>ℓ</m:mi></m:mfrac><m:mo>)</m:mo></m:mrow></m:math>.</para>
+        </section>
+        <section id="id63113">
+          <title>2.</title>
+          <para id="id63119"><emphasis effect="bold">Amplitude</emphasis> measures how high the wave is. We can make a wave of amplitude <m:math overflow="scroll"><m:mi>a</m:mi></m:math> by writing:</para>
+          <equation id="id63134">
+            <m:math overflow="scroll" mode="display">
+              <m:mrow>
+                <m:mi>a</m:mi>
+                <m:mo>·</m:mo>
+                <m:mo form="prefix">sin</m:mo>
+                <m:mo>(</m:mo>
+                <m:mn>2</m:mn>
+                <m:mi>π</m:mi>
+                <m:mi>t</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+            </m:math>
+          </equation>
+          <para id="id63162">Sometimes <m:math overflow="scroll"><m:mi>a</m:mi></m:math> will be negative. In this case, we still say that the wave has amplitude <m:math overflow="scroll"><m:mi>a</m:mi></m:math>, but note that the function will be flipped across the x-axis.</para>
+        </section>
+        <section id="id63186">
+          <title>3.</title>
+          <para id="id63192"><emphasis effect="bold">Phase</emphasis> describes how far the wave has been shifted from center. To create a wave with phase <m:math overflow="scroll"><m:mi>p</m:mi></m:math>, we write:</para>
+          <equation id="id63208">
+            <m:math overflow="scroll" mode="display">
+              <m:mrow>
+                <m:mo form="prefix">sin</m:mo>
+                <m:mo>(</m:mo>
+                <m:mn>2</m:mn>
+                <m:mi>π</m:mi>
+                <m:mi>ω</m:mi>
+                <m:mi>t</m:mi>
+                <m:mo>+</m:mo>
+                <m:mi>p</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+            </m:math>
+          </equation>
+          <para id="id63238">Since a sin wave repeats every <m:math overflow="scroll"><m:mrow><m:mn>2</m:mn><m:mi>π</m:mi></m:mrow></m:math>, the following is always true (that is, for any <m:math overflow="scroll"><m:mi>ϕ</m:mi></m:math>):</para>
+          <equation id="id63261">
+            <m:math overflow="scroll" mode="display">
+              <m:mrow>
+                <m:mo form="prefix">sin</m:mo>
+                <m:mo>(</m:mo>
+                <m:mi>ϕ</m:mi>
+                <m:mo>)</m:mo>
+                <m:mo>=</m:mo>
+                <m:mo form="prefix">sin</m:mo>
+                <m:mo>(</m:mo>
+                <m:mi>ϕ</m:mi>
+                <m:mo>+</m:mo>
+                <m:mn>2</m:mn>
+                <m:mi>π</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+            </m:math>
+          </equation>
+          <para id="id63299"><emphasis effect="italics">Aside</emphasis>: A cosine wave is a sine wave shifted back by a <m:math overflow="scroll"><m:mrow><m:mi>π</m:mi><m:mo>/</m:mo><m:mn>2</m:mn></m:mrow></m:math>, a quarter of the standard wave:</para>
+          <equation id="id63320">
+            <m:math overflow="scroll" mode="display">
+              <m:mrow>
+                <m:mo form="prefix">cos</m:mo>
+                <m:mo>(</m:mo>
+                <m:mi>ϕ</m:mi>
+                <m:mo>)</m:mo>
+                <m:mo>=</m:mo>
+                <m:mo form="prefix">sin</m:mo>
+                <m:mo>(</m:mo>
+                <m:mi>ϕ</m:mi>
+                <m:mo>+</m:mo>
+                <m:mi>π</m:mi>
+                <m:mo>/</m:mo>
+                <m:mn>2</m:mn>
+                <m:mo>)</m:mo>
+              </m:mrow>
+            </m:math>
+          </equation>
+          <para id="id63361">Every sine (cosine) wave can be described completely by these characteristics. These are shown in <link target-id="charwave"/> (phase <m:math overflow="scroll"><m:mrow><m:mo>=</m:mo><m:mn>0</m:mn></m:mrow></m:math> for simplicity):</para>
+<figure id="charwave">
+ <media id="mcharwave" alt="a dog on a bed">
+   <image mime-type="image/png" src="../../media/charwave.png" width="600"/>
+ </media>
+<caption>A sin wave.</caption>
+</figure>
+
+          <para id="id63376">To code <link target-id="charwave"/> in MATLAB, use:</para>
+          <code id="id63382" display="block">&gt;&gt;t = 0:.01:1;
+&gt;&gt;amp = 3;
+&gt;&gt;freq = 1;
+&gt;&gt;phase = 0
+&gt;&gt;y = amp*sin(freq*2*pi*t + phase);
+</code>
+        </section>
+        <section id="uid3">
+          <title>Hearing Sine Waves</title>
+          <para id="id63434">The sine wave represents a pure tone. To hear one, we use the MATLAB function <code display="inline">sound()</code>, which converts a vector into sound. Find the frequency that is specified, and compare to human range of hearing. Should we be able to hear this sound?</para>
+          <code id="id63446" display="block">&gt;&gt;freq = 1000;
+&gt;&gt;samp_rate = 1e4;
+&gt;&gt;duration = 1;
+&gt;&gt;samples = 0 : (1/samp_rate) : duration;
+&gt;&gt;sound_wave = sin(2 * pi * samples * freq);
+&gt;&gt;sound(sound_wave, samp_rate);
+</code>
+          <para id="id63498">
+            <emphasis effect="italics">Enter the above code into Matlab to hear the sound.</emphasis>
+          </para>
+        </section>
+      </section>
+      <section id="uid4">
+        <title>Adding Sine Waves</title>
+        <para id="id63516">We can add together multiple sin waves to accomplish different shapes. For example, if we add the wave <m:math overflow="scroll"><m:mrow><m:mo>[</m:mo><m:mn>4</m:mn><m:mo>·</m:mo><m:mo form="prefix">sin</m:mo><m:mo>(</m:mo><m:mn>2</m:mn><m:mi>π</m:mi><m:mi>t</m:mi><m:mo>)</m:mo><m:mo>]</m:mo></m:mrow></m:math> and the wave <m:math overflow="scroll"><m:mrow><m:mo>[</m:mo><m:mo form="prefix">sin</m:mo><m:mo>(</m:mo><m:mn>6</m:mn><m:mo>·</m:mo><m:mo>(</m:mo><m:mn>2</m:mn><m:mi>π</m:mi><m:mi>t</m:mi><m:mo>)</m:mo><m:mo>)</m:mo><m:mo>]</m:mo></m:mrow></m:math> we get:</para>
+<figure id="compoundwv_1">
+ <media id="mcompoundwv_1" alt="a dog on a bed">
+   <image mime-type="image/png" src="../../media/compoundwv_1.png" width="500"/>
+ </media>
+<caption>A compound wave</caption>
+</figure>
+        <para id="id63764">Look at the figure and try to identify the effect of each wave. The first wave has frequency 1 and amplitude 4. This accounts for the large up-and-down motion that only goes through one cycle in the figure. The second wave has frequency 6 (wavelength <m:math overflow="scroll"><m:mfrac><m:mn>1</m:mn><m:mn>6</m:mn></m:mfrac></m:math>) and amplitude 1. This accounts for the small wiggles that happen many times in the figure.</para>
+        <para id="id63782">Figure 4 is implemented in MATLAB with the following code:</para>
+        <code id="id63789" display="block">&gt;t = 0:.01:1;
+&gt;&gt;y = 4*sin(2*pi*t)+sin(6*2*pi*t);
+&gt;&gt;plot(t,y)
+</code>
+        <para id="id63815">A wave of any shape can be expressed as a sum of sin and cosine waves, although it may take infinitely many. In the end of this module we will find interesting uses for the this fact.</para>
+      </section>
+      <section id="id63823">
+        <title>Exercises</title>
+        <section id="uid5">
+          <title>1.1</title>
+          <para id="id63837"><link target-id="comp_wave_problemfig"/> two shows a sum of two sine waves (with phase 0). Try to replicate it, and report what the amplitudes and frequencies of each wave is.</para>
+
+<figure id="comp_wave_problemfig">
+ <label>Figura</label>
+ <media id="comp_wave_problemfigm" alt="Perro sentado en la cama">
+  <image mime-type="image/png" src="../../media/comp_wave_problem.png" width="500"/>
+ </media>
+ <caption>The compound wave for exercise 1.1</caption>
+</figure>
+
+
+
+
+        </section>
+        <section id="uid6">
+          <title>1.2</title>
+          <para id="id63853">Use the identities <m:math overflow="scroll"><m:mrow><m:mo form="prefix">cos</m:mo><m:mo>(</m:mo><m:mi>ϕ</m:mi><m:mo>)</m:mo><m:mo>=</m:mo><m:mo form="prefix">sin</m:mo><m:mo>(</m:mo><m:mi>ϕ</m:mi><m:mo>+</m:mo><m:mi>π</m:mi><m:mo>/</m:mo><m:mn>2</m:mn><m:mo>)</m:mo></m:mrow></m:math> and <m:math overflow="scroll"><m:mrow><m:mo form="prefix">sin</m:mo><m:mo>(</m:mo><m:mi>ϕ</m:mi><m:mo>)</m:mo><m:mo>=</m:mo><m:mo form="prefix">sin</m:mo><m:mo>(</m:mo><m:mi>ϕ</m:mi><m:mo>+</m:mo><m:mn>2</m:mn><m:mi>π</m:mi><m:mo>)</m:mo></m:mrow></m:math> to solve for <m:math overflow="scroll"><m:mi>p</m:mi></m:math> in the following equations by making the above substitutions. Check your answer visually against the figures of sine and cosine waves:</para>
+        </section>
+        <section id="uid7">
+          <title>Equations:</title>
+          <list id="id63950" display="block" list-type="enumerated">
+            <item id="uid8">
+              <m:math overflow="scroll">
+                <m:mrow>
+                  <m:mo form="prefix">cos</m:mo>
+                  <m:mo>(</m:mo>
+                  <m:mi>ϕ</m:mi>
+                  <m:mo>+</m:mo>
+                  <m:mn>1</m:mn>
+                  <m:mo>)</m:mo>
+                  <m:mo>=</m:mo>
+                  <m:mo form="prefix">sin</m:mo>
+                  <m:mo>(</m:mo>
+                  <m:mi>ϕ</m:mi>
+                  <m:mo>+</m:mo>
+                  <m:mi>p</m:mi>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+              </m:math>
+            </item>
+            <item id="uid9">
+              <m:math overflow="scroll">
+                <m:mrow>
+                  <m:mo form="prefix">sin</m:mo>
+                  <m:mo>(</m:mo>
+                  <m:mi>ϕ</m:mi>
+                  <m:mo>)</m:mo>
+                  <m:mo>=</m:mo>
+                  <m:mo>-</m:mo>
+                  <m:mo form="prefix">sin</m:mo>
+                  <m:mo>(</m:mo>
+                  <m:mi>ϕ</m:mi>
+                  <m:mo>+</m:mo>
+                  <m:mi>p</m:mi>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+              </m:math>
+            </item>
+            <item id="uid10">
+              <m:math overflow="scroll">
+                <m:mrow>
+                  <m:mo form="prefix">tan</m:mo>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:mi>ϕ</m:mi>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                  <m:mo>=</m:mo>
+                  <m:mfrac>
+                    <m:mrow>
+                      <m:mo form="prefix">sin</m:mo>
+                      <m:mo>(</m:mo>
+                      <m:mi>ϕ</m:mi>
+                      <m:mo>)</m:mo>
+                    </m:mrow>
+                    <m:mrow>
+                      <m:mo form="prefix">sin</m:mo>
+                      <m:mrow>
+                        <m:mi>ϕ</m:mi>
+                        <m:mo>+</m:mo>
+                        <m:mi>p</m:mi>
+                      </m:mrow>
+                    </m:mrow>
+                  </m:mfrac>
+                </m:mrow>
+              </m:math>
+            </item>
+            <item id="uid11">
+              <m:math overflow="scroll">
+                <m:mrow>
+                  <m:mo form="prefix">cos</m:mo>
+                  <m:mo>(</m:mo>
+                  <m:mi>ϕ</m:mi>
+                  <m:mo>)</m:mo>
+                  <m:mo>=</m:mo>
+                  <m:mo>-</m:mo>
+                  <m:mo form="prefix">tan</m:mo>
+                  <m:mo>(</m:mo>
+                  <m:mi>ϕ</m:mi>
+                  <m:mo>+</m:mo>
+                  <m:mi>p</m:mi>
+                  <m:mo>)</m:mo>
+                  <m:mo>·</m:mo>
+                  <m:mo form="prefix">cos</m:mo>
+                  <m:mo>(</m:mo>
+                  <m:mi>ϕ</m:mi>
+                  <m:mo>-</m:mo>
+                  <m:mi>p</m:mi>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+              </m:math>
+            </item>
+          </list>
+          <para id="id64171">(<m:math overflow="scroll"><m:mrow><m:mo form="prefix">tan</m:mo><m:mo>(</m:mo><m:mi>ϕ</m:mi><m:mo>)</m:mo></m:mrow></m:math> is defined in exercise 1)</para>
+
+
+<figure id="sinexfig" orient="horizontal">
+   <subfigure id="sinf1">
+      <title>A sine wave.</title>
+      <media id="sinf1m" alt="An envelope with a blue page">          
+         <image mime-type="image/png" src="../../media/sine_wv.png" width="500"/>
+      </media>
+   </subfigure>
+   <subfigure id="sinf2">
+      <title>A cosine wave.</title>
+      <media id="sinf2m" alt="An envelope with a white page">
+         <image mime-type="image/png" src="../../media/cosine_wv.png" width="500"/>
+      </media>
+   </subfigure>
+</figure>
+
+
+        </section>
+      </section>
+    </section>
+    <section id="cid2">
+      <title>Trapezoid rule for estimating area (Integration)</title>
+      <section id="uid12">
+        <title>Basic Method</title>
+        <para id="id64212">A useful tool for analyzing curves is finding the area underneath them. When we have an unknown combination of waves, we can estimate the area under the curve using the <emphasis effect="italics">trapezoid rule</emphasis>. We will use <m:math overflow="scroll"><m:mrow><m:mi>f</m:mi><m:mo>(</m:mo><m:mi>t</m:mi><m:mo>)</m:mo><m:mo>=</m:mo><m:mo form="prefix">sin</m:mo><m:mo>(</m:mo><m:mi>t</m:mi><m:mo>)</m:mo></m:mrow></m:math> as an example. If we were to estimate part of the area under the curve with one trapezoid, we might do the following:</para>
+
+
+<figure id="trapfig" orient="horizontal">
+   <subfigure id="tf1">
+      <title>A single trapezoid.</title>
+      <media id="sinse1" alt="An envelope with a blue page">          
+         <image mime-type="image/png" src="../../media/first_trapezoid.png" width="500"/>
+      </media>
+   </subfigure>
+   <subfigure id="tf2">
+      <title>Estimating the area with four trapezoids.</title>
+      <media id="sinse2" alt="An envelope with a white page">
+         <image mime-type="image/png" src="../../media/fourtap.png" width="500"/>
+      </media>
+   </subfigure>
+<caption>Applying the trapezoid rule to a sine wave.</caption>
+</figure>
+
+
+
+        <para id="id64253">We have labeled the two heights, <m:math overflow="scroll"><m:msub><m:mi>h</m:mi><m:mn>1</m:mn></m:msub></m:math> and <m:math overflow="scroll"><m:msub><m:mi>h</m:mi><m:mn>2</m:mn></m:msub></m:math>, and the length of the base <m:math overflow="scroll"><m:mi>b</m:mi></m:math>. The area of the square is:</para>
+        <equation id="id64296">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:mtext>area</m:mtext>
+              <m:mspace width="4.pt"/>
+              <m:mtext>of</m:mtext>
+              <m:mspace width="4.pt"/>
+              <m:mtext>square</m:mtext>
+              <m:mo>=</m:mo>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mtext>base</m:mtext>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>×</m:mo>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mtext>height</m:mtext>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>=</m:mo>
+              <m:mi>b</m:mi>
+              <m:mo>·</m:mo>
+              <m:msub>
+                <m:mi>h</m:mi>
+                <m:mn>1</m:mn>
+              </m:msub>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id64353">The area of the top triangle is:</para>
+        <equation id="id64359">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:mtext>area</m:mtext>
+              <m:mspace width="4.pt"/>
+              <m:mtext>of</m:mtext>
+              <m:mspace width="4.pt"/>
+              <m:mtext>triangle</m:mtext>
+              <m:mo>=</m:mo>
+              <m:mfrac>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mtext>base</m:mtext>
+                  <m:mo>)</m:mo>
+                  <m:mo>×</m:mo>
+                  <m:mo>(</m:mo>
+                  <m:mtext>height</m:mtext>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mn>2</m:mn>
+              </m:mfrac>
+              <m:mo>=</m:mo>
+              <m:mfrac>
+                <m:mrow>
+                  <m:mi>b</m:mi>
+                  <m:mo>·</m:mo>
+                  <m:mo>(</m:mo>
+                  <m:msub>
+                    <m:mi>h</m:mi>
+                    <m:mn>2</m:mn>
+                  </m:msub>
+                  <m:mo>-</m:mo>
+                  <m:msub>
+                    <m:mi>h</m:mi>
+                    <m:mn>1</m:mn>
+                  </m:msub>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mn>2</m:mn>
+              </m:mfrac>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id64439">The total area of the trapezoid is then:</para>
+        <equation id="id64443">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:mtext>area</m:mtext>
+              <m:mspace width="4.pt"/>
+              <m:mtext>of</m:mtext>
+              <m:mspace width="4.pt"/>
+              <m:mtext>trapezoid</m:mtext>
+              <m:mo>=</m:mo>
+              <m:mi>b</m:mi>
+              <m:mo>·</m:mo>
+              <m:msub>
+                <m:mi>h</m:mi>
+                <m:mn>1</m:mn>
+              </m:msub>
+              <m:mo>+</m:mo>
+              <m:mfrac>
+                <m:mrow>
+                  <m:mi>b</m:mi>
+                  <m:mo>·</m:mo>
+                  <m:mo>(</m:mo>
+                  <m:msub>
+                    <m:mi>h</m:mi>
+                    <m:mn>2</m:mn>
+                  </m:msub>
+                  <m:mo>-</m:mo>
+                  <m:msub>
+                    <m:mi>h</m:mi>
+                    <m:mn>1</m:mn>
+                  </m:msub>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mn>2</m:mn>
+              </m:mfrac>
+              <m:mo>=</m:mo>
+              <m:mfrac>
+                <m:mrow>
+                  <m:mi>b</m:mi>
+                  <m:mo>·</m:mo>
+                  <m:mo>(</m:mo>
+                  <m:msub>
+                    <m:mi>h</m:mi>
+                    <m:mn>2</m:mn>
+                  </m:msub>
+                  <m:mo>+</m:mo>
+                  <m:msub>
+                    <m:mi>h</m:mi>
+                    <m:mn>1</m:mn>
+                  </m:msub>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mn>2</m:mn>
+              </m:mfrac>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id64547">If we know that the two points on the <m:math overflow="scroll"><m:mi>x</m:mi></m:math>-axis are <m:math overflow="scroll"><m:msub><m:mi>t</m:mi><m:mn>1</m:mn></m:msub></m:math> and <m:math overflow="scroll"><m:msub><m:mi>t</m:mi><m:mn>2</m:mn></m:msub></m:math>, then <m:math overflow="scroll"><m:mrow><m:mi>b</m:mi><m:mo>=</m:mo><m:msub><m:mi>t</m:mi><m:mn>2</m:mn></m:msub><m:mo>-</m:mo><m:msub><m:mi>t</m:mi><m:mn>1</m:mn></m:msub></m:mrow></m:math>. In the figure above, <m:math overflow="scroll"><m:mrow><m:msub><m:mi>t</m:mi><m:mn>1</m:mn></m:msub><m:mo>=</m:mo><m:mo>.</m:mo><m:mn>5</m:mn></m:mrow></m:math> and <m:math overflow="scroll"><m:mrow><m:msub><m:mi>t</m:mi><m:mn>2</m:mn></m:msub><m:mo>=</m:mo><m:mn>1</m:mn><m:mo>.</m:mo><m:mn>5</m:mn></m:mrow></m:math>. Then the heights follow from the function: <m:math overflow="scroll"><m:mrow><m:msub><m:mi>h</m:mi><m:mn>1</m:mn></m:msub><m:mo>=</m:mo><m:mi>f</m:mi><m:mrow><m:mo>(</m:mo><m:msub><m:mi>t</m:mi><m:mn>1</m:mn></m:msub><m:mo>)</m:mo></m:mrow><m:mo>=</m:mo><m:mo form="prefix">sin</m:mo><m:mrow><m:mo>(</m:mo><m:msub><m:mi>t</m:mi><m:mn>1</m:mn></m:msub><m:mo>)</m:mo></m:mrow></m:mrow></m:math> and <m:math overflow="scroll"><m:mrow><m:msub><m:mi>h</m:mi><m:mn>2</m:mn></m:msub><m:mo>=</m:mo><m:mi>f</m:mi><m:mrow><m:mo>(</m:mo><m:msub><m:mi>t</m:mi><m:mn>2</m:mn></m:msub><m:mo>)</m:mo></m:mrow><m:mo>=</m:mo><m:mo form="prefix">sin</m:mo><m:mrow><m:mo>(</m:mo><m:msub><m:mi>t</m:mi><m:mn>2</m:mn></m:msub><m:mo>)</m:mo></m:mrow></m:mrow></m:math>. Thus in general, the area of a trapezoid approximating the area under <m:math overflow="scroll"><m:mi>f</m:mi></m:math> between the points <m:math overflow="scroll"><m:msub><m:mi>t</m:mi><m:mn>1</m:mn></m:msub></m:math> and <m:math overflow="scroll"><m:msub><m:mi>t</m:mi><m:mn>2</m:mn></m:msub></m:math> is:</para>
+        <equation id="uid13">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:mtext>area</m:mtext>
+              <m:mspace width="4.pt"/>
+              <m:mtext>of</m:mtext>
+              <m:mspace width="4.pt"/>
+              <m:mtext>trapezoid</m:mtext>
+              <m:mo>=</m:mo>
+              <m:mfrac>
+                <m:mrow>
+                  <m:mi>b</m:mi>
+                  <m:mo>·</m:mo>
+                  <m:mo>(</m:mo>
+                  <m:msub>
+                    <m:mi>h</m:mi>
+                    <m:mn>2</m:mn>
+                  </m:msub>
+                  <m:mo>+</m:mo>
+                  <m:msub>
+                    <m:mi>h</m:mi>
+                    <m:mn>1</m:mn>
+                  </m:msub>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mn>2</m:mn>
+              </m:mfrac>
+              <m:mo>=</m:mo>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:msub>
+                  <m:mi>t</m:mi>
+                  <m:mn>2</m:mn>
+                </m:msub>
+                <m:mo>-</m:mo>
+                <m:msub>
+                  <m:mi>t</m:mi>
+                  <m:mn>1</m:mn>
+                </m:msub>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mfrac>
+                <m:mrow>
+                  <m:mi>f</m:mi>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:msub>
+                      <m:mi>t</m:mi>
+                      <m:mn>1</m:mn>
+                    </m:msub>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                  <m:mo>+</m:mo>
+                  <m:mi>f</m:mi>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:msub>
+                      <m:mi>t</m:mi>
+                      <m:mn>2</m:mn>
+                    </m:msub>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                </m:mrow>
+                <m:mn>2</m:mn>
+              </m:mfrac>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id64926">In order to get a good estimate, we split up the domain of the function <m:math overflow="scroll"><m:mrow><m:mi>f</m:mi><m:mo>(</m:mo><m:mi>t</m:mi><m:mo>)</m:mo></m:mrow></m:math> into several intervals <m:math overflow="scroll"><m:mrow><m:mo>[</m:mo><m:msub><m:mi>t</m:mi><m:mi>i</m:mi></m:msub><m:mo>,</m:mo><m:msub><m:mi>t</m:mi><m:mrow><m:mi>i</m:mi><m:mo>+</m:mo><m:mn>1</m:mn></m:mrow></m:msub><m:mo>]</m:mo></m:mrow></m:math>. For each interval, we calculate the area of the trapezoid that approximates the area under that curve. For example, we could approximate <m:math overflow="scroll"><m:mrow><m:mi>f</m:mi><m:mo>(</m:mo><m:mi>t</m:mi><m:mo>)</m:mo></m:mrow></m:math> over <m:math overflow="scroll"><m:mrow><m:mo>[</m:mo><m:mn>0</m:mn><m:mo>,</m:mo><m:mn>1</m:mn><m:mo>]</m:mo></m:mrow></m:math> using four equal intervals.
+This would look like:</para>
+        <para id="id65018">In this case, our estimate would be</para>
+        <equation id="id65024">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:mtext>approximate</m:mtext>
+              <m:mspace width="4.pt"/>
+              <m:mtext>area</m:mtext>
+              <m:mspace width="4.pt"/>
+              <m:mtext>of</m:mtext>
+              <m:mspace width="4.pt"/>
+              <m:mtext>curve</m:mtext>
+              <m:mo>=</m:mo>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:msub>
+                  <m:mi>t</m:mi>
+                  <m:mn>2</m:mn>
+                </m:msub>
+                <m:mo>-</m:mo>
+                <m:msub>
+                  <m:mi>t</m:mi>
+                  <m:mn>1</m:mn>
+                </m:msub>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mfrac>
+                <m:mrow>
+                  <m:mi>f</m:mi>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:msub>
+                      <m:mi>t</m:mi>
+                      <m:mn>1</m:mn>
+                    </m:msub>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                  <m:mo>+</m:mo>
+                  <m:mi>f</m:mi>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:msub>
+                      <m:mi>t</m:mi>
+                      <m:mn>2</m:mn>
+                    </m:msub>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                </m:mrow>
+                <m:mn>2</m:mn>
+              </m:mfrac>
+              <m:mo>+</m:mo>
+              <m:mo>⋯</m:mo>
+              <m:mo>+</m:mo>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:msub>
+                  <m:mi>t</m:mi>
+                  <m:mn>4</m:mn>
+                </m:msub>
+                <m:mo>-</m:mo>
+                <m:msub>
+                  <m:mi>t</m:mi>
+                  <m:mn>3</m:mn>
+                </m:msub>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mfrac>
+                <m:mrow>
+                  <m:mi>f</m:mi>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:msub>
+                      <m:mi>t</m:mi>
+                      <m:mn>3</m:mn>
+                    </m:msub>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                  <m:mo>+</m:mo>
+                  <m:mi>f</m:mi>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:msub>
+                      <m:mi>t</m:mi>
+                      <m:mn>4</m:mn>
+                    </m:msub>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                </m:mrow>
+                <m:mn>2</m:mn>
+              </m:mfrac>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id65180">As we take smaller and smaller intervals, our approximation will get better, because there will be less space between the trapezoids and the curve. We can prove that the trapezoid rule given `order 2' convergence–that is, if we cut our intervals in half, our error gets four times smaller.</para>
+        <para id="id65188">In the general case, if we split up the domain of the function at points <m:math overflow="scroll"><m:mrow><m:mo>{</m:mo><m:msub><m:mi>t</m:mi><m:mn>1</m:mn></m:msub><m:mo>,</m:mo><m:msub><m:mi>t</m:mi><m:mn>2</m:mn></m:msub><m:mo>,</m:mo><m:mo>⋯</m:mo><m:mo>,</m:mo><m:msub><m:mi>t</m:mi><m:mi>n</m:mi></m:msub><m:mo>}</m:mo></m:mrow></m:math>, then the rule for the estimate is</para>
+        <equation id="uid14">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:mtext>approximate</m:mtext>
+              <m:mspace width="4.pt"/>
+              <m:mtext>area</m:mtext>
+              <m:mspace width="4.pt"/>
+              <m:mtext>of</m:mtext>
+              <m:mspace width="4.pt"/>
+              <m:mtext>curve</m:mtext>
+              <m:mo>=</m:mo>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:msub>
+                  <m:mi>t</m:mi>
+                  <m:mn>1</m:mn>
+                </m:msub>
+                <m:mo>-</m:mo>
+                <m:msub>
+                  <m:mi>t</m:mi>
+                  <m:mn>2</m:mn>
+                </m:msub>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mfrac>
+                <m:mrow>
+                  <m:mi>f</m:mi>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:msub>
+                      <m:mi>t</m:mi>
+                      <m:mn>1</m:mn>
+                    </m:msub>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                  <m:mo>+</m:mo>
+                  <m:mi>f</m:mi>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:msub>
+                      <m:mi>t</m:mi>
+                      <m:mn>2</m:mn>
+                    </m:msub>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                </m:mrow>
+                <m:mn>2</m:mn>
+              </m:mfrac>
+              <m:mo>+</m:mo>
+              <m:mo>⋯</m:mo>
+              <m:mo>+</m:mo>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:msub>
+                  <m:mi>t</m:mi>
+                  <m:mi>n</m:mi>
+                </m:msub>
+                <m:mo>-</m:mo>
+                <m:msub>
+                  <m:mi>t</m:mi>
+                  <m:mrow>
+                    <m:mi>n</m:mi>
+                    <m:mo>-</m:mo>
+                    <m:mn>1</m:mn>
+                  </m:mrow>
+                </m:msub>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mfrac>
+                <m:mrow>
+                  <m:mi>f</m:mi>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:msub>
+                      <m:mi>t</m:mi>
+                      <m:mrow>
+                        <m:mi>n</m:mi>
+                        <m:mo>-</m:mo>
+                        <m:mn>1</m:mn>
+                      </m:mrow>
+                    </m:msub>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                  <m:mo>+</m:mo>
+                  <m:mi>f</m:mi>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:msub>
+                      <m:mi>t</m:mi>
+                      <m:mi>n</m:mi>
+                    </m:msub>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                </m:mrow>
+                <m:mn>2</m:mn>
+              </m:mfrac>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id65411">This formula can be further reduced, which is the subject of Exercise 2.1.</para>
+      </section>
+      <section id="uid15">
+        <title>Coding the trapezoid rule</title>
+        <para id="id65425">Here we present a code that uses the trapezoid rule to find the area under any function we provide. We need a vector <code display="inline">x</code> that holds the values of the domain, for example <code display="inline">x = 0:.01:pi</code>. We then need a vector <code display="inline">y</code> that holds the function values at those <code display="inline">x</code> points, for example <code display="inline">y = sin(x)</code>.</para>
+        <code id="id65459" display="block">function curve_area = mytrapz(x, y, fast)
+% function curve_area = mytrapz(x, y, fast)
+%
+% mytrapz.m performs the trapezoid rule on the vector given by x and y.
+% Input:
+%   x - a vector containing the domain of the function
+%   y - a vector containing values of the function corresponding to the
+
+curve_area = 0;
+
+%loop through and add up trapezoids for as many points as we are given
+    for n = 2 : numel(x)
+</code>
+        <para id="id65594">We start the code with zero area under the curve, since we haven't counted anything yet. Then we create a <code display="inline">for</code> loop to count each triangle individually. As we see above, more trapezoids leads to better answers, so we want to use as many trapezoids as we possibly can. In this situation, that means using every point in <code display="inline">x</code> and <code display="inline">y</code>. The function <code display="inline">numel</code> simply counts the number of elements in <code display="inline">x</code>. We then calculate the area of the current triangle (within the loop):</para>
+        <code id="id65629" display="block">    height = (y(n) + y(n-1))/2;     %average height of function across interval
+base = x(n) - x(n-1);      	    %length of interval
+</code>
+        <para id="id65656">The area, as in Equation <link target-id="uid13"/>, is base times height. The height is the average of the height of the function at the two corner points. The length of the interval is the difference between the two corner points.</para>
+        <para id="id65668">Lastly, we compute the area of the trapezoid and add it to our answer:</para>
+        <code id="id65673" display="block">   trap_area = base * height; 	    %area of trapezoid
+ curve_area = curve_area + trap_area;    %add to continuing sum
+end
+</code>
+        <para id="id65700">The <code display="inline">end</code> statement closes the loop over triangles.</para>
+        <para id="id65711">To check the accuracy of our code, we test it with many examples, one of which is shown here. The function <code display="inline">trapz()</code> is a built-in function that performs the same operation:</para>
+        <code id="id65725" display="block">&gt;&gt; x = 0:.01:pi;
+&gt;&gt; y = sin(x);
+&gt;&gt; mytrapz(x,y)
+ 
+   ans =  1.99998206504367
+ 
+&gt;&gt; trapz(x,y)
+ 
+   ans =  1.99998206504367
+</code>
+        <para id="id65833">Additionally, we know that <m:math overflow="scroll"><m:mrow><m:msubsup><m:mo>∫</m:mo><m:mn>0</m:mn><m:mi>π</m:mi></m:msubsup><m:mo form="prefix">sin</m:mo><m:mrow><m:mo>(</m:mo><m:mi>x</m:mi><m:mo>)</m:mo></m:mrow><m:mi>d</m:mi><m:mi>x</m:mi><m:mo>=</m:mo><m:mn>2</m:mn></m:mrow></m:math>, so the answer we are getting is very close to the true value.</para>
+        <para id="id65876">A simpler implementation of the code is included at the end, if we specify a third argument `<code display="inline">fast</code>':</para>
+        <code id="id65887" display="block">    %alternate (fast) implementation
+    curve_area = sum(y(2:end-1).*(x(3:end) - x(1:end-2)));
+    curve_area = curve_area + y(1)*(x(2) - x(1)) + y(end)*(x(end) - x(end-1));
+    curve_area = curve_area/2;
+</code>
+        <para id="id65937">The explanation for this code is left as exercise 2.1.</para>
+      </section>
+      <section id="uid16">
+        <title>Integration and the Trapezoid Rule</title>
+        <para id="id65951">The trapezoid rule is a way of estimating the area under a function. This is exactly what we call an <emphasis effect="italics">integral</emphasis>. The integral of <m:math overflow="scroll"><m:mrow><m:mi>f</m:mi><m:mo>(</m:mo><m:mi>x</m:mi><m:mo>)</m:mo></m:mrow></m:math> from <m:math overflow="scroll"><m:mi>a</m:mi></m:math> to <m:math overflow="scroll"><m:mi>b</m:mi></m:math> looks like this:</para>
+        <equation id="id65996">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:msubsup>
+                <m:mo>∫</m:mo>
+                <m:mi>a</m:mi>
+                <m:mi>b</m:mi>
+              </m:msubsup>
+              <m:mi>f</m:mi>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>x</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mi>d</m:mi>
+              <m:mi>x</m:mi>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id66030">For well-behaved functions, evaluation of the trapezoid rule approaches the true value of the integral (true area underneath the curve) as we evaluate smaller and smaller intervals. Of course, there are other ways to characterize integration, namely the <emphasis effect="bold">Fundamental Theorem of Calculus</emphasis>. For more on this, see the Connexions module <emphasis effect="italics">Integration, Average Behavior: The Fundamental Theorem of Calculus</emphasis>.</para>
+      </section>
+      <section id="uid17">
+        <title>Exercises</title>
+        <para id="id66059"><emphasis effect="bold">2.1</emphasis> Show that Equation <link target-id="uid14"/> is equivalent to the “fast" version of the code:</para>
+        <equation id="id66072">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:mtext>approximate</m:mtext>
+              <m:mspace width="4.pt"/>
+              <m:mtext>area</m:mtext>
+              <m:mspace width="4.pt"/>
+              <m:mtext>of</m:mtext>
+              <m:mspace width="4.pt"/>
+              <m:mtext>curve</m:mtext>
+              <m:mo>=</m:mo>
+              <m:munderover>
+                <m:mo>∑</m:mo>
+                <m:mrow>
+                  <m:mi>i</m:mi>
+                  <m:mo>=</m:mo>
+                  <m:mn>2</m:mn>
+                </m:mrow>
+                <m:mrow>
+                  <m:mi>n</m:mi>
+                  <m:mo>-</m:mo>
+                  <m:mn>1</m:mn>
+                </m:mrow>
+              </m:munderover>
+              <m:mi>f</m:mi>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:msub>
+                  <m:mi>t</m:mi>
+                  <m:mn>1</m:mn>
+                </m:msub>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:msub>
+                  <m:mi>x</m:mi>
+                  <m:mrow>
+                    <m:mi>i</m:mi>
+                    <m:mo>+</m:mo>
+                    <m:mn>1</m:mn>
+                  </m:mrow>
+                </m:msub>
+                <m:mo>-</m:mo>
+                <m:msub>
+                  <m:mi>x</m:mi>
+                  <m:mrow>
+                    <m:mi>i</m:mi>
+                    <m:mo>-</m:mo>
+                    <m:mn>1</m:mn>
+                  </m:mrow>
+                </m:msub>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>+</m:mo>
+              <m:mi>f</m:mi>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:msub>
+                  <m:mi>t</m:mi>
+                  <m:mn>1</m:mn>
+                </m:msub>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:msub>
+                  <m:mi>x</m:mi>
+                  <m:mn>2</m:mn>
+                </m:msub>
+                <m:mo>-</m:mo>
+                <m:msub>
+                  <m:mi>x</m:mi>
+                  <m:mn>1</m:mn>
+                </m:msub>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>+</m:mo>
+              <m:mi>f</m:mi>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:msub>
+                  <m:mi>t</m:mi>
+                  <m:mi>n</m:mi>
+                </m:msub>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:msub>
+                  <m:mi>x</m:mi>
+                  <m:mi>n</m:mi>
+                </m:msub>
+                <m:mo>-</m:mo>
+                <m:msub>
+                  <m:mi>x</m:mi>
+                  <m:mrow>
+                    <m:mi>n</m:mi>
+                    <m:mo>-</m:mo>
+                    <m:mn>1</m:mn>
+                  </m:mrow>
+                </m:msub>
+                <m:mo>)</m:mo>
+              </m:mrow>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id66257"><emphasis effect="bold">2.2</emphasis> Test the accuracy of <code display="inline">mytrapz.m</code> for <m:math overflow="scroll"><m:mrow><m:mi>y</m:mi><m:mo>=</m:mo><m:mo form="prefix">sin</m:mo><m:mo>(</m:mo><m:mi>x</m:mi><m:mo>)</m:mo></m:mrow></m:math> (or some other function) as you increase the number of trapezoids. Plot your result on a <code display="inline">loglog()</code> plot: on the <m:math overflow="scroll"><m:mi>x</m:mi></m:math>-axis, number of trapezoids, and on the <m:math overflow="scroll"><m:mi>y</m:mi></m:math>-axis, error.</para>
+      </section>
+    </section>
+    <section id="cid3">
+      <title>Fourier Method for decomposing signals</title>
+      <para id="id66330">We now introduce the key mathematical ideas that will allow us to break down signals into their component frequencies.</para>
+      <section id="uid18">
+        <title>Building the Tools</title>
+        <para id="id66343">Suppose the function <m:math overflow="scroll"><m:mrow><m:mi>f</m:mi><m:mo>(</m:mo><m:mi>t</m:mi><m:mo>)</m:mo></m:mrow></m:math> consists of several sine waves added together:</para>
+        <equation id="id66364">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:mi>f</m:mi>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>t</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>=</m:mo>
+              <m:msub>
+                <m:mi>a</m:mi>
+                <m:mn>1</m:mn>
+              </m:msub>
+              <m:mo form="prefix">sin</m:mo>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mn>1</m:mn>
+                <m:mo>·</m:mo>
+                <m:mn>2</m:mn>
+                <m:mi>π</m:mi>
+                <m:mi>t</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>+</m:mo>
+              <m:msub>
+                <m:mi>a</m:mi>
+                <m:mn>2</m:mn>
+              </m:msub>
+              <m:mo form="prefix">sin</m:mo>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mn>2</m:mn>
+                <m:mo>·</m:mo>
+                <m:mn>2</m:mn>
+                <m:mi>π</m:mi>
+                <m:mi>t</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>+</m:mo>
+              <m:mo>⋯</m:mo>
+              <m:mo>+</m:mo>
+              <m:msub>
+                <m:mi>a</m:mi>
+                <m:mi>n</m:mi>
+              </m:msub>
+              <m:mo form="prefix">sin</m:mo>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>n</m:mi>
+                <m:mo>·</m:mo>
+                <m:mn>2</m:mn>
+                <m:mi>π</m:mi>
+                <m:mi>t</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id66479">Suppose we know <m:math overflow="scroll"><m:mrow><m:mi>f</m:mi><m:mo>(</m:mo><m:mi>t</m:mi><m:mo>)</m:mo></m:mrow></m:math> over some interval, say <m:math overflow="scroll"><m:mrow><m:mo>[</m:mo><m:mn>0</m:mn><m:mo>,</m:mo><m:mn>1</m:mn><m:mo>]</m:mo></m:mrow></m:math>, and we want to find <m:math overflow="scroll"><m:msub><m:mi>a</m:mi><m:mi>j</m:mi></m:msub></m:math>. Before we jump into this, we need to calculate the value of a certain integral. For integers <m:math overflow="scroll"><m:mi>h</m:mi></m:math> and <m:math overflow="scroll"><m:mi>k</m:mi></m:math>, with <m:math overflow="scroll"><m:mrow><m:mi>h</m:mi><m:mo>≠</m:mo><m:mi>k</m:mi></m:mrow></m:math>,</para>
+        <equation id="uid19">
+          <m:math overflow="scroll" mode="display">
+            <m:mtable displaystyle="true">
+              <m:mtr>
+                <m:mtd/>
+                <m:mtd columnalign="left">
+                  <m:mrow>
+                    <m:msubsup>
+                      <m:mo>∫</m:mo>
+                      <m:mrow>
+                        <m:mn>0</m:mn>
+                      </m:mrow>
+                      <m:mn>1</m:mn>
+                    </m:msubsup>
+                    <m:mo form="prefix">sin</m:mo>
+                    <m:mrow>
+                      <m:mo>(</m:mo>
+                      <m:mi>h</m:mi>
+                      <m:mo>·</m:mo>
+                      <m:mn>2</m:mn>
+                      <m:mi>π</m:mi>
+                      <m:mi>t</m:mi>
+                      <m:mo>)</m:mo>
+                    </m:mrow>
+                    <m:mo form="prefix">sin</m:mo>
+                    <m:mrow>
+                      <m:mo>(</m:mo>
+                      <m:mi>k</m:mi>
+                      <m:mo>·</m:mo>
+                      <m:mn>2</m:mn>
+                      <m:mi>π</m:mi>
+                      <m:mi>t</m:mi>
+                      <m:mo>)</m:mo>
+                    </m:mrow>
+                    <m:mi>d</m:mi>
+                    <m:mi>t</m:mi>
+                  </m:mrow>
+                </m:mtd>
+              </m:mtr>
+              <m:mtr>
+                <m:mtd/>
+                <m:mtd columnalign="left">
+                  <m:mrow>
+                    <m:mo>=</m:mo>
+                    <m:msubsup>
+                      <m:mo>∫</m:mo>
+                      <m:mrow>
+                        <m:mn>0</m:mn>
+                      </m:mrow>
+                      <m:mn>1</m:mn>
+                    </m:msubsup>
+                    <m:mfrac>
+                      <m:mn>1</m:mn>
+                      <m:mn>2</m:mn>
+                    </m:mfrac>
+                    <m:mfenced separators="" open="[" close="]">
+                      <m:mo form="prefix">cos</m:mo>
+                      <m:mo>(</m:mo>
+                      <m:mo>(</m:mo>
+                      <m:mi>h</m:mi>
+                      <m:mo>-</m:mo>
+                      <m:mi>k</m:mi>
+                      <m:mo>)</m:mo>
+                      <m:mo>·</m:mo>
+                      <m:mn>2</m:mn>
+                      <m:mi>π</m:mi>
+                      <m:mi>t</m:mi>
+                      <m:mo>)</m:mo>
+                      <m:mo>-</m:mo>
+                      <m:mo form="prefix">cos</m:mo>
+                      <m:mo>(</m:mo>
+                      <m:mo>(</m:mo>
+                      <m:mi>h</m:mi>
+                      <m:mo>+</m:mo>
+                      <m:mi>k</m:mi>
+                      <m:mo>)</m:mo>
+                      <m:mo>·</m:mo>
+                      <m:mn>2</m:mn>
+                      <m:mi>π</m:mi>
+                      <m:mi>t</m:mi>
+                      <m:mo>)</m:mo>
+                    </m:mfenced>
+                    <m:mi>d</m:mi>
+                    <m:mi>t</m:mi>
+                    <m:mspace width="2.em"/>
+                    <m:mspace width="2.em"/>
+                    <m:mspace width="2.em"/>
+                  </m:mrow>
+                </m:mtd>
+                <m:mtd columnalign="right">
+                  <m:mrow>
+                    <m:mtext>trigononmic</m:mtext>
+                    <m:mspace width="4.pt"/>
+                    <m:mtext>identity</m:mtext>
+                    <m:mspace width="4.pt"/>
+                    <m:mtext>(substitution)</m:mtext>
+                  </m:mrow>
+                </m:mtd>
+              </m:mtr>
+              <m:mtr>
+                <m:mtd/>
+                <m:mtd columnalign="left">
+                  <m:mrow>
+                    <m:mo>=</m:mo>
+                    <m:mfrac>
+                      <m:mn>1</m:mn>
+                      <m:mrow>
+                        <m:mn>2</m:mn>
+                        <m:mo>(</m:mo>
+                        <m:mi>h</m:mi>
+                        <m:mo>-</m:mo>
+                        <m:mi>k</m:mi>
+                        <m:mo>)</m:mo>
+                        <m:mn>2</m:mn>
+                        <m:mi>π</m:mi>
+                        <m:mi>t</m:mi>
+                      </m:mrow>
+                    </m:mfrac>
+                    <m:mo form="prefix">sin</m:mo>
+                    <m:mrow>
+                      <m:mo>(</m:mo>
+                      <m:mrow>
+                        <m:mo>(</m:mo>
+                        <m:mi>h</m:mi>
+                        <m:mo>-</m:mo>
+                        <m:mi>k</m:mi>
+                        <m:mo>)</m:mo>
+                      </m:mrow>
+                      <m:mo>·</m:mo>
+                      <m:mn>2</m:mn>
+                      <m:mi>π</m:mi>
+                      <m:mi>t</m:mi>
+                      <m:mo>)</m:mo>
+                    </m:mrow>
+                    <m:mo>-</m:mo>
+                    <m:mfrac>
+                      <m:mn>1</m:mn>
+                      <m:mrow>
+                        <m:mn>2</m:mn>
+                        <m:mo>(</m:mo>
+                        <m:mi>h</m:mi>
+                        <m:mo>+</m:mo>
+                        <m:mi>k</m:mi>
+                        <m:mo>)</m:mo>
+                        <m:mn>2</m:mn>
+                        <m:mi>π</m:mi>
+                      </m:mrow>
+                    </m:mfrac>
+                    <m:mo form="prefix">sin</m:mo>
+                    <m:mrow>
+                      <m:mo>(</m:mo>
+                      <m:mrow>
+                        <m:mo>(</m:mo>
+                        <m:mi>h</m:mi>
+                        <m:mo>+</m:mo>
+                        <m:mi>k</m:mi>
+                        <m:mo>)</m:mo>
+                      </m:mrow>
+                      <m:mo>·</m:mo>
+                      <m:mn>2</m:mn>
+                      <m:mi>π</m:mi>
+                      <m:mi>t</m:mi>
+                      <m:mo>)</m:mo>
+                    </m:mrow>
+                    <m:msubsup>
+                      <m:mo>|</m:mo>
+                      <m:mrow>
+                        <m:mi>t</m:mi>
+                        <m:mo>=</m:mo>
+                        <m:mn>0</m:mn>
+                      </m:mrow>
+                      <m:mn>1</m:mn>
+                    </m:msubsup>
+                    <m:mspace width="2.em"/>
+                  </m:mrow>
+                </m:mtd>
+                <m:mtd columnalign="right">
+                  <m:mrow>
+                    <m:mtext>integral</m:mtext>
+                    <m:mspace width="4.pt"/>
+                    <m:mtext>of</m:mtext>
+                    <m:mspace width="4.pt"/>
+                    <m:mtext>cosine</m:mtext>
+                    <m:mspace width="4.pt"/>
+                    <m:mtext>is</m:mtext>
+                    <m:mspace width="4.pt"/>
+                    <m:mtext>sine</m:mtext>
+                  </m:mrow>
+                </m:mtd>
+              </m:mtr>
+              <m:mtr>
+                <m:mtd/>
+                <m:mtd columnalign="left">
+                  <m:mrow>
+                    <m:mo>=</m:mo>
+                    <m:mn>0</m:mn>
+                  </m:mrow>
+                </m:mtd>
+                <m:mtd columnalign="right">
+                  <m:mrow>
+                    <m:mtext>evaluate</m:mtext>
+                    <m:mspace width="4.pt"/>
+                    <m:mtext>from</m:mtext>
+                    <m:mspace width="4.pt"/>
+                    <m:mtext>0</m:mtext>
+                    <m:mspace width="4.pt"/>
+                    <m:mtext>to</m:mtext>
+                    <m:mspace width="4.pt"/>
+                    <m:mtext>1</m:mtext>
+                  </m:mrow>
+                </m:mtd>
+              </m:mtr>
+            </m:mtable>
+          </m:math>
+        </equation>
+        <para id="id66978">If instead <m:math overflow="scroll"><m:mrow><m:mi>h</m:mi><m:mo>=</m:mo><m:mi>k</m:mi></m:mrow></m:math>,</para>
+        <equation id="uid20">
+          <m:math overflow="scroll" mode="display">
+            <m:mtable displaystyle="true">
+              <m:mtr>
+                <m:mtd columnalign="right">
+                  <m:mrow>
+                    <m:msubsup>
+                      <m:mo>∫</m:mo>
+                      <m:mrow>
+                        <m:mn>0</m:mn>
+                      </m:mrow>
+                      <m:mn>1</m:mn>
+                    </m:msubsup>
+                    <m:mo form="prefix">sin</m:mo>
+                    <m:msup>
+                      <m:mrow>
+                        <m:mo>(</m:mo>
+                        <m:mi>h</m:mi>
+                        <m:mo>·</m:mo>
+                        <m:mn>2</m:mn>
+                        <m:mi>π</m:mi>
+                        <m:mi>t</m:mi>
+                        <m:mo>)</m:mo>
+                      </m:mrow>
+                      <m:mn>2</m:mn>
+                    </m:msup>
+                    <m:mi>d</m:mi>
+                    <m:mi>t</m:mi>
+                  </m:mrow>
+                </m:mtd>
+                <m:mtd columnalign="left">
+                  <m:mrow>
+                    <m:mo>=</m:mo>
+                    <m:msubsup>
+                      <m:mo>∫</m:mo>
+                      <m:mrow>
+                        <m:mn>0</m:mn>
+                      </m:mrow>
+                      <m:mn>1</m:mn>
+                    </m:msubsup>
+                    <m:mfrac>
+                      <m:mn>1</m:mn>
+                      <m:mn>2</m:mn>
+                    </m:mfrac>
+                    <m:mrow>
+                      <m:mo>(</m:mo>
+                      <m:mn>1</m:mn>
+                      <m:mo>-</m:mo>
+                      <m:mo form="prefix">cos</m:mo>
+                      <m:mrow>
+                        <m:mo>(</m:mo>
+                        <m:mn>2</m:mn>
+                        <m:mi>h</m:mi>
+                        <m:mo>·</m:mo>
+                        <m:mn>2</m:mn>
+                        <m:mi>π</m:mi>
+                        <m:mi>t</m:mi>
+                        <m:mo>)</m:mo>
+                      </m:mrow>
+                      <m:mo>)</m:mo>
+                    </m:mrow>
+                    <m:mi>d</m:mi>
+                    <m:mi>t</m:mi>
+                    <m:mspace width="2.em"/>
+                  </m:mrow>
+                </m:mtd>
+                <m:mtd columnalign="right">
+                  <m:mrow>
+                    <m:mtext>trigononmic</m:mtext>
+                    <m:mspace width="4.pt"/>
+                    <m:mtext>identity</m:mtext>
+                    <m:mspace width="4.pt"/>
+                    <m:mtext>(substitution)</m:mtext>
+                  </m:mrow>
+                </m:mtd>
+              </m:mtr>
+              <m:mtr>
+                <m:mtd/>
+                <m:mtd columnalign="left">
+                  <m:mrow>
+                    <m:mo>=</m:mo>
+                    <m:mfrac>
+                      <m:mi>x</m:mi>
+                      <m:mn>2</m:mn>
+                    </m:mfrac>
+                    <m:mo>-</m:mo>
+                    <m:mfrac>
+                      <m:mn>1</m:mn>
+                      <m:mrow>
+                        <m:mo>(</m:mo>
+                        <m:mn>2</m:mn>
+                        <m:mi>h</m:mi>
+                        <m:mo>·</m:mo>
+                        <m:mn>2</m:mn>
+                        <m:mi>π</m:mi>
+                        <m:mo>)</m:mo>
+                      </m:mrow>
+                    </m:mfrac>
+                    <m:mo form="prefix">sin</m:mo>
+                    <m:mrow>
+                      <m:mo>(</m:mo>
+                      <m:mn>2</m:mn>
+                      <m:mi>h</m:mi>
+                      <m:mo>·</m:mo>
+                      <m:mn>2</m:mn>
+                      <m:mi>π</m:mi>
+                      <m:mi>t</m:mi>
+                      <m:mo>)</m:mo>
+                    </m:mrow>
+                    <m:msubsup>
+                      <m:mo>|</m:mo>
+                      <m:mrow>
+                        <m:mi>t</m:mi>
+                        <m:mo>=</m:mo>
+                        <m:mn>0</m:mn>
+                      </m:mrow>
+                      <m:mn>1</m:mn>
+                    </m:msubsup>
+                    <m:mspace width="2.em"/>
+                  </m:mrow>
+                </m:mtd>
+                <m:mtd columnalign="right">
+                  <m:mrow>
+                    <m:mtext>integral</m:mtext>
+                    <m:mspace width="4.pt"/>
+                    <m:mtext>of</m:mtext>
+                    <m:mspace width="4.pt"/>
+                    <m:mtext>cosine</m:mtext>
+                    <m:mspace width="4.pt"/>
+                    <m:mtext>is</m:mtext>
+                    <m:mspace width="4.pt"/>
+                    <m:mtext>sine</m:mtext>
+                  </m:mrow>
+                </m:mtd>
+              </m:mtr>
+              <m:mtr>
+                <m:mtd/>
+                <m:mtd columnalign="left">
+                  <m:mrow>
+                    <m:mo>=</m:mo>
+                    <m:mn>1</m:mn>
+                    <m:mo>/</m:mo>
+                    <m:mn>2</m:mn>
+                  </m:mrow>
+                </m:mtd>
+                <m:mtd columnalign="right">
+                  <m:mrow>
+                    <m:mtext>evaluate</m:mtext>
+                    <m:mspace width="4.pt"/>
+                    <m:mtext>from</m:mtext>
+                    <m:mspace width="4.pt"/>
+                    <m:mtext>0</m:mtext>
+                    <m:mspace width="4.pt"/>
+                    <m:mtext>to</m:mtext>
+                    <m:mspace width="4.pt"/>
+                    <m:mtext>1</m:mtext>
+                  </m:mrow>
+                </m:mtd>
+              </m:mtr>
+            </m:mtable>
+          </m:math>
+        </equation>
+        <para id="id67297">Now we wish to find the coefficients of <m:math overflow="scroll"><m:mrow><m:mi>f</m:mi><m:mo>(</m:mo><m:mi>t</m:mi><m:mo>)</m:mo></m:mrow></m:math>. If we multiply <m:math overflow="scroll"><m:mrow><m:mi>f</m:mi><m:mo>(</m:mo><m:mi>t</m:mi><m:mo>)</m:mo></m:mrow></m:math> by <m:math overflow="scroll"><m:mrow><m:mo form="prefix">sin</m:mo><m:mo>(</m:mo><m:mi>j</m:mi><m:mo>·</m:mo><m:mn>2</m:mn><m:mi>π</m:mi><m:mi>t</m:mi><m:mo>)</m:mo></m:mrow></m:math> and integrate, we get:</para>
+        <equation id="uid21">
+          <m:math overflow="scroll" mode="display">
+            <m:mtable displaystyle="true">
+              <m:mtr>
+                <m:mtd/>
+                <m:mtd columnalign="left">
+                  <m:mrow>
+                    <m:msubsup>
+                      <m:mo>∫</m:mo>
+                      <m:mrow>
+                        <m:mn>0</m:mn>
+                      </m:mrow>
+                      <m:mn>1</m:mn>
+                    </m:msubsup>
+                    <m:mi>f</m:mi>
+                    <m:mrow>
+                      <m:mo>(</m:mo>
+                      <m:mi>t</m:mi>
+                      <m:mo>)</m:mo>
+                    </m:mrow>
+                    <m:mo form="prefix">sin</m:mo>
+                    <m:mrow>
+                      <m:mo>(</m:mo>
+                      <m:mi>j</m:mi>
+                      <m:mo>·</m:mo>
+                      <m:mn>2</m:mn>
+                      <m:mi>π</m:mi>
+                      <m:mi>t</m:mi>
+                      <m:mo>)</m:mo>
+                    </m:mrow>
+                    <m:mi>d</m:mi>
+                    <m:mi>t</m:mi>
+                  </m:mrow>
+                </m:mtd>
+              </m:mtr>
+              <m:mtr>
+                <m:mtd/>
+                <m:mtd columnalign="left">
+                  <m:mrow>
+                    <m:mo>=</m:mo>
+                    <m:msubsup>
+                      <m:mo>∫</m:mo>
+                      <m:mrow>
+                        <m:mn>0</m:mn>
+                      </m:mrow>
+                      <m:mn>1</m:mn>
+                    </m:msubsup>
+                    <m:mfenced separators="" open="(" close=")">
+                      <m:msub>
+                        <m:mi>a</m:mi>
+                        <m:mn>1</m:mn>
+                      </m:msub>
+                      <m:mo form="prefix">sin</m:mo>
+                      <m:mrow>
+                        <m:mo>(</m:mo>
+                        <m:mn>1</m:mn>
+                        <m:mo>·</m:mo>
+                        <m:mn>2</m:mn>
+                        <m:mi>π</m:mi>
+                        <m:mi>t</m:mi>
+                        <m:mo>)</m:mo>
+                      </m:mrow>
+                      <m:mo form="prefix">sin</m:mo>
+                      <m:mrow>
+                        <m:mo>(</m:mo>
+                        <m:mi>j</m:mi>
+                        <m:mo>·</m:mo>
+                        <m:mn>2</m:mn>
+                        <m:mi>π</m:mi>
+                        <m:mi>t</m:mi>
+                        <m:mo>)</m:mo>
+                      </m:mrow>
+                      <m:mo>+</m:mo>
+                      <m:mo>⋯</m:mo>
+                      <m:mo>+</m:mo>
+                      <m:msub>
+                        <m:mi>a</m:mi>
+                        <m:mi>j</m:mi>
+                      </m:msub>
+                      <m:mo form="prefix">sin</m:mo>
+                      <m:mrow>
+                        <m:mo>(</m:mo>
+                        <m:mi>j</m:mi>
+                        <m:mo>·</m:mo>
+                        <m:mn>2</m:mn>
+                        <m:mi>π</m:mi>
+                        <m:mi>t</m:mi>
+                        <m:mo>)</m:mo>
+                      </m:mrow>
+                      <m:mo form="prefix">sin</m:mo>
+                      <m:mrow>
+                        <m:mo>(</m:mo>
+                        <m:mi>j</m:mi>
+                        <m:mo>·</m:mo>
+                        <m:mn>2</m:mn>
+                        <m:mi>π</m:mi>
+                        <m:mi>t</m:mi>
+                        <m:mo>)</m:mo>
+                      </m:mrow>
+                      <m:mo>+</m:mo>
+                      <m:mo>⋯</m:mo>
+                      <m:mo>+</m:mo>
+                      <m:msub>
+                        <m:mi>a</m:mi>
+                        <m:mi>n</m:mi>
+                      </m:msub>
+                      <m:mo form="prefix">sin</m:mo>
+                      <m:mrow>
+                        <m:mo>(</m:mo>
+                        <m:mi>n</m:mi>
+                        <m:mo>·</m:mo>
+                        <m:mn>2</m:mn>
+                        <m:mi>π</m:mi>
+                        <m:mi>t</m:mi>
+                        <m:mo>)</m:mo>
+                      </m:mrow>
+                      <m:mo form="prefix">sin</m:mo>
+                      <m:mrow>
+                        <m:mo>(</m:mo>
+                        <m:mi>j</m:mi>
+                        <m:mo>·</m:mo>
+                        <m:mn>2</m:mn>
+                        <m:mi>π</m:mi>
+                        <m:mi>t</m:mi>
+                        <m:mo>)</m:mo>
+                      </m:mrow>
+                    </m:mfenced>
+                    <m:mi>d</m:mi>
+                    <m:mi>t</m:mi>
+                  </m:mrow>
+                </m:mtd>
+              </m:mtr>
+              <m:mtr>
+                <m:mtd/>
+                <m:mtd columnalign="left">
+                  <m:mrow>
+                    <m:mspace width="2.em"/>
+                    <m:mspace width="2.em"/>
+                    <m:mspace width="2.em"/>
+                    <m:mspace width="2.em"/>
+                    <m:mspace width="2.em"/>
+                    <m:mspace width="2.em"/>
+                    <m:mo>(</m:mo>
+                    <m:mtext>substitute</m:mtext>
+                    <m:mspace width="4.pt"/>
+                    <m:mtext>for</m:mtext>
+                    <m:mspace width="4.pt"/>
+                    <m:mi>f</m:mi>
+                    <m:mspace width="4.pt"/>
+                    <m:mtext>and</m:mtext>
+                    <m:mspace width="4.pt"/>
+                    <m:mtext>distribute</m:mtext>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                </m:mtd>
+              </m:mtr>
+              <m:mtr>
+                <m:mtd/>
+                <m:mtd columnalign="left">
+                  <m:mrow>
+                    <m:mo>=</m:mo>
+                    <m:msubsup>
+                      <m:mo>∫</m:mo>
+                      <m:mrow>
+                        <m:mn>0</m:mn>
+                      </m:mrow>
+                      <m:mn>1</m:mn>
+                    </m:msubsup>
+                    <m:msub>
+                      <m:mi>a</m:mi>
+                      <m:mn>1</m:mn>
+                    </m:msub>
+                    <m:mo form="prefix">sin</m:mo>
+                    <m:mrow>
+                      <m:mo>(</m:mo>
+                      <m:mn>1</m:mn>
+                      <m:mo>·</m:mo>
+                      <m:mn>2</m:mn>
+                      <m:mi>π</m:mi>
+                      <m:mi>t</m:mi>
+                      <m:mo>)</m:mo>
+                    </m:mrow>
+                    <m:mo form="prefix">sin</m:mo>
+                    <m:mrow>
+                      <m:mo>(</m:mo>
+                      <m:mi>j</m:mi>
+                      <m:mo>·</m:mo>
+                      <m:mn>2</m:mn>
+                      <m:mi>π</m:mi>
+                      <m:mi>t</m:mi>
+                      <m:mo>)</m:mo>
+                    </m:mrow>
+                    <m:mi>d</m:mi>
+                    <m:mi>t</m:mi>
+                    <m:mo>+</m:mo>
+                    <m:mo>⋯</m:mo>
+                    <m:mo>+</m:mo>
+                    <m:msubsup>
+                      <m:mo>∫</m:mo>
+                      <m:mrow>
+                        <m:mn>0</m:mn>
+                      </m:mrow>
+                      <m:mn>1</m:mn>
+                    </m:msubsup>
+                    <m:msub>
+                      <m:mi>a</m:mi>
+                      <m:mi>j</m:mi>
+                    </m:msub>
+                    <m:mo form="prefix">sin</m:mo>
+                    <m:mrow>
+                      <m:mo>(</m:mo>
+                      <m:mi>j</m:mi>
+                      <m:mo>·</m:mo>
+                      <m:mn>2</m:mn>
+                      <m:mi>π</m:mi>
+                      <m:mi>t</m:mi>
+                      <m:mo>)</m:mo>
+                    </m:mrow>
+                    <m:mo form="prefix">sin</m:mo>
+                    <m:mrow>
+                      <m:mo>(</m:mo>
+                      <m:mi>j</m:mi>
+                      <m:mo>·</m:mo>
+                      <m:mn>2</m:mn>
+                      <m:mi>π</m:mi>
+                      <m:mi>t</m:mi>
+                      <m:mo>)</m:mo>
+                    </m:mrow>
+                    <m:mi>d</m:mi>
+                    <m:mi>t</m:mi>
+                    <m:mo>+</m:mo>
+                    <m:mo>⋯</m:mo>
+                    <m:mo>+</m:mo>
+                    <m:msubsup>
+                      <m:mo>∫</m:mo>
+                      <m:mrow>
+                        <m:mn>0</m:mn>
+                      </m:mrow>
+                      <m:mn>1</m:mn>
+                    </m:msubsup>
+                    <m:msub>
+                      <m:mi>a</m:mi>
+                      <m:mi>n</m:mi>
+                    </m:msub>
+                    <m:mo form="prefix">sin</m:mo>
+                    <m:mrow>
+                      <m:mo>(</m:mo>
+                      <m:mi>n</m:mi>
+                      <m:mo>·</m:mo>
+                      <m:mn>2</m:mn>
+                      <m:mi>π</m:mi>
+                      <m:mi>t</m:mi>
+                      <m:mo>)</m:mo>
+                    </m:mrow>
+                    <m:mo form="prefix">sin</m:mo>
+                    <m:mrow>
+                      <m:mo>(</m:mo>
+                      <m:mi>j</m:mi>
+                      <m:mo>·</m:mo>
+                      <m:mn>2</m:mn>
+                      <m:mi>π</m:mi>
+                      <m:mi>t</m:mi>
+                      <m:mo>)</m:mo>
+                    </m:mrow>
+                    <m:mi>d</m:mi>
+                    <m:mi>t</m:mi>
+                  </m:mrow>
+                </m:mtd>
+              </m:mtr>
+              <m:mtr>
+                <m:mtd/>
+                <m:mtd columnalign="left">
+                  <m:mrow>
+                    <m:mspace width="2.em"/>
+                    <m:mspace width="2.em"/>
+                    <m:mspace width="2.em"/>
+                    <m:mspace width="2.em"/>
+                    <m:mspace width="2.em"/>
+                    <m:mspace width="2.em"/>
+                    <m:mo>(</m:mo>
+                    <m:mtext>the</m:mtext>
+                    <m:mspace width="4.pt"/>
+                    <m:mtext>integral</m:mtext>
+                    <m:mspace width="4.pt"/>
+                    <m:mtext>of</m:mtext>
+                    <m:mspace width="4.pt"/>
+                    <m:mtext>a</m:mtext>
+                    <m:mspace width="4.pt"/>
+                    <m:mtext>sum</m:mtext>
+                    <m:mspace width="4.pt"/>
+                    <m:mtext>is</m:mtext>
+                    <m:mspace width="4.pt"/>
+                    <m:mtext>the</m:mtext>
+                    <m:mspace width="4.pt"/>
+                    <m:mtext>sum</m:mtext>
+                    <m:mspace width="4.pt"/>
+                    <m:mtext>of</m:mtext>
+                    <m:mspace width="4.pt"/>
+                    <m:mtext>integrals</m:mtext>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                </m:mtd>
+              </m:mtr>
+              <m:mtr>
+                <m:mtd/>
+                <m:mtd columnalign="left">
+                  <m:mrow>
+                    <m:mo>=</m:mo>
+                    <m:mn>0</m:mn>
+                    <m:mo>+</m:mo>
+                    <m:mo>⋯</m:mo>
+                    <m:mo>+</m:mo>
+                    <m:msub>
+                      <m:mi>a</m:mi>
+                      <m:mi>j</m:mi>
+                    </m:msub>
+                    <m:mo>/</m:mo>
+                    <m:mn>2</m:mn>
+                    <m:mo>+</m:mo>
+                    <m:mo>⋯</m:mo>
+                    <m:mo>+</m:mo>
+                    <m:mn>0</m:mn>
+                  </m:mrow>
+                </m:mtd>
+              </m:mtr>
+              <m:mtr>
+                <m:mtd/>
+                <m:mtd columnalign="left">
+                  <m:mrow>
+                    <m:mspace width="2.em"/>
+                    <m:mspace width="2.em"/>
+                    <m:mspace width="2.em"/>
+                    <m:mspace width="2.em"/>
+                    <m:mspace width="2.em"/>
+                    <m:mspace width="2.em"/>
+                    <m:mo>(</m:mo>
+                    <m:mtext>all</m:mtext>
+                    <m:mspace width="4.pt"/>
+                    <m:mtext>integrals</m:mtext>
+                    <m:mspace width="4.pt"/>
+                    <m:mtext>are</m:mtext>
+                    <m:mspace width="4.pt"/>
+                    <m:mtext>zero</m:mtext>
+                    <m:mspace width="4.pt"/>
+                    <m:mtext>except</m:mtext>
+                    <m:mspace width="4.pt"/>
+                    <m:mtext>for</m:mtext>
+                    <m:mspace width="4.pt"/>
+                    <m:mtext>the</m:mtext>
+                    <m:mspace width="4.pt"/>
+                    <m:msup>
+                      <m:mi>j</m:mi>
+                      <m:mtext>th</m:mtext>
+                    </m:msup>
+                    <m:mspace width="4.pt"/>
+                    <m:mtext>integral</m:mtext>
+                    <m:mspace width="4.pt"/>
+                    <m:mtext>by</m:mtext>
+                    <m:mspace width="4.pt"/>
+                    <m:mtext>the</m:mtext>
+                    <m:mspace width="4.pt"/>
+                    <m:mtext>above</m:mtext>
+                    <m:mspace width="4.pt"/>
+                    <m:mtext>equations</m:mtext>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                </m:mtd>
+              </m:mtr>
+              <m:mtr>
+                <m:mtd/>
+                <m:mtd columnalign="left">
+                  <m:mrow>
+                    <m:mo>=</m:mo>
+                    <m:msub>
+                      <m:mi>a</m:mi>
+                      <m:mi>j</m:mi>
+                    </m:msub>
+                    <m:mo>/</m:mo>
+                    <m:mn>2</m:mn>
+                  </m:mrow>
+                </m:mtd>
+              </m:mtr>
+            </m:mtable>
+          </m:math>
+        </equation>
+        <para id="id68145">Then equating the first and last lines, we have a formula for recovering <m:math overflow="scroll"><m:msub><m:mi>a</m:mi><m:mi>j</m:mi></m:msub></m:math>:</para>
+        <equation id="uid22">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:msub>
+                <m:mi>a</m:mi>
+                <m:mi>j</m:mi>
+              </m:msub>
+              <m:mo>=</m:mo>
+              <m:mn>2</m:mn>
+              <m:msubsup>
+                <m:mo>∫</m:mo>
+                <m:mn>0</m:mn>
+                <m:mn>1</m:mn>
+              </m:msubsup>
+              <m:mi>f</m:mi>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>t</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo form="prefix">sin</m:mo>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>j</m:mi>
+                <m:mo>·</m:mo>
+                <m:mn>2</m:mn>
+                <m:mi>π</m:mi>
+                <m:mi>t</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mi>d</m:mi>
+              <m:mi>t</m:mi>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id68234">This derivation is valid for as large of <m:math overflow="scroll"><m:mi>n</m:mi></m:math> as we want. In fact, the most general application of this is infinite series of sine waves.</para>
+        <para id="id68248">Additionally, we can do the same thing with sums of cosines. If <m:math overflow="scroll"><m:mrow><m:mi>f</m:mi><m:mo>=</m:mo><m:msub><m:mi>b</m:mi><m:mn>1</m:mn></m:msub><m:mo form="prefix">cos</m:mo><m:mrow><m:mo>(</m:mo><m:mn>1</m:mn><m:mo>·</m:mo><m:mn>2</m:mn><m:mi>π</m:mi><m:mi>t</m:mi><m:mo>)</m:mo></m:mrow><m:mo>+</m:mo><m:msub><m:mi>b</m:mi><m:mn>2</m:mn></m:msub><m:mo form="prefix">cos</m:mo><m:mrow><m:mo>(</m:mo><m:mn>2</m:mn><m:mo>·</m:mo><m:mn>2</m:mn><m:mi>π</m:mi><m:mi>t</m:mi><m:mo>)</m:mo></m:mrow><m:mo>+</m:mo><m:mo>⋯</m:mo></m:mrow></m:math>, then we can recover the coefficients in the same way (Exercise 3.1):</para>
+        <equation id="uid23">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:msub>
+                <m:mi>b</m:mi>
+                <m:mi>j</m:mi>
+              </m:msub>
+              <m:mo>=</m:mo>
+              <m:mn>2</m:mn>
+              <m:msubsup>
+                <m:mo>∫</m:mo>
+                <m:mrow>
+                  <m:mn>0</m:mn>
+                </m:mrow>
+                <m:mn>1</m:mn>
+              </m:msubsup>
+              <m:mi>f</m:mi>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>t</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo form="prefix">cos</m:mo>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>j</m:mi>
+                <m:mo>·</m:mo>
+                <m:mn>2</m:mn>
+                <m:mi>π</m:mi>
+                <m:mi>t</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mi>d</m:mi>
+              <m:mi>t</m:mi>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id68402">And if we have a function that is a mix of the two, such as</para>
+        <equation id="id68406">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:mi>f</m:mi>
+              <m:mo>=</m:mo>
+              <m:mo form="prefix">sin</m:mo>
+              <m:mo>(</m:mo>
+              <m:mn>2</m:mn>
+              <m:mi>π</m:mi>
+              <m:mi>t</m:mi>
+              <m:mo>)</m:mo>
+              <m:mo>+</m:mo>
+              <m:mo form="prefix">sin</m:mo>
+              <m:mo>(</m:mo>
+              <m:mn>2</m:mn>
+              <m:mo>·</m:mo>
+              <m:mn>2</m:mn>
+              <m:mi>π</m:mi>
+              <m:mi>t</m:mi>
+              <m:mo>)</m:mo>
+              <m:mo>+</m:mo>
+              <m:mo>⋯</m:mo>
+              <m:mo>+</m:mo>
+              <m:mo form="prefix">cos</m:mo>
+              <m:mo>(</m:mo>
+              <m:mn>2</m:mn>
+              <m:mi>π</m:mi>
+              <m:mi>t</m:mi>
+              <m:mo>)</m:mo>
+              <m:mo>+</m:mo>
+              <m:mo form="prefix">cos</m:mo>
+              <m:mo>(</m:mo>
+              <m:mn>2</m:mn>
+              <m:mo>·</m:mo>
+              <m:mn>2</m:mn>
+              <m:mi>π</m:mi>
+              <m:mi>t</m:mi>
+              <m:mo>)</m:mo>
+              <m:mo>+</m:mo>
+              <m:mo>⋯</m:mo>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id68505">we can extract the coefficients by the same equations as above (Exercise 3.2).</para>
+      </section>
+      <section id="uid24">
+        <title>Numerical Implementation</title>
+        <para id="id68520">Now we see why the trapezoid rule was so important. In order to recover the sine coefficients of a function, we need to be able to find the integral of <m:math overflow="scroll"><m:mi>f</m:mi></m:math> multiplied against different sine functions. We can do this pretty well with our trapezoid code. To show this method in action, we show the code <code display="inline">myfreq.m</code> (full code in Appendix). We'll walk through it here. First, we create a sum of sine waves:</para>
+        <code id="id68542" display="block">T = 5;% duration of signal
+dt = 0.001;     % time between signal samples
+t = 0:dt:T;
+N = length(t);
+y = 2.5*sin(3*2*pi*t) - 4.2*sin(4*2*pi*t);    % a 2-piece wave
+plot(t,y)
+xlabel('time   (seconds)')
+ylabel('signal')
+
+for f = 1:5,     % compute the amplitudes as ratios of areas
+    a(f) = trapz(t,y.*sin(f*2*pi*t))/trapz(t,sin(f*2*pi*t).^2);
+end
+</code>
+        <para id="id68676">Let's break down the syntax of this operation. We loop through the computation five times, each time representing a frequency <code display="inline">j</code> from 1 to 5. Within the loop, the first <code display="inline">mytrapz</code> is the integral we care about. We give it two arguments: <code display="inline">t</code> and <code display="inline">y.*sin(j*2*pi*t)</code>. The first, “<code display="inline">t</code>", is simply the time grid that we will approximately integrate over. The second corresponds to <m:math overflow="scroll"><m:mrow><m:mi>f</m:mi><m:mo>(</m:mo><m:mi>t</m:mi><m:mo>)</m:mo><m:mo form="prefix">cos</m:mo><m:mo>(</m:mo><m:mi>j</m:mi><m:mn>2</m:mn><m:mi>π</m:mi><m:mi>t</m:mi><m:mo>)</m:mo></m:mrow></m:math>, as in equation <link target-id="uid22"/>. Note that <code display="inline">j</code> is the frequency we are testing. The operator (<code display="inline">.*</code>) performs <emphasis effect="italics">elementwise</emphasis> multiplication, that is, multiplying the corresponding elements in each array. (Many operators such as <code display="inline">+</code> and <code display="inline">sin()</code> automatically do this.) Thus each entry in the <code display="inline">y.*sin(j*2*pi*t)</code> corresponds to one in <code display="inline">t</code>.</para>
+        <para id="id68788">The second instance of <code display="inline">mytrapz()</code> is just normalization (accounts for the length of the wave). After this, we plot the recovered coefficients against the originals. This effectively checks the error in our process.</para>
+        <code id="id68802" display="block">figure
+plot(1:5,a,'ko')    % plot the amplitudes vs frequency
+hold on
+plot(1:5, [0 0 2.5 -4.2 0], 'b*')
+</code>
+        <para id="id68850">As we can see from <link target-id="fftf"/>, our method works well.</para>
+<figure id="fftf" orient="horizontal">
+   <subfigure id="fftfs1">
+      <title>Frequencies captured by myfreq().</title>
+      <media id="fftfse1" alt="An envelope with a blue page">          
+         <image mime-type="image/png" src="../../media/checking_fourier.png" width="500"/>
+      </media>
+   </subfigure>
+   <subfigure id="fftfs2">
+      <title>Frequencies captured by Matlab's fft().</title>
+      <media id="fftfse2" alt="An envelope with a white page">
+         <image mime-type="image/png" src="../../media/mf_fft_frequencies.png" width="500"/>
+      </media>
+   </subfigure>
+   <caption>Our method gets the same result as Matlab's fft().</caption>
+</figure>
+
+
+
+
+<figure id="mfsf">
+ <media id="sfsfm" alt="a dog on a bed">
+   <image mime-type="image/png" src="../../media/mf_sine.png" width="500"/>
+ </media>
+<caption>The function in question.</caption>
+</figure>
+
+        <para id="id68856">The remainder of the code uses the Matlab function <code display="inline">fft()</code>. This stands for “Fast Fourier Transform." This transforms maps a function from the <emphasis effect="italics">time</emphasis> domain (the way we normally think about it) to the <emphasis effect="italics">frequency</emphasis> domain. Basically, we express a signal in terms of the frequency coefficients of which it is composed. The plots from this analysis confirm that our analysis is the same as that of the Matlab-tested functions.</para>
+      </section>
+      <section id="uid25">
+        <title>Estimating other functions</title>
+        <para id="id68890">You may be pleasantly surprised to hear that <emphasis effect="italics">any</emphasis> periodic function can be broken down into an infinite sum of sine and cosine waves. The elements of such a sum are together called a Fourier Series. The method for recovering the coefficients of the Fourier Series for any periodic function are the same as in equation <link target-id="uid22"/>. Thus we create a function that will find the decomposition of any function. We do this in <code display="inline">myfourier.m</code>. The entire code is in the appendix, but it uses very similar ideas as in <code display="inline">myfreq()</code> (above).</para>
+        <code id="id68920" display="block">function [freq mag] = myfourier(y, sr, use_fft, plot_on)
+(...some code skipped...)
+
+for n = 1 : numel(freq)
+    %obtain coefficient for freqency nth frequency [freq(n)]
+    sinmag(n) = mytrapz(t, y.*sin(freq(n)*2*pi*t), 1);
+    cosmag(n) = mytrapz(t, y.*cos(freq(n)*2*pi*t), 1);
+end
+</code>
+        <para id="id69007">As a test, we compare the “answer" <code display="inline">fft</code> code with our own for an arbitrary function and find good agreement:</para>
+<figure id="ffta">
+ <media id="fftam" alt="a dog on a bed">
+   <image mime-type="image/png" src="../../media/myfftcoef.png"/>
+ </media>
+<caption>Comparison of myfft() to true frequencies.</caption>
+</figure>
+
+      </section>
+      <section id="id69018">
+        <title>Exercises</title>
+        <para id="id69025"><emphasis effect="bold">3.1</emphasis> Suppose <m:math overflow="scroll"><m:mrow><m:mi>f</m:mi><m:mo>=</m:mo><m:msub><m:mi>b</m:mi><m:mn>1</m:mn></m:msub><m:mo form="prefix">cos</m:mo><m:mrow><m:mo>(</m:mo><m:mn>1</m:mn><m:mo>*</m:mo><m:mn>2</m:mn><m:mi>π</m:mi><m:mi>t</m:mi><m:mo>)</m:mo></m:mrow><m:mo>+</m:mo><m:msub><m:mi>b</m:mi><m:mn>2</m:mn></m:msub><m:mo form="prefix">cos</m:mo><m:mrow><m:mo>(</m:mo><m:mn>2</m:mn><m:mo>*</m:mo><m:mn>2</m:mn><m:mi>π</m:mi><m:mi>t</m:mi><m:mo>)</m:mo></m:mrow><m:mo>+</m:mo><m:mo>⋯</m:mo></m:mrow></m:math>. Then prove Equation <link target-id="uid23"/> that helps recover the coefficients:</para>
+        <equation id="id69113">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:msub>
+                <m:mi>b</m:mi>
+                <m:mi>j</m:mi>
+              </m:msub>
+              <m:mo>=</m:mo>
+              <m:mn>2</m:mn>
+              <m:msubsup>
+                <m:mo>∫</m:mo>
+                <m:mrow>
+                  <m:mn>0</m:mn>
+                </m:mrow>
+                <m:mn>1</m:mn>
+              </m:msubsup>
+              <m:mi>f</m:mi>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>t</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo form="prefix">cos</m:mo>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>j</m:mi>
+                <m:mo>·</m:mo>
+                <m:mn>2</m:mn>
+                <m:mi>π</m:mi>
+                <m:mi>t</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mi>d</m:mi>
+              <m:mi>t</m:mi>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id69182"><emphasis effect="bold">3.2</emphasis> Suppose <m:math overflow="scroll"><m:mi>f</m:mi></m:math> is an infinite sum of sine and cosine waves:</para>
+        <equation id="id69202">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:mi>f</m:mi>
+              <m:mo>=</m:mo>
+              <m:mo form="prefix">sin</m:mo>
+              <m:mo>(</m:mo>
+              <m:mn>2</m:mn>
+              <m:mi>π</m:mi>
+              <m:mi>t</m:mi>
+              <m:mo>)</m:mo>
+              <m:mo>+</m:mo>
+              <m:mo form="prefix">sin</m:mo>
+              <m:mo>(</m:mo>
+              <m:mn>2</m:mn>
+              <m:mo>·</m:mo>
+              <m:mn>2</m:mn>
+              <m:mi>π</m:mi>
+              <m:mi>t</m:mi>
+              <m:mo>)</m:mo>
+              <m:mo>+</m:mo>
+              <m:mo>⋯</m:mo>
+              <m:mo>+</m:mo>
+              <m:mo form="prefix">cos</m:mo>
+              <m:mo>(</m:mo>
+              <m:mn>2</m:mn>
+              <m:mi>π</m:mi>
+              <m:mi>t</m:mi>
+              <m:mo>)</m:mo>
+              <m:mo>+</m:mo>
+              <m:mo form="prefix">cos</m:mo>
+              <m:mo>(</m:mo>
+              <m:mn>2</m:mn>
+              <m:mo>·</m:mo>
+              <m:mn>2</m:mn>
+              <m:mi>π</m:mi>
+              <m:mi>t</m:mi>
+              <m:mo>)</m:mo>
+              <m:mo>+</m:mo>
+              <m:mo>⋯</m:mo>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id69301">Show that Equations <link target-id="uid22"/> and <link target-id="uid23"/>, which give expressions for <m:math overflow="scroll"><m:msub><m:mi>a</m:mi><m:mi>j</m:mi></m:msub></m:math> and <m:math overflow="scroll"><m:msub><m:mi>b</m:mi><m:mi>j</m:mi></m:msub></m:math>, are still valid.</para>
+      </section>
+    </section>
+    <section id="cid4">
+      <title>Spectrogram Applications to EEG</title>
+      <para id="id69352">Here is the application we have been seeking the whole time. Given an EEG signal, we would like to find its corresponding Fourier series. We have just built up the tools to decompose the signal into component frequencies. This is useful, but the brain changes over time, and we want to be able to track changes in the signal over time. One way to do this is the spectrogram, or the short-term Fourier transform. It allows us to watch the way a signal changes over time.</para>
+      <section id="uid26">
+        <title>Short-time Fourier Transform and the Spectrogram</title>
+        <para id="id69368">The idea behind the Short-time Fourier Transform is that we break up the signal into several time windows, then take the Fourier transform of each one of these. In Figure 10, we analyze the function <m:math overflow="scroll"><m:mrow><m:mi>f</m:mi><m:mrow><m:mo>(</m:mo><m:mi>x</m:mi><m:mo>)</m:mo></m:mrow><m:mo>=</m:mo><m:mo form="prefix">cos</m:mo><m:mrow><m:mo>(</m:mo><m:mn>4</m:mn><m:mo>·</m:mo><m:mn>2</m:mn><m:mi>π</m:mi><m:mi>t</m:mi><m:mo>)</m:mo></m:mrow><m:mo>+</m:mo><m:mn>3</m:mn><m:mo form="prefix">cos</m:mo><m:mrow><m:mo>(</m:mo><m:mn>10</m:mn><m:mo>·</m:mo><m:mn>2</m:mn><m:mi>π</m:mi><m:mi>t</m:mi><m:mo>)</m:mo></m:mrow><m:mo>+</m:mo><m:mn>5</m:mn><m:msup><m:mi>t</m:mi><m:mn>2</m:mn></m:msup><m:mo>+</m:mo><m:mn>5</m:mn><m:mo form="prefix">sin</m:mo><m:mrow><m:mo>(</m:mo><m:mn>35</m:mn><m:mo>·</m:mo><m:mn>2</m:mn><m:mi>π</m:mi><m:mi>t</m:mi><m:mo>)</m:mo></m:mrow></m:mrow></m:math> from time <m:math overflow="scroll"><m:mrow><m:mi>t</m:mi><m:mo>=</m:mo><m:mn>0</m:mn></m:mrow></m:math> to <m:math overflow="scroll"><m:mrow><m:mi>t</m:mi><m:mo>=</m:mo><m:mn>1</m:mn></m:mrow></m:math>. First, we break it up into 10 segments of 100 ms each. Each segment corresponds to one block in the “Time" dimension. The line in that block is the amplitudes of sine and cosine waves from the Fourier transform of the function over that time window. The colors on the plane below it represent the amplitude of that frequency in that time interval. The higher the amplitude, the closer to red, and the lower, the closer to blue. The resulting image that we get is called a <emphasis effect="italics">spectrogram</emphasis>.</para>
+
+<figure id="specfig">
+ <media id="specfigm" alt="a dog on a bed">
+   <image mime-type="image/png" src="../../media/sglink2.png" width="600"/>
+ </media>
+<caption>Visual illustration of a spectrogram.</caption>
+</figure>
+
+        <para id="id69519">To code something like this, we consider each time window separately. This takes the form of a loop:</para>
+        <code id="id69524" display="block">function [stft_plot freq tm] = my_stft(y, dt, win_len)
+(...some code skipped...)
+for n = 1:Nwindow
+    %isolate the part of the signal we want to deal with
+    sig_win = y((n-1)*win_len + 1 : n*win_len);
+</code>
+        <para id="id69572">Within this window, we perform the Fourier Transform (using our homemade code!) and record it:</para>
+        <code id="id69577" display="block">    %perform the fourier transform
+    [mg freq] = myfourier(sig_win, dt, 1);
+    sm(:,n) = mg(:,1);
+    cm(:,n) = mg(:,2);
+end
+</code>
+        <para id="id69622">We then plot the results on a 2-D plane using <code display="inline">imagesc()</code>. This function associates colors with the values in the matrix, so that you can see where the values in the matrix are larger. Thus we get a pretty picture as above.</para>
+      </section>
+      <section id="uid27">
+        <title>Testing the Spectrogram</title>
+        <para id="id69642">For the first test, we will try a simple sin wave.</para>
+        <para id="id69646">For the second test, we will use a more interesting function. Below we have plotted <m:math overflow="scroll"><m:mrow><m:mo form="prefix">sin</m:mo><m:mrow><m:mo>(</m:mo><m:mn>6</m:mn><m:mo>*</m:mo><m:mn>2</m:mn><m:mi>π</m:mi><m:mi>t</m:mi><m:mo>)</m:mo></m:mrow><m:mo>+</m:mo><m:mo form="prefix">sin</m:mo><m:mrow><m:mo>(</m:mo><m:mn>20</m:mn><m:mo>*</m:mo><m:mn>2</m:mn><m:mi>π</m:mi><m:mi>t</m:mi><m:mo>)</m:mo></m:mrow><m:mo>+</m:mo><m:mn>2</m:mn><m:mo>*</m:mo><m:mo form="prefix">sin</m:mo><m:mrow><m:mo>(</m:mo><m:msup><m:mi>e</m:mi><m:mrow><m:mi>t</m:mi><m:mo>/</m:mo><m:mn>1</m:mn><m:mo>.</m:mo><m:mn>5</m:mn></m:mrow></m:msup><m:mo>)</m:mo></m:mrow></m:mrow></m:math> over <m:math overflow="scroll"><m:mrow><m:mo>[</m:mo><m:mn>0</m:mn><m:mo>,</m:mo><m:mn>10</m:mn><m:mo>]</m:mo></m:mrow></m:math>.</para>
+
+
+<figure id="wsigfig">
+ <media id="wsigfigm" alt="a dog on a bed">
+   <image mime-type="image/png" src="../../media/sg_sig.png" height="300"/>
+ </media>
+<caption>An interesting signal to decompose.</caption>
+</figure>
+
+        <para id="id69754">This function is interesting because it contains a frequency component that is changing over time. While we have waves at a constant 6 and 20 Hertz, the third component speeds up as <m:math overflow="scroll"><m:mi>t</m:mi></m:math> gets larger and the exponential curve gets steeper. Thus for the plot we expect to see a frequency component that is increasing. This is exactly what we see in <link target-id="spec2fig"/>–two constant bands of frequency, and one train of frequency that increases with time.</para>
+        <code id="id69773" display="block">&gt;&gt; dt = 1e-4;
+&gt;&gt; t = 0:sr:10;
+&gt;&gt; y = sin(6*2*pi*t)+sin(20*2*pi*t)+2*sin(exp(t/1.5));
+&gt;&gt; my_stft(y, dt, 5000);
+</code>
+
+<figure id="spec2fig">
+ <media id="spec2figm" alt="a dog on a bed">
+   <image mime-type="image/png" src="../../media/sg2.png" width="500"/>
+ </media>
+<caption>The spectrogram of the above function</caption>
+</figure>
+
+
+
+      </section>
+      <section id="uid28">
+        <title>Application to EEG data</title>
+        <para id="id69839">For the final section, we will analyze actual brain waves. We recorded from and EEG, and got the signal in <link target-id="zsigfig"/>.</para>
+
+<figure id="zsigfig">
+ <media id="zsigfigm" alt="a dog on a bed">
+   <image mime-type="image/png" src="../../media/EEGwv.png"/>
+ </media>
+<caption>An EEG wave.</caption>
+</figure>
+
+        <para id="id69846">To analyze, we find the time-step in the data, then call mysgram().  This gives us the plot below.</para>
+        
+<figure id="zspecf">
+ <media id="zspecfm" alt="a dog on a bed">
+   <image mime-type="image/png" src="../../media/zspec.png"/>
+ </media>
+</figure><para id="eip-711">Compare the spectrogram to the raw signal.  What do you notice?  Perhaps the most notable change is the significant increase in signal magnitude near 18 seconds.  This is reflected in the spectrogram with the brighter colors.  Also, several "dominant" frequencies emerge.  Two faint bands appear at 10 Hz 4 Hz for the first half of the signal.  In the last section, a cluster of frequencies between 6 and 10 Hz dominate.  Many of the patterns are hidden behind the subtleties in the data, however.  Decoding the spectrogram is at least as difficult and creating it.  Indeed, it is much less defined.  The next section will explore these rules in the context of an interesting application.</para>
+
+        <section id="eip-586"><title>Application: Driving a Car</title><para id="eip-225">
+One application of decoding brain waves is giving commands to a machine via brainwaves.  To see developing work in this field, see this  <link url="http://www.youtube.com/watch?v=hQWBfCg91CU">video</link> of the company NeuroSky.  Of the many machines we could command, we choose here to command a virtual car (some assembly required) that goes left or right.  As above, the decision rule for such a program is not obvious.  As a first try, we can find the strongest frequency for each time section and compare it to a set value.  If it is lower, the car moves left, and if higher, the car moves right.  The following code implements this rule:
+</para></section><code id="id787878" display="block">  
+%load data
+load bwave
+N = numel(eeg_sig);
+win_len = 3 * round(N / 60);
+n = 0;
+freq_criterion = 8;
+
+while (n+3) * win_len / 3  &lt;= N %for each time window
+    %define the moving window and isolate that piece of signal
+    sig_win = eeg_sig(round(n * win_len / 3) + (1:win_len));
+    
+    %perform fourier analysis
+    [freq raw_amps] = myfourier(sig_win, dt, 1);
+    %only take positive frequencies
+    freq = freq((end/2+1):end);
+    %add sine and cosine entries togethef
+    amps = abs(sum(raw_amps(end/2:end,1), 2));  
+    
+    %find the maximum one
+    [a idx] = max(amps);
+    
+    %find the frequency corresponding to the max amplitude
+    max_freq = freq(idx);
+    
+    %decided which way the car should move based on the max frequency
+    if max_freq &lt; freq_criterion; 
+        fprintf('Moving left.... (fmax = %f)\n', max_freq);
+        %this is where we put animation code
+    else
+        fprintf('Moving right.....(fmax = %f)\n', max_freq);
+        %this is where we put animation code
+    end
+    
+    pause(.5); %for dramatic effect :)
+    n = n + 1;
+end
+</code><para id="eip-241">Another approach would be to find the center of mass of the data.  This decision rule is more comprehensive because it takes into account all data from the Fourier transform, not just the maximum value.  In order to find the average weight of all amplitudes, we change the inner part of code to the following (starting with  "%find the maximum one"):</para><code id="eip-124" display="block">...    
+    %find the frequency corresponding to the "average" amplitude
+    avg_freq = sum(freq.*amps)/(sum(amps)*df);
+    
+    %decided which way the car should move based on the max frequency
+    if avg_freq &lt; freq_criterion;
+    ...</code><para id="eip-756">One can imagine myriad other ways to approach this problem.  Many strategies have been developed, but the question is open-ended.  A natural next step is for the reader to think of new ways to interpret spectrogram data.  The most effective characterizations probably have yet to be discovered!</para>
+
+
+
+      </section>
+    </section>
+    <section id="cid5">
+      <title>Conclusion</title>
+      <para id="id69898">In this module we developed the tools to decompose an arbitrary signal, such as an EEG, into is component frequencies. We began with sine waves, established the trapezoid scheme, and finally introduced Fourier analysis. This same flavor of analysis is used in many other settings, too–see the related documents.</para>
+    </section>
+    <section id="cid6">
+      <title>Code</title>
+      <section id="id69916">
+        <title>Code for <code display="inline">mytrapz.m</code></title>
+        <code id="id69928" display="block">function curve_area = mytrapz(x, y, fast)
+% function curve_area = mytrapz(x, y, fast)
+%
+% mytrapz.m performs the trapezoid rule on the vector given by x and y.
+%
+% Input:
+%   x - a vector containing the domain of the function
+%   y - a vector containing values of the function corresponding to the
+%   values in 'x'
+
+if nargin &lt; 3
+    curve_area = 0;
+    
+    %loop through and add up trapezoids for as many points as we are given
+    for n = 2 : numel(x)
+        height = (y(n) + y(n-1))/2;     %average height of function across interval
+        base = x(n) - x(n-1);           %length of interval
+        trap_area = base * height;      %area of trapezoid
+        curve_area = curve_area + trap_area;    %add to continuing sum
+    end
+    
+elseif fast
+    %alternate (fast) implementation
+    xvals = x(3:end) - x(1:end-2);
+    yvals = y(2:end-1);
+    curve_area = yvals(:)'*xvals(:);
+    curve_area = curve_area + y(1)*(x(2) - x(1)) + y(end)*(x(end) - x(end-1));
+    curve_area = curve_area/2;
+end
+</code>
+      </section>
+
+
+
+      <section id="id70207">
+        <title>Code for <code display="inline">myfreq.m</code></title>
+<code id="id69929" display="block">
+% myfreq.m
+%
+% find the frequencies and amplitudes at which a wave is "vibrating"
+%
+% Contrast simple (but laborious) trapezoid computations to the fast
+% and flexible built-in fft command (fft stands for fast Fourier
+% transform).
+% To make full sense of this we will need to think about complex
+% numbers and the complex exponential function.
+%
+
+T = 5;% duration of signal
+dt = 0.001;     % time between signal samples
+t = 0:dt:T;
+N = length(t);
+y = 2.5*sin(3*2*pi*t) - 4.2*sin(4*2*pi*t);    % a 2-piece wave
+plot(t,y)
+xlabel('time   (seconds)')
+ylabel('signal')
+
+for f = 1:5,     % compute the amplitudes as ratios of areas
+    a(f) = trapz(t,y.*sin(f*2*pi*t))/trapz(t,sin(f*2*pi*t).^2);
+end
+
+figure
+plot(1:5,a,'ko')    % plot the amplitudes vs frequency
+hold on
+plot(1:5, [0 0 2.5 -4.2 0], 'b*')
+
+figure(34)
+f = (0:N-1)/T;% fft frequencies
+sc = N*trapz(t,sin(2*pi*t).^2)/T;   % fft scale factor
+A = fft(y);
+newa = -imag(A)/sc;
+plot(f,newa,'r+')
+
+
+y = y + 3*cos(6*2*pi*t);    % add a cosine piece
+figure(1)
+hold on
+plot(t,y,'g')    % plot it
+hold off
+legend('2 sines','2 sines and 1 cosine')
+
+figure(2)
+A = fft(y);           % take the fft of the new signal
+newa = -imag(A)/sc;
+plot(f,newa,'gx')
+b = real(A)/sc;
+plot(f,b,'gx')
+xlim([0 7])   % focus in on the low frequencies
+hold off
+xlabel('frequency  (Hz)')
+ylabel('amplitude')
+legend('by hand','by fft','with cosine')
+</code>
+      </section>
+      <section id="id70802">
+        <title>Code for <code display="inline">myfourier.m</code></title>
+        <code id="id70815" display="block">% function [mag freq] = myfourier(y, dt, use_fft)
+%
+% myfourier.m decomposes the signal 'y', taken with sample interval dt,
+% into its component frequencies.
+%
+% Input:
+%
+%   y       -- signal vection
+%   dt      -- sample interval (s/sample) of y
+%   use_fft -- if designated, use matlab's fft instead of trapezoid method
+%
+% Output:
+%
+%   freq -- frequency domain
+%   mag  -- magnitude of frequency components of y corresponding to 'freq'
+
+function [freq mag] = myfourier(y, dt, use_fft)
+
+y = y(:);
+N = numel(y); %number of samples
+T = N*dt;                %total time
+t = linspace(0,T,N)';     %reconstruct time vector
+half_N = floor(N/2);  %ensures that N/2 is an integer
+if mod(N,2) %treat differently if f odd or even
+    freq = (-half_N:half_N)'/T;   %fft frequencies    
+else
+    freq = (-half_N:half_N-1)'/T;   %fft frequencies    
+end
+
+if nargin &lt; 3  %perform explicit Fourier transform
+    sinmag = zeros(size(freq));  %vector for component magnitudes
+    cosmag = zeros(size(freq));  %vector for component magnitudes
+    
+    %loop through each frequency we will test
+    for n = 1 : numel(freq)
+        %obtain coefficient for freqency 'freq(n)'
+        sinmag(n) = mytrapz(t, y.*sin(freq(n)*2*pi*t), 1);
+        cosmag(n) = mytrapz(t, y.*cos(freq(n)*2*pi*t), 1);
+    end
+    
+    %scale to account for sample length
+    scale_factor = mytrapz(t, sin(2*pi*t).^2);
+    sinmag = sinmag / scale_factor;
+    cosmag = cosmag / scale_factor;
+    mag = [sinmag(:)  cosmag(:)];
+    
+elseif use_fft   %use built-in MATLAB fft() for speed
+    fft_scale_factor = mytrapz(t, sin(2*pi*t).^2) * N / T;
+    A = fft(y);
+    mag(:,1) = -imag(A)/fft_scale_factor;
+    mag(:,2) = real(A)/fft_scale_factor;
+    mag = circshift(mag, half_N);
+end
+</code>
+      </section>
+      <section id="id71311">
+        <title>Code for <code display="inline">mysgram.m</code></title>
+        <code id="id71323" display="block">%
+% function [stft_plot freq tm] = my_stft(y, dt, Nwindow)
+%
+% my_stft splits the signa 'y' into time windows, the breaks each 
+% segment into its component frequencies.  See "Short-time Fourier Transform"
+% 
+%
+% Input: 
+%   y       -- signal
+%   dt      -- sample interval
+%   Nwindow -- number of time intervals to analyze
+%
+% Output:
+%   stft_plot -- values plotted in the spectrogram
+%   freq      -- frequency domain
+%   tm        -- time domain
+
+function [stft_plot freq tm hh] = mysgram(y, dt, Nwindow)
+
+%count the number of windows
+N = numel(y);
+win_len = floor(N/Nwindow);
+sm = zeros(win_len, Nwindow);
+cm = zeros(win_len, Nwindow);
+tm = linspace(0, numel(y) * dt, Nwindow);
+
+%for each window
+for n = 1:Nwindow 
+    %isolate the part of the signal we want to deal with
+    sig_win = y((n-1)*win_len + 1 : n*win_len);
+    %perform the fourier transform
+    [freq mg] = myfourier(sig_win, dt, 1);
+    sm(:,n) = mg(1:win_len,1);
+    cm(:,n) = mg(1:win_len,2);
+end
+
+stft_plot = abs(sm + cm);
+stft_plot = stft_plot(end/2:end, :);
+
+%plot the fourier transform over time
+hh = imagesc(tm, freq(round(end/2):end), stft_plot);
+title('Spectrogram', 'FontSize', 20)
+xlabel('time', 'FontSize', 16)
+ylabel('frequency', 'FontSize', 16)
+set(gca, 'ydir', 'normal')
+
+%just look at lower frequencies
+ylim([0-win_len/2 50+win_len/2])
+</code>
+      </section>
+    </section>
+  </content>
+</document>

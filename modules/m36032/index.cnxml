@@ -1,0 +1,110 @@
+<document xmlns="http://cnx.rice.edu/cnxml" xmlns:bib="http://bibtexml.sf.net/">
+  <title>Statistical Analysis of Cancer</title>
+<metadata xmlns:md="http://cnx.rice.edu/mdml">
+  <md:content-id>m36032</md:content-id>
+  <md:title>Statistical Analysis of Cancer</md:title>
+  <md:abstract>This report summarizes work done as part of the Bioinformatics PFUG under Rice University's VIGRE program.  VIGRE is a program of Vertically Integrated Grants for Research and Education in the Mathematical Sciences under the direction of the National Science Foundation.  A PFUG is a group of Postdocs, Faculty, Undergraduates and Graduate students formed round the study of a common problem.  This module describes various statistical analyses done to illuminate the causes of cancer.</md:abstract>
+  <md:uuid>cef50e85-38e4-484f-8c09-fd1f3f601bf1</md:uuid>
+</metadata>
+
+<content>
+      <section id="uid1">
+        <title>Central Dogma of Molecular Biology</title>
+        <para id="id123018">It is important to understand the processes behind 
+the genetic variables of interest. The most important concept is known as the 
+central dogma of molecular biology. This describes that process of by which 
+genetic information is interpreted and eventually proteins are created that are 
+required for all life. We begin with double stranded DNA. DNA is composed of a 
+long chain of two different base pairs (4 bases). The pairs are Adenine and 
+Thymine, and Guanine and Cytosine. Thus at any point on the DNA strand you can 
+have a choice of 4 different bases. Some sections of the DNA are genes. Each 
+gene in the DNA is unzipped into one strand and then transcribed onto which is 
+known as messenger RNA. The RNA can then be read and translated into protein. 
+I.E. We progress as from DNA to mRNA to Protein.</para>
+      </section>
+      <section id="uid2">
+        <title>Copy Number and Gene Expression</title>
+        <para id="id123375">Two genetic variables of interest that are involved 
+in the central dogma are estimated copy number and gene expression. The 
+estimated copy number of a gene gives the estimated number of copies of a 
+specific gene exist with in a samples genome. Normally, we would expect to see a 
+copy number of 2 but often we see copy numbers as low as 0 and as high as 5 or 
+6. Most of the time this does not harm the particular patient and we expect to 
+see a certain amount of copy number variation within any person, but it can 
+sometimes be correlated with the incidence of cancer.</para>
+        <para id="id123383">Gene expression is a variable that indicates the 
+estimates amount of mRNA that one observes in a sample. It is often difficult to 
+directly measure the amount of a given protein within a sample, but we often 
+witness a correlation between the amount of mRNA in a sample and the amount of 
+protein that is created.</para>
+      </section>
+      <section id="uid3">
+        <title>Goals</title>
+        <para id="id123398">Our data is comprised of 89 samples which have 
+estimated copy number data. 41 of these samples also have gene expression data. 
+The goals of this project is to examine the copy number and gene expression data 
+of these sample and see if there are certain sections in the genome that have 
+are consistently over or under expressed and possibly have an abnormal copy 
+number. The next steps would be to examine the known processes of these genes to 
+see if they are incorporated in any cancer-related functions such as cell 
+growth.</para>
+      </section>
+    <section id="cid2">
+      <title>Copy Number Analysis</title>
+      <para id="id123415">First, the raw copy number data was imported into an 
+application called Illumina Genome Studio. Physically, the data is obtained by 
+measuring how bright a certain chemical fluoresces when mixed with the DNA. 
+Genome Studio then estimates the copy numbers based on this data. Genome Studio 
+was then used to generate a frequency plot which displays how frequently each 
+gene was amplified or deleted,</para>
+      <para id="id123435">In addition, to confirm our findings an R script was 
+written that also generates a similar plot,</para>
+      <para id="id123462">These findings were also confirmed using a program 
+called GISTIC which is genetic analysis software which is part of the Broad 
+Institutes Gene Pattern Server.</para>
+      <para id="id123468">The next step in our analysis of the copy number data 
+involved examining any genes that had extreme amplifications or extreme 
+deletions. I.E. any genes in which the estimated copy number was less than .5 or 
+greater than 5. A script was written in the R statistical package in order to 
+detect the frequency with which the genes had major amplifications or deletions.
+</para>
+    </section>
+    <section id="cid3">
+      <title>Future Work</title>
+      <para id="id123538">The results of this research will be published in a 
+future publication. It would be necessary to get more samples, especially ones 
+with both copy number and gene expression data to create a full gene expression 
+pattern. <link target-id="bid1"/></para>
+    </section>
+    <section id="cid4">
+      <title>Acknowledgements</title>
+      <para id="id123559">Dr. Rudy Guerra, Matthew Burnstein, Dr. Chris Man, Dr. 
+Ching Lau, Alexander Yu, Powell-Brown Lab, Rice university, Texas Children's 
+Hospital</para>
+      <para id="id123563">This Connexions module describes work conducted as 
+part of Rice
+University's VIGRE program, supported by National Science Foundation
+grant DMS–0739420.</para>
+    </section>
+  </content>
+  <bib:file>
+    <bib:entry id="bid0">
+      <bib:article>
+        <!--required fields-->
+        <bib:author>Rebecca Dent, Kathleen I. Pritchard, Wedad M. Hanna, Harriet 
+K. Kahn, Carol A. Sawka, Lavina A. Lickley, Ellen Rawlinson, Ping Sun and Narod, 
+Steven A.</bib:author>
+        <bib:title>Triple-Negative Breast cancer: clinical Features and Patterns 
+of Recurrence</bib:title>
+        <bib:journal>Clinical cancer Research</bib:journal>
+        <bib:year>2007</bib:year>
+        <!--optional fields-->
+        <bib:volume>13</bib:volume>
+        <bib:number/>
+        <bib:pages>4429-4434</bib:pages>
+        <bib:month/>
+        <bib:note/>
+      </bib:article>
+    </bib:entry>
+  </bib:file>
+</document>

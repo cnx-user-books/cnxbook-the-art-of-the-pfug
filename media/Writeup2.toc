@@ -1,0 +1,17 @@
+\contentsline {section}{\numberline {1}Background: Place Cells in the Hippocampus}{1}
+\contentsline {subsection}{\numberline {1.1}Biology}{1}
+\contentsline {subsection}{\numberline {1.2}Motivation: Double Rotation Experiment}{2}
+\contentsline {section}{\numberline {2}Modeling}{4}
+\contentsline {subsection}{\numberline {2.1}Neuron as a Circuit: Integrate and Fire}{4}
+\contentsline {subsection}{\numberline {2.2}Model of DRE: 120-cell Ring}{6}
+\contentsline {subsubsection}{\numberline {2.2.1}STDP}{6}
+\contentsline {subsection}{\numberline {2.3}Model for Analysis}{7}
+\contentsline {subsubsection}{\numberline {2.3.1}Computational Method}{11}
+\contentsline {subsubsection}{\numberline {2.3.2}Analytic Method}{11}
+\contentsline {section}{\numberline {3}Problems and Results}{13}
+\contentsline {subsection}{\numberline {3.1}Minimum input weight for activity}{13}
+\contentsline {subsubsection}{\numberline {3.1.1}Computational vs. Analytic Method}{13}
+\contentsline {subsection}{\numberline {3.2}Number of input spikes versus input weight}{13}
+\contentsline {subsubsection}{\numberline {3.2.1}Computational vs. Analytic Method}{13}
+\contentsline {section}{\numberline {4}Application of findings}{16}
+\contentsline {section}{\numberline {5}Future work}{19}

@@ -1,0 +1,167 @@
+<col:collection xmlns="http://cnx.rice.edu/collxml" xmlns:md="http://cnx.rice.edu/mdml" xmlns:col="http://cnx.rice.edu/collxml" xmlns:cnxml="http://cnx.rice.edu/cnxml" xml:lang="en" type="Book" authors="Steven J. Cox">
+  <metadata xmlns:md="http://cnx.rice.edu/mdml" mdml-version="0.5">
+    <md:content-id>col10523</md:content-id>
+    <md:title>The Art of the PFUG</md:title>
+    <md:license url="http://creativecommons.org/licenses/by/3.0/"/>
+    <md:language>en</md:language>
+    <md:uuid>40d3a19a-b287-4e85-ba87-13b7b1606df3</md:uuid>
+<md:slug>the-art-of-the-pfug</md:slug>
+</metadata>
+  <col:content>
+    <col:module document="m32540"/>
+    <col:subcollection>
+      <md:title>Algebraic Geometry</md:title>
+      <col:content>
+        <col:module document="m30817"/>
+        <col:module document="m36023"/>
+      </col:content>
+    </col:subcollection>
+    <col:subcollection>
+      <md:title>Knot Theory</md:title>
+      <col:content>
+        <col:module document="m36041"/>
+      </col:content>
+    </col:subcollection>
+    <col:subcollection>
+      <md:title>Dynamical Systems</md:title>
+      <col:content>
+        <col:module document="m44263"/>
+      </col:content>
+    </col:subcollection>
+    <col:subcollection>
+      <md:title>Calculus of Variations</md:title>
+      <col:content>
+        <col:module document="m18831"/>
+        <col:module document="m19065"/>
+        <col:module document="m30944"/>
+        <col:module document="m34976"/>
+        <col:module document="m36356"/>
+        <col:module document="m38677"/>
+      </col:content>
+    </col:subcollection>
+    <col:subcollection>
+      <md:title>Combinatorial Optimization</md:title>
+      <col:content>
+        <col:module document="m30982"/>
+        <col:module document="m34835"/>
+        <col:module document="m44374"/>
+      </col:content>
+    </col:subcollection>
+    <col:subcollection>
+      <md:title>Computational Biology</md:title>
+      <col:content>
+        <col:module document="m36032"/>
+        <col:module document="m36053"/>
+      </col:content>
+    </col:subcollection>
+    <col:subcollection>
+      <md:title>Computational Finance</md:title>
+      <col:content>
+        <col:module document="m31865"/>
+        <col:module document="m32523"/>
+        <col:module document="m32528"/>
+      </col:content>
+    </col:subcollection>
+    <col:subcollection>
+      <md:title>Computational Neuroscience</md:title>
+      <col:content>
+        <col:module document="m22294"/>
+        <col:module document="m19349"/>
+        <col:module document="m30936"/>
+        <col:module document="m22377"/>
+        <col:module document="m16175"/>
+        <col:module document="m34843"/>
+        <col:module document="m40978">
+          <col:featured-links>
+            <cnxml:link-group type="supplemental">
+              <cnxml:link url="http://cnx.org/content/m40587/latest/">Analysis of Spike-Time Dependent Plasticity</cnxml:link>
+            </cnxml:link-group>
+          </col:featured-links>
+        </col:module>
+        <col:module document="m40587">
+          <col:featured-links>
+            <cnxml:link-group type="supplemental">
+              <cnxml:link url="http://cnx.org/content/m40978/1.1/">Mathematical Models of Hippocampal Spatial Memory</cnxml:link>
+            </cnxml:link-group>
+          </col:featured-links>
+        </col:module>
+        <col:module document="m39093"/>
+      </col:content>
+    </col:subcollection>
+    <col:subcollection>
+      <md:title>Imaging</md:title>
+      <col:content>
+        <col:module document="m18833"/>
+        <col:module document="m19059"/>
+      </col:content>
+    </col:subcollection>
+    <col:subcollection>
+      <md:title>Physics of Strings</md:title>
+      <col:content>
+        <col:module document="m16177"/>
+        <col:module document="m18703"/>
+        <col:module document="m31758"/>
+        <col:module document="m32657"/>
+        <col:module document="m34828"/>
+        <col:module document="m35234">
+          <col:featured-links>
+            <cnxml:link-group type="supplemental">
+              <cnxml:link url="http://www.caam.rice.edu/~vanese/icmapmovie.mp4">Movie of color map of recovered string length from various initial conditions</cnxml:link>
+              <cnxml:link url="http://www.caam.rice.edu/~vanese/rhomovie2.mp4">Movie of mass density of unit string with ρ(0)=1 (Part 1)</cnxml:link>
+              <cnxml:link url="http://www.caam.rice.edu/~vanese/rhomovie374.mp4">Movie of mass density of unit string with ρ(0)=1 (Part 2)</cnxml:link>
+              <cnxml:link url="http://www.caam.rice.edu/~vanese/eigfnmovie2.mp4">Movie of first two eigenfunctions</cnxml:link>
+              <cnxml:link url="http://www.caam.rice.edu/~vanese/code/codelist.html">MATLAB code used to generate results</cnxml:link>
+            </cnxml:link-group>
+          </col:featured-links>
+        </col:module>
+        <col:module document="m32575"/>
+      </col:content>
+    </col:subcollection>
+    <col:subcollection>
+      <md:title>Probability</md:title>
+      <col:content>
+        <col:module document="m34949"/>
+      </col:content>
+    </col:subcollection>
+    <col:subcollection>
+      <md:title>Visualization</md:title>
+      <col:content>
+        <col:module document="m35980"/>
+        <col:module document="m35970"/>
+      </col:content>
+    </col:subcollection>
+    <col:subcollection>
+      <md:title>Outreach</md:title>
+      <col:content>
+        <col:module document="m32493">
+          <col:featured-links>
+            <cnxml:link-group type="supplemental">
+              <cnxml:link url="stat_moduleCNX.zip">Zip file containing LaTeX Source and Image</cnxml:link>
+            </cnxml:link-group>
+          </col:featured-links>
+        </col:module>
+        <col:module document="m36946"/>
+      </col:content>
+    </col:subcollection>
+    <col:subcollection>
+      <md:title>Appendix</md:title>
+      <col:content>
+        <col:module document="m18243">
+          <col:featured-links>
+            <cnxml:link-group type="example">
+              <cnxml:link url="http://cnx.org/Members/embree/m18243/template.zip/download">Zip file containing LaTeX source, image, .bib file</cnxml:link>
+            </cnxml:link-group>
+          </col:featured-links>
+        </col:module>
+        <col:module document="m18276">
+          <col:featured-links>
+            <cnxml:link-group type="supplemental">
+              <cnxml:link url="http://cnx.org/Members/embree/module.2008-11-14.8314220947/template_html.tex/download">LaTeX source code</cnxml:link>
+              <cnxml:link url="http://cnx.org/content/m18243/latest/">General LaTeX advice for VIGRE reports</cnxml:link>
+            </cnxml:link-group>
+          </col:featured-links>
+        </col:module>
+      </col:content>
+    </col:subcollection>
+  </col:content>
+</col:collection>

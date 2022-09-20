@@ -1,0 +1,965 @@
+<document xmlns="http://cnx.rice.edu/cnxml" xmlns:m="http://www.w3.org/1998/Math/MathML" xmlns:bib="http://bibtexml.sf.net/">
+  <title>Using Markov Random Fields for Election Prediction</title>
+<metadata xmlns:md="http://cnx.rice.edu/mdml">
+  <md:content-id>m44374</md:content-id>
+  <md:title>Using Markov Random Fields for Election Prediction</md:title>
+  <md:abstract>We model the counties of Colorado as a Markov Random Field in an attempt to predict the results of the 2012 Presidential Election therein.</md:abstract>
+  <md:uuid>8d11f65d-1152-4884-bc22-0c5286602ad7</md:uuid>
+</metadata>
+
+<content>
+    <section id="cid1">
+      <title>Introduction</title>
+      <para id="id264202">The importance of predicting the United States Presidential Election cannot be understated because of the impact the U.S. president has on national policy. The U.S. President holds the veto power, which can make it very difficult for the Congress to pass legislation without his approval. In addition, the president appoints all federal judges, most notably the justices of the Supreme Court. While all nominees must be confirmed by the Senate, the confirmation process is usually a rubber stamp and few nominees are turned down, with some notable exceptions (such as Ronald Reagan's failed appointment of Robert Bork). Also, the U.S. President is the Commander in Chief of the U.S. military and can go to war unilaterally and then ask for Congressional approval 48 hours later under the War Powers Resolution of 1973. Lastly, presidents use the executive order to carry out their wishes, perhaps outside the constraints of the Constitution, to choose which laws they want to enforce. For example, President Obama does not enforce neither Defense of Marriage Act nor the deportation of illegal immigrants under the age of 30, Harry Truman ended racial segregation of the military, and Jimmy Carter created the Federal Emergency Management Agency (FEMA). Clearly the U.S. president has enormous power in the U.S. and abroad. Therefore, a company or an individual making decisions that demand foresight about the political state of the country would benefit knowing who the next president is.</para>
+      <para id="id264218">Despite the large demand for predicting elections, most existing methods are either unscientific or unreliable. Unscientific judgements include evaluations of a candidate's character or analysis of a candidate's rhetoric. It is not wrong to say that one candidate will win over another because he has more charisma or more appeal to the party base. Such statements are meaningful because political intangibles like charisma and appeal to the base are vital aspects for any politician. The problem is that such intangibles lack some sort of reliable measuring stick, something that can be viewed objectively rather than through the lens of political opinion, in which people may view candidates as they want to see them rather than as they really are.</para>
+      <para id="id264227">The most common answer to the measuring stick problem is using public opinion polls. However, public opinion polls are unreliable. Polls are no doubt useful for a first approximation to predicting an election, but they contain many pitfalls for the election forecaster. For example, national polls may not be able to predict who will win the electoral college. The electoral college evolved to limit direct democracy, and an important consequence of the electoral college is that a president can win a presidential election without winning the popular vote. Four U.S. presidents have done so: John Quincy Adams in 1824, Rutherford B. Hayes in 1876, Benjamin Harrison in 1888, and most recently George W. Bush in 2000<link target-id="bid0"/>. Furthermore, national polls include voters from states of no consequence in that they are solidly Republican or Democratic states (i.e. Democratic voters from Texas or Republican voters from Massachusetts or New York). For these reasons, state level polls are more accurate.</para>
+      <para id="id264583">But where might a state poll go wrong? The most obvious answer is with independent voters, voters who haven't made up their mind yet. For example, Rasmussen's latest Colorado poll has 5% of people undecided, 6% of people for some third party candidate, and equal percentages for the two major party candidates<link target-id="bid1"/> . State level polls are fine for a month before an election: vice presidential candidates are decided, undecided voters are becoming less and less common, primary struggles are long finished, and party conventions are over. But as of the writing of this paper, these factors, crucial for the accuracy of polls, are not yet decided.</para>
+      <para id="id264597">A key to predicting a presidential election is using swing states as the focus of the analysis. In the United States, swing states such as Ohio, Florida, Colorado, Virginia, and Nevada are different than other states in the sense that they are on the border between Republican and Democrat, hovering around 50% in recent elections. These swing states are often bellwethers for the presidency. For example, no president has been elected without winning Ohio since John F. Kennedy lost Ohio in 1960. Also, by focusing on the state level, data becomes more meaningful. For example, while the national unemployment rate is hovering around 8.2% for the June jobs report from the Bureau of Labor Statistics, North Dakota has unemployment below 5% whereas Nevada and California have statewide unemployment rates above 10%<link target-id="bid2"/>. Unemployment levels by county can vary even more from the national average<link target-id="bid3"/>. The point here is that while national averages are indicative of the state of the country as a whole, they are less meaningful for the states in question.</para>
+      <para id="id264620">One important insight about the level of detail available on the state and local level is the relationship between counties in a state. Two observations are absolutely critical for the prediction method described herein. First is that strongly Republican counties are usually not right next to strongly Democratic counties, and that the change between Democratic and Republican counties in a state is gradual rather than sudden. The second observation is that the differences between two counties is not random and does not vary greatly nor randomly between elections. If one knows the voting percentages of one county, it is possible to guess the voting percentages of the neighboring counties using historical data. In order to take advantage of these facts, we can model the counties as a Markov Random Field and find the most likely outcome for each county (maximum a posteriori inference).</para>
+    </section>
+    <section id="cid2">
+      <title>Markov Random Fields</title>
+      <section id="uid1">
+        <title>Definition</title>
+        <para id="id264648">A Markov Random Field (or Markov network) is an undirected, probabilistic graphical model. It consists of a set of nodes connected by a set of edges, where each node takes exactly one state. The nodes in a Markov Random Field have the <emphasis effect="italics">Markov property</emphasis> in the sense that their state depends only on the nodes they are connected to as well as their own built-in preferences. Each assignment of states over the network yields a level of energy, which is a measure of the probability of that assignment occurring given the model. The exact probability of a particular assignment is its energy divided by the sum of the energies of all possible assignments. In our research, we focus on <emphasis effect="italics">pairwise</emphasis> Markov Random Fields, in which any potential function describing the energy attained from an assignment of nodes' states is a function over no more than 2 nodes. We note that any Markov Random Field can be converted to a pairwise Markov Random Field<link target-id="bid4"/>.</para>
+        <figure id="uid2">
+          <media id="uid2_media" alt="">
+            <image mime-type="image/png" src="../../media/markov.png" id="uid2_onlineimage" width="285"><!-- NOTE: attribute width changes image size online (pixels). original width is 285. --></image>
+            <image mime-type="application/postscript" for="pdf" src="../../media/markov.eps" id="uid2_printimage" print-width="3in">
+              <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+            </image>
+          </media>
+          <caption>An example of a Markov Random Field</caption>
+        </figure>
+        <para id="id264690">The energy of a given assignment is equal to <m:math overflow="scroll"><m:msup><m:mi>e</m:mi><m:mrow><m:mi>θ</m:mi><m:mo>·</m:mo><m:mi>μ</m:mi></m:mrow></m:msup></m:math>, where <m:math overflow="scroll"><m:mi>θ</m:mi></m:math> is a vector of parameters and <m:math overflow="scroll"><m:mi>μ</m:mi></m:math> is a vector of indicator functions, i.e. 1 means on, 0 means off. Below, we define these notions exactly<link target-id="bid5"/>.</para>
+        <para id="id264734">               
+<m:math overflow="scroll"><m:mrow><m:mi>θ</m:mi><m:mo>=</m:mo><m:mfenced separators="" open="(" close=")"><m:mtable><m:mtr><m:mtd><m:mrow><m:msub><m:mi>θ</m:mi><m:mn>1</m:mn></m:msub><m:mrow><m:mo>(</m:mo><m:msub><m:mi>x</m:mi><m:mn>1</m:mn></m:msub><m:mo>)</m:mo></m:mrow></m:mrow></m:mtd></m:mtr><m:mtr><m:mtd><m:mrow><m:msub><m:mi>θ</m:mi><m:mn>1</m:mn></m:msub><m:mrow><m:mo>(</m:mo><m:msub><m:mi>x</m:mi><m:mn>2</m:mn></m:msub><m:mo>)</m:mo></m:mrow></m:mrow></m:mtd></m:mtr><m:mtr><m:mtd><m:mo>.</m:mo></m:mtd></m:mtr><m:mtr><m:mtd><m:mo>.</m:mo></m:mtd></m:mtr><m:mtr><m:mtd><m:mo>.</m:mo></m:mtd></m:mtr><m:mtr><m:mtd><m:mrow><m:msub><m:mi>θ</m:mi><m:mn>1</m:mn></m:msub><m:mrow><m:mo>(</m:mo><m:msub><m:mi>x</m:mi><m:mi>K</m:mi></m:msub><m:mo>)</m:mo></m:mrow></m:mrow></m:mtd></m:mtr><m:mtr><m:mtd><m:mrow><m:msub><m:mi>θ</m:mi><m:mn>2</m:mn></m:msub><m:mrow><m:mo>(</m:mo><m:msub><m:mi>x</m:mi><m:mn>1</m:mn></m:msub><m:mo>)</m:mo></m:mrow></m:mrow></m:mtd></m:mtr><m:mtr><m:mtd><m:mo>.</m:mo></m:mtd></m:mtr><m:mtr><m:mtd><m:mo>.</m:mo></m:mtd></m:mtr><m:mtr><m:mtd><m:mo>.</m:mo></m:mtd></m:mtr><m:mtr><m:mtd><m:mrow><m:msub><m:mi>θ</m:mi><m:mn>2</m:mn></m:msub><m:mrow><m:mo>(</m:mo><m:msub><m:mi>x</m:mi><m:mi>K</m:mi></m:msub><m:mo>)</m:mo></m:mrow></m:mrow></m:mtd></m:mtr><m:mtr><m:mtd><m:mrow><m:msub><m:mi>θ</m:mi><m:mn>3</m:mn></m:msub><m:mrow><m:mo>(</m:mo><m:msub><m:mi>x</m:mi><m:mn>1</m:mn></m:msub><m:mo>)</m:mo></m:mrow></m:mrow></m:mtd></m:mtr><m:mtr><m:mtd><m:mo>.</m:mo></m:mtd></m:mtr><m:mtr><m:mtd><m:mo>.</m:mo></m:mtd></m:mtr><m:mtr><m:mtd><m:mo>.</m:mo></m:mtd></m:mtr><m:mtr><m:mtd><m:mrow><m:msub><m:mi>θ</m:mi><m:mi>N</m:mi></m:msub><m:mrow><m:mo>(</m:mo><m:msub><m:mi>x</m:mi><m:mi>K</m:mi></m:msub><m:mo>)</m:mo></m:mrow></m:mrow></m:mtd></m:mtr><m:mtr><m:mtd><m:mrow><m:msub><m:mi>θ</m:mi><m:mrow><m:msub><m:mi>E</m:mi><m:msub><m:mn>1</m:mn><m:mn>1</m:mn></m:msub></m:msub><m:mo>,</m:mo><m:msub><m:mi>E</m:mi><m:msub><m:mn>1</m:mn><m:mn>2</m:mn></m:msub></m:msub></m:mrow></m:msub><m:mrow><m:mo>(</m:mo><m:msub><m:mi>x</m:mi><m:mn>1</m:mn></m:msub><m:mo>,</m:mo><m:msub><m:mi>x</m:mi><m:mn>1</m:mn></m:msub><m:mo>)</m:mo></m:mrow></m:mrow></m:mtd></m:mtr><m:mtr><m:mtd><m:mrow><m:msub><m:mi>θ</m:mi><m:mrow><m:msub><m:mi>E</m:mi><m:msub><m:mn>1</m:mn><m:mn>1</m:mn></m:msub></m:msub><m:mo>,</m:mo><m:msub><m:mi>E</m:mi><m:msub><m:mn>1</m:mn><m:mn>2</m:mn></m:msub></m:msub></m:mrow></m:msub><m:mrow><m:mo>(</m:mo><m:msub><m:mi>x</m:mi><m:mn>1</m:mn></m:msub><m:mo>,</m:mo><m:msub><m:mi>x</m:mi><m:mn>2</m:mn></m:msub><m:mo>)</m:mo></m:mrow></m:mrow></m:mtd></m:mtr><m:mtr><m:mtd><m:mo>.</m:mo></m:mtd></m:mtr><m:mtr><m:mtd><m:mo>.</m:mo></m:mtd></m:mtr><m:mtr><m:mtd><m:mo>.</m:mo></m:mtd></m:mtr><m:mtr><m:mtd><m:mrow><m:msub><m:mi>θ</m:mi><m:mrow><m:msub><m:mi>E</m:mi><m:msub><m:mn>1</m:mn><m:mn>1</m:mn></m:msub></m:msub><m:mo>,</m:mo><m:msub><m:mi>E</m:mi><m:msub><m:mn>1</m:mn><m:mn>2</m:mn></m:msub></m:msub></m:mrow></m:msub><m:mrow><m:mo>(</m:mo><m:msub><m:mi>x</m:mi><m:mn>1</m:mn></m:msub><m:mo>,</m:mo><m:msub><m:mi>x</m:mi><m:mi>K</m:mi></m:msub><m:mo>)</m:mo></m:mrow></m:mrow></m:mtd></m:mtr><m:mtr><m:mtd><m:mrow><m:msub><m:mi>θ</m:mi><m:mrow><m:msub><m:mi>E</m:mi><m:msub><m:mn>1</m:mn><m:mn>1</m:mn></m:msub></m:msub><m:mo>,</m:mo><m:msub><m:mi>E</m:mi><m:msub><m:mn>1</m:mn><m:mn>2</m:mn></m:msub></m:msub></m:mrow></m:msub><m:mrow><m:mo>(</m:mo><m:msub><m:mi>x</m:mi><m:mn>2</m:mn></m:msub><m:mo>,</m:mo><m:msub><m:mi>x</m:mi><m:mn>1</m:mn></m:msub><m:mo>)</m:mo></m:mrow></m:mrow></m:mtd></m:mtr><m:mtr><m:mtd><m:mo>.</m:mo></m:mtd></m:mtr><m:mtr><m:mtd><m:mo>.</m:mo></m:mtd></m:mtr><m:mtr><m:mtd><m:mo>.</m:mo></m:mtd></m:mtr><m:mtr><m:mtd><m:mrow><m:msub><m:mi>θ</m:mi><m:mrow><m:msub><m:mi>E</m:mi><m:msub><m:mn>1</m:mn><m:mn>1</m:mn></m:msub></m:msub><m:mo>,</m:mo><m:msub><m:mi>E</m:mi><m:msub><m:mn>1</m:mn><m:mn>2</m:mn></m:msub></m:msub></m:mrow></m:msub><m:mrow><m:mo>(</m:mo><m:msub><m:mi>x</m:mi><m:mi>K</m:mi></m:msub><m:mo>,</m:mo><m:msub><m:mi>x</m:mi><m:mi>K</m:mi></m:msub><m:mo>)</m:mo></m:mrow></m:mrow></m:mtd></m:mtr><m:mtr><m:mtd><m:mrow><m:msub><m:mi>θ</m:mi><m:mrow><m:msub><m:mi>E</m:mi><m:msub><m:mn>2</m:mn><m:mn>1</m:mn></m:msub></m:msub><m:mo>,</m:mo><m:msub><m:mi>E</m:mi><m:msub><m:mn>2</m:mn><m:mn>2</m:mn></m:msub></m:msub></m:mrow></m:msub><m:mrow><m:mo>(</m:mo><m:msub><m:mi>x</m:mi><m:mn>1</m:mn></m:msub><m:mo>,</m:mo><m:msub><m:mi>x</m:mi><m:mn>1</m:mn></m:msub><m:mo>)</m:mo></m:mrow></m:mrow></m:mtd></m:mtr><m:mtr><m:mtd><m:mo>.</m:mo></m:mtd></m:mtr><m:mtr><m:mtd><m:mo>.</m:mo></m:mtd></m:mtr><m:mtr><m:mtd><m:mo>.</m:mo></m:mtd></m:mtr><m:mtr><m:mtd><m:mrow><m:msub><m:mi>θ</m:mi><m:mrow><m:msub><m:mi>E</m:mi><m:msub><m:mi>M</m:mi><m:mn>1</m:mn></m:msub></m:msub><m:mo>,</m:mo><m:msub><m:mi>E</m:mi><m:msub><m:mi>M</m:mi><m:mn>2</m:mn></m:msub></m:msub></m:mrow></m:msub><m:mrow><m:mo>(</m:mo><m:msub><m:mi>x</m:mi><m:mi>K</m:mi></m:msub><m:mo>,</m:mo><m:msub><m:mi>x</m:mi><m:mi>K</m:mi></m:msub><m:mo>)</m:mo></m:mrow></m:mrow></m:mtd></m:mtr></m:mtable></m:mfenced></m:mrow></m:math>
+                              
+<m:math overflow="scroll"><m:mrow><m:mi>μ</m:mi><m:mo>=</m:mo><m:mfenced separators="" open="(" close=")"><m:mtable><m:mtr><m:mtd><m:mrow><m:msub><m:mi>μ</m:mi><m:mn>1</m:mn></m:msub><m:mrow><m:mo>(</m:mo><m:msub><m:mi>x</m:mi><m:mn>1</m:mn></m:msub><m:mo>)</m:mo></m:mrow></m:mrow></m:mtd></m:mtr><m:mtr><m:mtd><m:mrow><m:msub><m:mi>μ</m:mi><m:mn>1</m:mn></m:msub><m:mrow><m:mo>(</m:mo><m:msub><m:mi>x</m:mi><m:mn>2</m:mn></m:msub><m:mo>)</m:mo></m:mrow></m:mrow></m:mtd></m:mtr><m:mtr><m:mtd><m:mo>.</m:mo></m:mtd></m:mtr><m:mtr><m:mtd><m:mo>.</m:mo></m:mtd></m:mtr><m:mtr><m:mtd><m:mo>.</m:mo></m:mtd></m:mtr><m:mtr><m:mtd><m:mrow><m:msub><m:mi>μ</m:mi><m:mn>1</m:mn></m:msub><m:mrow><m:mo>(</m:mo><m:msub><m:mi>x</m:mi><m:mi>K</m:mi></m:msub><m:mo>)</m:mo></m:mrow></m:mrow></m:mtd></m:mtr><m:mtr><m:mtd><m:mrow><m:msub><m:mi>μ</m:mi><m:mn>2</m:mn></m:msub><m:mrow><m:mo>(</m:mo><m:msub><m:mi>x</m:mi><m:mn>1</m:mn></m:msub><m:mo>)</m:mo></m:mrow></m:mrow></m:mtd></m:mtr><m:mtr><m:mtd><m:mo>.</m:mo></m:mtd></m:mtr><m:mtr><m:mtd><m:mo>.</m:mo></m:mtd></m:mtr><m:mtr><m:mtd><m:mo>.</m:mo></m:mtd></m:mtr><m:mtr><m:mtd><m:mrow><m:msub><m:mi>μ</m:mi><m:mn>2</m:mn></m:msub><m:mrow><m:mo>(</m:mo><m:msub><m:mi>x</m:mi><m:mi>K</m:mi></m:msub><m:mo>)</m:mo></m:mrow></m:mrow></m:mtd></m:mtr><m:mtr><m:mtd><m:mrow><m:msub><m:mi>μ</m:mi><m:mn>3</m:mn></m:msub><m:mrow><m:mo>(</m:mo><m:msub><m:mi>x</m:mi><m:mn>1</m:mn></m:msub><m:mo>)</m:mo></m:mrow></m:mrow></m:mtd></m:mtr><m:mtr><m:mtd><m:mo>.</m:mo></m:mtd></m:mtr><m:mtr><m:mtd><m:mo>.</m:mo></m:mtd></m:mtr><m:mtr><m:mtd><m:mo>.</m:mo></m:mtd></m:mtr><m:mtr><m:mtd><m:mrow><m:msub><m:mi>μ</m:mi><m:mi>N</m:mi></m:msub><m:mrow><m:mo>(</m:mo><m:msub><m:mi>x</m:mi><m:mi>K</m:mi></m:msub><m:mo>)</m:mo></m:mrow></m:mrow></m:mtd></m:mtr><m:mtr><m:mtd><m:mrow><m:msub><m:mi>μ</m:mi><m:mrow><m:msub><m:mi>E</m:mi><m:msub><m:mn>1</m:mn><m:mn>1</m:mn></m:msub></m:msub><m:mo>,</m:mo><m:msub><m:mi>E</m:mi><m:msub><m:mn>1</m:mn><m:mn>2</m:mn></m:msub></m:msub></m:mrow></m:msub><m:mrow><m:mo>(</m:mo><m:msub><m:mi>x</m:mi><m:mn>1</m:mn></m:msub><m:mo>,</m:mo><m:msub><m:mi>x</m:mi><m:mn>1</m:mn></m:msub><m:mo>)</m:mo></m:mrow></m:mrow></m:mtd></m:mtr><m:mtr><m:mtd><m:mrow><m:msub><m:mi>μ</m:mi><m:mrow><m:msub><m:mi>E</m:mi><m:msub><m:mn>1</m:mn><m:mn>1</m:mn></m:msub></m:msub><m:mo>,</m:mo><m:msub><m:mi>E</m:mi><m:msub><m:mn>1</m:mn><m:mn>2</m:mn></m:msub></m:msub></m:mrow></m:msub><m:mrow><m:mo>(</m:mo><m:msub><m:mi>x</m:mi><m:mn>1</m:mn></m:msub><m:mo>,</m:mo><m:msub><m:mi>x</m:mi><m:mn>2</m:mn></m:msub><m:mo>)</m:mo></m:mrow></m:mrow></m:mtd></m:mtr><m:mtr><m:mtd><m:mo>.</m:mo></m:mtd></m:mtr><m:mtr><m:mtd><m:mo>.</m:mo></m:mtd></m:mtr><m:mtr><m:mtd><m:mo>.</m:mo></m:mtd></m:mtr><m:mtr><m:mtd><m:mrow><m:msub><m:mi>μ</m:mi><m:mrow><m:msub><m:mi>E</m:mi><m:msub><m:mn>1</m:mn><m:mn>1</m:mn></m:msub></m:msub><m:mo>,</m:mo><m:msub><m:mi>E</m:mi><m:msub><m:mn>1</m:mn><m:mn>2</m:mn></m:msub></m:msub></m:mrow></m:msub><m:mrow><m:mo>(</m:mo><m:msub><m:mi>x</m:mi><m:mn>1</m:mn></m:msub><m:mo>,</m:mo><m:msub><m:mi>x</m:mi><m:mi>K</m:mi></m:msub><m:mo>)</m:mo></m:mrow></m:mrow></m:mtd></m:mtr><m:mtr><m:mtd><m:mrow><m:msub><m:mi>μ</m:mi><m:mrow><m:msub><m:mi>E</m:mi><m:msub><m:mn>1</m:mn><m:mn>1</m:mn></m:msub></m:msub><m:mo>,</m:mo><m:msub><m:mi>E</m:mi><m:msub><m:mn>1</m:mn><m:mn>2</m:mn></m:msub></m:msub></m:mrow></m:msub><m:mrow><m:mo>(</m:mo><m:msub><m:mi>x</m:mi><m:mn>2</m:mn></m:msub><m:mo>,</m:mo><m:msub><m:mi>x</m:mi><m:mn>1</m:mn></m:msub><m:mo>)</m:mo></m:mrow></m:mrow></m:mtd></m:mtr><m:mtr><m:mtd><m:mo>.</m:mo></m:mtd></m:mtr><m:mtr><m:mtd><m:mo>.</m:mo></m:mtd></m:mtr><m:mtr><m:mtd><m:mo>.</m:mo></m:mtd></m:mtr><m:mtr><m:mtd><m:mrow><m:msub><m:mi>μ</m:mi><m:mrow><m:msub><m:mi>E</m:mi><m:msub><m:mn>1</m:mn><m:mn>1</m:mn></m:msub></m:msub><m:mo>,</m:mo><m:msub><m:mi>E</m:mi><m:msub><m:mn>1</m:mn><m:mn>2</m:mn></m:msub></m:msub></m:mrow></m:msub><m:mrow><m:mo>(</m:mo><m:msub><m:mi>x</m:mi><m:mi>K</m:mi></m:msub><m:mo>,</m:mo><m:msub><m:mi>x</m:mi><m:mi>K</m:mi></m:msub><m:mo>)</m:mo></m:mrow></m:mrow></m:mtd></m:mtr><m:mtr><m:mtd><m:mrow><m:msub><m:mi>μ</m:mi><m:mrow><m:msub><m:mi>E</m:mi><m:msub><m:mn>2</m:mn><m:mn>1</m:mn></m:msub></m:msub><m:mo>,</m:mo><m:msub><m:mi>E</m:mi><m:msub><m:mn>2</m:mn><m:mn>2</m:mn></m:msub></m:msub></m:mrow></m:msub><m:mrow><m:mo>(</m:mo><m:msub><m:mi>x</m:mi><m:mn>1</m:mn></m:msub><m:mo>,</m:mo><m:msub><m:mi>x</m:mi><m:mn>1</m:mn></m:msub><m:mo>)</m:mo></m:mrow></m:mrow></m:mtd></m:mtr><m:mtr><m:mtd><m:mo>.</m:mo></m:mtd></m:mtr><m:mtr><m:mtd><m:mo>.</m:mo></m:mtd></m:mtr><m:mtr><m:mtd><m:mo>.</m:mo></m:mtd></m:mtr><m:mtr><m:mtd><m:mrow><m:msub><m:mi>μ</m:mi><m:mrow><m:msub><m:mi>E</m:mi><m:msub><m:mi>M</m:mi><m:mn>1</m:mn></m:msub></m:msub><m:mo>,</m:mo><m:msub><m:mi>E</m:mi><m:msub><m:mi>M</m:mi><m:mn>2</m:mn></m:msub></m:msub></m:mrow></m:msub><m:mrow><m:mo>(</m:mo><m:msub><m:mi>x</m:mi><m:mi>K</m:mi></m:msub><m:mo>,</m:mo><m:msub><m:mi>x</m:mi><m:mi>K</m:mi></m:msub><m:mo>)</m:mo></m:mrow></m:mrow></m:mtd></m:mtr></m:mtable></m:mfenced></m:mrow></m:math></para>
+        <list id="id266098" display="block" list-type="bulleted">
+          <item id="uid3"><m:math overflow="scroll"><m:mi>K</m:mi></m:math> = Total Number of Possible States (Assumed to be the same for each node here, though this isn't necessarily true)
+</item>
+          <item id="uid4"><m:math overflow="scroll"><m:mi>N</m:mi></m:math> = Total Number of Nodes
+</item>
+          <item id="uid5"><m:math overflow="scroll"><m:mi>M</m:mi></m:math> = Total Number of Edges
+</item>
+          <item id="uid6"><m:math overflow="scroll"><m:msub><m:mi>x</m:mi><m:mi>k</m:mi></m:msub></m:math> = State k
+</item>
+          <item id="uid7"><m:math overflow="scroll"><m:msub><m:mi>E</m:mi><m:msub><m:mi>m</m:mi><m:mn>1</m:mn></m:msub></m:msub></m:math> = The first of two nodes connected by edge m
+</item>
+          <item id="uid8"><m:math overflow="scroll"><m:msub><m:mi>E</m:mi><m:msub><m:mi>m</m:mi><m:mn>2</m:mn></m:msub></m:msub></m:math> = The second of two nodes connected by edge m
+</item>
+          <item id="uid9"><m:math overflow="scroll"><m:mrow><m:msub><m:mi>θ</m:mi><m:mi>n</m:mi></m:msub><m:mrow><m:mo>(</m:mo><m:msub><m:mi>x</m:mi><m:mi>k</m:mi></m:msub><m:mo>)</m:mo></m:mrow></m:mrow></m:math> = The level of energy gained by node n being in state k
+</item>
+          <item id="uid10"><m:math overflow="scroll"><m:mrow><m:msub><m:mi>θ</m:mi><m:mrow><m:msub><m:mi>E</m:mi><m:msub><m:mi>m</m:mi><m:mn>1</m:mn></m:msub></m:msub><m:mo>,</m:mo><m:msub><m:mi>E</m:mi><m:msub><m:mi>m</m:mi><m:mn>2</m:mn></m:msub></m:msub></m:mrow></m:msub><m:mrow><m:mo>(</m:mo><m:msub><m:mi>x</m:mi><m:mi>j</m:mi></m:msub><m:mo>,</m:mo><m:msub><m:mi>x</m:mi><m:mi>k</m:mi></m:msub><m:mo>)</m:mo></m:mrow></m:mrow></m:math> = The level of energy gained by the two nodes connected by edge m being in states j and k, respectively
+</item>
+          <item id="uid11"><m:math overflow="scroll"><m:mrow><m:msub><m:mi>μ</m:mi><m:mi>n</m:mi></m:msub><m:mrow><m:mo>(</m:mo><m:msub><m:mi>x</m:mi><m:mi>k</m:mi></m:msub><m:mo>)</m:mo></m:mrow></m:mrow></m:math> = 1 if node n is in state k, 0 if not.
+</item>
+          <item id="uid12"><m:math overflow="scroll"><m:mrow><m:msub><m:mi>μ</m:mi><m:mrow><m:msub><m:mi>E</m:mi><m:msub><m:mi>m</m:mi><m:mn>1</m:mn></m:msub></m:msub><m:mo>,</m:mo><m:msub><m:mi>E</m:mi><m:msub><m:mi>m</m:mi><m:mn>2</m:mn></m:msub></m:msub></m:mrow></m:msub><m:mrow><m:mo>(</m:mo><m:msub><m:mi>x</m:mi><m:mi>j</m:mi></m:msub><m:mo>,</m:mo><m:msub><m:mi>x</m:mi><m:mi>k</m:mi></m:msub><m:mo>)</m:mo></m:mrow></m:mrow></m:math> = 1 if the two nodes connected by edge m are in states j and k, respectively. 0 otherwise.
+</item>
+        </list>
+        <para id="id266644">It can be seen that <m:math overflow="scroll"><m:mrow><m:mi>D</m:mi><m:mo>=</m:mo></m:mrow></m:math> length of <m:math overflow="scroll"><m:mrow><m:mi>θ</m:mi><m:mo>=</m:mo></m:mrow></m:math> length of <m:math overflow="scroll"><m:mrow><m:mi>μ</m:mi><m:mo>=</m:mo><m:mi>N</m:mi><m:mo>*</m:mo><m:mi>K</m:mi><m:mo>+</m:mo><m:mi>M</m:mi><m:mo>*</m:mo><m:msup><m:mi>K</m:mi><m:mn>2</m:mn></m:msup></m:mrow></m:math>. In general, we are interested in maximizing the amount of energy over the network (also known as <emphasis effect="italics">maximum a posteriori</emphasis> inference). Since the exponential is monotonic, this is equivalent to maximizing the following binary program<link target-id="bid5"/>:</para>
+        <equation id="id266713">
+          <m:math overflow="scroll" mode="display">
+            <m:mtable displaystyle="true">
+              <m:mtr>
+                <m:mtd/>
+                <m:mtd columnalign="left">
+                  <m:munder>
+                    <m:mtext>maximize</m:mtext>
+                    <m:mi>μ</m:mi>
+                  </m:munder>
+                </m:mtd>
+                <m:mtd/>
+                <m:mtd columnalign="left">
+                  <m:mrow>
+                    <m:munderover>
+                      <m:mo>∑</m:mo>
+                      <m:mrow>
+                        <m:mi>d</m:mi>
+                        <m:mo>=</m:mo>
+                        <m:mn>1</m:mn>
+                      </m:mrow>
+                      <m:mi>D</m:mi>
+                    </m:munderover>
+                    <m:msub>
+                      <m:mi>θ</m:mi>
+                      <m:mi>d</m:mi>
+                    </m:msub>
+                    <m:mo>*</m:mo>
+                    <m:msub>
+                      <m:mi>μ</m:mi>
+                      <m:mi>d</m:mi>
+                    </m:msub>
+                  </m:mrow>
+                </m:mtd>
+              </m:mtr>
+              <m:mtr>
+                <m:mtd/>
+                <m:mtd columnalign="left">
+                  <m:mrow>
+                    <m:mtext>subject</m:mtext>
+                    <m:mspace width="4.pt"/>
+                    <m:mtext>to</m:mtext>
+                  </m:mrow>
+                </m:mtd>
+                <m:mtd/>
+                <m:mtd columnalign="left">
+                  <m:mrow>
+                    <m:munderover>
+                      <m:mo>∑</m:mo>
+                      <m:mrow>
+                        <m:mi>k</m:mi>
+                        <m:mo>=</m:mo>
+                        <m:mn>1</m:mn>
+                      </m:mrow>
+                      <m:mi>K</m:mi>
+                    </m:munderover>
+                    <m:msub>
+                      <m:mi>μ</m:mi>
+                      <m:mrow>
+                        <m:msub>
+                          <m:mi>E</m:mi>
+                          <m:msub>
+                            <m:mi>m</m:mi>
+                            <m:mn>1</m:mn>
+                          </m:msub>
+                        </m:msub>
+                        <m:mo>,</m:mo>
+                        <m:msub>
+                          <m:mi>E</m:mi>
+                          <m:msub>
+                            <m:mi>m</m:mi>
+                            <m:mn>2</m:mn>
+                          </m:msub>
+                        </m:msub>
+                      </m:mrow>
+                    </m:msub>
+                    <m:mrow>
+                      <m:mo>(</m:mo>
+                      <m:msub>
+                        <m:mi>x</m:mi>
+                        <m:mi>j</m:mi>
+                      </m:msub>
+                      <m:mo>,</m:mo>
+                      <m:msub>
+                        <m:mi>x</m:mi>
+                        <m:mi>k</m:mi>
+                      </m:msub>
+                      <m:mo>)</m:mo>
+                    </m:mrow>
+                    <m:mo>=</m:mo>
+                    <m:msub>
+                      <m:mi>μ</m:mi>
+                      <m:msub>
+                        <m:mi>E</m:mi>
+                        <m:msub>
+                          <m:mi>m</m:mi>
+                          <m:mn>1</m:mn>
+                        </m:msub>
+                      </m:msub>
+                    </m:msub>
+                    <m:mrow>
+                      <m:mo>(</m:mo>
+                      <m:msub>
+                        <m:mi>x</m:mi>
+                        <m:mi>j</m:mi>
+                      </m:msub>
+                      <m:mo>)</m:mo>
+                    </m:mrow>
+                    <m:mspace width="20.0pt"/>
+                    <m:mo>∀</m:mo>
+                    <m:mi>m</m:mi>
+                    <m:mo>,</m:mo>
+                    <m:mi>j</m:mi>
+                  </m:mrow>
+                </m:mtd>
+              </m:mtr>
+              <m:mtr>
+                <m:mtd/>
+                <m:mtd/>
+                <m:mtd/>
+                <m:mtd columnalign="left">
+                  <m:mrow>
+                    <m:munderover>
+                      <m:mo>∑</m:mo>
+                      <m:mrow>
+                        <m:mi>j</m:mi>
+                        <m:mo>=</m:mo>
+                        <m:mn>1</m:mn>
+                      </m:mrow>
+                      <m:mi>K</m:mi>
+                    </m:munderover>
+                    <m:msub>
+                      <m:mi>μ</m:mi>
+                      <m:mrow>
+                        <m:msub>
+                          <m:mi>E</m:mi>
+                          <m:msub>
+                            <m:mi>m</m:mi>
+                            <m:mn>1</m:mn>
+                          </m:msub>
+                        </m:msub>
+                        <m:mo>,</m:mo>
+                        <m:msub>
+                          <m:mi>E</m:mi>
+                          <m:msub>
+                            <m:mi>m</m:mi>
+                            <m:mn>2</m:mn>
+                          </m:msub>
+                        </m:msub>
+                      </m:mrow>
+                    </m:msub>
+                    <m:mrow>
+                      <m:mo>(</m:mo>
+                      <m:msub>
+                        <m:mi>x</m:mi>
+                        <m:mi>j</m:mi>
+                      </m:msub>
+                      <m:mo>,</m:mo>
+                      <m:msub>
+                        <m:mi>x</m:mi>
+                        <m:mi>k</m:mi>
+                      </m:msub>
+                      <m:mo>)</m:mo>
+                    </m:mrow>
+                    <m:mo>=</m:mo>
+                    <m:msub>
+                      <m:mi>μ</m:mi>
+                      <m:msub>
+                        <m:mi>E</m:mi>
+                        <m:msub>
+                          <m:mi>m</m:mi>
+                          <m:mn>2</m:mn>
+                        </m:msub>
+                      </m:msub>
+                    </m:msub>
+                    <m:mrow>
+                      <m:mo>(</m:mo>
+                      <m:msub>
+                        <m:mi>x</m:mi>
+                        <m:mi>k</m:mi>
+                      </m:msub>
+                      <m:mo>)</m:mo>
+                    </m:mrow>
+                    <m:mspace width="20.0pt"/>
+                    <m:mo>∀</m:mo>
+                    <m:mi>m</m:mi>
+                    <m:mo>,</m:mo>
+                    <m:mi>k</m:mi>
+                  </m:mrow>
+                </m:mtd>
+              </m:mtr>
+              <m:mtr>
+                <m:mtd/>
+                <m:mtd/>
+                <m:mtd/>
+                <m:mtd columnalign="left">
+                  <m:mrow>
+                    <m:munderover>
+                      <m:mo>∑</m:mo>
+                      <m:mrow>
+                        <m:mi>k</m:mi>
+                        <m:mo>=</m:mo>
+                        <m:mn>1</m:mn>
+                      </m:mrow>
+                      <m:mi>K</m:mi>
+                    </m:munderover>
+                    <m:msub>
+                      <m:mi>μ</m:mi>
+                      <m:mi>n</m:mi>
+                    </m:msub>
+                    <m:mrow>
+                      <m:mo>(</m:mo>
+                      <m:msub>
+                        <m:mi>x</m:mi>
+                        <m:mi>k</m:mi>
+                      </m:msub>
+                      <m:mo>)</m:mo>
+                    </m:mrow>
+                    <m:mo>=</m:mo>
+                    <m:mn>1</m:mn>
+                    <m:mspace width="40.0pt"/>
+                    <m:mo>∀</m:mo>
+                    <m:mi>n</m:mi>
+                  </m:mrow>
+                </m:mtd>
+              </m:mtr>
+              <m:mtr>
+                <m:mtd/>
+                <m:mtd/>
+                <m:mtd/>
+                <m:mtd columnalign="left">
+                  <m:mrow>
+                    <m:mi>μ</m:mi>
+                    <m:mo>∈</m:mo>
+                    <m:msup>
+                      <m:mrow>
+                        <m:mo>{</m:mo>
+                        <m:mn>0</m:mn>
+                        <m:mo>,</m:mo>
+                        <m:mn>1</m:mn>
+                        <m:mo>}</m:mo>
+                      </m:mrow>
+                      <m:mi>D</m:mi>
+                    </m:msup>
+                  </m:mrow>
+                </m:mtd>
+              </m:mtr>
+            </m:mtable>
+          </m:math>
+        </equation>
+        <para id="id267121">The first two constraints ensure consistency between the edge indicator functions and the nodal indicator functions. The third constraint ensures that each node takes exactly one state.</para>
+      </section>
+      <section id="uid13">
+        <title>Colorado Counties as a Markov Random Field</title>
+        <para id="id267138">We consider each of the 64 counties of Colorado to be a node. Two counties are connected by an edge if they are geographically adjacent (see figure 2). The <emphasis effect="italics">state</emphasis> of a county is the percentage of its voters in 2012 who will vote for Barack Obama (precisely it's the number of voters voting for Obama divided by the number of voters voting for Obama or Romney). For computational efficiency, we cut these percentages off at 20 and 79. In order to use this Markov Network to predict the 2012 election, we must know the model parameters, <m:math overflow="scroll"><m:mi>θ</m:mi></m:math>.</para>
+        <figure id="uid14">
+          <media id="uid14_media" alt="">
+            <image mime-type="image/png" src="../../media/cocounties.png" id="uid14_onlineimage" width="635"><!-- NOTE: attribute width changes image size online (pixels). original width is 635. --></image>
+            <image mime-type="application/postscript" for="pdf" src="../../media/cocounties.eps" id="uid14_printimage" print-width="5in">
+              <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+            </image>
+          </media>
+          <caption>A subset of our Colorado Markov Random Field</caption>
+        </figure>
+        <section id="uid15">
+          <title>Learning the Model Parameters</title>
+          <para id="id267183">In order to learn the model parameters, we examine presidential elections from 1960 to 2008. We note that 1960 was chosen somewhat arbitrarily but roughly represents the end of an old political era. The historical observations (call them <m:math overflow="scroll"><m:mrow><m:msub><m:mi>ξ</m:mi><m:mn>1</m:mn></m:msub><m:mo>,</m:mo><m:mo>⋯</m:mo><m:mo>,</m:mo><m:msub><m:mi>ξ</m:mi><m:mn>13</m:mn></m:msub></m:mrow></m:math>) are used in a Maximum Likelihood Estimation. This optimization problem searches for the most likely model parameters given the observed data:</para>
+          <equation id="id267218">
+            <m:math overflow="scroll" mode="display">
+              <m:mtable displaystyle="true">
+                <m:mtr>
+                  <m:mtd/>
+                  <m:mtd columnalign="left">
+                    <m:munder>
+                      <m:mtext>maximize</m:mtext>
+                      <m:mi>θ</m:mi>
+                    </m:munder>
+                  </m:mtd>
+                  <m:mtd/>
+                  <m:mtd columnalign="left">
+                    <m:mrow>
+                      <m:mi>l</m:mi>
+                      <m:mrow>
+                        <m:mo>(</m:mo>
+                        <m:mi>θ</m:mi>
+                        <m:mo>:</m:mo>
+                        <m:mi>Ξ</m:mi>
+                        <m:mo>)</m:mo>
+                      </m:mrow>
+                      <m:mo>=</m:mo>
+                      <m:mfenced separators="" open="(" close=")">
+                        <m:munderover>
+                          <m:mo>∑</m:mo>
+                          <m:mrow>
+                            <m:mi>i</m:mi>
+                            <m:mo>=</m:mo>
+                            <m:mn>1</m:mn>
+                          </m:mrow>
+                          <m:mi>D</m:mi>
+                        </m:munderover>
+                        <m:msub>
+                          <m:mi>θ</m:mi>
+                          <m:mi>i</m:mi>
+                        </m:msub>
+                        <m:munderover>
+                          <m:mo>∑</m:mo>
+                          <m:mrow>
+                            <m:mi>j</m:mi>
+                            <m:mo>=</m:mo>
+                            <m:mn>1</m:mn>
+                          </m:mrow>
+                          <m:mn>13</m:mn>
+                        </m:munderover>
+                        <m:msub>
+                          <m:mi>μ</m:mi>
+                          <m:mi>i</m:mi>
+                        </m:msub>
+                        <m:mrow>
+                          <m:mo>(</m:mo>
+                          <m:msub>
+                            <m:mi>ξ</m:mi>
+                            <m:mi>j</m:mi>
+                          </m:msub>
+                          <m:mo>)</m:mo>
+                        </m:mrow>
+                      </m:mfenced>
+                      <m:mo>-</m:mo>
+                      <m:mi>M</m:mi>
+                      <m:mtext>ln</m:mtext>
+                      <m:mi>Z</m:mi>
+                      <m:mrow>
+                        <m:mo>(</m:mo>
+                        <m:mi>θ</m:mi>
+                        <m:mo>)</m:mo>
+                      </m:mrow>
+                    </m:mrow>
+                  </m:mtd>
+                </m:mtr>
+              </m:mtable>
+            </m:math>
+          </equation>
+          <para id="id267344">Technically, our equation above gives the <emphasis effect="italics">log</emphasis>-likelihood of a set of parameters <m:math overflow="scroll"><m:mi>θ</m:mi></m:math>, but this is unimportant since the logarithm is a monotonic function. <m:math overflow="scroll"><m:mrow><m:mi>Z</m:mi><m:mo>(</m:mo><m:mi>θ</m:mi><m:mo>)</m:mo></m:mrow></m:math> is the partition function, i.e. the sum over all possible outcomes given a set of parameters, <m:math overflow="scroll"><m:mi>θ</m:mi></m:math>.
+</para>
+          <equation id="id267402">
+            <m:math overflow="scroll" mode="display">
+              <m:mrow>
+                <m:mi>Z</m:mi>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mi>θ</m:mi>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mo>=</m:mo>
+                <m:munder>
+                  <m:mo>∑</m:mo>
+                  <m:mi>ξ</m:mi>
+                </m:munder>
+                <m:mtext>exp</m:mtext>
+                <m:mfenced separators="" open="{" close="}">
+                  <m:munderover>
+                    <m:mo>∑</m:mo>
+                    <m:mrow>
+                      <m:mi>i</m:mi>
+                      <m:mo>=</m:mo>
+                      <m:mn>1</m:mn>
+                    </m:mrow>
+                    <m:mi>D</m:mi>
+                  </m:munderover>
+                  <m:msub>
+                    <m:mi>θ</m:mi>
+                    <m:mi>i</m:mi>
+                  </m:msub>
+                  <m:msub>
+                    <m:mi>μ</m:mi>
+                    <m:mi>i</m:mi>
+                  </m:msub>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:msub>
+                      <m:mi>ξ</m:mi>
+                      <m:mi>j</m:mi>
+                    </m:msub>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                </m:mfenced>
+              </m:mrow>
+            </m:math>
+          </equation>
+          <para id="id267484">Note that the sum over <m:math overflow="scroll"><m:mi>ξ</m:mi></m:math> in the partition function refers to the sum over all possible <m:math overflow="scroll"><m:mi>ξ</m:mi></m:math>, not just the <m:math overflow="scroll"><m:mi>ξ</m:mi></m:math> that have been observed. This fact makes computation of the partition function intractable and we must approximate it. Following a sampling-based learning technique, we conclude<link target-id="bid6"/>:</para>
+          <equation id="id267520">
+            <m:math overflow="scroll" mode="display">
+              <m:mrow>
+                <m:mtext>ln</m:mtext>
+                <m:mi>Z</m:mi>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mi>θ</m:mi>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mo>≈</m:mo>
+                <m:mtext>ln</m:mtext>
+                <m:mfenced separators="" open="(" close=")">
+                  <m:mfrac>
+                    <m:mn>1</m:mn>
+                    <m:mi>T</m:mi>
+                  </m:mfrac>
+                  <m:munderover>
+                    <m:mo>∑</m:mo>
+                    <m:mrow>
+                      <m:mi>t</m:mi>
+                      <m:mo>=</m:mo>
+                      <m:mn>1</m:mn>
+                    </m:mrow>
+                    <m:mi>T</m:mi>
+                  </m:munderover>
+                  <m:mtext>exp</m:mtext>
+                  <m:mfenced separators="" open="{" close="}">
+                    <m:munderover>
+                      <m:mo>∑</m:mo>
+                      <m:mrow>
+                        <m:mi>i</m:mi>
+                        <m:mo>=</m:mo>
+                        <m:mn>1</m:mn>
+                      </m:mrow>
+                      <m:mi>D</m:mi>
+                    </m:munderover>
+                    <m:mrow>
+                      <m:mo>(</m:mo>
+                      <m:msub>
+                        <m:mi>θ</m:mi>
+                        <m:mi>i</m:mi>
+                      </m:msub>
+                      <m:mo>-</m:mo>
+                      <m:msubsup>
+                        <m:mi>θ</m:mi>
+                        <m:mi>i</m:mi>
+                        <m:mn>0</m:mn>
+                      </m:msubsup>
+                      <m:mo>)</m:mo>
+                    </m:mrow>
+                    <m:msub>
+                      <m:mi>μ</m:mi>
+                      <m:mi>i</m:mi>
+                    </m:msub>
+                    <m:mrow>
+                      <m:mo>(</m:mo>
+                      <m:msub>
+                        <m:mi>ξ</m:mi>
+                        <m:mi>t</m:mi>
+                      </m:msub>
+                      <m:mo>)</m:mo>
+                    </m:mrow>
+                  </m:mfenced>
+                </m:mfenced>
+                <m:mo>+</m:mo>
+                <m:mtext>ln</m:mtext>
+                <m:mi>Z</m:mi>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:msup>
+                    <m:mi>θ</m:mi>
+                    <m:mn>0</m:mn>
+                  </m:msup>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+              </m:mrow>
+            </m:math>
+          </equation>
+          <para id="id267665">Where <m:math overflow="scroll"><m:msup><m:mi>θ</m:mi><m:mn>0</m:mn></m:msup></m:math> is some set of parameters from which T samples are drawn (20 in our case). Since <m:math overflow="scroll"><m:mrow><m:mtext>ln</m:mtext><m:mi>Z</m:mi><m:mo>(</m:mo><m:msup><m:mi>θ</m:mi><m:mn>0</m:mn></m:msup><m:mo>)</m:mo></m:mrow></m:math> is a constant, we can leave it out of the optimization's objective function and we solve the MLE problem via gradient ascent.</para>
+          <equation id="id267708">
+            <m:math overflow="scroll" mode="display">
+              <m:mrow>
+                <m:mi>∇</m:mi>
+                <m:msubsup>
+                  <m:mi>θ</m:mi>
+                  <m:mi>i</m:mi>
+                  <m:mrow>
+                    <m:mi>t</m:mi>
+                    <m:mo>-</m:mo>
+                    <m:mn>1</m:mn>
+                  </m:mrow>
+                </m:msubsup>
+                <m:mo>=</m:mo>
+                <m:munderover>
+                  <m:mo>∑</m:mo>
+                  <m:mrow>
+                    <m:mi>j</m:mi>
+                    <m:mo>=</m:mo>
+                    <m:mn>1</m:mn>
+                  </m:mrow>
+                  <m:mn>13</m:mn>
+                </m:munderover>
+                <m:msub>
+                  <m:mi>μ</m:mi>
+                  <m:mi>i</m:mi>
+                </m:msub>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:msub>
+                    <m:mi>ξ</m:mi>
+                    <m:mi>j</m:mi>
+                  </m:msub>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mo>-</m:mo>
+                <m:mfrac>
+                  <m:mrow>
+                    <m:mn>13</m:mn>
+                    <m:msubsup>
+                      <m:mo>∑</m:mo>
+                      <m:mrow>
+                        <m:mi>t</m:mi>
+                        <m:mo>=</m:mo>
+                        <m:mn>1</m:mn>
+                      </m:mrow>
+                      <m:mi>T</m:mi>
+                    </m:msubsup>
+                    <m:mfenced separators="" open="(" close=")">
+                      <m:msub>
+                        <m:mi>μ</m:mi>
+                        <m:mi>i</m:mi>
+                      </m:msub>
+                      <m:mrow>
+                        <m:mo>(</m:mo>
+                        <m:msub>
+                          <m:mi>ξ</m:mi>
+                          <m:mi>t</m:mi>
+                        </m:msub>
+                        <m:mo>)</m:mo>
+                      </m:mrow>
+                      <m:mtext>exp</m:mtext>
+                      <m:mfenced separators="" open="{" close="}">
+                        <m:msubsup>
+                          <m:mo>∑</m:mo>
+                          <m:mrow>
+                            <m:mi>r</m:mi>
+                            <m:mo>=</m:mo>
+                            <m:mn>1</m:mn>
+                          </m:mrow>
+                          <m:mi>D</m:mi>
+                        </m:msubsup>
+                        <m:mrow>
+                          <m:mo>(</m:mo>
+                          <m:msubsup>
+                            <m:mi>θ</m:mi>
+                            <m:mi>r</m:mi>
+                            <m:mrow>
+                              <m:mi>t</m:mi>
+                              <m:mo>-</m:mo>
+                              <m:mn>1</m:mn>
+                            </m:mrow>
+                          </m:msubsup>
+                          <m:mo>-</m:mo>
+                          <m:msubsup>
+                            <m:mi>θ</m:mi>
+                            <m:mi>r</m:mi>
+                            <m:mrow>
+                              <m:mi>t</m:mi>
+                              <m:mo>-</m:mo>
+                              <m:mn>2</m:mn>
+                            </m:mrow>
+                          </m:msubsup>
+                          <m:mo>)</m:mo>
+                        </m:mrow>
+                        <m:msub>
+                          <m:mi>μ</m:mi>
+                          <m:mi>r</m:mi>
+                        </m:msub>
+                        <m:mrow>
+                          <m:mo>(</m:mo>
+                          <m:msub>
+                            <m:mi>ξ</m:mi>
+                            <m:mi>t</m:mi>
+                          </m:msub>
+                          <m:mo>)</m:mo>
+                        </m:mrow>
+                      </m:mfenced>
+                    </m:mfenced>
+                  </m:mrow>
+                  <m:mrow>
+                    <m:msubsup>
+                      <m:mo>∑</m:mo>
+                      <m:mrow>
+                        <m:mi>t</m:mi>
+                        <m:mo>=</m:mo>
+                        <m:mn>1</m:mn>
+                      </m:mrow>
+                      <m:mi>T</m:mi>
+                    </m:msubsup>
+                    <m:mtext>exp</m:mtext>
+                    <m:mfenced separators="" open="{" close="}">
+                      <m:msubsup>
+                        <m:mo>∑</m:mo>
+                        <m:mrow>
+                          <m:mi>r</m:mi>
+                          <m:mo>=</m:mo>
+                          <m:mn>1</m:mn>
+                        </m:mrow>
+                        <m:mi>D</m:mi>
+                      </m:msubsup>
+                      <m:mrow>
+                        <m:mo>(</m:mo>
+                        <m:msubsup>
+                          <m:mi>θ</m:mi>
+                          <m:mi>r</m:mi>
+                          <m:mrow>
+                            <m:mi>t</m:mi>
+                            <m:mo>-</m:mo>
+                            <m:mn>1</m:mn>
+                          </m:mrow>
+                        </m:msubsup>
+                        <m:mo>-</m:mo>
+                        <m:msubsup>
+                          <m:mi>θ</m:mi>
+                          <m:mi>r</m:mi>
+                          <m:mrow>
+                            <m:mi>t</m:mi>
+                            <m:mo>-</m:mo>
+                            <m:mn>2</m:mn>
+                          </m:mrow>
+                        </m:msubsup>
+                        <m:mo>)</m:mo>
+                      </m:mrow>
+                      <m:msub>
+                        <m:mi>μ</m:mi>
+                        <m:mi>r</m:mi>
+                      </m:msub>
+                      <m:mrow>
+                        <m:mo>(</m:mo>
+                        <m:msub>
+                          <m:mi>ξ</m:mi>
+                          <m:mi>t</m:mi>
+                        </m:msub>
+                        <m:mo>)</m:mo>
+                      </m:mrow>
+                    </m:mfenced>
+                  </m:mrow>
+                </m:mfrac>
+              </m:mrow>
+            </m:math>
+          </equation>
+          <equation id="id268015">
+            <m:math overflow="scroll" mode="display">
+              <m:mrow>
+                <m:msup>
+                  <m:mi>θ</m:mi>
+                  <m:mi>t</m:mi>
+                </m:msup>
+                <m:mo>=</m:mo>
+                <m:msup>
+                  <m:mi>θ</m:mi>
+                  <m:mrow>
+                    <m:mi>t</m:mi>
+                    <m:mo>-</m:mo>
+                    <m:mn>1</m:mn>
+                  </m:mrow>
+                </m:msup>
+                <m:mo>+</m:mo>
+                <m:mi>s</m:mi>
+                <m:mo>*</m:mo>
+                <m:mi>∇</m:mi>
+                <m:msup>
+                  <m:mi>θ</m:mi>
+                  <m:mrow>
+                    <m:mi>t</m:mi>
+                    <m:mo>-</m:mo>
+                    <m:mn>1</m:mn>
+                  </m:mrow>
+                </m:msup>
+              </m:mrow>
+            </m:math>
+          </equation>
+          <para id="id268069">Where <m:math overflow="scroll"><m:mi>s</m:mi></m:math> is some small step size. We update <m:math overflow="scroll"><m:msup><m:mi>θ</m:mi><m:mn>0</m:mn></m:msup></m:math> on each iteration to be <m:math overflow="scroll"><m:msup><m:mi>θ</m:mi><m:mrow><m:mi>t</m:mi><m:mo>-</m:mo><m:mn>2</m:mn></m:mrow></m:msup></m:math>. This is due to the fact that the partition function approximation is only reasonable in a neighborhood of <m:math overflow="scroll"><m:msup><m:mi>θ</m:mi><m:mn>0</m:mn></m:msup></m:math><link target-id="bid6"/>. It follows that the <m:math overflow="scroll"><m:mi>ξ</m:mi></m:math>'s which are indexed by t are drawn from a model with parameters <m:math overflow="scroll"><m:msup><m:mi>θ</m:mi><m:mrow><m:mi>t</m:mi><m:mo>-</m:mo><m:mn>2</m:mn></m:mrow></m:msup></m:math>, while the <m:math overflow="scroll"><m:mi>ξ</m:mi></m:math>'s indexed by j still represent the historical data.</para>
+        </section>
+        <section id="uid16">
+          <title>Correcting for Lack of Data</title>
+          <para id="id268185">Due to the small number of historical observations (13) and the large number of possible combinations for any edge (<m:math overflow="scroll"><m:mrow><m:mn>60</m:mn><m:mtext>states</m:mtext><m:mo>*</m:mo><m:mn>60</m:mn><m:mtext>states</m:mtext><m:mo>=</m:mo><m:mn>3</m:mn><m:mo>,</m:mo><m:mn>600</m:mn></m:mrow></m:math> combinations), we must come up with a more concise way to learn the relationships between counties. To that end, we look not at the absolute voting percentages of counties but rather the difference in voting percentage between each pair of neighboring counties. This method has the added bonus of circumventing the problem of overall change that has affected every county. Unfortunately, there are still 119 possible differences that could occur (-59,-58,...,0,...58,59) and only 13 elections to determine the frequency with which each difference occurs. Therefore, we place each difference into a cluster, e.g. [-9,-6]. We use 11 clusters total and since the differences between counties are fairly consistent between years, the 13 observations should be sufficient for an approximation of the marginal probabilities for each edge. These approximation techniques do not affect the way we solve the problem via gradient ascent. However, once gradient ascent is finished we must convert our small <m:math overflow="scroll"><m:mi>θ</m:mi></m:math> into standard long form (as displayed in Section 2.1).</para>
+        </section>
+        <section id="uid17">
+          <title>Performing MAP Inference</title>
+          <para id="id268245">Due to our approximation techniques in the learning process, we are confronted with a problem when attempting to predict the 2012 election. Since the entire model is based off relativity, any outcome for a particular county is equally likely as long as the rest of the model shifts with it. In order to ensure we do not get extremely low or high results, we must fix some subset of the counties as a starting point for the model. In order to do this, we utilize linear regression techniques (as discussed in the next section). Once the model is partially filled in, we solve the binary program stated above with our learned <m:math overflow="scroll"><m:mi>θ</m:mi></m:math> (in standard long form) via Gurobi Optimizer.</para>
+        </section>
+      </section>
+    </section>
+    <section id="cid3">
+      <title>Multivariate Regression</title>
+      <para id="id268272">Multivariate Linear Regression is commonly used in social sciences as a means of predicting future outcomes based off of known data. It will provide us with a comparison as well as a starting off point for our Markov Random Field model. Our model will have Incumbent Party Vote % as the dependent variable. That is, if a Democratic president is currently in office, then we will be predicting the voting %'s earned by this year's Democratic Candidate.</para>
+      <section id="uid18">
+        <title>Regressors</title>
+        <section id="uid19">
+          <title>Percentage Change in Per Capita Income</title>
+          <para id="id268297">Reflects an overall change in well-being since the last election. As the Percentage Change in Per Capita Income decreases, the incumbent becomes more unelectable.</para>
+        </section>
+        <section id="uid20">
+          <title>Unemployment</title>
+          <para id="id268312">Tells how many people are unable to find work as a percentage of the workforce who cannot find find work. As unemployment increases, the incumbent's chance of re-election decreases.</para>
+        </section>
+        <section id="uid21">
+          <title>Control of Congress</title>
+          <para id="id268327">A variable reflecting whether the incumbent's party controls Congress or not. 1 if the incumbent party controls both the house and the senate, 1/2 if the incumbent's party controls only one chamber, 0 if the incumbent's party controls neither.</para>
+        </section>
+        <section id="uid22">
+          <title>Incumbent Approval Rating</title>
+          <para id="id268343">The incumbent's approval from the last month in June. As this number decreases, the incumbent becomes more unelectable.</para>
+        </section>
+        <section id="uid23">
+          <title>Incumbent Vote in the Past Three Elections</title>
+          <para id="id268357">A variable showing how people voted in the past for the incumbent. If the previous incumbent vote is high, chances are people will not go drastically away from that result.</para>
+        </section>
+      </section>
+      <section id="uid24">
+        <title>Assumptions</title>
+        <list id="id268372" display="block" list-type="bulleted">
+          <item id="uid25"><emphasis effect="italics">Percentage Change in Per Capita Income</emphasis>: In 2008 CPI Adjusted dollars<link target-id="bid7"/>, 2012 figures assumes same growth rate as 2009-2010
+</item>
+          <item id="uid26"><emphasis effect="italics">Unemployment</emphasis>: 1992-2008 figures are averages for the year, 2012 figures are the unemployment data for May
+</item>
+        </list>
+      </section>
+    </section>
+    <section id="cid4">
+      <title>Results</title>
+      <section id="uid27">
+        <title>2008</title>
+        <para id="id268435">We used both the regression model on its own as well as the partially filled-in Markov model to predict the 2008 election using data from 2004 and earlier. The results are presented in Table 1 and Figure 3.</para>
+        <table id="uid28" summary="">
+          <tgroup cols="3">
+            <tbody>
+              <row>
+                <entry/>
+                <entry>State Prediction</entry>
+                <entry>Average Prediction Error (magnitude)</entry>
+              </row>
+              <row>
+                <entry>Linear Regression</entry>
+                <entry>52.18%</entry>
+                <entry>2.08%</entry>
+              </row>
+              <row>
+                <entry>Markov Random Field</entry>
+                <entry>47%</entry>
+                <entry>6.84%</entry>
+              </row>
+              <row>
+                <entry>Actual Result</entry>
+                <entry>54.57%</entry>
+                <entry>-</entry>
+              </row>
+            </tbody>
+          </tgroup>
+          <caption>Prediction Results for 2008 (% Democratic vote)</caption>
+        </table>
+        <figure id="uid29">
+          <media id="uid29_media" alt="">
+            <image mime-type="image/png" src="../../media/hists.png" id="uid29_onlineimage" width="933"><!-- NOTE: attribute width changes image size online (pixels). original width is 933. --></image>
+            <image mime-type="application/postscript" for="pdf" src="../../media/hists.eps" id="uid29_printimage" print-width="7in">
+              <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+            </image>
+          </media>
+          <caption>Histogram of Errors in Predictions for 2008
+</caption>
+        </figure>
+      </section>
+      <section id="uid30">
+        <title>2012</title>
+        <para id="id268568">In 2012, we predict Mitt Romney to win Colorado with about 60% of the vote. Our regression model predicts 60.36% while our Markov model predicts 60.65%. In figure 4, we present the county-by-county predictions.</para>
+        <figure id="uid31">
+          <media id="uid31_media" alt="">
+            <image mime-type="image/png" src="../../media/2012preds.png" id="uid31_onlineimage" width="378"><!-- NOTE: attribute width changes image size online (pixels). original width is 378. --></image>
+            <image mime-type="application/postscript" for="pdf" src="../../media/2012preds.eps" id="uid31_printimage" print-width="3.5in">
+              <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+            </image>
+          </media>
+          <caption>Our Predictions for 2012
+</caption>
+        </figure>
+      </section>
+      <section id="uid32">
+        <title>Turnout Assumption</title>
+        <para id="id268609">In order to calculate the statewide prediction based on the individual county predictions, we had to estimate how many people would vote in each county in 2012. The assumption we made was that the percentage of Colorado voters in each county would remain constant.</para>
+      </section>
+    </section>
+    <section id="cid5">
+      <title>Conclusions/Further Research</title>
+      <para id="id268625">Based off the results from 2008, the Markov Random Field technique does not seem to perform as well as the regression by itself. This could be due to a lack of data (again, we only had 13 observations to learn the model from), or it could be due to inconsistencies in neighboring counties' relationships with one another. If the latter is true, then our hypothesis was incorrect. That is, the relationships between adjacent counties are not consistent enough to use for election predictions. To answer this question for certain would require many more observations, probably from all types of elections for many years. This is one potential area for future research. Despite the uncertainty regarding our Markov model, we can seemingly conclude success with our regression model. It predicted the correct winner in both 2008 (trained on data from 1992-2004) and 2004 (not shown here, trained on data from 1992-2000). Of course, we used a small set of regressors and there is much room for further research in this area, as well.</para>
+    </section>
+  </content>
+  <bib:file>
+    <bib:entry id="bid3">
+      <bib:techreport>
+        <!--required fields-->
+        <bib:author/>
+        <bib:title>Labor Force Data by County, 2011 Annual Averages</bib:title>
+        <bib:institution>U.S. Department of Labor</bib:institution>
+        <bib:year>2012</bib:year>
+        <!--optional fields-->
+        <bib:type>Technical report</bib:type>
+        <bib:number/>
+        <bib:address/>
+        <bib:month/>
+        <bib:note/>
+      </bib:techreport>
+    </bib:entry>
+    <bib:entry id="bid1">
+      <bib:misc>
+        <!--required fields-->
+        <!--optional fields-->
+        <bib:author/>
+        <bib:title>Election 2012: Colorado President</bib:title>
+        <bib:howpublished>Web</bib:howpublished>
+        <bib:month>June</bib:month>
+        <bib:year>2012</bib:year>
+        <bib:note>Rasmussen Reports</bib:note>
+      </bib:misc>
+    </bib:entry>
+    <bib:entry id="bid7">
+      <bib:techreport>
+        <!--required fields-->
+        <bib:author/>
+        <bib:title>Consumer Price Index</bib:title>
+        <bib:institution>U.S. Department of Labor</bib:institution>
+        <bib:year>2012</bib:year>
+        <!--optional fields-->
+        <bib:type>Technical report</bib:type>
+        <bib:number/>
+        <bib:address/>
+        <bib:month/>
+        <bib:note/>
+      </bib:techreport>
+    </bib:entry>
+    <bib:entry id="bid0">
+      <bib:misc>
+        <!--required fields-->
+        <!--optional fields-->
+        <bib:author>Gore, D'Angelo</bib:author>
+        <bib:title>Presidents Winning Without Popular Vote</bib:title>
+        <bib:howpublished>Web</bib:howpublished>
+        <bib:month>March</bib:month>
+        <bib:year>2008</bib:year>
+        <bib:note>FactCheck.org</bib:note>
+      </bib:misc>
+    </bib:entry>
+    <bib:entry id="bid4">
+      <bib:article>
+        <!--required fields-->
+        <bib:author>Jordan, M.I. and Wainwright, M.</bib:author>
+        <bib:title>Graphical Models, Exponential Families, and Variational Inference</bib:title>
+        <bib:journal>Foundations and Trends in Machine Learning</bib:journal>
+        <bib:year>2008</bib:year>
+        <!--optional fields-->
+        <bib:volume>1</bib:volume>
+        <bib:number>1-2</bib:number>
+        <bib:pages/>
+        <bib:month/>
+        <bib:note/>
+      </bib:article>
+    </bib:entry>
+    <bib:entry id="bid6">
+      <bib:book>
+        <!--required fields-->
+        <bib:author>Koller, D. and Friedman, N.</bib:author>
+        <bib:title>Probabilistic Graphical Models: Principles and Techniques</bib:title>
+        <bib:publisher>The MIT Press</bib:publisher>
+        <bib:year>2009</bib:year>
+        <!--optional fields-->
+        <bib:volume/>
+        <bib:series/>
+        <bib:address/>
+        <bib:edition/>
+        <bib:month/>
+        <bib:note/>
+      </bib:book>
+    </bib:entry>
+    <bib:entry id="bid2">
+      <bib:techreport>
+        <!--required fields-->
+        <bib:author/>
+        <bib:title>Unemployment Rates for States</bib:title>
+        <bib:institution>U.S. Department of Labor</bib:institution>
+        <bib:year>2012</bib:year>
+        <!--optional fields-->
+        <bib:type>Technical report</bib:type>
+        <bib:number/>
+        <bib:address/>
+        <bib:month/>
+        <bib:note/>
+      </bib:techreport>
+    </bib:entry>
+    <bib:entry id="bid5">
+      <bib:phdthesis>
+        <!--required fields-->
+        <bib:author>Sontag, D.</bib:author>
+        <bib:title>Approximate Inference in Graphical Models Using LP Relaxations</bib:title>
+        <bib:school>Massachusetts Institute of Technology</bib:school>
+        <bib:year>2010</bib:year>
+        <!--optional fields-->
+        <bib:type>Ph. D. Thesis</bib:type>
+        <bib:address/>
+        <bib:month/>
+        <bib:note/>
+      </bib:phdthesis>
+    </bib:entry>
+  </bib:file>
+</document>

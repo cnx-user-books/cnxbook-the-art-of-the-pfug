@@ -1,0 +1,580 @@
+<document xmlns="http://cnx.rice.edu/cnxml" xmlns:m="http://www.w3.org/1998/Math/MathML">
+  <title>Rice University VIGRE: Edge Length Minimizing Polyhedra</title>
+  <metadata xmlns:md="http://cnx.rice.edu/mdml">
+  <md:content-id>m18831</md:content-id>
+  <md:title>Rice University VIGRE: Edge Length Minimizing Polyhedra</md:title>
+  <md:abstract>This report summarizes work done as part of the Calculus of Variations PFUG under Rice University's VIGRE program. VIGRE is a program of Vertically Integrated Grants for Research and Education in the Mathematical Sciences under the direction of the National Science Foundation. A PFUG is a group of Postdocs, Faculty, Undergraduates and Graduate students formed around the study of a common problem. In this PFUG, we study Melzak's Problem, which asks if we can find a polyhedron which minimizes the edge length amongst all polyhedra with unit volume. This work was studied in the Rice University VIGRE class MATH499 in the Fall of 2008.</md:abstract>
+  <md:uuid>30264236-d61c-434e-a04e-e0d4517e5f3f</md:uuid>
+</metadata>
+
+<content>
+    <section id="cid1">
+      <title>Introduction</title>
+      <para id="id334745">In the Calculus of Variations PFUG, we studied Melzak's Problem using variational methods. These methods involve the study of geometric objects by defining a functional, which quantitatively measures those objects. We then seek to describe properties of objects which optimize this functional.</para>
+      <para id="id334751">For the problem studied, the functional involved the edge length and volume of polyhedra. For a polyhedron <m:math overflow="scroll"><m:mrow><m:mi>P</m:mi><m:mo>,</m:mo></m:mrow></m:math> let <m:math overflow="scroll"><m:mrow><m:mi>V</m:mi><m:mo>(</m:mo><m:mi>P</m:mi><m:mo>)</m:mo></m:mrow></m:math> be its volume and <m:math overflow="scroll"><m:mrow><m:mi>E</m:mi><m:mo>(</m:mo><m:mi>P</m:mi><m:mo>)</m:mo></m:mrow></m:math> be its total edge length. Let <m:math overflow="scroll"><m:mi mathvariant="script">P</m:mi></m:math> be the set of all polyhedra <emphasis effect="italics">P</emphasis> with <m:math overflow="scroll"><m:mrow><m:mi>V</m:mi><m:mo>(</m:mo><m:mi>P</m:mi><m:mo>)</m:mo><m:mo>=</m:mo><m:mn>1</m:mn><m:mo>.</m:mo></m:mrow></m:math> Then Melzak's Problem, which is also referred to as the Waste Storage Problem, asks if there exists a polyhedron <m:math overflow="scroll"><m:mrow><m:msub><m:mi>P</m:mi><m:mn>0</m:mn></m:msub><m:mo>∈</m:mo><m:mi mathvariant="script">P</m:mi></m:mrow></m:math> with <m:math overflow="scroll"><m:mrow><m:mi>E</m:mi><m:mrow><m:mo>(</m:mo><m:msub><m:mi>P</m:mi><m:mn>0</m:mn></m:msub><m:mo>)</m:mo></m:mrow><m:mo>≤</m:mo><m:mi>E</m:mi><m:mrow><m:mo>(</m:mo><m:mi>P</m:mi><m:mo>)</m:mo></m:mrow></m:mrow></m:math> for all <m:math overflow="scroll"><m:mrow><m:mi>P</m:mi><m:mo>∈</m:mo><m:mi mathvariant="script">P</m:mi><m:mo>.</m:mo></m:mrow></m:math></para>
+      <para id="id334910">As a practical consideration, it is inconvenient to consider polyhedra <emphasis effect="italics">P</emphasis> with <m:math overflow="scroll"><m:mrow><m:mi>V</m:mi><m:mo>(</m:mo><m:mi>P</m:mi><m:mo>)</m:mo><m:mo>=</m:mo><m:mn>1</m:mn><m:mo>,</m:mo></m:mrow></m:math> namely because easy examples are unwieldy to construct. For example, it is computationally much easier to work with the tetrahedron with unit length edges, having volume <m:math overflow="scroll"><m:mrow><m:mfrac><m:msqrt><m:mn>2</m:mn></m:msqrt><m:mn>12</m:mn></m:mfrac><m:mo>.</m:mo></m:mrow></m:math> In order to circumvent this problem, we define</para>
+      <equation id="id334963">
+        <m:math overflow="scroll" mode="display">
+          <m:mrow>
+            <m:mi mathvariant="script">F</m:mi>
+            <m:mrow>
+              <m:mo>(</m:mo>
+              <m:mi>P</m:mi>
+              <m:mo>)</m:mo>
+            </m:mrow>
+            <m:mo>=</m:mo>
+            <m:mfrac>
+              <m:mrow>
+                <m:mi>E</m:mi>
+                <m:msup>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:mi>P</m:mi>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                  <m:mn>3</m:mn>
+                </m:msup>
+              </m:mrow>
+              <m:mrow>
+                <m:mi>V</m:mi>
+                <m:mo>(</m:mo>
+                <m:mi>P</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+            </m:mfrac>
+          </m:mrow>
+        </m:math>
+      </equation>
+      <para id="id335014">for <emphasis effect="italics">P</emphasis> any polyhedron. It follows that a polyhedron <emphasis effect="italics">P</emphasis> minimizes the quantity <m:math overflow="scroll"><m:mrow><m:mi mathvariant="script">F</m:mi><m:mo>(</m:mo><m:mi>P</m:mi><m:mo>)</m:mo></m:mrow></m:math> amongst all polyhedra if and only if the rescaled polyhedron <m:math overflow="scroll"><m:mrow><m:mover accent="true"><m:mi>P</m:mi><m:mo>˜</m:mo></m:mover><m:mo>,</m:mo></m:mrow></m:math> given by taking the edges <emphasis effect="italics">e<sub>i</sub></emphasis> of <emphasis effect="italics">P</emphasis> and setting the new corresponding edge of <m:math overflow="scroll"><m:mover accent="true"><m:mi>P</m:mi><m:mo>˜</m:mo></m:mover></m:math> to be <m:math overflow="scroll"><m:mrow><m:msub><m:mover accent="true"><m:mi>e</m:mi><m:mo>˜</m:mo></m:mover><m:mi>i</m:mi></m:msub><m:mo>=</m:mo><m:mfrac><m:msub><m:mi>e</m:mi><m:mi>i</m:mi></m:msub><m:mrow><m:mi>V</m:mi><m:msup><m:mrow><m:mo>(</m:mo><m:mi>P</m:mi><m:mo>)</m:mo></m:mrow><m:mrow><m:mn>1</m:mn><m:mo>/</m:mo><m:mn>3</m:mn></m:mrow></m:msup></m:mrow></m:mfrac><m:mo>,</m:mo></m:mrow></m:math> solves Melzak's Problem (that is, <m:math overflow="scroll"><m:mrow><m:mi>V</m:mi><m:mo>(</m:mo><m:mover accent="true"><m:mi>P</m:mi><m:mo>˜</m:mo></m:mover><m:mo>)</m:mo><m:mo>=</m:mo><m:mn>1</m:mn></m:mrow></m:math> and <m:math overflow="scroll"><m:mover accent="true"><m:mi>P</m:mi><m:mo>˜</m:mo></m:mover></m:math> minimizes edge length over all polyhedra with unit volume). We therefore seek a polyhedron <emphasis effect="italics">P</emphasis> which minimizes <m:math overflow="scroll"><m:mrow><m:mi mathvariant="script">F</m:mi><m:mo>(</m:mo><m:mi>P</m:mi><m:mo>)</m:mo><m:mo>.</m:mo></m:mrow></m:math></para>
+      <para id="id335232">The problem is mentioned in several sources, most notably as Problem 13 in [M65]. Although not much work has been done to solve the problem, the <emphasis effect="italics">Regular Triangular Prism</emphasis> is conjectured to be the minimizer. This polyhedron is constructed from three squares and two equilateral triangles:</para>
+      <para id="id335245">
+        <figure id="id335248">
+          <media id="id335248_media" alt="">
+            <image mime-type="image/png" src="../../media/RTP.png" id="id335248_onlineimage" width="243"><!-- NOTE: attribute width changes image size online (pixels). original width is 243. --></image>
+            <image for="pdf" mime-type="application/postscript" src="../../media/RTP.eps" id="id335248_printimage" print-width="1in">
+              <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+            </image>
+          </media>
+        </figure>
+      </para>
+      <para id="id335258">When the edges are chosen to have unit length, then for the Regular Triangular Prism we have <m:math overflow="scroll"><m:mrow><m:mi mathvariant="script">F</m:mi><m:mrow><m:mo>(</m:mo><m:mi>R</m:mi><m:mi>T</m:mi><m:mi>P</m:mi><m:mo>)</m:mo></m:mrow><m:mo>=</m:mo><m:mn>972</m:mn><m:msqrt><m:mn>3</m:mn></m:msqrt><m:mo>.</m:mo></m:mrow></m:math> The work contained in [B01] gives evidence to believe that the Regular Triangular Prism is the minimizer.</para>
+    </section>
+    <section id="cid2">
+      <title>Known Results</title>
+      <para id="id335484">First, calculations show that the Regular Triangular Prism has a smaller value of <m:math overflow="scroll"><m:mi mathvariant="script">F</m:mi></m:math> than the <emphasis effect="italics">Platonic Solids</emphasis>. These are the Tetrahedron, Cube, Octahedron, Dodecahedron, Icosahedron with <m:math overflow="scroll"><m:mi mathvariant="script">F</m:mi></m:math> values <m:math overflow="scroll"><m:mrow><m:mn>1296</m:mn><m:msqrt><m:mn>2</m:mn></m:msqrt><m:mo>,</m:mo><m:mn>1728</m:mn><m:mo>,</m:mo><m:mn>2592</m:mn><m:msqrt><m:mn>2</m:mn></m:msqrt><m:mo>,</m:mo><m:mn>172800</m:mn><m:msqrt><m:mn>5</m:mn></m:msqrt><m:msup><m:mrow><m:mo>(</m:mo><m:mn>1</m:mn><m:mo>+</m:mo><m:msqrt><m:mn>5</m:mn></m:msqrt><m:mo>)</m:mo></m:mrow><m:mrow><m:mo>-</m:mo><m:mn>4</m:mn></m:mrow></m:msup><m:mo>,</m:mo></m:mrow></m:math> and <m:math overflow="scroll"><m:mrow><m:mn>129600</m:mn><m:msup><m:mrow><m:mo>(</m:mo><m:mn>1</m:mn><m:mo>+</m:mo><m:msqrt><m:mn>5</m:mn></m:msqrt><m:mo>)</m:mo></m:mrow><m:mrow><m:mo>-</m:mo><m:mn>2</m:mn></m:mrow></m:msup></m:mrow></m:math> respectively.</para>
+      <para id="id335598">Second, we define a <emphasis effect="italics">prism</emphasis> to be a polygon in the plane translated in the direction of a vector not in the plane. Then [B01] shows that <emphasis effect="italics">Right Regular Prisms</emphasis>, prisms formed by translating a polygon with equal sides vertically in the perpendicular direction so that the vertical sides are squares, minimize the value of <m:math overflow="scroll"><m:mi mathvariant="script">F</m:mi></m:math> over all prisms. This is done by writing down the formula for the volume of a prism depending on the area of the polygonal base, the height of the prism, and the angle between the base and the generating vector. Given a base, then differentiating this function shows that the volume is minimized, while edge length is preserved, when the generating vector is perpendicular to the base. Then, the 2-Dimensional Isoperimetric Inequality for Polygons shows that the volume can be decreased, while the edge length kept fixed, if the base is regular. Finally, a calculation shows that the Regular Triangular Prism has smallest value of <m:math overflow="scroll"><m:mi mathvariant="script">F</m:mi></m:math> amongst all Right Regular Prisms.</para>
+      <para id="id335642">Third, the Regular Triangular Prism is shown in [B01] to have smaller <m:math overflow="scroll"><m:mi mathvariant="script">F</m:mi></m:math> value than any <emphasis effect="italics">Right Regular Pyramid</emphasis>. A <emphasis effect="italics">pyramid</emphasis> is a polygon in the plane, together with an apex at a point above the polygon, and a pyramid is regular if the base is regular and the triangles forming the sides of the pyramid are equilateral. Using techniques similar to the case of a prism, it is shown that <m:math overflow="scroll"><m:mi mathvariant="script">F</m:mi></m:math> is minimized over pyramids with equal-sided bases when the pyramid is a Right Regular Pyramid. A calculation then shows <m:math overflow="scroll"><m:mi mathvariant="script">F</m:mi></m:math> is minimized over all pyramids for the Tetrahedron, but on the other hand the value of <m:math overflow="scroll"><m:mi mathvariant="script">F</m:mi></m:math> for the Regular Triangular Prism is smaller than that of the Tetrahedron.</para>
+      <para id="id335703">Fourth, an <emphasis effect="italics">Equal-Faced Polyhedron</emphasis> is a polyhedron where the faces have equal area. The Regular Triangular Prism has smaller <m:math overflow="scroll"><m:mi mathvariant="script">F</m:mi></m:math> value than any equal-faced polyhedron with ten or more faces. This is shown in [B01] by proving a lower estimate for the value of <m:math overflow="scroll"><m:mi mathvariant="script">F</m:mi></m:math> for any equal-faced polyhedron with ten or more faces using the Isoperimetric Inequality, a lower bound which is greater than <m:math overflow="scroll"><m:mrow><m:mi mathvariant="script">F</m:mi><m:mo>(</m:mo><m:mi>R</m:mi><m:mi>T</m:mi><m:mi>P</m:mi><m:mo>)</m:mo><m:mo>.</m:mo></m:mrow></m:math></para>
+    </section>
+    <section id="cid3">
+      <title>Variations of Polyhedra</title>
+      <para id="id335768">Our first approach for solving Melzak's Problem is derived by analogy from the proofs provided in [B01] to show that Right Regular Prisms minimize <m:math overflow="scroll"><m:mi mathvariant="script">F</m:mi></m:math> over all prisms. More specifically, given a polyhedron <emphasis effect="italics">P</emphasis> we define a <emphasis effect="italics">variation</emphasis><emphasis effect="italics">P<sub>t</sub></emphasis> of <emphasis effect="italics">P</emphasis> to be a continuous deformation of <emphasis effect="italics">P</emphasis> so that <m:math overflow="scroll"><m:mrow><m:mi mathvariant="script">F</m:mi><m:mo>(</m:mo><m:msub><m:mi>P</m:mi><m:mi>t</m:mi></m:msub><m:mo>)</m:mo></m:mrow></m:math> is a differentiable function of <emphasis effect="italics">t</emphasis> with <m:math overflow="scroll"><m:mrow><m:msub><m:mi>P</m:mi><m:mn>0</m:mn></m:msub><m:mo>=</m:mo><m:mi>P</m:mi><m:mo>.</m:mo></m:mrow></m:math> We then calculate</para>
+      <equation id="id335876">
+        <m:math overflow="scroll" mode="display">
+          <m:mrow>
+            <m:mfrac>
+              <m:mi>d</m:mi>
+              <m:mrow>
+                <m:mi>d</m:mi>
+                <m:mi>t</m:mi>
+              </m:mrow>
+            </m:mfrac>
+            <m:mi mathvariant="script">F</m:mi>
+            <m:mrow>
+              <m:mo>(</m:mo>
+              <m:msub>
+                <m:mi>P</m:mi>
+                <m:mi>t</m:mi>
+              </m:msub>
+              <m:mo>)</m:mo>
+            </m:mrow>
+            <m:msub>
+              <m:mrow>
+                <m:mo>|</m:mo>
+              </m:mrow>
+              <m:mrow>
+                <m:mi>t</m:mi>
+                <m:mo>=</m:mo>
+                <m:mn>0</m:mn>
+              </m:mrow>
+            </m:msub>
+            <m:mo>,</m:mo>
+          </m:mrow>
+        </m:math>
+      </equation>
+      <para id="id335928">in order to see whether <m:math overflow="scroll"><m:mrow><m:mi mathvariant="script">F</m:mi><m:mo>(</m:mo><m:msub><m:mi>P</m:mi><m:mi>t</m:mi></m:msub><m:mo>)</m:mo></m:mrow></m:math> has a critical point, and possibly a minimum, at <m:math overflow="scroll"><m:mrow><m:mi>t</m:mi><m:mo>=</m:mo><m:mn>0</m:mn><m:mo>.</m:mo></m:mrow></m:math></para>
+      <para id="id335970">There are some difficulties with this approach. First, as a theoretical matter, although it is true that if <emphasis effect="italics">P</emphasis> is the solution to Melzak's Problem then <m:math overflow="scroll"><m:mrow><m:mi mathvariant="script">F</m:mi><m:mo>(</m:mo><m:msub><m:mi>P</m:mi><m:mi>t</m:mi></m:msub><m:mo>)</m:mo></m:mrow></m:math> achieves a minimum at <m:math overflow="scroll"><m:mrow><m:mi>t</m:mi><m:mo>=</m:mo><m:mn>0</m:mn></m:mrow></m:math> for any variation <emphasis effect="italics">P<sub>t</sub></emphasis> of <m:math overflow="scroll"><m:mrow><m:mi>P</m:mi><m:mo>,</m:mo></m:mrow></m:math> we may encounter a <emphasis effect="italics">pseudo-minimizer</emphasis>, a polyhedron <emphasis effect="italics">P</emphasis> which has <m:math overflow="scroll"><m:mrow><m:mfrac><m:mi>d</m:mi><m:mrow><m:mi>d</m:mi><m:mi>t</m:mi></m:mrow></m:mfrac><m:mi mathvariant="script">F</m:mi><m:mrow><m:mo>(</m:mo><m:msub><m:mi>P</m:mi><m:mi>t</m:mi></m:msub><m:mo>)</m:mo></m:mrow><m:msub><m:mrow><m:mo>|</m:mo></m:mrow><m:mrow><m:mi>t</m:mi><m:mo>=</m:mo><m:mn>0</m:mn></m:mrow></m:msub><m:mo>=</m:mo><m:mn>0</m:mn></m:mrow></m:math> for all variations <emphasis effect="italics">P<sub>t</sub></emphasis> of <emphasis effect="italics">P</emphasis> which is only <emphasis effect="italics">locally</emphasis> a solution to Melzak's Problem. Second, as a practical matter, finding variations of a given polyhedron is typically delicate, as edges tend to appear and disappear as we deform polyhedra.</para>
+      <para id="id336138">Given the idea of taking variations of polyhedra, the first task was to verify that <m:math overflow="scroll"><m:mrow><m:mfrac><m:mi>d</m:mi><m:mrow><m:mi>d</m:mi><m:mi>t</m:mi></m:mrow></m:mfrac><m:mi mathvariant="script">F</m:mi><m:mrow><m:mo>(</m:mo><m:mi>R</m:mi><m:mi>T</m:mi><m:msub><m:mi>P</m:mi><m:mi>t</m:mi></m:msub><m:mo>)</m:mo></m:mrow><m:msub><m:mrow><m:mo>|</m:mo></m:mrow><m:mrow><m:mi>t</m:mi><m:mo>=</m:mo><m:mn>0</m:mn></m:mrow></m:msub></m:mrow></m:math> for any variation <m:math overflow="scroll"><m:mrow><m:mi>R</m:mi><m:mi>T</m:mi><m:msub><m:mi>P</m:mi><m:mi>t</m:mi></m:msub></m:mrow></m:math> of the Regular Triangular Prism. We checked this for two variations, which are not merely deformations on the Regular Triangular Prism into other prisms. The first variation, consisted of lifting a vertex of the triangular top, to get a polyhedron <m:math overflow="scroll"><m:mrow><m:msub><m:mi>P</m:mi><m:mi>θ</m:mi></m:msub><m:mo>,</m:mo></m:mrow></m:math> where <emphasis effect="italics">θ</emphasis> is the angle between the old triangular top and the new one:</para>
+      <para id="id336242">
+        <figure id="id336245">
+          <media id="id336245_media" alt="">
+            <image mime-type="image/png" src="../../media/RTP_V1.png" id="id336245_onlineimage" width="243"><!-- NOTE: attribute width changes image size online (pixels). original width is 243. --></image>
+            <image for="pdf" mime-type="application/postscript" src="../../media/RTP_V1.eps" id="id336245_printimage" print-width="1in">
+              <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+            </image>
+          </media>
+        </figure>
+      </para>
+      <para id="id336255">A calculation shows that</para>
+      <equation id="id336258">
+        <m:math overflow="scroll" mode="display">
+          <m:mrow>
+            <m:mi mathvariant="script">F</m:mi>
+            <m:mrow>
+              <m:mo>(</m:mo>
+              <m:msub>
+                <m:mi>P</m:mi>
+                <m:mi>θ</m:mi>
+              </m:msub>
+              <m:mo>)</m:mo>
+            </m:mrow>
+            <m:mo>=</m:mo>
+            <m:mfrac>
+              <m:mrow>
+                <m:mn>2</m:mn>
+                <m:msup>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:mn>2</m:mn>
+                    <m:mo form="prefix">sec</m:mo>
+                    <m:mi>θ</m:mi>
+                    <m:mo>+</m:mo>
+                    <m:mn>10</m:mn>
+                    <m:mo>+</m:mo>
+                    <m:mn>2</m:mn>
+                    <m:mo form="prefix">tan</m:mo>
+                    <m:mi>θ</m:mi>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                  <m:mn>3</m:mn>
+                </m:msup>
+              </m:mrow>
+              <m:mrow>
+                <m:mn>2</m:mn>
+                <m:mo>+</m:mo>
+                <m:mo form="prefix">tan</m:mo>
+                <m:mi>θ</m:mi>
+              </m:mrow>
+            </m:mfrac>
+          </m:mrow>
+        </m:math>
+      </equation>
+      <para id="id336337">which attains its minimum at <m:math overflow="scroll"><m:mrow><m:mi>θ</m:mi><m:mo>=</m:mo><m:mn>0</m:mn><m:mo>.</m:mo></m:mrow></m:math></para>
+      <para id="id336357">Next, we varied the Regular Triangular Prism by taking the triangular base and expanding it, to form a tetrahedron with the top sliced off:</para>
+      <para id="id336363">
+        <figure id="id336366">
+          <media id="id336366_media" alt="">
+            <image mime-type="image/png" src="../../media/RTP_V2.png" id="id336366_onlineimage" width="335"><!-- NOTE: attribute width changes image size online (pixels). original width is 335. --></image>
+            <image for="pdf" mime-type="application/postscript" src="../../media/RTP_V2.eps" id="id336366_printimage" print-width="1in">
+              <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+            </image>
+          </media>
+        </figure>
+      </para>
+      <para id="id336376">Taking the base to be equilateral triangle, then if <m:math overflow="scroll"><m:mrow><m:mn>1</m:mn><m:mo>+</m:mo><m:mi>n</m:mi></m:mrow></m:math> was the length of an edge of the base, then we have for the variation <emphasis effect="italics">P<sub>n</sub></emphasis></para>
+      <equation id="id336408">
+        <m:math overflow="scroll" mode="display">
+          <m:mrow>
+            <m:mi mathvariant="script">F</m:mi>
+            <m:mrow>
+              <m:mo>(</m:mo>
+              <m:msub>
+                <m:mi>P</m:mi>
+                <m:mi>n</m:mi>
+              </m:msub>
+              <m:mo>)</m:mo>
+            </m:mrow>
+            <m:mo>=</m:mo>
+            <m:mfrac>
+              <m:msup>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mn>6</m:mn>
+                  <m:mo>+</m:mo>
+                  <m:mn>3</m:mn>
+                  <m:mi>n</m:mi>
+                  <m:mo>+</m:mo>
+                  <m:mn>3</m:mn>
+                  <m:msqrt>
+                    <m:mrow>
+                      <m:mrow>
+                        <m:mo>(</m:mo>
+                        <m:mfrac>
+                          <m:mn>3</m:mn>
+                          <m:mn>4</m:mn>
+                        </m:mfrac>
+                        <m:mo>)</m:mo>
+                      </m:mrow>
+                      <m:msup>
+                        <m:mi>n</m:mi>
+                        <m:mn>2</m:mn>
+                      </m:msup>
+                      <m:mo>+</m:mo>
+                      <m:mn>1</m:mn>
+                    </m:mrow>
+                  </m:msqrt>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mn>3</m:mn>
+              </m:msup>
+              <m:mrow>
+                <m:mfrac>
+                  <m:msqrt>
+                    <m:mn>3</m:mn>
+                  </m:msqrt>
+                  <m:mrow>
+                    <m:mn>12</m:mn>
+                    <m:mi>n</m:mi>
+                  </m:mrow>
+                </m:mfrac>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:msup>
+                    <m:mrow>
+                      <m:mo>(</m:mo>
+                      <m:mn>1</m:mn>
+                      <m:mo>+</m:mo>
+                      <m:mi>n</m:mi>
+                      <m:mo>)</m:mo>
+                    </m:mrow>
+                    <m:mn>3</m:mn>
+                  </m:msup>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mo>-</m:mo>
+                <m:mn>1</m:mn>
+              </m:mrow>
+            </m:mfrac>
+          </m:mrow>
+        </m:math>
+      </equation>
+      <para id="id336526">which has minimum at <m:math overflow="scroll"><m:mrow><m:mi>n</m:mi><m:mo>=</m:mo><m:mn>0</m:mn><m:mo>,</m:mo></m:mrow></m:math> when the figure is a Regular Triangular Prism.</para>
+      <para id="id336549">These calculations are further evidence that the Regular Triangular Prism is the proposed minimizer. On the other hand, taking variations of the cube showed that it is a pseudo-minimizer. First, we vary the cube by lifting the top via two vertices:</para>
+      <para id="id336556">
+        <figure id="id336559">
+          <media id="id336559_media" alt="">
+            <image mime-type="image/png" src="../../media/CUBE_V1.png" id="id336559_onlineimage" width="282"><!-- NOTE: attribute width changes image size online (pixels). original width is 282. --></image>
+            <image for="pdf" mime-type="application/postscript" src="../../media/CUBE_V1.eps" id="id336559_printimage" print-width="1in">
+              <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+            </image>
+          </media>
+        </figure>
+      </para>
+      <para id="id336570">When <emphasis effect="italics">θ</emphasis> is the angle between the old top and the new one, then for the variation <emphasis effect="italics">P<sub>θ</sub></emphasis> we have</para>
+      <equation id="id336598">
+        <m:math overflow="scroll" mode="display">
+          <m:mrow>
+            <m:mi mathvariant="script">F</m:mi>
+            <m:mrow>
+              <m:mo>(</m:mo>
+              <m:msub>
+                <m:mi>P</m:mi>
+                <m:mi>θ</m:mi>
+              </m:msub>
+              <m:mo>)</m:mo>
+            </m:mrow>
+            <m:mo>=</m:mo>
+            <m:mfrac>
+              <m:msup>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mn>10</m:mn>
+                  <m:mo>+</m:mo>
+                  <m:mn>2</m:mn>
+                  <m:mo form="prefix">sec</m:mo>
+                  <m:mi>θ</m:mi>
+                  <m:mo>+</m:mo>
+                  <m:mn>2</m:mn>
+                  <m:mo form="prefix">tan</m:mo>
+                  <m:mi>θ</m:mi>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mn>3</m:mn>
+              </m:msup>
+              <m:mrow>
+                <m:mn>1</m:mn>
+                <m:mo>+</m:mo>
+                <m:mfrac>
+                  <m:mrow>
+                    <m:mo form="prefix">tan</m:mo>
+                    <m:mi>θ</m:mi>
+                  </m:mrow>
+                  <m:mn>2</m:mn>
+                </m:mfrac>
+              </m:mrow>
+            </m:mfrac>
+            <m:mo>,</m:mo>
+          </m:mrow>
+        </m:math>
+      </equation>
+      <para id="id336683">which has a minimum at <m:math overflow="scroll"><m:mrow><m:mi>θ</m:mi><m:mo>=</m:mo><m:mn>0</m:mn><m:mo>.</m:mo></m:mrow></m:math></para>
+      <para id="id336705">Next, we varied the cube by fixing a vertex, lifting the diagonal vertex a certain height and the two adjacent vertices by half that height:</para>
+      <para id="id336711">
+        <figure id="id336714">
+          <media id="id336714_media" alt="">
+            <image mime-type="image/png" src="../../media/CUBE_V2.png" id="id336714_onlineimage" width="282"><!-- NOTE: attribute width changes image size online (pixels). original width is 282. --></image>
+            <image for="pdf" mime-type="application/postscript" src="../../media/CUBE_V2.eps" id="id336714_printimage" print-width="1in">
+              <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+            </image>
+          </media>
+        </figure>
+      </para>
+      <para id="id336725">In this case, when <emphasis effect="italics">θ</emphasis> was the angle between the old top and the new one, then for the variation <emphasis effect="italics">P<sub>θ</sub></emphasis> we have:</para>
+      <equation id="id336753">
+        <m:math overflow="scroll" mode="display">
+          <m:mrow>
+            <m:mi mathvariant="script">F</m:mi>
+            <m:mrow>
+              <m:mo>(</m:mo>
+              <m:msub>
+                <m:mi>P</m:mi>
+                <m:mi>θ</m:mi>
+              </m:msub>
+              <m:mo>)</m:mo>
+            </m:mrow>
+            <m:mo>=</m:mo>
+            <m:mfrac>
+              <m:msup>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mn>8</m:mn>
+                  <m:mo>+</m:mo>
+                  <m:mn>2</m:mn>
+                  <m:msqrt>
+                    <m:mn>2</m:mn>
+                  </m:msqrt>
+                  <m:mo form="prefix">tan</m:mo>
+                  <m:mi>θ</m:mi>
+                  <m:mo>+</m:mo>
+                  <m:mfrac>
+                    <m:mn>4</m:mn>
+                    <m:msqrt>
+                      <m:mn>2</m:mn>
+                    </m:msqrt>
+                  </m:mfrac>
+                  <m:msqrt>
+                    <m:mrow>
+                      <m:mfrac>
+                        <m:mn>1</m:mn>
+                        <m:mrow>
+                          <m:msup>
+                            <m:mo form="prefix">cos</m:mo>
+                            <m:mn>2</m:mn>
+                          </m:msup>
+                          <m:mi>θ</m:mi>
+                        </m:mrow>
+                      </m:mfrac>
+                      <m:mrow>
+                        <m:mo>+</m:mo>
+                        <m:mn>1</m:mn>
+                        <m:mo>)</m:mo>
+                      </m:mrow>
+                    </m:mrow>
+                  </m:msqrt>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mn>3</m:mn>
+              </m:msup>
+              <m:mrow>
+                <m:mn>1</m:mn>
+                <m:mo>+</m:mo>
+                <m:mfrac>
+                  <m:msqrt>
+                    <m:mn>2</m:mn>
+                  </m:msqrt>
+                  <m:mn>2</m:mn>
+                </m:mfrac>
+                <m:mo form="prefix">tan</m:mo>
+                <m:mi>θ</m:mi>
+              </m:mrow>
+            </m:mfrac>
+            <m:mo>,</m:mo>
+          </m:mrow>
+        </m:math>
+      </equation>
+      <para id="id336869">which has minimum at <m:math overflow="scroll"><m:mrow><m:mi>θ</m:mi><m:mo>=</m:mo><m:mn>0</m:mn><m:mo>.</m:mo></m:mrow></m:math></para>
+      <para id="id336891">The next variation of the cube is collapsing two of the sides together, so as to form a shape approaching the Regular Triangular Prism:</para>
+      <para id="id336897">
+        <figure id="id336900">
+          <media id="id336900_media" alt="">
+            <image mime-type="image/png" src="../../media/CUBE_V3.png" id="id336900_onlineimage" width="281"><!-- NOTE: attribute width changes image size online (pixels). original width is 281. --></image>
+            <image for="pdf" mime-type="application/postscript" src="../../media/CUBE_V3.eps" id="id336900_printimage" print-width="1in">
+              <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+            </image>
+          </media>
+        </figure>
+      </para>
+      <para id="id336911">When <emphasis effect="italics">θ</emphasis> is the angle of collapse, then</para>
+      <equation id="id336924">
+        <m:math overflow="scroll" mode="display">
+          <m:mrow>
+            <m:mi mathvariant="script">F</m:mi>
+            <m:mrow>
+              <m:mo>(</m:mo>
+              <m:msub>
+                <m:mi>P</m:mi>
+                <m:mi>θ</m:mi>
+              </m:msub>
+              <m:mo>)</m:mo>
+            </m:mrow>
+            <m:mo>=</m:mo>
+            <m:mfrac>
+              <m:msup>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mn>8</m:mn>
+                  <m:mo>+</m:mo>
+                  <m:mfrac>
+                    <m:mn>4</m:mn>
+                    <m:mrow>
+                      <m:mo form="prefix">cos</m:mo>
+                      <m:mi>θ</m:mi>
+                    </m:mrow>
+                  </m:mfrac>
+                  <m:mo>-</m:mo>
+                  <m:mn>4</m:mn>
+                  <m:mo form="prefix">tan</m:mo>
+                  <m:mi>θ</m:mi>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mn>3</m:mn>
+              </m:msup>
+              <m:mrow>
+                <m:mn>1</m:mn>
+                <m:mo>-</m:mo>
+                <m:mo form="prefix">tan</m:mo>
+                <m:mi>θ</m:mi>
+              </m:mrow>
+            </m:mfrac>
+            <m:mo>,</m:mo>
+          </m:mrow>
+        </m:math>
+      </equation>
+      <para id="id337007">which has minimum at <m:math overflow="scroll"><m:mrow><m:mi>θ</m:mi><m:mo>=</m:mo><m:mn>0</m:mn><m:mo>,</m:mo></m:mrow></m:math> when the figure is a cube. Observe that although the figure with <m:math overflow="scroll"><m:mrow><m:mi>θ</m:mi><m:mo>=</m:mo><m:mfrac><m:mi>π</m:mi><m:mn>6</m:mn></m:mfrac></m:mrow></m:math> is the Regular Triangular Prism, <m:math overflow="scroll"><m:mrow><m:mi mathvariant="script">F</m:mi><m:mrow><m:mo>(</m:mo><m:msub><m:mi>P</m:mi><m:mi>θ</m:mi></m:msub><m:mo>)</m:mo></m:mrow><m:msub><m:mrow><m:mo>|</m:mo></m:mrow><m:mfrac><m:mi>π</m:mi><m:mn>6</m:mn></m:mfrac></m:msub></m:mrow></m:math> with the formula given above is not <m:math overflow="scroll"><m:mrow><m:mi mathvariant="script">F</m:mi><m:mo>(</m:mo><m:mi>R</m:mi><m:mi>T</m:mi><m:mi>P</m:mi><m:mo>)</m:mo><m:mo>.</m:mo></m:mrow></m:math> This is because when <m:math overflow="scroll"><m:mrow><m:mi>θ</m:mi><m:mo>=</m:mo><m:mfrac><m:mi>π</m:mi><m:mn>6</m:mn></m:mfrac><m:mo>,</m:mo></m:mrow></m:math> two vertical edges have collapsed into one, and our formula above double counts these edges at <m:math overflow="scroll"><m:mrow><m:mi>θ</m:mi><m:mo>=</m:mo><m:mfrac><m:mi>π</m:mi><m:mn>6</m:mn></m:mfrac><m:mo>.</m:mo></m:mrow></m:math></para>
+    </section>
+    <section id="cid4">
+      <title>Symmetrization of Polyhedra</title>
+      <para id="id337164">The next method we considered is derived from the Isoperimetric Problem, which asks to find the figure in the plane with unit area and whose boundary curve has the smallest length. The solution, of course, is the disk of unit area. An argument for this is via symmetrization. That is, take a region <emphasis effect="italics">A</emphasis> in the plane and draw a line <emphasis effect="italics">ℓ</emphasis> which cuts <emphasis effect="italics">A</emphasis> into two connected regions <m:math overflow="scroll"><m:mrow><m:msub><m:mi>A</m:mi><m:mn>1</m:mn></m:msub><m:mo>,</m:mo><m:msub><m:mi>A</m:mi><m:mn>2</m:mn></m:msub></m:mrow></m:math> both with area <m:math overflow="scroll"><m:mrow><m:mn>1</m:mn><m:mo>/</m:mo><m:mn>2</m:mn><m:mo>.</m:mo></m:mrow></m:math> Suppose then that the part of the boundary curve of <emphasis effect="italics">A</emphasis> corresponding to <emphasis effect="italics">A<sub>1</sub></emphasis> has smaller length than that of <m:math overflow="scroll"><m:mrow><m:msub><m:mi>A</m:mi><m:mn>2</m:mn></m:msub><m:mo>,</m:mo></m:mrow></m:math> that is</para>
+      <equation id="id337279">
+        <m:math overflow="scroll" mode="display">
+          <m:mrow>
+            <m:mtext>length</m:mtext>
+            <m:mrow>
+              <m:mo>(</m:mo>
+              <m:mi>∂</m:mi>
+              <m:mi>A</m:mi>
+              <m:mo>∩</m:mo>
+              <m:mi>∂</m:mi>
+              <m:msub>
+                <m:mi>A</m:mi>
+                <m:mn>1</m:mn>
+              </m:msub>
+              <m:mo>)</m:mo>
+            </m:mrow>
+            <m:mo>=</m:mo>
+            <m:mtext>min</m:mtext>
+            <m:mrow>
+              <m:mo>{</m:mo>
+              <m:mtext>length</m:mtext>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>∂</m:mi>
+                <m:mi>A</m:mi>
+                <m:mo>∩</m:mo>
+                <m:mi>∂</m:mi>
+                <m:msub>
+                  <m:mi>A</m:mi>
+                  <m:mn>1</m:mn>
+                </m:msub>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>,</m:mo>
+              <m:mtext>length</m:mtext>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>∂</m:mi>
+                <m:mi>A</m:mi>
+                <m:mo>∩</m:mo>
+                <m:mi>∂</m:mi>
+                <m:msub>
+                  <m:mi>A</m:mi>
+                  <m:mn>2</m:mn>
+                </m:msub>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>}</m:mo>
+            </m:mrow>
+            <m:mo>.</m:mo>
+          </m:mrow>
+        </m:math>
+      </equation>
+      <para id="id337376">Consider the new region <m:math overflow="scroll"><m:mrow><m:msub><m:mi>A</m:mi><m:mn>1</m:mn></m:msub><m:mo>∪</m:mo><m:msub><m:mi>R</m:mi><m:mi>ℓ</m:mi></m:msub><m:mrow><m:mo>(</m:mo><m:msub><m:mi>A</m:mi><m:mn>1</m:mn></m:msub><m:mo>)</m:mo></m:mrow></m:mrow></m:math> where <m:math overflow="scroll"><m:mrow><m:msub><m:mi>R</m:mi><m:mi>ℓ</m:mi></m:msub><m:mrow><m:mo>(</m:mo><m:msub><m:mi>A</m:mi><m:mn>1</m:mn></m:msub><m:mo>)</m:mo></m:mrow></m:mrow></m:math> is the reflection of <emphasis effect="italics">A<sub>1</sub></emphasis> across the line <m:math overflow="scroll"><m:mrow><m:mi>ℓ</m:mi><m:mo>.</m:mo></m:mrow></m:math> Then <m:math overflow="scroll"><m:mrow><m:msub><m:mi>A</m:mi><m:mn>1</m:mn></m:msub><m:mo>∪</m:mo><m:msub><m:mi>R</m:mi><m:mi>ℓ</m:mi></m:msub><m:mrow><m:mo>(</m:mo><m:msub><m:mi>A</m:mi><m:mn>1</m:mn></m:msub><m:mo>)</m:mo></m:mrow></m:mrow></m:math> has unit area, but the length of the boundary curve of <m:math overflow="scroll"><m:mrow><m:msub><m:mi>A</m:mi><m:mn>1</m:mn></m:msub><m:mo>∪</m:mo><m:msub><m:mi>R</m:mi><m:mi>ℓ</m:mi></m:msub><m:mrow><m:mo>(</m:mo><m:msub><m:mi>A</m:mi><m:mn>1</m:mn></m:msub><m:mo>)</m:mo></m:mrow></m:mrow></m:math> is less than or equal to that of <m:math overflow="scroll"><m:mrow><m:mi>A</m:mi><m:mo>.</m:mo></m:mrow></m:math> Hence, if <emphasis effect="italics">A</emphasis> is a solution to the Isoperimetric Problem, then the claim is that <emphasis effect="italics">A</emphasis> must be symmetric across every line which slices <emphasis effect="italics">A</emphasis> into two regions of equal area, and so <emphasis effect="italics">A</emphasis> must be a disk.</para>
+      <para id="id337600">Although the solution to the Isoperimetric Problem is far more subtle than the argument given above, we nonetheless take the argument above as an analogy. That is, given a polyhedra <m:math overflow="scroll"><m:mrow><m:mi>P</m:mi><m:mo>,</m:mo></m:mrow></m:math> we slice <emphasis effect="italics">P</emphasis> via a plane <emphasis effect="italics">H</emphasis> which cuts <emphasis effect="italics">P</emphasis> into two polyhedra <m:math overflow="scroll"><m:mrow><m:msub><m:mi>P</m:mi><m:mn>1</m:mn></m:msub><m:mo>,</m:mo><m:msub><m:mi>P</m:mi><m:mn>2</m:mn></m:msub></m:mrow></m:math> with equal volume. Then letting <emphasis effect="italics">P<sub>1</sub></emphasis> have the smaller total edge length, where we only sum the edges which correspond to edges of <m:math overflow="scroll"><m:mrow><m:mi>P</m:mi><m:mo>,</m:mo></m:mrow></m:math> then the polyhedron <m:math overflow="scroll"><m:mrow><m:msub><m:mi>P</m:mi><m:mn>1</m:mn></m:msub><m:mo>∪</m:mo><m:msub><m:mi>R</m:mi><m:mi>H</m:mi></m:msub><m:mrow><m:mo>(</m:mo><m:msub><m:mi>P</m:mi><m:mn>1</m:mn></m:msub><m:mo>)</m:mo></m:mrow><m:mo>,</m:mo></m:mrow></m:math> where <m:math overflow="scroll"><m:mrow><m:msub><m:mi>R</m:mi><m:mi>H</m:mi></m:msub><m:mrow><m:mo>(</m:mo><m:msub><m:mi>P</m:mi><m:mn>1</m:mn></m:msub><m:mo>)</m:mo></m:mrow></m:mrow></m:math> is the reflection of <emphasis effect="italics">P<sub>1</sub></emphasis> across <m:math overflow="scroll"><m:mrow><m:mi>H</m:mi><m:mo>,</m:mo></m:mrow></m:math> will have <m:math overflow="scroll"><m:mrow><m:mi>V</m:mi><m:mrow><m:mo>(</m:mo><m:msub><m:mi>P</m:mi><m:mn>1</m:mn></m:msub><m:mo>∪</m:mo><m:msub><m:mi>R</m:mi><m:mi>H</m:mi></m:msub><m:mrow><m:mo>(</m:mo><m:msub><m:mi>P</m:mi><m:mn>1</m:mn></m:msub><m:mo>)</m:mo></m:mrow><m:mo>)</m:mo></m:mrow><m:mo>=</m:mo><m:mi>V</m:mi><m:mrow><m:mo>(</m:mo><m:mi>P</m:mi><m:mo>)</m:mo></m:mrow></m:mrow></m:math> and <m:math overflow="scroll"><m:mrow><m:mi>E</m:mi><m:mrow><m:mo>(</m:mo><m:msub><m:mi>P</m:mi><m:mn>1</m:mn></m:msub><m:mo>∪</m:mo><m:msub><m:mi>R</m:mi><m:mi>H</m:mi></m:msub><m:mrow><m:mo>(</m:mo><m:msub><m:mi>P</m:mi><m:mn>1</m:mn></m:msub><m:mo>)</m:mo></m:mrow><m:mo>)</m:mo></m:mrow><m:mo>≤</m:mo><m:mi>E</m:mi><m:mrow><m:mo>(</m:mo><m:mi>P</m:mi><m:mo>)</m:mo></m:mrow><m:mo>,</m:mo></m:mrow></m:math> assuming that no new edges have been introduced when we took the reflection of <emphasis effect="italics">P<sub>1</sub></emphasis> across <emphasis effect="italics">H</emphasis> and merged it with <m:math overflow="scroll"><m:mrow><m:msub><m:mi>P</m:mi><m:mn>1</m:mn></m:msub><m:mo>.</m:mo></m:mrow></m:math></para>
+      <para id="id337948">The difficulty is finding planes given a polyhedron <emphasis effect="italics">P</emphasis> which halve the volume and which produce new polyhedra with no new edges introduced at the plane <emphasis effect="italics">H</emphasis> when we reflect the two halves across <m:math overflow="scroll"><m:mrow><m:mi>H</m:mi><m:mo>.</m:mo></m:mrow></m:math> We call such a plane a <emphasis effect="italics">bisecting plane</emphasis> of <m:math overflow="scroll"><m:mrow><m:mi>P</m:mi><m:mo>.</m:mo></m:mrow></m:math> If <emphasis effect="italics">P</emphasis> and <emphasis effect="italics">H</emphasis> intersect along a face of <emphasis effect="italics">P</emphasis> which is not perpendicular to <emphasis effect="italics">H</emphasis>, then a new edge will be introduced when we reflect. For the Regular Triangular Prism, there are only two such planes, and the Regular Triangular Prism is symmetric under the reflection across these planes:</para>
+      <para id="id338040">
+        <figure id="id338043">
+          <media id="id338043_media" alt="">
+            <image mime-type="image/png" src="../../media/RTP_S.png" id="id338043_onlineimage" width="243"><!-- NOTE: attribute width changes image size online (pixels). original width is 243. --></image>
+            <image for="pdf" mime-type="application/postscript" src="../../media/RTP_S.eps" id="id338043_printimage" print-width="1in">
+              <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+            </image>
+          </media>
+        </figure>
+      </para>
+      <para id="id338053">There are only two such planes for the cube</para>
+      <para id="id338057">
+        <figure id="id338060">
+          <media id="id338060_media" alt="">
+            <image mime-type="image/png" src="../../media/CUBE_S.png" id="id338060_onlineimage" width="281"><!-- NOTE: attribute width changes image size online (pixels). original width is 281. --></image>
+            <image for="pdf" mime-type="application/postscript" src="../../media/CUBE_S.eps" id="id338060_printimage" print-width="1in">
+              <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+            </image>
+          </media>
+        </figure>
+      </para>
+      <para id="id338070">In general, the platonic solids are symmetric across their bisecting planes.</para>
+      <para id="id338074">If we can show that the Regular Triangular Prism can be obtained from an arbitrary polyhedron with unit volume through this symmetrization with bisecting planes, then we would show that the Regular Triangular Prism is a solution to Melzak's Problem, given the existence of a solution. Hence, it is unfortunate that the Platonic Solids are already symmetric. We thereby consider the following operation on a polyhedron <emphasis effect="italics">P</emphasis> with unit volume. Take a plane <emphasis effect="italics">H</emphasis> that bisect the volume of <m:math overflow="scroll"><m:mrow><m:mi>P</m:mi><m:mo>.</m:mo></m:mrow></m:math> Then choosing one of the two halves <emphasis effect="italics">P<sub>1</sub></emphasis> and <emphasis effect="italics">P<sub>2</sub></emphasis> of <m:math overflow="scroll"><m:mrow><m:mi>P</m:mi><m:mo>,</m:mo></m:mrow></m:math> we merge <emphasis effect="italics">P<sub>j</sub></emphasis> with itself along any face that does not create new edges along the merging face. This method allows one to create distinct polyhedra even if <emphasis effect="italics">P</emphasis> is already symmetric about all bisecting planes. For example, the cube can be made into a triangular prism consisting of three squares and an isosceles triangle:</para>
+      <para id="id338180">
+        <figure id="id338183">
+          <media id="id338183_media" alt="">
+            <image mime-type="image/png" src="../../media/CUBE_MS1.png" id="id338183_onlineimage" width="281"><!-- NOTE: attribute width changes image size online (pixels). original width is 281. --></image>
+            <image for="pdf" mime-type="application/postscript" src="../../media/CUBE_MS1.eps" id="id338183_printimage" print-width="1in">
+              <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+            </image>
+          </media>
+        </figure>
+        <m:math overflow="scroll">
+          <m:mo>⇒</m:mo>
+        </m:math>
+        <figure id="id338203">
+          <media id="id338203_media" alt="">
+            <image mime-type="image/png" src="../../media/CUBE_MS2.png" id="id338203_onlineimage" width="280"><!-- NOTE: attribute width changes image size online (pixels). original width is 280. --></image>
+            <image for="pdf" mime-type="application/postscript" src="../../media/CUBE_MS2.eps" id="id338203_printimage" print-width="1in">
+              <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+            </image>
+          </media>
+        </figure>
+      </para>
+    </section>
+    <section id="cid5">
+      <title>Future Work</title>
+      <para id="id338222">The method of symmetrization remains to be fully explored. Specifically, given a polyhedra <emphasis effect="italics">P</emphasis> which is symmetric across a plane <m:math overflow="scroll"><m:mrow><m:mi>H</m:mi><m:mo>,</m:mo></m:mrow></m:math> we ask if a comparison of the edge length of <emphasis effect="italics">P</emphasis> can be made to the prism formed by the cross section <m:math overflow="scroll"><m:mrow><m:mi>P</m:mi><m:mo>∩</m:mo><m:mi>H</m:mi><m:mo>.</m:mo></m:mrow></m:math> This may involve introducing variations of polyhedra in order to show that near the slice, a prism is optimal.</para>
+      <para id="id338275">For the method of variations of polyhedra, we must investigate whether pseudo-minimizers have any special properties, or perhaps show that the only pseudo-minimizers are known polyhedra such as the platonic solids and the right regular prisms. One may show that prisms or right prisms are more efficient that all other figures, since it has already been shown that the Regular Triangular Prism is best among prisms. However, it would be easier to show that the Regular Triangular Prism in particular is more efficient than all other figures instead of considering an arbitrary right prism; hence the classical approach of pointing out improvements to large classes of polyhedra (aside from prisms) may not be effective. A non-variational approach may be more promising.</para>
+      <para id="id338286">A computational approach using technology also remains to be taken. We seek to write a computer program to bisect and then reflect polyhedra, and then perhaps take variations. Thus far, our only use of computers has been to plot the graphs of <m:math overflow="scroll"><m:mrow><m:mi mathvariant="script">F</m:mi><m:mo>(</m:mo><m:msub><m:mi>P</m:mi><m:mi>t</m:mi></m:msub><m:mo>)</m:mo></m:mrow></m:math> for a variation <emphasis effect="italics">P<sub>t</sub></emphasis> for a given polyhedron <m:math overflow="scroll"><m:mrow><m:mi>P</m:mi><m:mo>.</m:mo></m:mrow></m:math></para>
+    </section>
+    <section id="cid6">
+      <title>Summary</title>
+      <para id="id338353">This report summarizes work done as part of the Calculus of Variations PFUG under Rice University's VIGRE program. VIGRE is a program of Vertically Integrated Grants for Research and Education in the Mathematical Sciences under the direction of the National Science Foundation. A PFUG is a group of Postdocs, Faculty, Undergraduates and Graduate students formed round the study of a common problem.</para>
+      <para id="id338359">This module introduces an overview of Melzak's Problem, and discusses two methods for studying the problem: the method of Variations and the method of Symmetrization. Examples of each method applied to the cube and the Regular Triangular Prism are presented, and a discussion on future directions is provided.</para>
+    </section>
+    <section id="cid7">
+      <title>Acknowledgements</title>
+      <para id="id338377">This Connexions module describes work conducted as part of Rice University's VIGRE program, supported by National Science Foundation grant DMS-0739420. We would like to thank Professor Bob Hardt for leading our PFUG, and we thank the undergraduate members Siegfried Bilstein, Kirby Fears, Michael Jauch, James Katz, and Caroline Nganga.</para>
+    </section>
+    <section id="cid8">
+      <title>Bibliography</title>
+      <para id="id338393">[B01] S. Berger, <emphasis effect="italics">Edge Length Minimizing Polyhedra</emphasis>, Thesis, Rice University, (2001)</para>
+      <para id="id338405">[M65] Z.A. Melzack, <emphasis effect="italics">Problems connected with convexity</emphasis>, Canad. Math. Bull. <emphasis effect="bold">8</emphasis>, (1965), 565-573.</para>
+    </section>
+  </content>
+</document>

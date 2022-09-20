@@ -1,0 +1,338 @@
+<document xmlns="http://cnx.rice.edu/cnxml" xmlns:m="http://www.w3.org/1998/Math/MathML" xmlns:md="http://cnx.rice.edu/mdml" xmlns:bib="http://bibtexml.sf.net/">
+  <title>LaTeX template for VIGRE modules: general guidelines</title>
+  <metadata><md:content-id>undefined</md:content-id><md:title/><md:uuid>50b4291a-f9d9-4c7f-b100-72bf4efa7fc5</md:uuid>
+</metadata>
+  <content>
+    <section id="cid1">
+      <title>Introduction</title>
+      <para id="id2253706">Connexions allows one to import content directly from
+LaTeX files. This document provides a template to help
+VIGRE research groups at Rice University draft documents
+that can be readily converted from LaTeX into Connexions.</para>
+      <section id="uid1">
+        <title>Purpose of this Template</title>
+        <para id="id2253720">The present template is designed to provide very rudimentary
+guidance on how to write LaTeX source that can easily be
+converted into Connexions. Here we use only one add-on packages,
+graphicx
+, which we use to include graphics.
+A number of additional packages are also supported; see
+http://www-sop.inria.fr/apics/tralics/packages.html
+.
+Given the importance of citing one's sources in research work,
+we also include bibliography references in this file.</para>
+        <para id="id2253744">This small document makes no effort to teach basic LaTeX skills.
+Many resources are available for this,
+such as the fundamental book by Lamport <link target-id="bid0"/>.
+Donald Knuth, the author of the underlying TeX program,
+provides a treasure-trove of information not only about
+the technical aspects of TeX, but also about good mathematical
+typesetting style <link target-id="bid1"/>.</para>
+      </section>
+      <section id="uid2">
+        <title>General Instructions for Conversion</title>
+        <para id="id2253778">Connexions provides online instructions that guide you through the
+process of uploading your LaTeX source files. At present, you must
+use the Firefox or Internet Explorer browsers to properly view and edit
+Connexions content.
+To upload files, you will also need to create your own Connexions account;
+see http://cnx.org/join_form
+ for details.</para>
+        <para id="id2253792">To convert your LaTeX document, you first need to create a .zip
+
+file that contains your .tex
+ source files,
+your .bib
+ file if you have a bibliography,
+and any image files you include in your document.
+Note: the names of your LaTeX source file and zip file must have the
+same stem. For example, foo.tex
+ should be packaged into foo.zip
+.
+Now log-in to Connexions, go to your Workspace,
+create a new module with MathML support, and fill-in the basic
+“Metadata,” such as the title and summary. (The top of this LaTeX
+template contains some a basic text for the Summary: please copy, paste,
+and manually edit this text in the Summary box.)
+Finally, you arrive at the “Edit Text” window, with options to
+import from various file formats. Choose “LaTeX”, and then select
+the .zip
+ file that contains your source files. Connexions
+commences with the conversion procedure, and in a few moments
+you should be presented with a translated version of your
+LaTeX document, in a format that allows for further edits
+directly in Connexions.
+You should proof-read the conversion to make sure all text
+and equations appear as you intended.
+When satisfied, you can preview and publish your document.</para>
+      </section>
+    </section>
+    <section id="cid2">
+      <title>Rules for Converting LaTeX Source</title>
+      <para id="id2253861">Connexions generally does a fine job translating LaTeX source
+code into the native Connexions mark-up language.
+However, one may need to adapt one's usual typesetting habits
+to work around a few idiosyncrasies.
+Firstly, one should not invest effort in adjusting page margins,
+line spacing, and fonts: the converter will strip away much of
+this veneer and replace it with the standard Connexions stylings.
+Equations will not be converted into graphics (as is common
+in LaTeX to HTML conversion), but will rather be translated
+into MathML fonts that can be subsequently edited in Connexions.
+Do not include a title or abstract in your LaTeX document: these
+must be entered into Connexions manually when you set up your module.</para>
+      <para id="id2253876">The Connexions converter will not properly handle several LaTeX commands,
+as noted in the online help
+(http://cnx.org/help/UsingLaTeX
+).</para>
+      <list id="id2253888" list-type="bulleted">
+        <item id="uid3">The \mbox
+ command is not supported.
+</item>
+        <item id="uid4">Nested tables are not supported.
+</item>
+        <item id="uid5">LaTeX allows functions like \sqrt
+ to be followed by a
+single argument without brackets, e.g., \sqrt\pi
+.
+The Connexions translator misses this syntax; one instead
+needs to use brackets \sqrt{\pi}
+.
+</item>
+      </list>
+      <section id="uid6">
+        <title>Future Editing</title>
+        <para id="id2253952">You will likely want to make changes to your file at some point after you
+have uploaded the LaTeX document into Connexions.
+Should you edit the LaTeX document, then re-import, or should you
+alter the code directly in Connexions?
+If you have major mathematical edits, it may well be easiest to directly
+alter the LaTeX source. Beware that when you upload, any changes that
+you made to the previous version directly in Connexions will be overwritten.
+This is not such a concern if you can make all the edits you desire
+directly in LaTeX; however, this is not always the case: some things
+must be done in Connexions. (For example, see the comments about
+the verbatim
+ environment in <link target-id="uid12">"Incorporating code"</link> below.)</para>
+      </section>
+      <section id="uid7">
+        <title>Importing Equations</title>
+        <para id="id2253984">We list a few sample equations to test the ability of the converter.
+For example, we have the Pythagorean Theorem, <m:math><m:mrow><m:msup><m:mi>a</m:mi><m:mn>2</m:mn></m:msup><m:mo>+</m:mo><m:msup><m:mi>b</m:mi><m:mn>2</m:mn></m:msup><m:mo>=</m:mo><m:msup><m:mi>c</m:mi><m:mn>2</m:mn></m:msup></m:mrow></m:math>.
+This is an example of an <emphasis>inline</emphasis> equation, as is the integral
+<m:math><m:mrow><m:msubsup><m:mo>∫</m:mo><m:mn>0</m:mn><m:mi>∞</m:mi></m:msubsup><m:msup><m:mi>e</m:mi><m:mrow><m:mo>-</m:mo><m:msup><m:mi>x</m:mi><m:mn>2</m:mn></m:msup></m:mrow></m:msup><m:mspace width="0.166667em"/><m:mi>d</m:mi><m:mi>x</m:mi></m:mrow></m:math>.
+The same integral can also be typeset as a <emphasis>displayed</emphasis> equation,</para>
+        <equation id="id2254089">
+          <m:math mode="display">
+            <m:mrow>
+              <m:msubsup>
+                <m:mo>∫</m:mo>
+                <m:mn>0</m:mn>
+                <m:mi>∞</m:mi>
+              </m:msubsup>
+              <m:msup>
+                <m:mi>e</m:mi>
+                <m:mrow>
+                  <m:mo>-</m:mo>
+                  <m:msup>
+                    <m:mi>x</m:mi>
+                    <m:mn>2</m:mn>
+                  </m:msup>
+                </m:mrow>
+              </m:msup>
+              <m:mspace width="0.166667em"/>
+              <m:mi>d</m:mi>
+              <m:mi>x</m:mi>
+              <m:mo>.</m:mo>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id2254135">To typeset a matrix, use the LaTeX array
+ environment:</para>
+        <equation id="id2254146">
+          <m:math mode="display">
+            <m:mrow>
+              <m:mi>A</m:mi>
+              <m:mo>=</m:mo>
+              <m:mfenced separators="" open="[" close="]">
+                <m:mtable>
+                  <m:mtr>
+                    <m:mtd>
+                      <m:mi>a</m:mi>
+                    </m:mtd>
+                    <m:mtd>
+                      <m:mi>b</m:mi>
+                    </m:mtd>
+                  </m:mtr>
+                  <m:mtr>
+                    <m:mtd>
+                      <m:mi>c</m:mi>
+                    </m:mtd>
+                    <m:mtd>
+                      <m:mi>d</m:mi>
+                    </m:mtd>
+                  </m:mtr>
+                </m:mtable>
+              </m:mfenced>
+              <m:mo>.</m:mo>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id2254188">(Note that the TeX \matrix
+ command does not properly translate.)</para>
+      </section>
+      <section id="uid8">
+        <title>A sample figure</title>
+        <para id="id2254206"><link target-id="uid9"/> shows the gap between consecutive
+prime numbers; see <link target-id="bid2"/>.
+Beware: though the original image was drawn in precise vector graphics, the
+converter has turned it into a bitmap of substantially diminished quality.
+Make sure you make your fonts large enough that they remain legible after
+the translation (unlike this figure).
+The translator also seems to place the figure directly after the reference,
+so the location of the figure in your Connexions document will generally
+differ from its placement in your LaTeX document (often for the better).
+Notice that if you choose the print the Connexions module as a .pdf
+
+file, the output will include the bitmapped image, rather than the sharp
+version in your original document.</para>
+        <figure id="uid9" orient="horizontal">
+          <media id="idm4710624" alt=""><image src="../../media/prime_gap.png" mime-type="image/png" width="492"/><image for="pdf" src="../../media/prime_gap.eps" mime-type="application/postscript" print-width="0.5"/></media>
+          <caption>The gap between consecutive prime numbers.</caption>
+        </figure>
+      </section>
+      <section id="uid10">
+        <title>A sample table</title>
+        <para id="id2253556"><link target-id="uid11"/> provides a list
+of the first seven Mersenne primes.
+(Beware: The Converter does not properly handle
+the caption command for tables. For example,
+if a caption precedes the table itself, as is the usual custom,
+the reference does not translate properly.
+Moreover, Connexions seems to draw boxes around all cells,
+regardless of the formatting in the LaTeX source.)</para>
+        <table id="uid11" summary="">
+          <tgroup cols="8">
+            <tbody>
+              <row>
+                <entry>
+                  <m:math>
+                    <m:mi>k</m:mi>
+                  </m:math>
+                </entry>
+                <entry>1</entry>
+                <entry>2</entry>
+                <entry>3</entry>
+                <entry>4</entry>
+                <entry>5</entry>
+                <entry>6</entry>
+                <entry>7</entry>
+              </row>
+              <row>
+                <entry><m:math><m:mi>k</m:mi></m:math>th Mersenne prime</entry>
+                <entry>3</entry>
+                <entry>7</entry>
+                <entry>31</entry>
+                <entry>127</entry>
+                <entry>8191</entry>
+                <entry>131071</entry>
+                <entry>524287</entry>
+              </row>
+            </tbody>
+          </tgroup>
+          <caption>Mersenne primes.</caption>
+        </table>
+      </section>
+      <section id="uid12">
+        <title>Incorporating code</title>
+        <para id="id2253656">You might naturally want to include small snippets of code with your report,
+which you would incorporate in LaTeX using the verbatim
+ environment.
+For example, the following MATLAB commands produce the Mersenne prime data
+given in <link target-id="uid11"/>.</para>
+        <para id="id2254785">  p=[1:20]';
+</para>
+        <para id="id2254795">  pmer = p(isprime(2.^p-1));
+</para>
+        <para id="id2254806">  disp([[1:length(pmer)]' 2.^pmer-1])
+</para>
+        <para id="id2254819">At present, the Connexions LaTeX translator does not properly handle
+the verbatim
+ environment, though this is expected to improve
+in an updated translator that will be available in a few months.
+In the meantime, it is best to leave code out of your LaTeX document,
+and paste it into Connexions manually as a &lt;code&gt;
+ block.</para>
+      </section>
+      <section id="uid13">
+        <title>Adding a Bibliography</title>
+        <para id="id2254849">Connexions works well with LaTeX's bibliography tool, BibTeX.
+This tool allows you to create a .bib
+ file that contains
+a database of papers and books that you regularly reference.
+For example, this template is accompanied by a file called
+mybibfile.bib
+ that contains the three references
+cited here.
+You add citations in your LaTeX document using the
+\cite
+ command. See Lamport <link target-id="bid0"/> for details.</para>
+      </section>
+      <section id="uid14">
+        <title>Acknowledgements</title>
+        <para id="id2254887">This Connexions module describes work conducted as part of Rice
+University's VIGRE program, supported by National Science Foundation
+grant DMS–0739420.</para>
+      </section>
+    </section>
+  </content>
+  <bib:file>
+    <bib:entry id="bid2">
+      <bib:article>
+<!--required fields-->
+        <bib:author>Huxley, M. N.</bib:author>
+        <bib:title>On the difference between consecutive primes</bib:title>
+        <bib:journal>Inventiones Math.</bib:journal>
+        <bib:year>1971</bib:year>
+<!--optional fields-->
+        <bib:volume>15</bib:volume>
+        <bib:number/>
+        <bib:pages>164–170</bib:pages>
+        <bib:month/>
+        <bib:note/>
+      </bib:article>
+    </bib:entry>
+    <bib:entry id="bid1">
+      <bib:book>
+<!--required fields-->
+        <bib:author>Knuth, Donald E.</bib:author>
+        <bib:title>The TeXbook</bib:title>
+        <bib:publisher>Addison–Wesley</bib:publisher>
+        <bib:year>1986</bib:year>
+<!--optional fields-->
+        <bib:volume/>
+        <bib:series/>
+        <bib:address>Reading, Massachusetts</bib:address>
+        <bib:edition/>
+        <bib:month/>
+        <bib:note/>
+      </bib:book>
+    </bib:entry>
+    <bib:entry id="bid0">
+      <bib:book>
+<!--required fields-->
+        <bib:author>Lamport, Leslie</bib:author>
+        <bib:title>LaTeX: A Document Preparation System</bib:title>
+        <bib:publisher>Addison–Wesley</bib:publisher>
+        <bib:year>1994</bib:year>
+<!--optional fields-->
+        <bib:volume/>
+        <bib:series/>
+        <bib:address>Reading, Massachusetts</bib:address>
+        <bib:edition/>
+        <bib:month/>
+        <bib:note/>
+      </bib:book>
+    </bib:entry>
+  </bib:file>
+</document>

@@ -1,0 +1,602 @@
+<document xmlns="http://cnx.rice.edu/cnxml" xmlns:m="http://www.w3.org/1998/Math/MathML" xmlns:md="http://cnx.rice.edu/mdml">
+  <title>Mean, Variance, and Histograms</title>
+  <metadata>
+  <md:content-id>m32493</md:content-id><md:title>Mean, Variance, and Histograms</md:title>
+  <md:abstract>This module introduces the concepts of mean, variance, and histograms.  This work was done as part of the TaTGAP program, a VIGRE PFUG that pairs Rice students with local high school students.  VIGRE is a program of Vertically Integrated Grants for Research and Education in the Mathematical Sciences under the direction of the National Science Foundation. A PFUG is a group of Postdocs, Faculty, Undergraduates and Graduate students formed around the study of a common problem.</md:abstract>
+  <md:uuid>f2163cc4-7a4f-4c66-baa1-faa5794b291e</md:uuid>
+</metadata>
+<featured-links>
+  <!-- WARNING! The 'featured-links' section is read only. Do not edit below.
+       Changes to the links section in the source will not be saved. -->
+    <link-group type="supplemental">
+      <link url="stat_moduleCNX.zip" strength="3">Zip file containing LaTeX Source and Image</link>
+    </link-group>
+  <!-- WARNING! The 'featured-links' section is read only. Do not edit above.
+       Changes to the links section in the source will not be saved. -->
+</featured-links>
+<content>
+    <para id="id99968">By the end of this module, you should be able to analyze large data sets.</para>
+    <para id="id99974">Key Concepts:</para>
+    <list id="id99979" display="block" list-type="enumerated">
+      <item id="uid1">EEG
+</item>
+      <item id="uid2">Mean
+</item>
+      <item id="uid3">Variance
+</item>
+      <item id="uid4">Standard Deviation
+</item>
+      <item id="uid5">Histogram
+</item>
+    </list>
+    <section id="cid1">
+      <title>Motivation from Epilepsy</title>
+      <para id="id100048">An <emphasis effect="bold">EEG</emphasis> (electroencephalogram) is a tool that tracks and records electrical activity (voltage) in the brain. Data from an EEG can be used to diagnose and monitor seizure disorders.</para>
+      <section id="uid6">
+        <title>Exercise 1.1</title>
+        <para id="id100066">Go to the webpage <link url="http://emedicine.medscape.com/article/1138154-media">EEG in Common Epilepsy Syndromes</link>. This page shows the EEG signals recorded from patients with various types of epilepsy. What do you notice about these signals, particularly media files 3, 5, 6, 9, and 10? Can you spot the period in the data where the seizures occur?</para>
+        <para id="id100079">While in some cases, it may be easy to recognize a seizure from a plot of EEG data, the EEG itself produces a large set of numbers corresponding to the voltage at discrete points in time. If the sampling rate were 250 Hz, then the EEG would record the voltage every 4 ms. This means that to record the activity in the brain for 10 minutes, the EEG would give 150,000 voltage readings. It would be very difficult to look at such a large set of data and make conclusions about what types of seizures, if any, are present. This module will give you the basic tools needed to analyze large sets of data, such as the data taken from an EEG. Below is a summary of the concepts you will learn to compute in this module.</para>
+        <para id="id100090">Summary of Key Concepts</para>
+        <!--empty paragraphs get left behind.-->
+        <table id="id100102" summary="">
+          <tgroup cols="3">
+            <tbody>
+              <row>
+                <entry>
+                  <emphasis effect="bold">Term</emphasis>
+                </entry>
+                <entry>
+                  <emphasis effect="bold">Matlab command</emphasis>
+                </entry>
+                <entry>
+                  <emphasis effect="bold">Definition</emphasis>
+                </entry>
+              </row>
+              <row>
+                <entry>Mean</entry>
+                <entry>mean</entry>
+                <entry>Average number</entry>
+              </row>
+              <row>
+                <entry>Variance</entry>
+                <entry>var</entry>
+                <entry>Measure of the spread of the data</entry>
+              </row>
+              <row>
+                <entry>Standard Deviation</entry>
+                <entry>std</entry>
+                <entry>Square root of the variance</entry>
+              </row>
+              <row>
+                <entry>Histogram</entry>
+                <entry>hist</entry>
+                <entry>Proportion of numbers that falls within given intervals</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+        <!--empty paragraphs get left behind.-->
+      </section>
+    </section>
+    <section id="cid2">
+      <title>Mean</title>
+      <para id="id100263">The <emphasis effect="bold">mean</emphasis> of a set of numbers is the average. If <emphasis effect="bold">x</emphasis> is a vector of <emphasis effect="italics">n</emphasis> numbers, then the mean of <emphasis effect="bold">x</emphasis> is given by</para>
+      <equation id="id100302">
+        <m:math overflow="scroll" mode="display">
+          <m:mrow>
+            <m:mover accent="true">
+              <m:mi>x</m:mi>
+              <m:mo>¯</m:mo>
+            </m:mover>
+            <m:mo>=</m:mo>
+            <m:mfrac>
+              <m:mn>1</m:mn>
+              <m:mi>n</m:mi>
+            </m:mfrac>
+            <m:munderover>
+              <m:mo>∑</m:mo>
+              <m:mrow>
+                <m:mi>k</m:mi>
+                <m:mo>=</m:mo>
+                <m:mn>1</m:mn>
+              </m:mrow>
+              <m:mi>n</m:mi>
+            </m:munderover>
+            <m:msub>
+              <m:mi mathvariant="bold">x</m:mi>
+              <m:mi>k</m:mi>
+            </m:msub>
+            <m:mo>=</m:mo>
+            <m:mfrac>
+              <m:mrow>
+                <m:msub>
+                  <m:mi mathvariant="bold">x</m:mi>
+                  <m:mn>1</m:mn>
+                </m:msub>
+                <m:mo>+</m:mo>
+                <m:msub>
+                  <m:mi mathvariant="bold">x</m:mi>
+                  <m:mn>2</m:mn>
+                </m:msub>
+                <m:mo>+</m:mo>
+                <m:mo>.</m:mo>
+                <m:mo>.</m:mo>
+                <m:mo>.</m:mo>
+                <m:mo>+</m:mo>
+                <m:msub>
+                  <m:mi mathvariant="bold">x</m:mi>
+                  <m:mi>n</m:mi>
+                </m:msub>
+              </m:mrow>
+              <m:mi>n</m:mi>
+            </m:mfrac>
+            <m:mo>.</m:mo>
+          </m:mrow>
+        </m:math>
+      </equation>
+      <para id="id100404">In Matlab, the mean of the vector x can be computed by typing mean(x).</para>
+      <section id="uid7">
+        <title>Example 2.1</title>
+        <para id="id100418">Let <emphasis effect="bold">x</emphasis> = [1, 7, 2, 5, 9, 6]. Then, <m:math overflow="scroll"><m:mrow><m:mover accent="true"><m:mi>x</m:mi><m:mo>¯</m:mo></m:mover><m:mo>=</m:mo><m:mrow><m:mo>(</m:mo><m:mn>1</m:mn><m:mo>+</m:mo><m:mn>7</m:mn><m:mo>+</m:mo><m:mn>2</m:mn><m:mo>+</m:mo><m:mn>5</m:mn><m:mo>+</m:mo><m:mn>9</m:mn><m:mo>+</m:mo><m:mn>6</m:mn><m:mo>)</m:mo></m:mrow><m:mo>/</m:mo><m:mn>6</m:mn><m:mo>=</m:mo><m:mn>5</m:mn><m:mo>.</m:mo></m:mrow></m:math></para>
+      </section>
+      <section id="uid8">
+        <title>Example 2.2</title>
+        <para id="id100498">Suppose you are interviewing for a job where the employees make the following daily salaries:</para>
+        <list id="id100504" display="block" list-type="bulleted">
+          <item id="uid9">16 general employees: $100 each
+</item>
+          <item id="uid10">3 managers: $900 each
+</item>
+          <item id="uid11">1 owner: $1700
+</item>
+        </list>
+        <para id="id100543">Then, the mean daily salary is given by</para>
+        <equation id="id100546">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:mover accent="true">
+                <m:mi>x</m:mi>
+                <m:mo>¯</m:mo>
+              </m:mover>
+              <m:mo>=</m:mo>
+              <m:mfrac>
+                <m:mrow>
+                  <m:mn>16</m:mn>
+                  <m:mo>·</m:mo>
+                  <m:mn>100</m:mn>
+                  <m:mo>+</m:mo>
+                  <m:mn>3</m:mn>
+                  <m:mo>·</m:mo>
+                  <m:mn>900</m:mn>
+                  <m:mo>+</m:mo>
+                  <m:mn>1700</m:mn>
+                </m:mrow>
+                <m:mrow>
+                  <m:mn>16</m:mn>
+                  <m:mo>+</m:mo>
+                  <m:mn>3</m:mn>
+                  <m:mo>+</m:mo>
+                  <m:mn>1</m:mn>
+                </m:mrow>
+              </m:mfrac>
+              <m:mo>=</m:mo>
+              <m:mn>6000</m:mn>
+              <m:mo>/</m:mo>
+              <m:mn>20</m:mn>
+              <m:mo>=</m:mo>
+              <m:mn>300</m:mn>
+              <m:mo>.</m:mo>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id100794">Notice that the mean is $300, which is 3 times the daily salary of 80% of the workers! Thus, if you are simply told the mean of the daily salaries, you will not have an accurate idea of how much money you would be making if you got the job. The variance and standard deviation are two measures that can give you an idea of how well the mean represents the data.</para>
+      </section>
+      <section id="uid12">
+        <title>Exercise 2.1</title>
+        <para id="id100811">Compute the mean of the vector <emphasis effect="bold">y</emphasis> = [3, 8, 2, 5, 5, 7], both on paper and using Matlab.</para>
+      </section>
+      <section id="uid13">
+        <title>Exercise 2.2</title>
+        <para id="id100836">Suppose you have set the goal of making an A in your math class. If your class grades consist of 4 tests, and you have made a 98, 80, and 90 on your first three tests, what do you need to make on your last test so that the mean of your grades is 90?</para>
+      </section>
+      <section id="uid14">
+        <title>Exercise 2.3</title>
+        <para id="id100853">(for the advanced) Suppose that, for the same class, you have already computed the mean of the first three tests when you receive your fourth test grade. Instead of computing the mean of all four tests from scratch, it's possible to update the mean that you've already computed. Write a Matlab code that takes two inputs, the mean of your first three tests and the grade of your fourth test, and computes the mean of all four tests.</para>
+      </section>
+    </section>
+    <section id="cid3">
+      <title>Variance and Standard Deviation</title>
+      <para id="id99889">As you saw in <link target-id="uid8">"Example 2.2"</link>, the mean is not always representative of the data, and other measures are needed to analyze the spread of the data. The <emphasis effect="bold">variance</emphasis> is a measure of the distance of each number from the mean. Given a vector <emphasis effect="bold">x</emphasis> of <emphasis effect="italics">n</emphasis> numbers and mean value <m:math overflow="scroll"><m:mrow><m:mover accent="true"><m:mi>x</m:mi><m:mo>¯</m:mo></m:mover><m:mo>,</m:mo></m:mrow></m:math> the variance of <emphasis effect="bold">x</emphasis> is given by</para>
+      <equation id="id101006">
+        <m:math overflow="scroll" mode="display">
+          <m:mrow>
+            <m:mi> var </m:mi>
+            <m:mrow>
+              <m:mo>(</m:mo>
+              <m:mi mathvariant="bold">x</m:mi>
+              <m:mo>)</m:mo>
+            </m:mrow>
+            <m:mo>=</m:mo>
+            <m:mfrac>
+              <m:mn>1</m:mn>
+              <m:mrow>
+                <m:mi>n</m:mi>
+                <m:mo>-</m:mo>
+                <m:mn>1</m:mn>
+              </m:mrow>
+            </m:mfrac>
+            <m:munderover>
+              <m:mo>∑</m:mo>
+              <m:mrow>
+                <m:mi>k</m:mi>
+                <m:mo>=</m:mo>
+                <m:mn>1</m:mn>
+              </m:mrow>
+              <m:mi>n</m:mi>
+            </m:munderover>
+            <m:msup>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:msub>
+                  <m:mi mathvariant="bold">x</m:mi>
+                  <m:mi>k</m:mi>
+                </m:msub>
+                <m:mo>-</m:mo>
+                <m:mover accent="true">
+                  <m:mi>x</m:mi>
+                  <m:mo>¯</m:mo>
+                </m:mover>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mn>2</m:mn>
+            </m:msup>
+            <m:mo>=</m:mo>
+            <m:mfrac>
+              <m:mrow>
+                <m:msup>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:msub>
+                      <m:mi mathvariant="bold">x</m:mi>
+                      <m:mn>1</m:mn>
+                    </m:msub>
+                    <m:mo>-</m:mo>
+                    <m:mover accent="true">
+                      <m:mi>x</m:mi>
+                      <m:mo>¯</m:mo>
+                    </m:mover>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                  <m:mn>2</m:mn>
+                </m:msup>
+                <m:mo>+</m:mo>
+                <m:msup>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:msub>
+                      <m:mi mathvariant="bold">x</m:mi>
+                      <m:mn>2</m:mn>
+                    </m:msub>
+                    <m:mo>-</m:mo>
+                    <m:mover accent="true">
+                      <m:mi>x</m:mi>
+                      <m:mo>¯</m:mo>
+                    </m:mover>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                  <m:mn>2</m:mn>
+                </m:msup>
+                <m:mo>+</m:mo>
+                <m:mo>.</m:mo>
+                <m:mo>.</m:mo>
+                <m:mo>.</m:mo>
+                <m:mo>+</m:mo>
+                <m:msup>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:msub>
+                      <m:mi mathvariant="bold">x</m:mi>
+                      <m:mi>n</m:mi>
+                    </m:msub>
+                    <m:mo>-</m:mo>
+                    <m:mover accent="true">
+                      <m:mi>x</m:mi>
+                      <m:mo>¯</m:mo>
+                    </m:mover>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                  <m:mn>2</m:mn>
+                </m:msup>
+              </m:mrow>
+              <m:mrow>
+                <m:mi>n</m:mi>
+                <m:mo>-</m:mo>
+                <m:mn>1</m:mn>
+              </m:mrow>
+            </m:mfrac>
+            <m:mo>.</m:mo>
+          </m:mrow>
+        </m:math>
+      </equation>
+      <para id="id101210">The <emphasis effect="bold">standard deviation</emphasis> of the data is related to the variance and is given by</para>
+      <equation id="id101220">
+        <m:math overflow="scroll" mode="display">
+          <m:mrow>
+            <m:mi> std </m:mi>
+            <m:mrow>
+              <m:mo>(</m:mo>
+              <m:mi mathvariant="bold">x</m:mi>
+              <m:mo>)</m:mo>
+            </m:mrow>
+            <m:mo>=</m:mo>
+            <m:msqrt>
+              <m:mrow>
+                <m:mi> var </m:mi>
+                <m:mo>(</m:mo>
+                <m:mi mathvariant="bold">x</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+            </m:msqrt>
+            <m:mo>.</m:mo>
+          </m:mrow>
+        </m:math>
+      </equation>
+      <para id="id101257">You can compute the variance and standard deviation of x in Matlab by typing the commands var(x) and std(x).</para>
+      <section id="uid15">
+        <title>Example 3.1</title>
+        <para id="id101272">Consider the vector given in <link target-id="uid7">"Example 2.1"</link>, <emphasis effect="bold">x</emphasis> = [1, 7, 2, 5, 9, 6]. Recall that the mean of <emphasis effect="bold">x</emphasis> = 5.</para>
+        <equation id="id101302">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:mi> var </m:mi>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi mathvariant="bold">x</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>=</m:mo>
+              <m:mfrac>
+                <m:mrow>
+                  <m:msup>
+                    <m:mrow>
+                      <m:mo>(</m:mo>
+                      <m:mn>1</m:mn>
+                      <m:mo>-</m:mo>
+                      <m:mn>5</m:mn>
+                      <m:mo>)</m:mo>
+                    </m:mrow>
+                    <m:mn>2</m:mn>
+                  </m:msup>
+                  <m:mo>+</m:mo>
+                  <m:msup>
+                    <m:mrow>
+                      <m:mo>(</m:mo>
+                      <m:mn>7</m:mn>
+                      <m:mo>-</m:mo>
+                      <m:mn>5</m:mn>
+                      <m:mo>)</m:mo>
+                    </m:mrow>
+                    <m:mn>2</m:mn>
+                  </m:msup>
+                  <m:mo>+</m:mo>
+                  <m:msup>
+                    <m:mrow>
+                      <m:mo>(</m:mo>
+                      <m:mn>2</m:mn>
+                      <m:mo>-</m:mo>
+                      <m:mn>5</m:mn>
+                      <m:mo>)</m:mo>
+                    </m:mrow>
+                    <m:mn>2</m:mn>
+                  </m:msup>
+                  <m:mo>+</m:mo>
+                  <m:msup>
+                    <m:mrow>
+                      <m:mo>(</m:mo>
+                      <m:mn>5</m:mn>
+                      <m:mo>-</m:mo>
+                      <m:mn>5</m:mn>
+                      <m:mo>)</m:mo>
+                    </m:mrow>
+                    <m:mn>2</m:mn>
+                  </m:msup>
+                  <m:mo>+</m:mo>
+                  <m:msup>
+                    <m:mrow>
+                      <m:mo>(</m:mo>
+                      <m:mn>9</m:mn>
+                      <m:mo>-</m:mo>
+                      <m:mn>5</m:mn>
+                      <m:mo>)</m:mo>
+                    </m:mrow>
+                    <m:mn>2</m:mn>
+                  </m:msup>
+                  <m:mo>+</m:mo>
+                  <m:msup>
+                    <m:mrow>
+                      <m:mo>(</m:mo>
+                      <m:mn>6</m:mn>
+                      <m:mo>-</m:mo>
+                      <m:mn>5</m:mn>
+                      <m:mo>)</m:mo>
+                    </m:mrow>
+                    <m:mn>2</m:mn>
+                  </m:msup>
+                </m:mrow>
+                <m:mn>5</m:mn>
+              </m:mfrac>
+              <m:mo>=</m:mo>
+              <m:mn>9</m:mn>
+              <m:mo>.</m:mo>
+              <m:mn>2</m:mn>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <equation id="id101451">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:mi> std </m:mi>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi mathvariant="bold">x</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>=</m:mo>
+              <m:msqrt>
+                <m:mrow>
+                  <m:mi> var </m:mi>
+                  <m:mo>(</m:mo>
+                  <m:mi mathvariant="bold">x</m:mi>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+              </m:msqrt>
+              <m:mo>≃</m:mo>
+              <m:mn>3</m:mn>
+              <m:mo>.</m:mo>
+              <m:mn>03</m:mn>
+            </m:mrow>
+          </m:math>
+        </equation>
+      </section>
+      <section id="uid16">
+        <title>Example 3.2</title>
+        <para id="id101504">Consider the data from <link target-id="uid8">"Example 2.2"</link>, where the mean <m:math overflow="scroll"><m:mover accent="true"><m:mi>x</m:mi><m:mo>¯</m:mo></m:mover></m:math> = 300. The variance is</para>
+        <equation id="id101527">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:mi> var </m:mi>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi mathvariant="bold">x</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>=</m:mo>
+              <m:mfrac>
+                <m:mrow>
+                  <m:mn>16</m:mn>
+                  <m:mo>·</m:mo>
+                  <m:msup>
+                    <m:mrow>
+                      <m:mo>(</m:mo>
+                      <m:mn>100</m:mn>
+                      <m:mo>-</m:mo>
+                      <m:mn>300</m:mn>
+                      <m:mo>)</m:mo>
+                    </m:mrow>
+                    <m:mn>2</m:mn>
+                  </m:msup>
+                  <m:mo>+</m:mo>
+                  <m:mn>3</m:mn>
+                  <m:mo>·</m:mo>
+                  <m:msup>
+                    <m:mrow>
+                      <m:mo>(</m:mo>
+                      <m:mn>900</m:mn>
+                      <m:mo>-</m:mo>
+                      <m:mn>300</m:mn>
+                      <m:mo>)</m:mo>
+                    </m:mrow>
+                    <m:mn>2</m:mn>
+                  </m:msup>
+                  <m:mo>+</m:mo>
+                  <m:msup>
+                    <m:mrow>
+                      <m:mo>(</m:mo>
+                      <m:mn>1700</m:mn>
+                      <m:mo>-</m:mo>
+                      <m:mn>300</m:mn>
+                      <m:mo>)</m:mo>
+                    </m:mrow>
+                    <m:mn>2</m:mn>
+                  </m:msup>
+                </m:mrow>
+                <m:mn>13</m:mn>
+              </m:mfrac>
+              <m:mo>≃</m:mo>
+              <m:mn>193</m:mn>
+              <m:mo>,</m:mo>
+              <m:mn>684</m:mn>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id101627">and the standard deviation is</para>
+        <equation id="id101632">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:mi> std </m:mi>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi mathvariant="bold">x</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>=</m:mo>
+              <m:msqrt>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mi> var </m:mi>
+                  <m:mo>(</m:mo>
+                  <m:mi mathvariant="bold">x</m:mi>
+                  <m:mo>)</m:mo>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+              </m:msqrt>
+              <m:mo>≃</m:mo>
+              <m:mn>440</m:mn>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id101676">Because the standard deviation is considerably larger than the mean, the variance tells us that the mean is not very representative of the data.</para>
+      </section>
+      <section id="uid17">
+        <title>Exercise 3.1</title>
+        <para id="id101692">Compute the variance and standard deviation of <emphasis effect="bold">y</emphasis> = [3, 8, 2, 5, 5, 7], using both the formulas and the Matlab commands.</para>
+      </section>
+      <section id="uid18">
+        <title>Exercise 3.2</title>
+        <para id="id101717">Suppose that in the situation of <link target-id="uid8">"Example 2.2"</link>, there are 50 general exmployees instead of 16. Compute the mean and variance of the daily salary. Is the mean more or less representative of the data than it was in Example 2.2?</para>
+      </section>
+    </section>
+    <section id="cid4">
+      <title>Histograms</title>
+      <para id="id101739">Although the mean, variance, and standard deviation provide information about the data, it is often useful to visualize the data. A histogram is a tool that allows you to visualize the proportion of numbers that fall within a given bin, or interval. To compute the histogram of a set of data, <emphasis effect="bold">x</emphasis>, follow the algorithm below.</para>
+      <list id="id101756" display="block" list-type="enumerated">
+        <item id="uid19">Choose the bin size <m:math overflow="scroll"><m:mrow><m:mi>Δ</m:mi><m:mi>x</m:mi></m:mrow></m:math>. The bins are the intervals [0, <m:math overflow="scroll"><m:mrow><m:mi>Δ</m:mi><m:mi>x</m:mi></m:mrow></m:math>], (<m:math overflow="scroll"><m:mrow><m:mi>Δ</m:mi><m:mi>x</m:mi></m:mrow></m:math>, 2<m:math overflow="scroll"><m:mrow><m:mi>Δ</m:mi><m:mi>x</m:mi></m:mrow></m:math>], (2<m:math overflow="scroll"><m:mrow><m:mi>Δ</m:mi><m:mi>x</m:mi></m:mrow></m:math>, 3<m:math overflow="scroll"><m:mrow><m:mi>Δ</m:mi><m:mi>x</m:mi></m:mrow></m:math>], and so on.
+</item>
+        <item id="uid20">For each bin, count the number of data points that lie within the bin.
+</item>
+        <item id="uid21">Create a bar graph showing the number of data points within each bin.
+</item>
+      </list>
+      <section id="uid22">
+        <title>Example 4.1</title>
+        <para id="id101880">Consider again the vector from <link target-id="uid7">"Example 2.1"</link>, <emphasis effect="bold">x</emphasis> = [1, 7, 2, 5, 9, 6]. Using a bin size <m:math overflow="scroll"><m:mrow><m:mi>Δ</m:mi><m:mi>x</m:mi></m:mrow></m:math> = 2, there are 5 bins.</para>
+        <list id="id101912" display="block" list-type="bulleted">
+          <item id="uid23">Bin 1 = [0, 2] has 2 elements of <emphasis effect="bold">x</emphasis></item>
+          <item id="uid24">Bin 2 = (2, 4] has 0 elements of <emphasis effect="bold">x</emphasis></item>
+          <item id="uid25">Bin 3 = (4, 6] has 2 elements of <emphasis effect="bold">x</emphasis></item>
+          <item id="uid26">Bin 4 = (6, 8] has 1 element of <emphasis effect="bold">x</emphasis></item>
+          <item id="uid27">Bin 5 = (8, 10] has 1 element of <emphasis effect="bold">x</emphasis></item>
+        </list>
+        <para id="id102027">
+          <figure id="id102030">
+            <media id="id102030_media" alt="">
+              <image mime-type="image/png" src="../../media/histEx.png" id="id102030_onlineimage" width="427"><!-- NOTE: attribute width changes image size online (pixels). original width is 427. --></image>
+              <image for="pdf" mime-type="application/postscript" src="../../media/histEx.eps" id="id102030_printimage" print-width="3.75cm">
+                <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+              </image>
+            </media>
+          </figure>
+        </para>
+        <para id="id102038">In Matlab, you can plot the histogram of a vector x by typing hist(x). Matlab will automatically use 10 bins. If you'd like to specify the bin centers, type hist(x,c), where c is a vector of bin centers. The histogram of <link target-id="uid22">"Example 4.1"</link> was generated by the Matlab command hist(x, [1, 3, 5, 7, 9]).</para>
+      </section>
+      <section id="uid28">
+        <title>Exercise 4.1</title>
+        <para id="id102063">Plot the histogram of the vector <emphasis effect="bold">y</emphasis> = [3, 8, 2, 5, 5, 7], both on paper and in Matlab.</para>
+      </section>
+      <section id="uid29">
+        <title>Exercise 4.2</title>
+        <para id="id102090">Plot the histogram of the daily salaries from <link target-id="uid8">"Example 2.2"</link>. For this example, does the histogram or the mean give you a better idea of what salary you would be making if you got the job?</para>
+      </section>
+    </section>
+  </content>
+</document>

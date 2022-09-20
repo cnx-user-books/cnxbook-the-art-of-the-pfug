@@ -1,0 +1,1009 @@
+<document xmlns="http://cnx.rice.edu/cnxml" xmlns:m="http://www.w3.org/1998/Math/MathML" xmlns:md="http://cnx.rice.edu/mdml" xmlns:bib="http://bibtexml.sf.net/">
+  <title>Dynamics of a Network of Single Compartmental Cells</title>
+  <metadata>
+  <md:content-id>m22294</md:content-id><md:title>Dynamics of a Network of Single Compartmental Cells</md:title>
+  <md:abstract>This report summarizes work done as part of the Hippocampus Neuroscience PFUG under Rice University's VIGRE program.  VIGRE is a program of Vertically Integrated Grants for Research and Education in the Mathematical Sciences under the direction of the National Science Foundation.  A PFUG is a group of Postdocs, Faculty, Undergraduates and Graduate students formed round the study of a common problem.  This module explains how to implement the conductance-based model for the dynamics of a network of single compartmental cells presented in the paper "Rate Models for Conductance-Based Cortical Neuronal Networks," by O. Shriki, D. Hansel, and H. Sompolinsky.</md:abstract>
+  <md:uuid>94029fed-7411-47aa-9d02-c8bfb3111ca7</md:uuid>
+</metadata>
+  <content>
+    <section id="cid1">
+      <title>Introduction</title>
+      <para id="id2253706">In order to gain a better understanding of many biological processes, it is often necessary to implement a theoretical model of a neuronal network. In the paper <emphasis>Rate Models for Conductance-Based Cortical Neuronal Networks</emphasis>, Shriki et al. present a conductance-based model for simulating the dynamics of a neuronal network  <link target-id="bid0"/>. The work done in this module is an implementation of their model. In his module <!--mode is not biblio--><link document="m19349">Dynamics of the Firing Rate of Single Compartmental Cells</link>, Yangluo Wang shows how to model the dynamics of an isolated cell using the Hodgkin and Huxley model. We will build on the work presented by Wang to model the dynamics of cells within a neuronal network driven by some external current. We then apply this model to a network of cells within a hypercolumn in primary visual cortex.</para>
+    </section>
+    <section id="cid2">
+      <title>Network Dynamics</title>
+      <para id="id2253750">The dynamics of cell <m:math><m:mi>i</m:mi></m:math> within a network of <m:math><m:mi>N</m:mi></m:math> neurons are given by</para>
+      <equation id="id2253773">
+        <m:math mode="display">
+          <m:mrow>
+            <m:msub>
+              <m:mi>C</m:mi>
+              <m:mi>m</m:mi>
+            </m:msub>
+            <m:mfrac>
+              <m:mrow>
+                <m:mi>d</m:mi>
+                <m:msub>
+                  <m:mi>V</m:mi>
+                  <m:mi>i</m:mi>
+                </m:msub>
+              </m:mrow>
+              <m:mrow>
+                <m:mi>d</m:mi>
+                <m:mi>t</m:mi>
+              </m:mrow>
+            </m:mfrac>
+            <m:mo>=</m:mo>
+            <m:msubsup>
+              <m:mi>I</m:mi>
+              <m:mi>i</m:mi>
+              <m:mrow>
+                <m:mi>l</m:mi>
+                <m:mi>e</m:mi>
+                <m:mi>a</m:mi>
+                <m:mi>k</m:mi>
+              </m:mrow>
+            </m:msubsup>
+            <m:mo>-</m:mo>
+            <m:msubsup>
+              <m:mi>I</m:mi>
+              <m:mi>i</m:mi>
+              <m:mrow>
+                <m:mi>a</m:mi>
+                <m:mi>c</m:mi>
+                <m:mi>t</m:mi>
+                <m:mi>i</m:mi>
+                <m:mi>v</m:mi>
+                <m:mi>e</m:mi>
+              </m:mrow>
+            </m:msubsup>
+            <m:mo>+</m:mo>
+            <m:msubsup>
+              <m:mi>I</m:mi>
+              <m:mi>i</m:mi>
+              <m:mrow>
+                <m:mi>e</m:mi>
+                <m:mi>x</m:mi>
+                <m:mi>t</m:mi>
+              </m:mrow>
+            </m:msubsup>
+            <m:mo>+</m:mo>
+            <m:msubsup>
+              <m:mi>I</m:mi>
+              <m:mi>i</m:mi>
+              <m:mrow>
+                <m:mi>n</m:mi>
+                <m:mi>e</m:mi>
+                <m:mi>t</m:mi>
+              </m:mrow>
+            </m:msubsup>
+            <m:mo>,</m:mo>
+          </m:mrow>
+        </m:math>
+      </equation>
+<!--empty paragraphs get left behind.-->
+      <para id="id2254140">where the parameters for cell <m:math><m:mi>i</m:mi></m:math> are defined according to the following table:</para>
+<!--empty paragraphs get left behind.-->
+      <table id="uid1" summary="">
+        <tgroup cols="2">
+          <tbody>
+            <row>
+              <entry>
+                <m:math>
+                  <m:msub>
+                    <m:mi>C</m:mi>
+                    <m:mi>m</m:mi>
+                  </m:msub>
+                </m:math>
+              </entry>
+              <entry>membrane capacitance</entry>
+            </row>
+            <row>
+              <entry>
+                <m:math>
+                  <m:msub>
+                    <m:mi>V</m:mi>
+                    <m:mi>i</m:mi>
+                  </m:msub>
+                </m:math>
+              </entry>
+              <entry>membrane potential</entry>
+            </row>
+            <row>
+              <entry>
+                <m:math>
+                  <m:msubsup>
+                    <m:mi>I</m:mi>
+                    <m:mi>i</m:mi>
+                    <m:mrow>
+                      <m:mi>l</m:mi>
+                      <m:mi>e</m:mi>
+                      <m:mi>a</m:mi>
+                      <m:mi>k</m:mi>
+                    </m:mrow>
+                  </m:msubsup>
+                </m:math>
+              </entry>
+              <entry>leak current</entry>
+            </row>
+            <row>
+              <entry>
+                <m:math>
+                  <m:msubsup>
+                    <m:mi>I</m:mi>
+                    <m:mi>i</m:mi>
+                    <m:mrow>
+                      <m:mi>a</m:mi>
+                      <m:mi>c</m:mi>
+                      <m:mi>t</m:mi>
+                      <m:mi>i</m:mi>
+                      <m:mi>v</m:mi>
+                      <m:mi>e</m:mi>
+                    </m:mrow>
+                  </m:msubsup>
+                </m:math>
+              </entry>
+              <entry>active ionic current</entry>
+            </row>
+            <row>
+              <entry>
+                <m:math>
+                  <m:msubsup>
+                    <m:mi>I</m:mi>
+                    <m:mi>i</m:mi>
+                    <m:mrow>
+                      <m:mi>e</m:mi>
+                      <m:mi>x</m:mi>
+                      <m:mi>t</m:mi>
+                    </m:mrow>
+                  </m:msubsup>
+                </m:math>
+              </entry>
+              <entry>externally applied current</entry>
+            </row>
+            <row>
+              <entry>
+                <m:math>
+                  <m:msubsup>
+                    <m:mi>I</m:mi>
+                    <m:mi>i</m:mi>
+                    <m:mrow>
+                      <m:mi>n</m:mi>
+                      <m:mi>e</m:mi>
+                      <m:mi>t</m:mi>
+                    </m:mrow>
+                  </m:msubsup>
+                </m:math>
+              </entry>
+              <entry>network current</entry>
+            </row>
+          </tbody>
+        </tgroup>
+        <caption>Parameter Definitions</caption>
+      </table>
+      <section id="uid2">
+        <title>Leak Current and Active Current</title>
+        <para id="id2254413">The model of a cell within a network is very similar to the model of an isolated cell,</para>
+        <equation id="id2254420">
+          <m:math mode="display">
+            <m:mrow>
+              <m:msub>
+                <m:mi>C</m:mi>
+                <m:mi>m</m:mi>
+              </m:msub>
+              <m:mfrac>
+                <m:mrow>
+                  <m:mi>d</m:mi>
+                  <m:msub>
+                    <m:mi>V</m:mi>
+                    <m:mi>i</m:mi>
+                  </m:msub>
+                </m:mrow>
+                <m:mrow>
+                  <m:mi>d</m:mi>
+                  <m:mi>t</m:mi>
+                </m:mrow>
+              </m:mfrac>
+              <m:mo>=</m:mo>
+              <m:msubsup>
+                <m:mi>I</m:mi>
+                <m:mi>i</m:mi>
+                <m:mrow>
+                  <m:mi>l</m:mi>
+                  <m:mi>e</m:mi>
+                  <m:mi>a</m:mi>
+                  <m:mi>k</m:mi>
+                </m:mrow>
+              </m:msubsup>
+              <m:mo>-</m:mo>
+              <m:msubsup>
+                <m:mi>I</m:mi>
+                <m:mi>i</m:mi>
+                <m:mrow>
+                  <m:mi>a</m:mi>
+                  <m:mi>c</m:mi>
+                  <m:mi>t</m:mi>
+                  <m:mi>i</m:mi>
+                  <m:mi>v</m:mi>
+                  <m:mi>e</m:mi>
+                </m:mrow>
+              </m:msubsup>
+              <m:mo>+</m:mo>
+              <m:msubsup>
+                <m:mi>I</m:mi>
+                <m:mi>i</m:mi>
+                <m:mrow>
+                  <m:mi>a</m:mi>
+                  <m:mi>p</m:mi>
+                  <m:mi>p</m:mi>
+                </m:mrow>
+              </m:msubsup>
+              <m:mo>,</m:mo>
+            </m:mrow>
+          </m:math>
+        </equation>
+<!--empty paragraphs get left behind.-->
+        <para id="id2254524">where</para>
+        <equation id="id2254528">
+          <m:math mode="display">
+            <m:mrow>
+              <m:msubsup>
+                <m:mi>I</m:mi>
+                <m:mi>i</m:mi>
+                <m:mrow>
+                  <m:mi>l</m:mi>
+                  <m:mi>e</m:mi>
+                  <m:mi>a</m:mi>
+                  <m:mi>k</m:mi>
+                </m:mrow>
+              </m:msubsup>
+              <m:mo>=</m:mo>
+              <m:msub>
+                <m:mi>g</m:mi>
+                <m:mi>L</m:mi>
+              </m:msub>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:msub>
+                  <m:mi>E</m:mi>
+                  <m:mi>L</m:mi>
+                </m:msub>
+                <m:mo>-</m:mo>
+                <m:msub>
+                  <m:mi>V</m:mi>
+                  <m:mi>i</m:mi>
+                </m:msub>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>,</m:mo>
+            </m:mrow>
+          </m:math>
+        </equation>
+<!--empty paragraphs get left behind.-->
+        <equation id="id2254594">
+          <m:math mode="display">
+            <m:mrow>
+              <m:msubsup>
+                <m:mi>I</m:mi>
+                <m:mi>i</m:mi>
+                <m:mrow>
+                  <m:mi>a</m:mi>
+                  <m:mi>c</m:mi>
+                  <m:mi>t</m:mi>
+                  <m:mi>i</m:mi>
+                  <m:mi>v</m:mi>
+                  <m:mi>e</m:mi>
+                </m:mrow>
+              </m:msubsup>
+              <m:mo>=</m:mo>
+              <m:msubsup>
+                <m:mi>I</m:mi>
+                <m:mi>i</m:mi>
+                <m:mrow>
+                  <m:mi>N</m:mi>
+                  <m:mi>a</m:mi>
+                </m:mrow>
+              </m:msubsup>
+              <m:mo>+</m:mo>
+              <m:msubsup>
+                <m:mi>I</m:mi>
+                <m:mi>i</m:mi>
+                <m:mi>K</m:mi>
+              </m:msubsup>
+              <m:mo>+</m:mo>
+              <m:msubsup>
+                <m:mi>I</m:mi>
+                <m:mi>i</m:mi>
+                <m:mi>A</m:mi>
+              </m:msubsup>
+              <m:mo>.</m:mo>
+            </m:mrow>
+          </m:math>
+        </equation>
+<!--empty paragraphs get left behind.-->
+        <para id="id2254674">The leak current and active current for a cell within a network is defined exactly as it is for an isolated cell. For details on these two currents, see Yungluo Wang's module <!--mode is not biblio--><link document="m19349">Dynamics of the Firing Rate of Single Compartmental Cells</link>. The applied current in the isolated cell model is an abstract current that drives the cell. For the network model, we replace this applied current with the sum of the external and network currents.</para>
+      </section>
+      <section id="uid3">
+        <title>Network Current</title>
+        <para id="id2254702">The network current for cell <m:math><m:mi>i</m:mi></m:math> is induced by other cells within the network and is given by</para>
+        <equation id="id2254718">
+          <m:math mode="display">
+            <m:mrow>
+              <m:msubsup>
+                <m:mi>I</m:mi>
+                <m:mi>i</m:mi>
+                <m:mrow>
+                  <m:mi>n</m:mi>
+                  <m:mi>e</m:mi>
+                  <m:mi>t</m:mi>
+                </m:mrow>
+              </m:msubsup>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>t</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>=</m:mo>
+              <m:munderover>
+                <m:mo>∑</m:mo>
+                <m:mrow>
+                  <m:mi>j</m:mi>
+                  <m:mo>=</m:mo>
+                  <m:mn>1</m:mn>
+                </m:mrow>
+                <m:mi>N</m:mi>
+              </m:munderover>
+              <m:msub>
+                <m:mi>g</m:mi>
+                <m:mrow>
+                  <m:mi>i</m:mi>
+                  <m:mi>j</m:mi>
+                </m:mrow>
+              </m:msub>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>t</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:msub>
+                  <m:mi>E</m:mi>
+                  <m:mi>j</m:mi>
+                </m:msub>
+                <m:mo>-</m:mo>
+                <m:msub>
+                  <m:mi>V</m:mi>
+                  <m:mi>i</m:mi>
+                </m:msub>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mi>t</m:mi>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>,</m:mo>
+            </m:mrow>
+          </m:math>
+        </equation>
+<!--empty paragraphs get left behind.-->
+        <para id="id2254823">where <m:math><m:msub><m:mi>g</m:mi><m:mrow><m:mi>i</m:mi><m:mi>j</m:mi></m:mrow></m:msub></m:math> is the synaptic conductance of cell <m:math><m:mi>i</m:mi></m:math> generated by action potentials of cell <m:math><m:mi>j</m:mi></m:math>, and <m:math><m:msub><m:mi>E</m:mi><m:mi>j</m:mi></m:msub></m:math> is the reversal potential of the synapse from cell <m:math><m:mi>j</m:mi></m:math> to cell <m:math><m:mi>i</m:mi></m:math>. Note that <m:math><m:msub><m:mi>E</m:mi><m:mi>j</m:mi></m:msub></m:math> depends only on the properties of the presynaptic cell <m:math><m:mi>j</m:mi></m:math>. If <m:math><m:msub><m:mi mathvariant="bold">t</m:mi><m:mi mathvariant="bold">j</m:mi></m:msub></m:math> is a vector containing the spike times of cell <m:math><m:mi>j</m:mi></m:math>, the conductance at the synapse from cell <m:math><m:mi>j</m:mi></m:math> to cell <m:math><m:mi>i</m:mi></m:math> is given by</para>
+        <equation id="id2254966">
+          <m:math mode="display">
+            <m:mrow>
+              <m:mfrac>
+                <m:mrow>
+                  <m:mi>d</m:mi>
+                  <m:msub>
+                    <m:mi>g</m:mi>
+                    <m:mrow>
+                      <m:mi>i</m:mi>
+                      <m:mi>j</m:mi>
+                    </m:mrow>
+                  </m:msub>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:mi>t</m:mi>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                </m:mrow>
+                <m:mrow>
+                  <m:mi>d</m:mi>
+                  <m:mi>t</m:mi>
+                </m:mrow>
+              </m:mfrac>
+              <m:mo>=</m:mo>
+              <m:mo>-</m:mo>
+              <m:mfrac>
+                <m:mrow>
+                  <m:msub>
+                    <m:mi>g</m:mi>
+                    <m:mrow>
+                      <m:mi>i</m:mi>
+                      <m:mi>j</m:mi>
+                    </m:mrow>
+                  </m:msub>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:mi>t</m:mi>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                </m:mrow>
+                <m:msub>
+                  <m:mi>τ</m:mi>
+                  <m:mrow>
+                    <m:mi>i</m:mi>
+                    <m:mi>j</m:mi>
+                  </m:mrow>
+                </m:msub>
+              </m:mfrac>
+              <m:mo>+</m:mo>
+              <m:msub>
+                <m:mi>G</m:mi>
+                <m:mrow>
+                  <m:mi>i</m:mi>
+                  <m:mi>j</m:mi>
+                </m:mrow>
+              </m:msub>
+              <m:msub>
+                <m:mi>R</m:mi>
+                <m:mi>j</m:mi>
+              </m:msub>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>t</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>,</m:mo>
+              <m:mspace width="4pt"/>
+              <m:mi>t</m:mi>
+              <m:mo>&gt;</m:mo>
+              <m:mn>0</m:mn>
+              <m:mo>,</m:mo>
+            </m:mrow>
+          </m:math>
+        </equation>
+<!--empty paragraphs get left behind.-->
+        <para id="id2255089">where <m:math><m:msub><m:mi>τ</m:mi><m:mrow><m:mi>i</m:mi><m:mi>j</m:mi></m:mrow></m:msub></m:math> is the conductance decay constant, <m:math><m:msub><m:mi>G</m:mi><m:mrow><m:mi>i</m:mi><m:mi>j</m:mi></m:mrow></m:msub></m:math> is the peak synaptic conductance, and <m:math><m:mrow><m:msub><m:mi>R</m:mi><m:mi>j</m:mi></m:msub><m:mrow><m:mo>(</m:mo><m:mi>t</m:mi><m:mo>)</m:mo></m:mrow></m:mrow></m:math> is the firing rate of cell <m:math><m:mi>j</m:mi></m:math> given by</para>
+        <equation id="id2255161">
+          <m:math mode="display">
+            <m:mrow>
+              <m:msub>
+                <m:mi>R</m:mi>
+                <m:mi>j</m:mi>
+              </m:msub>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>t</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>=</m:mo>
+              <m:munderover>
+                <m:mo>∑</m:mo>
+                <m:mrow>
+                  <m:mi>k</m:mi>
+                  <m:mo>=</m:mo>
+                  <m:mn>1</m:mn>
+                </m:mrow>
+                <m:mrow>
+                  <m:mo>♯</m:mo>
+                  <m:msub>
+                    <m:mi mathvariant="bold">t</m:mi>
+                    <m:mi mathvariant="bold">j</m:mi>
+                  </m:msub>
+                </m:mrow>
+              </m:munderover>
+              <m:mi>δ</m:mi>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>t</m:mi>
+                <m:mo>-</m:mo>
+                <m:msub>
+                  <m:mi>t</m:mi>
+                  <m:mi>j</m:mi>
+                </m:msub>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mi>k</m:mi>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>.</m:mo>
+            </m:mrow>
+          </m:math>
+        </equation>
+<!--empty paragraphs get left behind.-->
+        <para id="id2255249">We illustrate the dynamics of the synaptic conductance in a very simple example presented in Figure 1.</para>
+        <figure id="uid4" orient="horizontal">
+          <media id="id8922213" alt=""><image src="../../media/condEx3.png" mime-type="image/png" width="603"/><image for="pdf" src="../../media/condEx3.eps" mime-type="application/postscript" print-width="4in"/></media>
+          <caption>Example of the Dynamics of Synaptic Conductance. In this simple example, cell 2 receives network current from both cell 1 and cell 3. We show the synaptic conductance at the synapse from cell 1 to cell 2 in (a), from cell 3 to cell 2 in (b). The spike times for cell 1 and cell 3 are stored in the vectors <m:math><m:mrow><m:msub><m:mi mathvariant="bold">t</m:mi><m:mn mathvariant="bold">1</m:mn></m:msub><m:mo>=</m:mo><m:mrow><m:mo>{</m:mo><m:mn>2</m:mn><m:mo>,</m:mo><m:mspace width="4pt"/><m:mn>10</m:mn><m:mo>}</m:mo></m:mrow></m:mrow></m:math> ms and <m:math><m:mrow><m:msub><m:mi mathvariant="bold">t</m:mi><m:mn mathvariant="bold">3</m:mn></m:msub><m:mo>=</m:mo><m:mrow><m:mo>{</m:mo><m:mn>1</m:mn><m:mo>,</m:mo><m:mspace width="4pt"/><m:mn>8</m:mn><m:mo>}</m:mo></m:mrow></m:mrow></m:math> ms, respectively. For <m:math><m:mrow><m:mi>j</m:mi><m:mo>=</m:mo></m:mrow></m:math>1 or 3, the synaptic conductance <m:math><m:msub><m:mi>g</m:mi><m:mrow><m:mn>2</m:mn><m:mi>j</m:mi></m:mrow></m:msub></m:math> jumps instantaneously by the amount <m:math><m:msub><m:mi>G</m:mi><m:mrow><m:mn>2</m:mn><m:mi>j</m:mi></m:mrow></m:msub></m:math>, then decays at a rate dictated by the decay constant, <m:math><m:msub><m:mi>τ</m:mi><m:mrow><m:mn>2</m:mn><m:mi>j</m:mi></m:mrow></m:msub></m:math>. For this example, <m:math><m:mrow><m:msub><m:mi>G</m:mi><m:mn>21</m:mn></m:msub><m:mo>=</m:mo><m:mn>1</m:mn><m:mi>μ</m:mi><m:mi>S</m:mi><m:mo>/</m:mo><m:mi>c</m:mi><m:msup><m:mi>m</m:mi><m:mn>2</m:mn></m:msup></m:mrow></m:math>, <m:math><m:mrow><m:msub><m:mi>G</m:mi><m:mn>23</m:mn></m:msub><m:mo>=</m:mo><m:mn>2</m:mn><m:mi>μ</m:mi><m:mi>S</m:mi><m:mo>/</m:mo><m:mi>c</m:mi><m:msup><m:mi>m</m:mi><m:mn>2</m:mn></m:msup></m:mrow></m:math>, and <m:math><m:mrow><m:msub><m:mi>τ</m:mi><m:mn>21</m:mn></m:msub><m:mo>=</m:mo><m:msub><m:mi>τ</m:mi><m:mn>23</m:mn></m:msub><m:mo>=</m:mo><m:mn>5</m:mn></m:mrow></m:math> ms.</caption>
+        </figure>
+      </section>
+      <section id="uid5">
+        <title>External Current</title>
+        <para id="id2255656">Similar to the network current, the external current for cell <m:math><m:mi>i</m:mi></m:math> is given by</para>
+        <equation id="id2255669">
+          <m:math mode="display">
+            <m:mrow>
+              <m:msubsup>
+                <m:mi>I</m:mi>
+                <m:mi>i</m:mi>
+                <m:mrow>
+                  <m:mi>e</m:mi>
+                  <m:mi>x</m:mi>
+                  <m:mi>t</m:mi>
+                </m:mrow>
+              </m:msubsup>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>t</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>=</m:mo>
+              <m:msubsup>
+                <m:mi>g</m:mi>
+                <m:mi>i</m:mi>
+                <m:mrow>
+                  <m:mi>e</m:mi>
+                  <m:mi>x</m:mi>
+                  <m:mi>t</m:mi>
+                </m:mrow>
+              </m:msubsup>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>t</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:msup>
+                  <m:mi>E</m:mi>
+                  <m:mrow>
+                    <m:mi>e</m:mi>
+                    <m:mi>x</m:mi>
+                    <m:mi>t</m:mi>
+                  </m:mrow>
+                </m:msup>
+                <m:mo>-</m:mo>
+                <m:msub>
+                  <m:mi>V</m:mi>
+                  <m:mi>i</m:mi>
+                </m:msub>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mi>t</m:mi>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>,</m:mo>
+            </m:mrow>
+          </m:math>
+        </equation>
+<!--empty paragraphs get left behind.-->
+        <para id="id2255770">where</para>
+        <equation id="id2255773">
+          <m:math mode="display">
+            <m:mrow>
+              <m:mfrac>
+                <m:mrow>
+                  <m:mi>d</m:mi>
+                  <m:msubsup>
+                    <m:mi>g</m:mi>
+                    <m:mi>i</m:mi>
+                    <m:mrow>
+                      <m:mi>e</m:mi>
+                      <m:mi>x</m:mi>
+                      <m:mi>p</m:mi>
+                    </m:mrow>
+                  </m:msubsup>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:mi>t</m:mi>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                </m:mrow>
+                <m:mrow>
+                  <m:mi>d</m:mi>
+                  <m:mi>t</m:mi>
+                </m:mrow>
+              </m:mfrac>
+              <m:mo>=</m:mo>
+              <m:mo>-</m:mo>
+              <m:mfrac>
+                <m:mrow>
+                  <m:msubsup>
+                    <m:mi>g</m:mi>
+                    <m:mi>i</m:mi>
+                    <m:mrow>
+                      <m:mi>e</m:mi>
+                      <m:mi>x</m:mi>
+                      <m:mi>t</m:mi>
+                    </m:mrow>
+                  </m:msubsup>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:mi>t</m:mi>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                </m:mrow>
+                <m:msup>
+                  <m:mi>τ</m:mi>
+                  <m:mrow>
+                    <m:mi>e</m:mi>
+                    <m:mi>x</m:mi>
+                    <m:mi>t</m:mi>
+                  </m:mrow>
+                </m:msup>
+              </m:mfrac>
+              <m:mo>+</m:mo>
+              <m:msup>
+                <m:mi>G</m:mi>
+                <m:mrow>
+                  <m:mi>e</m:mi>
+                  <m:mi>x</m:mi>
+                  <m:mi>t</m:mi>
+                </m:mrow>
+              </m:msup>
+              <m:msubsup>
+                <m:mi>R</m:mi>
+                <m:mi>i</m:mi>
+                <m:mrow>
+                  <m:mi>e</m:mi>
+                  <m:mi>x</m:mi>
+                  <m:mi>t</m:mi>
+                </m:mrow>
+              </m:msubsup>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>t</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>,</m:mo>
+              <m:mspace width="4pt"/>
+              <m:mi>t</m:mi>
+              <m:mo>&gt;</m:mo>
+              <m:mn>0</m:mn>
+              <m:mo>.</m:mo>
+            </m:mrow>
+          </m:math>
+        </equation>
+<!--empty paragraphs get left behind.-->
+        <para id="id2255917">We assume that all external sources are excitatory and have the same reversal potential, <m:math><m:msup><m:mi>E</m:mi><m:mrow><m:mi>e</m:mi><m:mi>x</m:mi><m:mi>t</m:mi></m:mrow></m:msup></m:math>. This assumption allows us to model the sum of the effects of all external sources as a single effective excitatory synapse with peak conductance <m:math><m:msup><m:mi>G</m:mi><m:mrow><m:mi>e</m:mi><m:mi>x</m:mi><m:mi>t</m:mi></m:mrow></m:msup></m:math> and decay constant <m:math><m:msup><m:mi>τ</m:mi><m:mrow><m:mi>e</m:mi><m:mi>x</m:mi><m:mi>t</m:mi></m:mrow></m:msup></m:math>. The external firing rate, <m:math><m:msubsup><m:mi>R</m:mi><m:mi>i</m:mi><m:mrow><m:mi>e</m:mi><m:mi>x</m:mi><m:mi>t</m:mi></m:mrow></m:msubsup></m:math>, now represents the sum of the firing rates of all external sources. Because the external sources have no input in this model, we must generate their spike trains. To meet this end, we set <m:math><m:msubsup><m:mi>R</m:mi><m:mi>i</m:mi><m:mrow><m:mi>e</m:mi><m:mi>x</m:mi><m:mi>t</m:mi></m:mrow></m:msubsup></m:math> to be a Poisson spike train with mean rate <m:math><m:msubsup><m:mi>f</m:mi><m:mi>i</m:mi><m:mrow><m:mi>e</m:mi><m:mi>x</m:mi><m:mi>t</m:mi></m:mrow></m:msubsup></m:math>.</para>
+      </section>
+    </section>
+    <section id="cid3">
+      <title>Model of a Hypercolumn in Primary Visual Cortex</title>
+      <para id="id2256067">We now apply this network model to a network of cells found in a hypercolumn in primary visual cortex. We divide the network neurons into two types: excitatory and inhibitory. Each cell is selective to the orientation of the visual stimulus and is parameterized by its preferred orientation (PO). For excitatory neurons, the PO for cell <m:math><m:mi>i</m:mi></m:math> is given by <m:math><m:mrow><m:msub><m:mi>θ</m:mi><m:mi>i</m:mi></m:msub><m:mo>=</m:mo><m:mo>-</m:mo><m:mfrac><m:mi>π</m:mi><m:mn>2</m:mn></m:mfrac><m:mo>+</m:mo><m:mi>i</m:mi><m:mfrac><m:mi>π</m:mi><m:msub><m:mi>N</m:mi><m:mrow><m:mi>e</m:mi><m:mi>x</m:mi></m:mrow></m:msub></m:mfrac></m:mrow></m:math>, and the reversal potential is uniform and denoted <m:math><m:msub><m:mi>E</m:mi><m:mrow><m:mi>e</m:mi><m:mi>x</m:mi></m:mrow></m:msub></m:math>. The PO and reversal potential for inhibitory neurons are defined analogously.</para>
+      <para id="id2256151">The peak conductance at a network synapse is dependent on the PO of the pre- and postsynaptic neurons. If cell <m:math><m:mi>j</m:mi></m:math> is excitatory, then the peak conductance at the excitatory synapse from cell <m:math><m:mi>j</m:mi></m:math> to cell <m:math><m:mi>i</m:mi></m:math> is given by</para>
+      <equation id="id2256187">
+        <m:math mode="display">
+          <m:mrow>
+            <m:msub>
+              <m:mi>G</m:mi>
+              <m:mrow>
+                <m:mi>i</m:mi>
+                <m:mi>j</m:mi>
+              </m:mrow>
+            </m:msub>
+            <m:mrow>
+              <m:mo>(</m:mo>
+              <m:mo>|</m:mo>
+            </m:mrow>
+            <m:msub>
+              <m:mi>θ</m:mi>
+              <m:mi>i</m:mi>
+            </m:msub>
+            <m:mo>-</m:mo>
+            <m:msub>
+              <m:mi>θ</m:mi>
+              <m:mi>j</m:mi>
+            </m:msub>
+            <m:mrow>
+              <m:mo>|</m:mo>
+              <m:mo>)</m:mo>
+            </m:mrow>
+            <m:mo>=</m:mo>
+            <m:mfrac>
+              <m:msub>
+                <m:mover accent="true">
+                  <m:mi>G</m:mi>
+                  <m:mo>¯</m:mo>
+                </m:mover>
+                <m:mrow>
+                  <m:mi>e</m:mi>
+                  <m:mi>x</m:mi>
+                </m:mrow>
+              </m:msub>
+              <m:msub>
+                <m:mi>λ</m:mi>
+                <m:mrow>
+                  <m:mi>e</m:mi>
+                  <m:mi>x</m:mi>
+                </m:mrow>
+              </m:msub>
+            </m:mfrac>
+            <m:mo form="prefix">exp</m:mo>
+            <m:mrow>
+              <m:mo>(</m:mo>
+              <m:mrow>
+                <m:mrow>
+                  <m:mo>|</m:mo>
+                </m:mrow>
+                <m:msub>
+                  <m:mi>θ</m:mi>
+                  <m:mi>i</m:mi>
+                </m:msub>
+                <m:mo>-</m:mo>
+                <m:msub>
+                  <m:mi>θ</m:mi>
+                  <m:mi>j</m:mi>
+                </m:msub>
+                <m:mrow>
+                  <m:mo>|</m:mo>
+                  <m:mo>/</m:mo>
+                </m:mrow>
+                <m:msub>
+                  <m:mi>λ</m:mi>
+                  <m:mrow>
+                    <m:mi>e</m:mi>
+                    <m:mi>x</m:mi>
+                  </m:mrow>
+                </m:msub>
+              </m:mrow>
+              <m:mo>)</m:mo>
+            </m:mrow>
+            <m:mo>,</m:mo>
+          </m:mrow>
+        </m:math>
+      </equation>
+<!--empty paragraphs get left behind.-->
+      <para id="id2256323">where <m:math><m:msub><m:mi>λ</m:mi><m:mrow><m:mi>e</m:mi><m:mi>x</m:mi></m:mrow></m:msub></m:math> is the excitatory decay constant in space. The peak conductance at inhibitory synapses is defined analogously. We assume that no cell synapses onto itself, or <m:math><m:mrow><m:msub><m:mi>G</m:mi><m:mrow><m:mi>i</m:mi><m:mi>i</m:mi></m:mrow></m:msub><m:mo>=</m:mo><m:mn>0</m:mn><m:mspace width="4pt"/><m:mo>∀</m:mo><m:mi>i</m:mi></m:mrow></m:math>, and that no inhibitory to inhibitory synapses exist. Figure 2 shows the network architecture for a small network.</para>
+      <para id="id2256382">Excitatory neurons in the lateral geniculate nucleus (LGN) are the external sources for our network in the primary visual cortex. The total mean firing rate of all external sources to cell <m:math><m:mi>i</m:mi></m:math> is given by</para>
+      <equation id="id2256400">
+        <m:math mode="display">
+          <m:mrow>
+            <m:msub>
+              <m:mi>f</m:mi>
+              <m:mrow>
+                <m:mi>L</m:mi>
+                <m:mi>G</m:mi>
+                <m:mi>N</m:mi>
+              </m:mrow>
+            </m:msub>
+            <m:mrow>
+              <m:mo>(</m:mo>
+              <m:mo>|</m:mo>
+            </m:mrow>
+            <m:msub>
+              <m:mi>θ</m:mi>
+              <m:mi>i</m:mi>
+            </m:msub>
+            <m:mo>-</m:mo>
+            <m:msub>
+              <m:mi>θ</m:mi>
+              <m:mn>0</m:mn>
+            </m:msub>
+            <m:mrow>
+              <m:mo>|</m:mo>
+              <m:mo>)</m:mo>
+            </m:mrow>
+            <m:mo>=</m:mo>
+            <m:msub>
+              <m:mover accent="true">
+                <m:mi>f</m:mi>
+                <m:mo>¯</m:mo>
+              </m:mover>
+              <m:mrow>
+                <m:mi>L</m:mi>
+                <m:mi>G</m:mi>
+                <m:mi>N</m:mi>
+              </m:mrow>
+            </m:msub>
+            <m:mi>C</m:mi>
+            <m:mrow>
+              <m:mo>[</m:mo>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mn>1</m:mn>
+                <m:mo>-</m:mo>
+                <m:mi>ϵ</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>+</m:mo>
+              <m:mi>ϵ</m:mi>
+              <m:mo form="prefix">cos</m:mo>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mn>2</m:mn>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:msub>
+                    <m:mi>θ</m:mi>
+                    <m:mi>i</m:mi>
+                  </m:msub>
+                  <m:mo>-</m:mo>
+                  <m:msub>
+                    <m:mi>θ</m:mi>
+                    <m:mn>0</m:mn>
+                  </m:msub>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>]</m:mo>
+            </m:mrow>
+            <m:mo>,</m:mo>
+          </m:mrow>
+        </m:math>
+      </equation>
+<!--empty paragraphs get left behind.-->
+      <para id="id2256538">where <m:math><m:msub><m:mi>θ</m:mi><m:mi>i</m:mi></m:msub></m:math> is the PO of cell <m:math><m:mi>i</m:mi></m:math>, and <m:math><m:msub><m:mi>θ</m:mi><m:mn>0</m:mn></m:msub></m:math> is the orientation of the stimulus. The parameter <m:math><m:mi>C</m:mi></m:math> dictates the stimulus contrast, and the parameter <m:math><m:mi>ϵ</m:mi></m:math> measures the degree of tuning of the LGN input. The maximum firing rate, <m:math><m:msub><m:mover accent="true"><m:mi>f</m:mi><m:mo>¯</m:mo></m:mover><m:mrow><m:mi>L</m:mi><m:mi>G</m:mi><m:mi>N</m:mi></m:mrow></m:msub></m:math>, is reached if <m:math><m:mrow><m:mi>C</m:mi><m:mo>=</m:mo><m:mn>0</m:mn></m:mrow></m:math> and <m:math><m:mrow><m:msub><m:mi>θ</m:mi><m:mi>i</m:mi></m:msub><m:mo>=</m:mo><m:msub><m:mi>θ</m:mi><m:mn>0</m:mn></m:msub></m:mrow></m:math>. Note that if <m:math><m:mrow><m:mi>ϵ</m:mi><m:mo>=</m:mo><m:mn>0</m:mn></m:mrow></m:math>, the LGN input is untuned, and if <m:math><m:mrow><m:mi>ϵ</m:mi><m:mo>=</m:mo><m:mn>0</m:mn><m:mo>.</m:mo><m:mn>5</m:mn></m:mrow></m:math>, the LGN input vanishes when <m:math><m:mrow><m:mrow><m:mo>|</m:mo></m:mrow><m:msub><m:mi>θ</m:mi><m:mi>i</m:mi></m:msub><m:mo>-</m:mo><m:msub><m:mi>θ</m:mi><m:mn>0</m:mn></m:msub><m:mrow><m:mo>|</m:mo><m:mo>=</m:mo></m:mrow><m:mfrac><m:mi>π</m:mi><m:mn>2</m:mn></m:mfrac></m:mrow></m:math>.</para>
+      <figure id="uid6" orient="horizontal">
+        <media id="id5061447" alt=""><image src="../../media/WtF.png" mime-type="image/png" width="601"/><image for="pdf" src="../../media/WtF.eps" mime-type="application/postscript" print-width="5in"/></media>
+        <caption>Example Network. Plots (a),(b), and (c) show the peak conductance values for network synapses. The peak conductance is maximal for neurons with the same PO and decreases exponentially as the distance between the pre- and postsynaptic cells increases. Plot (d) shows the mean firing rate for all excitatory network cells as a function of the PO. We used the following parameters for this example: <m:math><m:mrow><m:msub><m:mi>N</m:mi><m:mrow><m:mi>e</m:mi><m:mi>x</m:mi></m:mrow></m:msub><m:mo>=</m:mo><m:mn>100</m:mn></m:mrow></m:math>, <m:math><m:mrow><m:msub><m:mi>N</m:mi><m:mrow><m:mi>i</m:mi><m:mi>n</m:mi></m:mrow></m:msub><m:mo>=</m:mo><m:mn>20</m:mn><m:mo>,</m:mo><m:mspace width="4pt"/><m:msub><m:mover accent="true"><m:mi>G</m:mi><m:mo>¯</m:mo></m:mover><m:mrow><m:mi>e</m:mi><m:mi>x</m:mi></m:mrow></m:msub><m:mo>=</m:mo><m:msub><m:mover accent="true"><m:mi>G</m:mi><m:mo>¯</m:mo></m:mover><m:mrow><m:mi>i</m:mi><m:mi>n</m:mi></m:mrow></m:msub><m:mo>=</m:mo><m:mn>0</m:mn><m:mo>.</m:mo><m:mn>01</m:mn><m:mi>m</m:mi><m:mi>S</m:mi><m:mo>/</m:mo><m:mi>c</m:mi><m:msup><m:mi>m</m:mi><m:mn>2</m:mn></m:msup></m:mrow></m:math>, <m:math><m:mrow><m:msub><m:mi>θ</m:mi><m:mn>0</m:mn></m:msub><m:mo>=</m:mo><m:mn>0</m:mn></m:mrow></m:math>, <m:math><m:mrow><m:mi>ϵ</m:mi><m:mo>=</m:mo><m:mn>0</m:mn><m:mo>.</m:mo><m:mn>5</m:mn></m:mrow></m:math>, <m:math><m:mrow><m:mi>C</m:mi><m:mo>=</m:mo><m:mn>0</m:mn><m:mo>.</m:mo><m:mn>5</m:mn></m:mrow></m:math>, <m:math><m:mrow><m:msub><m:mover accent="true"><m:mi>f</m:mi><m:mo>¯</m:mo></m:mover><m:mrow><m:mi>L</m:mi><m:mi>G</m:mi><m:mi>N</m:mi></m:mrow></m:msub><m:mo>=</m:mo><m:mn>1570</m:mn></m:mrow></m:math> Hz, and <m:math><m:mrow><m:msub><m:mi>λ</m:mi><m:mrow><m:mi>e</m:mi><m:mi>x</m:mi></m:mrow></m:msub><m:mo>=</m:mo><m:msub><m:mi>λ</m:mi><m:mrow><m:mi>i</m:mi><m:mi>n</m:mi></m:mrow></m:msub><m:mo>=</m:mo><m:mn>5</m:mn></m:mrow></m:math> rad.</caption>
+      </figure>
+      <para id="id2257002">To ensure that we have understood and implemented the model as Shriki intended, we now test our model by reproducing the conductance-based portion of Figure 3 in Shriki's paper  <link target-id="bid0"/>. For this simple example, the network in the primary visual cortex consists of <m:math><m:mi>N</m:mi></m:math> excitatory, homogeneous neurons. The homogeneity of the network means that each neuron is connected to every other neuron with peak conductance <m:math><m:mi>G</m:mi></m:math>. Also, each neuron has the same PO, implying that the mean firing rate, <m:math><m:msub><m:mi>f</m:mi><m:mrow><m:mi>L</m:mi><m:mi>G</m:mi><m:mi>N</m:mi></m:mrow></m:msub></m:math>, is uniform across all neurons. To model this, we generate <m:math><m:mi>N</m:mi></m:math> uncorrelated Poisson spike trains with mean firing rate <m:math><m:msub><m:mi>f</m:mi><m:mrow><m:mi>L</m:mi><m:mi>G</m:mi><m:mi>N</m:mi></m:mrow></m:msub></m:math>. We now implement the model for this homogeneous network to show how the firing rate depends on the peak synaptic conductance, <m:math><m:mrow><m:mi>G</m:mi><m:mo>.</m:mo></m:mrow></m:math> Our results are shown in Figure 3.</para>
+      <figure id="uid7" orient="horizontal">
+        <media id="id1163896930108" alt=""><image src="../../media/papFig3.png" mime-type="image/png" width="474"/><image for="pdf" src="../../media/papFig3.eps" mime-type="application/postscript" print-width="5in"/></media>
+        <caption>Firing rate versus synaptic conductance in a homogeneous network of fully connected neurons. By implementing the model presented by Shriki et al, we have reproduced the conductance-based portion of Figure 3 and shown the relationship between the firing rate and the peak synaptic conductance. The parameters used for this network are given in the table below.</caption>
+      </figure>
+<!--empty paragraphs get left behind.-->
+      <table id="uid8" summary="">
+        <tgroup cols="2">
+          <tbody>
+            <row>
+              <entry>
+                <m:math>
+                  <m:msub>
+                    <m:mi>N</m:mi>
+                    <m:mrow>
+                      <m:mi>e</m:mi>
+                      <m:mi>x</m:mi>
+                    </m:mrow>
+                  </m:msub>
+                </m:math>
+              </entry>
+              <entry>1000</entry>
+            </row>
+            <row>
+              <entry>
+                <m:math>
+                  <m:msup>
+                    <m:mi>G</m:mi>
+                    <m:mrow>
+                      <m:mi>e</m:mi>
+                      <m:mi>x</m:mi>
+                      <m:mi>t</m:mi>
+                    </m:mrow>
+                  </m:msup>
+                </m:math>
+              </entry>
+              <entry>0.0035 <m:math><m:mrow><m:mi>m</m:mi><m:mi>S</m:mi><m:mo>/</m:mo><m:mi>c</m:mi><m:msup><m:mi>m</m:mi><m:mn>2</m:mn></m:msup></m:mrow></m:math></entry>
+            </row>
+            <row>
+              <entry>
+                <m:math>
+                  <m:msub>
+                    <m:mi>f</m:mi>
+                    <m:mrow>
+                      <m:mi>L</m:mi>
+                      <m:mi>G</m:mi>
+                      <m:mi>N</m:mi>
+                    </m:mrow>
+                  </m:msub>
+                </m:math>
+              </entry>
+              <entry>1570 Hz</entry>
+            </row>
+            <row>
+              <entry>
+                <m:math>
+                  <m:msub>
+                    <m:mi>λ</m:mi>
+                    <m:mrow>
+                      <m:mi>e</m:mi>
+                      <m:mi>x</m:mi>
+                    </m:mrow>
+                  </m:msub>
+                </m:math>
+              </entry>
+              <entry>5 rad</entry>
+            </row>
+            <row>
+              <entry>
+                <m:math>
+                  <m:msub>
+                    <m:mi>τ</m:mi>
+                    <m:mrow>
+                      <m:mi>e</m:mi>
+                      <m:mi>x</m:mi>
+                    </m:mrow>
+                  </m:msub>
+                </m:math>
+              </entry>
+              <entry>5 ms</entry>
+            </row>
+            <row>
+              <entry>
+                <m:math>
+                  <m:msup>
+                    <m:mi>τ</m:mi>
+                    <m:mrow>
+                      <m:mi>e</m:mi>
+                      <m:mi>x</m:mi>
+                      <m:mi>t</m:mi>
+                    </m:mrow>
+                  </m:msup>
+                </m:math>
+              </entry>
+              <entry>5 ms</entry>
+            </row>
+            <row>
+              <entry>
+                <m:math>
+                  <m:msub>
+                    <m:mi>V</m:mi>
+                    <m:mrow>
+                      <m:mi>r</m:mi>
+                      <m:mi>e</m:mi>
+                      <m:mi>s</m:mi>
+                      <m:mi>t</m:mi>
+                    </m:mrow>
+                  </m:msub>
+                </m:math>
+              </entry>
+              <entry>-73 mV</entry>
+            </row>
+            <row>
+              <entry>
+                <m:math>
+                  <m:msub>
+                    <m:mi>C</m:mi>
+                    <m:mi>m</m:mi>
+                  </m:msub>
+                </m:math>
+              </entry>
+              <entry>1 <m:math><m:mrow><m:mi>μ</m:mi><m:mi>F</m:mi><m:mo>/</m:mo><m:mi>c</m:mi><m:msup><m:mi>m</m:mi><m:mn>2</m:mn></m:msup></m:mrow></m:math></entry>
+            </row>
+            <row>
+              <entry>
+                <m:math>
+                  <m:msub>
+                    <m:mi>E</m:mi>
+                    <m:mi>L</m:mi>
+                  </m:msub>
+                </m:math>
+              </entry>
+              <entry>-65 mV</entry>
+            </row>
+          </tbody>
+        </tgroup>
+        <caption>Parameter values used for figure 3</caption>
+      </table>
+    </section>
+    <section id="cid4">
+      <title>Conclusion</title>
+      <para id="id2257530">We have shown how to extend the model of the isolated single compartmental neuron to model a network of neurons receiving external input. Using this model, we have simulated the dynamics of a network of cells in the primary visual cortex receiving input from the LGN. For an excitatory, homogeneous network, we have shown the relationship between the firing rate of the network and the peak synaptic conductance at the network synapses, reproducing results obtained by Shriki et al. The next step needing to be taken for this VIGRE project is to implement the rate equations that are the central focus of the Shriki paper. We could then compare the results obtained from the rate model to those obtained in the conductance-based model presented here and determine if the rate equations are a good approximation for the conductance-based model.</para>
+    </section>
+  </content>
+  <bib:file>
+    <bib:entry id="bid0">
+      <bib:article>
+<!--required fields-->
+        <bib:author>Shriki, O. and Hansel, D. and Sompolinsky, H.</bib:author>
+        <bib:title>Rate Models for Conductance-Based Cortical Neuronal Networks</bib:title>
+        <bib:journal>Neural Computation</bib:journal>
+        <bib:year>2003</bib:year>
+<!--optional fields-->
+        <bib:volume>15</bib:volume>
+        <bib:number/>
+        <bib:pages>1809–1841</bib:pages>
+        <bib:month/>
+        <bib:note/>
+      </bib:article>
+    </bib:entry>
+  </bib:file>
+</document>

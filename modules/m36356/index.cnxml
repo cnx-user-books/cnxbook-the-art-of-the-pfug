@@ -1,0 +1,649 @@
+<document xmlns="http://cnx.rice.edu/cnxml" xmlns:m="http://www.w3.org/1998/Math/MathML">
+  <title>Surfaces Minimizing Boundary-Weighted Area</title>
+<metadata xmlns:md="http://cnx.rice.edu/mdml">
+  <md:content-id>m36356</md:content-id>
+  <md:title>Surfaces Minimizing Boundary-Weighted Area</md:title>
+  <md:abstract>This report summarizes work done as part of the Calculus of Variations PFUG under Rice University's VIGRE program. VIGRE is a program of Vertically Integrated Grants for Research and Education in the Mathematical Sciences under the direction of the National Science Foundation. A PFUG is a group of Postdocs, Faculty, Undergraduates and Graduate students formed around the study of a common problem. This module investigates the boundary-weighted area of surfaces, and asks the Plateau problem for this functional. An analogous functional, the boundary-value weighted area and energy, is discussed in the one-dimensional setting. This work was studied in the Rice University VIGRE class MATH499 in the Fall of 2010.</md:abstract>
+  <md:uuid>49f1265e-69b3-4dbf-83ec-c0b1c334fef1</md:uuid>
+</metadata>
+
+<content>
+    <section id="cid1">
+      <title>Introduction</title>
+      <para id="id209520">Our research has been devoted to minimizing the <m:math overflow="scroll"><m:mi>c</m:mi></m:math>-boundary-weighted area of surfaces. We have also studied the boundary-value weighted Dirichlet energy over the interval [0,1]. These two problems have required us to study the minimal surface equation over the plane, using techniques from geometric calculus of variations.</para>
+    </section>
+    <section id="cid2">
+      <title>Problem</title>
+      <para id="id209544">Given a surface <m:math overflow="scroll"><m:mrow><m:mi>S</m:mi><m:mo>,</m:mo></m:mrow></m:math> we define the <m:math overflow="scroll"><m:mi>c</m:mi></m:math>-boundary-weighted area of <m:math overflow="scroll"><m:mi>S</m:mi></m:math> to be</para>
+      <equation id="id209912">
+        <m:math overflow="scroll" mode="display">
+          <m:mrow>
+            <m:msub>
+              <m:mi>A</m:mi>
+              <m:mrow>
+                <m:mi>c</m:mi>
+                <m:mo>,</m:mo>
+                <m:mi>∂</m:mi>
+              </m:mrow>
+            </m:msub>
+            <m:mrow>
+              <m:mo>(</m:mo>
+              <m:mi>S</m:mi>
+              <m:mo>)</m:mo>
+            </m:mrow>
+            <m:mo>=</m:mo>
+            <m:mi>A</m:mi>
+            <m:mi>r</m:mi>
+            <m:mi>e</m:mi>
+            <m:mi>a</m:mi>
+            <m:mrow>
+              <m:mo>(</m:mo>
+              <m:mi>S</m:mi>
+              <m:mo>)</m:mo>
+            </m:mrow>
+            <m:mo>+</m:mo>
+            <m:mi>c</m:mi>
+            <m:mo>·</m:mo>
+            <m:msup>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>l</m:mi>
+                <m:mi>e</m:mi>
+                <m:mi>n</m:mi>
+                <m:mi>g</m:mi>
+                <m:mi>t</m:mi>
+                <m:mi>h</m:mi>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mi>∂</m:mi>
+                  <m:mi>S</m:mi>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mn>2</m:mn>
+            </m:msup>
+            <m:mo>.</m:mo>
+          </m:mrow>
+        </m:math>
+      </equation>
+      <para id="id209475">For <m:math overflow="scroll"><m:msub><m:mi mathvariant="script">D</m:mi><m:mi>R</m:mi></m:msub></m:math> the disc of radius <m:math overflow="scroll"><m:mi>R</m:mi></m:math> and <m:math overflow="scroll"><m:msub><m:mi>C</m:mi><m:mi>h</m:mi></m:msub></m:math> the cylinder of radius <m:math overflow="scroll"><m:mi>R</m:mi></m:math> and height <m:math overflow="scroll"><m:mi>h</m:mi></m:math> we have:</para>
+      <equation id="id210238">
+        <m:math overflow="scroll" mode="display">
+          <m:mrow>
+            <m:msub>
+              <m:mi>A</m:mi>
+              <m:mrow>
+                <m:mi>c</m:mi>
+                <m:mo>,</m:mo>
+                <m:mi>∂</m:mi>
+              </m:mrow>
+            </m:msub>
+            <m:mrow>
+              <m:mo>(</m:mo>
+              <m:msub>
+                <m:mi mathvariant="script">D</m:mi>
+                <m:mi>R</m:mi>
+              </m:msub>
+              <m:mo>)</m:mo>
+            </m:mrow>
+            <m:mo>=</m:mo>
+            <m:mrow>
+              <m:mo>(</m:mo>
+              <m:mi>π</m:mi>
+              <m:mo>+</m:mo>
+              <m:mn>4</m:mn>
+              <m:msup>
+                <m:mi>π</m:mi>
+                <m:mn>2</m:mn>
+              </m:msup>
+              <m:mi>c</m:mi>
+              <m:mo>)</m:mo>
+            </m:mrow>
+            <m:msup>
+              <m:mi>R</m:mi>
+              <m:mn>2</m:mn>
+            </m:msup>
+            <m:mo>,</m:mo>
+            <m:mspace width="4pt"/>
+            <m:msub>
+              <m:mi>A</m:mi>
+              <m:mrow>
+                <m:mi>c</m:mi>
+                <m:mo>,</m:mo>
+                <m:mi>∂</m:mi>
+              </m:mrow>
+            </m:msub>
+            <m:mrow>
+              <m:mo>(</m:mo>
+              <m:msub>
+                <m:mi>C</m:mi>
+                <m:mi>h</m:mi>
+              </m:msub>
+              <m:mo>)</m:mo>
+            </m:mrow>
+            <m:mo>=</m:mo>
+            <m:mn>2</m:mn>
+            <m:mi>π</m:mi>
+            <m:mi>R</m:mi>
+            <m:mi>h</m:mi>
+            <m:mo>+</m:mo>
+            <m:mn>16</m:mn>
+            <m:msup>
+              <m:mi>π</m:mi>
+              <m:mn>2</m:mn>
+            </m:msup>
+            <m:mi>c</m:mi>
+            <m:msup>
+              <m:mi>R</m:mi>
+              <m:mn>2</m:mn>
+            </m:msup>
+            <m:mo>.</m:mo>
+          </m:mrow>
+        </m:math>
+      </equation>
+      <para id="id210370">If <m:math overflow="scroll"><m:mrow><m:mi>c</m:mi><m:mo>&lt;</m:mo><m:mfrac><m:mn>1</m:mn><m:mrow><m:mn>12</m:mn><m:mi>π</m:mi></m:mrow></m:mfrac><m:mo>,</m:mo></m:mrow></m:math> then <m:math overflow="scroll"><m:mrow><m:msub><m:mo movablelimits="true" form="prefix">lim</m:mo><m:mrow><m:mi>h</m:mi><m:mo>→</m:mo><m:mn>0</m:mn></m:mrow></m:msub><m:msub><m:mi>A</m:mi><m:mrow><m:mi>c</m:mi><m:mo>,</m:mo><m:mi>∂</m:mi></m:mrow></m:msub><m:mrow><m:mo>(</m:mo><m:msub><m:mi>C</m:mi><m:mi>h</m:mi></m:msub><m:mo>)</m:mo></m:mrow><m:mo>&lt;</m:mo><m:msub><m:mi>A</m:mi><m:mrow><m:mi>c</m:mi><m:mo>,</m:mo><m:mi>∂</m:mi></m:mrow></m:msub><m:mrow><m:mo>(</m:mo><m:msub><m:mi mathvariant="script">D</m:mi><m:mi>R</m:mi></m:msub><m:mo>)</m:mo></m:mrow><m:mo>.</m:mo></m:mrow></m:math></para>
+      <para id="id210478">
+        <emphasis effect="bold">Problem:</emphasis>
+        <emphasis effect="italics">Given a curve <m:math overflow="scroll"><m:msub><m:mi>γ</m:mi><m:mn>0</m:mn></m:msub></m:math> in <m:math overflow="scroll"><m:mrow><m:msup><m:mi mathvariant="double-struck">R</m:mi><m:mn>3</m:mn></m:msup><m:mo>,</m:mo></m:mrow></m:math> does there exist a surface <m:math overflow="scroll"><m:mi>S</m:mi></m:math> with boundary</emphasis>
+      </para>
+      <equation id="id210533">
+        <m:math overflow="scroll" mode="display">
+          <m:mrow>
+            <m:mi>∂</m:mi>
+            <m:mi>S</m:mi>
+            <m:mo>=</m:mo>
+            <m:msub>
+              <m:mi>γ</m:mi>
+              <m:mn>0</m:mn>
+            </m:msub>
+            <m:mo>∪</m:mo>
+            <m:munderover>
+              <m:mo>⋃</m:mo>
+              <m:mrow>
+                <m:mi>i</m:mi>
+                <m:mo>=</m:mo>
+                <m:mn>1</m:mn>
+              </m:mrow>
+              <m:mi>n</m:mi>
+            </m:munderover>
+            <m:msub>
+              <m:mi>γ</m:mi>
+              <m:mi>i</m:mi>
+            </m:msub>
+          </m:mrow>
+        </m:math>
+      </equation>
+      <para id="id210581">
+        <emphasis effect="italics">disjoint curves so that the <m:math overflow="scroll"><m:mi>c</m:mi></m:math>-boundary-weighted area of <m:math overflow="scroll"><m:mi>S</m:mi></m:math> is least amongst all surfaces having boundary at least <m:math overflow="scroll"><m:msub><m:mi>γ</m:mi><m:mn>0</m:mn></m:msub></m:math>? </emphasis>
+      </para>
+      <para id="id210619">Consider the upper-half of the truncated catenoid <m:math overflow="scroll"><m:msub><m:mi mathvariant="fraktur">C</m:mi><m:mi>R</m:mi></m:msub></m:math> given by the graph of <m:math overflow="scroll"><m:mrow><m:mi>f</m:mi><m:mrow><m:mo>(</m:mo><m:mi>x</m:mi><m:mo>,</m:mo><m:mi>y</m:mi><m:mo>)</m:mo></m:mrow><m:mo>=</m:mo><m:msup><m:mo form="prefix">cosh</m:mo><m:mrow><m:mo>-</m:mo><m:mn>1</m:mn></m:mrow></m:msup><m:mrow><m:mo>(</m:mo><m:mi>r</m:mi><m:mo>)</m:mo></m:mrow></m:mrow></m:math> for <m:math overflow="scroll"><m:mrow><m:mn>1</m:mn><m:mo>&lt;</m:mo><m:mi>r</m:mi><m:mo>&lt;</m:mo><m:mi>R</m:mi><m:mo>,</m:mo></m:mrow></m:math> we have</para>
+      <equation id="id210702">
+        <m:math overflow="scroll" mode="display">
+          <m:mrow>
+            <m:msub>
+              <m:mi>A</m:mi>
+              <m:mrow>
+                <m:mi>c</m:mi>
+                <m:mo>,</m:mo>
+                <m:mi>∂</m:mi>
+              </m:mrow>
+            </m:msub>
+            <m:mrow>
+              <m:mo>(</m:mo>
+              <m:msub>
+                <m:mi mathvariant="fraktur">C</m:mi>
+                <m:mi>R</m:mi>
+              </m:msub>
+              <m:mo>)</m:mo>
+            </m:mrow>
+            <m:mo>=</m:mo>
+            <m:mi>π</m:mi>
+            <m:mrow>
+              <m:mo>[</m:mo>
+              <m:mi>R</m:mi>
+              <m:msqrt>
+                <m:mrow>
+                  <m:msup>
+                    <m:mi>R</m:mi>
+                    <m:mn>2</m:mn>
+                  </m:msup>
+                  <m:mo>-</m:mo>
+                  <m:mn>1</m:mn>
+                </m:mrow>
+              </m:msqrt>
+              <m:mo>+</m:mo>
+              <m:msup>
+                <m:mo form="prefix">cosh</m:mo>
+                <m:mrow>
+                  <m:mo>-</m:mo>
+                  <m:mn>1</m:mn>
+                </m:mrow>
+              </m:msup>
+              <m:mi>R</m:mi>
+              <m:mo>]</m:mo>
+            </m:mrow>
+            <m:mo>+</m:mo>
+            <m:mn>4</m:mn>
+            <m:msup>
+              <m:mi>π</m:mi>
+              <m:mn>2</m:mn>
+            </m:msup>
+            <m:mi>c</m:mi>
+            <m:msup>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>R</m:mi>
+                <m:mo>+</m:mo>
+                <m:mn>1</m:mn>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mn>2</m:mn>
+            </m:msup>
+            <m:mo>.</m:mo>
+          </m:mrow>
+        </m:math>
+      </equation>
+    </section>
+    <section id="cid3">
+      <title>Boundary-Value Weighted Energy &amp; Area</title>
+      <para id="id210825">Let <m:math overflow="scroll"><m:mrow><m:mi>Ω</m:mi><m:mo>=</m:mo><m:msubsup><m:mo>∪</m:mo><m:mrow><m:mi>i</m:mi><m:mo>=</m:mo><m:mn>0</m:mn></m:mrow><m:mi>n</m:mi></m:msubsup><m:mrow><m:mo>[</m:mo><m:msub><m:mi>a</m:mi><m:mrow><m:mn>2</m:mn><m:mi>i</m:mi></m:mrow></m:msub><m:mo>,</m:mo><m:msub><m:mi>a</m:mi><m:mrow><m:mn>2</m:mn><m:mi>i</m:mi><m:mo>+</m:mo><m:mn>1</m:mn></m:mrow></m:msub><m:mo>]</m:mo></m:mrow></m:mrow></m:math> where <m:math overflow="scroll"><m:mrow><m:msub><m:mi>a</m:mi><m:mn>0</m:mn></m:msub><m:mo>=</m:mo><m:mn>0</m:mn><m:mo>,</m:mo><m:msub><m:mi>a</m:mi><m:mrow><m:mn>2</m:mn><m:mi>n</m:mi><m:mo>+</m:mo><m:mn>1</m:mn></m:mrow></m:msub><m:mo>=</m:mo><m:mn>1</m:mn></m:mrow></m:math> and <m:math overflow="scroll"><m:mrow><m:msub><m:mi>a</m:mi><m:mi>j</m:mi></m:msub><m:mo>&lt;</m:mo><m:msub><m:mi>a</m:mi><m:mrow><m:mi>j</m:mi><m:mo>+</m:mo><m:mn>1</m:mn></m:mrow></m:msub><m:mo>.</m:mo></m:mrow></m:math> We define the <m:math overflow="scroll"><m:mi>c</m:mi></m:math>-boundary-value weighted Dirichlet energy of a function <m:math overflow="scroll"><m:mrow><m:mi>u</m:mi><m:mo>:</m:mo><m:mi>Ω</m:mi><m:mo>→</m:mo><m:mi mathvariant="double-struck">R</m:mi></m:mrow></m:math> to be:</para>
+      <equation id="id210988">
+        <m:math overflow="scroll" mode="display">
+          <m:mrow>
+            <m:msub>
+              <m:mi>E</m:mi>
+              <m:mrow>
+                <m:mi>c</m:mi>
+                <m:mo>,</m:mo>
+                <m:mi>∂</m:mi>
+              </m:mrow>
+            </m:msub>
+            <m:mrow>
+              <m:mo>(</m:mo>
+              <m:mi>u</m:mi>
+              <m:mo>)</m:mo>
+            </m:mrow>
+            <m:mo>=</m:mo>
+            <m:munderover>
+              <m:mo>∑</m:mo>
+              <m:mrow>
+                <m:mi>i</m:mi>
+                <m:mo>=</m:mo>
+                <m:mn>0</m:mn>
+              </m:mrow>
+              <m:mi>n</m:mi>
+            </m:munderover>
+            <m:msubsup>
+              <m:mo>∫</m:mo>
+              <m:mrow>
+                <m:msub>
+                  <m:mi>a</m:mi>
+                  <m:mrow>
+                    <m:mn>2</m:mn>
+                    <m:mi>i</m:mi>
+                  </m:mrow>
+                </m:msub>
+              </m:mrow>
+              <m:msub>
+                <m:mi>a</m:mi>
+                <m:mrow>
+                  <m:mn>2</m:mn>
+                  <m:mi>i</m:mi>
+                  <m:mo>+</m:mo>
+                  <m:mn>1</m:mn>
+                </m:mrow>
+              </m:msub>
+            </m:msubsup>
+            <m:mrow>
+              <m:mo>|</m:mo>
+            </m:mrow>
+            <m:msup>
+              <m:mi>u</m:mi>
+              <m:mo>'</m:mo>
+            </m:msup>
+            <m:msup>
+              <m:mrow>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mi>x</m:mi>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mo>|</m:mo>
+              </m:mrow>
+              <m:mn>2</m:mn>
+            </m:msup>
+            <m:mspace width="4pt"/>
+            <m:mi>d</m:mi>
+            <m:mi>x</m:mi>
+            <m:mo>+</m:mo>
+            <m:mi>c</m:mi>
+            <m:mo>·</m:mo>
+            <m:munderover>
+              <m:mo>∑</m:mo>
+              <m:mrow>
+                <m:mi>i</m:mi>
+                <m:mo>=</m:mo>
+                <m:mn>0</m:mn>
+              </m:mrow>
+              <m:mrow>
+                <m:mn>2</m:mn>
+                <m:mi>n</m:mi>
+                <m:mo>+</m:mo>
+                <m:mn>1</m:mn>
+              </m:mrow>
+            </m:munderover>
+            <m:mrow>
+              <m:mo>|</m:mo>
+              <m:mi>u</m:mi>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:msub>
+                  <m:mi>a</m:mi>
+                  <m:mi>i</m:mi>
+                </m:msub>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>|</m:mo>
+            </m:mrow>
+            <m:mo>.</m:mo>
+          </m:mrow>
+        </m:math>
+      </equation>
+      <para id="id211154">We seek to minimize <m:math overflow="scroll"><m:mrow><m:msub><m:mi>E</m:mi><m:mrow><m:mi>c</m:mi><m:mo>,</m:mo><m:mi>∂</m:mi></m:mrow></m:msub><m:mrow><m:mo>(</m:mo><m:mi>u</m:mi><m:mo>)</m:mo></m:mrow></m:mrow></m:math> over functions <m:math overflow="scroll"><m:mrow><m:mi>u</m:mi><m:mo>:</m:mo><m:mi>Ω</m:mi><m:mo>→</m:mo><m:mi mathvariant="double-struck">R</m:mi></m:mrow></m:math> subject to the constraints <m:math overflow="scroll"><m:mrow><m:mi>u</m:mi><m:mo>(</m:mo><m:mn>0</m:mn><m:mo>)</m:mo><m:mo>=</m:mo><m:mn>0</m:mn><m:mo>,</m:mo><m:mi>u</m:mi><m:mo>(</m:mo><m:mn>1</m:mn><m:mo>)</m:mo><m:mo>=</m:mo><m:mn>1</m:mn><m:mo>.</m:mo></m:mrow></m:math></para>
+      <figure id="uid1" orient="vertical">
+        <subfigure id="id211307">
+          <media id="id211307_media" alt="">
+            <image mime-type="image/png" src="../../media/graph1.png" id="id211307_onlineimage" width="167"><!-- NOTE: attribute width changes image size online (pixels). original width is 167. --></image>
+            <image mime-type="application/postscript" for="pdf" src="../../media/graph1.eps" id="id211307_printimage" print-width="2in">
+              <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+            </image>
+          </media>
+        </subfigure>
+        <subfigure id="id211315">
+          <media id="id211315_media" alt="">
+            <image mime-type="image/png" src="../../media/graph2.png" id="id211315_onlineimage" width="170"><!-- NOTE: attribute width changes image size online (pixels). original width is 170. --></image>
+            <image mime-type="application/postscript" for="pdf" src="../../media/graph2.eps" id="id211315_printimage" print-width="2in">
+              <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+            </image>
+          </media>
+        </subfigure>
+        <caption>A general function <m:math overflow="scroll"><m:mrow><m:mi>u</m:mi><m:mo>:</m:mo><m:mi>Ω</m:mi><m:mo>→</m:mo><m:mi mathvariant="double-struck">R</m:mi><m:mo>,</m:mo></m:mrow></m:math> and the functions <m:math overflow="scroll"><m:msub><m:mi>u</m:mi><m:mrow><m:mi>ϵ</m:mi><m:mo>,</m:mo><m:mi>A</m:mi></m:mrow></m:msub></m:math> parameterized by <m:math overflow="scroll"><m:mrow><m:mi>ϵ</m:mi><m:mo>,</m:mo><m:mi>A</m:mi><m:mo>.</m:mo></m:mrow></m:math></caption>
+      </figure>
+      <para id="id211325">We can show that we only need to consider functions <m:math overflow="scroll"><m:msub><m:mi>u</m:mi><m:mrow><m:mi>ϵ</m:mi><m:mo>,</m:mo><m:mi>A</m:mi></m:mrow></m:msub></m:math> that vanish along the majority of the interval. We therefore need to minimize the function <m:math overflow="scroll"><m:mrow><m:mi>f</m:mi><m:mo>(</m:mo><m:mi>ϵ</m:mi><m:mo>,</m:mo><m:mi>A</m:mi><m:mo>)</m:mo></m:mrow></m:math> over <m:math overflow="scroll"><m:mrow><m:mo>(</m:mo><m:mn>0</m:mn><m:mo>,</m:mo><m:mn>1</m:mn><m:mo>)</m:mo><m:mo>×</m:mo><m:mo>(</m:mo><m:mn>0</m:mn><m:mo>,</m:mo><m:mn>1</m:mn><m:mo>)</m:mo><m:mo>,</m:mo></m:mrow></m:math> given by</para>
+      <equation id="id211400">
+        <m:math overflow="scroll" mode="display">
+          <m:mrow>
+            <m:mi>f</m:mi>
+            <m:mrow>
+              <m:mo>(</m:mo>
+              <m:mi>ϵ</m:mi>
+              <m:mo>,</m:mo>
+              <m:mi>A</m:mi>
+              <m:mo>)</m:mo>
+            </m:mrow>
+            <m:mo>=</m:mo>
+            <m:msub>
+              <m:mi>E</m:mi>
+              <m:mrow>
+                <m:mi>∂</m:mi>
+                <m:mo>,</m:mo>
+                <m:mi>c</m:mi>
+              </m:mrow>
+            </m:msub>
+            <m:mrow>
+              <m:mo>(</m:mo>
+              <m:msub>
+                <m:mi>u</m:mi>
+                <m:mrow>
+                  <m:mi>ϵ</m:mi>
+                  <m:mo>,</m:mo>
+                  <m:mi>A</m:mi>
+                </m:mrow>
+              </m:msub>
+              <m:mo>)</m:mo>
+            </m:mrow>
+            <m:mo>=</m:mo>
+            <m:mfrac>
+              <m:msup>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mn>1</m:mn>
+                  <m:mo>-</m:mo>
+                  <m:mi>A</m:mi>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mn>2</m:mn>
+              </m:msup>
+              <m:mi>ϵ</m:mi>
+            </m:mfrac>
+            <m:mo>+</m:mo>
+            <m:mi>c</m:mi>
+            <m:mrow>
+              <m:mo>(</m:mo>
+              <m:mi>A</m:mi>
+              <m:mo>+</m:mo>
+              <m:mn>1</m:mn>
+              <m:mo>)</m:mo>
+            </m:mrow>
+            <m:mo>.</m:mo>
+          </m:mrow>
+        </m:math>
+      </equation>
+      <para id="id211497">For <m:math overflow="scroll"><m:mrow><m:mi>c</m:mi><m:mo>≥</m:mo><m:mn>2</m:mn><m:mo>,</m:mo></m:mrow></m:math> a minimizer is <m:math overflow="scroll"><m:mrow><m:msub><m:mi>u</m:mi><m:mrow><m:mn>1</m:mn><m:mo>,</m:mo><m:mn>0</m:mn></m:mrow></m:msub><m:mrow><m:mo>(</m:mo><m:mi>x</m:mi><m:mo>)</m:mo></m:mrow><m:mo>=</m:mo><m:mi>x</m:mi></m:mrow></m:math> with <m:math overflow="scroll"><m:mrow><m:mi>Ω</m:mi><m:mo>=</m:mo><m:mo>[</m:mo><m:mn>0</m:mn><m:mo>,</m:mo><m:mn>1</m:mn><m:mo>]</m:mo></m:mrow></m:math> which is unique for <m:math overflow="scroll"><m:mrow><m:mi>c</m:mi><m:mo>&gt;</m:mo><m:mn>2</m:mn><m:mo>.</m:mo></m:mrow></m:math> When <m:math overflow="scroll"><m:mrow><m:mi>c</m:mi><m:mo>&lt;</m:mo><m:mn>2</m:mn></m:mrow></m:math> no minimizer exists, but can be approximated by the sequence <m:math overflow="scroll"><m:mrow><m:msub><m:mi>u</m:mi><m:mrow><m:mi>ϵ</m:mi><m:mo>,</m:mo><m:mn>1</m:mn><m:mo>-</m:mo><m:mfrac><m:mi>c</m:mi><m:mn>2</m:mn></m:mfrac></m:mrow></m:msub><m:mo>,</m:mo></m:mrow></m:math> letting <m:math overflow="scroll"><m:mrow><m:mi>ϵ</m:mi><m:mo>→</m:mo><m:mn>1</m:mn><m:mo>.</m:mo></m:mrow></m:math></para>
+      <para id="id211644">We define the <m:math overflow="scroll"><m:mi>c</m:mi></m:math>-boundary-value weighted area of a function <m:math overflow="scroll"><m:mrow><m:mi>u</m:mi><m:mo>:</m:mo><m:mi>Ω</m:mi><m:mo>→</m:mo><m:mi mathvariant="double-struck">R</m:mi></m:mrow></m:math> to be:</para>
+      <equation id="id211678">
+        <m:math overflow="scroll" mode="display">
+          <m:mrow>
+            <m:msub>
+              <m:mi>A</m:mi>
+              <m:mrow>
+                <m:mi>c</m:mi>
+                <m:mo>,</m:mo>
+                <m:mi>∂</m:mi>
+              </m:mrow>
+            </m:msub>
+            <m:mrow>
+              <m:mo>(</m:mo>
+              <m:mi>u</m:mi>
+              <m:mo>)</m:mo>
+            </m:mrow>
+            <m:mo>=</m:mo>
+            <m:munderover>
+              <m:mo>∑</m:mo>
+              <m:mrow>
+                <m:mi>i</m:mi>
+                <m:mo>=</m:mo>
+                <m:mn>0</m:mn>
+              </m:mrow>
+              <m:mi>n</m:mi>
+            </m:munderover>
+            <m:msubsup>
+              <m:mo>∫</m:mo>
+              <m:mrow>
+                <m:msub>
+                  <m:mi>a</m:mi>
+                  <m:mrow>
+                    <m:mn>2</m:mn>
+                    <m:mi>i</m:mi>
+                  </m:mrow>
+                </m:msub>
+              </m:mrow>
+              <m:msub>
+                <m:mi>a</m:mi>
+                <m:mrow>
+                  <m:mn>2</m:mn>
+                  <m:mi>i</m:mi>
+                  <m:mo>+</m:mo>
+                  <m:mn>1</m:mn>
+                </m:mrow>
+              </m:msub>
+            </m:msubsup>
+            <m:msqrt>
+              <m:mrow>
+                <m:mrow>
+                  <m:mn>1</m:mn>
+                  <m:mo>+</m:mo>
+                  <m:mo>|</m:mo>
+                </m:mrow>
+                <m:msup>
+                  <m:mi>u</m:mi>
+                  <m:mo>'</m:mo>
+                </m:msup>
+                <m:msup>
+                  <m:mrow>
+                    <m:mrow>
+                      <m:mo>(</m:mo>
+                      <m:mi>x</m:mi>
+                      <m:mo>)</m:mo>
+                    </m:mrow>
+                    <m:mo>|</m:mo>
+                  </m:mrow>
+                  <m:mn>2</m:mn>
+                </m:msup>
+              </m:mrow>
+            </m:msqrt>
+            <m:mspace width="4pt"/>
+            <m:mi>d</m:mi>
+            <m:mi>x</m:mi>
+            <m:mo>+</m:mo>
+            <m:mi>c</m:mi>
+            <m:mo>·</m:mo>
+            <m:munderover>
+              <m:mo>∑</m:mo>
+              <m:mrow>
+                <m:mi>i</m:mi>
+                <m:mo>=</m:mo>
+                <m:mn>0</m:mn>
+              </m:mrow>
+              <m:mrow>
+                <m:mn>2</m:mn>
+                <m:mi>n</m:mi>
+                <m:mo>+</m:mo>
+                <m:mn>1</m:mn>
+              </m:mrow>
+            </m:munderover>
+            <m:mrow>
+              <m:mo>|</m:mo>
+              <m:mi>u</m:mi>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:msub>
+                  <m:mi>a</m:mi>
+                  <m:mi>i</m:mi>
+                </m:msub>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>|</m:mo>
+            </m:mrow>
+            <m:mo>.</m:mo>
+          </m:mrow>
+        </m:math>
+      </equation>
+      <para id="id211852">The minimizer for <m:math overflow="scroll"><m:mrow><m:mi>c</m:mi><m:mo>≥</m:mo><m:msqrt><m:mn>2</m:mn></m:msqrt></m:mrow></m:math> is <m:math overflow="scroll"><m:mrow><m:msub><m:mi>u</m:mi><m:mrow><m:mn>1</m:mn><m:mo>,</m:mo><m:mn>0</m:mn></m:mrow></m:msub><m:mrow><m:mo>(</m:mo><m:mi>x</m:mi><m:mo>)</m:mo></m:mrow><m:mo>=</m:mo><m:mi>x</m:mi></m:mrow></m:math> with <m:math overflow="scroll"><m:mrow><m:mi>Ω</m:mi><m:mo>=</m:mo><m:mo>[</m:mo><m:mn>0</m:mn><m:mo>,</m:mo><m:mn>1</m:mn><m:mo>]</m:mo><m:mo>,</m:mo></m:mrow></m:math> unique for <m:math overflow="scroll"><m:mrow><m:mi>c</m:mi><m:mo>&gt;</m:mo><m:msqrt><m:mn>2</m:mn></m:msqrt><m:mo>.</m:mo></m:mrow></m:math> When <m:math overflow="scroll"><m:mrow><m:mi>c</m:mi><m:mo>&lt;</m:mo><m:msqrt><m:mn>2</m:mn></m:msqrt></m:mrow></m:math>, no minimizer exists.</para>
+    </section>
+    <section id="cid4">
+      <title>Minimal Surface Equation</title>
+      <para id="id211968">The MSE in two variables is the PDE:</para>
+      <equation id="id211971">
+        <m:math overflow="scroll" mode="display">
+          <m:mrow>
+            <m:mi mathvariant="script">M</m:mi>
+            <m:mrow>
+              <m:mo>(</m:mo>
+              <m:mi>u</m:mi>
+              <m:mo>)</m:mo>
+            </m:mrow>
+            <m:mo>=</m:mo>
+            <m:mfrac>
+              <m:mi>∂</m:mi>
+              <m:mrow>
+                <m:mi>∂</m:mi>
+                <m:mi>x</m:mi>
+              </m:mrow>
+            </m:mfrac>
+            <m:mfenced separators="" open="(" close=")">
+              <m:mfrac>
+                <m:mfrac>
+                  <m:mrow>
+                    <m:mi>∂</m:mi>
+                    <m:mi>u</m:mi>
+                  </m:mrow>
+                  <m:mrow>
+                    <m:mi>∂</m:mi>
+                    <m:mi>x</m:mi>
+                  </m:mrow>
+                </m:mfrac>
+                <m:msqrt>
+                  <m:mrow>
+                    <m:mn>1</m:mn>
+                    <m:mo>+</m:mo>
+                    <m:msup>
+                      <m:mrow>
+                        <m:mo>|</m:mo>
+                        <m:mi>∇</m:mi>
+                        <m:mi>u</m:mi>
+                        <m:mo>|</m:mo>
+                      </m:mrow>
+                      <m:mn>2</m:mn>
+                    </m:msup>
+                  </m:mrow>
+                </m:msqrt>
+              </m:mfrac>
+            </m:mfenced>
+            <m:mo>+</m:mo>
+            <m:mfrac>
+              <m:mi>∂</m:mi>
+              <m:mrow>
+                <m:mi>∂</m:mi>
+                <m:mi>y</m:mi>
+              </m:mrow>
+            </m:mfrac>
+            <m:mfenced separators="" open="(" close=")">
+              <m:mfrac>
+                <m:mfrac>
+                  <m:mrow>
+                    <m:mi>∂</m:mi>
+                    <m:mi>u</m:mi>
+                  </m:mrow>
+                  <m:mrow>
+                    <m:mi>∂</m:mi>
+                    <m:mi>y</m:mi>
+                  </m:mrow>
+                </m:mfrac>
+                <m:msqrt>
+                  <m:mrow>
+                    <m:mn>1</m:mn>
+                    <m:mo>+</m:mo>
+                    <m:msup>
+                      <m:mrow>
+                        <m:mo>|</m:mo>
+                        <m:mi>∇</m:mi>
+                        <m:mi>u</m:mi>
+                        <m:mo>|</m:mo>
+                      </m:mrow>
+                      <m:mn>2</m:mn>
+                    </m:msup>
+                  </m:mrow>
+                </m:msqrt>
+              </m:mfrac>
+            </m:mfenced>
+            <m:mo>.</m:mo>
+          </m:mrow>
+        </m:math>
+      </equation>
+      <para id="id212107">A function <m:math overflow="scroll"><m:mi>u</m:mi></m:math> satisfies <m:math overflow="scroll"><m:mrow><m:mi mathvariant="script">M</m:mi><m:mo>(</m:mo><m:mi>u</m:mi><m:mo>)</m:mo><m:mo>=</m:mo><m:mn>0</m:mn></m:mrow></m:math> over the unit disk <m:math overflow="scroll"><m:mi mathvariant="script">D</m:mi></m:math> if and only if the graph of <m:math overflow="scroll"><m:mi>u</m:mi></m:math> has the least surface area amongst all other graphs of functions with the same boundary values.
+Solutions to the MSE satisfy the Maximum Principle: if <m:math overflow="scroll"><m:mrow><m:mi mathvariant="script">M</m:mi><m:mo>(</m:mo><m:mi>u</m:mi><m:mo>)</m:mo><m:mo>=</m:mo><m:mn>0</m:mn></m:mrow></m:math> in <m:math overflow="scroll"><m:mrow><m:mi mathvariant="script">D</m:mi><m:mo>,</m:mo></m:mrow></m:math> then <m:math overflow="scroll"><m:mi>u</m:mi></m:math> attains its max/min only at the boundary, unless if <m:math overflow="scroll"><m:mi>u</m:mi></m:math> is constant.</para>
+      <para id="id212220"><m:math overflow="scroll"><m:mrow><m:mi>f</m:mi><m:mrow><m:mo>(</m:mo><m:mi>x</m:mi><m:mo>,</m:mo><m:mi>y</m:mi><m:mo>)</m:mo></m:mrow><m:mo>=</m:mo><m:msup><m:mo form="prefix">cosh</m:mo><m:mrow><m:mo>-</m:mo><m:mn>1</m:mn></m:mrow></m:msup><m:mi>r</m:mi></m:mrow></m:math> is a solution to the MSE for <m:math overflow="scroll"><m:mrow><m:mi>r</m:mi><m:mo>&gt;</m:mo><m:mn>1</m:mn><m:mo>.</m:mo></m:mrow></m:math></para>
+    </section>
+    <section id="cid5">
+      <title>Future Work</title>
+      <para id="id212289">Our next task is to study the catenoid more closely. We wish to investigate the 2-D versions of the <m:math overflow="scroll"><m:mi>c</m:mi></m:math>-boundary-value weighted Dirichlet energy and area.
+The Isoperimetric Inequality states that if <m:math overflow="scroll"><m:mi>S</m:mi></m:math> is a region bounded by a curve <m:math overflow="scroll"><m:mrow><m:mi>γ</m:mi><m:mo>,</m:mo></m:mrow></m:math> then <m:math overflow="scroll"><m:mrow><m:mn>4</m:mn><m:mi>π</m:mi><m:mo>·</m:mo><m:mi>A</m:mi><m:mi>r</m:mi><m:mi>e</m:mi><m:mi>a</m:mi><m:mo>(</m:mo><m:mi>S</m:mi><m:mo>)</m:mo><m:mo>≤</m:mo><m:mi>l</m:mi><m:mi>e</m:mi><m:mi>n</m:mi><m:mi>g</m:mi><m:mi>t</m:mi><m:mi>h</m:mi><m:mo>(</m:mo><m:mi>γ</m:mi><m:mo>)</m:mo><m:mo>.</m:mo></m:mrow></m:math> We need to see how this theory applies.</para>
+    </section>
+    <section id="cid6">
+      <title>Acknowledgements</title>
+      <para id="id212387">We thank the guidance offered by our PFUG leader Dr. Leobardo Rosales. We also thank our faculty sponsors in the Department of Mathematics, Dr. Robert Hardt and Dr. Michael Wolf. We also thank the undergraduate group members Sylvia Casas de Leon, James Hart, Marissa Lawson, Conor Loftis, Aneesh Mehta, and Trey Villafane. This work was supported by NSF grant No. DMS-0739420.</para>
+    </section>
+  </content>
+</document>

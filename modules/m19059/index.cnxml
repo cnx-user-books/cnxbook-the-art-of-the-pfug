@@ -1,0 +1,2514 @@
+<document xmlns="http://cnx.rice.edu/cnxml" xmlns:m="http://www.w3.org/1998/Math/MathML" xmlns:md="http://cnx.rice.edu/mdml" xmlns:bib="http://bibtexml.sf.net/">
+  <title>A Class of Fast Algorithms for Total Variation Image Restoration</title>
+  <metadata><md:content-id>undefined</md:content-id><md:title/><md:uuid>2386f1f6-4f7a-4870-994f-e585152c80b3</md:uuid>
+</metadata>
+  <content>
+    <section id="cid1">
+      <title>Introduction</title>
+      <para id="id2253714">In electrical engineering and computer science, image processing
+refers to any form of signal processing in which the input is an
+image and the output can be either an image or a set of parameters
+related to the image. Generally, image processing includes image
+enhancement, restoration and reconstruction, edge and boundary
+detection, classification and segmentation, object recognition and
+identification, compression and communication, etc. Among them,
+image restoration is a classical problem and is generally a
+preprocessing stage of higher level processing. In many
+applications, the measured images are degraded by blurs; e.g. the
+optical system in a camera lens may be out of focus, so that the
+incoming light is smeared out, and in astronomical imaging the
+incoming light in the telescope has been slightly bent by turbulence
+in the atmosphere. In addition, images that occur in practical
+applications inevitably suffer from noise, which arise from numerous
+sources such as radiation scatter from the surface before the image
+is sensed, electrical noise in the sensor or camera, transmission
+errors, and bit errors as the image is digitized, etc. In such
+situations, the image formation process is usually modeled by the
+following equation</para>
+      <equation id="uid1">
+        <m:math mode="display">
+          <m:mtable displaystyle="true">
+            <m:mtr>
+              <m:mtd columnalign="right">
+                <m:mrow>
+                  <m:mi>f</m:mi>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:mi>x</m:mi>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                  <m:mo>=</m:mo>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:mi>k</m:mi>
+                    <m:mo>*</m:mo>
+                    <m:mover accent="true">
+                      <m:mi>u</m:mi>
+                      <m:mo>¯</m:mo>
+                    </m:mover>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:mi>x</m:mi>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                  <m:mo>+</m:mo>
+                  <m:mi>ω</m:mi>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:mi>x</m:mi>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                  <m:mo>,</m:mo>
+                  <m:mspace width="1.em"/>
+                  <m:mi>x</m:mi>
+                  <m:mo>∈</m:mo>
+                  <m:mi>Ω</m:mi>
+                  <m:mo>,</m:mo>
+                </m:mrow>
+              </m:mtd>
+            </m:mtr>
+          </m:mtable>
+        </m:math>
+      </equation>
+      <para id="id2253830">where <m:math><m:mrow><m:mover accent="true"><m:mi>u</m:mi><m:mo>¯</m:mo></m:mover><m:mrow><m:mo>(</m:mo><m:mi>x</m:mi><m:mo>)</m:mo></m:mrow></m:mrow></m:math> is an unknown clean image over a region
+<m:math><m:mrow><m:mi>Ω</m:mi><m:mo>⊂</m:mo><m:msup><m:mi mathvariant="double-struck">R</m:mi><m:mn>2</m:mn></m:msup></m:mrow></m:math>, “<m:math><m:mo>*</m:mo></m:math>" denotes the convolution operation,
+<m:math><m:mrow><m:mi>k</m:mi><m:mo>(</m:mo><m:mi>x</m:mi><m:mo>)</m:mo><m:mo>,</m:mo><m:mi>n</m:mi><m:mo>(</m:mo><m:mi>x</m:mi><m:mo>)</m:mo></m:mrow></m:math> and <m:math><m:mrow><m:mi>f</m:mi><m:mo>(</m:mo><m:mi>x</m:mi><m:mo>)</m:mo></m:mrow></m:math> are real-valued functions from <m:math><m:msup><m:mi mathvariant="double-struck">R</m:mi><m:mn>2</m:mn></m:msup></m:math> to
+<m:math><m:mi mathvariant="double-struck">R</m:mi></m:math> representing, respectively, convolution kernel, additive noise,
+and the blurry and noisy observation. Usually, the convolution
+process neither absorbs nor generates optical energy, i.e.,
+<m:math><m:mrow><m:msub><m:mo>∫</m:mo><m:mi>Ω</m:mi></m:msub><m:mi>k</m:mi><m:mrow><m:mo>(</m:mo><m:mi>x</m:mi><m:mo>)</m:mo></m:mrow><m:mi mathvariant="normal">d</m:mi><m:mi>x</m:mi><m:mo>=</m:mo><m:mn>1</m:mn></m:mrow></m:math>, and the additive noise has zero
+mean.</para>
+      <para id="id2253056">Deblurring or decovolution aims to recover the unknown image
+<m:math><m:mrow><m:mover accent="true"><m:mi>u</m:mi><m:mo>¯</m:mo></m:mover><m:mrow><m:mo>(</m:mo><m:mi>x</m:mi><m:mo>)</m:mo></m:mrow></m:mrow></m:math> from <m:math><m:mrow><m:mi>f</m:mi><m:mo>(</m:mo><m:mi>x</m:mi><m:mo>)</m:mo></m:mrow></m:math> and <m:math><m:mrow><m:mi>k</m:mi><m:mo>(</m:mo><m:mi>x</m:mi><m:mo>)</m:mo></m:mrow></m:math> based on (<link target-id="uid1"/>).
+When <m:math><m:mrow><m:mi>k</m:mi><m:mo>(</m:mo><m:mi>x</m:mi><m:mo>)</m:mo></m:mrow></m:math> is unknown or only an estimate of it is available,
+recovering <m:math><m:mrow><m:mover accent="true"><m:mi>u</m:mi><m:mo>¯</m:mo></m:mover><m:mrow><m:mo>(</m:mo><m:mi>x</m:mi><m:mo>)</m:mo></m:mrow></m:mrow></m:math> from <m:math><m:mrow><m:mi>f</m:mi><m:mo>(</m:mo><m:mi>x</m:mi><m:mo>)</m:mo></m:mrow></m:math> is called blind deconvolution.
+Throughout this module, we assume that <m:math><m:mrow><m:mi>k</m:mi><m:mo>(</m:mo><m:mi>x</m:mi><m:mo>)</m:mo></m:mrow></m:math> is known and
+<m:math><m:mrow><m:mi>ω</m:mi><m:mo>(</m:mo><m:mi>x</m:mi><m:mo>)</m:mo></m:mrow></m:math> is either Gaussian or impulsive noise. When <m:math><m:mrow><m:mi>k</m:mi><m:mo>(</m:mo><m:mi>x</m:mi><m:mo>)</m:mo></m:mrow></m:math> is
+equal to the Dirac delta, the recovery of <m:math><m:mrow><m:mover accent="true"><m:mi>u</m:mi><m:mo>¯</m:mo></m:mover><m:mrow><m:mo>(</m:mo><m:mi>x</m:mi><m:mo>)</m:mo></m:mrow></m:mrow></m:math> becomes a pure
+denoising problem. In the rest of this section, we review the
+TV-based variational models for image restoration and introduce
+necessary notation for analysis.</para>
+      <section id="uid2">
+        <title>Total Variation for Image Restoration</title>
+        <para id="id2254444">The TV regularization was first proposed by Rudin,
+Osher and Fatemi in <link target-id="bid0"/> for image denoising, and then
+extended to image deblurring in <link target-id="bid1"/>. The TV of <m:math><m:mi>u</m:mi></m:math> is
+defined as</para>
+        <equation id="uid3">
+          <m:math mode="display">
+            <m:mtable displaystyle="true">
+              <m:mtr>
+                <m:mtd columnalign="right">
+                  <m:mrow>
+                    <m:mi> TV </m:mi>
+                    <m:mrow>
+                      <m:mo>(</m:mo>
+                      <m:mi>u</m:mi>
+                      <m:mo>)</m:mo>
+                    </m:mrow>
+                    <m:mo>=</m:mo>
+                    <m:msub>
+                      <m:mo>∫</m:mo>
+                      <m:mi>Ω</m:mi>
+                    </m:msub>
+                    <m:mrow>
+                      <m:mo>∥</m:mo>
+                      <m:mi>∇</m:mi>
+                      <m:mi>u</m:mi>
+                      <m:mrow>
+                        <m:mo>(</m:mo>
+                        <m:mi>x</m:mi>
+                        <m:mo>)</m:mo>
+                      </m:mrow>
+                      <m:mo>∥</m:mo>
+                    </m:mrow>
+                    <m:mspace width="0.277778em"/>
+                    <m:mi mathvariant="normal">d</m:mi>
+                    <m:mi>x</m:mi>
+                    <m:mo>.</m:mo>
+                  </m:mrow>
+                </m:mtd>
+              </m:mtr>
+            </m:mtable>
+          </m:math>
+        </equation>
+        <para id="id2254536">When <m:math><m:mrow><m:mi>∇</m:mi><m:mi>u</m:mi><m:mo>(</m:mo><m:mi>x</m:mi><m:mo>)</m:mo></m:mrow></m:math> does not exist, the TV is defined using a dual
+formulation <link target-id="bid2"/>, which is equivalent to (<link target-id="uid3"/>)
+when <m:math><m:mi>u</m:mi></m:math> is differentiable. We point out that, in practical
+computation, discrete forms of regularization are always used where
+differential operators are replaced by ceratin finite difference
+operators.
+We refer TV regularization
+and its variants as TV-like regularization. In comparison to
+Tikhonov-like regularization, the homogeneous penalty on image
+smoothness in TV-like regularization can better preserve sharp edges
+and object boundaries that are usually the most important features
+to recover. Variational models
+with TV
+regularization and <m:math><m:msub><m:mi>ℓ</m:mi><m:mn>2</m:mn></m:msub></m:math> fidelity
+has been
+widely studied in image restoration; see e.g.
+<link target-id="bid3"/>, <link target-id="bid4"/> and references therein. For
+<m:math><m:msub><m:mi>ℓ</m:mi><m:mn>1</m:mn></m:msub></m:math> fidelity
+with TV regularization, its
+geometric properties are analyzed in
+<link target-id="bid5"/>, <link target-id="bid6"/>, <link target-id="bid7"/>.
+The superiority of TV over Tikhonov-like regularization was analyzed
+in <link target-id="bid8"/>, <link target-id="bid9"/> for recovering images containing
+piecewise smooth objects.</para>
+        <para id="id2253600">Besides Tikhonov and TV-like regularization, there are other well
+studied regularizers in the literature, e.g. the Mumford-Shah
+regularization <link target-id="bid10"/>. In this module, we concentrate on
+TV-like regularization. We derive fast algorithms, study their
+convergence, and examine their performance.</para>
+      </section>
+      <section id="uid4">
+        <title>Discretization and Notation</title>
+        <para id="id2253621">As used before,
+we let <m:math><m:mrow><m:mo>∥</m:mo><m:mo>·</m:mo><m:mo>∥</m:mo></m:mrow></m:math> be the 2-norm. In practice, we always discretize
+an image defined on <m:math><m:mi>Ω</m:mi></m:math>, and vectorize the two-dimensional
+digitalized image into a long one-dimensional vector. We assume that
+<m:math><m:mi>Ω</m:mi></m:math> is a square region in <m:math><m:msup><m:mi mathvariant="double-struck">R</m:mi><m:mn>2</m:mn></m:msup></m:math>. Specifically, we first
+discretize <m:math><m:mrow><m:mi>u</m:mi><m:mo>(</m:mo><m:mi>x</m:mi><m:mo>)</m:mo></m:mrow></m:math> into a digital image represented by a matrix
+<m:math><m:mrow><m:mi>U</m:mi><m:mo>∈</m:mo><m:msup><m:mi mathvariant="double-struck">R</m:mi><m:mrow><m:mi>n</m:mi><m:mo>×</m:mo><m:mi>n</m:mi></m:mrow></m:msup></m:mrow></m:math>. Then we vectorize <m:math><m:mi>U</m:mi></m:math> column by column into a
+vector <m:math><m:mrow><m:mi>u</m:mi><m:mo>∈</m:mo><m:msup><m:mi mathvariant="double-struck">R</m:mi><m:msup><m:mi>n</m:mi><m:mn>2</m:mn></m:msup></m:msup></m:mrow></m:math>, i.e.</para>
+        <equation id="id2254950">
+          <m:math mode="display">
+            <m:mtable displaystyle="true">
+              <m:mtr>
+                <m:mtd columnalign="right">
+                  <m:mrow>
+                    <m:msub>
+                      <m:mi>u</m:mi>
+                      <m:mi>i</m:mi>
+                    </m:msub>
+                    <m:mo>=</m:mo>
+                    <m:msub>
+                      <m:mi>U</m:mi>
+                      <m:mrow>
+                        <m:mi>p</m:mi>
+                        <m:mi>q</m:mi>
+                      </m:mrow>
+                    </m:msub>
+                    <m:mo>,</m:mo>
+                    <m:mspace width="1.em"/>
+                    <m:mi>i</m:mi>
+                    <m:mo>=</m:mo>
+                    <m:mn>1</m:mn>
+                    <m:mo>,</m:mo>
+                    <m:mo>...</m:mo>
+                    <m:mo>,</m:mo>
+                    <m:msup>
+                      <m:mi>n</m:mi>
+                      <m:mn>2</m:mn>
+                    </m:msup>
+                    <m:mo>,</m:mo>
+                  </m:mrow>
+                </m:mtd>
+              </m:mtr>
+            </m:mtable>
+          </m:math>
+        </equation>
+        <para id="id2255015">where <m:math><m:msub><m:mi>u</m:mi><m:mi>i</m:mi></m:msub></m:math> denotes the <m:math><m:mi>i</m:mi></m:math>th component of <m:math><m:mi>u</m:mi></m:math>, <m:math><m:msub><m:mi>U</m:mi><m:mrow><m:mi>p</m:mi><m:mi>q</m:mi></m:mrow></m:msub></m:math> is the
+component of <m:math><m:mi>U</m:mi></m:math> at <m:math><m:mi>p</m:mi></m:math>th row and <m:math><m:mi>q</m:mi></m:math>th column, and <m:math><m:mi>p</m:mi></m:math> and <m:math><m:mi>q</m:mi></m:math> are
+determined by <m:math><m:mrow><m:mi>i</m:mi><m:mo>=</m:mo><m:mo>(</m:mo><m:mi>q</m:mi><m:mo>-</m:mo><m:mn>1</m:mn><m:mo>)</m:mo><m:mi>n</m:mi><m:mo>+</m:mo><m:mi>p</m:mi></m:mrow></m:math> and <m:math><m:mrow><m:mn>1</m:mn><m:mo>≤</m:mo><m:mi>q</m:mi><m:mo>≤</m:mo><m:mi>n</m:mi></m:mrow></m:math>. Other quantities
+such as the convolution kernel <m:math><m:mrow><m:mi>k</m:mi><m:mo>(</m:mo><m:mi>x</m:mi><m:mo>)</m:mo></m:mrow></m:math>, additive noise <m:math><m:mrow><m:mi>ω</m:mi><m:mo>(</m:mo><m:mi>x</m:mi><m:mo>)</m:mo></m:mrow></m:math>,
+and the observation <m:math><m:mrow><m:mi>f</m:mi><m:mo>(</m:mo><m:mi>x</m:mi><m:mo>)</m:mo></m:mrow></m:math> are all discretized correspondingly. Now
+we present the discrete forms of the previously presented equations.
+The discrete form of (<link target-id="uid1"/>) is</para>
+        <equation id="uid5">
+          <m:math mode="display">
+            <m:mtable displaystyle="true">
+              <m:mtr>
+                <m:mtd columnalign="right">
+                  <m:mrow>
+                    <m:mi>f</m:mi>
+                    <m:mo>=</m:mo>
+                    <m:mi>K</m:mi>
+                    <m:mover accent="true">
+                      <m:mi>u</m:mi>
+                      <m:mo>¯</m:mo>
+                    </m:mover>
+                    <m:mo>+</m:mo>
+                    <m:mi>ω</m:mi>
+                    <m:mo>,</m:mo>
+                  </m:mrow>
+                </m:mtd>
+              </m:mtr>
+            </m:mtable>
+          </m:math>
+        </equation>
+        <para id="id2255255">where in this case, <m:math><m:mrow><m:mover accent="true"><m:mi>u</m:mi><m:mo>¯</m:mo></m:mover><m:mo>,</m:mo><m:mi>ω</m:mi><m:mo>,</m:mo><m:mi>f</m:mi><m:mo>∈</m:mo><m:msup><m:mi mathvariant="double-struck">R</m:mi><m:msup><m:mi>n</m:mi><m:mn>2</m:mn></m:msup></m:msup></m:mrow></m:math> are all vectors
+representing, respectively, the discrete forms of the original
+image, additive noise and the blurry and noisy observation, and
+<m:math><m:mrow><m:mi>K</m:mi><m:mo>∈</m:mo><m:msup><m:mi mathvariant="double-struck">R</m:mi><m:mrow><m:msup><m:mi>n</m:mi><m:mn>2</m:mn></m:msup><m:mo>×</m:mo><m:msup><m:mi>n</m:mi><m:mn>2</m:mn></m:msup></m:mrow></m:msup></m:mrow></m:math> is a convolution matrix representing the
+kernel <m:math><m:mrow><m:mi>k</m:mi><m:mo>(</m:mo><m:mi>x</m:mi><m:mo>)</m:mo></m:mrow></m:math>.
+The gradient <m:math><m:mrow><m:mi>∇</m:mi><m:mi>u</m:mi><m:mo>(</m:mo><m:mi>x</m:mi><m:mo>)</m:mo></m:mrow></m:math> is replaced by certain
+first-order finite difference at pixel <m:math><m:mi>i</m:mi></m:math>. Let <m:math><m:mrow><m:msub><m:mi>D</m:mi><m:mi>i</m:mi></m:msub><m:mo>∈</m:mo><m:msup><m:mi mathvariant="double-struck">R</m:mi><m:mrow><m:mn>2</m:mn><m:mo>×</m:mo><m:msup><m:mi>n</m:mi><m:mn>2</m:mn></m:msup></m:mrow></m:msup></m:mrow></m:math> be a first-order local finite difference matrix at pixel <m:math><m:mi>i</m:mi></m:math>
+in horizontal and vertical directions. E.g. when the forward finite
+difference is used, we have</para>
+        <equation id="id2255441">
+          <m:math mode="display">
+            <m:mtable displaystyle="true">
+              <m:mtr>
+                <m:mtd columnalign="right">
+                  <m:mrow>
+                    <m:msub>
+                      <m:mi>D</m:mi>
+                      <m:mi>i</m:mi>
+                    </m:msub>
+                    <m:mi>u</m:mi>
+                    <m:mo>=</m:mo>
+                    <m:mfenced separators="" open="(" close=")">
+                      <m:mtable>
+                        <m:mtr>
+                          <m:mtd>
+                            <m:mrow>
+                              <m:msub>
+                                <m:mi>u</m:mi>
+                                <m:mrow>
+                                  <m:mi>i</m:mi>
+                                  <m:mo>+</m:mo>
+                                  <m:mi>n</m:mi>
+                                </m:mrow>
+                              </m:msub>
+                              <m:mo>-</m:mo>
+                              <m:msub>
+                                <m:mi>u</m:mi>
+                                <m:mi>i</m:mi>
+                              </m:msub>
+                            </m:mrow>
+                          </m:mtd>
+                        </m:mtr>
+                        <m:mtr>
+                          <m:mtd>
+                            <m:mrow>
+                              <m:msub>
+                                <m:mi>u</m:mi>
+                                <m:mrow>
+                                  <m:mi>i</m:mi>
+                                  <m:mo>+</m:mo>
+                                  <m:mn>1</m:mn>
+                                </m:mrow>
+                              </m:msub>
+                              <m:mo>-</m:mo>
+                              <m:msub>
+                                <m:mi>u</m:mi>
+                                <m:mi>i</m:mi>
+                              </m:msub>
+                            </m:mrow>
+                          </m:mtd>
+                        </m:mtr>
+                      </m:mtable>
+                    </m:mfenced>
+                    <m:mo>∈</m:mo>
+                    <m:msup>
+                      <m:mi mathvariant="double-struck">R</m:mi>
+                      <m:mn>2</m:mn>
+                    </m:msup>
+                    <m:mo>,</m:mo>
+                  </m:mrow>
+                </m:mtd>
+              </m:mtr>
+            </m:mtable>
+          </m:math>
+        </equation>
+        <para id="id2255544">for <m:math><m:mrow><m:mi>i</m:mi><m:mo>=</m:mo><m:mn>1</m:mn><m:mo>,</m:mo><m:mo>...</m:mo><m:mo>,</m:mo><m:msup><m:mi>n</m:mi><m:mn>2</m:mn></m:msup></m:mrow></m:math> (with certain boundary conditions assumed for
+<m:math><m:mrow><m:mi>i</m:mi><m:mo>&gt;</m:mo><m:msup><m:mi>n</m:mi><m:mn>2</m:mn></m:msup><m:mo>-</m:mo><m:mi>n</m:mi></m:mrow></m:math>). Then the discrete form of TV defined in (<link target-id="uid3"/>)
+is given by</para>
+        <equation id="uid6">
+          <m:math mode="display">
+            <m:mtable displaystyle="true">
+              <m:mtr>
+                <m:mtd columnalign="right">
+                  <m:mrow>
+                    <m:mi> TV </m:mi>
+                    <m:mrow>
+                      <m:mo>(</m:mo>
+                      <m:mi>u</m:mi>
+                      <m:mo>)</m:mo>
+                    </m:mrow>
+                    <m:mo>=</m:mo>
+                    <m:munderover>
+                      <m:mo>∑</m:mo>
+                      <m:mrow>
+                        <m:mi>i</m:mi>
+                        <m:mo>=</m:mo>
+                        <m:mn>1</m:mn>
+                      </m:mrow>
+                      <m:msup>
+                        <m:mi>n</m:mi>
+                        <m:mn>2</m:mn>
+                      </m:msup>
+                    </m:munderover>
+                    <m:mrow>
+                      <m:mo>∥</m:mo>
+                      <m:msub>
+                        <m:mi>D</m:mi>
+                        <m:mi>i</m:mi>
+                      </m:msub>
+                      <m:mi>u</m:mi>
+                      <m:mo>∥</m:mo>
+                    </m:mrow>
+                    <m:mo>.</m:mo>
+                  </m:mrow>
+                </m:mtd>
+              </m:mtr>
+            </m:mtable>
+          </m:math>
+        </equation>
+        <para id="id2255680">We will refer to</para>
+        <equation id="id2255685">
+          <m:math mode="display">
+            <m:mrow>
+              <m:munder>
+                <m:mo movablelimits="true" form="prefix">min</m:mo>
+                <m:mi>u</m:mi>
+              </m:munder>
+              <m:mspace width="3.33333pt"/>
+              <m:mi>T</m:mi>
+              <m:mi>V</m:mi>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>u</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>+</m:mo>
+              <m:mfrac>
+                <m:mi>μ</m:mi>
+                <m:mn>2</m:mn>
+              </m:mfrac>
+              <m:msup>
+                <m:mrow>
+                  <m:mo>∥</m:mo>
+                  <m:mi>K</m:mi>
+                  <m:mi>u</m:mi>
+                  <m:mo>-</m:mo>
+                  <m:mi>f</m:mi>
+                  <m:mo>∥</m:mo>
+                </m:mrow>
+                <m:mn>2</m:mn>
+              </m:msup>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id2255751">with discretized TV regularization (<link target-id="uid6"/>) as TV/L<m:math><m:msup><m:mrow/><m:mn>2</m:mn></m:msup></m:math>. For
+impulsive noise, we replace the <m:math><m:msub><m:mi>ℓ</m:mi><m:mn>2</m:mn></m:msub></m:math> fidelity by <m:math><m:msub><m:mi>ℓ</m:mi><m:mn>1</m:mn></m:msub></m:math>
+fidelity and refer to the resulted problem as TV/L<m:math><m:msup><m:mrow/><m:mn>1</m:mn></m:msup></m:math>.</para>
+        <para id="id2255820">Now we introduce several more notation. For simplicity, we let
+<m:math><m:msub><m:mo>∑</m:mo><m:mi>i</m:mi></m:msub></m:math> be the summation taken over all pixels. The two first-order
+global finite difference operators in horizontal and vertical
+directions are, respectively, denoted by <m:math><m:msup><m:mi>D</m:mi><m:mrow><m:mo>(</m:mo><m:mn>1</m:mn><m:mo>)</m:mo></m:mrow></m:msup></m:math> and <m:math><m:msup><m:mi>D</m:mi><m:mrow><m:mo>(</m:mo><m:mn>2</m:mn><m:mo>)</m:mo></m:mrow></m:msup></m:math>
+which are <m:math><m:msup><m:mi>n</m:mi><m:mn>2</m:mn></m:msup></m:math>-by-<m:math><m:msup><m:mi>n</m:mi><m:mn>2</m:mn></m:msup></m:math> matrices (boundary conditions are the same
+as those assumed on <m:math><m:msub><m:mi>D</m:mi><m:mi>i</m:mi></m:msub></m:math>). As such, it is worth noting that the
+two-row matrix <m:math><m:msub><m:mi>D</m:mi><m:mi>i</m:mi></m:msub></m:math> is formed by stacking the <m:math><m:mi>i</m:mi></m:math>th row of
+<m:math><m:msup><m:mi>D</m:mi><m:mrow><m:mo>(</m:mo><m:mn>1</m:mn><m:mo>)</m:mo></m:mrow></m:msup></m:math> on that of <m:math><m:msup><m:mi>D</m:mi><m:mrow><m:mo>(</m:mo><m:mn>2</m:mn><m:mo>)</m:mo></m:mrow></m:msup></m:math>. For vectors <m:math><m:msub><m:mi>v</m:mi><m:mn>1</m:mn></m:msub></m:math> and <m:math><m:msub><m:mi>v</m:mi><m:mn>2</m:mn></m:msub></m:math>, we let
+<m:math><m:mrow><m:mi>v</m:mi><m:mo>=</m:mo><m:mrow><m:mo>(</m:mo><m:msub><m:mi>v</m:mi><m:mn>1</m:mn></m:msub><m:mo>;</m:mo><m:msub><m:mi>v</m:mi><m:mn>2</m:mn></m:msub><m:mo>)</m:mo></m:mrow><m:mo>≜</m:mo><m:msup><m:mrow><m:mo>(</m:mo><m:msubsup><m:mi>v</m:mi><m:mn>1</m:mn><m:mi>⊤</m:mi></m:msubsup><m:mo>,</m:mo><m:msubsup><m:mi>v</m:mi><m:mn>2</m:mn><m:mi>⊤</m:mi></m:msubsup><m:mo>)</m:mo></m:mrow><m:mi>⊤</m:mi></m:msup></m:mrow></m:math>, i.e. <m:math><m:mi>v</m:mi></m:math> is the
+vector formed by stacking <m:math><m:msub><m:mi>v</m:mi><m:mn>1</m:mn></m:msub></m:math> on the top of <m:math><m:msub><m:mi>v</m:mi><m:mn>2</m:mn></m:msub></m:math>. Similarly, we
+let <m:math><m:mrow><m:mi>D</m:mi><m:mo>=</m:mo><m:mrow><m:mo>(</m:mo><m:msup><m:mi>D</m:mi><m:mrow><m:mo>(</m:mo><m:mn>1</m:mn><m:mo>)</m:mo></m:mrow></m:msup><m:mo>;</m:mo><m:msup><m:mi>D</m:mi><m:mrow><m:mo>(</m:mo><m:mn>2</m:mn><m:mo>)</m:mo></m:mrow></m:msup><m:mo>)</m:mo></m:mrow><m:mo>=</m:mo><m:msup><m:mfenced separators="" open="(" close=")"><m:msup><m:mrow><m:mo>(</m:mo><m:msup><m:mi>D</m:mi><m:mrow><m:mo>(</m:mo><m:mn>1</m:mn><m:mo>)</m:mo></m:mrow></m:msup><m:mo>)</m:mo></m:mrow><m:mi>⊤</m:mi></m:msup><m:mo>,</m:mo><m:msup><m:mrow><m:mo>(</m:mo><m:msup><m:mi>D</m:mi><m:mrow><m:mo>(</m:mo><m:mn>2</m:mn><m:mo>)</m:mo></m:mrow></m:msup><m:mo>)</m:mo></m:mrow><m:mi>⊤</m:mi></m:msup></m:mfenced><m:mi>⊤</m:mi></m:msup></m:mrow></m:math>. Given a matrix
+<m:math><m:mi>T</m:mi></m:math>, we let <m:math><m:mrow><m:mi> diag </m:mi><m:mo>(</m:mo><m:mi>T</m:mi><m:mo>)</m:mo></m:mrow></m:math> be the vector containing the elements
+on the diagonal of <m:math><m:mi>T</m:mi></m:math>, and <m:math><m:mrow><m:mi mathvariant="script">F</m:mi><m:mrow><m:mo>(</m:mo><m:mi>T</m:mi><m:mo>)</m:mo></m:mrow><m:mo>=</m:mo><m:mi mathvariant="bold">F</m:mi><m:mi>T</m:mi><m:msup><m:mrow><m:mi mathvariant="bold">F</m:mi></m:mrow><m:mrow><m:mo>-</m:mo><m:mn>1</m:mn></m:mrow></m:msup></m:mrow></m:math>, where
+<m:math><m:mrow><m:mi mathvariant="bold">F</m:mi><m:mo>∈</m:mo><m:mrow><m:msup><m:mi>n</m:mi><m:mn>2</m:mn></m:msup><m:mo>×</m:mo><m:msup><m:mi>n</m:mi><m:mn>2</m:mn></m:msup></m:mrow></m:mrow></m:math> is the 2D discrete Fourier transform
+matrix.</para>
+      </section>
+      <section id="uid7">
+        <title>Existing Methods</title>
+        <para id="id2256366">Since TV is nonsmooth, quite a few algorithms are based on smoothing
+the TV term and solving an approximation problem. The TV of <m:math><m:mi>u</m:mi></m:math> is
+usually replaced by</para>
+        <equation id="uid8">
+          <m:math mode="display">
+            <m:mtable displaystyle="true">
+              <m:mtr>
+                <m:mtd columnalign="right">
+                  <m:mrow>
+                    <m:msub>
+                      <m:mi> TV </m:mi>
+                      <m:mi>ϵ</m:mi>
+                    </m:msub>
+                    <m:mrow>
+                      <m:mo>(</m:mo>
+                      <m:mi>u</m:mi>
+                      <m:mo>)</m:mo>
+                    </m:mrow>
+                    <m:mo>=</m:mo>
+                    <m:munder>
+                      <m:mo>∑</m:mo>
+                      <m:mi>i</m:mi>
+                    </m:munder>
+                    <m:msqrt>
+                      <m:mrow>
+                        <m:mrow>
+                          <m:mo>∥</m:mo>
+                        </m:mrow>
+                        <m:msub>
+                          <m:mi>D</m:mi>
+                          <m:mi>i</m:mi>
+                        </m:msub>
+                        <m:msup>
+                          <m:mrow>
+                            <m:mi>u</m:mi>
+                            <m:mo>∥</m:mo>
+                          </m:mrow>
+                          <m:mn>2</m:mn>
+                        </m:msup>
+                        <m:mo>+</m:mo>
+                        <m:mi>ϵ</m:mi>
+                      </m:mrow>
+                    </m:msqrt>
+                    <m:mo>,</m:mo>
+                  </m:mrow>
+                </m:mtd>
+              </m:mtr>
+            </m:mtable>
+          </m:math>
+        </equation>
+        <para id="id2256458">where <m:math><m:mrow><m:mi>ϵ</m:mi><m:mo>&gt;</m:mo><m:mn>0</m:mn></m:mrow></m:math> is a small constant. Then the resulted
+approximate TV/L<m:math><m:msup><m:mrow/><m:mn>2</m:mn></m:msup></m:math> problem is smooth and many optimization methods
+are available. Among others, the simplest method is the gradient
+descent method as was used in <link target-id="bid0"/>. However, this method
+suffers slow convergence especially when the iterate point is close
+to the solution. Another important method is the linearized gradient
+method proposed in <link target-id="bid11"/> for denoising and in
+<link target-id="bid12"/> for deblurring. Both the gradient descent and the
+linearized gradient methods are globally and at best linearly
+convergent. To obtain super linear convergence, a primal-dual based
+Newton method was proposed in <link target-id="bid13"/>. Both the
+linearized gradient method and this primal-dual method need to solve
+a large system of linear equations at each iteration. When
+<m:math><m:mi>ϵ</m:mi></m:math> is small and/or <m:math><m:mi>K</m:mi></m:math> becomes more ill-conditioned, the
+linear system becomes more and more difficult to solve. Another
+class of well-known methods for TV/L<m:math><m:msup><m:mrow/><m:mn>2</m:mn></m:msup></m:math> are the iterative
+shrinkage/thresholding (IST) based methods <link target-id="bid14"/>.
+For IST-based methods, a TV denoising problem needs to be solved at
+each iteration. Also, in <link target-id="bid15"/> the authors transformed the
+TV/L<m:math><m:msup><m:mrow/><m:mn>2</m:mn></m:msup></m:math> problem into a second order cone program and solved it by
+interior point method.</para>
+      </section>
+    </section>
+    <section id="cid2">
+      <title>A New Alternating Minimization Algorithm</title>
+      <para id="id2256597">In this section, we derive a new algorithm for the TV/L<m:math><m:msup><m:mrow/><m:mn>2</m:mn></m:msup></m:math> problem</para>
+      <equation id="uid9">
+        <m:math mode="display">
+          <m:mtable displaystyle="true">
+            <m:mtr>
+              <m:mtd columnalign="right">
+                <m:mrow>
+                  <m:munder>
+                    <m:mo movablelimits="true" form="prefix">min</m:mo>
+                    <m:mi>u</m:mi>
+                  </m:munder>
+                  <m:munder>
+                    <m:mo>∑</m:mo>
+                    <m:mi>i</m:mi>
+                  </m:munder>
+                  <m:mrow>
+                    <m:mo>∥</m:mo>
+                  </m:mrow>
+                  <m:msub>
+                    <m:mi>D</m:mi>
+                    <m:mi>i</m:mi>
+                  </m:msub>
+                  <m:mrow>
+                    <m:mi>u</m:mi>
+                    <m:mo>∥</m:mo>
+                    <m:mo>+</m:mo>
+                  </m:mrow>
+                  <m:mfrac>
+                    <m:mi>μ</m:mi>
+                    <m:mn>2</m:mn>
+                  </m:mfrac>
+                  <m:msup>
+                    <m:mrow>
+                      <m:mo>∥</m:mo>
+                      <m:mi>K</m:mi>
+                      <m:mi>u</m:mi>
+                      <m:mo>-</m:mo>
+                      <m:mi>f</m:mi>
+                      <m:mo>∥</m:mo>
+                    </m:mrow>
+                    <m:mn>2</m:mn>
+                  </m:msup>
+                  <m:mo>.</m:mo>
+                </m:mrow>
+              </m:mtd>
+            </m:mtr>
+          </m:mtable>
+        </m:math>
+      </equation>
+      <para id="id2256702">In (<link target-id="uid9"/>), the fidelity term is quadratic with respect to <m:math><m:mi>u</m:mi></m:math>.
+Moreover, <m:math><m:mi>K</m:mi></m:math> is a convolution matrix and thus can be easily
+diagonalized by fast transforms (with proper boundary conditions
+assumed on <m:math><m:mi>u</m:mi></m:math>). Therefore, the main difficulty in solving
+(<link target-id="uid9"/>) is caused by the nondifferentiability and the universal
+coupling of variables of the TV term. Our algorithm is derived from
+the well-known variable-splitting and penalty techniques in
+optimization. First, we introduce an auxiliary variable
+<m:math><m:mrow><m:msub><m:mi mathvariant="bold">w</m:mi><m:mi>i</m:mi></m:msub><m:mo>∈</m:mo><m:msup><m:mi mathvariant="double-struck">R</m:mi><m:mn>2</m:mn></m:msup></m:mrow></m:math> at pixel <m:math><m:mi>i</m:mi></m:math> to transfer <m:math><m:mrow><m:msub><m:mi>D</m:mi><m:mi>i</m:mi></m:msub><m:mi>u</m:mi></m:mrow></m:math> out of the
+nondifferentiable term <m:math><m:mrow><m:mo>∥</m:mo><m:mo>·</m:mo><m:mo>∥</m:mo></m:mrow></m:math>. Then we penalize the difference
+between <m:math><m:msub><m:mi mathvariant="bold">w</m:mi><m:mi>i</m:mi></m:msub></m:math> and <m:math><m:mrow><m:msub><m:mi>D</m:mi><m:mi>i</m:mi></m:msub><m:mi>u</m:mi></m:mrow></m:math> quadratically. As such, the auxiliary
+variables <m:math><m:msub><m:mi mathvariant="bold">w</m:mi><m:mi>i</m:mi></m:msub></m:math>'s are separable with respect to one another. For
+convenience, in the following we let
+<m:math><m:mrow><m:mi mathvariant="bold">w</m:mi><m:mo>≜</m:mo><m:mo>[</m:mo><m:msub><m:mi mathvariant="bold">w</m:mi><m:mn>1</m:mn></m:msub><m:mo>,</m:mo><m:mo>...</m:mo><m:mo>,</m:mo><m:msub><m:mi mathvariant="bold">w</m:mi><m:msup><m:mi>n</m:mi><m:mn>2</m:mn></m:msup></m:msub><m:mo>]</m:mo></m:mrow></m:math>. The approximation model to
+(<link target-id="uid9"/>) is given by</para>
+      <equation id="uid10">
+        <m:math mode="display">
+          <m:mtable displaystyle="true">
+            <m:mtr>
+              <m:mtd columnalign="right">
+                <m:mrow>
+                  <m:munder>
+                    <m:mo movablelimits="true" form="prefix">min</m:mo>
+                    <m:mrow>
+                      <m:mi mathvariant="bold">w</m:mi>
+                      <m:mo>,</m:mo>
+                      <m:mi>u</m:mi>
+                    </m:mrow>
+                  </m:munder>
+                  <m:munder>
+                    <m:mo>∑</m:mo>
+                    <m:mi>i</m:mi>
+                  </m:munder>
+                  <m:mrow>
+                    <m:mo>∥</m:mo>
+                  </m:mrow>
+                  <m:msub>
+                    <m:mi mathvariant="bold">w</m:mi>
+                    <m:mi>i</m:mi>
+                  </m:msub>
+                  <m:mrow>
+                    <m:mo>∥</m:mo>
+                    <m:mo>+</m:mo>
+                  </m:mrow>
+                  <m:mfrac>
+                    <m:mi>β</m:mi>
+                    <m:mn>2</m:mn>
+                  </m:mfrac>
+                  <m:munder>
+                    <m:mo>∑</m:mo>
+                    <m:mi>i</m:mi>
+                  </m:munder>
+                  <m:mrow>
+                    <m:mo>∥</m:mo>
+                  </m:mrow>
+                  <m:msub>
+                    <m:mi mathvariant="bold">w</m:mi>
+                    <m:mi>i</m:mi>
+                  </m:msub>
+                  <m:mo>-</m:mo>
+                  <m:msub>
+                    <m:mi>D</m:mi>
+                    <m:mi>i</m:mi>
+                  </m:msub>
+                  <m:msup>
+                    <m:mrow>
+                      <m:mi>u</m:mi>
+                      <m:mo>∥</m:mo>
+                    </m:mrow>
+                    <m:mn>2</m:mn>
+                  </m:msup>
+                  <m:mo>+</m:mo>
+                  <m:mfrac>
+                    <m:mi>μ</m:mi>
+                    <m:mn>2</m:mn>
+                  </m:mfrac>
+                  <m:msup>
+                    <m:mrow>
+                      <m:mo>∥</m:mo>
+                      <m:mi>K</m:mi>
+                      <m:mi>u</m:mi>
+                      <m:mo>-</m:mo>
+                      <m:mi>f</m:mi>
+                      <m:mo>∥</m:mo>
+                    </m:mrow>
+                    <m:mn>2</m:mn>
+                  </m:msup>
+                  <m:mo>,</m:mo>
+                </m:mrow>
+              </m:mtd>
+            </m:mtr>
+          </m:mtable>
+        </m:math>
+      </equation>
+      <para id="id2257079">where <m:math><m:mrow><m:mi>β</m:mi><m:mo>≫</m:mo><m:mn>0</m:mn></m:mrow></m:math> is a penalty parameter. It is well known that the
+solution of (<link target-id="uid10"/>) converges to that of (<link target-id="uid9"/>) as
+<m:math><m:mrow><m:mi>β</m:mi><m:mo>→</m:mo><m:mi>∞</m:mi></m:mrow></m:math>. In the following, we concentrate on problem
+(<link target-id="uid10"/>).</para>
+      <section id="uid11">
+        <title>Basic Algorithm</title>
+        <para id="id2257137">The benefit of (<link target-id="uid10"/>) is that while either one of the two
+variables <m:math><m:mi>u</m:mi></m:math> and <m:math><m:mi mathvariant="bold">w</m:mi></m:math> is fixed, minimizing the objective function
+with respect to the other has a closed-form formula that we will
+specify below. First, for a fixed <m:math><m:mi>u</m:mi></m:math>, the first two terms in
+(<link target-id="uid10"/>) are separable with respect to <m:math><m:msub><m:mi mathvariant="bold">w</m:mi><m:mi>i</m:mi></m:msub></m:math>, and thus the
+minimization for <m:math><m:mi mathvariant="bold">w</m:mi></m:math> is equivalent to solving</para>
+        <equation id="uid12">
+          <m:math mode="display">
+            <m:mtable displaystyle="true">
+              <m:mtr>
+                <m:mtd columnalign="right">
+                  <m:mrow>
+                    <m:munder>
+                      <m:mo movablelimits="true" form="prefix">min</m:mo>
+                      <m:msub>
+                        <m:mi mathvariant="bold">w</m:mi>
+                        <m:mi>i</m:mi>
+                      </m:msub>
+                    </m:munder>
+                    <m:mrow>
+                      <m:mo>∥</m:mo>
+                    </m:mrow>
+                    <m:msub>
+                      <m:mi mathvariant="bold">w</m:mi>
+                      <m:mi>i</m:mi>
+                    </m:msub>
+                    <m:mrow>
+                      <m:mo>∥</m:mo>
+                      <m:mo>+</m:mo>
+                    </m:mrow>
+                    <m:mfrac>
+                      <m:mi>β</m:mi>
+                      <m:mn>2</m:mn>
+                    </m:mfrac>
+                    <m:msup>
+                      <m:mrow>
+                        <m:mo>∥</m:mo>
+                        <m:msub>
+                          <m:mi mathvariant="bold">w</m:mi>
+                          <m:mi>i</m:mi>
+                        </m:msub>
+                        <m:mo>-</m:mo>
+                        <m:msub>
+                          <m:mi>D</m:mi>
+                          <m:mi>i</m:mi>
+                        </m:msub>
+                        <m:mi>u</m:mi>
+                        <m:mo>∥</m:mo>
+                      </m:mrow>
+                      <m:mn>2</m:mn>
+                    </m:msup>
+                    <m:mo>,</m:mo>
+                    <m:mspace width="1.em"/>
+                    <m:mi>i</m:mi>
+                    <m:mo>=</m:mo>
+                    <m:mn>1</m:mn>
+                    <m:mo>,</m:mo>
+                    <m:mn>2</m:mn>
+                    <m:mo>,</m:mo>
+                    <m:mo>...</m:mo>
+                    <m:mo>,</m:mo>
+                    <m:msup>
+                      <m:mi>n</m:mi>
+                      <m:mn>2</m:mn>
+                    </m:msup>
+                    <m:mo>.</m:mo>
+                  </m:mrow>
+                </m:mtd>
+              </m:mtr>
+            </m:mtable>
+          </m:math>
+        </equation>
+        <para id="id2257342">It is easy to verify that the unique solutions of (<link target-id="uid12"/>)
+are</para>
+        <equation id="uid13">
+          <m:math mode="display">
+            <m:mtable displaystyle="true">
+              <m:mtr>
+                <m:mtd columnalign="right">
+                  <m:mrow>
+                    <m:msub>
+                      <m:mi mathvariant="bold">w</m:mi>
+                      <m:mi>i</m:mi>
+                    </m:msub>
+                    <m:mo>=</m:mo>
+                    <m:mo movablelimits="true" form="prefix">max</m:mo>
+                    <m:mfenced separators="" open="{" close="}">
+                      <m:mrow>
+                        <m:mo>∥</m:mo>
+                      </m:mrow>
+                      <m:msub>
+                        <m:mi>D</m:mi>
+                        <m:mi>i</m:mi>
+                      </m:msub>
+                      <m:mrow>
+                        <m:mi>u</m:mi>
+                        <m:mo>∥</m:mo>
+                        <m:mo>-</m:mo>
+                      </m:mrow>
+                      <m:mfrac>
+                        <m:mn>1</m:mn>
+                        <m:mi>β</m:mi>
+                      </m:mfrac>
+                      <m:mo>,</m:mo>
+                      <m:mn>0</m:mn>
+                    </m:mfenced>
+                    <m:mfrac>
+                      <m:mrow>
+                        <m:msub>
+                          <m:mi>D</m:mi>
+                          <m:mi>i</m:mi>
+                        </m:msub>
+                        <m:mi>u</m:mi>
+                      </m:mrow>
+                      <m:mrow>
+                        <m:mrow>
+                          <m:mo>∥</m:mo>
+                        </m:mrow>
+                        <m:msub>
+                          <m:mi>D</m:mi>
+                          <m:mi>i</m:mi>
+                        </m:msub>
+                        <m:mrow>
+                          <m:mi>u</m:mi>
+                          <m:mo>∥</m:mo>
+                        </m:mrow>
+                      </m:mrow>
+                    </m:mfrac>
+                    <m:mo>,</m:mo>
+                    <m:mspace width="1.em"/>
+                    <m:mi>i</m:mi>
+                    <m:mo>=</m:mo>
+                    <m:mn>1</m:mn>
+                    <m:mo>,</m:mo>
+                    <m:mo>...</m:mo>
+                    <m:mo>,</m:mo>
+                    <m:msup>
+                      <m:mi>n</m:mi>
+                      <m:mn>2</m:mn>
+                    </m:msup>
+                    <m:mo>,</m:mo>
+                  </m:mrow>
+                </m:mtd>
+              </m:mtr>
+            </m:mtable>
+          </m:math>
+        </equation>
+        <para id="id2257487">where the convention <m:math><m:mrow><m:mn>0</m:mn><m:mo>·</m:mo><m:mo>(</m:mo><m:mn>0</m:mn><m:mo>/</m:mo><m:mn>0</m:mn><m:mo>)</m:mo><m:mo>=</m:mo><m:mn>0</m:mn></m:mrow></m:math> is followed. On the other
+hand, for a fixed <m:math><m:mi mathvariant="bold">w</m:mi></m:math>, (<link target-id="uid10"/>) is quadratic in <m:math><m:mi>u</m:mi></m:math> and the
+minimizer <m:math><m:mi>u</m:mi></m:math> is given by the normal equations</para>
+        <equation id="uid14">
+          <m:math mode="display">
+            <m:mtable displaystyle="true">
+              <m:mtr>
+                <m:mtd columnalign="right">
+                  <m:mrow>
+                    <m:mfenced separators="" open="(" close=")">
+                      <m:munder>
+                        <m:mo>∑</m:mo>
+                        <m:mi>i</m:mi>
+                      </m:munder>
+                      <m:msubsup>
+                        <m:mi>D</m:mi>
+                        <m:mi>i</m:mi>
+                        <m:mi>⊤</m:mi>
+                      </m:msubsup>
+                      <m:msub>
+                        <m:mi>D</m:mi>
+                        <m:mi>i</m:mi>
+                      </m:msub>
+                      <m:mo>+</m:mo>
+                      <m:mfrac>
+                        <m:mi>μ</m:mi>
+                        <m:mi>β</m:mi>
+                      </m:mfrac>
+                      <m:msup>
+                        <m:mi>K</m:mi>
+                        <m:mi>⊤</m:mi>
+                      </m:msup>
+                      <m:mi>K</m:mi>
+                    </m:mfenced>
+                    <m:mi>u</m:mi>
+                    <m:mo>=</m:mo>
+                    <m:munder>
+                      <m:mo>∑</m:mo>
+                      <m:mi>i</m:mi>
+                    </m:munder>
+                    <m:msubsup>
+                      <m:mi>D</m:mi>
+                      <m:mi>i</m:mi>
+                      <m:mi>⊤</m:mi>
+                    </m:msubsup>
+                    <m:msub>
+                      <m:mi mathvariant="bold">w</m:mi>
+                      <m:mi>i</m:mi>
+                    </m:msub>
+                    <m:mo>+</m:mo>
+                    <m:mfrac>
+                      <m:mi>μ</m:mi>
+                      <m:mi>β</m:mi>
+                    </m:mfrac>
+                    <m:msup>
+                      <m:mi>K</m:mi>
+                      <m:mi>⊤</m:mi>
+                    </m:msup>
+                    <m:mi>f</m:mi>
+                    <m:mo>.</m:mo>
+                  </m:mrow>
+                </m:mtd>
+              </m:mtr>
+            </m:mtable>
+          </m:math>
+        </equation>
+        <para id="id2257681">By noting the relation between <m:math><m:mi>D</m:mi></m:math> and <m:math><m:msub><m:mi>D</m:mi><m:mi>i</m:mi></m:msub></m:math> and a reordering of
+variables, (<link target-id="uid14"/>) can be rewritten as</para>
+        <equation id="uid15">
+          <m:math mode="display">
+            <m:mtable displaystyle="true">
+              <m:mtr>
+                <m:mtd columnalign="right">
+                  <m:mrow>
+                    <m:mfenced separators="" open="(" close=")">
+                      <m:msup>
+                        <m:mi>D</m:mi>
+                        <m:mi>⊤</m:mi>
+                      </m:msup>
+                      <m:mi>D</m:mi>
+                      <m:mo>+</m:mo>
+                      <m:mfrac>
+                        <m:mi>μ</m:mi>
+                        <m:mi>β</m:mi>
+                      </m:mfrac>
+                      <m:msup>
+                        <m:mi>K</m:mi>
+                        <m:mi>⊤</m:mi>
+                      </m:msup>
+                      <m:mi>K</m:mi>
+                    </m:mfenced>
+                    <m:mi>u</m:mi>
+                    <m:mo>=</m:mo>
+                    <m:msup>
+                      <m:mi>D</m:mi>
+                      <m:mi>⊤</m:mi>
+                    </m:msup>
+                    <m:mi>w</m:mi>
+                    <m:mo>+</m:mo>
+                    <m:mfrac>
+                      <m:mi>μ</m:mi>
+                      <m:mi>β</m:mi>
+                    </m:mfrac>
+                    <m:msup>
+                      <m:mi>K</m:mi>
+                      <m:mi>⊤</m:mi>
+                    </m:msup>
+                    <m:mi>f</m:mi>
+                    <m:mo>,</m:mo>
+                  </m:mrow>
+                </m:mtd>
+              </m:mtr>
+            </m:mtable>
+          </m:math>
+        </equation>
+        <para id="id2257807">where</para>
+        <equation id="uid16">
+          <m:math mode="display">
+            <m:mtable displaystyle="true">
+              <m:mtr>
+                <m:mtd columnalign="right">
+                  <m:mrow>
+                    <m:mi>w</m:mi>
+                    <m:mo>≜</m:mo>
+                    <m:mfenced separators="" open="(" close=")">
+                      <m:mtable>
+                        <m:mtr>
+                          <m:mtd>
+                            <m:msub>
+                              <m:mi>w</m:mi>
+                              <m:mn>1</m:mn>
+                            </m:msub>
+                          </m:mtd>
+                        </m:mtr>
+                        <m:mtr>
+                          <m:mtd>
+                            <m:msub>
+                              <m:mi>w</m:mi>
+                              <m:mn>2</m:mn>
+                            </m:msub>
+                          </m:mtd>
+                        </m:mtr>
+                      </m:mtable>
+                    </m:mfenced>
+                    <m:mo>∈</m:mo>
+                    <m:msup>
+                      <m:mi mathvariant="double-struck">R</m:mi>
+                      <m:mrow>
+                        <m:mn>2</m:mn>
+                        <m:msup>
+                          <m:mi>n</m:mi>
+                          <m:mn>2</m:mn>
+                        </m:msup>
+                      </m:mrow>
+                    </m:msup>
+                    <m:mspace width="0.277778em"/>
+                    <m:mi> and </m:mi>
+                    <m:mspace width="0.277778em"/>
+                    <m:msub>
+                      <m:mi>w</m:mi>
+                      <m:mi>j</m:mi>
+                    </m:msub>
+                    <m:mo>≜</m:mo>
+                    <m:mfenced separators="" open="(" close=")">
+                      <m:mtable>
+                        <m:mtr>
+                          <m:mtd>
+                            <m:msub>
+                              <m:mrow>
+                                <m:mo>(</m:mo>
+                                <m:msub>
+                                  <m:mi mathvariant="bold">w</m:mi>
+                                  <m:mn>1</m:mn>
+                                </m:msub>
+                                <m:mo>)</m:mo>
+                              </m:mrow>
+                              <m:mi>j</m:mi>
+                            </m:msub>
+                          </m:mtd>
+                        </m:mtr>
+                        <m:mtr>
+                          <m:mtd>
+                            <m:mo>⋮</m:mo>
+                          </m:mtd>
+                        </m:mtr>
+                        <m:mtr>
+                          <m:mtd>
+                            <m:msub>
+                              <m:mrow>
+                                <m:mo>(</m:mo>
+                                <m:msub>
+                                  <m:mi mathvariant="bold">w</m:mi>
+                                  <m:msup>
+                                    <m:mi>n</m:mi>
+                                    <m:mn>2</m:mn>
+                                  </m:msup>
+                                </m:msub>
+                                <m:mo>)</m:mo>
+                              </m:mrow>
+                              <m:mi>j</m:mi>
+                            </m:msub>
+                          </m:mtd>
+                        </m:mtr>
+                      </m:mtable>
+                    </m:mfenced>
+                    <m:mo>,</m:mo>
+                    <m:mspace width="0.277778em"/>
+                    <m:mi>j</m:mi>
+                    <m:mo>=</m:mo>
+                    <m:mn>1</m:mn>
+                    <m:mo>,</m:mo>
+                    <m:mn>2</m:mn>
+                    <m:mo>.</m:mo>
+                  </m:mrow>
+                </m:mtd>
+              </m:mtr>
+            </m:mtable>
+          </m:math>
+        </equation>
+        <para id="id2257986">The normal equation (<link target-id="uid15"/>) can also be solved easily
+provided that proper boundary conditions are assumed on <m:math><m:mi>u</m:mi></m:math>. Since
+both the finite difference operations and the convolution are not
+well-defined on the boundary of <m:math><m:mi>u</m:mi></m:math>, certain boundary assumptions
+are needed when solving (<link target-id="uid15"/>). Under the periodic
+boundary conditions for <m:math><m:mi>u</m:mi></m:math>, i.e. the 2D image <m:math><m:mi>u</m:mi></m:math> is treated as a
+periodic function in both horizontal and vertical directions,
+<m:math><m:msup><m:mi>D</m:mi><m:mrow><m:mo>(</m:mo><m:mn>1</m:mn><m:mo>)</m:mo></m:mrow></m:msup></m:math>, <m:math><m:msup><m:mi>D</m:mi><m:mrow><m:mo>(</m:mo><m:mn>2</m:mn><m:mo>)</m:mo></m:mrow></m:msup></m:math> and <m:math><m:mi>K</m:mi></m:math> are all block circulant matrices with
+circulant blocks; see e.g. <link target-id="bid16"/>, <link target-id="bid17"/>. Therefore, the Hessian
+matrix on the left-hand side of (<link target-id="uid15"/>) has a block
+circulant structure and thus can be diagonalized by the 2D discrete
+Fourier transform <m:math><m:mi mathvariant="bold">F</m:mi></m:math>, see e.g. <link target-id="bid17"/>. Using the
+convolution theorem of Fourier transforms, the solution of
+(<link target-id="uid15"/>) is given by</para>
+        <equation id="uid17">
+          <m:math mode="display">
+            <m:mtable displaystyle="true">
+              <m:mtr>
+                <m:mtd columnalign="right">
+                  <m:mrow>
+                    <m:mi>u</m:mi>
+                    <m:mo>=</m:mo>
+                    <m:msup>
+                      <m:mrow>
+                        <m:mi mathvariant="bold">F</m:mi>
+                      </m:mrow>
+                      <m:mrow>
+                        <m:mo>-</m:mo>
+                        <m:mn>1</m:mn>
+                      </m:mrow>
+                    </m:msup>
+                    <m:mfenced separators="" open="(" close=")">
+                      <m:mfrac>
+                        <m:mrow>
+                          <m:mi mathvariant="bold">F</m:mi>
+                          <m:mfenced separators="" open="(" close=")">
+                            <m:msup>
+                              <m:mi>D</m:mi>
+                              <m:mi>⊤</m:mi>
+                            </m:msup>
+                            <m:mi>w</m:mi>
+                            <m:mo>+</m:mo>
+                            <m:mrow>
+                              <m:mo>(</m:mo>
+                              <m:mi>μ</m:mi>
+                              <m:mo>/</m:mo>
+                              <m:mi>β</m:mi>
+                              <m:mo>)</m:mo>
+                            </m:mrow>
+                            <m:msup>
+                              <m:mi>K</m:mi>
+                              <m:mi>⊤</m:mi>
+                            </m:msup>
+                            <m:mi>f</m:mi>
+                          </m:mfenced>
+                        </m:mrow>
+                        <m:mrow>
+                          <m:mi> diag </m:mi>
+                          <m:mfenced separators="" open="(" close=")">
+                            <m:mi mathvariant="script">F</m:mi>
+                            <m:mo>(</m:mo>
+                            <m:msup>
+                              <m:mi>D</m:mi>
+                              <m:mi>⊤</m:mi>
+                            </m:msup>
+                            <m:mi>D</m:mi>
+                            <m:mo>+</m:mo>
+                            <m:mrow>
+                              <m:mo>(</m:mo>
+                              <m:mi>μ</m:mi>
+                              <m:mo>/</m:mo>
+                              <m:mi>β</m:mi>
+                              <m:mo>)</m:mo>
+                            </m:mrow>
+                            <m:msup>
+                              <m:mi>K</m:mi>
+                              <m:mi>⊤</m:mi>
+                            </m:msup>
+                            <m:mi>K</m:mi>
+                            <m:mo>)</m:mo>
+                          </m:mfenced>
+                        </m:mrow>
+                      </m:mfrac>
+                    </m:mfenced>
+                    <m:mo>,</m:mo>
+                  </m:mrow>
+                </m:mtd>
+              </m:mtr>
+            </m:mtable>
+          </m:math>
+        </equation>
+        <para id="id2258284">where the division is implemented by componentwise. Since all
+quantities but <m:math><m:mi>w</m:mi></m:math> are constant for given <m:math><m:mi>β</m:mi></m:math>, computing <m:math><m:mi>u</m:mi></m:math>
+from (<link target-id="uid17"/>) involves merely the finite difference
+operation on <m:math><m:mi>w</m:mi></m:math> and two FFTs (including one inverse FFT), once the
+constant quantities are computed.</para>
+        <para id="id2258335">Since minimizing the objective function in (<link target-id="uid10"/>) with
+respect to either <m:math><m:mi mathvariant="bold">w</m:mi></m:math> or <m:math><m:mi>u</m:mi></m:math> is computationally inexpensive, we
+solve (<link target-id="uid10"/>) for a fixed <m:math><m:mi>β</m:mi></m:math> by an alternating
+minimization scheme given below.</para>
+        <para id="id2258380">Algorithm :</para>
+        <list id="id2258383" list-type="bulleted">
+          <item id="uid18">Input <m:math><m:mi>f</m:mi></m:math>, <m:math><m:mi>K</m:mi></m:math>
+and <m:math><m:mrow><m:mi>μ</m:mi><m:mo>&gt;</m:mo><m:mn>0</m:mn></m:mrow></m:math>. Given <m:math><m:mrow><m:mi>β</m:mi><m:mo>&gt;</m:mo><m:mn>0</m:mn></m:mrow></m:math> and initialize <m:math><m:mrow><m:mi>u</m:mi><m:mo>=</m:mo><m:mi>f</m:mi></m:mrow></m:math>.
+</item>
+          <item id="uid19">While
+
+“not converged”, Do
+
+<list id="id2258479" list-type="enumerated"><item id="uid20">Compute <m:math><m:mi mathvariant="bold">w</m:mi></m:math> according to (<link target-id="uid13"/>) for fixed <m:math><m:mi>u</m:mi></m:math>.
+</item><item id="uid21">Compute <m:math><m:mi>u</m:mi></m:math> according to (<link target-id="uid17"/>) for fixed <m:math><m:mi>w</m:mi></m:math> (or equivalently <m:math><m:mi mathvariant="bold">w</m:mi></m:math>).
+</item></list></item>
+          <item id="uid22">End Do
+
+</item>
+        </list>
+      </section>
+      <section id="uid23">
+        <title>Optimality Conditions and Convergence Results</title>
+        <para id="id2258586">To present the convergence results of Algorithm <link target-id="uid11">"Basic Algorithm"</link> for
+a fixed <m:math><m:mi>β</m:mi></m:math>, we make the following weak assumption.</para>
+        <para id="id2258604">Assumption 1 
+ <m:math><m:mrow><m:mi mathvariant="script">N</m:mi><m:mo>(</m:mo><m:mi>K</m:mi><m:mo>)</m:mo><m:mo>∩</m:mo><m:mi mathvariant="script">N</m:mi><m:mo>(</m:mo><m:mi>D</m:mi><m:mo>)</m:mo><m:mo>=</m:mo><m:mo>{</m:mo><m:mn>0</m:mn><m:mo>}</m:mo></m:mrow></m:math>, where <m:math><m:mrow><m:mi mathvariant="script">N</m:mi><m:mo>(</m:mo><m:mo>·</m:mo><m:mo>)</m:mo></m:mrow></m:math> represents the
+null space of a matrix.</para>
+        <para id="id2258673">Define</para>
+        <equation id="uid25">
+          <m:math mode="display">
+            <m:mtable displaystyle="true">
+              <m:mtr>
+                <m:mtd columnalign="right">
+                  <m:mrow>
+                    <m:mi>M</m:mi>
+                    <m:mo>=</m:mo>
+                    <m:msup>
+                      <m:mi>D</m:mi>
+                      <m:mi>⊤</m:mi>
+                    </m:msup>
+                    <m:mi>D</m:mi>
+                    <m:mo>+</m:mo>
+                    <m:mfrac>
+                      <m:mi>μ</m:mi>
+                      <m:mi>β</m:mi>
+                    </m:mfrac>
+                    <m:msup>
+                      <m:mi>K</m:mi>
+                      <m:mi>⊤</m:mi>
+                    </m:msup>
+                    <m:mi>K</m:mi>
+                    <m:mspace width="0.277778em"/>
+                    <m:mspace width="0.277778em"/>
+                    <m:mspace width="3.33333pt"/>
+                    <m:mi> and </m:mi>
+                    <m:mspace width="3.33333pt"/>
+                    <m:mspace width="0.277778em"/>
+                    <m:mspace width="0.277778em"/>
+                    <m:mi>T</m:mi>
+                    <m:mo>=</m:mo>
+                    <m:mi>D</m:mi>
+                    <m:msup>
+                      <m:mi>M</m:mi>
+                      <m:mrow>
+                        <m:mo>-</m:mo>
+                        <m:mn>1</m:mn>
+                      </m:mrow>
+                    </m:msup>
+                    <m:msup>
+                      <m:mi>D</m:mi>
+                      <m:mi>⊤</m:mi>
+                    </m:msup>
+                    <m:mo>.</m:mo>
+                  </m:mrow>
+                </m:mtd>
+              </m:mtr>
+            </m:mtable>
+          </m:math>
+        </equation>
+        <para id="id2258779">Furthermore, we will make use of the following two index sets:</para>
+        <equation id="uid26">
+          <m:math mode="display">
+            <m:mtable displaystyle="true">
+              <m:mtr>
+                <m:mtd columnalign="right">
+                  <m:mrow>
+                    <m:mi>L</m:mi>
+                    <m:mo>=</m:mo>
+                    <m:mfenced separators="" open="{" close="}">
+                      <m:mrow>
+                        <m:mi>i</m:mi>
+                        <m:mspace width="3.33333pt"/>
+                        <m:mo>:</m:mo>
+                        <m:mspace width="3.33333pt"/>
+                        <m:mo>∥</m:mo>
+                      </m:mrow>
+                      <m:msub>
+                        <m:mi>D</m:mi>
+                        <m:mi>i</m:mi>
+                      </m:msub>
+                      <m:msup>
+                        <m:mi>u</m:mi>
+                        <m:mo>*</m:mo>
+                      </m:msup>
+                      <m:mrow>
+                        <m:mo>∥</m:mo>
+                        <m:mo>&lt;</m:mo>
+                      </m:mrow>
+                      <m:mfrac>
+                        <m:mn>1</m:mn>
+                        <m:mi>β</m:mi>
+                      </m:mfrac>
+                    </m:mfenced>
+                    <m:mspace width="4.pt"/>
+                    <m:mspace width="4.pt"/>
+                    <m:mtext>and</m:mtext>
+                    <m:mspace width="4.pt"/>
+                    <m:mspace width="4.pt"/>
+                    <m:mi>E</m:mi>
+                    <m:mo>=</m:mo>
+                    <m:mrow>
+                      <m:mo>{</m:mo>
+                      <m:mn>1</m:mn>
+                      <m:mo>,</m:mo>
+                      <m:mo>...</m:mo>
+                      <m:mo>,</m:mo>
+                      <m:msup>
+                        <m:mi>n</m:mi>
+                        <m:mn>2</m:mn>
+                      </m:msup>
+                      <m:mo>}</m:mo>
+                    </m:mrow>
+                    <m:mo>∖</m:mo>
+                    <m:mi>L</m:mi>
+                    <m:mo>.</m:mo>
+                  </m:mrow>
+                </m:mtd>
+              </m:mtr>
+            </m:mtable>
+          </m:math>
+        </equation>
+        <para id="id2258908">Under Assumption 1, the proposed algorithm has the following
+convergence properties.</para>
+        <para id="id2258916">Theorem 1 
+ For any fixed <m:math><m:mrow><m:mi>β</m:mi><m:mo>&gt;</m:mo><m:mn>0</m:mn></m:mrow></m:math>, the sequence
+<m:math><m:mrow><m:mo>{</m:mo><m:mrow><m:mo>(</m:mo><m:msup><m:mi>w</m:mi><m:mi>k</m:mi></m:msup><m:mo>,</m:mo><m:msup><m:mi>u</m:mi><m:mi>k</m:mi></m:msup><m:mo>)</m:mo></m:mrow><m:mo>}</m:mo></m:mrow></m:math> generated by Algorithm <link target-id="uid11">"Basic Algorithm"</link> from any
+starting point <m:math><m:mrow><m:mo>(</m:mo><m:msup><m:mi>w</m:mi><m:mn>0</m:mn></m:msup><m:mo>,</m:mo><m:msup><m:mi>u</m:mi><m:mn>0</m:mn></m:msup><m:mo>)</m:mo></m:mrow></m:math> converges to a solution <m:math><m:mrow><m:mo>(</m:mo><m:msup><m:mi>w</m:mi><m:mo>*</m:mo></m:msup><m:mo>,</m:mo><m:msup><m:mi>u</m:mi><m:mo>*</m:mo></m:msup><m:mo>)</m:mo></m:mrow></m:math> of
+(<link target-id="uid10"/>). Furthermore, the sequence satisfies</para>
+        <list id="id2259043" list-type="enumerated">
+          <item id="uid28">
+            <equation id="id2259051">
+              <m:math>
+                <m:mrow>
+                  <m:mrow>
+                    <m:mo>∥</m:mo>
+                  </m:mrow>
+                  <m:msubsup>
+                    <m:mi>w</m:mi>
+                    <m:mi>E</m:mi>
+                    <m:mrow>
+                      <m:mi>k</m:mi>
+                      <m:mo>+</m:mo>
+                      <m:mn>1</m:mn>
+                    </m:mrow>
+                  </m:msubsup>
+                  <m:mo>-</m:mo>
+                  <m:msubsup>
+                    <m:mi>w</m:mi>
+                    <m:mi>E</m:mi>
+                    <m:mo>*</m:mo>
+                  </m:msubsup>
+                  <m:mrow>
+                    <m:mo>∥</m:mo>
+                    <m:mo>≤</m:mo>
+                  </m:mrow>
+                  <m:msqrt>
+                    <m:mrow>
+                      <m:mi>ρ</m:mi>
+                      <m:mo>(</m:mo>
+                      <m:msub>
+                        <m:mrow>
+                          <m:mo>(</m:mo>
+                          <m:msup>
+                            <m:mi>T</m:mi>
+                            <m:mn>2</m:mn>
+                          </m:msup>
+                          <m:mo>)</m:mo>
+                        </m:mrow>
+                        <m:mrow>
+                          <m:mi>E</m:mi>
+                          <m:mi>E</m:mi>
+                        </m:mrow>
+                      </m:msub>
+                      <m:mo>)</m:mo>
+                    </m:mrow>
+                  </m:msqrt>
+                  <m:mrow>
+                    <m:mo>∥</m:mo>
+                    <m:msubsup>
+                      <m:mi>w</m:mi>
+                      <m:mi>E</m:mi>
+                      <m:mi>k</m:mi>
+                    </m:msubsup>
+                    <m:mo>-</m:mo>
+                    <m:msubsup>
+                      <m:mi>w</m:mi>
+                      <m:mi>E</m:mi>
+                      <m:mo>*</m:mo>
+                    </m:msubsup>
+                    <m:mo>∥</m:mo>
+                  </m:mrow>
+                  <m:mo>;</m:mo>
+                </m:mrow>
+              </m:math>
+            </equation>
+          </item>
+          <item id="uid29">
+            <equation id="id2259167">
+              <m:math>
+                <m:mrow>
+                  <m:mrow>
+                    <m:mo>∥</m:mo>
+                  </m:mrow>
+                  <m:msup>
+                    <m:mi>u</m:mi>
+                    <m:mrow>
+                      <m:mi>k</m:mi>
+                      <m:mo>+</m:mo>
+                      <m:mn>1</m:mn>
+                    </m:mrow>
+                  </m:msup>
+                  <m:mo>-</m:mo>
+                  <m:msup>
+                    <m:mi>u</m:mi>
+                    <m:mo>*</m:mo>
+                  </m:msup>
+                  <m:msub>
+                    <m:mrow>
+                      <m:mo>∥</m:mo>
+                    </m:mrow>
+                    <m:mi>M</m:mi>
+                  </m:msub>
+                  <m:mo>≤</m:mo>
+                  <m:msqrt>
+                    <m:mrow>
+                      <m:mi>ρ</m:mi>
+                      <m:mo>(</m:mo>
+                      <m:msub>
+                        <m:mi>T</m:mi>
+                        <m:mrow>
+                          <m:mi>E</m:mi>
+                          <m:mi>E</m:mi>
+                        </m:mrow>
+                      </m:msub>
+                      <m:mo>)</m:mo>
+                    </m:mrow>
+                  </m:msqrt>
+                  <m:msub>
+                    <m:mrow>
+                      <m:mo>∥</m:mo>
+                      <m:msup>
+                        <m:mi>u</m:mi>
+                        <m:mi>k</m:mi>
+                      </m:msup>
+                      <m:mo>-</m:mo>
+                      <m:msup>
+                        <m:mi>u</m:mi>
+                        <m:mo>*</m:mo>
+                      </m:msup>
+                      <m:mo>∥</m:mo>
+                    </m:mrow>
+                    <m:mi>M</m:mi>
+                  </m:msub>
+                  <m:mo>;</m:mo>
+                </m:mrow>
+              </m:math>
+            </equation>
+          </item>
+        </list>
+        <para id="id2259266">for all <m:math><m:mi>k</m:mi></m:math> sufficiently large, where <m:math><m:mrow><m:msub><m:mi>T</m:mi><m:mrow><m:mi>E</m:mi><m:mi>E</m:mi></m:mrow></m:msub><m:mo>=</m:mo><m:msub><m:mrow><m:mo>[</m:mo><m:msub><m:mi>T</m:mi><m:mrow><m:mi>i</m:mi><m:mo>,</m:mo><m:mi>j</m:mi></m:mrow></m:msub><m:mo>]</m:mo></m:mrow><m:mrow><m:mi>i</m:mi><m:mo>,</m:mo><m:mi>j</m:mi><m:mo>∈</m:mo><m:mi>E</m:mi><m:mo>∪</m:mo><m:mo>(</m:mo><m:msup><m:mi>n</m:mi><m:mn>2</m:mn></m:msup><m:mo>+</m:mo><m:mi>E</m:mi><m:mo>)</m:mo></m:mrow></m:msub></m:mrow></m:math> is a minor of <m:math><m:mi>T</m:mi></m:math>, <m:math><m:mrow><m:msubsup><m:mrow><m:mo>∥</m:mo><m:mi>v</m:mi><m:mo>∥</m:mo></m:mrow><m:mi>M</m:mi><m:mn>2</m:mn></m:msubsup><m:mo>=</m:mo><m:msup><m:mi>v</m:mi><m:mi>⊤</m:mi></m:msup><m:mi>M</m:mi><m:mi>v</m:mi></m:mrow></m:math> and
+<m:math><m:mrow><m:mi>ρ</m:mi><m:mo>(</m:mo><m:mo>·</m:mo><m:mo>)</m:mo></m:mrow></m:math> is the spectral radius of its argument.</para>
+      </section>
+    </section>
+    <section id="cid3">
+      <title>Extensions to Multichannel Images and TV/L<!--Math is not currently allowed in CNXML section title.--></title>
+      <para id="id2259437">The alternating minimization algorithm given in <link target-id="cid2">"A New Alternating Minimization Algorithm"</link> can be extended to solve multichannel extension of
+(<link target-id="uid9"/>) when the underlying image has more than one channels
+and TV/L<m:math><m:msup><m:mrow/><m:mn>1</m:mn></m:msup></m:math> when the additive noise is impulsive.</para>
+      <section id="uid30">
+        <title>Multichannel image deconvolution</title>
+        <para id="id2259473">Let <m:math><m:mrow><m:mover accent="true"><m:mi>u</m:mi><m:mo>¯</m:mo></m:mover><m:mo>=</m:mo><m:mrow><m:mo>[</m:mo><m:msup><m:mover accent="true"><m:mi>u</m:mi><m:mo>¯</m:mo></m:mover><m:mrow><m:mo>(</m:mo><m:mn>1</m:mn><m:mo>)</m:mo></m:mrow></m:msup><m:mo>;</m:mo><m:mo>...</m:mo><m:mo>;</m:mo><m:msup><m:mover accent="true"><m:mi>u</m:mi><m:mo>¯</m:mo></m:mover><m:mrow><m:mo>(</m:mo><m:mi>m</m:mi><m:mo>)</m:mo></m:mrow></m:msup><m:mo>]</m:mo></m:mrow><m:mo>∈</m:mo><m:msup><m:mi mathvariant="double-struck">R</m:mi><m:mrow><m:mi>m</m:mi><m:msup><m:mi>n</m:mi><m:mn>2</m:mn></m:msup></m:mrow></m:msup></m:mrow></m:math> be an
+<m:math><m:mi>m</m:mi></m:math>-channel image, where, for each <m:math><m:mi>j</m:mi></m:math>, <m:math><m:mrow><m:msup><m:mover accent="true"><m:mi>u</m:mi><m:mo>¯</m:mo></m:mover><m:mrow><m:mo>(</m:mo><m:mi>j</m:mi><m:mo>)</m:mo></m:mrow></m:msup><m:mo>∈</m:mo><m:msup><m:mi mathvariant="double-struck">R</m:mi><m:msup><m:mi>n</m:mi><m:mn>2</m:mn></m:msup></m:msup></m:mrow></m:math>
+represents the <m:math><m:mi>j</m:mi></m:math>th channel. An observation of <m:math><m:mover accent="true"><m:mi>u</m:mi><m:mo>¯</m:mo></m:mover></m:math> is modeled
+by (<link target-id="uid5"/>), in which case
+<m:math><m:mrow><m:mi>f</m:mi><m:mo>=</m:mo><m:mo>[</m:mo><m:msup><m:mi>f</m:mi><m:mrow><m:mo>(</m:mo><m:mn>1</m:mn><m:mo>)</m:mo></m:mrow></m:msup><m:mo>;</m:mo><m:mo>...</m:mo><m:mo>;</m:mo><m:msup><m:mi>f</m:mi><m:mrow><m:mo>(</m:mo><m:mi>m</m:mi><m:mo>)</m:mo></m:mrow></m:msup><m:mo>]</m:mo></m:mrow></m:math> and
+<m:math><m:mrow><m:mi>ω</m:mi><m:mo>=</m:mo><m:mo>[</m:mo><m:msup><m:mi>ω</m:mi><m:mrow><m:mo>(</m:mo><m:mn>1</m:mn><m:mo>)</m:mo></m:mrow></m:msup><m:mo>;</m:mo><m:mo>...</m:mo><m:mo>;</m:mo><m:msup><m:mi>ω</m:mi><m:mrow><m:mo>(</m:mo><m:mi>m</m:mi><m:mo>)</m:mo></m:mrow></m:msup><m:mo>]</m:mo></m:mrow></m:math> have the same size and
+the number of channels as <m:math><m:mover accent="true"><m:mi>u</m:mi><m:mo>¯</m:mo></m:mover></m:math>, and <m:math><m:mi>K</m:mi></m:math> is a multichannel
+blurring operator of the form</para>
+        <equation id="uid31">
+          <m:math mode="display">
+            <m:mtable displaystyle="true">
+              <m:mtr>
+                <m:mtd columnalign="right">
+                  <m:mrow>
+                    <m:mi>K</m:mi>
+                    <m:mo>=</m:mo>
+                    <m:mfenced separators="" open="[" close="]">
+                      <m:mtable>
+                        <m:mtr>
+                          <m:mtd>
+                            <m:msub>
+                              <m:mi>K</m:mi>
+                              <m:mn>11</m:mn>
+                            </m:msub>
+                          </m:mtd>
+                          <m:mtd>
+                            <m:msub>
+                              <m:mi>K</m:mi>
+                              <m:mn>12</m:mn>
+                            </m:msub>
+                          </m:mtd>
+                          <m:mtd>
+                            <m:mo>⋯</m:mo>
+                          </m:mtd>
+                          <m:mtd>
+                            <m:msub>
+                              <m:mi>K</m:mi>
+                              <m:mrow>
+                                <m:mn>1</m:mn>
+                                <m:mi>m</m:mi>
+                              </m:mrow>
+                            </m:msub>
+                          </m:mtd>
+                        </m:mtr>
+                        <m:mtr>
+                          <m:mtd>
+                            <m:msub>
+                              <m:mi>K</m:mi>
+                              <m:mn>21</m:mn>
+                            </m:msub>
+                          </m:mtd>
+                          <m:mtd>
+                            <m:msub>
+                              <m:mi>K</m:mi>
+                              <m:mn>22</m:mn>
+                            </m:msub>
+                          </m:mtd>
+                          <m:mtd>
+                            <m:mo>⋯</m:mo>
+                          </m:mtd>
+                          <m:mtd>
+                            <m:msub>
+                              <m:mi>K</m:mi>
+                              <m:mrow>
+                                <m:mn>2</m:mn>
+                                <m:mi>m</m:mi>
+                              </m:mrow>
+                            </m:msub>
+                          </m:mtd>
+                        </m:mtr>
+                        <m:mtr>
+                          <m:mtd>
+                            <m:mo>⋮</m:mo>
+                          </m:mtd>
+                          <m:mtd>
+                            <m:mo>⋮</m:mo>
+                          </m:mtd>
+                          <m:mtd>
+                            <m:mo>⋱</m:mo>
+                          </m:mtd>
+                          <m:mtd>
+                            <m:mo>⋮</m:mo>
+                          </m:mtd>
+                        </m:mtr>
+                        <m:mtr>
+                          <m:mtd>
+                            <m:msub>
+                              <m:mi>K</m:mi>
+                              <m:mrow>
+                                <m:mi>m</m:mi>
+                                <m:mn>1</m:mn>
+                              </m:mrow>
+                            </m:msub>
+                          </m:mtd>
+                          <m:mtd>
+                            <m:msub>
+                              <m:mi>K</m:mi>
+                              <m:mrow>
+                                <m:mi>m</m:mi>
+                                <m:mn>2</m:mn>
+                              </m:mrow>
+                            </m:msub>
+                          </m:mtd>
+                          <m:mtd>
+                            <m:mo>⋯</m:mo>
+                          </m:mtd>
+                          <m:mtd>
+                            <m:msub>
+                              <m:mi>K</m:mi>
+                              <m:mrow>
+                                <m:mi>m</m:mi>
+                                <m:mi>m</m:mi>
+                              </m:mrow>
+                            </m:msub>
+                          </m:mtd>
+                        </m:mtr>
+                      </m:mtable>
+                    </m:mfenced>
+                    <m:mo>∈</m:mo>
+                    <m:msup>
+                      <m:mi mathvariant="double-struck">R</m:mi>
+                      <m:mrow>
+                        <m:mi>m</m:mi>
+                        <m:msup>
+                          <m:mi>n</m:mi>
+                          <m:mn>2</m:mn>
+                        </m:msup>
+                        <m:mo>×</m:mo>
+                        <m:mi>m</m:mi>
+                        <m:msup>
+                          <m:mi>n</m:mi>
+                          <m:mn>2</m:mn>
+                        </m:msup>
+                      </m:mrow>
+                    </m:msup>
+                    <m:mo>,</m:mo>
+                  </m:mrow>
+                </m:mtd>
+              </m:mtr>
+            </m:mtable>
+          </m:math>
+        </equation>
+        <para id="id2259974">where <m:math><m:mrow><m:msub><m:mi>K</m:mi><m:mrow><m:mi>i</m:mi><m:mi>j</m:mi></m:mrow></m:msub><m:mo>∈</m:mo><m:msup><m:mi mathvariant="double-struck">R</m:mi><m:mrow><m:msup><m:mi>n</m:mi><m:mn>2</m:mn></m:msup><m:mo>×</m:mo><m:msup><m:mi>n</m:mi><m:mn>2</m:mn></m:msup></m:mrow></m:msup></m:mrow></m:math>, each diagonal submatrix
+<m:math><m:msub><m:mi>K</m:mi><m:mrow><m:mi>i</m:mi><m:mi>i</m:mi></m:mrow></m:msub></m:math> defines the blurring operator within the <m:math><m:mi>i</m:mi></m:math>th channel, and
+each off-diagonal matrix <m:math><m:msub><m:mi>K</m:mi><m:mrow><m:mi>i</m:mi><m:mi>j</m:mi></m:mrow></m:msub></m:math>, <m:math><m:mrow><m:mi>i</m:mi><m:mo>≠</m:mo><m:mi>j</m:mi></m:mrow></m:math>, defines how the <m:math><m:mi>j</m:mi></m:math>th
+channel affects the <m:math><m:mi>i</m:mi></m:math>th channel.</para>
+        <para id="id2260106">The multichannel extension of (<link target-id="uid9"/>) is</para>
+        <equation id="uid32">
+          <m:math mode="display">
+            <m:mtable displaystyle="true">
+              <m:mtr>
+                <m:mtd columnalign="right">
+                  <m:mrow>
+                    <m:munder>
+                      <m:mo movablelimits="true" form="prefix">min</m:mo>
+                      <m:mi>u</m:mi>
+                    </m:munder>
+                    <m:munder>
+                      <m:mo>∑</m:mo>
+                      <m:mi>i</m:mi>
+                    </m:munder>
+                    <m:mrow>
+                      <m:mo>∥</m:mo>
+                    </m:mrow>
+                    <m:mrow>
+                      <m:mo>(</m:mo>
+                      <m:msub>
+                        <m:mi>I</m:mi>
+                        <m:mi>m</m:mi>
+                      </m:msub>
+                      <m:mo>⊗</m:mo>
+                      <m:msub>
+                        <m:mi>D</m:mi>
+                        <m:mi>i</m:mi>
+                      </m:msub>
+                      <m:mo>)</m:mo>
+                    </m:mrow>
+                    <m:mrow>
+                      <m:mi>u</m:mi>
+                      <m:mo>∥</m:mo>
+                      <m:mo>+</m:mo>
+                    </m:mrow>
+                    <m:mfrac>
+                      <m:mi>μ</m:mi>
+                      <m:mn>2</m:mn>
+                    </m:mfrac>
+                    <m:msup>
+                      <m:mrow>
+                        <m:mo>∥</m:mo>
+                        <m:mi>K</m:mi>
+                        <m:mi>u</m:mi>
+                        <m:mo>-</m:mo>
+                        <m:mi>f</m:mi>
+                        <m:mo>∥</m:mo>
+                      </m:mrow>
+                      <m:mn>2</m:mn>
+                    </m:msup>
+                    <m:mo>,</m:mo>
+                  </m:mrow>
+                </m:mtd>
+              </m:mtr>
+            </m:mtable>
+          </m:math>
+        </equation>
+        <para id="id2260217">where <m:math><m:msub><m:mi>I</m:mi><m:mi>m</m:mi></m:msub></m:math> is the identity matrix of order <m:math><m:mi>m</m:mi></m:math>, and “<m:math><m:mo>⊗</m:mo></m:math>" is
+the Kronecker product. By introducing auxiliary variables
+<m:math><m:mrow><m:msub><m:mi mathvariant="bold">w</m:mi><m:mi>i</m:mi></m:msub><m:mo>∈</m:mo><m:msup><m:mi mathvariant="double-struck">R</m:mi><m:mrow><m:mn>2</m:mn><m:mi>m</m:mi></m:mrow></m:msup></m:mrow></m:math>, <m:math><m:mrow><m:mi>i</m:mi><m:mo>=</m:mo><m:mn>1</m:mn><m:mo>,</m:mo><m:mo>...</m:mo><m:mo>,</m:mo><m:msup><m:mi>n</m:mi><m:mn>2</m:mn></m:msup></m:mrow></m:math>, (<link target-id="uid32"/>) is approximated
+by</para>
+        <equation id="uid33">
+          <m:math mode="display">
+            <m:mtable displaystyle="true">
+              <m:mtr>
+                <m:mtd columnalign="right">
+                  <m:mrow>
+                    <m:munder>
+                      <m:mo movablelimits="true" form="prefix">min</m:mo>
+                      <m:mrow>
+                        <m:mi mathvariant="bold">w</m:mi>
+                        <m:mo>,</m:mo>
+                        <m:mi>u</m:mi>
+                      </m:mrow>
+                    </m:munder>
+                    <m:munder>
+                      <m:mo>∑</m:mo>
+                      <m:mi>i</m:mi>
+                    </m:munder>
+                    <m:mrow>
+                      <m:mo>∥</m:mo>
+                    </m:mrow>
+                    <m:msub>
+                      <m:mi mathvariant="bold">w</m:mi>
+                      <m:mi>i</m:mi>
+                    </m:msub>
+                    <m:mrow>
+                      <m:mo>∥</m:mo>
+                      <m:mo>+</m:mo>
+                    </m:mrow>
+                    <m:mfrac>
+                      <m:mi>β</m:mi>
+                      <m:mn>2</m:mn>
+                    </m:mfrac>
+                    <m:munder>
+                      <m:mo>∑</m:mo>
+                      <m:mi>i</m:mi>
+                    </m:munder>
+                    <m:mrow>
+                      <m:mo>∥</m:mo>
+                    </m:mrow>
+                    <m:msub>
+                      <m:mi mathvariant="bold">w</m:mi>
+                      <m:mi>i</m:mi>
+                    </m:msub>
+                    <m:mo>-</m:mo>
+                    <m:mrow>
+                      <m:mo>(</m:mo>
+                      <m:msub>
+                        <m:mi>I</m:mi>
+                        <m:mi>m</m:mi>
+                      </m:msub>
+                      <m:mo>⊗</m:mo>
+                      <m:msub>
+                        <m:mi>D</m:mi>
+                        <m:mi>i</m:mi>
+                      </m:msub>
+                      <m:mo>)</m:mo>
+                    </m:mrow>
+                    <m:msup>
+                      <m:mrow>
+                        <m:mi>u</m:mi>
+                        <m:mo>∥</m:mo>
+                      </m:mrow>
+                      <m:mn>2</m:mn>
+                    </m:msup>
+                    <m:mo>+</m:mo>
+                    <m:mfrac>
+                      <m:mi>μ</m:mi>
+                      <m:mn>2</m:mn>
+                    </m:mfrac>
+                    <m:msup>
+                      <m:mrow>
+                        <m:mo>∥</m:mo>
+                        <m:mi>K</m:mi>
+                        <m:mi>u</m:mi>
+                        <m:mo>-</m:mo>
+                        <m:mi>f</m:mi>
+                        <m:mo>∥</m:mo>
+                      </m:mrow>
+                      <m:mn>2</m:mn>
+                    </m:msup>
+                    <m:mo>.</m:mo>
+                  </m:mrow>
+                </m:mtd>
+              </m:mtr>
+            </m:mtable>
+          </m:math>
+        </equation>
+        <para id="id2260483">For fixed <m:math><m:mi>u</m:mi></m:math>, the minimizer function for <m:math><m:mi mathvariant="bold">w</m:mi></m:math> is given by
+(<link target-id="uid13"/>) in which <m:math><m:mrow><m:msub><m:mi>D</m:mi><m:mi>i</m:mi></m:msub><m:mi>u</m:mi></m:mrow></m:math> should be replaced by <m:math><m:mrow><m:mo>(</m:mo><m:msub><m:mi>I</m:mi><m:mi>m</m:mi></m:msub><m:mo>⊗</m:mo><m:msub><m:mi>D</m:mi><m:mi>i</m:mi></m:msub><m:mo>)</m:mo><m:mi>u</m:mi></m:mrow></m:math>. On the other hand, for fixed <m:math><m:mi mathvariant="bold">w</m:mi></m:math>, the minimization for <m:math><m:mi>u</m:mi></m:math>
+is a least squares problem which is equivalent to the normal
+equations</para>
+        <equation id="uid34">
+          <m:math mode="display">
+            <m:mtable displaystyle="true">
+              <m:mtr>
+                <m:mtd columnalign="right">
+                  <m:mrow>
+                    <m:mfenced separators="" open="(" close=")">
+                      <m:msub>
+                        <m:mi>I</m:mi>
+                        <m:mn>3</m:mn>
+                      </m:msub>
+                      <m:mo>⊗</m:mo>
+                      <m:mrow>
+                        <m:mo>(</m:mo>
+                        <m:msup>
+                          <m:mi>D</m:mi>
+                          <m:mi>⊤</m:mi>
+                        </m:msup>
+                        <m:mi>D</m:mi>
+                        <m:mo>)</m:mo>
+                      </m:mrow>
+                      <m:mo>+</m:mo>
+                      <m:mfrac>
+                        <m:mi>μ</m:mi>
+                        <m:mi>β</m:mi>
+                      </m:mfrac>
+                      <m:msup>
+                        <m:mi>K</m:mi>
+                        <m:mi>⊤</m:mi>
+                      </m:msup>
+                      <m:mi>K</m:mi>
+                    </m:mfenced>
+                    <m:mi>u</m:mi>
+                    <m:mo>=</m:mo>
+                    <m:msup>
+                      <m:mrow>
+                        <m:mo>(</m:mo>
+                        <m:msub>
+                          <m:mi>I</m:mi>
+                          <m:mn>3</m:mn>
+                        </m:msub>
+                        <m:mo>⊗</m:mo>
+                        <m:mi>D</m:mi>
+                        <m:mo>)</m:mo>
+                      </m:mrow>
+                      <m:mi>⊤</m:mi>
+                    </m:msup>
+                    <m:mi>w</m:mi>
+                    <m:mo>+</m:mo>
+                    <m:mfrac>
+                      <m:mi>μ</m:mi>
+                      <m:mi>β</m:mi>
+                    </m:mfrac>
+                    <m:msup>
+                      <m:mi>K</m:mi>
+                      <m:mi>⊤</m:mi>
+                    </m:msup>
+                    <m:mi>f</m:mi>
+                    <m:mo>,</m:mo>
+                  </m:mrow>
+                </m:mtd>
+              </m:mtr>
+            </m:mtable>
+          </m:math>
+        </equation>
+        <para id="id2260708">where <m:math><m:mi>w</m:mi></m:math> is a reordering of variables in a similar way as given in
+(<link target-id="uid16"/>). Under the periodic boundary condition,
+(<link target-id="uid34"/>) can be block diagonalized by FFTs and then
+solved by a low complexity Gaussian elimination method.</para>
+      </section>
+      <section id="uid35">
+        <title>Deconvolution with Impulsive Noise</title>
+        <para id="id2260742">When the blurred image is corrupted by impulsive noise rather than
+Gaussian, we recover <m:math><m:mover accent="true"><m:mi>u</m:mi><m:mo>¯</m:mo></m:mover></m:math> as the minimizer of a TV/L<m:math><m:msup><m:mrow/><m:mn>1</m:mn></m:msup></m:math>
+problem. For simplicity, we again assume <m:math><m:mrow><m:mover accent="true"><m:mi>u</m:mi><m:mo>¯</m:mo></m:mover><m:mo>∈</m:mo><m:msup><m:mi mathvariant="double-struck">R</m:mi><m:msup><m:mi>n</m:mi><m:mn>2</m:mn></m:msup></m:msup></m:mrow></m:math> is a
+single channel image and the extension to multichannel case can be
+similarly done as in <link target-id="uid30">"Multichannel image deconvolution"</link>. The TV/L<m:math><m:msup><m:mrow/><m:mn>1</m:mn></m:msup></m:math> problem is</para>
+        <equation id="uid36">
+          <m:math mode="display">
+            <m:mtable displaystyle="true">
+              <m:mtr>
+                <m:mtd columnalign="right">
+                  <m:mrow>
+                    <m:munder>
+                      <m:mo movablelimits="true" form="prefix">min</m:mo>
+                      <m:mi>u</m:mi>
+                    </m:munder>
+                    <m:munder>
+                      <m:mo>∑</m:mo>
+                      <m:mi>i</m:mi>
+                    </m:munder>
+                    <m:mrow>
+                      <m:mo>∥</m:mo>
+                    </m:mrow>
+                    <m:msub>
+                      <m:mi>D</m:mi>
+                      <m:mi>i</m:mi>
+                    </m:msub>
+                    <m:msub>
+                      <m:mrow>
+                        <m:mi>u</m:mi>
+                        <m:mo>∥</m:mo>
+                        <m:mo>+</m:mo>
+                        <m:mi>μ</m:mi>
+                        <m:mo>∥</m:mo>
+                        <m:mi>K</m:mi>
+                        <m:mi>u</m:mi>
+                        <m:mo>-</m:mo>
+                        <m:mi>f</m:mi>
+                        <m:mo>∥</m:mo>
+                      </m:mrow>
+                      <m:mn>1</m:mn>
+                    </m:msub>
+                    <m:mo>.</m:mo>
+                  </m:mrow>
+                </m:mtd>
+              </m:mtr>
+            </m:mtable>
+          </m:math>
+        </equation>
+        <para id="id2260914">Since the data-fidelity term is also not differentiable, in addition
+to <m:math><m:mi mathvariant="bold">w</m:mi></m:math>, we introduce <m:math><m:mrow><m:mi>z</m:mi><m:mo>∈</m:mo><m:msup><m:mi mathvariant="double-struck">R</m:mi><m:msup><m:mi>n</m:mi><m:mn>2</m:mn></m:msup></m:msup></m:mrow></m:math> and add a quadratic penalty
+term. The approximation problem to (<link target-id="uid36"/>) is</para>
+        <equation id="uid37">
+          <m:math mode="display">
+            <m:mtable displaystyle="true">
+              <m:mtr>
+                <m:mtd columnalign="right">
+                  <m:mrow>
+                    <m:munder>
+                      <m:mo movablelimits="true" form="prefix">min</m:mo>
+                      <m:mrow>
+                        <m:mi mathvariant="bold">w</m:mi>
+                        <m:mo>,</m:mo>
+                        <m:mi>z</m:mi>
+                        <m:mo>,</m:mo>
+                        <m:mi>u</m:mi>
+                      </m:mrow>
+                    </m:munder>
+                    <m:munder>
+                      <m:mo>∑</m:mo>
+                      <m:mi>i</m:mi>
+                    </m:munder>
+                    <m:mfenced separators="" open="(" close=")">
+                      <m:mrow>
+                        <m:mo>∥</m:mo>
+                      </m:mrow>
+                      <m:msub>
+                        <m:mi mathvariant="bold">w</m:mi>
+                        <m:mi>i</m:mi>
+                      </m:msub>
+                      <m:mrow>
+                        <m:mo>∥</m:mo>
+                        <m:mo>+</m:mo>
+                      </m:mrow>
+                      <m:mfrac>
+                        <m:mi>β</m:mi>
+                        <m:mn>2</m:mn>
+                      </m:mfrac>
+                      <m:msup>
+                        <m:mrow>
+                          <m:mo>∥</m:mo>
+                          <m:msub>
+                            <m:mi mathvariant="bold">w</m:mi>
+                            <m:mi>i</m:mi>
+                          </m:msub>
+                          <m:mo>-</m:mo>
+                          <m:msub>
+                            <m:mi>D</m:mi>
+                            <m:mi>i</m:mi>
+                          </m:msub>
+                          <m:mi>u</m:mi>
+                          <m:mo>∥</m:mo>
+                        </m:mrow>
+                        <m:mn>2</m:mn>
+                      </m:msup>
+                    </m:mfenced>
+                    <m:mo>+</m:mo>
+                    <m:mi>μ</m:mi>
+                    <m:mfenced separators="" open="(" close=")">
+                      <m:msub>
+                        <m:mrow>
+                          <m:mo>∥</m:mo>
+                          <m:mi>z</m:mi>
+                          <m:mo>∥</m:mo>
+                        </m:mrow>
+                        <m:mn>1</m:mn>
+                      </m:msub>
+                      <m:mo>+</m:mo>
+                      <m:mfrac>
+                        <m:mi>γ</m:mi>
+                        <m:mn>2</m:mn>
+                      </m:mfrac>
+                      <m:msup>
+                        <m:mrow>
+                          <m:mo>∥</m:mo>
+                          <m:mi>z</m:mi>
+                          <m:mo>-</m:mo>
+                          <m:mrow>
+                            <m:mo>(</m:mo>
+                            <m:mi>K</m:mi>
+                            <m:mi>u</m:mi>
+                            <m:mo>-</m:mo>
+                            <m:mi>f</m:mi>
+                            <m:mo>)</m:mo>
+                          </m:mrow>
+                          <m:mo>∥</m:mo>
+                        </m:mrow>
+                        <m:mn>2</m:mn>
+                      </m:msup>
+                    </m:mfenced>
+                    <m:mo>,</m:mo>
+                  </m:mrow>
+                </m:mtd>
+              </m:mtr>
+            </m:mtable>
+          </m:math>
+        </equation>
+        <para id="id2261148">where <m:math><m:mrow><m:mi>β</m:mi><m:mo>,</m:mo><m:mi>γ</m:mi><m:mo>≫</m:mo><m:mn>0</m:mn></m:mrow></m:math> are penalty parameters. For fixed <m:math><m:mi>u</m:mi></m:math>, the
+minimization for <m:math><m:mi mathvariant="bold">w</m:mi></m:math> is the same as before, while the minimizer
+function for <m:math><m:mi>z</m:mi></m:math> is given by the famous one-dimensional shrinkage:</para>
+        <equation id="uid38">
+          <m:math mode="display">
+            <m:mtable displaystyle="true">
+              <m:mtr>
+                <m:mtd columnalign="right">
+                  <m:mrow>
+                    <m:mi>z</m:mi>
+                    <m:mo>=</m:mo>
+                    <m:mo movablelimits="true" form="prefix">max</m:mo>
+                    <m:mfenced separators="" open="{" close="}">
+                      <m:mrow>
+                        <m:mo>|</m:mo>
+                        <m:mi>K</m:mi>
+                        <m:mi>u</m:mi>
+                        <m:mo>-</m:mo>
+                        <m:mi>f</m:mi>
+                        <m:mo>|</m:mo>
+                        <m:mo>-</m:mo>
+                      </m:mrow>
+                      <m:mfrac>
+                        <m:mn>1</m:mn>
+                        <m:mi>γ</m:mi>
+                      </m:mfrac>
+                      <m:mo>,</m:mo>
+                      <m:mn>0</m:mn>
+                    </m:mfenced>
+                    <m:mo>·</m:mo>
+                    <m:mi> sgn </m:mi>
+                    <m:mrow>
+                      <m:mo>(</m:mo>
+                      <m:mi>K</m:mi>
+                      <m:mi>u</m:mi>
+                      <m:mo>-</m:mo>
+                      <m:mi>f</m:mi>
+                      <m:mo>)</m:mo>
+                    </m:mrow>
+                    <m:mo>.</m:mo>
+                  </m:mrow>
+                </m:mtd>
+              </m:mtr>
+            </m:mtable>
+          </m:math>
+        </equation>
+        <para id="id2261291">On the other hand, for fixed <m:math><m:mi mathvariant="bold">w</m:mi></m:math> and <m:math><m:mi>z</m:mi></m:math>, the minimization for <m:math><m:mi>u</m:mi></m:math>
+is a least squares problem which is equivalent to the normal
+equations</para>
+        <equation id="uid39">
+          <m:math mode="display">
+            <m:mtable displaystyle="true">
+              <m:mtr>
+                <m:mtd columnalign="right">
+                  <m:mrow>
+                    <m:mfenced separators="" open="(" close=")">
+                      <m:msup>
+                        <m:mi>D</m:mi>
+                        <m:mi>⊤</m:mi>
+                      </m:msup>
+                      <m:mi>D</m:mi>
+                      <m:mo>+</m:mo>
+                      <m:mfrac>
+                        <m:mrow>
+                          <m:mi>μ</m:mi>
+                          <m:mi>γ</m:mi>
+                        </m:mrow>
+                        <m:mi>β</m:mi>
+                      </m:mfrac>
+                      <m:msup>
+                        <m:mi>K</m:mi>
+                        <m:mi>⊤</m:mi>
+                      </m:msup>
+                      <m:mi>K</m:mi>
+                    </m:mfenced>
+                    <m:mi>u</m:mi>
+                    <m:mo>=</m:mo>
+                    <m:msup>
+                      <m:mi>D</m:mi>
+                      <m:mi>⊤</m:mi>
+                    </m:msup>
+                    <m:mi>w</m:mi>
+                    <m:mo>+</m:mo>
+                    <m:mfrac>
+                      <m:mrow>
+                        <m:mi>μ</m:mi>
+                        <m:mi>γ</m:mi>
+                      </m:mrow>
+                      <m:mi>β</m:mi>
+                    </m:mfrac>
+                    <m:msup>
+                      <m:mi>K</m:mi>
+                      <m:mi>⊤</m:mi>
+                    </m:msup>
+                    <m:mrow>
+                      <m:mo>(</m:mo>
+                      <m:mi>f</m:mi>
+                      <m:mo>+</m:mo>
+                      <m:mi>z</m:mi>
+                      <m:mo>)</m:mo>
+                    </m:mrow>
+                    <m:mo>.</m:mo>
+                  </m:mrow>
+                </m:mtd>
+              </m:mtr>
+            </m:mtable>
+          </m:math>
+        </equation>
+        <para id="id2261435">Similar to previous arguments, (<link target-id="uid39"/>) can be easily solved
+by FFTs.</para>
+      </section>
+    </section>
+    <section id="cid4">
+      <title>Experiments</title>
+      <para id="id2261454">In this section, we present the practical implementation and
+numerical results of the proposed algorithms. We used two images,
+Man (grayscale) and Lena (color) in our experiments, see <link target-id="uid40"/>. The two images are widely used in the field of
+image processing because they contain nice mixture of detail, flat
+regions, shading area and texture.</para>
+<!--empty paragraphs get left behind.-->
+      <figure id="uid40" orient="horizontal">
+        <media id="idm757936" alt=""><image src="../../media/ManLen.png" mime-type="image/png" width="419"/><image for="pdf" src="../../media/ManLen.eps" mime-type="application/postscript" print-width="0.9"/></media>
+        <caption>Test images: Man (left, 1024<m:math><m:mo>×</m:mo></m:math>1024)
+and Lena (right, 512<m:math><m:mo>×</m:mo></m:math>512).</caption>
+      </figure>
+      <para id="id2261507">We tested several kinds of blurring kernels including Gaussian,
+average and motion. The additive noise is Gaussian for TV/L<m:math><m:msup><m:mrow/><m:mn>2</m:mn></m:msup></m:math>
+problems and impulsive for TV/L<m:math><m:msup><m:mrow/><m:mn>1</m:mn></m:msup></m:math> problem. The quality of image is
+measured by the signal-to-noise ratio (SNR) defined by</para>
+      <equation id="id2261541">
+        <m:math mode="display">
+          <m:mrow>
+            <m:mtext>SNR</m:mtext>
+            <m:mo>≜</m:mo>
+            <m:mn>10</m:mn>
+            <m:mo>*</m:mo>
+            <m:msub>
+              <m:mo form="prefix">log</m:mo>
+              <m:mn>10</m:mn>
+            </m:msub>
+            <m:mfrac>
+              <m:mrow>
+                <m:mrow>
+                  <m:mo>∥</m:mo>
+                </m:mrow>
+                <m:mover accent="true">
+                  <m:mi>u</m:mi>
+                  <m:mo>¯</m:mo>
+                </m:mover>
+                <m:mo>-</m:mo>
+                <m:mi>E</m:mi>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mover accent="true">
+                    <m:mi>u</m:mi>
+                    <m:mo>¯</m:mo>
+                  </m:mover>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:msup>
+                  <m:mrow>
+                    <m:mo>∥</m:mo>
+                  </m:mrow>
+                  <m:mn>2</m:mn>
+                </m:msup>
+              </m:mrow>
+              <m:mrow>
+                <m:mrow>
+                  <m:mo>∥</m:mo>
+                </m:mrow>
+                <m:mover accent="true">
+                  <m:mi>u</m:mi>
+                  <m:mo>¯</m:mo>
+                </m:mover>
+                <m:msup>
+                  <m:mrow>
+                    <m:mo>-</m:mo>
+                    <m:mi>u</m:mi>
+                    <m:mo>∥</m:mo>
+                  </m:mrow>
+                  <m:mn>2</m:mn>
+                </m:msup>
+              </m:mrow>
+            </m:mfrac>
+            <m:mo>,</m:mo>
+          </m:mrow>
+        </m:math>
+      </equation>
+      <para id="id2261641">where <m:math><m:mover accent="true"><m:mi>u</m:mi><m:mo>¯</m:mo></m:mover></m:math> is the original image and <m:math><m:mrow><m:mi>E</m:mi><m:mo>(</m:mo><m:mover accent="true"><m:mi>u</m:mi><m:mo>¯</m:mo></m:mover><m:mo>)</m:mo></m:mrow></m:math> is the mean
+intensity value of <m:math><m:mover accent="true"><m:mi>u</m:mi><m:mo>¯</m:mo></m:mover></m:math>. All blurring effects were generated
+using the MATLAB function “imfilter
+" with periodic boundary
+conditions, and noise was added using “imnoise
+". All the
+experiments were finished under Windows Vista Premium and MATLAB
+v7.6 (R2008a) running on a Lenovo laptop with an Intel Core 2 Duo
+CPU at 2 GHz and 2 GB of memory.</para>
+      <section id="uid41">
+        <title>Practical Implementation</title>
+        <para id="id2261731">Generally, the quality of the restored image is expected to increase
+as <m:math><m:mi>β</m:mi></m:math> increases because the approximation problems become
+closer to the original ones. However, the alternating algorithms
+converge slowly when <m:math><m:mi>β</m:mi></m:math> is large, which is well-known for the
+class of penalty methods. An effective remedy is to gradually
+increase <m:math><m:mi>β</m:mi></m:math> from a small value to a pre-specified one. <link target-id="uid42"/> compares the different convergence behaviors of
+the proposed algorithm when with and without continuation, where we
+used Gaussian blur of size 11 and standard deviation 5 and added
+white Gaussian noise with mean zero and standard deviation
+<m:math><m:msup><m:mn>10</m:mn><m:mrow><m:mo>-</m:mo><m:mn>3</m:mn></m:mrow></m:msup></m:math>.</para>
+        <figure id="uid42" orient="horizontal">
+          <media id="idp7750992" alt=""><image src="../../media/Continuation_relative_error_u14.png" mime-type="image/png" width="419"/><image for="pdf" src="../../media/Continuation_relative_error_u14.eps" mime-type="application/postscript" print-width="0.5"/></media>
+          <caption>Continuation vs. no continuation: <m:math><m:msup><m:mi>u</m:mi><m:mo>*</m:mo></m:msup></m:math> is
+an “exact” solution corresponding to <m:math><m:mrow><m:mi>β</m:mi><m:mo>=</m:mo><m:msup><m:mn>2</m:mn><m:mn>14</m:mn></m:msup></m:mrow></m:math>. The
+horizontal axis represents the number of iterations, and the
+vertical axis is the relative error <m:math><m:mrow><m:msub><m:mi>e</m:mi><m:mi>k</m:mi></m:msub><m:mrow><m:mo>=</m:mo><m:mo>∥</m:mo></m:mrow><m:msup><m:mi>u</m:mi><m:mi>k</m:mi></m:msup><m:mo>-</m:mo><m:msup><m:mi>u</m:mi><m:mo>*</m:mo></m:msup><m:mrow><m:mo>∥</m:mo><m:mo>/</m:mo><m:mo>∥</m:mo></m:mrow><m:msup><m:mi>u</m:mi><m:mo>*</m:mo></m:msup><m:mrow><m:mo>∥</m:mo></m:mrow></m:mrow></m:math>.</caption>
+        </figure>
+        <para id="id2261907">In this continuation framework, we compute a solution of an
+approximation problem which used a smaller beta, and use the
+solution to warm-start the next approximation problem corresponding
+to a bigger <m:math><m:mi>β</m:mi></m:math>. As can be seen from <link target-id="uid42"/>,
+with continuation on <m:math><m:mi>β</m:mi></m:math> the convergence is greatly sped up. In
+our experiments, we implemented the alternating minimization
+algorithms with continuation on <m:math><m:mi>β</m:mi></m:math>, which we call the resulting
+algorithm “Fast Total Variation de-convolution” or FTVd, which,
+for TV/L<m:math><m:msup><m:mrow/><m:mn>2</m:mn></m:msup></m:math>, the framework is given below.</para>
+        <para id="id2261967">[FTVd]:</para>
+        <list id="id2261970" list-type="bulleted">
+          <item id="uid43">Input <m:math><m:mi>f</m:mi></m:math>, <m:math><m:mi>K</m:mi></m:math> and
+<m:math><m:mrow><m:mi>μ</m:mi><m:mo>&gt;</m:mo><m:mn>0</m:mn></m:mrow></m:math>. Given <m:math><m:mrow><m:msub><m:mi>β</m:mi><m:mo movablelimits="true" form="prefix">max</m:mo></m:msub><m:mo>&gt;</m:mo><m:msub><m:mi>β</m:mi><m:mn>0</m:mn></m:msub><m:mo>&gt;</m:mo><m:mn>0</m:mn></m:mrow></m:math>.
+</item>
+          <item id="uid44">Initialize
+ <m:math><m:mrow><m:mi>u</m:mi><m:mo>=</m:mo><m:mi>f</m:mi></m:mrow></m:math>, <m:math><m:mrow><m:msub><m:mi>u</m:mi><m:mi>p</m:mi></m:msub><m:mo>=</m:mo><m:mn>0</m:mn></m:mrow></m:math>,
+<m:math><m:mrow><m:mi>β</m:mi><m:mo>=</m:mo><m:msub><m:mi>β</m:mi><m:mn>0</m:mn></m:msub></m:mrow></m:math> and <m:math><m:mrow><m:mi>ϵ</m:mi><m:mo>&gt;</m:mo><m:mn>0</m:mn></m:mrow></m:math>.
+</item>
+          <item id="uid45">While
+ <m:math><m:mrow><m:mi>β</m:mi><m:mo>≤</m:mo><m:msub><m:mi>β</m:mi><m:mo movablelimits="true" form="prefix">max</m:mo></m:msub></m:mrow></m:math>, Do
+
+<list id="id2262178" list-type="enumerated"><item id="uid46">Run Algorithm <link target-id="uid11">"Basic Algorithm"</link> until an optimality condition is
+met.
+</item><item id="uid47"><m:math><m:mrow><m:mi>β</m:mi><m:mo>←</m:mo><m:mn>2</m:mn><m:mo>*</m:mo><m:mi>β</m:mi></m:mrow></m:math>.
+</item></list></item>
+          <item id="uid48">End Do
+
+</item>
+        </list>
+        <figure id="uid49" orient="horizontal">
+          <media id="idp2713504" alt=""><image src="../../media/SNR_sequence_Beta.png" mime-type="image/png" width="419"/><image for="pdf" src="../../media/SNR_sequence_Beta.eps" mime-type="application/postscript" print-width="0.45"/></media>
+          <caption>SNRs of images recovered from
+(<!--references within titles or captions is not allowed.-->) for different <m:math><m:mi>β</m:mi></m:math>.</caption>
+        </figure>
+        <figure id="uid50" orient="vertical">
+          <subfigure id="id2262313">
+            <media id="idp4598528" alt=""><image src="../../media/ManBnR.png" mime-type="image/png" width="960"/><image for="pdf" src="../../media/ManBnR.eps" mime-type="application/postscript" print-width="0.4"/></media>
+          </subfigure>
+          <subfigure id="id2262327">
+            <media id="idp5267632" alt=""><image src="../../media/LenaBnR.png" mime-type="image/png" width="960"/><image for="pdf" src="../../media/LenaBnR.eps" mime-type="application/postscript" print-width="0.4"/></media>
+          </subfigure>
+          <caption>Results recovered from TV/L<m:math><m:msup><m:mrow/><m:mn>2</m:mn></m:msup></m:math>. Image Man
+is blurred by a Gaussian kernel, while image Lena is blurred by a
+cross-channel kernel. Gaussian noise with zero mean and standard
+deviation <m:math><m:msup><m:mn>10</m:mn><m:mrow><m:mo>-</m:mo><m:mn>3</m:mn></m:mrow></m:msup></m:math> is added to both blurred images. The left images
+are the blurry and noisy observations, and the right ones are
+recovered by FTVd.</caption>
+        </figure>
+        <para id="id2262336">Generally, it is difficult to determine how large <m:math><m:mi>β</m:mi></m:math> is
+sufficient to generate a solution that is close to be a solution of
+the original problems. In practice, we observed that the SNR values
+of recovered images from the approximation problems are stabilized
+once <m:math><m:mi>β</m:mi></m:math> reached a reasonably large value. To see this, we plot
+the SNR values of restored images corresponding to <m:math><m:mrow><m:mi>β</m:mi><m:mo>=</m:mo><m:msup><m:mn>2</m:mn><m:mn>0</m:mn></m:msup><m:mo>,</m:mo><m:msup><m:mn>2</m:mn><m:mn>1</m:mn></m:msup><m:mo>,</m:mo><m:mo>⋯</m:mo><m:mo>,</m:mo><m:msup><m:mn>2</m:mn><m:mn>18</m:mn></m:msup></m:mrow></m:math> in <link target-id="uid49"/>. In this experiment, we
+used the same blur and noise as we used in the testing of
+continuation. As can be seen from <link target-id="uid49"/>, the SNR
+values on both images essentially remain constant for <m:math><m:mrow><m:mi>β</m:mi><m:mo>≥</m:mo><m:msup><m:mn>2</m:mn><m:mn>7</m:mn></m:msup></m:mrow></m:math>. This suggests that <m:math><m:mi>β</m:mi></m:math> need not to be excessively large
+from a practical point of view. In our experiments, we set
+<m:math><m:mrow><m:msub><m:mi>β</m:mi><m:mn>0</m:mn></m:msub><m:mo>=</m:mo><m:mn>1</m:mn></m:mrow></m:math> and <m:math><m:mrow><m:msub><m:mi>β</m:mi><m:mo movablelimits="true" form="prefix">max</m:mo></m:msub><m:mo>=</m:mo><m:msup><m:mn>2</m:mn><m:mn>7</m:mn></m:msup></m:mrow></m:math> in Algorithm <link target-id="uid41">"Practical Implementation"</link>. For each
+<m:math><m:mi>β</m:mi></m:math>, the inner iteration was stopped once an optimality condition is satisfied. For TV/L<m:math><m:msup><m:mrow/><m:mn>1</m:mn></m:msup></m:math> problems, we also
+implement continuation on <m:math><m:mi>γ</m:mi></m:math>, and used similar settings as
+used in TV/L<m:math><m:msup><m:mrow/><m:mn>2</m:mn></m:msup></m:math>.</para>
+      </section>
+      <section id="uid51">
+        <title>Recovered Results</title>
+        <para id="id2262562">In this subsection, we present results recovered from TV/L<m:math><m:msup><m:mrow/><m:mn>2</m:mn></m:msup></m:math> and
+TV/L<m:math><m:msup><m:mrow/><m:mn>1</m:mn></m:msup></m:math> problems including (<link target-id="uid9"/>), (<link target-id="uid36"/>) and their
+multichannel extensions. We tested various of blurs with different
+levels of Gaussian noise and impulsive noise. Here we merely present
+serval test results. <link target-id="uid50"/> gives two examples of
+blurry and noisy images and the recovered ones, where the blurred
+images are corrupted by Gaussian noise, while <link target-id="uid52"/>
+gives the recovered results where the blurred images are corrupted
+by random-valued noise. For TV/L<m:math><m:msup><m:mrow/><m:mn>1</m:mn></m:msup></m:math> problems, we set
+<m:math><m:mrow><m:mi>γ</m:mi><m:mo>=</m:mo><m:msup><m:mn>2</m:mn><m:mn>15</m:mn></m:msup></m:mrow></m:math> and <m:math><m:mrow><m:mi>β</m:mi><m:mo>=</m:mo><m:msup><m:mn>2</m:mn><m:mn>10</m:mn></m:msup></m:mrow></m:math> in the approximation model and
+implemented continuation on both <m:math><m:mi>β</m:mi></m:math> and <m:math><m:mi>γ</m:mi></m:math>.</para>
+        <figure id="uid52" orient="vertical">
+          <subfigure id="id2262744">
+            <media id="idp5616928" alt=""><image src="../../media/LenaBn.png" mime-type="image/png" width="960"/><image for="pdf" src="../../media/LenaBn.eps" mime-type="application/postscript" print-width="0.4"/></media>
+          </subfigure>
+          <subfigure id="id2262758">
+            <media id="idm1193824" alt=""><image src="../../media/LenaR.png" mime-type="image/png" width="960"/><image for="pdf" src="../../media/LenaR.eps" mime-type="application/postscript" print-width="0.4"/></media>
+          </subfigure>
+          <caption>Results recovered from TV/L<m:math><m:msup><m:mrow/><m:mn>1</m:mn></m:msup></m:math>. Image Lena
+is blurred by a cross-channel kernel and corrupted by <m:math><m:mrow><m:mn>40</m:mn><m:mo>%</m:mo></m:mrow></m:math> (left)
+and <m:math><m:mrow><m:mn>50</m:mn><m:mo>%</m:mo></m:mrow></m:math> (right) random-valued noise. The top row contains the
+blurry and noisy observations and the bottom row shows the results
+recovered by FTVd.</caption>
+        </figure>
+      </section>
+    </section>
+    <section id="cid5">
+      <title>Concluding Remarks</title>
+      <para id="id2262774">We proposed, analyzed and tested an alternating algorithm FTVd which
+for solving the TV/<m:math><m:msup><m:mi>L</m:mi><m:mn>2</m:mn></m:msup></m:math> problem. This algorithm was extended to
+solve the TV/<m:math><m:msup><m:mi>L</m:mi><m:mn>1</m:mn></m:msup></m:math> model and their multichannel extensions by
+incorporating an extension of TV. Cross-channel blurs are permitted
+when the underlying image has more than one channels. We established strong
+convergence results for the algorithms and validated a continuation
+scheme. Numerical results are given to demonstrate the feasibility
+and efficiency of the proposed algorithms.</para>
+    </section><section id="element-944"><title>Acknowledgements</title><para id="element-1">
+This Connexions module describes work conducted as part of Rice University's VIGRE program, supported by National Science Foundation grant DMS-0739420.
+</para></section>
+  </content>
+  <bib:file>
+    <bib:entry id="bid8">
+      <bib:article>
+<!--required fields-->
+        <bib:author>Acar, R. and Vogel, C. R.</bib:author>
+        <bib:title>Analysis of total variation penalty methods</bib:title>
+        <bib:journal>Inv. Probl.</bib:journal>
+        <bib:year>1994</bib:year>
+<!--optional fields-->
+        <bib:volume>10</bib:volume>
+        <bib:number/>
+        <bib:pages>1217-1229</bib:pages>
+        <bib:month/>
+        <bib:note/>
+      </bib:article>
+    </bib:entry>
+    <bib:entry id="bid5">
+      <bib:article>
+<!--required fields-->
+        <bib:author>Chan, T. F. and Esedoglu, S.</bib:author>
+        <bib:title>Aspects of total variation regularized <!--Math is not currently allowed within BibTeXML.--> function approximation</bib:title>
+        <bib:journal>SIAM Journal on Applied Mathematics</bib:journal>
+        <bib:year>2005</bib:year>
+<!--optional fields-->
+        <bib:volume>65</bib:volume>
+        <bib:number>5</bib:number>
+        <bib:pages>1817–1837</bib:pages>
+        <bib:month/>
+        <bib:note/>
+      </bib:article>
+    </bib:entry>
+    <bib:entry id="bid4">
+      <bib:techreport>
+<!--required fields-->
+        <bib:author>Chan, T. F. and Esedoglu, S. and Park, F. and Yip, A.</bib:author>
+        <bib:title>Recent Developments in Total Variation Image Restoration</bib:title>
+        <bib:institution>Department of Mathematics, UCLA</bib:institution>
+        <bib:year>2004</bib:year>
+<!--optional fields-->
+        <bib:type>CAM Report</bib:type>
+        <bib:number>05-01</bib:number>
+        <bib:address/>
+        <bib:month/>
+        <bib:note/>
+      </bib:techreport>
+    </bib:entry>
+    <bib:entry id="bid3">
+      <bib:article>
+<!--required fields-->
+        <bib:author>Chambolle, A. and Lions, P. L.</bib:author>
+        <bib:title>Image Recovery via Total Variation Minimization and Related Problems</bib:title>
+        <bib:journal>Numer. Math.</bib:journal>
+        <bib:year>1997</bib:year>
+<!--optional fields-->
+        <bib:volume>76</bib:volume>
+        <bib:number>2</bib:number>
+        <bib:pages>167-188</bib:pages>
+        <bib:month/>
+        <bib:note/>
+      </bib:article>
+    </bib:entry>
+    <bib:entry id="bid9">
+      <bib:article>
+<!--required fields-->
+        <bib:author>Dobson, D. C. and Santosa, F.</bib:author>
+        <bib:title>Recovery of blocky images from noisy and blurred data</bib:title>
+        <bib:journal>SIAM J. Appl. Math.</bib:journal>
+        <bib:year>1996</bib:year>
+<!--optional fields-->
+        <bib:volume>56</bib:volume>
+        <bib:number/>
+        <bib:pages>1181–1198</bib:pages>
+        <bib:month/>
+        <bib:note/>
+      </bib:article>
+    </bib:entry>
+    <bib:entry id="bid17">
+      <bib:book>
+<!--required fields-->
+        <bib:author>Gonzalez, R. and Woods, R.</bib:author>
+        <bib:title>Digital Image Processing</bib:title>
+        <bib:publisher>Addison-Wesley</bib:publisher>
+        <bib:year>1992</bib:year>
+<!--optional fields-->
+        <bib:volume/>
+        <bib:series/>
+        <bib:address/>
+        <bib:edition/>
+        <bib:month/>
+        <bib:note/>
+      </bib:book>
+    </bib:entry>
+    <bib:entry id="bid15">
+      <bib:article>
+<!--required fields-->
+        <bib:author>Goldforb, D. and Yin, W.</bib:author>
+        <bib:title>Second-Order Cone Programming Methods for Total Variation-based Image Restoration</bib:title>
+        <bib:journal>SIAM J. Sci. Comput.</bib:journal>
+        <bib:year>2005</bib:year>
+<!--optional fields-->
+        <bib:volume>27</bib:volume>
+        <bib:number>2</bib:number>
+        <bib:pages>622-645</bib:pages>
+        <bib:month/>
+        <bib:note/>
+      </bib:article>
+    </bib:entry>
+    <bib:entry id="bid14">
+      <bib:article>
+<!--required fields-->
+        <bib:author>I. Daubechies, M. Defriese and Mol, C. De</bib:author>
+        <bib:title>An iterative thresholding algorithm for linear inverse problems with a sparsity constraint</bib:title>
+        <bib:journal>Commun. Pure Appl. Math.</bib:journal>
+        <bib:year>2004</bib:year>
+<!--optional fields-->
+        <bib:volume>LVII</bib:volume>
+        <bib:number/>
+        <bib:pages>1413-1457</bib:pages>
+        <bib:month/>
+        <bib:note/>
+      </bib:article>
+    </bib:entry>
+    <bib:entry id="bid10">
+      <bib:article>
+<!--required fields-->
+        <bib:author>Mumford, D. and Shah, J.</bib:author>
+        <bib:title>Optimal approximations by piecewise smooth functions and associated variational problems</bib:title>
+        <bib:journal>Comm. Pure Appl. Math.</bib:journal>
+        <bib:year>1989</bib:year>
+<!--optional fields-->
+        <bib:volume>42</bib:volume>
+        <bib:number/>
+        <bib:pages>577-685</bib:pages>
+        <bib:month/>
+        <bib:note/>
+      </bib:article>
+    </bib:entry>
+    <bib:entry id="bid16">
+      <bib:article>
+<!--required fields-->
+        <bib:author>NG, Michael K. and Chan, Raymond H. and Tang, Wuncheung</bib:author>
+        <bib:title>A fast algorithm for deblurring models with neumann boundary conditions</bib:title>
+        <bib:journal>SIAM J. Sci. Comput.</bib:journal>
+        <bib:year>1999</bib:year>
+<!--optional fields-->
+        <bib:volume>21</bib:volume>
+        <bib:number>3</bib:number>
+        <bib:pages>851–866</bib:pages>
+        <bib:month/>
+        <bib:note/>
+      </bib:article>
+    </bib:entry>
+    <bib:entry id="bid1">
+      <bib:article>
+<!--required fields-->
+        <bib:author>Rudin, L. and Osher, S.</bib:author>
+        <bib:title>Total Variation Based Image Restoration with Free Local Constraints</bib:title>
+        <bib:journal>Proc. 1st IEEE ICIP</bib:journal>
+        <bib:year>1994</bib:year>
+<!--optional fields-->
+        <bib:volume>1</bib:volume>
+        <bib:number/>
+        <bib:pages>31-35</bib:pages>
+        <bib:month/>
+        <bib:note/>
+      </bib:article>
+    </bib:entry>
+    <bib:entry id="bid0">
+      <bib:article>
+<!--required fields-->
+        <bib:author>Rudin, L. and Osher, S. and Fatemi, E.</bib:author>
+        <bib:title>Nonlinear Total Variation Based Noise Removal Algorithms</bib:title>
+        <bib:journal>Phys. D</bib:journal>
+        <bib:year>1992</bib:year>
+<!--optional fields-->
+        <bib:volume>60</bib:volume>
+        <bib:number/>
+        <bib:pages>259-268</bib:pages>
+        <bib:month/>
+        <bib:note/>
+      </bib:article>
+    </bib:entry>
+    <bib:entry id="bid13">
+      <bib:article>
+<!--required fields-->
+        <bib:author>T. F. Chan, G. H. Golub and Mulet, P.</bib:author>
+        <bib:title>A nonlinear primal dual method for total variation based image restoration</bib:title>
+        <bib:journal>SIAM J. Sci. Comput.</bib:journal>
+        <bib:year>1999</bib:year>
+<!--optional fields-->
+        <bib:volume>20</bib:volume>
+        <bib:number/>
+        <bib:pages>1964-1977</bib:pages>
+        <bib:month/>
+        <bib:note/>
+      </bib:article>
+    </bib:entry>
+    <bib:entry id="bid11">
+      <bib:article>
+<!--required fields-->
+        <bib:author>Vogel, C. R. and Oman, M. E.</bib:author>
+        <bib:title>Iterative Methods for Total Variation Denoising</bib:title>
+        <bib:journal>SIAM J. Sci. Comput.</bib:journal>
+        <bib:year>1996</bib:year>
+<!--optional fields-->
+        <bib:volume>17</bib:volume>
+        <bib:number>1</bib:number>
+        <bib:pages>227-238</bib:pages>
+        <bib:month/>
+        <bib:note/>
+      </bib:article>
+    </bib:entry>
+    <bib:entry id="bid12">
+      <bib:article>
+<!--required fields-->
+        <bib:author>Vogel, C. and Oman, M.</bib:author>
+        <bib:title>Fast, robust total variation-based reconstruction of noisy, blurred images</bib:title>
+        <bib:journal>IEEE Trans. Image processing</bib:journal>
+        <bib:year>1998</bib:year>
+<!--optional fields-->
+        <bib:volume>7</bib:volume>
+        <bib:number>6</bib:number>
+        <bib:pages>813–824</bib:pages>
+        <bib:month/>
+        <bib:note/>
+      </bib:article>
+    </bib:entry>
+    <bib:entry id="bid6">
+      <bib:incollection>
+<!--required fields-->
+        <bib:author>Yin, W. and Goldfarb, D. and Osher, S.</bib:author>
+        <bib:title>Image cartoon-texture decomposition and feature selection using the total variation regularized <!--Math is not currently allowed within BibTeXML.--> functional</bib:title>
+        <bib:booktitle>Variational, Geometric, and Level Set Methods in Computer Vision</bib:booktitle>
+        <bib:publisher>Springer</bib:publisher>
+        <bib:year>2005</bib:year>
+<!--optional fields-->
+        <bib:editor/>
+        <bib:volume>3752</bib:volume>
+        <bib:series>Leture Notes in Computer Science</bib:series>
+        <bib:type/>
+        <bib:chapter/>
+        <bib:pages>73-84</bib:pages>
+        <bib:address/>
+        <bib:edition/>
+        <bib:month/>
+        <bib:note/>
+      </bib:incollection>
+    </bib:entry>
+    <bib:entry id="bid7">
+      <bib:article>
+<!--required fields-->
+        <bib:author>Yin, W. and Goldfarb, D. and Osher, S.</bib:author>
+        <bib:title>The total variation regularized <!--Math is not currently allowed within BibTeXML.--> model for multiscale decomposition</bib:title>
+        <bib:journal>SIAM Journal on Multiscale Modeling and Simulation</bib:journal>
+        <bib:year>2006</bib:year>
+<!--optional fields-->
+        <bib:volume>6</bib:volume>
+        <bib:number>1</bib:number>
+        <bib:pages>190–211</bib:pages>
+        <bib:month/>
+        <bib:note/>
+      </bib:article>
+    </bib:entry>
+    <bib:entry id="bid2">
+      <bib:book>
+<!--required fields-->
+        <bib:author>Ziemer, W. P.</bib:author>
+        <bib:title>Weakly Differentiable Functions: Sobolev Spaces and Functions of Bounded Variation</bib:title>
+        <bib:publisher>Springer</bib:publisher>
+        <bib:year>1989</bib:year>
+<!--optional fields-->
+        <bib:volume/>
+        <bib:series>Graduate Texts in Mathematics</bib:series>
+        <bib:address/>
+        <bib:edition/>
+        <bib:month/>
+        <bib:note/>
+      </bib:book>
+    </bib:entry>
+  </bib:file>
+</document>

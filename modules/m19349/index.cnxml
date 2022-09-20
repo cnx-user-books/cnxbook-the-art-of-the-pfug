@@ -1,0 +1,1004 @@
+<document xmlns="http://cnx.rice.edu/cnxml" xmlns:m="http://www.w3.org/1998/Math/MathML" xmlns:md="http://cnx.rice.edu/mdml">
+  <title>Dynamics of the Firing Rate of Single Compartmental Cells</title>
+  <metadata><md:content-id>undefined</md:content-id><md:title/><md:uuid>4f1167a7-39c3-48cc-8c31-71588ac0c1d0</md:uuid>
+</metadata>
+  <content>
+    <section id="cid1">
+      <title>Introduction</title>
+      <para id="id2253706">We seek to understand how to reduce complicated neuronal models into simplified versions that still capture essential features of the neuron. It has been observed through the detailed Hodgkin-Huxley model that the firing rate of a cell depends on current input. This module examines the dynamics of an active single-compartment cell and verifies the existence of a linear relationship between the firing rate and the injected current. It will reproduce the results found in Section 2.1 of “Rate Models for Conductance-Based Cortical Neuronal Networks," by Shriki et al [1]. In particular, it verifies Figures 1 and 2 of the Shriki paper through <!--mode is not biblio--><link url="http://www.caam.rice.edu/~cox/neuro/wang9-9-08.zip">MATLAB simulations</link>.</para>
+    </section>
+    <section id="cid2">
+      <title>Dynamics of a Single-Compartment Cell</title>
+      <para id="id2253746">The Hodgkin-Huxley model of a single-compartment cell obeys</para>
+      <equation id="uid1">
+        <m:math mode="display">
+          <m:mrow>
+            <m:msub>
+              <m:mi>C</m:mi>
+              <m:mi>m</m:mi>
+            </m:msub>
+            <m:mfrac>
+              <m:mrow>
+                <m:mi>d</m:mi>
+                <m:mi>V</m:mi>
+                <m:mo>(</m:mo>
+                <m:mi>t</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mrow>
+                <m:mi>d</m:mi>
+                <m:mi>t</m:mi>
+              </m:mrow>
+            </m:mfrac>
+            <m:mo>=</m:mo>
+            <m:msub>
+              <m:mi>g</m:mi>
+              <m:mi>L</m:mi>
+            </m:msub>
+            <m:mrow>
+              <m:mo>(</m:mo>
+              <m:msub>
+                <m:mi>E</m:mi>
+                <m:mi>L</m:mi>
+              </m:msub>
+              <m:mo>-</m:mo>
+              <m:mi>V</m:mi>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>t</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>)</m:mo>
+            </m:mrow>
+            <m:mo>-</m:mo>
+            <m:msup>
+              <m:mi>I</m:mi>
+              <m:mrow>
+                <m:mi>a</m:mi>
+                <m:mi>c</m:mi>
+                <m:mi>t</m:mi>
+                <m:mi>i</m:mi>
+                <m:mi>v</m:mi>
+                <m:mi>e</m:mi>
+              </m:mrow>
+            </m:msup>
+            <m:mrow>
+              <m:mo>(</m:mo>
+              <m:mi>t</m:mi>
+              <m:mo>)</m:mo>
+            </m:mrow>
+            <m:mo>+</m:mo>
+            <m:msup>
+              <m:mi>I</m:mi>
+              <m:mrow>
+                <m:mi>a</m:mi>
+                <m:mi>p</m:mi>
+                <m:mi>p</m:mi>
+              </m:mrow>
+            </m:msup>
+            <m:mrow>
+              <m:mo>(</m:mo>
+              <m:mi>t</m:mi>
+              <m:mo>)</m:mo>
+            </m:mrow>
+            <m:mo>,</m:mo>
+          </m:mrow>
+        </m:math>
+      </equation>
+      <para id="id2254122">with the following definitions:</para>
+      <table id="uid2" summary="">
+        <tgroup cols="2">
+          <tbody>
+            <row>
+              <entry>Variables</entry>
+              <entry>Description</entry>
+            </row>
+            <row>
+              <entry>
+                <m:math>
+                  <m:mrow>
+                    <m:mi>V</m:mi>
+                    <m:mo>(</m:mo>
+                    <m:mi>t</m:mi>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                </m:math>
+              </entry>
+              <entry>membrane potential of the cell at time <m:math><m:mi>t</m:mi></m:math></entry>
+            </row>
+            <row>
+              <entry>
+                <m:math>
+                  <m:msub>
+                    <m:mi>C</m:mi>
+                    <m:mi>m</m:mi>
+                  </m:msub>
+                </m:math>
+              </entry>
+              <entry>membrane capacitance</entry>
+            </row>
+            <row>
+              <entry>
+                <m:math>
+                  <m:msub>
+                    <m:mi>g</m:mi>
+                    <m:mi>L</m:mi>
+                  </m:msub>
+                </m:math>
+              </entry>
+              <entry>leak conductance</entry>
+            </row>
+            <row>
+              <entry>
+                <m:math>
+                  <m:msub>
+                    <m:mi>E</m:mi>
+                    <m:mi>L</m:mi>
+                  </m:msub>
+                </m:math>
+              </entry>
+              <entry>reversal potential of the leak current</entry>
+            </row>
+            <row>
+              <entry>
+                <m:math>
+                  <m:mrow>
+                    <m:msup>
+                      <m:mi>I</m:mi>
+                      <m:mrow>
+                        <m:mi>a</m:mi>
+                        <m:mi>c</m:mi>
+                        <m:mi>t</m:mi>
+                        <m:mi>i</m:mi>
+                        <m:mi>v</m:mi>
+                        <m:mi>e</m:mi>
+                      </m:mrow>
+                    </m:msup>
+                    <m:mrow>
+                      <m:mo>(</m:mo>
+                      <m:mi>t</m:mi>
+                      <m:mo>)</m:mo>
+                    </m:mrow>
+                  </m:mrow>
+                </m:math>
+              </entry>
+              <entry>active ionic currents, varies with time</entry>
+            </row>
+            <row>
+              <entry>
+                <m:math>
+                  <m:mrow>
+                    <m:msup>
+                      <m:mi>I</m:mi>
+                      <m:mrow>
+                        <m:mi>a</m:mi>
+                        <m:mi>p</m:mi>
+                        <m:mi>p</m:mi>
+                      </m:mrow>
+                    </m:msup>
+                    <m:mrow>
+                      <m:mo>(</m:mo>
+                      <m:mi>t</m:mi>
+                      <m:mo>)</m:mo>
+                    </m:mrow>
+                  </m:mrow>
+                </m:math>
+              </entry>
+              <entry>externally applied current.</entry>
+            </row>
+          </tbody>
+        </tgroup>
+        <caption>Variable meanings.</caption>
+      </table>
+      <para id="id2254397">If <m:math><m:msup><m:mi>I</m:mi><m:mrow><m:mi>a</m:mi><m:mi>p</m:mi><m:mi>p</m:mi></m:mrow></m:msup></m:math> were kept constant in time and sufficiently large, then the cell will fire at a rate <m:math><m:mi>f</m:mi></m:math>. There is a simple relationship between <m:math><m:mi>f</m:mi></m:math> and <m:math><m:msup><m:mi>I</m:mi><m:mrow><m:mi>a</m:mi><m:mi>p</m:mi><m:mi>p</m:mi></m:mrow></m:msup></m:math>, namely, <m:math><m:mrow><m:mi>f</m:mi><m:mo>=</m:mo><m:mi>F</m:mi><m:mo>(</m:mo><m:msup><m:mi>I</m:mi><m:mrow><m:mi>a</m:mi><m:mi>p</m:mi><m:mi>p</m:mi></m:mrow></m:msup><m:mo>,</m:mo><m:msub><m:mi>g</m:mi><m:mi>L</m:mi></m:msub><m:mo>)</m:mo><m:mo>,</m:mo></m:mrow></m:math> called the <emphasis>f-I curve</emphasis>. It was noted in the Shriki paper that in many cortical neurons, the f-I curve is approximately linear if <m:math><m:mi>I</m:mi></m:math> is above threshold. Our goal is to reproduce the f-I curves shown in Figures 1 and 2 of Shriki et al. through simulation of the Hodgkin-Huxley model on a single-compartment cell.</para>
+      <section id="uid3">
+        <title>Active Ionic Currents, <!--Math is not currently allowed in CNXML section title.--></title>
+        <para id="id2254559">In order to generate f-I curves, we must stimulate the cell with varying current input (with the current kept constant across each simulation), and count the number of times it fired each time. But first, we need to understand the active ionic currents, an integral part of <link target-id="uid1"/>.</para>
+        <para id="id2254571">There are three types of active currents, Na, K, and A. The first two currents are gated by sodium and potassium channels respectively. They obey the following equations:</para>
+        <equation id="id2254577">
+          <m:math mode="display">
+            <m:mrow>
+              <m:msup>
+                <m:mi>I</m:mi>
+                <m:mrow>
+                  <m:mi>N</m:mi>
+                  <m:mi>a</m:mi>
+                </m:mrow>
+              </m:msup>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>t</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>=</m:mo>
+              <m:msub>
+                <m:mover accent="true">
+                  <m:mi>g</m:mi>
+                  <m:mo>¯</m:mo>
+                </m:mover>
+                <m:mrow>
+                  <m:mi>N</m:mi>
+                  <m:mi>a</m:mi>
+                </m:mrow>
+              </m:msub>
+              <m:msubsup>
+                <m:mi>m</m:mi>
+                <m:mrow>
+                  <m:mi>∞</m:mi>
+                </m:mrow>
+                <m:mn>3</m:mn>
+              </m:msubsup>
+              <m:mi>h</m:mi>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>V</m:mi>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mi>t</m:mi>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mo>-</m:mo>
+                <m:msub>
+                  <m:mi>E</m:mi>
+                  <m:mrow>
+                    <m:mi>N</m:mi>
+                    <m:mi>a</m:mi>
+                  </m:mrow>
+                </m:msub>
+                <m:mo>)</m:mo>
+              </m:mrow>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <equation id="id2254665">
+          <m:math mode="display">
+            <m:mrow>
+              <m:msup>
+                <m:mi>I</m:mi>
+                <m:mi>K</m:mi>
+              </m:msup>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>t</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>=</m:mo>
+              <m:msub>
+                <m:mover accent="true">
+                  <m:mi>g</m:mi>
+                  <m:mo>¯</m:mo>
+                </m:mover>
+                <m:mi>k</m:mi>
+              </m:msub>
+              <m:msup>
+                <m:mi>n</m:mi>
+                <m:mn>4</m:mn>
+              </m:msup>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>V</m:mi>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mi>t</m:mi>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mo>-</m:mo>
+                <m:msub>
+                  <m:mi>E</m:mi>
+                  <m:mi>K</m:mi>
+                </m:msub>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>.</m:mo>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id2254741">Here, <m:math><m:msub><m:mi>E</m:mi><m:mrow><m:mi>N</m:mi><m:mi>a</m:mi></m:mrow></m:msub></m:math> and <m:math><m:msub><m:mi>E</m:mi><m:mi>K</m:mi></m:msub></m:math> are the reversal potentials of Na and K respectively.
+The A-current is a slow current gated by a type of potassium channel. It obeys</para>
+        <equation id="id2254780">
+          <m:math mode="display">
+            <m:mrow>
+              <m:msup>
+                <m:mi>I</m:mi>
+                <m:mi>A</m:mi>
+              </m:msup>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>t</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>=</m:mo>
+              <m:msub>
+                <m:mover accent="true">
+                  <m:mi>g</m:mi>
+                  <m:mo>¯</m:mo>
+                </m:mover>
+                <m:mi>A</m:mi>
+              </m:msub>
+              <m:msubsup>
+                <m:mi>a</m:mi>
+                <m:mrow>
+                  <m:mi>∞</m:mi>
+                </m:mrow>
+                <m:mn>3</m:mn>
+              </m:msubsup>
+              <m:mi>b</m:mi>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>V</m:mi>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mi>t</m:mi>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mo>-</m:mo>
+                <m:msub>
+                  <m:mi>E</m:mi>
+                  <m:mi>k</m:mi>
+                </m:msub>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>.</m:mo>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id2254860">The A-current is introduced to linearize the f-I curve, as we shall later see in Figure 1.</para>
+        <para id="id2254867">Adding these currents, we get</para>
+        <equation id="id2254871">
+          <m:math mode="display">
+            <m:mrow>
+              <m:msup>
+                <m:mi>I</m:mi>
+                <m:mrow>
+                  <m:mi>a</m:mi>
+                  <m:mi>c</m:mi>
+                  <m:mi>t</m:mi>
+                  <m:mi>i</m:mi>
+                  <m:mi>v</m:mi>
+                  <m:mi>e</m:mi>
+                </m:mrow>
+              </m:msup>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>t</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>=</m:mo>
+              <m:msup>
+                <m:mi>I</m:mi>
+                <m:mrow>
+                  <m:mi>N</m:mi>
+                  <m:mi>a</m:mi>
+                </m:mrow>
+              </m:msup>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>t</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>+</m:mo>
+              <m:msup>
+                <m:mi>I</m:mi>
+                <m:mi>K</m:mi>
+              </m:msup>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>t</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>+</m:mo>
+              <m:msup>
+                <m:mi>I</m:mi>
+                <m:mi>A</m:mi>
+              </m:msup>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>t</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>.</m:mo>
+            </m:mrow>
+          </m:math>
+        </equation>
+      </section>
+      <section id="uid4">
+        <title>Implementing the Single-Cell Model</title>
+        <para id="id2254972">In Shriki et al., the following equations and parameters were used:</para>
+        <equation id="uid5">
+          <m:math mode="display">
+            <m:mrow>
+              <m:mfrac>
+                <m:mrow>
+                  <m:mi>d</m:mi>
+                  <m:mi>x</m:mi>
+                </m:mrow>
+                <m:mrow>
+                  <m:mi>d</m:mi>
+                  <m:mi>t</m:mi>
+                </m:mrow>
+              </m:mfrac>
+              <m:mo>=</m:mo>
+              <m:mfrac>
+                <m:mrow>
+                  <m:msub>
+                    <m:mi>x</m:mi>
+                    <m:mi>∞</m:mi>
+                  </m:msub>
+                  <m:mo>-</m:mo>
+                  <m:mi>x</m:mi>
+                </m:mrow>
+                <m:msub>
+                  <m:mi>τ</m:mi>
+                  <m:mi>x</m:mi>
+                </m:msub>
+              </m:mfrac>
+              <m:msub>
+                <m:mo>|</m:mo>
+                <m:mrow>
+                  <m:mi>x</m:mi>
+                  <m:mo>=</m:mo>
+                  <m:mi>h</m:mi>
+                  <m:mo>,</m:mo>
+                  <m:mi>n</m:mi>
+                  <m:mo>,</m:mo>
+                  <m:mi>b</m:mi>
+                </m:mrow>
+              </m:msub>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <equation id="id2255047">
+          <m:math mode="display">
+            <m:mrow>
+              <m:msub>
+                <m:mi>x</m:mi>
+                <m:mi>∞</m:mi>
+              </m:msub>
+              <m:mo>=</m:mo>
+              <m:mfrac>
+                <m:msub>
+                  <m:mi>α</m:mi>
+                  <m:mi>x</m:mi>
+                </m:msub>
+                <m:mrow>
+                  <m:msub>
+                    <m:mi>α</m:mi>
+                    <m:mi>x</m:mi>
+                  </m:msub>
+                  <m:mo>-</m:mo>
+                  <m:msub>
+                    <m:mi>β</m:mi>
+                    <m:mi>x</m:mi>
+                  </m:msub>
+                </m:mrow>
+              </m:mfrac>
+              <m:msub>
+                <m:mo>|</m:mo>
+                <m:mrow>
+                  <m:mi>x</m:mi>
+                  <m:mo>=</m:mo>
+                  <m:mi>h</m:mi>
+                  <m:mo>,</m:mo>
+                  <m:mi>n</m:mi>
+                  <m:mo>,</m:mo>
+                  <m:mi>m</m:mi>
+                </m:mrow>
+              </m:msub>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <equation id="id2255115">
+          <m:math mode="display">
+            <m:mrow>
+              <m:msub>
+                <m:mi>τ</m:mi>
+                <m:mi>x</m:mi>
+              </m:msub>
+              <m:mo>=</m:mo>
+              <m:mfrac>
+                <m:mi>φ</m:mi>
+                <m:mrow>
+                  <m:msub>
+                    <m:mi>α</m:mi>
+                    <m:mi>x</m:mi>
+                  </m:msub>
+                  <m:mo>+</m:mo>
+                  <m:msub>
+                    <m:mi>β</m:mi>
+                    <m:mi>x</m:mi>
+                  </m:msub>
+                </m:mrow>
+              </m:mfrac>
+              <m:msub>
+                <m:mo>|</m:mo>
+                <m:mrow>
+                  <m:mi>x</m:mi>
+                  <m:mo>=</m:mo>
+                  <m:mi>h</m:mi>
+                  <m:mo>,</m:mo>
+                  <m:mi>n</m:mi>
+                  <m:mo>,</m:mo>
+                  <m:mi>m</m:mi>
+                </m:mrow>
+              </m:msub>
+              <m:mo>.</m:mo>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <equation id="uid6">
+          <m:math mode="display">
+            <m:mrow>
+              <m:msub>
+                <m:mi>α</m:mi>
+                <m:mi>m</m:mi>
+              </m:msub>
+              <m:mo>=</m:mo>
+              <m:mo>-</m:mo>
+              <m:mn>0</m:mn>
+              <m:mo>.</m:mo>
+              <m:mn>1</m:mn>
+              <m:mfrac>
+                <m:mrow>
+                  <m:mi>V</m:mi>
+                  <m:mo>+</m:mo>
+                  <m:mn>30</m:mn>
+                </m:mrow>
+                <m:mrow>
+                  <m:mo form="prefix">exp</m:mo>
+                  <m:mo>(</m:mo>
+                  <m:mo>-</m:mo>
+                  <m:mn>0</m:mn>
+                  <m:mo>.</m:mo>
+                  <m:mn>1</m:mn>
+                  <m:mo>(</m:mo>
+                  <m:mi>V</m:mi>
+                  <m:mo>+</m:mo>
+                  <m:mn>30</m:mn>
+                  <m:mo>)</m:mo>
+                  <m:mo>)</m:mo>
+                  <m:mo>-</m:mo>
+                  <m:mn>1</m:mn>
+                </m:mrow>
+              </m:mfrac>
+              <m:mo>,</m:mo>
+              <m:mspace width="4pt"/>
+              <m:mspace width="4pt"/>
+              <m:mspace width="4pt"/>
+              <m:mspace width="4pt"/>
+              <m:mspace width="4pt"/>
+              <m:msub>
+                <m:mi>β</m:mi>
+                <m:mi>m</m:mi>
+              </m:msub>
+              <m:mo>=</m:mo>
+              <m:mn>4</m:mn>
+              <m:mo form="prefix">exp</m:mo>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mo>-</m:mo>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mi>V</m:mi>
+                  <m:mo>+</m:mo>
+                  <m:mn>55</m:mn>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mo>/</m:mo>
+                <m:mn>18</m:mn>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>,</m:mo>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <equation id="uid7">
+          <m:math mode="display">
+            <m:mrow>
+              <m:msub>
+                <m:mi>α</m:mi>
+                <m:mi>h</m:mi>
+              </m:msub>
+              <m:mo>=</m:mo>
+              <m:mn>0</m:mn>
+              <m:mo>.</m:mo>
+              <m:mn>07</m:mn>
+              <m:mo form="prefix">exp</m:mo>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mo>-</m:mo>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mi>V</m:mi>
+                  <m:mo>+</m:mo>
+                  <m:mn>44</m:mn>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mo>/</m:mo>
+                <m:mn>20</m:mn>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>,</m:mo>
+              <m:mspace width="4pt"/>
+              <m:mspace width="4pt"/>
+              <m:mspace width="4pt"/>
+              <m:mspace width="4pt"/>
+              <m:mspace width="4pt"/>
+              <m:msub>
+                <m:mi>β</m:mi>
+                <m:mi>h</m:mi>
+              </m:msub>
+              <m:mo>=</m:mo>
+              <m:mfrac>
+                <m:mn>1</m:mn>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mo form="prefix">exp</m:mo>
+                  <m:mo>(</m:mo>
+                  <m:mo>-</m:mo>
+                  <m:mn>0</m:mn>
+                  <m:mo>.</m:mo>
+                  <m:mn>1</m:mn>
+                  <m:mo>(</m:mo>
+                  <m:mi>V</m:mi>
+                  <m:mo>+</m:mo>
+                  <m:mn>14</m:mn>
+                  <m:mo>)</m:mo>
+                  <m:mo>)</m:mo>
+                  <m:mo>+</m:mo>
+                  <m:mn>1</m:mn>
+                </m:mrow>
+              </m:mfrac>
+              <m:mo>,</m:mo>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <equation id="uid8">
+          <m:math mode="display">
+            <m:mrow>
+              <m:msub>
+                <m:mi>α</m:mi>
+                <m:mi>n</m:mi>
+              </m:msub>
+              <m:mo>=</m:mo>
+              <m:mfrac>
+                <m:mrow>
+                  <m:mo>-</m:mo>
+                  <m:mn>0</m:mn>
+                  <m:mo>.</m:mo>
+                  <m:mn>01</m:mn>
+                  <m:mo>(</m:mo>
+                  <m:mi>V</m:mi>
+                  <m:mo>+</m:mo>
+                  <m:mn>34</m:mn>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mo form="prefix">exp</m:mo>
+                  <m:mo>(</m:mo>
+                  <m:mo>-</m:mo>
+                  <m:mn>0</m:mn>
+                  <m:mo>.</m:mo>
+                  <m:mn>1</m:mn>
+                  <m:mo>(</m:mo>
+                  <m:mi>V</m:mi>
+                  <m:mo>+</m:mo>
+                  <m:mn>34</m:mn>
+                  <m:mo>)</m:mo>
+                  <m:mo>)</m:mo>
+                  <m:mo>-</m:mo>
+                  <m:mn>1</m:mn>
+                </m:mrow>
+              </m:mfrac>
+              <m:mo>,</m:mo>
+              <m:mspace width="4pt"/>
+              <m:mspace width="4pt"/>
+              <m:mspace width="4pt"/>
+              <m:mspace width="4pt"/>
+              <m:mspace width="4pt"/>
+              <m:msub>
+                <m:mi>β</m:mi>
+                <m:mi>n</m:mi>
+              </m:msub>
+              <m:mo>=</m:mo>
+              <m:mn>0</m:mn>
+              <m:mo>.</m:mo>
+              <m:mn>125</m:mn>
+              <m:mo form="prefix">exp</m:mo>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mo>-</m:mo>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mi>V</m:mi>
+                  <m:mo>+</m:mo>
+                  <m:mn>44</m:mn>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mo>/</m:mo>
+                <m:mn>80</m:mn>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>,</m:mo>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <equation id="uid9">
+          <m:math mode="display">
+            <m:mrow>
+              <m:msub>
+                <m:mi>a</m:mi>
+                <m:mi>∞</m:mi>
+              </m:msub>
+              <m:mo>=</m:mo>
+              <m:mfrac>
+                <m:mn>1</m:mn>
+                <m:mrow>
+                  <m:mo form="prefix">exp</m:mo>
+                  <m:mo>(</m:mo>
+                  <m:mo>-</m:mo>
+                  <m:mo>(</m:mo>
+                  <m:mi>V</m:mi>
+                  <m:mo>+</m:mo>
+                  <m:mn>50</m:mn>
+                  <m:mo>)</m:mo>
+                  <m:mo>/</m:mo>
+                  <m:mn>20</m:mn>
+                  <m:mo>)</m:mo>
+                  <m:mo>+</m:mo>
+                  <m:mn>1</m:mn>
+                </m:mrow>
+              </m:mfrac>
+              <m:mo>,</m:mo>
+              <m:mspace width="4pt"/>
+              <m:mspace width="4pt"/>
+              <m:mspace width="4pt"/>
+              <m:mspace width="4pt"/>
+              <m:mspace width="4pt"/>
+              <m:msub>
+                <m:mi>b</m:mi>
+                <m:mi>∞</m:mi>
+              </m:msub>
+              <m:mo>=</m:mo>
+              <m:mfrac>
+                <m:mn>1</m:mn>
+                <m:mrow>
+                  <m:mo form="prefix">exp</m:mo>
+                  <m:mo>(</m:mo>
+                  <m:mo>(</m:mo>
+                  <m:mi>V</m:mi>
+                  <m:mo>+</m:mo>
+                  <m:mn>80</m:mn>
+                  <m:mo>)</m:mo>
+                  <m:mo>/</m:mo>
+                  <m:mn>6</m:mn>
+                  <m:mo>)</m:mo>
+                  <m:mo>+</m:mo>
+                  <m:mn>1</m:mn>
+                </m:mrow>
+              </m:mfrac>
+              <m:mo>.</m:mo>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id2255695">We first solve for the initial condition <m:math><m:mrow><m:mi>V</m:mi><m:mo>(</m:mo><m:mn>0</m:mn><m:mo>)</m:mo></m:mrow></m:math> by setting <m:math><m:mrow><m:msup><m:mi>V</m:mi><m:mo>'</m:mo></m:msup><m:mrow><m:mo>(</m:mo><m:mi>t</m:mi><m:mo>)</m:mo></m:mrow><m:mo>=</m:mo><m:mn>0</m:mn></m:mrow></m:math> in <link target-id="uid1"/> since it is generally assumed that the cell is in its steady state configuration at time <m:math><m:mrow><m:mi>t</m:mi><m:mo>=</m:mo><m:mn>0</m:mn></m:mrow></m:math>.</para>
+        <para id="id2255762">Then we solve <link target-id="uid5"/> using Backwards Euler, noting that <link target-id="uid6"/>, <link target-id="uid7"/>, <link target-id="uid8"/>, <link target-id="uid9"/>
+use <m:math><m:mi>V</m:mi></m:math> from the previous time step. The result allows us to solve <link target-id="uid1"/> using Backwards Euler, govern by the equation</para>
+        <equation id="uid10">
+          <m:math mode="display">
+            <m:mrow>
+              <m:msub>
+                <m:mi>V</m:mi>
+                <m:mrow>
+                  <m:mi>j</m:mi>
+                  <m:mo>+</m:mo>
+                  <m:mn>1</m:mn>
+                </m:mrow>
+              </m:msub>
+              <m:mo>=</m:mo>
+              <m:mfrac>
+                <m:mrow>
+                  <m:mfrac>
+                    <m:msub>
+                      <m:mi>C</m:mi>
+                      <m:mi>m</m:mi>
+                    </m:msub>
+                    <m:mrow>
+                      <m:mi>Δ</m:mi>
+                      <m:mi>t</m:mi>
+                    </m:mrow>
+                  </m:mfrac>
+                  <m:msub>
+                    <m:mi>V</m:mi>
+                    <m:mi>j</m:mi>
+                  </m:msub>
+                  <m:mo>+</m:mo>
+                  <m:msub>
+                    <m:mi>g</m:mi>
+                    <m:mi>L</m:mi>
+                  </m:msub>
+                  <m:msub>
+                    <m:mi>E</m:mi>
+                    <m:mi>L</m:mi>
+                  </m:msub>
+                  <m:mo>+</m:mo>
+                  <m:msub>
+                    <m:mover accent="true">
+                      <m:mi>g</m:mi>
+                      <m:mo>¯</m:mo>
+                    </m:mover>
+                    <m:mrow>
+                      <m:mi>N</m:mi>
+                      <m:mi>a</m:mi>
+                    </m:mrow>
+                  </m:msub>
+                  <m:msubsup>
+                    <m:mi>m</m:mi>
+                    <m:mi>∞</m:mi>
+                    <m:mn>3</m:mn>
+                  </m:msubsup>
+                  <m:mi>h</m:mi>
+                  <m:msub>
+                    <m:mi>E</m:mi>
+                    <m:mrow>
+                      <m:mi>N</m:mi>
+                      <m:mi>a</m:mi>
+                    </m:mrow>
+                  </m:msub>
+                  <m:mo>+</m:mo>
+                  <m:msub>
+                    <m:mover accent="true">
+                      <m:mi>g</m:mi>
+                      <m:mo>¯</m:mo>
+                    </m:mover>
+                    <m:mi>k</m:mi>
+                  </m:msub>
+                  <m:msup>
+                    <m:mi>n</m:mi>
+                    <m:mn>4</m:mn>
+                  </m:msup>
+                  <m:msub>
+                    <m:mi>E</m:mi>
+                    <m:mi>k</m:mi>
+                  </m:msub>
+                  <m:mo>+</m:mo>
+                  <m:msub>
+                    <m:mover accent="true">
+                      <m:mi>g</m:mi>
+                      <m:mo>¯</m:mo>
+                    </m:mover>
+                    <m:mi>A</m:mi>
+                  </m:msub>
+                  <m:msubsup>
+                    <m:mi>a</m:mi>
+                    <m:mi>∞</m:mi>
+                    <m:mn>3</m:mn>
+                  </m:msubsup>
+                  <m:mi>b</m:mi>
+                  <m:msub>
+                    <m:mi>E</m:mi>
+                    <m:mi>k</m:mi>
+                  </m:msub>
+                </m:mrow>
+                <m:mrow>
+                  <m:mfrac>
+                    <m:msub>
+                      <m:mi>C</m:mi>
+                      <m:mi>m</m:mi>
+                    </m:msub>
+                    <m:mrow>
+                      <m:mi>Δ</m:mi>
+                      <m:mi>t</m:mi>
+                    </m:mrow>
+                  </m:mfrac>
+                  <m:mo>+</m:mo>
+                  <m:msub>
+                    <m:mi>g</m:mi>
+                    <m:mi>L</m:mi>
+                  </m:msub>
+                  <m:mo>+</m:mo>
+                  <m:msub>
+                    <m:mover accent="true">
+                      <m:mi>g</m:mi>
+                      <m:mo>¯</m:mo>
+                    </m:mover>
+                    <m:mrow>
+                      <m:mi>N</m:mi>
+                      <m:mi>a</m:mi>
+                    </m:mrow>
+                  </m:msub>
+                  <m:msubsup>
+                    <m:mi>m</m:mi>
+                    <m:mi>∞</m:mi>
+                    <m:mn>3</m:mn>
+                  </m:msubsup>
+                  <m:mi>h</m:mi>
+                  <m:mo>+</m:mo>
+                  <m:msub>
+                    <m:mover accent="true">
+                      <m:mi>g</m:mi>
+                      <m:mo>¯</m:mo>
+                    </m:mover>
+                    <m:mi>k</m:mi>
+                  </m:msub>
+                  <m:msup>
+                    <m:mi>n</m:mi>
+                    <m:mn>4</m:mn>
+                  </m:msup>
+                  <m:mo>+</m:mo>
+                  <m:msub>
+                    <m:mover accent="true">
+                      <m:mi>g</m:mi>
+                      <m:mo>¯</m:mo>
+                    </m:mover>
+                    <m:mi>A</m:mi>
+                  </m:msub>
+                  <m:msubsup>
+                    <m:mi>a</m:mi>
+                    <m:mi>∞</m:mi>
+                    <m:mn>3</m:mn>
+                  </m:msubsup>
+                  <m:mi>b</m:mi>
+                </m:mrow>
+              </m:mfrac>
+              <m:mo>.</m:mo>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id2256097">In MATLAB, <link target-id="uid10"/> is written as</para>
+        <para id="id2256105">    top = v(i) + dt/Cm*(g_L*E_L+gbar_na*m_inf^3*h(i+1)*E_na+...
+</para>
+        <para id="id2256115">        gbar_k*n(i+1)^4*E_k+gbar_A*a_inf^3*b(i+1)*E_k+I_app);
+</para>
+        <para id="id2256125">    bottom = 1 + dt/Cm*(g_L+...
+</para>
+        <para id="id2256134">        gbar_na*m_inf^3*h(i+1)+gbar_k*n(i+1)^4+gbar_A*a_inf^3*b(i+1));
+</para>
+        <para id="id2256144">    v(i+1) = top/bottom;
+</para>
+        <para id="id2256153">We say that a cell has spiked, or generated an action potential, if <m:math><m:mrow><m:mi>V</m:mi><m:mo>&gt;</m:mo><m:mn>30</m:mn><m:mspace width="4pt"/><m:mi>m</m:mi><m:mi>V</m:mi><m:mo>.</m:mo></m:mrow></m:math> By varying the injective current (kept constant during each run) per simulation, we count the number of spikes in that simulation. This produces an f-I curve.</para>
+      </section>
+    </section>
+    <section id="cid3">
+      <title>Simulation Results</title>
+      <para id="id2256193">Shriki et. al's Figures 1 and 2 and their respective insets were reproduced below by running the single-cell model described in section 2.2.</para>
+      <figure id="uid11" orient="horizontal">
+        <media id="idm6023456" alt=""><image src="../../media/2.png" mime-type="image/png" width="494"/><image for="pdf" src="../../media/2.eps" mime-type="application/postscript" print-width=".5"/></media>
+        <caption>Shriki Figure 1. f-I curves of the single-cell model. Notice the linearization of the f-I curve due to the long time constant of the A current. The units for <m:math><m:msub><m:mi>g</m:mi><m:mi>A</m:mi></m:msub></m:math> and <m:math><m:msub><m:mi>τ</m:mi><m:mi>A</m:mi></m:msub></m:math> were <m:math><m:mrow><m:mi>m</m:mi><m:mi>S</m:mi><m:mo>/</m:mo><m:mi>c</m:mi><m:msup><m:mi>m</m:mi><m:mn>2</m:mn></m:msup></m:mrow></m:math> and <m:math><m:mrow><m:mi>m</m:mi><m:mi>s</m:mi><m:mi>e</m:mi><m:mi>c</m:mi></m:mrow></m:math>, respectively. Notice the kinks are merely discretization errors.</caption>
+      </figure>
+      <figure id="uid12" orient="horizontal">
+        <media id="idm8283456" alt=""><image src="../../media/fig1inset.png" mime-type="image/png" width="419"/><image for="pdf" src="../../media/fig1inset.eps" mime-type="application/postscript" print-width=".5"/></media>
+        <caption>Inset of Shriki Figure 1.</caption>
+      </figure>
+      <para id="id2256297">Figure 1 is an exact replica of Shriki's Figure 1. Thus, we confirm that the active current <m:math><m:mi>A</m:mi></m:math> plays an important role in linearizing the f-I curve.</para>
+      <para id="id2256312">In Shriki's Figure 1 inset, there is another action potential at about 50 msec, which is not realized in Figure 2. The reason could be that Shriki did not state the assumption that the cell starts at steady state, which given the parameters, came out to be -72.73 mV. It is possible that he assumed the cell starts at 65 mV or 70 mV, common rest potentials in neuroscience. If that is the case, then the model will spike at about 50 msec.</para>
+      <para id="id2256323">Besides the active current, the leak conductance <m:math><m:msub><m:mi>g</m:mi><m:mi>L</m:mi></m:msub></m:math> governs the threshold current <m:math><m:msub><m:mi>I</m:mi><m:mi>c</m:mi></m:msub></m:math>, the smallest current for which the cell will spike. This fact is captured in Figures 3 and 4, a reproduction of Shriki's Figure 2 and its inset.</para>
+      <figure id="uid13" orient="horizontal">
+        <media id="idm4826272" alt=""><image src="../../media/3.png" mime-type="image/png" width="494"/><image for="pdf" src="../../media/3.eps" mime-type="application/postscript" print-width=".5"/></media>
+        <caption>Shriki Figure 2. f-I curves given <m:math><m:mrow><m:msub><m:mi>g</m:mi><m:mi>A</m:mi></m:msub><m:mo>=</m:mo><m:mn>20</m:mn><m:mspace width="4pt"/><m:mi>m</m:mi><m:mi>S</m:mi><m:mo>/</m:mo><m:mi>c</m:mi><m:msup><m:mi>m</m:mi><m:mn>2</m:mn></m:msup></m:mrow></m:math>, <m:math><m:mrow><m:msub><m:mi>τ</m:mi><m:mi>A</m:mi></m:msub><m:mo>=</m:mo><m:mn>20</m:mn><m:mspace width="4pt"/><m:mi>m</m:mi><m:mi>s</m:mi><m:mi>e</m:mi><m:mi>c</m:mi><m:mo>,</m:mo></m:mrow></m:math> and different values of <m:math><m:msub><m:mi>g</m:mi><m:mi>L</m:mi></m:msub></m:math>.</caption>
+      </figure>
+      <figure id="uid14" orient="horizontal">
+        <media id="idm3047456" alt=""><image src="../../media/fig2inset.png" mime-type="image/png" width="419"/><image for="pdf" src="../../media/fig2inset.eps" mime-type="application/postscript" print-width=".5"/></media>
+        <caption>Inset of Shriki Figure 2. The threshold current <m:math><m:msub><m:mi>I</m:mi><m:mi>c</m:mi></m:msub></m:math> as a function of the leak conductance <m:math><m:msub><m:mi>g</m:mi><m:mi>L</m:mi></m:msub></m:math>.
+</caption>
+      </figure>
+    </section>
+    <section id="cid4">
+      <title>Conclusion</title>
+      <para id="id2256517">By reproducing Shriki Figures 1 and 2, we have confirmed that the firing rate of an active cell depends linearly on the applied current.</para>
+    </section>
+    <section id="cid5">
+      <title>Acknowledgements</title>
+      <para id="id2256530">This Connexions module describes work conducted as part of Rice
+University's VIGRE program, supported by National Science Foundation
+grant DMS–0739420. I would like to thank Dr. Steve Cox for leading our Computational Neuroscience VIGRE team. Also thanks to the entire group whose members include Jay Raol, Tony Kellems, Eva Dyer, Katherine Ward, Eric Reinelt, Mingbo Cai, Ben Leung, Ryan George, and Aneesh Mehta.</para>
+    </section>
+    <section id="cid6">
+      <title>References</title>
+      <list id="id2256556" list-type="enumerated">
+        <item id="uid15">Shriki, O., Hansel D., and Sompolinsky H. (2003). Rate Models for Conductance-Based Cortical Neuronal Networks. <emphasis>Neural Computation 15,</emphasis> 1809-1841.
+</item>
+      </list>
+    </section>
+  </content>
+</document>

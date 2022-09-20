@@ -1,0 +1,109 @@
+\relax 
+\citation{Moser}
+\citation{Moser}
+\citation{Moser}
+\citation{Moser}
+\citation{Moser}
+\citation{KnierimDRE}
+\citation{KnierimDRE}
+\citation{KnierimDRE}
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces The place field of one place cell. As a rat explored the square environment, experimenters monitored the activity of one place cell.ÊThe black line is the rat's trajectory, and each red dot represents a location that the place cell has become active. The place field of the particular place cell that was monitored is the area of the environment marked densely by red dots \cite  {Moser}.}}{1}}
+\newlabel{fig:placefield}{{1}{1}}
+\@writefile{toc}{\contentsline {section}{\numberline {1}Background: Place Cells in the Hippocampus}{1}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.1}Biology}{1}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.2}Motivation: Double Rotation Experiment}{1}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces The Double Rotation Experiment (DRE). Rats were trained to walk clockwise around the track, and the place fields corresponding to specific locations on the track were monitored. During the learning phase, the place fields experienced a backward shift. During double rotation runs of the experiment, the local cues were rotated backward (counterclockwise), and the place fields shifted backward as well. Thus the place fields seemed to favor following the local cues. Perhaps the natural backward shift seen in the learning phase predisposes the place fields to wanting to follow cues that move backwards \cite  {KnierimDRE}.}}{2}}
+\newlabel{fig:DRE}{{2}{2}}
+\citation{Mehta}
+\citation{KnierimDRE}
+\citation{Katie}
+\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Parameters for models. These values are used unless otherwise specified.}}{3}}
+\newlabel{tbl:param}{{1}{3}}
+\@writefile{toc}{\contentsline {section}{\numberline {2}Modeling}{3}}
+\newlabel{seq:modeling}{{2}{3}}
+\citation{Cox}
+\citation{Cox}
+\citation{Cox}
+\citation{Cox}
+\citation{Cox}
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Circuit model of a cell. The cell can be modeled as a circuit with three currents. The difference between potentials $\phi _{in}$ and $\phi _{out}$ gives the reversal potential $v_{Cl}$, which we refer to as $v$ in the text. $g_{Cl}$ and $g_{syn}$ denote the conductances of the chloride channels and the synapse, respectively. $C_m$ is the membrane capacitance. $v_{syn}$ depends upon the equilibrium concentrations of the ion of the associated channel. By Kirchoff's current law, $I_{Cl}+I_C+I_{syn}=0$, \cite  {Cox}.}}{4}}
+\newlabel{fig:circuit}{{3}{4}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.1}Neuron as a Circuit: Integrate and Fire}{4}}
+\citation{Cox}
+\citation{Cox}
+\citation{Cox}
+\citation{Cox}
+\citation{KnierimSTDP}
+\citation{Cox}
+\citation{KnierimSTDP}
+\citation{Cox}
+\citation{KnierimSTDP}
+\citation{KnierimSTDP}
+\citation{KnierimSTDP}
+\citation{KnierimSTDP}
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Simple 2-cell network. Cell 1 receives input from an external source, and Cell 2 receives input from Cell 1. The conductances and voltages of the two cells are calculated by equations \textup  {\hbox {\mathsurround \z@ \normalfont  (\ignorespaces 1\hbox {}\unskip \@@italiccorr )}} and \textup  {\hbox {\mathsurround \z@ \normalfont  (\ignorespaces 2\hbox {}\unskip \@@italiccorr )}}, respectively \cite  {Cox}.}}{5}}
+\newlabel{fig:2cellmodel}{{4}{5}}
+\newlabel{eq:cond}{{1}{5}}
+\newlabel{eq:circuitvolt}{{2}{5}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.2}Model of DRE: 120-cell Ring}{5}}
+\newlabel{seq:DRE}{{2.2}{5}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {2.2.1}STDP}{5}}
+\newlabel{seq:STDP}{{2.2.1}{5}}
+\newlabel{eq:STDP}{{3}{5}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces 120-cell ring. We put 120 cells, represented by circles, in a ring architecture with bidirectional interactions between cells, as well as synapses to sources of external input.ÊLike the DRE, each place cell has a corresponding place field on a circular path that a simulated rat traverses clockwise. The bidirectional interaction between two neighboring cells is modeled through two synapses with one synapse for each direction \cite  {Cox}. The weights of the synapses changes over time according to the STDP model described in Section 2.2.1\hbox {} \cite  {KnierimSTDP}.}}{6}}
+\newlabel{fig:120cellring}{{5}{6}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.3}Model for Analysis}{6}}
+\newlabel{eq:vmodel}{{4}{6}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces Depiction of the IAF model for Cell 1 and Cell 2 from Figure 5\hbox {}. We calculate the conductances and voltages for Cells 1 and 2 by \textup  {\hbox {\mathsurround \z@ \normalfont  (\ignorespaces 1\hbox {}\unskip \@@italiccorr )}} and \textup  {\hbox {\mathsurround \z@ \normalfont  (\ignorespaces 2\hbox {}\unskip \@@italiccorr )}}, respectively. $v_{th}=-54\ mV$, and $w_{ext}=w_{12}=2\ S$ are the weights of the synapses from the external source and Cell 1, respectively. It can be seen that in Place Field 1 ($0<t<100$), Cell 1 receives external input every $20$ ms (in the form of conductance spikes), and in Place Field 2 ($100\leq t <200$), Cell 2 receives the external input. At each external input spike, the corresponding cell fires (its voltage spikes) and gives a small amount of input to its neighboring cells. (\textbf  {IAF2cellsweight.m})}}{7}}
+\newlabel{fig:IAFmodel}{{6}{7}}
+\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces Percentage of weight change due to STDP. This graph shows that as $\Delta t=t_{pre}-t_{post}$ approaches $0$, the percentage of change in the weight of the synapse increases \cite  {KnierimSTDP}. $F(\Delta t)$ is calculated by Equation 3\hbox {}.}}{8}}
+\newlabel{fig:STDP}{{7}{8}}
+\@writefile{lof}{\contentsline {figure}{\numberline {8}{\ignorespaces Weights of synapses over time. The weight of the synapse from Cell 1 to Cell 2 ($w_{12}$) increases each lap (1 lap = 12,000 ms) as the weight of the synapse from Cell 2 to Cell 1 ($w_{21}$) decreases each lap to 0. (\textbf  {IAF120cellsSTDP.m})}}{8}}
+\newlabel{fig:STDPweights}{{8}{8}}
+\@writefile{lof}{\contentsline {figure}{\numberline {9}{\ignorespaces Backward shift of place field of Cell 2 in $ms$. The rat spends $100\ ms$ in each place field. It can be seen here that after as few as $4$ laps around the track, place cell $2$ starts to fire earlier and its place field shifts backwards. (\textbf  {IAF120cells1stspks.m})}}{9}}
+\newlabel{fig:STDPtime}{{9}{9}}
+\@writefile{lof}{\contentsline {figure}{\numberline {10}{\ignorespaces Simple 1-cell system. Cell 1 receives input of weight $w_{inp}$ at an interspike interval $I$.}}{9}}
+\newlabel{fig:1cellmodel}{{10}{9}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {2.3.1}Computational Method}{10}}
+\newlabel{eq:compvbtwn}{{5}{10}}
+\newlabel{eq:compvinp}{{6}{10}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {2.3.2}Analytic Method}{10}}
+\newlabel{eq:anvinp}{{7}{10}}
+\newlabel{fig:AnpeakV}{{2.3.2}{11}}
+\@writefile{lof}{\contentsline {figure}{\numberline {11}{\ignorespaces Voltage as a function of time as calculated by equation \textup  {\hbox {\mathsurround \z@ \normalfont  (\ignorespaces 7\hbox {}\unskip \@@italiccorr )}}. The peak voltages are denoted by asterisks. Here we set $v_{th}=-52\ mV$. (\textbf  {AnpeakV.m})}}{11}}
+\newlabel{eq:Vasymp}{{8}{11}}
+\@writefile{toc}{\contentsline {section}{\numberline {3}Problems and Results}{11}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.1}Minimum input weight for activity}{11}}
+\newlabel{seq:minw}{{3.1}{11}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.1.1}Computational vs. Analytic Method}{11}}
+\@writefile{lof}{\contentsline {figure}{\numberline {12}{\ignorespaces Comparison of $w_{inp}$ from computation and analysis as a function of $I$. $v(t)$ is calculated by equations \textup  {\hbox {\mathsurround \z@ \normalfont  (\ignorespaces 5\hbox {}\unskip \@@italiccorr )}} and \textup  {\hbox {\mathsurround \z@ \normalfont  (\ignorespaces 6\hbox {}\unskip \@@italiccorr )}} in \textbf  {compW.m}. $w_{inp}$ is calculated by equation \textup  {\hbox {\mathsurround \z@ \normalfont  (\ignorespaces 9\hbox {}\unskip \@@italiccorr )}} in \textbf  {AnalysisW.m}. (Plotted in \textbf  {AnalysisW.m})}}{12}}
+\newlabel{fig:BothWinpsxI}{{12}{12}}
+\newlabel{eq:wanalysis}{{9}{12}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}Number of input spikes versus input weight}{12}}
+\newlabel{seq:firstspkt}{{3.2}{12}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.2.1}Computational vs. Analytic Method}{12}}
+\@writefile{lof}{\contentsline {figure}{\numberline {13}{\ignorespaces Comparison of minimum number of input spikes necessary for activity from computation and analysis as a function of $w_{inp}$. $v(t)$ is calculated by equations \textup  {\hbox {\mathsurround \z@ \normalfont  (\ignorespaces 5\hbox {}\unskip \@@italiccorr )}} and \textup  {\hbox {\mathsurround \z@ \normalfont  (\ignorespaces 6\hbox {}\unskip \@@italiccorr )}} in \textbf  {compT.m} and by equation \textup  {\hbox {\mathsurround \z@ \normalfont  (\ignorespaces 7\hbox {}\unskip \@@italiccorr )}} in \textbf  {AnalysisT.m}. (Plotted in \textbf  {AnalysisT.m})}}{13}}
+\newlabel{fig:BothNinpxWinp}{{13}{13}}
+\newlabel{eq:n1analysis}{{10}{13}}
+\@writefile{toc}{\contentsline {section}{\numberline {4}Application of findings}{13}}
+\newlabel{seq:apps}{{4}{13}}
+\@writefile{lof}{\contentsline {figure}{\numberline {14}{\ignorespaces Simple 2-cell network with synapses active in Place Field 1. While the rat is in the place field of Cell 1, Cell 1 receives input with weight $w_{ext}$ from an external source, and when Cell 1 spikes, it gives input with weight $w_{12}$ to Cell 2.}}{14}}
+\newlabel{fig:2cellsPF1}{{14}{14}}
+\newlabel{eq:w12}{{11}{14}}
+\citation{KnierimDRE}
+\citation{Cox}
+\@writefile{lof}{\contentsline {figure}{\numberline {15}{\ignorespaces Interspike interval of Cell 1 from external input alone, $I_1$. Cell 1's first spike occurs at $t=t_1=(n_1-1)I$. Then the voltage of Cell 1 decays until the next input spike at $t=n_1 I$. It then takes another $(n_1-1)I\ ms$ for Cell 1 to spike at $t=n_1 I + (n_1-1)I$. Thus, it can be seen that except for the first spike at $t=(n_1 -1)I$, Cell 1 fires every $n_1 I\ ms$.}}{15}}
+\newlabel{fig:cell1spkfreq}{{15}{15}}
+\@writefile{toc}{\contentsline {section}{\numberline {5}Future work}{15}}
+\@writefile{lof}{\contentsline {figure}{\numberline {16}{\ignorespaces Minimum $w_{12}$ necessary for Cell 2 to fire as a function of $n_1 I$. It is clear that the larger the interspike interval, the more weight is required for activity. We note the value of $w_{12}$ at $n_1 I=40$ because these values are used in the case where Place Field 1 is finite. (\textbf  {App.m})}}{16}}
+\newlabel{fig:w12xn1I}{{16}{16}}
+\@writefile{lof}{\contentsline {figure}{\numberline {17}{\ignorespaces Minimum number of input spikes necessary for Cell 2 to fire, denoted as $n_2$, as a function of input weight $w_{12}$. We choose $n_1 I = 40\ ms$ and consider only the values of $w_{12}\geq 13.83\ mV$ (the minimum $w_{12}$ necessary for Cell 1 to fire from equation \textup  {\hbox {\mathsurround \z@ \normalfont  (\ignorespaces 11\hbox {}\unskip \@@italiccorr )}}). Like $n_1$ from Section 3.2\hbox {}, $n_2$ is step-wise. We note the minimum weight necessary for Cell 2 to fire in Place Field 1, $w_{12}=16.01\ mV$. (\textbf  {App.m})}}{17}}
+\newlabel{fig:n2xw12}{{17}{17}}
+\bibstyle{plain}
+\bibdata{Writeup2}
+\bibcite{Cox}{1}
+\bibcite{KnierimDRE}{2}
+\bibcite{Mehta}{3}
+\bibcite{Moser}{4}
+\bibcite{Katie}{5}
+\bibcite{KnierimSTDP}{6}

@@ -1,0 +1,1432 @@
+<document xmlns="http://cnx.rice.edu/cnxml" xmlns:m="http://www.w3.org/1998/Math/MathML">
+  <title>Geometric Calculus of Variations: VIGRE Summer 2011</title>
+<metadata xmlns:md="http://cnx.rice.edu/mdml">
+  <md:content-id>m38677</md:content-id>
+  <md:title>Geometric Calculus of Variations: VIGRE Summer 2011</md:title>
+  <md:abstract>This report summarizes work done as part of the Geometric Calculus of Variations PFUG under Rice University’s VIGRE program in Summer 2011. VIGRE is a program of Vertically Integrated Grants for Research and Education in the Mathematical Sciences under the direction of the National Science Foundation. A PFUG is a group of Postdocs, Faculty, Undergraduates and Graduate students formed round the study of a common problem. The purpose of the PFUG was to study extremal length and metric minimization on several domains.</md:abstract>
+  <md:uuid>3d544992-c38a-4378-9fbd-cb425226cae2</md:uuid>
+</metadata>
+
+<content>
+    <section id="id208967">
+      <title>Introduction</title>
+      <para id="id208973">The primary objective of the PFUG was to study extremal metrics on the Swiss Cross, which is defined to be five unit squares arranged in a cross (Figure 1).</para>
+      <para id="eip-742"><figure id="SwissCross">
+ <media id="SwissCross1" alt="Swiss Cross">
+  <image mime-type="image/jpeg" src="../../media/Swiss Cross.jpg"/>
+ </media>
+</figure></para><para id="id208978">Let <m:math overflow="scroll"><m:mrow><m:mi>Γ</m:mi><m:mo>=</m:mo><m:mo>{</m:mo><m:mo>(</m:mo><m:mtext>Connected</m:mtext><m:mspace width="4.pt"/><m:mtext>curves</m:mtext><m:mspace width="4.pt"/><m:mtext>between</m:mtext><m:mspace width="4.pt"/><m:mi>A</m:mi><m:mspace width="4.pt"/><m:mtext>and</m:mtext><m:mspace width="4.pt"/><m:mi>B</m:mi><m:mo>)</m:mo><m:mspace width="0.166667em"/><m:mo>∪</m:mo><m:mspace width="0.166667em"/><m:mo>(</m:mo><m:mtext>Connected</m:mtext><m:mspace width="4.pt"/><m:mtext>curves</m:mtext><m:mspace width="4.pt"/><m:mtext>between</m:mtext><m:mspace width="4.pt"/><m:mi>C</m:mi><m:mspace width="4.pt"/><m:mtext>and</m:mtext><m:mspace width="4.pt"/><m:mi>D</m:mi><m:mo>)</m:mo><m:mo>}</m:mo></m:mrow></m:math>. Then we wish to find a metric <m:math overflow="scroll"><m:mrow><m:mi>ρ</m:mi><m:mo>(</m:mo><m:mi>x</m:mi><m:mo>,</m:mo><m:mi>y</m:mi><m:mo>)</m:mo></m:mrow></m:math> on the Swiss Cross (S.C.) which minimizes</para>
+      <equation id="id209428">
+        <m:math overflow="scroll" mode="display">
+          <m:mrow>
+            <m:munder>
+              <m:mrow>
+                <m:mspace width="0.277778em"/>
+                <m:mpadded width="-3pt">
+                  <m:mo>∫</m:mo>
+                </m:mpadded>
+                <m:mpadded width="-3pt">
+                  <m:mo>∫</m:mo>
+                </m:mpadded>
+                <m:mspace width="0.277778em"/>
+              </m:mrow>
+              <m:mtext>S.C.</m:mtext>
+            </m:munder>
+            <m:mspace width="-0.166667em"/>
+            <m:msup>
+              <m:mi>ρ</m:mi>
+              <m:mn>2</m:mn>
+            </m:msup>
+            <m:mrow>
+              <m:mo>(</m:mo>
+              <m:mi>x</m:mi>
+              <m:mo>,</m:mo>
+              <m:mi>y</m:mi>
+              <m:mo>)</m:mo>
+            </m:mrow>
+            <m:mspace width="0.166667em"/>
+            <m:mi mathvariant="normal">d</m:mi>
+            <m:mi>x</m:mi>
+            <m:mspace width="0.166667em"/>
+            <m:mi mathvariant="normal">d</m:mi>
+            <m:mi>y</m:mi>
+          </m:mrow>
+        </m:math>
+      </equation>
+      <para id="id208923">subject to the constraint</para>
+      <equation id="id208928">
+        <m:math overflow="scroll" mode="display">
+          <m:mrow>
+            <m:munder>
+              <m:mo movablelimits="true" form="prefix">inf</m:mo>
+              <m:mrow>
+                <m:mi>γ</m:mi>
+                <m:mo>∈</m:mo>
+                <m:mi>Γ</m:mi>
+              </m:mrow>
+            </m:munder>
+            <m:msub>
+              <m:mo>∫</m:mo>
+              <m:mi>γ</m:mi>
+            </m:msub>
+            <m:mspace width="-0.166667em"/>
+            <m:mi>ρ</m:mi>
+            <m:mrow>
+              <m:mo>(</m:mo>
+              <m:mi>x</m:mi>
+              <m:mo>,</m:mo>
+              <m:mi>y</m:mi>
+              <m:mo>)</m:mo>
+            </m:mrow>
+            <m:mspace width="0.166667em"/>
+            <m:mi mathvariant="normal">d</m:mi>
+            <m:mi>s</m:mi>
+            <m:mo>≥</m:mo>
+            <m:mn>3</m:mn>
+          </m:mrow>
+        </m:math>
+      </equation>
+      <para id="id209749">Another problem of interest is finding the extremal metric on a unit disk where <m:math overflow="scroll"><m:mrow><m:msup><m:mi>Γ</m:mi><m:mo>'</m:mo></m:msup><m:mo>=</m:mo><m:mrow><m:mo>{</m:mo><m:mtext>Connected</m:mtext><m:mspace width="4.pt"/><m:mtext>curves</m:mtext><m:mspace width="4.pt"/><m:mtext>between</m:mtext><m:mspace width="4.pt"/><m:mtext>antipodal</m:mtext><m:mspace width="4.pt"/><m:mtext>points</m:mtext><m:mspace width="4.pt"/><m:mtext>on</m:mtext><m:mspace width="4.pt"/><m:mtext>the</m:mtext><m:mspace width="4.pt"/><m:mtext>boundary</m:mtext><m:mo>}</m:mo></m:mrow></m:mrow></m:math>. Again we are trying to minimize</para>
+      <equation id="id209813">
+        <m:math overflow="scroll" mode="display">
+          <m:mrow>
+            <m:munder>
+              <m:mrow>
+                <m:mspace width="0.277778em"/>
+                <m:mpadded width="-3pt">
+                  <m:mo>∫</m:mo>
+                </m:mpadded>
+                <m:mpadded width="-3pt">
+                  <m:mo>∫</m:mo>
+                </m:mpadded>
+                <m:mspace width="0.277778em"/>
+              </m:mrow>
+              <m:mi>Δ</m:mi>
+            </m:munder>
+            <m:mspace width="-0.166667em"/>
+            <m:msup>
+              <m:mi>ρ</m:mi>
+              <m:mn>2</m:mn>
+            </m:msup>
+            <m:mrow>
+              <m:mo>(</m:mo>
+              <m:mi>x</m:mi>
+              <m:mo>,</m:mo>
+              <m:mi>y</m:mi>
+              <m:mo>)</m:mo>
+            </m:mrow>
+            <m:mspace width="0.166667em"/>
+            <m:mi mathvariant="normal">d</m:mi>
+            <m:mi>x</m:mi>
+            <m:mspace width="0.166667em"/>
+            <m:mi mathvariant="normal">d</m:mi>
+            <m:mi>y</m:mi>
+          </m:mrow>
+        </m:math>
+      </equation>
+      <para id="id209886">on <m:math overflow="scroll"><m:mrow><m:mi>Δ</m:mi><m:mo>=</m:mo></m:mrow></m:math> the unit disk, subject to the constraint that</para>
+      <equation id="id209902">
+        <m:math overflow="scroll" mode="display">
+          <m:mrow>
+            <m:munder>
+              <m:mo movablelimits="true" form="prefix">inf</m:mo>
+              <m:mrow>
+                <m:msup>
+                  <m:mi>γ</m:mi>
+                  <m:mo>'</m:mo>
+                </m:msup>
+                <m:mo>∈</m:mo>
+                <m:msup>
+                  <m:mi>Γ</m:mi>
+                  <m:mo>'</m:mo>
+                </m:msup>
+              </m:mrow>
+            </m:munder>
+            <m:msub>
+              <m:mo>∫</m:mo>
+              <m:msup>
+                <m:mi>γ</m:mi>
+                <m:mo>'</m:mo>
+              </m:msup>
+            </m:msub>
+            <m:mspace width="-0.166667em"/>
+            <m:mi>ρ</m:mi>
+            <m:mrow>
+              <m:mo>(</m:mo>
+              <m:mi>x</m:mi>
+              <m:mo>,</m:mo>
+              <m:mi>y</m:mi>
+              <m:mo>)</m:mo>
+            </m:mrow>
+            <m:mspace width="0.166667em"/>
+            <m:mi mathvariant="normal">d</m:mi>
+            <m:mi>s</m:mi>
+            <m:mo>≥</m:mo>
+            <m:mn>2</m:mn>
+          </m:mrow>
+        </m:math>
+      </equation>
+    </section>
+    <section id="id209983">
+      <title>Definitions</title>
+      <para id="id209989"><emphasis effect="bold">Definition 1</emphasis> A functional is a mapping from a function space to the real numbers. We are particularly interested in the maps <m:math overflow="scroll"><m:mi>F</m:mi></m:math>: <m:math overflow="scroll"><m:mrow><m:msup><m:mi>L</m:mi><m:mn>2</m:mn></m:msup><m:mrow><m:mo>(</m:mo><m:mi>ℜ</m:mi><m:mo>)</m:mo></m:mrow></m:mrow></m:math><m:math overflow="scroll"><m:mo>→</m:mo></m:math><m:math overflow="scroll"><m:mi>ℜ</m:mi></m:math>.</para>
+      <para id="id210047"><emphasis effect="bold">Definition 2</emphasis> The Area functional, <m:math overflow="scroll"><m:mrow><m:msub><m:mi>A</m:mi><m:mi>ρ</m:mi></m:msub><m:mrow><m:mo>(</m:mo><m:mi>Ω</m:mi><m:mo>)</m:mo></m:mrow></m:mrow></m:math>, is defined to be:</para>
+      <equation id="id210080">
+        <m:math overflow="scroll" mode="display">
+          <m:mrow>
+            <m:msub>
+              <m:mi>A</m:mi>
+              <m:mi>ρ</m:mi>
+            </m:msub>
+            <m:mrow>
+              <m:mo>(</m:mo>
+              <m:mi>Ω</m:mi>
+              <m:mo>)</m:mo>
+            </m:mrow>
+            <m:mo>=</m:mo>
+            <m:munder>
+              <m:mrow>
+                <m:mspace width="0.277778em"/>
+                <m:mpadded width="-3pt">
+                  <m:mo>∫</m:mo>
+                </m:mpadded>
+                <m:mpadded width="-3pt">
+                  <m:mo>∫</m:mo>
+                </m:mpadded>
+                <m:mspace width="0.277778em"/>
+              </m:mrow>
+              <m:mi>Ω</m:mi>
+            </m:munder>
+            <m:mspace width="-0.166667em"/>
+            <m:msup>
+              <m:mi>ρ</m:mi>
+              <m:mn>2</m:mn>
+            </m:msup>
+            <m:mrow>
+              <m:mo>(</m:mo>
+              <m:mi>x</m:mi>
+              <m:mo>,</m:mo>
+              <m:mi>y</m:mi>
+              <m:mo>)</m:mo>
+            </m:mrow>
+            <m:mspace width="0.166667em"/>
+            <m:mi mathvariant="normal">d</m:mi>
+            <m:mi>x</m:mi>
+            <m:mspace width="0.166667em"/>
+            <m:mi mathvariant="normal">d</m:mi>
+            <m:mi>y</m:mi>
+          </m:mrow>
+        </m:math>
+      </equation>
+      <para id="id210170">where <m:math overflow="scroll"><m:mi>Ω</m:mi></m:math> is our region of interest.</para>
+      <para id="id210183"><emphasis effect="bold">Definition 3</emphasis> The <m:math overflow="scroll"><m:mrow><m:mi>L</m:mi><m:mi>e</m:mi><m:mi>n</m:mi><m:mi>g</m:mi><m:mi>t</m:mi><m:mi>h</m:mi></m:mrow></m:math> of <m:math overflow="scroll"><m:mi>Γ</m:mi></m:math> with respect to a metric <m:math overflow="scroll"><m:mi>ρ</m:mi></m:math> is defined to be:</para>
+      <equation id="id210230">
+        <m:math overflow="scroll" mode="display">
+          <m:mrow>
+            <m:msub>
+              <m:mi>L</m:mi>
+              <m:mi>ρ</m:mi>
+            </m:msub>
+            <m:mrow>
+              <m:mo>(</m:mo>
+              <m:mi>Γ</m:mi>
+              <m:mo>)</m:mo>
+            </m:mrow>
+            <m:mo>=</m:mo>
+            <m:munder>
+              <m:mo movablelimits="true" form="prefix">inf</m:mo>
+              <m:mrow>
+                <m:mi>γ</m:mi>
+                <m:mo>∈</m:mo>
+                <m:mi>Γ</m:mi>
+              </m:mrow>
+            </m:munder>
+            <m:msub>
+              <m:mo>∫</m:mo>
+              <m:mi>γ</m:mi>
+            </m:msub>
+            <m:mspace width="-0.166667em"/>
+            <m:mi>ρ</m:mi>
+            <m:mrow>
+              <m:mo>(</m:mo>
+              <m:mi>x</m:mi>
+              <m:mo>,</m:mo>
+              <m:mi>y</m:mi>
+              <m:mo>)</m:mo>
+            </m:mrow>
+            <m:mspace width="0.166667em"/>
+            <m:mi mathvariant="normal">d</m:mi>
+            <m:mi>s</m:mi>
+          </m:mrow>
+        </m:math>
+      </equation>
+      <para id="id210306">where the <m:math overflow="scroll"><m:mi>γ</m:mi></m:math> are rectifiable curves in the set of curves <m:math overflow="scroll"><m:mi>Γ</m:mi></m:math>.</para>
+      <para id="id210327"><emphasis effect="bold">Definition 4</emphasis> The Extremal Length of a region <m:math overflow="scroll"><m:mi>Ω</m:mi></m:math> with respect to a set of curves <m:math overflow="scroll"><m:mi>Γ</m:mi></m:math> contained within <m:math overflow="scroll"><m:mi>Ω</m:mi></m:math> is defined to be:</para>
+      <equation id="id210362">
+        <m:math overflow="scroll" mode="display">
+          <m:mrow>
+            <m:mi>E</m:mi>
+            <m:msub>
+              <m:mi>L</m:mi>
+              <m:mi>Ω</m:mi>
+            </m:msub>
+            <m:mrow>
+              <m:mo>(</m:mo>
+              <m:mi>Γ</m:mi>
+              <m:mo>)</m:mo>
+            </m:mrow>
+            <m:mo>=</m:mo>
+            <m:munder>
+              <m:mo movablelimits="true" form="prefix">sup</m:mo>
+              <m:mi>ρ</m:mi>
+            </m:munder>
+            <m:mfrac>
+              <m:mrow>
+                <m:msubsup>
+                  <m:mi>L</m:mi>
+                  <m:mi>ρ</m:mi>
+                  <m:mn>2</m:mn>
+                </m:msubsup>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mi>Γ</m:mi>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+              </m:mrow>
+              <m:mrow>
+                <m:msub>
+                  <m:mi>A</m:mi>
+                  <m:mi>ρ</m:mi>
+                </m:msub>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mi>Ω</m:mi>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+              </m:mrow>
+            </m:mfrac>
+          </m:mrow>
+        </m:math>
+      </equation>
+      <para id="id210439">where <m:math overflow="scroll"><m:mrow><m:mi>ρ</m:mi><m:mo>∈</m:mo><m:msup><m:mi>L</m:mi><m:mn>2</m:mn></m:msup><m:mrow><m:mo>(</m:mo><m:mi>ℜ</m:mi><m:mo>)</m:mo></m:mrow></m:mrow></m:math> and <m:math overflow="scroll"><m:mi>ρ</m:mi></m:math> : <m:math overflow="scroll"><m:mrow><m:msup><m:mrow><m:mi>ℜ</m:mi></m:mrow><m:mn>2</m:mn></m:msup><m:mo>→</m:mo><m:msub><m:mi>ℜ</m:mi><m:mo>+</m:mo></m:msub></m:mrow></m:math></para>
+    </section>
+    <section id="id210503">
+      <title>Previous Results</title>
+      <para id="id210509">There has not been very much work done on the topic of extremal length, and thus, most of the previous results are limited to one source by Ahlfors. Nevertheless there are still many useful theorems that we can apply to our topic.  The following are two theorems from [1].</para>
+      <para id="id210515"><emphasis effect="bold">Theorem 1</emphasis> Let us say that a metric <m:math overflow="scroll"><m:mrow><m:mi>ρ</m:mi><m:mo>(</m:mo><m:mi>x</m:mi><m:mo>,</m:mo><m:mi>y</m:mi><m:mo>)</m:mo></m:mrow></m:math> is admissible if <m:math overflow="scroll"><m:mrow><m:msub><m:mi>L</m:mi><m:mi>ρ</m:mi></m:msub><m:mrow><m:mo>(</m:mo><m:mi>Γ</m:mi><m:mo>)</m:mo></m:mrow><m:mo>≥</m:mo><m:mn>1</m:mn></m:mrow></m:math>. Then the extremal length is equal to <m:math overflow="scroll"><m:mfrac><m:mn>1</m:mn><m:mrow><m:mo movablelimits="true" form="prefix">inf</m:mo><m:msub><m:mi>A</m:mi><m:mi>ρ</m:mi></m:msub><m:mrow><m:mo>(</m:mo><m:mi>Ω</m:mi><m:mo>)</m:mo></m:mrow></m:mrow></m:mfrac></m:math>.</para>
+      <para id="id210607">This can easily be applied to our Swiss Cross case, as instead of defining an admissible metric as one where <m:math overflow="scroll"><m:mrow><m:msub><m:mi>L</m:mi><m:mi>ρ</m:mi></m:msub><m:mrow><m:mo>(</m:mo><m:mi>Γ</m:mi><m:mo>)</m:mo></m:mrow><m:mo>≥</m:mo><m:mn>1</m:mn></m:mrow></m:math>, we can define it as <m:math overflow="scroll"><m:mrow><m:msub><m:mi>L</m:mi><m:mi>ρ</m:mi></m:msub><m:mrow><m:mo>(</m:mo><m:mi>Γ</m:mi><m:mo>)</m:mo></m:mrow><m:mo>≥</m:mo><m:mn>3</m:mn></m:mrow></m:math>.</para>
+      <para id="id210670">Another result is one that lets us actually check if a metric <m:math overflow="scroll"><m:mrow><m:mi>ρ</m:mi><m:mo>(</m:mo><m:mi>x</m:mi><m:mo>,</m:mo><m:mi>y</m:mi><m:mo>)</m:mo></m:mrow></m:math> is an extremal metric.</para>
+      <para id="id210693"><emphasis effect="bold">Theorem 2</emphasis> The metric <m:math overflow="scroll"><m:msub><m:mi>ρ</m:mi><m:mn>0</m:mn></m:msub></m:math> is extremal for <m:math overflow="scroll"><m:mi>Γ</m:mi></m:math> on a region <m:math overflow="scroll"><m:mi>Ω</m:mi></m:math> if <m:math overflow="scroll"><m:mi>Γ</m:mi></m:math> contains a subfamily <m:math overflow="scroll"><m:msub><m:mi>Γ</m:mi><m:mn>0</m:mn></m:msub></m:math> with the following properties:</para>
+      <equation id="id210762">
+        <m:math overflow="scroll" mode="display">
+          <m:mrow>
+            <m:msub>
+              <m:mo>∫</m:mo>
+              <m:mi>γ</m:mi>
+            </m:msub>
+            <m:mspace width="-0.166667em"/>
+            <m:msub>
+              <m:mi>ρ</m:mi>
+              <m:mn>0</m:mn>
+            </m:msub>
+            <m:mspace width="0.166667em"/>
+            <m:mi mathvariant="normal">d</m:mi>
+            <m:mi>s</m:mi>
+            <m:mo>=</m:mo>
+            <m:msub>
+              <m:mi>L</m:mi>
+              <m:msub>
+                <m:mi>ρ</m:mi>
+                <m:mn>0</m:mn>
+              </m:msub>
+            </m:msub>
+            <m:mrow>
+              <m:mo>(</m:mo>
+              <m:mi>Γ</m:mi>
+              <m:mo>)</m:mo>
+            </m:mrow>
+            <m:mspace width="4.pt"/>
+            <m:mtext>for</m:mtext>
+            <m:mspace width="4.pt"/>
+            <m:mtext>all</m:mtext>
+            <m:mspace width="4.pt"/>
+            <m:mrow>
+              <m:mi>γ</m:mi>
+              <m:mo>∈</m:mo>
+              <m:msub>
+                <m:mi>Γ</m:mi>
+                <m:mn>0</m:mn>
+              </m:msub>
+            </m:mrow>
+          </m:mrow>
+        </m:math>
+      </equation>
+      <para id="id210851">And secondly, for any real-valued <m:math overflow="scroll"><m:mi>h</m:mi></m:math> on <m:math overflow="scroll"><m:mi>Ω</m:mi></m:math>, <m:math overflow="scroll"><m:mi>h</m:mi></m:math> satisfying</para>
+      <equation id="id210882">
+        <m:math overflow="scroll" mode="display">
+          <m:mrow>
+            <m:msub>
+              <m:mo>∫</m:mo>
+              <m:mi>γ</m:mi>
+            </m:msub>
+            <m:mspace width="-0.166667em"/>
+            <m:mi>h</m:mi>
+            <m:mspace width="0.166667em"/>
+            <m:mi mathvariant="normal">d</m:mi>
+            <m:mi>s</m:mi>
+            <m:mo>≥</m:mo>
+            <m:mn>0</m:mn>
+          </m:mrow>
+        </m:math>
+      </equation>
+      <para id="id210918">for all <m:math overflow="scroll"><m:mrow><m:mi>γ</m:mi><m:mo>∈</m:mo><m:msub><m:mi>Γ</m:mi><m:mn>0</m:mn></m:msub></m:mrow></m:math> implies:
+</para>
+      <equation id="id210952"><m:math overflow="scroll" mode="display">
+          <m:mrow>
+            <m:munder>
+              <m:mrow>
+                <m:mspace width="0.277778em"/>
+                <m:mpadded width="-3pt">
+                  <m:mo>∫</m:mo>
+                </m:mpadded>
+                <m:mpadded width="-3pt">
+                  <m:mo>∫</m:mo>
+                </m:mpadded>
+                <m:mspace width="0.277778em"/>
+              </m:mrow>
+              <m:mi>Ω</m:mi>
+            </m:munder>
+            <m:mspace width="-0.166667em"/>
+            <m:mi>h</m:mi>
+            <m:msub>
+              <m:mi>ρ</m:mi>
+              <m:mn>0</m:mn>
+            </m:msub>
+            <m:mspace width="0.166667em"/>
+            <m:mi mathvariant="normal">d</m:mi>
+            <m:mi>x</m:mi>
+            <m:mi mathvariant="normal">d</m:mi>
+            <m:mi>y</m:mi>
+            <m:mo>≥</m:mo>
+            <m:mn>0</m:mn>
+          </m:mrow>
+        </m:math>
+      </equation>
+      <para id="id211029">This is useful because it states that the set of extremal curves, <m:math overflow="scroll"><m:msub><m:mi>Γ</m:mi><m:mn>0</m:mn></m:msub></m:math> covers the whole region <m:math overflow="scroll"><m:mi>Ω</m:mi></m:math> except possibly where <m:math overflow="scroll"><m:msub><m:mi>ρ</m:mi><m:mn>0</m:mn></m:msub></m:math> is equal to zero.</para>
+    </section>
+    <section id="id211072">
+      <title>Results</title>
+      <section id="id211078">
+        <title>Swiss Cross</title>
+        <para id="id211085">Preliminary inspection of extremal metrics yields a constant value of <m:math overflow="scroll"><m:mrow><m:mi>ρ</m:mi><m:mo>(</m:mo><m:mi>x</m:mi><m:mo>,</m:mo><m:mi>y</m:mi><m:mo>)</m:mo><m:mo>=</m:mo><m:mn>1</m:mn></m:mrow></m:math> as a function which satisfies the constraints and has metric area 5. However, <m:math overflow="scroll"><m:mrow><m:mi>ρ</m:mi><m:mo>≡</m:mo><m:mn>1</m:mn></m:mrow></m:math> is not extremal for the Swiss Cross. This can be shown by the function in Figure 2.</para>
+        <para id="eip-13"><figure id="SwissCrossFunction">
+ <media id="SwissCrossFunction1" alt="Swiss Cross Function">
+  <image mime-type="image/jpeg" src="../../media/Swiss Cross Function.jpg"/>
+ </media>
+</figure></para><para id="id211130"><emphasis effect="bold">Theorem 3</emphasis> The function in Figure 2 satisfies the constraints of the extremal length problem, and has a smaller metric area than <m:math overflow="scroll"><m:mrow><m:mi>ρ</m:mi><m:mo>≡</m:mo><m:mn>1</m:mn></m:mrow></m:math>.</para>
+        <para id="id211158"><emphasis effect="bold">Proof</emphasis> Suppose that we define <m:math overflow="scroll"><m:mi>ρ</m:mi></m:math> as in Figure 2. Then we can calculate the metric area as</para>
+        <equation id="id211176">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:munder>
+                <m:mrow>
+                  <m:mspace width="0.277778em"/>
+                  <m:mpadded width="-3pt">
+                    <m:mo>∫</m:mo>
+                  </m:mpadded>
+                  <m:mpadded width="-3pt">
+                    <m:mo>∫</m:mo>
+                  </m:mpadded>
+                  <m:mspace width="0.277778em"/>
+                </m:mrow>
+                <m:mrow>
+                  <m:mi>S</m:mi>
+                  <m:mo>.</m:mo>
+                  <m:mi>C</m:mi>
+                  <m:mo>.</m:mo>
+                </m:mrow>
+              </m:munder>
+              <m:mspace width="-0.166667em"/>
+              <m:msup>
+                <m:mi>ρ</m:mi>
+                <m:mn>2</m:mn>
+              </m:msup>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>x</m:mi>
+                <m:mo>,</m:mo>
+                <m:mi>y</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mspace width="0.166667em"/>
+              <m:mi mathvariant="normal">d</m:mi>
+              <m:mi>x</m:mi>
+              <m:mi mathvariant="normal">d</m:mi>
+              <m:mi>y</m:mi>
+              <m:mo>≈</m:mo>
+              <m:mn>4</m:mn>
+              <m:mo>.</m:mo>
+              <m:mn>9999989</m:mn>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id211266">Now it is only necessary to show that the constraint is satisfied.
+Let <m:math overflow="scroll"><m:mrow><m:mi>γ</m:mi><m:mo>∈</m:mo><m:mi>Γ</m:mi></m:mrow></m:math> be a curve with</para>
+        <equation id="id211285">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:msub>
+                <m:mo>∫</m:mo>
+                <m:mi>γ</m:mi>
+              </m:msub>
+              <m:mi>ρ</m:mi>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>x</m:mi>
+                <m:mo>,</m:mo>
+                <m:mi>y</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mspace width="0.166667em"/>
+              <m:mi mathvariant="normal">d</m:mi>
+              <m:mi>s</m:mi>
+              <m:mo>&lt;</m:mo>
+              <m:mn>3</m:mn>
+              <m:mo>.</m:mo>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id211333">Without loss of generality, <m:math overflow="scroll"><m:mi>γ</m:mi></m:math> moves from the left edge of the Swiss Cross to the right. All loops in <m:math overflow="scroll"><m:mi>γ</m:mi></m:math> can be cut at their intersection point and the loop itself discarded to create</para>
+        <equation id="id211359">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:msub>
+                <m:mo>∫</m:mo>
+                <m:mi>γ</m:mi>
+              </m:msub>
+              <m:mi>ρ</m:mi>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>x</m:mi>
+                <m:mo>,</m:mo>
+                <m:mi>y</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mspace width="0.166667em"/>
+              <m:mi mathvariant="normal">d</m:mi>
+              <m:mi>s</m:mi>
+              <m:mo>=</m:mo>
+              <m:msub>
+                <m:mo>∫</m:mo>
+                <m:msup>
+                  <m:mi>γ</m:mi>
+                  <m:mo>'</m:mo>
+                </m:msup>
+              </m:msub>
+              <m:mi>ρ</m:mi>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>x</m:mi>
+                <m:mo>,</m:mo>
+                <m:mi>y</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mspace width="0.166667em"/>
+              <m:mi mathvariant="normal">d</m:mi>
+              <m:mi>s</m:mi>
+              <m:mo>+</m:mo>
+              <m:msub>
+                <m:mo>∫</m:mo>
+                <m:mrow>
+                  <m:mtext>loops</m:mtext>
+                  <m:mspace width="4.pt"/>
+                  <m:mtext>of</m:mtext>
+                  <m:mspace width="4.pt"/>
+                  <m:mi>γ</m:mi>
+                </m:mrow>
+              </m:msub>
+              <m:mi>ρ</m:mi>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>x</m:mi>
+                <m:mo>,</m:mo>
+                <m:mi>y</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mspace width="0.166667em"/>
+              <m:mi mathvariant="normal">d</m:mi>
+              <m:mi>s</m:mi>
+              <m:mo>⇒</m:mo>
+              <m:msub>
+                <m:mo>∫</m:mo>
+                <m:msup>
+                  <m:mi>γ</m:mi>
+                  <m:mo>'</m:mo>
+                </m:msup>
+              </m:msub>
+              <m:mi>ρ</m:mi>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>x</m:mi>
+                <m:mo>,</m:mo>
+                <m:mi>y</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mspace width="0.166667em"/>
+              <m:mi mathvariant="normal">d</m:mi>
+              <m:mi>s</m:mi>
+              <m:mo>≤</m:mo>
+              <m:msub>
+                <m:mo>∫</m:mo>
+                <m:mi>γ</m:mi>
+              </m:msub>
+              <m:mi>ρ</m:mi>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>x</m:mi>
+                <m:mo>,</m:mo>
+                <m:mi>y</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mspace width="0.166667em"/>
+              <m:mi mathvariant="normal">d</m:mi>
+              <m:mi>s</m:mi>
+              <m:mo>&lt;</m:mo>
+              <m:mn>3</m:mn>
+              <m:mo>.</m:mo>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id211567">Any curve of <m:math overflow="scroll"><m:msup><m:mi>γ</m:mi><m:mo>'</m:mo></m:msup></m:math> which lies completely inside one constant-weighted region can be replaced by a curve from the entry point to the exit point which minimizes the length. If a line would leave the Swiss Cross, then draw two lines, one from the entry point to the corner and another from the corner to the exit point since this is a special case of lying inside the circle. Furthermore, we know that <m:math overflow="scroll"><m:mo>∃</m:mo></m:math> a geodesic between the 2 points. In a more general sense, we are replacing the earlier curve with a geodesic one, which may or may not travel along regional boundaries. Call this new curve <m:math overflow="scroll"><m:msup><m:mi>γ</m:mi><m:mrow><m:mo>'</m:mo><m:mo>'</m:mo></m:mrow></m:msup></m:math>.</para>
+        <para id="eip-468"><figure id="CreateStraight" type="b">
+ <label>Diagram</label>
+ <media id="CreateStraight1" alt="Create Straight">
+  <image mime-type="image/jpeg" src="../../media/Create Straight Lines.jpg"/>
+ </media>
+</figure></para><para id="id211620">Now suppose <m:math overflow="scroll"><m:msup><m:mi>γ</m:mi><m:mrow><m:mo>'</m:mo><m:mo>'</m:mo></m:mrow></m:msup></m:math> cuts back, i.e. it leaves a region going towards the right, then returns to the same x-value at some point along <m:math overflow="scroll"><m:msup><m:mi>γ</m:mi><m:mrow><m:mo>'</m:mo><m:mo>'</m:mo></m:mrow></m:msup></m:math>. Then cut <m:math overflow="scroll"><m:msup><m:mi>γ</m:mi><m:mrow><m:mo>'</m:mo><m:mo>'</m:mo></m:mrow></m:msup></m:math> at the largest x-value before the turn back and at the smallest x-value after the turn back. One of these sections of the curve has smaller integral length than the other (if they are the same length, arbitrarily pick one), and we can translate <m:math overflow="scroll"><m:msup><m:mi>γ</m:mi><m:mrow><m:mo>'</m:mo><m:mo>'</m:mo></m:mrow></m:msup></m:math> up or down either on the right or left in order that the "longer" path becomes a loop, while maintaining the same line length in each region. Then this <m:math overflow="scroll"><m:msup><m:mi>γ</m:mi><m:mrow><m:mo>'</m:mo><m:mo>'</m:mo><m:mo>'</m:mo></m:mrow></m:msup></m:math> can perform step 1 to get rid of the loops. We now have <m:math overflow="scroll"><m:mi>α</m:mi></m:math> running completely from left to right. By construction if <m:math overflow="scroll"><m:mi>α</m:mi></m:math> travels through one of the 4 circles,</para>
+        <para id="eip-671"><figure id="Translate" type="b">
+ <label>Diagram</label>
+ <media id="Translate1" alt="translate">
+  <image mime-type="image/jpeg" src="../../media/Translate.jpg"/>
+ </media>
+</figure></para><equation id="id211740">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:msub>
+                <m:mo>∫</m:mo>
+                <m:mi>α</m:mi>
+              </m:msub>
+              <m:mi>ρ</m:mi>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>x</m:mi>
+                <m:mo>,</m:mo>
+                <m:mi>y</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mspace width="0.166667em"/>
+              <m:mi mathvariant="normal">d</m:mi>
+              <m:mi>s</m:mi>
+              <m:mo>≥</m:mo>
+              <m:mn>3</m:mn>
+              <m:mo>.</m:mo>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id211787">Also by construction, if <m:math overflow="scroll"><m:mi>α</m:mi></m:math> travels all of the way around the circumference of a circle to get from one 1-<m:math overflow="scroll"><m:mfrac><m:mi>ϵ</m:mi><m:mn>2</m:mn></m:mfrac></m:math> region to another, then</para>
+        <equation id="id211817">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:msub>
+                <m:mo>∫</m:mo>
+                <m:mi>α</m:mi>
+              </m:msub>
+              <m:mi>ρ</m:mi>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>x</m:mi>
+                <m:mo>,</m:mo>
+                <m:mi>y</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mspace width="0.166667em"/>
+              <m:mi mathvariant="normal">d</m:mi>
+              <m:mi>s</m:mi>
+              <m:mo>≥</m:mo>
+              <m:mn>3</m:mn>
+              <m:mo>.</m:mo>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id211865">Also, any curve <m:math overflow="scroll"><m:mi>α</m:mi></m:math> that does not enter the top or bottom 1-<m:math overflow="scroll"><m:mfrac><m:mi>ϵ</m:mi><m:mn>2</m:mn></m:mfrac></m:math> regions while traveling will have</para>
+        <equation id="id211894">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:msub>
+                <m:mo>∫</m:mo>
+                <m:mi>α</m:mi>
+              </m:msub>
+              <m:mi>ρ</m:mi>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>x</m:mi>
+                <m:mo>,</m:mo>
+                <m:mi>y</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mspace width="0.166667em"/>
+              <m:mi mathvariant="normal">d</m:mi>
+              <m:mi>s</m:mi>
+              <m:mo>≥</m:mo>
+              <m:mn>3</m:mn>
+              <m:mo>.</m:mo>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id211942">Thus, suppose <m:math overflow="scroll"><m:mi>α</m:mi></m:math> travels along in the 1+<m:math overflow="scroll"><m:mi>ϵ</m:mi></m:math> region before breaking off to a 1-<m:math overflow="scroll"><m:mfrac><m:mi>ϵ</m:mi><m:mn>2</m:mn></m:mfrac></m:math> region. Then shift <m:math overflow="scroll"><m:mi>α</m:mi></m:math> up or down so that it is tangent to one of the circles if necessary, and make sure the first section and last section of <m:math overflow="scroll"><m:mi>α</m:mi></m:math> are completely horizontal to minimize Euclidean distance and create a new <m:math overflow="scroll"><m:mi>α</m:mi></m:math>. Then,</para>
+        <equation id="id211999">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:msub>
+                <m:mo>∫</m:mo>
+                <m:mi>α</m:mi>
+              </m:msub>
+              <m:mi>ρ</m:mi>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>x</m:mi>
+                <m:mo>,</m:mo>
+                <m:mi>y</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mspace width="0.166667em"/>
+              <m:mi mathvariant="normal">d</m:mi>
+              <m:mi>s</m:mi>
+              <m:mo>≤</m:mo>
+              <m:msub>
+                <m:mo>∫</m:mo>
+                <m:msub>
+                  <m:mi>α</m:mi>
+                  <m:mrow>
+                    <m:mi>o</m:mi>
+                    <m:mi>l</m:mi>
+                    <m:mi>d</m:mi>
+                  </m:mrow>
+                </m:msub>
+              </m:msub>
+              <m:mi>ρ</m:mi>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>x</m:mi>
+                <m:mo>,</m:mo>
+                <m:mi>y</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mspace width="0.166667em"/>
+              <m:mi mathvariant="normal">d</m:mi>
+              <m:mi>s</m:mi>
+              <m:mo>.</m:mo>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id212087">Now if we were somehow able to travel only across the 1-<m:math overflow="scroll"><m:mfrac><m:mi>ϵ</m:mi><m:mn>2</m:mn></m:mfrac></m:math> region, then a minimal path would add 1-<m:math overflow="scroll"><m:mfrac><m:mi>ϵ</m:mi><m:mn>2</m:mn></m:mfrac></m:math> in length. Traveling along the boundary of the circle in the 1+<m:math overflow="scroll"><m:mi>ϵ</m:mi></m:math> region we would pick up <m:math overflow="scroll"><m:mi>θ</m:mi></m:math><m:math overflow="scroll"><m:mo>*</m:mo></m:math><m:math overflow="scroll"><m:mi>ϵ</m:mi></m:math><m:math overflow="scroll"><m:msup><m:mrow/><m:mfrac><m:mn>3</m:mn><m:mn>4</m:mn></m:mfrac></m:msup></m:math>(1+<m:math overflow="scroll"><m:mi>ϵ</m:mi></m:math>) = <m:math overflow="scroll"><m:mi>θ</m:mi></m:math><m:math overflow="scroll"><m:mi>ϵ</m:mi></m:math><m:math overflow="scroll"><m:msup><m:mrow/><m:mfrac><m:mn>3</m:mn><m:mn>4</m:mn></m:mfrac></m:msup></m:math> + <m:math overflow="scroll"><m:mi>θ</m:mi></m:math><m:math overflow="scroll"><m:mi>ϵ</m:mi></m:math><m:math overflow="scroll"><m:msup><m:mrow/><m:mfrac><m:mn>7</m:mn><m:mn>4</m:mn></m:mfrac></m:msup></m:math>. As <m:math overflow="scroll"><m:mi>ϵ</m:mi></m:math> gets very small, this will be much greater than the advantage given by entering the 1-<m:math overflow="scroll"><m:mfrac><m:mi>ϵ</m:mi><m:mn>2</m:mn></m:mfrac></m:math> region. Thus</para>
+        <equation id="id212268">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:msub>
+                <m:mo>∫</m:mo>
+                <m:mi>α</m:mi>
+              </m:msub>
+              <m:mi>ρ</m:mi>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>x</m:mi>
+                <m:mo>,</m:mo>
+                <m:mi>y</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mspace width="0.166667em"/>
+              <m:mi mathvariant="normal">d</m:mi>
+              <m:mi>s</m:mi>
+              <m:mo>≥</m:mo>
+              <m:mn>3</m:mn>
+              <m:mo>⇒</m:mo>
+              <m:msub>
+                <m:mo>∫</m:mo>
+                <m:mi>γ</m:mi>
+              </m:msub>
+              <m:mi>ρ</m:mi>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>x</m:mi>
+                <m:mo>,</m:mo>
+                <m:mi>y</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mspace width="0.166667em"/>
+              <m:mi mathvariant="normal">d</m:mi>
+              <m:mi>s</m:mi>
+              <m:mo>≥</m:mo>
+              <m:mn>3</m:mn>
+              <m:mo>,</m:mo>
+              <m:mspace width="0.166667em"/>
+              <m:mspace width="0.166667em"/>
+              <m:mo>∀</m:mo>
+              <m:mi>γ</m:mi>
+              <m:mo>∈</m:mo>
+              <m:mi>Γ</m:mi>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id212371">
+          <m:math overflow="scroll">
+            <m:mo>□</m:mo>
+          </m:math>
+        </para>
+        <para id="id212384">There is clearly a great deal of symmetry in the Swiss Cross, and it would be convenient to use that. Theorem 4 allows us to do so.</para>
+        <para id="id212389"><emphasis effect="bold">Theorem 4</emphasis> The extremal metric on the Swiss Cross will be symmetric about all eight axes of symmetry.</para>
+        <para id="id212401"><emphasis effect="bold">Proof</emphasis> Consider a line of symmetry about the Swiss Cross. Then we can take opposite points and average their weights. If the original weights are <m:math overflow="scroll"><m:mi>a</m:mi></m:math> and <m:math overflow="scroll"><m:mi>b</m:mi></m:math>, then this yields by the Cauchy-Schwarz Inequality:</para>
+        <equation id="id212429">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:mi>a</m:mi>
+              <m:mi>b</m:mi>
+              <m:mo>≤</m:mo>
+              <m:mfrac>
+                <m:mrow>
+                  <m:msup>
+                    <m:mi>a</m:mi>
+                    <m:mn>2</m:mn>
+                  </m:msup>
+                  <m:mo>+</m:mo>
+                  <m:msup>
+                    <m:mi>b</m:mi>
+                    <m:mn>2</m:mn>
+                  </m:msup>
+                </m:mrow>
+                <m:mn>2</m:mn>
+              </m:mfrac>
+              <m:mtext>,</m:mtext>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id212470">which implies that:</para>
+        <equation id="id212473">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:msup>
+                <m:mfenced separators="" open="(" close=")">
+                  <m:mfrac>
+                    <m:mrow>
+                      <m:mi>a</m:mi>
+                      <m:mo>+</m:mo>
+                      <m:mi>b</m:mi>
+                    </m:mrow>
+                    <m:mn>2</m:mn>
+                  </m:mfrac>
+                </m:mfenced>
+                <m:mn>2</m:mn>
+              </m:msup>
+              <m:mo>≤</m:mo>
+              <m:mfrac>
+                <m:mrow>
+                  <m:msup>
+                    <m:mi>a</m:mi>
+                    <m:mn>2</m:mn>
+                  </m:msup>
+                  <m:mo>+</m:mo>
+                  <m:msup>
+                    <m:mi>b</m:mi>
+                    <m:mn>2</m:mn>
+                  </m:msup>
+                </m:mrow>
+                <m:mn>2</m:mn>
+              </m:mfrac>
+              <m:mtext>,</m:mtext>
+              <m:mspace width="4.pt"/>
+              <m:mtext>as</m:mtext>
+              <m:mspace width="4.pt"/>
+              <m:mtext>desired</m:mtext>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id212546">
+          <m:math overflow="scroll">
+            <m:mo>□</m:mo>
+          </m:math>
+        </para>
+        <para id="id212559">Also, this averaging will not affect the integral length of the function from side to side.</para>
+        <para id="id212564">Another useful result is a bound on the metric at the center of the Swiss Cross.</para>
+        <para id="id212568">Consider a discrete metric on the Swiss Cross. Then create a square in the center of the Swiss Cross with side length <m:math overflow="scroll"><m:mi>ϵ</m:mi></m:math>, and other <m:math overflow="scroll"><m:mi>ϵ</m:mi></m:math> squares at the center of the boundary of each outer square. If the weight in the center is <m:math overflow="scroll"><m:msub><m:mi>w</m:mi><m:mrow><m:mi>c</m:mi><m:mi>e</m:mi><m:mi>n</m:mi><m:mi>t</m:mi><m:mi>e</m:mi><m:mi>r</m:mi></m:mrow></m:msub></m:math>, and the weight on the sides is <m:math overflow="scroll"><m:msub><m:mi>w</m:mi><m:mrow><m:mi>s</m:mi><m:mi>i</m:mi><m:mi>d</m:mi><m:mi>e</m:mi></m:mrow></m:msub></m:math> then we want to minimize:</para>
+        <para id="eip-8"><figure id="SmallSquares" type="b">
+ <label>Diagram</label>
+  <media id="SmallSquares1" alt="Small Squares">
+   <image mime-type="image/jpeg" src="../../media/Small Squares.jpg"/>
+  </media>
+</figure></para><equation id="id212639">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:mn>4</m:mn>
+              <m:msubsup>
+                <m:mi>w</m:mi>
+                <m:mrow>
+                  <m:mi>s</m:mi>
+                  <m:mi>i</m:mi>
+                  <m:mi>d</m:mi>
+                  <m:mi>e</m:mi>
+                </m:mrow>
+                <m:mn>2</m:mn>
+              </m:msubsup>
+              <m:msup>
+                <m:mi>ϵ</m:mi>
+                <m:mn>2</m:mn>
+              </m:msup>
+              <m:mo>+</m:mo>
+              <m:msubsup>
+                <m:mi>w</m:mi>
+                <m:mrow>
+                  <m:mi>c</m:mi>
+                  <m:mi>e</m:mi>
+                  <m:mi>n</m:mi>
+                  <m:mi>t</m:mi>
+                  <m:mi>e</m:mi>
+                  <m:mi>r</m:mi>
+                </m:mrow>
+                <m:mn>2</m:mn>
+              </m:msubsup>
+              <m:msup>
+                <m:mi>ϵ</m:mi>
+                <m:mn>2</m:mn>
+              </m:msup>
+              <m:mo>=</m:mo>
+              <m:mi>A</m:mi>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id212713">subject to:</para>
+        <equation id="id212716">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:mn>2</m:mn>
+              <m:msub>
+                <m:mi>w</m:mi>
+                <m:mrow>
+                  <m:mi>s</m:mi>
+                  <m:mi>i</m:mi>
+                  <m:mi>d</m:mi>
+                  <m:mi>e</m:mi>
+                </m:mrow>
+              </m:msub>
+              <m:mi>ϵ</m:mi>
+              <m:mo>+</m:mo>
+              <m:msub>
+                <m:mi>w</m:mi>
+                <m:mrow>
+                  <m:mi>c</m:mi>
+                  <m:mi>e</m:mi>
+                  <m:mi>n</m:mi>
+                  <m:mi>t</m:mi>
+                  <m:mi>e</m:mi>
+                  <m:mi>r</m:mi>
+                </m:mrow>
+              </m:msub>
+              <m:mi>ϵ</m:mi>
+              <m:mo>=</m:mo>
+              <m:mi>L</m:mi>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id212774">We can use Lagrange multipliers to solve this equation. So:</para>
+        <equation id="id212777">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mn>8</m:mn>
+                <m:msub>
+                  <m:mi>w</m:mi>
+                  <m:mrow>
+                    <m:mi>s</m:mi>
+                    <m:mi>i</m:mi>
+                    <m:mi>d</m:mi>
+                    <m:mi>e</m:mi>
+                  </m:mrow>
+                </m:msub>
+                <m:msup>
+                  <m:mi>ϵ</m:mi>
+                  <m:mn>2</m:mn>
+                </m:msup>
+                <m:mo>,</m:mo>
+                <m:mn>2</m:mn>
+                <m:msub>
+                  <m:mi>w</m:mi>
+                  <m:mrow>
+                    <m:mi>c</m:mi>
+                    <m:mi>e</m:mi>
+                    <m:mi>n</m:mi>
+                    <m:mi>t</m:mi>
+                    <m:mi>e</m:mi>
+                    <m:mi>r</m:mi>
+                  </m:mrow>
+                </m:msub>
+                <m:msup>
+                  <m:mi>ϵ</m:mi>
+                  <m:mn>2</m:mn>
+                </m:msup>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>=</m:mo>
+              <m:mi>λ</m:mi>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mn>2</m:mn>
+                <m:mi>ϵ</m:mi>
+                <m:mo>,</m:mo>
+                <m:mi>ϵ</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id212867">When we solve for the ratio <m:math overflow="scroll"><m:mfrac><m:msub><m:mi>w</m:mi><m:mrow><m:mi>c</m:mi><m:mi>e</m:mi><m:mi>n</m:mi><m:mi>t</m:mi><m:mi>e</m:mi><m:mi>r</m:mi></m:mrow></m:msub><m:msub><m:mi>w</m:mi><m:mrow><m:mi>s</m:mi><m:mi>i</m:mi><m:mi>d</m:mi><m:mi>e</m:mi></m:mrow></m:msub></m:mfrac></m:math>, we get:</para>
+        <equation id="id212915">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:mfrac>
+                <m:msub>
+                  <m:mi>w</m:mi>
+                  <m:mrow>
+                    <m:mi>c</m:mi>
+                    <m:mi>e</m:mi>
+                    <m:mi>n</m:mi>
+                    <m:mi>t</m:mi>
+                    <m:mi>e</m:mi>
+                    <m:mi>r</m:mi>
+                  </m:mrow>
+                </m:msub>
+                <m:msub>
+                  <m:mi>w</m:mi>
+                  <m:mrow>
+                    <m:mi>s</m:mi>
+                    <m:mi>i</m:mi>
+                    <m:mi>d</m:mi>
+                    <m:mi>e</m:mi>
+                  </m:mrow>
+                </m:msub>
+              </m:mfrac>
+              <m:mo>=</m:mo>
+              <m:mn>2</m:mn>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id212965">In order to find a lower bound for the metric area of the Swiss Cross, we can consider the simplified case where <m:math overflow="scroll"><m:mrow><m:mi>Γ</m:mi><m:mo>=</m:mo><m:mo>{</m:mo><m:mo>(</m:mo><m:mtext>Straight</m:mtext><m:mspace width="4.pt"/><m:mtext>lines</m:mtext><m:mspace width="4.pt"/><m:mtext>connecting</m:mtext><m:mspace width="4.pt"/><m:mi>A</m:mi><m:mspace width="4.pt"/><m:mtext>and</m:mtext><m:mspace width="4.pt"/><m:mi>B</m:mi><m:mo>)</m:mo><m:mspace width="0.166667em"/><m:mo>∪</m:mo><m:mspace width="0.166667em"/><m:mo>(</m:mo><m:mtext>Straight</m:mtext><m:mspace width="4.pt"/><m:mtext>lines</m:mtext><m:mspace width="4.pt"/><m:mtext>connecting</m:mtext><m:mspace width="4.pt"/><m:mi>C</m:mi><m:mspace width="4.pt"/><m:mtext>and</m:mtext><m:mspace width="4.pt"/><m:mi>D</m:mi><m:mo>)</m:mo><m:mo>}</m:mo></m:mrow></m:math>. It is easy to verify that the extremal metric is as shown in Figure 3. This function has a metric area of 4.5, so the minimum metric area for the entire set of curves <m:math overflow="scroll"><m:mi>Γ</m:mi></m:math> will be greater than or equal to 4.5.</para>
+        <para id="eip-386"><figure id="SwissCrossStraight">
+ <media id="SwissCrossStraight1" alt="Swiss Cross Straight">
+  <image mime-type="image/jpeg" src="../../media/Swiss Cross Straight.jpg"/>
+ </media>
+</figure></para><para id="id213075">In order to visualize a solution, we used a recursive Matlab program to create an approximation of the extremal metric. Using a modified version of Dijkstra's algorithm we were able to find the shortest path between two sides, and progressively lower the metric area. In order to find a global minimum instead of a local, we used the method of gradient descent. Briefly, by selectively raising certain areas and rerunning the recursion, we wound up with a better metric area.</para><para id="eip-597"><figure id="Approximations" type="b">
+ <label>Diagram</label>
+ <media id="Approximations1" alt="approximations">
+  <image mime-type="image/jpeg" src="../../media/Numerical Approximation.jpg"/>
+ </media>
+ <caption>
+ A 36x36 matrix of a discrete approximation of the extremal metric on the Swiss Cross
+ </caption>
+</figure></para>
+      </section>
+      <section id="id213083">
+        <title>Disk</title>
+        <para id="id213090">Again, a prime candidate for extremal metric, <m:math overflow="scroll"><m:mrow><m:mi>ρ</m:mi><m:mo>≡</m:mo><m:mn>1</m:mn></m:mrow></m:math> seems reasonable which gives a metric area of <m:math overflow="scroll"><m:mi>π</m:mi></m:math>. However, it is not extremal as is demonstrated in Figure 4. The metric area of Figure 4 is about 2.95, and it satisfies the constraints.</para>
+        <para id="eip-647"><figure id="Disk">
+ <media id="Disk1" alt="disk">
+  <image mime-type="image/jpeg" src="../../media/circle.jpg"/>
+ </media>
+</figure></para><para id="id213119">Using a symmetry argument similar to the Swiss Cross, it is evident that the metric on the disk will be a radial function, and hence in polar coordinates will have no <m:math overflow="scroll"><m:mi>θ</m:mi></m:math> dependence.</para>
+        <para id="id213132">At this point it became useful to find a lower bound for the metric area of the circle. However, the straight line case is degenerate as every line passes through one point[1]. Thus using other methods it is possible to show that</para>
+        <equation id="uid9">
+          <m:math overflow="scroll" mode="display">
+            <m:mtable displaystyle="true">
+              <m:mtr>
+                <m:mtd columnalign="right">
+                  <m:mrow>
+                    <m:munder>
+                      <m:mrow>
+                        <m:mspace width="0.277778em"/>
+                        <m:mpadded width="-3pt">
+                          <m:mo>∫</m:mo>
+                        </m:mpadded>
+                        <m:mpadded width="-3pt">
+                          <m:mo>∫</m:mo>
+                        </m:mpadded>
+                        <m:mspace width="0.277778em"/>
+                      </m:mrow>
+                      <m:mi>Δ</m:mi>
+                    </m:munder>
+                    <m:mspace width="-0.166667em"/>
+                    <m:msup>
+                      <m:mi>ρ</m:mi>
+                      <m:mn>2</m:mn>
+                    </m:msup>
+                    <m:mi>r</m:mi>
+                    <m:mspace width="0.166667em"/>
+                    <m:mi mathvariant="normal">d</m:mi>
+                    <m:mi>r</m:mi>
+                    <m:mspace width="0.166667em"/>
+                    <m:mi mathvariant="normal">d</m:mi>
+                    <m:mi>θ</m:mi>
+                  </m:mrow>
+                </m:mtd>
+                <m:mtd columnalign="left">
+                  <m:mrow>
+                    <m:mo>=</m:mo>
+                    <m:mn>2</m:mn>
+                    <m:mi>π</m:mi>
+                    <m:munderover>
+                      <m:mo>∫</m:mo>
+                      <m:mn>0</m:mn>
+                      <m:mn>1</m:mn>
+                    </m:munderover>
+                    <m:mspace width="-0.166667em"/>
+                    <m:msup>
+                      <m:mi>ρ</m:mi>
+                      <m:mn>2</m:mn>
+                    </m:msup>
+                    <m:mi>r</m:mi>
+                    <m:mspace width="0.166667em"/>
+                    <m:mi mathvariant="normal">d</m:mi>
+                    <m:mi>r</m:mi>
+                  </m:mrow>
+                </m:mtd>
+              </m:mtr>
+              <m:mtr>
+                <m:mtd/>
+              </m:mtr>
+              <m:mtr>
+                <m:mtd/>
+                <m:mtd columnalign="left">
+                  <m:mrow>
+                    <m:mo>≥</m:mo>
+                    <m:mn>2</m:mn>
+                    <m:mi>π</m:mi>
+                    <m:munder>
+                      <m:mo movablelimits="true" form="prefix">lim</m:mo>
+                      <m:mrow>
+                        <m:mi>n</m:mi>
+                        <m:mo>→</m:mo>
+                        <m:msup>
+                          <m:mn>1</m:mn>
+                          <m:mo>+</m:mo>
+                        </m:msup>
+                      </m:mrow>
+                    </m:munder>
+                    <m:msup>
+                      <m:mi>n</m:mi>
+                      <m:mrow>
+                        <m:msubsup>
+                          <m:mo>∫</m:mo>
+                          <m:mn>0</m:mn>
+                          <m:mn>1</m:mn>
+                        </m:msubsup>
+                        <m:mspace width="-0.166667em"/>
+                        <m:msub>
+                          <m:mo form="prefix">log</m:mo>
+                          <m:mi>n</m:mi>
+                        </m:msub>
+                        <m:mrow>
+                          <m:msup>
+                            <m:mi>ρ</m:mi>
+                            <m:mn>2</m:mn>
+                          </m:msup>
+                          <m:mi>r</m:mi>
+                        </m:mrow>
+                        <m:mspace width="0.166667em"/>
+                        <m:mi mathvariant="normal">d</m:mi>
+                        <m:mi>r</m:mi>
+                      </m:mrow>
+                    </m:msup>
+                    <m:mtext>,</m:mtext>
+                    <m:mspace width="4.pt"/>
+                    <m:mtext>using</m:mtext>
+                    <m:mspace width="4.pt"/>
+                    <m:mtext>Jensen's</m:mtext>
+                    <m:mspace width="4.pt"/>
+                    <m:mtext>Inequality</m:mtext>
+                  </m:mrow>
+                </m:mtd>
+              </m:mtr>
+              <m:mtr>
+                <m:mtd/>
+              </m:mtr>
+              <m:mtr>
+                <m:mtd/>
+                <m:mtd columnalign="left">
+                  <m:mrow>
+                    <m:mo>=</m:mo>
+                    <m:mn>2</m:mn>
+                    <m:mi>π</m:mi>
+                    <m:munder>
+                      <m:mo movablelimits="true" form="prefix">lim</m:mo>
+                      <m:mrow>
+                        <m:mi>n</m:mi>
+                        <m:mo>→</m:mo>
+                        <m:msup>
+                          <m:mn>1</m:mn>
+                          <m:mo>+</m:mo>
+                        </m:msup>
+                      </m:mrow>
+                    </m:munder>
+                    <m:msup>
+                      <m:mi>n</m:mi>
+                      <m:mrow>
+                        <m:mn>2</m:mn>
+                        <m:msubsup>
+                          <m:mo>∫</m:mo>
+                          <m:mn>0</m:mn>
+                          <m:mn>1</m:mn>
+                        </m:msubsup>
+                        <m:mspace width="-0.166667em"/>
+                        <m:msub>
+                          <m:mo form="prefix">log</m:mo>
+                          <m:mi>n</m:mi>
+                        </m:msub>
+                        <m:mi>ρ</m:mi>
+                        <m:mspace width="0.166667em"/>
+                        <m:mi mathvariant="normal">d</m:mi>
+                        <m:mi>r</m:mi>
+                      </m:mrow>
+                    </m:msup>
+                    <m:msup>
+                      <m:mi>n</m:mi>
+                      <m:mrow>
+                        <m:msubsup>
+                          <m:mo>∫</m:mo>
+                          <m:mn>0</m:mn>
+                          <m:mn>1</m:mn>
+                        </m:msubsup>
+                        <m:mspace width="-0.166667em"/>
+                        <m:msub>
+                          <m:mo form="prefix">log</m:mo>
+                          <m:mi>n</m:mi>
+                        </m:msub>
+                        <m:mi>r</m:mi>
+                        <m:mspace width="0.166667em"/>
+                        <m:mi mathvariant="normal">d</m:mi>
+                        <m:mi>r</m:mi>
+                      </m:mrow>
+                    </m:msup>
+                  </m:mrow>
+                </m:mtd>
+              </m:mtr>
+              <m:mtr>
+                <m:mtd/>
+              </m:mtr>
+              <m:mtr>
+                <m:mtd/>
+                <m:mtd columnalign="left">
+                  <m:mrow>
+                    <m:mo>=</m:mo>
+                    <m:mn>2</m:mn>
+                    <m:mi>π</m:mi>
+                    <m:munder>
+                      <m:mo movablelimits="true" form="prefix">lim</m:mo>
+                      <m:mrow>
+                        <m:mi>n</m:mi>
+                        <m:mo>→</m:mo>
+                        <m:msup>
+                          <m:mn>1</m:mn>
+                          <m:mo>+</m:mo>
+                        </m:msup>
+                      </m:mrow>
+                    </m:munder>
+                    <m:mfrac>
+                      <m:msup>
+                        <m:mi>n</m:mi>
+                        <m:mrow>
+                          <m:mn>2</m:mn>
+                          <m:msubsup>
+                            <m:mo>∫</m:mo>
+                            <m:mn>0</m:mn>
+                            <m:mn>1</m:mn>
+                          </m:msubsup>
+                          <m:mspace width="-0.166667em"/>
+                          <m:msub>
+                            <m:mo form="prefix">log</m:mo>
+                            <m:mi>n</m:mi>
+                          </m:msub>
+                          <m:mi>ρ</m:mi>
+                          <m:mspace width="0.166667em"/>
+                          <m:mi mathvariant="normal">d</m:mi>
+                          <m:mi>r</m:mi>
+                        </m:mrow>
+                      </m:msup>
+                      <m:msup>
+                        <m:mi>n</m:mi>
+                        <m:mfrac>
+                          <m:mn>1</m:mn>
+                          <m:mrow>
+                            <m:mo form="prefix">log</m:mo>
+                            <m:mi>n</m:mi>
+                          </m:mrow>
+                        </m:mfrac>
+                      </m:msup>
+                    </m:mfrac>
+                    <m:mtext>,</m:mtext>
+                    <m:mspace width="4.pt"/>
+                    <m:mtext>since</m:mtext>
+                    <m:mspace width="4.pt"/>
+                    <m:mrow>
+                      <m:msubsup>
+                        <m:mo>∫</m:mo>
+                        <m:mn>0</m:mn>
+                        <m:mn>1</m:mn>
+                      </m:msubsup>
+                      <m:mspace width="-0.166667em"/>
+                      <m:msub>
+                        <m:mo form="prefix">log</m:mo>
+                        <m:mi>n</m:mi>
+                      </m:msub>
+                      <m:mi>r</m:mi>
+                      <m:mspace width="0.166667em"/>
+                      <m:mi mathvariant="normal">d</m:mi>
+                      <m:mi>r</m:mi>
+                      <m:mo>=</m:mo>
+                      <m:mo>-</m:mo>
+                      <m:mfrac>
+                        <m:mn>1</m:mn>
+                        <m:mrow>
+                          <m:mo form="prefix">log</m:mo>
+                          <m:mi>n</m:mi>
+                        </m:mrow>
+                      </m:mfrac>
+                    </m:mrow>
+                  </m:mrow>
+                </m:mtd>
+              </m:mtr>
+              <m:mtr>
+                <m:mtd/>
+              </m:mtr>
+              <m:mtr>
+                <m:mtd/>
+                <m:mtd columnalign="left">
+                  <m:mrow>
+                    <m:mo>≥</m:mo>
+                    <m:mn>2</m:mn>
+                    <m:mi>π</m:mi>
+                    <m:munder>
+                      <m:mo movablelimits="true" form="prefix">lim</m:mo>
+                      <m:mrow>
+                        <m:mi>n</m:mi>
+                        <m:mo>→</m:mo>
+                        <m:msup>
+                          <m:mn>1</m:mn>
+                          <m:mo>+</m:mo>
+                        </m:msup>
+                      </m:mrow>
+                    </m:munder>
+                    <m:mfrac>
+                      <m:msup>
+                        <m:mi>n</m:mi>
+                        <m:mrow>
+                          <m:mn>2</m:mn>
+                          <m:msub>
+                            <m:mo form="prefix">log</m:mo>
+                            <m:mi>n</m:mi>
+                          </m:msub>
+                          <m:mfrac>
+                            <m:mn>2</m:mn>
+                            <m:mi>π</m:mi>
+                          </m:mfrac>
+                        </m:mrow>
+                      </m:msup>
+                      <m:msup>
+                        <m:mi>n</m:mi>
+                        <m:mfrac>
+                          <m:mn>1</m:mn>
+                          <m:mrow>
+                            <m:mo form="prefix">log</m:mo>
+                            <m:mi>n</m:mi>
+                          </m:mrow>
+                        </m:mfrac>
+                      </m:msup>
+                    </m:mfrac>
+                    <m:mtext>,</m:mtext>
+                    <m:mspace width="4.pt"/>
+                    <m:mtext>since</m:mtext>
+                    <m:mspace width="4.pt"/>
+                    <m:mtext>we</m:mtext>
+                    <m:mspace width="4.pt"/>
+                    <m:mtext>have</m:mtext>
+                    <m:mspace width="4.pt"/>
+                    <m:mtext>a</m:mtext>
+                    <m:mspace width="4.pt"/>
+                    <m:mtext>global</m:mtext>
+                    <m:mspace width="4.pt"/>
+                    <m:mtext>lower</m:mtext>
+                    <m:mspace width="4.pt"/>
+                    <m:mtext>bound</m:mtext>
+                    <m:mspace width="4.pt"/>
+                    <m:mtext>of</m:mtext>
+                    <m:mspace width="4.pt"/>
+                    <m:mfrac>
+                      <m:mn>2</m:mn>
+                      <m:mi>π</m:mi>
+                    </m:mfrac>
+                  </m:mrow>
+                </m:mtd>
+              </m:mtr>
+              <m:mtr>
+                <m:mtd/>
+              </m:mtr>
+              <m:mtr>
+                <m:mtd/>
+                <m:mtd columnalign="left">
+                  <m:mrow>
+                    <m:mo>=</m:mo>
+                    <m:mn>2</m:mn>
+                    <m:mi>π</m:mi>
+                    <m:msup>
+                      <m:mfenced separators="" open="(" close=")">
+                        <m:mfrac>
+                          <m:mn>2</m:mn>
+                          <m:mi>π</m:mi>
+                        </m:mfrac>
+                      </m:mfenced>
+                      <m:mn>2</m:mn>
+                    </m:msup>
+                  </m:mrow>
+                </m:mtd>
+              </m:mtr>
+              <m:mtr>
+                <m:mtd/>
+              </m:mtr>
+              <m:mtr>
+                <m:mtd/>
+                <m:mtd columnalign="left">
+                  <m:mrow>
+                    <m:mo>=</m:mo>
+                    <m:mfrac>
+                      <m:mn>8</m:mn>
+                      <m:mi>π</m:mi>
+                    </m:mfrac>
+                  </m:mrow>
+                </m:mtd>
+              </m:mtr>
+            </m:mtable>
+          </m:math>
+        </equation>
+        <para id="id213865">Thus the extremal metric will have metric area between <m:math overflow="scroll"><m:mrow><m:mfrac><m:mn>8</m:mn><m:mi>π</m:mi></m:mfrac><m:mo>≈</m:mo></m:mrow></m:math> 2.54 and 2.95.</para>
+      </section>
+    </section>
+    <section id="id213887">
+      <title>Future Work</title>
+      <para id="id213893">A primary goal of any future work is creating a continuous minimizing metric on the disk and Swiss Cross. Further, some of the methods developed here can be applied to similar problems in extremal length.
+Many related problems involve sets of curves which connect two boundary sets. Specifically, the hexagon or Swiss hexagon (i.e. the hexagon with unit squares attached to the sides) are two interesting cases that could be the subject of further research.</para>
+    </section>
+    <section id="id213902">
+      <title>Bibliography</title>
+      <para id="id213908">1. Ahlfors, Lars V. <emphasis effect="italics">Conformal Invariants: Topics in Geometric Function Theory</emphasis>. New York: McGraw-Hill, 1973. Print.</para>
+    </section><section id="eip-300"><title>Acknowledgements</title><para id="eip-591">
+We would like to thank Mike Wolf, Colin Carroll, Leo Rosales, Bob Hardt, Paul Munger, and Renee Laverdiere for their help and guidance.  We would also like to acknowledge the Rice University VIGRE program.  A credit is due to the VIGRE program for the Summary section.
+</para></section>
+  </content>
+</document>

@@ -1,0 +1,211 @@
+<document xmlns="http://cnx.rice.edu/cnxml" xmlns:m="http://www.w3.org/1998/Math/MathML" xmlns:md="http://cnx.rice.edu/mdml">
+  <title>Cell Assemblies: A Binary Integer Programming Problem</title>
+  <metadata>
+  <md:content-id>m30936</md:content-id><md:title>Cell Assemblies: A Binary Integer Programming Problem</md:title>
+  <md:abstract>This report summarizes work done as part of the Computational Neuroscience PFUG under Rice University's VIGRE program. VIGRE is a program of Vertically Integrated Grants for Research and Education in the Mathematical Sciences under the direction of the National Science Foundation. A PFUG is a group of Postdocs, Faculty, Undergraduates and Graduate students formed round the study of a common problem. This module reproduces the work G. Palm "Towards a Theory of Cell Assemblies". This work was studied in the Rice University VIGRE/REU program in the Summer of 2009.</md:abstract>
+  <md:uuid>a9360f5c-872f-4183-9687-3e03211e900e</md:uuid>
+</metadata>
+
+<content>
+    <section id="cid1">
+      <title>Module Goal</title>
+      <list id="id235315" display="block" list-type="enumerated">
+        <item id="uid1">Provide biological motivation for finding cell assemblies in a network of neurons
+</item>
+        <item id="uid2">Understand how mathematics and graph theory can be used to locate cell assemblies in a neural network
+</item>
+        <item id="uid3">Understand how a minimal <emphasis effect="italics">k</emphasis>-core can be used to find a <emphasis effect="italics">k</emphasis>-assembly
+</item>
+        <item id="uid4">Learn how to use a bulit-in MATLAB function, <emphasis effect="italics">bintprog</emphasis>, to aid in the finding of cell assemblies
+</item>
+      </list>
+    </section>
+    <section id="cid2">
+      <title>Introduction</title>
+      <para id="id235398">Ever since psychologists and neuroscientists began studying the physiological inner workings of the brain, they have been puzzled by many questions. How are concepts stored and recalled within our brains? How does learning and memory occur? In 1949, D.O. Hebb tried to explain the answers to these questions in terms of cell assemblies in his book <emphasis effect="italics">The Organization of Behavior</emphasis>. Hebb asserts that a cell assembly is a group of neurons wired in a specific manner such that when a sufficient amount of neurons in this group become excited, the entire group becomes excited in a synchronized manner. Hebb went on to explain that these cell assemblies form via synaptic plasticity. He claims that if neuron A repeatedly fires neuron B, some metabolic activity occurs increasing the efficiency in which neuron A fires neuron B. This phenomenon is more commonly known as “cells that fire together, wire together.” Hebb postulates that the ignition of a series of these groups of neurons, or cell assemblies, can explain how concepts are stored and recalled within our brains, thus allowing learning and memory to occur.</para>
+    </section>
+    <section id="cid3">
+      <title>Mathematics of Cell Assemblies</title>
+      <para id="id235431">In 1989, G. Palm was the first mathematician to give a mathematical definition of cell assemblies in his article <emphasis effect="italics">Towards a Theory of Cell Assemblies</emphasis>. By finding a connection between graph theory and Palm's mathematical definition of cell assemblies, we have found a method for translating Palm's mathematical definition of a cell assembly into a binary integer programming problem. This has allowed us to find at least one cell assembly in a network of neurons and also gives us hope for finding more cell assemblies in the same networks. If we let <emphasis effect="italics">G</emphasis> be a graph with a set of vertices <m:math overflow="scroll"><m:mrow><m:mo>{</m:mo><m:msub><m:mi>v</m:mi><m:mi>i</m:mi></m:msub><m:mo>:</m:mo><m:mi>i</m:mi><m:mo>=</m:mo><m:mn>1</m:mn><m:msub><m:mo>,</m:mo><m:mo>⋯</m:mo></m:msub><m:mo>,</m:mo><m:mi>n</m:mi><m:mo>}</m:mo></m:mrow></m:math> and a set of edges <m:math overflow="scroll"><m:mrow><m:mo>{</m:mo><m:msub><m:mi>w</m:mi><m:mi>i</m:mi></m:msub><m:mo>:</m:mo><m:mi>i</m:mi><m:mo>=</m:mo><m:mn>1</m:mn><m:msub><m:mo>,</m:mo><m:mo>⋯</m:mo></m:msub><m:mo>,</m:mo><m:mi>p</m:mi><m:mo>}</m:mo></m:mrow></m:math>, we can take the following from Palm to help us locate a cell assembly in a network of neurons:</para>
+      <section id="uid5">
+        <title>Adjacency Matrix (<emphasis effect="italics">A<sub>d</sub></emphasis>)</title>
+        <para id="id235552">An adjacency matrix(<emphasis effect="italics">A<sub>d</sub></emphasis>) is a matrix of binary elements representing the connectivity of a given network of neurons such that if <m:math overflow="scroll"><m:mrow><m:msub><m:mi>A</m:mi><m:mi>d</m:mi></m:msub><m:mrow><m:mo>(</m:mo><m:mi>n</m:mi><m:mo>,</m:mo><m:mi>m</m:mi><m:mo>)</m:mo></m:mrow><m:mo>=</m:mo><m:mn>1</m:mn></m:mrow></m:math> there exists a connection between neurons <emphasis effect="italics">n</emphasis> and <emphasis effect="italics">m</emphasis> and conversely, if <m:math overflow="scroll"><m:mrow><m:msub><m:mi>A</m:mi><m:mi>d</m:mi></m:msub><m:mrow><m:mo>(</m:mo><m:mi>n</m:mi><m:mo>,</m:mo><m:mi>m</m:mi><m:mo>)</m:mo></m:mrow><m:mo>=</m:mo><m:mn>0</m:mn></m:mrow></m:math> then no connection exists between neurons <emphasis effect="italics">n</emphasis> and <emphasis effect="italics">m</emphasis></para>
+        <figure id="uid6">
+          <media id="uid6_media" alt="">
+            <image mime-type="image/png" src="../../media/Adjacency.png" id="uid6_onlineimage" width="539"><!-- NOTE: attribute width changes image size online (pixels). original width is 539. --></image>
+            <image for="pdf" mime-type="application/postscript" src="../../media/Adjacency.eps" id="uid6_printimage"/>
+          </media>
+          <caption>Five neuron network and the given adjacency matrix</caption>
+        </figure>
+      </section>
+      <section id="uid7">
+        <title>Threshold (<emphasis effect="italics">k</emphasis>)</title>
+        <para id="id235871">In undirected, unweighted graphs the threshold(<emphasis effect="italics">k</emphasis>) is the minimum number of inputs a neuron needs in order to become excited</para>
+      </section>
+      <section id="uid8">
+        
+        
+        <title>The excitation map, e(x,k)</title><list id="id235904" display="block" list-type="labeled-item"><item id="uid9">let <emphasis effect="italics">X</emphasis> be a subgraph in <emphasis effect="italics">G</emphasis>:
+<equation id="id235934"><m:math overflow="scroll" mode="display"><m:mrow><m:msub><m:mi>x</m:mi><m:mi>i</m:mi></m:msub><m:mo>=</m:mo><m:mfenced separators="" open="{" close=""><m:mtable><m:mtr><m:mtd columnalign="left"><m:mn>1</m:mn></m:mtd><m:mtd columnalign="left"><m:mrow><m:mtext>if</m:mtext><m:mspace width="4.pt"/><m:msub><m:mi>v</m:mi><m:mi>i</m:mi></m:msub><m:mo>∈</m:mo><m:mi>X</m:mi></m:mrow></m:mtd></m:mtr><m:mtr><m:mtd columnalign="left"><m:mn>0</m:mn></m:mtd><m:mtd columnalign="left"><m:mrow><m:mtext>if</m:mtext><m:mspace width="4.pt"/><m:mtext>otherwise</m:mtext></m:mrow></m:mtd></m:mtr></m:mtable></m:mfenced></m:mrow></m:math></equation></item>
+          <item id="uid10">Where <emphasis effect="italics">x</emphasis> is a binary vector representing the presence (1) or absence (0) of a neuron.
+<equation id="id236028"><m:math overflow="scroll" mode="display"><m:mrow><m:mi>e</m:mi><m:msub><m:mrow/><m:mi>i</m:mi></m:msub><m:mrow><m:mo>(</m:mo><m:mi>x</m:mi><m:mo>,</m:mo><m:mi>k</m:mi><m:mo>)</m:mo></m:mrow><m:mo>=</m:mo><m:mfenced separators="" open="{" close=""><m:mtable><m:mtr><m:mtd columnalign="left"><m:mn>1</m:mn></m:mtd><m:mtd columnalign="left"><m:mrow><m:mtext>if</m:mtext><m:mspace width="4.pt"/><m:msub><m:mrow><m:mo>(</m:mo><m:msub><m:mi>A</m:mi><m:mi>d</m:mi></m:msub><m:mi>x</m:mi><m:mo>)</m:mo></m:mrow><m:mi>i</m:mi></m:msub><m:mo>≥</m:mo><m:mi>k</m:mi></m:mrow></m:mtd></m:mtr><m:mtr><m:mtd columnalign="left"><m:mn>0</m:mn></m:mtd><m:mtd columnalign="left"><m:mrow><m:mtext>if</m:mtext><m:mspace width="4.pt"/><m:mtext>otherwise</m:mtext></m:mrow></m:mtd></m:mtr></m:mtable></m:mfenced></m:mrow></m:math></equation>
+</item>
+          <item id="uid11"><emphasis effect="italics">x</emphasis> is an invariant set if:
+<equation id="id236189"><m:math overflow="scroll" mode="display"><m:mrow><m:mi>e</m:mi><m:mo>(</m:mo><m:mi>x</m:mi><m:mo>,</m:mo><m:mi>k</m:mi><m:mo>)</m:mo><m:mo>=</m:mo><m:mi>x</m:mi></m:mrow></m:math></equation></item>
+        </list>
+      </section>
+    </section>
+    <section id="cid4">
+      <title>Graph Theory and Cell Assemblies</title>
+      <para id="id236225">Using tools from graph theory, we are able to link a certain class of Palm's cell assemblies, which we will call a <emphasis effect="italics">k</emphasis>-assembly, to the closure of a minimal <emphasis effect="italics">k</emphasis>-core. Using MATLAB, we are able to find a minimal <emphasis effect="italics">k</emphasis>-core and it's closure allowing us to find a <emphasis effect="italics">k</emphasis>-assembly in any given network of neurons.</para>
+      <section id="uid12">
+        <title><emphasis effect="italics">k</emphasis>-cores</title>
+        <para id="id236278"><emphasis effect="italics">k</emphasis>-cores are a concept in graph theory that has been widely used and studied by many graph theorists for locating cohesive subsets in a given graph. A <emphasis effect="italics">k</emphasis>-core can be defined as:</para>
+        <list id="id236297" display="block" list-type="labeled-item">
+          <item id="uid13">Given graph <emphasis effect="italics">G</emphasis>, subgraph <emphasis effect="italics">X</emphasis> is a <emphasis effect="italics">k</emphasis>-core if every node in <emphasis effect="italics">X</emphasis> has at lease <emphasis effect="italics">k</emphasis> neighbors in <emphasis effect="italics">X</emphasis>. A <emphasis effect="italics">k</emphasis>-core can be described as minimal if no proper subset of the <emphasis effect="italics">k</emphasis>-core is also a <emphasis effect="italics">k</emphasis>-core.
+</item>
+        </list>
+        <figure id="uid14"><media id="uid14_media" alt="">
+            <image mime-type="image/png" src="../../media/kcore.png" id="uid14_onlineimage" width="300"><!-- NOTE: attribute width changes image size online (pixels). original width is 423. --></image>
+            <image for="pdf" mime-type="application/postscript" src="../../media/kcore.eps" id="uid14_printimage"/>
+          </media>
+          
+        <caption><m:math overflow="scroll"><m:mrow><m:mi>X</m:mi><m:mo>=</m:mo><m:mo>{</m:mo><m:mn>1</m:mn><m:mo>,</m:mo><m:mn>2</m:mn><m:mo>,</m:mo><m:mn>4</m:mn><m:mo>}</m:mo></m:mrow></m:math> is a minimal 2-core</caption></figure>
+      </section>
+    </section>
+    <section id="cid5">
+      <title>Algorithms for Finding a <emphasis effect="italics">k</emphasis>-assembly</title>
+      <para id="id236439"><emphasis effect="bold">The closure (the invariant set generated by iterating the e map) of a minimal <emphasis effect="italics">k</emphasis>-core is a <emphasis effect="italics">k</emphasis>-assembly</emphasis>
+      </para>
+      <list id="id236461" display="block" list-type="labeled-item"><item id="uid15">One type of cell assembly, we will call a <emphasis effect="italics">k</emphasis>-assembly, is the closure of a minimal <emphasis effect="italics">k</emphasis>-core. In order to find these <emphasis effect="italics">k</emphasis>-assemblies, we needed to develop a method for finding minimal <emphasis effect="italics">k</emphasis>-cores and their closures in any given network of neurons.
+</item>
+      </list>
+      <section id="uid16">
+        <title>Finding minimal <emphasis effect="italics">k</emphasis>-cores:</title>
+        <para id="id236526"><emphasis effect="italics">bintprog</emphasis> is a built in MATLAB function that Þnds an optimal solution to binary integer programming problems of the following form:</para>
+        <equation id="id236536">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:munder>
+                <m:mo movablelimits="true" form="prefix">min</m:mo>
+                <m:mi>x</m:mi>
+              </m:munder>
+              <m:msup>
+                <m:mi>f</m:mi>
+                <m:mi>T</m:mi>
+              </m:msup>
+              <m:mi>x</m:mi>
+            </m:mrow>
+          </m:math>
+        </equation>
+        
+        <equation id="id236584">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:mi>A</m:mi>
+              <m:mi>x</m:mi>
+              <m:mo>≤</m:mo>
+              <m:mi>b</m:mi>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <equation id="id236601"><m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <!--<m:msub>-->
+                <m:mi>x</m:mi>
+              <!--</m:msub>-->
+              <m:mo>∈</m:mo>
+              <m:msup>
+                <m:mrow>
+                  <m:mo>{</m:mo>
+                  <m:mn>0</m:mn>
+                  <m:mo>,</m:mo>
+                  <m:mn>1</m:mn>
+                  <m:mo>}</m:mo>
+                </m:mrow>
+                <m:mi>n</m:mi>
+              </m:msup>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id236638"><emphasis effect="italics">bintprog</emphasis> arguments:<m:math overflow="scroll"><m:mrow><m:mi>f</m:mi><m:mo>,</m:mo><m:mi>A</m:mi><m:mo>,</m:mo><m:mi>b</m:mi></m:mrow></m:math></para>
+        <list id="id236665" display="block" list-type="bulleted">
+          <item id="uid17"><emphasis effect="italics">f</emphasis>: coefficients of the variables of the objective functions
+</item>
+          <item id="uid18"><m:math overflow="scroll"><m:mrow><m:mi>A</m:mi><m:mo>,</m:mo><m:mi>b</m:mi></m:mrow></m:math>: Using the threshold inequality we can find <emphasis effect="italics">A</emphasis>:
+<equation id="id236721"><m:math overflow="scroll" mode="display"><m:mrow><m:msub><m:mi>A</m:mi><m:mi>d</m:mi></m:msub><m:mi>x</m:mi><m:mo>≥</m:mo><m:mi>k</m:mi><m:mi>x</m:mi><m:mo>⟹</m:mo><m:mn>0</m:mn><m:mo>≥</m:mo><m:mrow><m:mo>(</m:mo><m:mi>k</m:mi><m:mi>I</m:mi><m:mo>-</m:mo><m:msub><m:mi>A</m:mi><m:mi>d</m:mi></m:msub><m:mo>)</m:mo></m:mrow><m:mi>x</m:mi></m:mrow></m:math></equation><emphasis effect="italics">bintprog</emphasis> minimizes <m:math overflow="scroll"><m:mrow><m:msup><m:mi>f</m:mi><m:mi>T</m:mi></m:msup><m:mi>x</m:mi></m:mrow></m:math> constrained to <m:math overflow="scroll"><m:mrow><m:mi>A</m:mi><m:mi>x</m:mi><m:mo>≤</m:mo><m:mi>b</m:mi></m:mrow></m:math>. Because x=0 satisfies the inequality we must add an additional constraint
+<equation id="id236816"><m:math overflow="scroll" mode="display"><m:mrow><m:msub><m:mi>x</m:mi><m:mn>1</m:mn></m:msub><m:mo>+</m:mo><m:msub><m:mi>x</m:mi><m:mn>2</m:mn></m:msub><m:mo>+</m:mo><m:mo>.</m:mo><m:mo>.</m:mo><m:mo>.</m:mo><m:mo>+</m:mo><m:msub><m:mi>x</m:mi><m:mi>n</m:mi></m:msub><m:mo>≥</m:mo><m:mn>1</m:mn></m:mrow></m:math></equation><equation id="id236862"><m:math overflow="scroll" mode="display"><m:mrow><m:mi>A</m:mi><m:mo>=</m:mo><m:mfenced open="(" close=")"><m:mfrac><m:mrow><m:mi>k</m:mi><m:mi>I</m:mi><m:mo>-</m:mo><m:msub><m:mi>A</m:mi><m:mi>d</m:mi></m:msub></m:mrow><m:mrow><m:mo>-</m:mo><m:mn>1</m:mn><m:mo>-</m:mo><m:mn>1</m:mn><m:mo>-</m:mo><m:mn>1</m:mn><m:mo>.</m:mo><m:mo>.</m:mo><m:mo>.</m:mo></m:mrow></m:mfrac></m:mfenced><m:mspace width="10.pt"/></m:mrow></m:math></equation><equation id="id236921"><m:math overflow="scroll" mode="display"><m:mrow><m:mi>b</m:mi><m:mo>=</m:mo><m:mfenced separators="" open="(" close=")"><m:mtable><m:mtr><m:mtd><m:mn>0</m:mn></m:mtd></m:mtr><m:mtr><m:mtd><m:mn>0</m:mn></m:mtd></m:mtr><m:mtr><m:mtd><m:mn>0</m:mn></m:mtd></m:mtr><m:mtr><m:mtd><m:mo>⋮</m:mo></m:mtd></m:mtr><m:mtr><m:mtd><m:mn>0</m:mn></m:mtd></m:mtr><m:mtr><m:mtd><m:mrow><m:mo>-</m:mo><m:mn>1</m:mn></m:mrow></m:mtd></m:mtr></m:mtable></m:mfenced></m:mrow></m:math></equation></item>
+        </list>
+      </section>
+    </section>
+    <section id="cid6">
+      <title>Algorithm Examples</title>
+      <section id="uid19">
+        <title><emphasis effect="italics">bintprog</emphasis> Example</title>
+        <list id="id236994" display="block" list-type="labeled-item">
+          <item id="uid20">Given the following graph, its corresponding adjacency matrix and threshold of <m:math overflow="scroll"><m:mrow><m:mi>k</m:mi><m:mo>=</m:mo><m:mn>2</m:mn></m:mrow></m:math>, <emphasis effect="italics">bintprog</emphasis> can find a minimal 2-core:
+<figure id="uid21"><media id="uid21_media" alt=""><image mime-type="image/png" src="../../media/bintprogG.png" id="uid21_onlineimage" width="310"><!-- NOTE: attribute width changes image size online (pixels). original width is 448. --></image><image for="pdf" mime-type="application/postscript" src="../../media/bintprogG.eps" id="uid21_printimage"/></media></figure><equation id="id237040"><m:math overflow="scroll" mode="display"><m:mrow><m:msub><m:mi>A</m:mi><m:mi>d</m:mi></m:msub><m:mo>=</m:mo><m:mfenced separators="" open="(" close=")"><m:mtable><m:mtr><m:mtd><m:mn>0</m:mn></m:mtd><m:mtd><m:mn>1</m:mn></m:mtd><m:mtd><m:mn>0</m:mn></m:mtd><m:mtd><m:mn>0</m:mn></m:mtd><m:mtd><m:mn>0</m:mn></m:mtd><m:mtd><m:mn>1</m:mn></m:mtd></m:mtr><m:mtr><m:mtd><m:mn>1</m:mn></m:mtd><m:mtd><m:mn>0</m:mn></m:mtd><m:mtd><m:mn>1</m:mn></m:mtd><m:mtd><m:mn>0</m:mn></m:mtd><m:mtd><m:mn>1</m:mn></m:mtd><m:mtd><m:mn>1</m:mn></m:mtd></m:mtr><m:mtr><m:mtd><m:mn>0</m:mn></m:mtd><m:mtd><m:mn>1</m:mn></m:mtd><m:mtd><m:mn>0</m:mn></m:mtd><m:mtd><m:mn>1</m:mn></m:mtd><m:mtd><m:mn>1</m:mn></m:mtd><m:mtd><m:mn>1</m:mn></m:mtd></m:mtr><m:mtr><m:mtd><m:mn>0</m:mn></m:mtd><m:mtd><m:mn>0</m:mn></m:mtd><m:mtd><m:mn>1</m:mn></m:mtd><m:mtd><m:mn>0</m:mn></m:mtd><m:mtd><m:mn>1</m:mn></m:mtd><m:mtd><m:mn>0</m:mn></m:mtd></m:mtr><m:mtr><m:mtd><m:mn>0</m:mn></m:mtd><m:mtd><m:mn>1</m:mn></m:mtd><m:mtd><m:mn>1</m:mn></m:mtd><m:mtd><m:mn>1</m:mn></m:mtd><m:mtd><m:mn>0</m:mn></m:mtd><m:mtd><m:mn>1</m:mn></m:mtd></m:mtr><m:mtr><m:mtd><m:mn>1</m:mn></m:mtd><m:mtd><m:mn>1</m:mn></m:mtd><m:mtd><m:mn>1</m:mn></m:mtd><m:mtd><m:mn>0</m:mn></m:mtd><m:mtd><m:mn>1</m:mn></m:mtd><m:mtd><m:mn>0</m:mn></m:mtd></m:mtr></m:mtable></m:mfenced></m:mrow></m:math></equation></item>
+          <item id="uid22"><emphasis effect="italics">bintprog</emphasis> arguments:
+<equation id="id237206"><m:math overflow="scroll" mode="display"><m:mrow><m:mi>f</m:mi><m:mo>=</m:mo><m:mfenced separators="" open="(" close=")"><m:mtable><m:mtr><m:mtd><m:mn>1</m:mn></m:mtd></m:mtr><m:mtr><m:mtd><m:mn>1</m:mn></m:mtd></m:mtr><m:mtr><m:mtd><m:mn>1</m:mn></m:mtd></m:mtr><m:mtr><m:mtd><m:mn>1</m:mn></m:mtd></m:mtr><m:mtr><m:mtd><m:mn>1</m:mn></m:mtd></m:mtr><m:mtr><m:mtd><m:mn>1</m:mn></m:mtd></m:mtr></m:mtable></m:mfenced><m:mspace width="50.pt"/><m:mi>A</m:mi><m:mo>=</m:mo><m:mfenced separators="" open="(" close=")"><m:mtable><m:mtr><m:mtd><m:mn>2</m:mn></m:mtd><m:mtd><m:mrow><m:mo>-</m:mo><m:mn>1</m:mn></m:mrow></m:mtd><m:mtd><m:mn>0</m:mn></m:mtd><m:mtd><m:mn>0</m:mn></m:mtd><m:mtd><m:mn>0</m:mn></m:mtd><m:mtd><m:mrow><m:mo>-</m:mo><m:mn>1</m:mn></m:mrow></m:mtd></m:mtr><m:mtr><m:mtd><m:mrow><m:mo>-</m:mo><m:mn>1</m:mn></m:mrow></m:mtd><m:mtd><m:mn>2</m:mn></m:mtd><m:mtd><m:mrow><m:mo>-</m:mo><m:mn>1</m:mn></m:mrow></m:mtd><m:mtd><m:mn>0</m:mn></m:mtd><m:mtd><m:mrow><m:mo>-</m:mo><m:mn>1</m:mn></m:mrow></m:mtd><m:mtd><m:mrow><m:mo>-</m:mo><m:mn>1</m:mn></m:mrow></m:mtd></m:mtr><m:mtr><m:mtd><m:mn>0</m:mn></m:mtd><m:mtd><m:mrow><m:mo>-</m:mo><m:mn>1</m:mn></m:mrow></m:mtd><m:mtd><m:mn>2</m:mn></m:mtd><m:mtd><m:mrow><m:mo>-</m:mo><m:mn>1</m:mn></m:mrow></m:mtd><m:mtd><m:mrow><m:mo>-</m:mo><m:mn>1</m:mn></m:mrow></m:mtd><m:mtd><m:mrow><m:mo>-</m:mo><m:mn>1</m:mn></m:mrow></m:mtd></m:mtr><m:mtr><m:mtd><m:mn>0</m:mn></m:mtd><m:mtd><m:mn>0</m:mn></m:mtd><m:mtd><m:mrow><m:mo>-</m:mo><m:mn>1</m:mn></m:mrow></m:mtd><m:mtd><m:mn>2</m:mn></m:mtd><m:mtd><m:mrow><m:mo>-</m:mo><m:mn>1</m:mn></m:mrow></m:mtd><m:mtd><m:mn>0</m:mn></m:mtd></m:mtr><m:mtr><m:mtd><m:mn>0</m:mn></m:mtd><m:mtd><m:mrow><m:mo>-</m:mo><m:mn>1</m:mn></m:mrow></m:mtd><m:mtd><m:mrow><m:mo>-</m:mo><m:mn>1</m:mn></m:mrow></m:mtd><m:mtd><m:mrow><m:mo>-</m:mo><m:mn>1</m:mn></m:mrow></m:mtd><m:mtd><m:mn>2</m:mn></m:mtd><m:mtd><m:mrow><m:mo>-</m:mo><m:mn>1</m:mn></m:mrow></m:mtd></m:mtr><m:mtr><m:mtd><m:mrow><m:mo>-</m:mo><m:mn>1</m:mn></m:mrow></m:mtd><m:mtd><m:mrow><m:mo>-</m:mo><m:mn>1</m:mn></m:mrow></m:mtd><m:mtd><m:mrow><m:mo>-</m:mo><m:mn>1</m:mn></m:mrow></m:mtd><m:mtd><m:mn>0</m:mn></m:mtd><m:mtd><m:mrow><m:mo>-</m:mo><m:mn>1</m:mn></m:mrow></m:mtd><m:mtd><m:mn>2</m:mn></m:mtd></m:mtr><m:mtr><m:mtd><m:mrow><m:mo>-</m:mo><m:mn>1</m:mn></m:mrow></m:mtd><m:mtd><m:mrow><m:mo>-</m:mo><m:mn>1</m:mn></m:mrow></m:mtd><m:mtd><m:mrow><m:mo>-</m:mo><m:mn>1</m:mn></m:mrow></m:mtd><m:mtd><m:mrow><m:mo>-</m:mo><m:mn>1</m:mn></m:mrow></m:mtd><m:mtd><m:mrow><m:mo>-</m:mo><m:mn>1</m:mn></m:mrow></m:mtd><m:mtd><m:mrow><m:mo>-</m:mo><m:mn>1</m:mn></m:mrow></m:mtd></m:mtr></m:mtable></m:mfenced><m:mspace width="50.pt"/><m:mi>b</m:mi><m:mo>=</m:mo><m:mfenced separators="" open="(" close=")"><m:mtable><m:mtr><m:mtd><m:mn>0</m:mn></m:mtd></m:mtr><m:mtr><m:mtd><m:mn>0</m:mn></m:mtd></m:mtr><m:mtr><m:mtd><m:mn>0</m:mn></m:mtd></m:mtr><m:mtr><m:mtd><m:mn>0</m:mn></m:mtd></m:mtr><m:mtr><m:mtd><m:mn>0</m:mn></m:mtd></m:mtr><m:mtr><m:mtd><m:mn>0</m:mn></m:mtd></m:mtr><m:mtr><m:mtd><m:mrow><m:mo>-</m:mo><m:mn>1</m:mn></m:mrow></m:mtd></m:mtr></m:mtable></m:mfenced></m:mrow></m:math></equation></item>
+          <item id="uid23"><emphasis effect="italics">bintprog</emphasis> returns a vector, <emphasis effect="italics">x</emphasis>, indicating which nodes are in the minimal <emphasis effect="italics">k</emphasis>-core:
+<equation id="id237578"><m:math overflow="scroll" mode="display"><m:mrow><m:mi>x</m:mi><m:mo>=</m:mo><m:mfenced separators="" open="(" close=")"><m:mtable><m:mtr><m:mtd><m:mn>1</m:mn></m:mtd></m:mtr><m:mtr><m:mtd><m:mn>1</m:mn></m:mtd></m:mtr><m:mtr><m:mtd><m:mn>0</m:mn></m:mtd></m:mtr><m:mtr><m:mtd><m:mn>0</m:mn></m:mtd></m:mtr><m:mtr><m:mtd><m:mn>0</m:mn></m:mtd></m:mtr><m:mtr><m:mtd><m:mn>1</m:mn></m:mtd></m:mtr></m:mtable></m:mfenced></m:mrow></m:math></equation></item>
+          <item id="uid24">{1,2,6} is the minimal 2-core found by <emphasis effect="italics">bintprog</emphasis></item>
+          <item id="uid25">There are, however, many other minimal <emphasis effect="italics">k</emphasis>-cores in this set of neurons such as: {3,4,5} and {2,5,6}. Our goal for the future is to find some method that enables <emphasis effect="italics">bintprog</emphasis> to find all of the minimal <emphasis effect="italics">k</emphasis>-cores in a given network allowing us to find all of the <emphasis effect="italics">k</emphasis>-assemblies in that network.
+</item>
+        </list>
+      </section>
+      <section id="uid26">
+        <title>Closure Example</title>
+        <para id="id237699">We will use the same graph as the previous <emphasis effect="italics">bintprog</emphasis> example:</para>
+        <list id="id237708" display="block" list-type="enumerated">
+          <item id="uid27">Create a subset, <emphasis effect="italics">x</emphasis>. We will use the minimal 2-core found by <emphasis effect="italics">bintprog</emphasis>:
+</item>
+          <item id="uid28">Find <m:math overflow="scroll"><m:mrow><m:msup><m:mi>e</m:mi><m:mn>1</m:mn></m:msup><m:mrow><m:mo>(</m:mo><m:mi>x</m:mi><m:mo>,</m:mo><m:mi>k</m:mi><m:mo>)</m:mo></m:mrow></m:mrow></m:math>:
+<equation id="id237778"><m:math overflow="scroll" mode="display"><m:mrow><m:mfenced separators="" open="(" close=")"><m:mtable><m:mtr><m:mtd><m:mn>0</m:mn></m:mtd><m:mtd><m:mn>1</m:mn></m:mtd><m:mtd><m:mn>0</m:mn></m:mtd><m:mtd><m:mn>0</m:mn></m:mtd><m:mtd><m:mn>0</m:mn></m:mtd><m:mtd><m:mn>1</m:mn></m:mtd></m:mtr><m:mtr><m:mtd><m:mn>1</m:mn></m:mtd><m:mtd><m:mn>0</m:mn></m:mtd><m:mtd><m:mn>1</m:mn></m:mtd><m:mtd><m:mn>0</m:mn></m:mtd><m:mtd><m:mn>1</m:mn></m:mtd><m:mtd><m:mn>1</m:mn></m:mtd></m:mtr><m:mtr><m:mtd><m:mn>0</m:mn></m:mtd><m:mtd><m:mn>1</m:mn></m:mtd><m:mtd><m:mn>0</m:mn></m:mtd><m:mtd><m:mn>1</m:mn></m:mtd><m:mtd><m:mn>1</m:mn></m:mtd><m:mtd><m:mn>1</m:mn></m:mtd></m:mtr><m:mtr><m:mtd><m:mn>0</m:mn></m:mtd><m:mtd><m:mn>0</m:mn></m:mtd><m:mtd><m:mn>1</m:mn></m:mtd><m:mtd><m:mn>0</m:mn></m:mtd><m:mtd><m:mn>1</m:mn></m:mtd><m:mtd><m:mn>0</m:mn></m:mtd></m:mtr><m:mtr><m:mtd><m:mn>0</m:mn></m:mtd><m:mtd><m:mn>1</m:mn></m:mtd><m:mtd><m:mn>1</m:mn></m:mtd><m:mtd><m:mn>1</m:mn></m:mtd><m:mtd><m:mn>0</m:mn></m:mtd><m:mtd><m:mn>1</m:mn></m:mtd></m:mtr><m:mtr><m:mtd><m:mn>1</m:mn></m:mtd><m:mtd><m:mn>1</m:mn></m:mtd><m:mtd><m:mn>1</m:mn></m:mtd><m:mtd><m:mn>0</m:mn></m:mtd><m:mtd><m:mn>1</m:mn></m:mtd><m:mtd><m:mn>0</m:mn></m:mtd></m:mtr></m:mtable></m:mfenced><m:mfenced separators="" open="(" close=")"><m:mtable><m:mtr><m:mtd><m:mn>1</m:mn></m:mtd></m:mtr><m:mtr><m:mtd><m:mn>1</m:mn></m:mtd></m:mtr><m:mtr><m:mtd><m:mn>0</m:mn></m:mtd></m:mtr><m:mtr><m:mtd><m:mn>0</m:mn></m:mtd></m:mtr><m:mtr><m:mtd><m:mn>0</m:mn></m:mtd></m:mtr><m:mtr><m:mtd><m:mn>1</m:mn></m:mtd></m:mtr></m:mtable></m:mfenced><m:mo>=</m:mo><m:mfenced separators="" open="(" close=")"><m:mtable><m:mtr><m:mtd><m:mn>2</m:mn></m:mtd></m:mtr><m:mtr><m:mtd><m:mn>2</m:mn></m:mtd></m:mtr><m:mtr><m:mtd><m:mn>2</m:mn></m:mtd></m:mtr><m:mtr><m:mtd><m:mn>0</m:mn></m:mtd></m:mtr><m:mtr><m:mtd><m:mn>2</m:mn></m:mtd></m:mtr><m:mtr><m:mtd><m:mn>2</m:mn></m:mtd></m:mtr></m:mtable></m:mfenced><m:mo>⟹</m:mo><m:msup><m:mi>e</m:mi><m:mn>1</m:mn></m:msup><m:mrow><m:mo>(</m:mo><m:mi>x</m:mi><m:mo>,</m:mo><m:mi>k</m:mi><m:mo>)</m:mo></m:mrow><m:mo>=</m:mo><m:mfenced separators="" open="(" close=")"><m:mtable><m:mtr><m:mtd><m:mn>1</m:mn></m:mtd></m:mtr><m:mtr><m:mtd><m:mn>1</m:mn></m:mtd></m:mtr><m:mtr><m:mtd><m:mn>1</m:mn></m:mtd></m:mtr><m:mtr><m:mtd><m:mn>0</m:mn></m:mtd></m:mtr><m:mtr><m:mtd><m:mn>1</m:mn></m:mtd></m:mtr><m:mtr><m:mtd><m:mn>1</m:mn></m:mtd></m:mtr></m:mtable></m:mfenced></m:mrow></m:math></equation>
+Because <m:math overflow="scroll"><m:mrow><m:msup><m:mi>e</m:mi><m:mn>1</m:mn></m:msup><m:mo>≠</m:mo><m:mi>x</m:mi></m:mrow></m:math> we must apply <m:math overflow="scroll"><m:mrow><m:msub><m:mi>e</m:mi><m:mi>i</m:mi></m:msub><m:mrow><m:mo>(</m:mo><m:mi>x</m:mi><m:mo>,</m:mo><m:mi>k</m:mi><m:mo>)</m:mo></m:mrow></m:mrow></m:math> again:
+<equation id="id238097"><m:math overflow="scroll" mode="display"><m:mrow><m:mfenced separators="" open="(" close=")"><m:mtable><m:mtr><m:mtd><m:mn>0</m:mn></m:mtd><m:mtd><m:mn>1</m:mn></m:mtd><m:mtd><m:mn>0</m:mn></m:mtd><m:mtd><m:mn>0</m:mn></m:mtd><m:mtd><m:mn>0</m:mn></m:mtd><m:mtd><m:mn>1</m:mn></m:mtd></m:mtr><m:mtr><m:mtd><m:mn>1</m:mn></m:mtd><m:mtd><m:mn>0</m:mn></m:mtd><m:mtd><m:mn>1</m:mn></m:mtd><m:mtd><m:mn>0</m:mn></m:mtd><m:mtd><m:mn>1</m:mn></m:mtd><m:mtd><m:mn>1</m:mn></m:mtd></m:mtr><m:mtr><m:mtd><m:mn>0</m:mn></m:mtd><m:mtd><m:mn>1</m:mn></m:mtd><m:mtd><m:mn>0</m:mn></m:mtd><m:mtd><m:mn>1</m:mn></m:mtd><m:mtd><m:mn>1</m:mn></m:mtd><m:mtd><m:mn>1</m:mn></m:mtd></m:mtr><m:mtr><m:mtd><m:mn>0</m:mn></m:mtd><m:mtd><m:mn>0</m:mn></m:mtd><m:mtd><m:mn>1</m:mn></m:mtd><m:mtd><m:mn>0</m:mn></m:mtd><m:mtd><m:mn>1</m:mn></m:mtd><m:mtd><m:mn>0</m:mn></m:mtd></m:mtr><m:mtr><m:mtd><m:mn>0</m:mn></m:mtd><m:mtd><m:mn>1</m:mn></m:mtd><m:mtd><m:mn>1</m:mn></m:mtd><m:mtd><m:mn>1</m:mn></m:mtd><m:mtd><m:mn>0</m:mn></m:mtd><m:mtd><m:mn>1</m:mn></m:mtd></m:mtr><m:mtr><m:mtd><m:mn>1</m:mn></m:mtd><m:mtd><m:mn>1</m:mn></m:mtd><m:mtd><m:mn>1</m:mn></m:mtd><m:mtd><m:mn>0</m:mn></m:mtd><m:mtd><m:mn>1</m:mn></m:mtd><m:mtd><m:mn>0</m:mn></m:mtd></m:mtr></m:mtable></m:mfenced><m:mfenced separators="" open="(" close=")"><m:mtable><m:mtr><m:mtd><m:mn>1</m:mn></m:mtd></m:mtr><m:mtr><m:mtd><m:mn>1</m:mn></m:mtd></m:mtr><m:mtr><m:mtd><m:mn>1</m:mn></m:mtd></m:mtr><m:mtr><m:mtd><m:mn>0</m:mn></m:mtd></m:mtr><m:mtr><m:mtd><m:mn>1</m:mn></m:mtd></m:mtr><m:mtr><m:mtd><m:mn>1</m:mn></m:mtd></m:mtr></m:mtable></m:mfenced><m:mo>=</m:mo><m:mfenced separators="" open="(" close=")"><m:mtable><m:mtr><m:mtd><m:mn>2</m:mn></m:mtd></m:mtr><m:mtr><m:mtd><m:mn>4</m:mn></m:mtd></m:mtr><m:mtr><m:mtd><m:mn>3</m:mn></m:mtd></m:mtr><m:mtr><m:mtd><m:mn>2</m:mn></m:mtd></m:mtr><m:mtr><m:mtd><m:mn>3</m:mn></m:mtd></m:mtr><m:mtr><m:mtd><m:mn>4</m:mn></m:mtd></m:mtr></m:mtable></m:mfenced><m:mo>⟹</m:mo><m:msup><m:mi>e</m:mi><m:mn>2</m:mn></m:msup><m:mrow><m:mo>(</m:mo><m:mi>x</m:mi><m:mo>,</m:mo><m:mi>k</m:mi><m:mo>)</m:mo></m:mrow><m:mo>=</m:mo><m:mfenced separators="" open="(" close=")"><m:mtable><m:mtr><m:mtd><m:mn>1</m:mn></m:mtd></m:mtr><m:mtr><m:mtd><m:mn>1</m:mn></m:mtd></m:mtr><m:mtr><m:mtd><m:mn>1</m:mn></m:mtd></m:mtr><m:mtr><m:mtd><m:mn>1</m:mn></m:mtd></m:mtr><m:mtr><m:mtd><m:mn>1</m:mn></m:mtd></m:mtr><m:mtr><m:mtd><m:mn>1</m:mn></m:mtd></m:mtr></m:mtable></m:mfenced></m:mrow></m:math></equation>
+Even though <m:math overflow="scroll"><m:mrow><m:msup><m:mi>e</m:mi><m:mn>2</m:mn></m:msup><m:mrow><m:mo>(</m:mo><m:mi>x</m:mi><m:mo>,</m:mo><m:mi>k</m:mi><m:mo>)</m:mo></m:mrow><m:mo>≠</m:mo><m:mi>x</m:mi></m:mrow></m:math>, we can see that because the entire graph is excited, it will keep exciting itself, thus generating an invariant set giving us a <emphasis effect="italics">k</emphasis>-assembly:
+<equation id="id238410"><m:math overflow="scroll" mode="display"><m:mrow><m:mi>x</m:mi><m:mo>=</m:mo><m:mfenced separators="" open="(" close=")"><m:mtable><m:mtr><m:mtd><m:mn>1</m:mn></m:mtd></m:mtr><m:mtr><m:mtd><m:mn>1</m:mn></m:mtd></m:mtr><m:mtr><m:mtd><m:mn>1</m:mn></m:mtd></m:mtr><m:mtr><m:mtd><m:mn>1</m:mn></m:mtd></m:mtr><m:mtr><m:mtd><m:mn>1</m:mn></m:mtd></m:mtr><m:mtr><m:mtd><m:mn>1</m:mn></m:mtd></m:mtr></m:mtable></m:mfenced></m:mrow></m:math></equation></item>
+        </list>
+      </section>
+      <section id="uid29">
+        <title>Finding <emphasis effect="italics">k</emphasis>-assemblies</title>
+        <figure id="uid30">
+          <media id="uid30_media" alt="">
+            <image mime-type="image/png" src="../../media/CellAssembly.png" id="uid30_onlineimage" width="1120"><!-- NOTE: attribute width changes image size online (pixels). original width is 1120. --></image>
+            <image for="pdf" mime-type="application/postscript" src="../../media/CellAssembly.eps" id="uid30_printimage"/>
+          </media>
+          <caption><emphasis effect="italics">bintprog</emphasis> found a minimal 3-core <m:math overflow="scroll"><m:mrow><m:mo>{</m:mo><m:mn>5</m:mn><m:mo>,</m:mo><m:mn>6</m:mn><m:mo>,</m:mo><m:mn>7</m:mn><m:mo>,</m:mo><m:mn>15</m:mn><m:mo>}</m:mo></m:mrow></m:math> in the 15 node graph and then finds that minimal 3-core's closure (a <emphasis effect="italics">k</emphasis>-assembly).</caption>
+        </figure>
+      </section>
+    </section>
+    <section id="cid7">
+      <title>Future Work for Finding Cell Assemblies</title>
+      <para id="id238544">In order to find more cell assemblies in any given network of neurons, we have come up with a few methods of finding other minimal <emphasis effect="italics">k</emphasis>-cores in a network of neurons:</para>
+      <list id="id238557" display="block" list-type="bulleted">
+        <item id="uid31">Alter the arguments of <emphasis effect="italics">bintprog</emphasis><list id="id238576" display="block" list-type="bulleted"><item id="uid32">We have altered with the coefficients of the objective function where we would increase the value for nodes already found in a previous minimal <emphasis effect="italics">k</emphasis>-core. This method has, however, proved to be exhaustive in that we must increase the value of the objective coefficients with all possible combinations of nodes of the previously found minimal <emphasis effect="italics">k</emphasis>-cores to ensure that all the minimal <emphasis effect="italics">k</emphasis>-cores of any given graph are located.
+</item></list></item>
+        <item id="uid33">Translate other graph theoretical algorithms to fit minimal <emphasis effect="italics">k</emphasis>-cores
+<list id="id238644" display="block" list-type="bulleted"><item id="uid34">We hope to use algorithms in graph theory for finding other types of subgraphs, such as a maximal clique, and translate them to fit our problem of finding all of the minimal <emphasis effect="italics">k</emphasis>-cores of any given graph.
+</item></list></item>
+        <item id="uid35">Use probability in random graphs
+<list id="id238683" display="block" list-type="bulleted"><item id="uid36">Using probability may allow us to figure out how many minimal <emphasis effect="italics">k</emphasis>-cores a given graph may support as well as where they might be, allowing us to constrain other exhaustive methods of finding minimal <emphasis effect="italics">k</emphasis>-cores.
+</item></list></item>
+      </list>
+    </section>
+    <section id="cid8">
+      <title>Conclusion</title>
+      <para id="id238729">This module has shown how to translate the problem of finding cell assemblies in a network of neurons into a binary integer programming problem. It has shown a clear connection between cell assemblies and graph theory and also how to find at least one cell assembly in any given network of neurons. Future work for this problem includes how to find more cell assemblies in a network of neurons.</para>
+    </section>
+    <section id="cid9">
+      <title>Acknowledgements</title>
+      <para id="id238746">I would like to give a big thanks to Dr. Steve Cox and Dr. Illya Hicks for guiding us through our project of finding cell assemblies. Also thanks to the REU students, Karina Aliaga, Shaunak Das, and Diane Taylor who I collaborated with on this project. Lastly I would like to thank NSF and the VIGRE program for funding me under the NSF VIGRE Grant DMS-0240058.</para>
+    </section>
+    <section id="cid10">
+      <title>References</title>
+      <para id="id238762">1. Hebb, Donald. (1949) The Organization of Behavior. (New York: John Wiley).
+</para><para id="eip-777">2. Palm, Gunther. (1981) Towards a Theory of Cell Assemblies. Biological Cybernetics 39, pp. 181-194.
+</para>
+    </section>
+  </content>
+</document>

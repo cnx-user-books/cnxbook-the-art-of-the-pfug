@@ -1,0 +1,3359 @@
+<document xmlns="http://cnx.rice.edu/cnxml" xmlns:m="http://www.w3.org/1998/Math/MathML" xmlns:md="http://cnx.rice.edu/mdml">
+  <title>Rice University VIGRE: Modeling Cell Assemblies</title>
+  <metadata><md:content-id>undefined</md:content-id><md:title/><md:uuid>c24258f6-3ed4-4c7c-a86b-3db85ca475f2</md:uuid>
+</metadata>
+  <content>
+    <section id="uid1">
+      <title>Theory</title>
+      <para id="id2255547">One hypothesis on how ideas are structured in the brain is that groups of cells form a unit called a cell assembly. The cells within the assembly are connected with strong excitatory synapses. Thus, when enough activity occurs in the neurons within the assembly, then the entire assembly will have the ability to activate. An active assembly would meet the definition that the cells within the assembly are firing at a high rate in the same time frame. Successions of assembly activation could be the basis of how to form thoughts and give a mental representation for different concepts. This idea was introduced by Donald Hebb in <emphasis>The Organization of Behavior</emphasis>. The assembly will eventually shut down if the source of stimulation ceases or a competing assembly can provide inhibition. This theory can be extended to explain how learning occurs and possible phenomena such as perspective-rivalry. For instance, in optical illusions, such as the nectar cube shown below, there are two different possible interpretations of the perspective. It is possible that two different assemblies represent the different perspectives. In order to switch perspectives one must shut down the current perspective assembly and activate the alternate perspective. There could also be a hierarchy of assemblies. Sub-assemblies could give rise to larger assemblies. Due to synaptic plasticity different sub-assemblies that are activated in similar orders through repetition allows new larger Assemblies to form. If sufficient clues that are represented by smaller sub-assemblies are activated, the brain will be able to activate the larger assembly.</para>
+      <figure id="uid2" orient="horizontal"><media id="idp991840" alt=""><image src="../../media/neckarcube.png" mime-type="image/png" width="250"/><image for="pdf" src="../../media/neckarcube.eps" mime-type="application/postscript" print-width="2.5in"/></media>
+        <caption>The Neckar Cube has two possible perspectives. Cell Assembly rivalry could be responsible for competing interpretations.</caption>
+      </figure>
+    </section>
+    <section id="uid3">
+      <title>Module Goal</title>
+      <para id="id2255604">To get some insight on whether this is plausible we want to construct biologically accurate computational models and test assembly activation and inhibition. This module will follow the paper <emphasis>Modeling Hebbian cell assemblies comprised of cortical neurons</emphasis>, by A Lanser and E Fransen. It will show how to reproduce the results contained in the paper and the mathematics involved.</para>
+      <para id="id2255619">Here is a brief summary of what is ahead:</para>
+      <para id="id2255625">1.) Go over the neuron models and the different ion channels.</para>
+      <para id="id2255632">2.) Show how synaptic input is modeled.</para>
+      <para id="id2255638">3.) Show how differential equations are solved with time stepping.</para>
+      <para id="id2255644">4.) Show how patterns which represent different assemblies are used to "train" a network and produce weights.</para>
+      <para id="id2255651">5.) Give parameters that are used and explain parameters that are dependent on simulations.</para>
+      <para id="id2255658">6.) Run simulations by going through the matlab prompt and display results.</para>
+    </section>
+    <section id="uid4">
+      <title>Cell Models</title>
+      <para id="id2255672">Below is a quick description of the basic dynamics of neurons and how messages are relayed in neuronal networks. The mathematical model that is used in the simulations is given in detail.</para>
+      <para id="id2255678">The basic function of a neuron is the ability to relay information by means of an action potential. This is a quick depolarization burst which originates at the cell soma (main body) and travels down the axon reaching boutons. At a bouton the depolarization will cause neurotransmitters to be released into the synaptic cleft, a small space between the bouton and a spine of the target cell. The neurotransmitter then opens ion channels in the postsynaptic receptor area that can serve to excite or depress the post-synaptic neuron, depending on whether the sending neuron is excitatory or inhibitory. A cell achieves an action potential when it receive enough excitation from other cells. When the cell voltage reaches a certain threshold its firing mechanisms kick in and generate an action potential. The firing mechanism consists of voltage gated ion channels in the cell's soma membrane. These channels permability are dependent on voltage levels and are specialized to only allow specific ions to pass through. The standard action potential starts with stimuli which raises voltage sufficiently to open <m:math><m:mrow><m:mi>N</m:mi><m:msup><m:mi>a</m:mi><m:mo>+</m:mo></m:msup></m:mrow></m:math> channels. Then <m:math><m:mrow><m:mi>N</m:mi><m:msup><m:mi>a</m:mi><m:mo>+</m:mo></m:msup></m:mrow></m:math> floods in (due to diffusion) causing a depolarization of the cell. When the voltage reaches the near peak depolarization <m:math><m:msup><m:mi>K</m:mi><m:mo>+</m:mo></m:msup></m:math> gating channels open allowing <m:math><m:msup><m:mi>K</m:mi><m:mo>+</m:mo></m:msup></m:math> to rush out, lowering the potential back to rest. There are additional ions which have a role in cell dynamics. One important ion that helps regulate firing rates is <m:math><m:mrow><m:mi>C</m:mi><m:msup><m:mi>a</m:mi><m:mrow><m:mn>2</m:mn><m:mo>+</m:mo></m:mrow></m:msup></m:mrow></m:math>. <m:math><m:mrow><m:mi>C</m:mi><m:msup><m:mi>a</m:mi><m:mrow><m:mn>2</m:mn><m:mo>+</m:mo></m:mrow></m:msup></m:mrow></m:math> levels are important because they open <m:math><m:mrow><m:mi>C</m:mi><m:msup><m:mi>a</m:mi><m:mrow><m:mn>2</m:mn><m:mo>+</m:mo></m:mrow></m:msup></m:mrow></m:math> dependent <m:math><m:msup><m:mi>K</m:mi><m:mo>+</m:mo></m:msup></m:math> channels. More <m:math><m:msup><m:mi>K</m:mi><m:mo>+</m:mo></m:msup></m:math> channels lead to greater repolarization, increasing refractory times between firing and leading to lower activity. We will look at two different sources of <m:math><m:mrow><m:mi>C</m:mi><m:msup><m:mi>a</m:mi><m:mrow><m:mn>2</m:mn><m:mo>+</m:mo></m:mrow></m:msup></m:mrow></m:math>. One, through voltage gated channels. The second from NMDA receptor channels, which will be discussed in further detail ahead.</para>
+      <section id="uid5">
+        <title>Cell Types</title>
+        <para id="id2255915">There are two basic types of cells: excitatory and inhibitory. When excitatory cells fire they increase the potential in the neurons they synapse onto. Whereas, inhibitory decrease the potential. For our purposes we will use different parameters to the two cells different characteristics.</para>
+      </section>
+      <section id="uid6">
+        <title>Mathematical Model</title>
+        <para id="id2255930">The excitatory cell model used has 4 compartments per cell. The first compartment represents the soma. The other three are a chain of dendrites, which represent a collapsed dendritic tree at different distances from the soma. In the case of an inhibitory cell there will only be 2 total compartments. Cells will synapse onto compartment 4 if it is a E (excitatory) to E connection. Compartment 1 if it is an I (inhibitory) to E connection. Compartment 2 if it is an E to I connection.</para>
+        <para id="id2255942">Below is the main differential equation that governs the cell voltage in a compartment. The first term in the fraction represents the leak current. The second term is the summation of current that comes in from neighboring compartments. The third term represents Ion channel currents; they are only present at the cell soma. The fourth term is current entering from synaptic input.</para>
+        <equation id="id2255954">
+          <m:math mode="display">
+            <m:mrow>
+              <m:mfrac>
+                <m:mrow>
+                  <m:mi>d</m:mi>
+                  <m:mi>V</m:mi>
+                </m:mrow>
+                <m:mrow>
+                  <m:mi>d</m:mi>
+                  <m:mi>t</m:mi>
+                </m:mrow>
+              </m:mfrac>
+              <m:mo>=</m:mo>
+              <m:mfrac>
+                <m:mrow>
+                  <m:mfenced separators="" open="(" close=")">
+                    <m:msub>
+                      <m:mi>V</m:mi>
+                      <m:mrow>
+                        <m:mi>l</m:mi>
+                        <m:mi>e</m:mi>
+                        <m:mi>a</m:mi>
+                        <m:mi>k</m:mi>
+                      </m:mrow>
+                    </m:msub>
+                    <m:mo>-</m:mo>
+                    <m:mi>V</m:mi>
+                  </m:mfenced>
+                  <m:msub>
+                    <m:mi>G</m:mi>
+                    <m:mi>m</m:mi>
+                  </m:msub>
+                  <m:mo>+</m:mo>
+                  <m:mo>∑</m:mo>
+                  <m:mfenced separators="" open="(" close=")">
+                    <m:msub>
+                      <m:mi>V</m:mi>
+                      <m:mrow>
+                        <m:mi>c</m:mi>
+                        <m:mi>o</m:mi>
+                        <m:mi>m</m:mi>
+                        <m:mi>p</m:mi>
+                      </m:mrow>
+                    </m:msub>
+                    <m:mo>-</m:mo>
+                    <m:mi>V</m:mi>
+                  </m:mfenced>
+                  <m:msub>
+                    <m:mi>G</m:mi>
+                    <m:mrow>
+                      <m:mi>c</m:mi>
+                      <m:mi>o</m:mi>
+                      <m:mi>r</m:mi>
+                      <m:mi>e</m:mi>
+                    </m:mrow>
+                  </m:msub>
+                  <m:mo>+</m:mo>
+                  <m:msub>
+                    <m:mi>I</m:mi>
+                    <m:mrow>
+                      <m:mi>c</m:mi>
+                      <m:mi>h</m:mi>
+                      <m:mi>a</m:mi>
+                      <m:mi>n</m:mi>
+                      <m:mi>n</m:mi>
+                      <m:mi>e</m:mi>
+                      <m:mi>l</m:mi>
+                      <m:mi>s</m:mi>
+                    </m:mrow>
+                  </m:msub>
+                  <m:mo>+</m:mo>
+                  <m:msub>
+                    <m:mi>I</m:mi>
+                    <m:mrow>
+                      <m:mi>s</m:mi>
+                      <m:mi>y</m:mi>
+                      <m:mi>n</m:mi>
+                    </m:mrow>
+                  </m:msub>
+                </m:mrow>
+                <m:msub>
+                  <m:mi>C</m:mi>
+                  <m:mi>m</m:mi>
+                </m:msub>
+              </m:mfrac>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <table id="id2256356" summary="">
+          <tgroup cols="2">
+            <tbody>
+              <row>
+                <entry>Variable
+</entry>
+                <entry>Description
+</entry>
+              </row>
+              <row>
+                <entry>V</entry>
+                <entry>Compartment Potential</entry>
+              </row>
+              <row>
+                <entry>
+                  <m:math>
+                    <m:msub>
+                      <m:mi>E</m:mi>
+                      <m:mrow>
+                        <m:mi>l</m:mi>
+                        <m:mi>e</m:mi>
+                        <m:mi>a</m:mi>
+                        <m:mi>k</m:mi>
+                      </m:mrow>
+                    </m:msub>
+                  </m:math>
+                </entry>
+                <entry>Outside Potential</entry>
+              </row>
+              <row>
+                <entry>
+                  <m:math>
+                    <m:msub>
+                      <m:mi>G</m:mi>
+                      <m:mi>m</m:mi>
+                    </m:msub>
+                  </m:math>
+                </entry>
+                <entry>Membrane conductance</entry>
+              </row>
+              <row>
+                <entry>
+                  <m:math>
+                    <m:msub>
+                      <m:mi>E</m:mi>
+                      <m:mrow>
+                        <m:mi>c</m:mi>
+                        <m:mi>o</m:mi>
+                        <m:mi>m</m:mi>
+                        <m:mi>p</m:mi>
+                      </m:mrow>
+                    </m:msub>
+                  </m:math>
+                </entry>
+                <entry>Neighbor compartment voltage</entry>
+              </row>
+              <row>
+                <entry>
+                  <m:math>
+                    <m:msub>
+                      <m:mi>G</m:mi>
+                      <m:mrow>
+                        <m:mi>c</m:mi>
+                        <m:mi>o</m:mi>
+                        <m:mi>r</m:mi>
+                        <m:mi>e</m:mi>
+                      </m:mrow>
+                    </m:msub>
+                  </m:math>
+                </entry>
+                <entry>Conductance between Compartments</entry>
+              </row>
+              <row>
+                <entry>
+                  <m:math>
+                    <m:msub>
+                      <m:mi>I</m:mi>
+                      <m:mrow>
+                        <m:mi>c</m:mi>
+                        <m:mi>h</m:mi>
+                        <m:mi>a</m:mi>
+                        <m:mi>n</m:mi>
+                        <m:mi>n</m:mi>
+                        <m:mi>e</m:mi>
+                        <m:mi>l</m:mi>
+                        <m:mi>s</m:mi>
+                      </m:mrow>
+                    </m:msub>
+                  </m:math>
+                </entry>
+                <entry>Ion channel current (only in soma compartment)</entry>
+              </row>
+              <row>
+                <entry>
+                  <m:math>
+                    <m:msub>
+                      <m:mi>C</m:mi>
+                      <m:mi>m</m:mi>
+                    </m:msub>
+                  </m:math>
+                </entry>
+                <entry>Membrane capacitance</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+      </section>
+      <section id="uid7">
+        <title>Ion Channels</title>
+        <para id="id2256643">The cell dynamics use a model that is derived from the Hodgkin-Huxley model. The ion currents take the general form of a driving force (which is due to the different concentrations of the ions on the inside and outside of the cell) being multiplied by a conductance term (the reciprocal of resistance) and a product of voltage dependant variables that indicate the fraction of the ion channels open. For example, the sodium current is:</para>
+        <equation id="id2255372">
+          <m:math mode="display">
+            <m:mrow>
+              <m:msub>
+                <m:mi>I</m:mi>
+                <m:mrow>
+                  <m:mi>N</m:mi>
+                  <m:mi>a</m:mi>
+                </m:mrow>
+              </m:msub>
+              <m:mo>=</m:mo>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:msub>
+                  <m:mi>V</m:mi>
+                  <m:mrow>
+                    <m:mi>N</m:mi>
+                    <m:mi>a</m:mi>
+                  </m:mrow>
+                </m:msub>
+                <m:mo>-</m:mo>
+                <m:msub>
+                  <m:mi>V</m:mi>
+                  <m:mrow>
+                    <m:mi>s</m:mi>
+                    <m:mi>o</m:mi>
+                    <m:mi>m</m:mi>
+                    <m:mi>a</m:mi>
+                  </m:mrow>
+                </m:msub>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:msub>
+                <m:mi>G</m:mi>
+                <m:mrow>
+                  <m:mi>N</m:mi>
+                  <m:mi>a</m:mi>
+                </m:mrow>
+              </m:msub>
+              <m:msup>
+                <m:mi>m</m:mi>
+                <m:mn>3</m:mn>
+              </m:msup>
+              <m:mi>h</m:mi>
+              <m:mo>.</m:mo>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id2255450">Where <m:math><m:msub><m:mi>V</m:mi><m:mrow><m:mi>N</m:mi><m:mi>a</m:mi></m:mrow></m:msub></m:math> is the reversal potential (indicating the concentration of <m:math><m:mrow><m:mi>N</m:mi><m:msup><m:mi>a</m:mi><m:mo>+</m:mo></m:msup></m:mrow></m:math> in the surrounding fluid). <m:math><m:msub><m:mi>G</m:mi><m:mrow><m:mi>N</m:mi><m:mi>a</m:mi></m:mrow></m:msub></m:math> is the conductance of <m:math><m:mrow><m:mi>N</m:mi><m:msup><m:mi>a</m:mi><m:mo>+</m:mo></m:msup></m:mrow></m:math>. <m:math><m:mi>m</m:mi></m:math> is called the activation variable of the <m:math><m:mrow><m:mi>N</m:mi><m:msup><m:mi>a</m:mi><m:mo>+</m:mo></m:msup></m:mrow></m:math> channels and <m:math><m:mi>h</m:mi></m:math> is the inactivation variable. They are governed by the following differential equations:</para>
+        <equation id="id2256980">
+          <m:math mode="display">
+            <m:mtable displaystyle="true">
+              <m:mtr>
+                <m:mtd>
+                  <m:mrow>
+                    <m:mfrac>
+                      <m:mrow>
+                        <m:mi>d</m:mi>
+                        <m:mi>m</m:mi>
+                      </m:mrow>
+                      <m:mrow>
+                        <m:mi>d</m:mi>
+                        <m:mi>t</m:mi>
+                      </m:mrow>
+                    </m:mfrac>
+                    <m:mo>=</m:mo>
+                    <m:msub>
+                      <m:mi>α</m:mi>
+                      <m:mi>m</m:mi>
+                    </m:msub>
+                    <m:mrow>
+                      <m:mo>(</m:mo>
+                      <m:mn>1</m:mn>
+                      <m:mo>-</m:mo>
+                      <m:mi>m</m:mi>
+                      <m:mo>)</m:mo>
+                    </m:mrow>
+                    <m:mo>-</m:mo>
+                    <m:msub>
+                      <m:mi>β</m:mi>
+                      <m:mi>m</m:mi>
+                    </m:msub>
+                    <m:mi>m</m:mi>
+                  </m:mrow>
+                </m:mtd>
+              </m:mtr>
+            </m:mtable>
+          </m:math>
+        </equation>
+        <para id="id2257041">Here <m:math><m:msub><m:mi>α</m:mi><m:mi>m</m:mi></m:msub></m:math> is the opening rate and <m:math><m:msub><m:mi>β</m:mi><m:mi>m</m:mi></m:msub></m:math> is the closing rate. These rates are dependent on the soma potential. A, B and C are fitting parameters that will later be prescribed.</para>
+        <equation id="id2257076">
+          <m:math mode="display">
+            <m:mtable displaystyle="true">
+              <m:mtr>
+                <m:mtd columnalign="right">
+                  <m:msub>
+                    <m:mi>α</m:mi>
+                    <m:mi>m</m:mi>
+                  </m:msub>
+                </m:mtd>
+                <m:mtd columnalign="left">
+                  <m:mrow>
+                    <m:mo>=</m:mo>
+                    <m:mfrac>
+                      <m:mrow>
+                        <m:mi>A</m:mi>
+                        <m:mo>(</m:mo>
+                        <m:msub>
+                          <m:mi>V</m:mi>
+                          <m:mrow>
+                            <m:mi>s</m:mi>
+                            <m:mi>o</m:mi>
+                            <m:mi>m</m:mi>
+                            <m:mi>a</m:mi>
+                          </m:mrow>
+                        </m:msub>
+                        <m:mo>-</m:mo>
+                        <m:mi>B</m:mi>
+                        <m:mo>)</m:mo>
+                      </m:mrow>
+                      <m:mrow>
+                        <m:mn>1</m:mn>
+                        <m:mo>-</m:mo>
+                        <m:msup>
+                          <m:mi>e</m:mi>
+                          <m:mrow>
+                            <m:mo>(</m:mo>
+                            <m:mi>B</m:mi>
+                            <m:mo>-</m:mo>
+                            <m:msub>
+                              <m:mi>V</m:mi>
+                              <m:mrow>
+                                <m:mi>s</m:mi>
+                                <m:mi>o</m:mi>
+                                <m:mi>m</m:mi>
+                                <m:mi>a</m:mi>
+                              </m:mrow>
+                            </m:msub>
+                            <m:mo>)</m:mo>
+                            <m:mo>/</m:mo>
+                            <m:mi>C</m:mi>
+                          </m:mrow>
+                        </m:msup>
+                      </m:mrow>
+                    </m:mfrac>
+                  </m:mrow>
+                </m:mtd>
+                <m:mtd columnalign="right">
+                  <m:msub>
+                    <m:mi>β</m:mi>
+                    <m:mi>m</m:mi>
+                  </m:msub>
+                </m:mtd>
+                <m:mtd columnalign="left">
+                  <m:mrow>
+                    <m:mo>=</m:mo>
+                    <m:mfrac>
+                      <m:mrow>
+                        <m:mi>A</m:mi>
+                        <m:mo>(</m:mo>
+                        <m:mi>B</m:mi>
+                        <m:mo>-</m:mo>
+                        <m:msub>
+                          <m:mi>V</m:mi>
+                          <m:mrow>
+                            <m:mi>s</m:mi>
+                            <m:mi>o</m:mi>
+                            <m:mi>m</m:mi>
+                            <m:mi>a</m:mi>
+                          </m:mrow>
+                        </m:msub>
+                        <m:mo>)</m:mo>
+                      </m:mrow>
+                      <m:mrow>
+                        <m:mn>1</m:mn>
+                        <m:mo>-</m:mo>
+                        <m:msup>
+                          <m:mi>e</m:mi>
+                          <m:mrow>
+                            <m:mo>(</m:mo>
+                            <m:msub>
+                              <m:mi>V</m:mi>
+                              <m:mrow>
+                                <m:mi>s</m:mi>
+                                <m:mi>o</m:mi>
+                                <m:mi>m</m:mi>
+                                <m:mi>a</m:mi>
+                              </m:mrow>
+                            </m:msub>
+                            <m:mo>-</m:mo>
+                            <m:mi>B</m:mi>
+                            <m:mo>)</m:mo>
+                            <m:mo>/</m:mo>
+                            <m:mi>C</m:mi>
+                          </m:mrow>
+                        </m:msup>
+                      </m:mrow>
+                    </m:mfrac>
+                  </m:mrow>
+                </m:mtd>
+              </m:mtr>
+            </m:mtable>
+          </m:math>
+        </equation>
+        <para id="id2257259">The inactivation variable <m:math><m:mi>h</m:mi></m:math> is slightly different, and has its own fitting parameters.</para>
+        <equation id="id2257274">
+          <m:math mode="display">
+            <m:mtable displaystyle="true">
+              <m:mtr>
+                <m:mtd columnalign="right">
+                  <m:mfrac>
+                    <m:mrow>
+                      <m:mi>d</m:mi>
+                      <m:mi>h</m:mi>
+                    </m:mrow>
+                    <m:mrow>
+                      <m:mi>d</m:mi>
+                      <m:mi>t</m:mi>
+                    </m:mrow>
+                  </m:mfrac>
+                </m:mtd>
+                <m:mtd columnalign="left">
+                  <m:mrow>
+                    <m:mo>=</m:mo>
+                    <m:msub>
+                      <m:mi>α</m:mi>
+                      <m:mi>h</m:mi>
+                    </m:msub>
+                    <m:mrow>
+                      <m:mo>(</m:mo>
+                      <m:mn>1</m:mn>
+                      <m:mo>-</m:mo>
+                      <m:mi>h</m:mi>
+                      <m:mo>)</m:mo>
+                    </m:mrow>
+                    <m:mo>-</m:mo>
+                    <m:msub>
+                      <m:mi>β</m:mi>
+                      <m:mi>h</m:mi>
+                    </m:msub>
+                    <m:mi>h</m:mi>
+                  </m:mrow>
+                </m:mtd>
+              </m:mtr>
+              <m:mtr>
+                <m:mtd columnalign="right">
+                  <m:msub>
+                    <m:mi>α</m:mi>
+                    <m:mi>h</m:mi>
+                  </m:msub>
+                </m:mtd>
+                <m:mtd columnalign="left">
+                  <m:mrow>
+                    <m:mo>=</m:mo>
+                    <m:mfrac>
+                      <m:mrow>
+                        <m:mi>A</m:mi>
+                        <m:mo>(</m:mo>
+                        <m:mi>B</m:mi>
+                        <m:mo>-</m:mo>
+                        <m:msub>
+                          <m:mi>V</m:mi>
+                          <m:mrow>
+                            <m:mi>s</m:mi>
+                            <m:mi>o</m:mi>
+                            <m:mi>m</m:mi>
+                            <m:mi>a</m:mi>
+                          </m:mrow>
+                        </m:msub>
+                        <m:mo>)</m:mo>
+                      </m:mrow>
+                      <m:mrow>
+                        <m:mn>1</m:mn>
+                        <m:mo>-</m:mo>
+                        <m:msup>
+                          <m:mi>e</m:mi>
+                          <m:mrow>
+                            <m:mo>(</m:mo>
+                            <m:msub>
+                              <m:mi>V</m:mi>
+                              <m:mrow>
+                                <m:mi>s</m:mi>
+                                <m:mi>o</m:mi>
+                                <m:mi>m</m:mi>
+                                <m:mi>a</m:mi>
+                              </m:mrow>
+                            </m:msub>
+                            <m:mo>-</m:mo>
+                            <m:mi>B</m:mi>
+                            <m:mo>)</m:mo>
+                            <m:mo>/</m:mo>
+                            <m:mi>C</m:mi>
+                          </m:mrow>
+                        </m:msup>
+                      </m:mrow>
+                    </m:mfrac>
+                  </m:mrow>
+                </m:mtd>
+                <m:mtd columnalign="right">
+                  <m:msub>
+                    <m:mi>β</m:mi>
+                    <m:mi>h</m:mi>
+                  </m:msub>
+                </m:mtd>
+                <m:mtd columnalign="left">
+                  <m:mrow>
+                    <m:mo>=</m:mo>
+                    <m:mfrac>
+                      <m:mi>A</m:mi>
+                      <m:mrow>
+                        <m:mn>1</m:mn>
+                        <m:mo>+</m:mo>
+                        <m:msup>
+                          <m:mi>e</m:mi>
+                          <m:mrow>
+                            <m:mo>(</m:mo>
+                            <m:mi>B</m:mi>
+                            <m:mo>-</m:mo>
+                            <m:msub>
+                              <m:mi>V</m:mi>
+                              <m:mrow>
+                                <m:mi>s</m:mi>
+                                <m:mi>o</m:mi>
+                                <m:mi>m</m:mi>
+                                <m:mi>a</m:mi>
+                              </m:mrow>
+                            </m:msub>
+                            <m:mo>)</m:mo>
+                            <m:mo>/</m:mo>
+                            <m:mi>C</m:mi>
+                          </m:mrow>
+                        </m:msup>
+                      </m:mrow>
+                    </m:mfrac>
+                  </m:mrow>
+                </m:mtd>
+              </m:mtr>
+            </m:mtable>
+          </m:math>
+        </equation>
+        <para id="id2257487">The <m:math><m:msup><m:mi>K</m:mi><m:mo>+</m:mo></m:msup></m:math> channels are similar. There is only one gating variable <m:math><m:mi>n</m:mi></m:math>.</para>
+        <equation id="id2257515">
+          <m:math mode="display">
+            <m:mtable displaystyle="true">
+              <m:mtr>
+                <m:mtd columnalign="right">
+                  <m:msub>
+                    <m:mi>I</m:mi>
+                    <m:mi>K</m:mi>
+                  </m:msub>
+                </m:mtd>
+                <m:mtd columnalign="left">
+                  <m:mrow>
+                    <m:mo>=</m:mo>
+                    <m:mrow>
+                      <m:mo>(</m:mo>
+                      <m:msub>
+                        <m:mi>V</m:mi>
+                        <m:mi>K</m:mi>
+                      </m:msub>
+                      <m:mo>-</m:mo>
+                      <m:msub>
+                        <m:mi>V</m:mi>
+                        <m:mrow>
+                          <m:mi>s</m:mi>
+                          <m:mi>o</m:mi>
+                          <m:mi>m</m:mi>
+                          <m:mi>a</m:mi>
+                        </m:mrow>
+                      </m:msub>
+                      <m:mo>)</m:mo>
+                    </m:mrow>
+                    <m:msub>
+                      <m:mi>G</m:mi>
+                      <m:mi>K</m:mi>
+                    </m:msub>
+                    <m:msup>
+                      <m:mi>n</m:mi>
+                      <m:mn>4</m:mn>
+                    </m:msup>
+                  </m:mrow>
+                </m:mtd>
+              </m:mtr>
+              <m:mtr>
+                <m:mtd columnalign="right">
+                  <m:mfrac>
+                    <m:mrow>
+                      <m:mi>d</m:mi>
+                      <m:mi>h</m:mi>
+                    </m:mrow>
+                    <m:mrow>
+                      <m:mi>d</m:mi>
+                      <m:mi>t</m:mi>
+                    </m:mrow>
+                  </m:mfrac>
+                </m:mtd>
+                <m:mtd columnalign="left">
+                  <m:mrow>
+                    <m:mo>=</m:mo>
+                    <m:msub>
+                      <m:mi>α</m:mi>
+                      <m:mi>h</m:mi>
+                    </m:msub>
+                    <m:mrow>
+                      <m:mo>(</m:mo>
+                      <m:mn>1</m:mn>
+                      <m:mo>-</m:mo>
+                      <m:mi>h</m:mi>
+                      <m:mo>)</m:mo>
+                    </m:mrow>
+                    <m:mo>-</m:mo>
+                    <m:msub>
+                      <m:mi>β</m:mi>
+                      <m:mi>h</m:mi>
+                    </m:msub>
+                    <m:mi>h</m:mi>
+                  </m:mrow>
+                </m:mtd>
+              </m:mtr>
+              <m:mtr>
+                <m:mtd columnalign="right">
+                  <m:msub>
+                    <m:mi>α</m:mi>
+                    <m:mi>h</m:mi>
+                  </m:msub>
+                </m:mtd>
+                <m:mtd columnalign="left">
+                  <m:mrow>
+                    <m:mo>=</m:mo>
+                    <m:mfrac>
+                      <m:mrow>
+                        <m:mi>A</m:mi>
+                        <m:mo>(</m:mo>
+                        <m:msub>
+                          <m:mi>V</m:mi>
+                          <m:mrow>
+                            <m:mi>s</m:mi>
+                            <m:mi>o</m:mi>
+                            <m:mi>m</m:mi>
+                            <m:mi>a</m:mi>
+                          </m:mrow>
+                        </m:msub>
+                        <m:mo>-</m:mo>
+                        <m:mi>B</m:mi>
+                        <m:mo>)</m:mo>
+                      </m:mrow>
+                      <m:mrow>
+                        <m:mn>1</m:mn>
+                        <m:mo>-</m:mo>
+                        <m:msup>
+                          <m:mi>e</m:mi>
+                          <m:mrow>
+                            <m:mo>(</m:mo>
+                            <m:mi>B</m:mi>
+                            <m:mo>-</m:mo>
+                            <m:msub>
+                              <m:mi>V</m:mi>
+                              <m:mrow>
+                                <m:mi>s</m:mi>
+                                <m:mi>o</m:mi>
+                                <m:mi>m</m:mi>
+                                <m:mi>a</m:mi>
+                              </m:mrow>
+                            </m:msub>
+                            <m:mo>)</m:mo>
+                            <m:mo>/</m:mo>
+                            <m:mi>C</m:mi>
+                          </m:mrow>
+                        </m:msup>
+                      </m:mrow>
+                    </m:mfrac>
+                  </m:mrow>
+                </m:mtd>
+                <m:mtd columnalign="right">
+                  <m:msub>
+                    <m:mi>β</m:mi>
+                    <m:mi>h</m:mi>
+                  </m:msub>
+                </m:mtd>
+                <m:mtd columnalign="left">
+                  <m:mrow>
+                    <m:mo>=</m:mo>
+                    <m:mfrac>
+                      <m:mrow>
+                        <m:mi>A</m:mi>
+                        <m:mo>(</m:mo>
+                        <m:mi>B</m:mi>
+                        <m:mo>-</m:mo>
+                        <m:msub>
+                          <m:mi>V</m:mi>
+                          <m:mrow>
+                            <m:mi>s</m:mi>
+                            <m:mi>o</m:mi>
+                            <m:mi>m</m:mi>
+                            <m:mi>a</m:mi>
+                          </m:mrow>
+                        </m:msub>
+                        <m:mo>)</m:mo>
+                      </m:mrow>
+                      <m:mrow>
+                        <m:mn>1</m:mn>
+                        <m:mo>-</m:mo>
+                        <m:msup>
+                          <m:mi>e</m:mi>
+                          <m:mrow>
+                            <m:mo>(</m:mo>
+                            <m:msub>
+                              <m:mi>V</m:mi>
+                              <m:mrow>
+                                <m:mi>s</m:mi>
+                                <m:mi>o</m:mi>
+                                <m:mi>m</m:mi>
+                                <m:mi>a</m:mi>
+                              </m:mrow>
+                            </m:msub>
+                            <m:mo>-</m:mo>
+                            <m:mi>B</m:mi>
+                            <m:mo>)</m:mo>
+                            <m:mo>/</m:mo>
+                            <m:mi>C</m:mi>
+                          </m:mrow>
+                        </m:msup>
+                      </m:mrow>
+                    </m:mfrac>
+                  </m:mrow>
+                </m:mtd>
+              </m:mtr>
+            </m:mtable>
+          </m:math>
+        </equation>
+        <para id="id2257815">For more details on the Hodgkin Huxley model visit <link url="http://www.caam.rice.edu/caam415/"> http://www.caam.rice.edu/caam415/ </link> or look at the series of papers this module is designed after.</para>
+        <para id="id2257825">The change in net potential due the calcium flow is negligible. However, we still need to track it in order to control the Calcium dependent Potassium channels. As cell repeatedly fires calcium will build up leading to stronger repolarizations this will help allow for firing rate adaptation and provide the assembly a mechanism through which it will die out eventually.</para>
+        <equation id="id2257837">
+          <m:math mode="display">
+            <m:mtable displaystyle="true">
+              <m:mtr>
+                <m:mtd columnalign="right">
+                  <m:msub>
+                    <m:mi>I</m:mi>
+                    <m:mi>q</m:mi>
+                  </m:msub>
+                </m:mtd>
+                <m:mtd columnalign="left">
+                  <m:mrow>
+                    <m:mo>=</m:mo>
+                    <m:mrow>
+                      <m:mo>(</m:mo>
+                      <m:msub>
+                        <m:mi>V</m:mi>
+                        <m:mi>q</m:mi>
+                      </m:msub>
+                      <m:mo>-</m:mo>
+                      <m:msub>
+                        <m:mi>V</m:mi>
+                        <m:mrow>
+                          <m:mi>s</m:mi>
+                          <m:mi>o</m:mi>
+                          <m:mi>m</m:mi>
+                          <m:mi>a</m:mi>
+                        </m:mrow>
+                      </m:msub>
+                      <m:mo>)</m:mo>
+                    </m:mrow>
+                    <m:msub>
+                      <m:mi>G</m:mi>
+                      <m:mi>q</m:mi>
+                    </m:msub>
+                    <m:msup>
+                      <m:mi>n</m:mi>
+                      <m:mn>4</m:mn>
+                    </m:msup>
+                  </m:mrow>
+                </m:mtd>
+              </m:mtr>
+              <m:mtr>
+                <m:mtd columnalign="right">
+                  <m:mfrac>
+                    <m:mrow>
+                      <m:mi>d</m:mi>
+                      <m:mi>q</m:mi>
+                    </m:mrow>
+                    <m:mrow>
+                      <m:mi>d</m:mi>
+                      <m:mi>t</m:mi>
+                    </m:mrow>
+                  </m:mfrac>
+                </m:mtd>
+                <m:mtd columnalign="left">
+                  <m:mrow>
+                    <m:mo>=</m:mo>
+                    <m:msub>
+                      <m:mi>α</m:mi>
+                      <m:mi>q</m:mi>
+                    </m:msub>
+                    <m:mrow>
+                      <m:mo>(</m:mo>
+                      <m:mn>1</m:mn>
+                      <m:mo>-</m:mo>
+                      <m:mi>h</m:mi>
+                      <m:mo>)</m:mo>
+                    </m:mrow>
+                    <m:mo>-</m:mo>
+                    <m:msub>
+                      <m:mi>β</m:mi>
+                      <m:mi>q</m:mi>
+                    </m:msub>
+                    <m:mi>q</m:mi>
+                  </m:mrow>
+                </m:mtd>
+              </m:mtr>
+              <m:mtr>
+                <m:mtd columnalign="right">
+                  <m:msub>
+                    <m:mi>α</m:mi>
+                    <m:mi>q</m:mi>
+                  </m:msub>
+                </m:mtd>
+                <m:mtd columnalign="left">
+                  <m:mrow>
+                    <m:mo>=</m:mo>
+                    <m:mfrac>
+                      <m:mrow>
+                        <m:mi>A</m:mi>
+                        <m:mo>(</m:mo>
+                        <m:msub>
+                          <m:mi>V</m:mi>
+                          <m:mrow>
+                            <m:mi>s</m:mi>
+                            <m:mi>o</m:mi>
+                            <m:mi>m</m:mi>
+                            <m:mi>a</m:mi>
+                          </m:mrow>
+                        </m:msub>
+                        <m:mo>-</m:mo>
+                        <m:mi>B</m:mi>
+                        <m:mo>)</m:mo>
+                      </m:mrow>
+                      <m:mrow>
+                        <m:mn>1</m:mn>
+                        <m:mo>-</m:mo>
+                        <m:msup>
+                          <m:mi>e</m:mi>
+                          <m:mrow>
+                            <m:mo>(</m:mo>
+                            <m:mi>B</m:mi>
+                            <m:mo>-</m:mo>
+                            <m:msub>
+                              <m:mi>V</m:mi>
+                              <m:mrow>
+                                <m:mi>s</m:mi>
+                                <m:mi>o</m:mi>
+                                <m:mi>m</m:mi>
+                                <m:mi>a</m:mi>
+                              </m:mrow>
+                            </m:msub>
+                            <m:mo>)</m:mo>
+                            <m:mo>/</m:mo>
+                            <m:mi>C</m:mi>
+                          </m:mrow>
+                        </m:msup>
+                      </m:mrow>
+                    </m:mfrac>
+                  </m:mrow>
+                </m:mtd>
+                <m:mtd columnalign="right">
+                  <m:msub>
+                    <m:mi>β</m:mi>
+                    <m:mi>q</m:mi>
+                  </m:msub>
+                </m:mtd>
+                <m:mtd columnalign="left">
+                  <m:mrow>
+                    <m:mo>=</m:mo>
+                    <m:mfrac>
+                      <m:mrow>
+                        <m:mi>A</m:mi>
+                        <m:mo>(</m:mo>
+                        <m:mi>B</m:mi>
+                        <m:mo>-</m:mo>
+                        <m:msub>
+                          <m:mi>V</m:mi>
+                          <m:mrow>
+                            <m:mi>s</m:mi>
+                            <m:mi>o</m:mi>
+                            <m:mi>m</m:mi>
+                            <m:mi>a</m:mi>
+                          </m:mrow>
+                        </m:msub>
+                        <m:mo>)</m:mo>
+                      </m:mrow>
+                      <m:mrow>
+                        <m:mn>1</m:mn>
+                        <m:mo>-</m:mo>
+                        <m:msup>
+                          <m:mi>e</m:mi>
+                          <m:mrow>
+                            <m:mo>(</m:mo>
+                            <m:msub>
+                              <m:mi>V</m:mi>
+                              <m:mrow>
+                                <m:mi>s</m:mi>
+                                <m:mi>o</m:mi>
+                                <m:mi>m</m:mi>
+                                <m:mi>a</m:mi>
+                              </m:mrow>
+                            </m:msub>
+                            <m:mo>-</m:mo>
+                            <m:mi>B</m:mi>
+                            <m:mo>)</m:mo>
+                            <m:mo>/</m:mo>
+                            <m:mi>C</m:mi>
+                          </m:mrow>
+                        </m:msup>
+                      </m:mrow>
+                    </m:mfrac>
+                  </m:mrow>
+                </m:mtd>
+              </m:mtr>
+            </m:mtable>
+          </m:math>
+        </equation>
+        <para id="id2258138">The Calcium dependent Potassium channels:</para>
+        <equation id="id2258143">
+          <m:math mode="display">
+            <m:mtable displaystyle="true">
+              <m:mtr>
+                <m:mtd>
+                  <m:mrow>
+                    <m:msub>
+                      <m:mi>I</m:mi>
+                      <m:mrow>
+                        <m:mi>K</m:mi>
+                        <m:mo>(</m:mo>
+                        <m:mi>C</m:mi>
+                        <m:mi>a</m:mi>
+                        <m:mo>)</m:mo>
+                      </m:mrow>
+                    </m:msub>
+                    <m:mo>=</m:mo>
+                    <m:mrow>
+                      <m:mo>(</m:mo>
+                      <m:msub>
+                        <m:mi>V</m:mi>
+                        <m:mi>K</m:mi>
+                      </m:msub>
+                      <m:mo>-</m:mo>
+                      <m:msub>
+                        <m:mi>V</m:mi>
+                        <m:mrow>
+                          <m:mi>S</m:mi>
+                          <m:mi>o</m:mi>
+                          <m:mi>m</m:mi>
+                          <m:mi>a</m:mi>
+                        </m:mrow>
+                      </m:msub>
+                      <m:mo>)</m:mo>
+                    </m:mrow>
+                    <m:msub>
+                      <m:mi>G</m:mi>
+                      <m:mrow>
+                        <m:mi>K</m:mi>
+                        <m:mo>(</m:mo>
+                        <m:mi>C</m:mi>
+                        <m:mi>a</m:mi>
+                        <m:mo>)</m:mo>
+                      </m:mrow>
+                    </m:msub>
+                    <m:mrow>
+                      <m:mo>[</m:mo>
+                      <m:mi>C</m:mi>
+                      <m:msub>
+                        <m:mi>a</m:mi>
+                        <m:mrow>
+                          <m:mi>A</m:mi>
+                          <m:mi>P</m:mi>
+                        </m:mrow>
+                      </m:msub>
+                      <m:mo>]</m:mo>
+                    </m:mrow>
+                  </m:mrow>
+                </m:mtd>
+              </m:mtr>
+              <m:mtr>
+                <m:mtd>
+                  <m:mrow>
+                    <m:mfrac>
+                      <m:mrow>
+                        <m:mi>d</m:mi>
+                        <m:mo>[</m:mo>
+                        <m:mi>C</m:mi>
+                        <m:msub>
+                          <m:mi>a</m:mi>
+                          <m:mrow>
+                            <m:mi>A</m:mi>
+                            <m:mi>P</m:mi>
+                          </m:mrow>
+                        </m:msub>
+                        <m:mo>]</m:mo>
+                      </m:mrow>
+                      <m:mrow>
+                        <m:mi>d</m:mi>
+                        <m:mi>t</m:mi>
+                      </m:mrow>
+                    </m:mfrac>
+                    <m:mo>=</m:mo>
+                    <m:mrow>
+                      <m:mo>(</m:mo>
+                      <m:msub>
+                        <m:mi>V</m:mi>
+                        <m:mrow>
+                          <m:mi>C</m:mi>
+                          <m:mi>a</m:mi>
+                        </m:mrow>
+                      </m:msub>
+                      <m:mo>-</m:mo>
+                      <m:msub>
+                        <m:mi>V</m:mi>
+                        <m:mrow>
+                          <m:mi>s</m:mi>
+                          <m:mi>o</m:mi>
+                          <m:mi>m</m:mi>
+                          <m:mi>a</m:mi>
+                        </m:mrow>
+                      </m:msub>
+                      <m:mo>)</m:mo>
+                    </m:mrow>
+                    <m:msub>
+                      <m:mi>ρ</m:mi>
+                      <m:mrow>
+                        <m:mi>A</m:mi>
+                        <m:mi>P</m:mi>
+                      </m:mrow>
+                    </m:msub>
+                    <m:msup>
+                      <m:mi>q</m:mi>
+                      <m:mn>5</m:mn>
+                    </m:msup>
+                    <m:mo>-</m:mo>
+                    <m:msub>
+                      <m:mi>δ</m:mi>
+                      <m:mrow>
+                        <m:mi>A</m:mi>
+                        <m:mi>P</m:mi>
+                      </m:mrow>
+                    </m:msub>
+                    <m:mrow>
+                      <m:mo>[</m:mo>
+                      <m:mi>C</m:mi>
+                      <m:msub>
+                        <m:mi>a</m:mi>
+                        <m:mrow>
+                          <m:mi>A</m:mi>
+                          <m:mi>P</m:mi>
+                        </m:mrow>
+                      </m:msub>
+                      <m:mo>]</m:mo>
+                    </m:mrow>
+                  </m:mrow>
+                </m:mtd>
+              </m:mtr>
+            </m:mtable>
+          </m:math>
+        </equation>
+        <para id="id2258360"><m:math><m:mrow><m:mo>[</m:mo><m:mi>C</m:mi><m:msub><m:mi>a</m:mi><m:mrow><m:mi>A</m:mi><m:mi>P</m:mi></m:mrow></m:msub><m:mo>]</m:mo></m:mrow></m:math> is the intracellular calcium level. Constants <m:math><m:msub><m:mi>ρ</m:mi><m:mrow><m:mi>A</m:mi><m:mi>P</m:mi></m:mrow></m:msub></m:math> and <m:math><m:msub><m:mi>δ</m:mi><m:mrow><m:mi>A</m:mi><m:mi>P</m:mi></m:mrow></m:msub></m:math> are the rates of calcium ion influx and efflux (decay).</para>
+        <para id="id2258428">The second form of Calcium comes through NMDA channels that are located on the post-synapse. It is important to separate this Calcium source since it enters and leaves the cell with different time constants due to the different method it enters the cell. This contribution will be discussed in more details in the next section. The Calcium pool <m:math><m:mrow><m:mo>[</m:mo><m:mi>C</m:mi><m:msub><m:mi>a</m:mi><m:mrow><m:mi>N</m:mi><m:mi>M</m:mi><m:mi>D</m:mi><m:mi>A</m:mi></m:mrow></m:msub><m:mo>]</m:mo></m:mrow></m:math> will be added to the total <m:math><m:mrow><m:mi>C</m:mi><m:msup><m:mi>a</m:mi><m:mrow><m:mn>2</m:mn><m:mo>+</m:mo></m:mrow></m:msup></m:mrow></m:math> count changing the total current from Calcium dependent Potassium channels to:</para>
+        <equation id="id2258492">
+          <m:math mode="display">
+            <m:mrow>
+              <m:msub>
+                <m:mi>I</m:mi>
+                <m:mrow>
+                  <m:mi>K</m:mi>
+                  <m:mo>(</m:mo>
+                  <m:mi>C</m:mi>
+                  <m:mi>a</m:mi>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+              </m:msub>
+              <m:mo>=</m:mo>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:msub>
+                  <m:mi>V</m:mi>
+                  <m:mi>K</m:mi>
+                </m:msub>
+                <m:mo>-</m:mo>
+                <m:msub>
+                  <m:mi>V</m:mi>
+                  <m:mrow>
+                    <m:mi>S</m:mi>
+                    <m:mi>o</m:mi>
+                    <m:mi>m</m:mi>
+                    <m:mi>a</m:mi>
+                  </m:mrow>
+                </m:msub>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:msub>
+                <m:mi>G</m:mi>
+                <m:mrow>
+                  <m:mi>K</m:mi>
+                  <m:mo>(</m:mo>
+                  <m:mi>C</m:mi>
+                  <m:mi>a</m:mi>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+              </m:msub>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mrow>
+                  <m:mo>[</m:mo>
+                  <m:mi>C</m:mi>
+                  <m:msub>
+                    <m:mi>a</m:mi>
+                    <m:mrow>
+                      <m:mi>A</m:mi>
+                      <m:mi>P</m:mi>
+                    </m:mrow>
+                  </m:msub>
+                  <m:mo>]</m:mo>
+                </m:mrow>
+                <m:mo>+</m:mo>
+                <m:mrow>
+                  <m:mo>[</m:mo>
+                  <m:mi>C</m:mi>
+                  <m:msub>
+                    <m:mi>a</m:mi>
+                    <m:mrow>
+                      <m:mi>N</m:mi>
+                      <m:mi>M</m:mi>
+                      <m:mi>D</m:mi>
+                      <m:mi>A</m:mi>
+                    </m:mrow>
+                  </m:msub>
+                  <m:mo>]</m:mo>
+                </m:mrow>
+                <m:mo>)</m:mo>
+              </m:mrow>
+            </m:mrow>
+          </m:math>
+        </equation>
+      </section>
+      <section id="uid8">
+        <title>Synaptic Connections</title>
+        <para id="id2258624">Cells communicate with synaptic connections where the bouton and post-synapse meet. The firing cell releases neurotransmitter into the synaptic cleft. These chemical open up ion channels in the postsynaptic receptor cell. This allows either a gain in postsynaptic potential (if the presynaptic cell is excitatory) or a depression in potential (for a inhibitory cell). The model for the synaptic current is show below:</para>
+        <equation id="id2258634">
+          <m:math mode="display">
+            <m:mrow>
+              <m:msub>
+                <m:mi>I</m:mi>
+                <m:mrow>
+                  <m:mi>s</m:mi>
+                  <m:mi>y</m:mi>
+                  <m:mi>n</m:mi>
+                </m:mrow>
+              </m:msub>
+              <m:mo>=</m:mo>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:msub>
+                  <m:mi>V</m:mi>
+                  <m:mrow>
+                    <m:mi>s</m:mi>
+                    <m:mi>y</m:mi>
+                    <m:mi>n</m:mi>
+                  </m:mrow>
+                </m:msub>
+                <m:mo>-</m:mo>
+                <m:mi>V</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:msub>
+                <m:mi>G</m:mi>
+                <m:mrow>
+                  <m:mi>s</m:mi>
+                  <m:mi>y</m:mi>
+                  <m:mi>n</m:mi>
+                </m:mrow>
+              </m:msub>
+              <m:mi>s</m:mi>
+              <m:mo>.</m:mo>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id2258699">Here <m:math><m:mi>s</m:mi></m:math> is an activation level variable. It will only take value 0 or 1. After a presynaptic cell fires the <m:math><m:mi>s</m:mi></m:math> variable will be held at 1 for fixed number of milliseconds, then reset to 0. The excitatory receptor area will consist of AMPA receptor and NMDA receptors. The AMPA receptor takes the form above and <m:math><m:msub><m:mi>V</m:mi><m:mrow><m:mi>s</m:mi><m:mi>y</m:mi><m:mi>n</m:mi></m:mrow></m:msub></m:math> would typically be around 0 mV for an excitatory connection. An inhibitory connection will have a reversal potential, <m:math><m:msub><m:mi>V</m:mi><m:mrow><m:mi>s</m:mi><m:mi>y</m:mi><m:mi>n</m:mi></m:mrow></m:msub></m:math>, below or near rest (around -85 mV).</para>
+        <para id="id2258769">The second type of receptor Channel is the NMDA channel. These receptor channels are blocked by <m:math><m:mrow><m:mi>M</m:mi><m:msup><m:mi>g</m:mi><m:mrow><m:mn>2</m:mn><m:mo>+</m:mo></m:mrow></m:msup></m:mrow></m:math> when the post-synaptic cell in near resting potential. Only come out when the receptive cell has been depolarized will the <m:math><m:mrow><m:mi>M</m:mi><m:msup><m:mi>g</m:mi><m:mrow><m:mn>2</m:mn><m:mo>+</m:mo></m:mrow></m:msup></m:mrow></m:math> pop out allowing <m:math><m:mrow><m:mi>N</m:mi><m:msup><m:mi>a</m:mi><m:mo>+</m:mo></m:msup></m:mrow></m:math> and <m:math><m:mrow><m:mi>C</m:mi><m:msup><m:mi>a</m:mi><m:mo>+</m:mo></m:msup></m:mrow></m:math> to pass through. This allows so that cells can continue firing once they have been activated.These channels are dependent on neurotransmitter from the sending cell and the post-synaptic cell firing. This feature helps for LTP (long term potentiation). The <m:math><m:mrow><m:mi>M</m:mi><m:msup><m:mi>g</m:mi><m:mrow><m:mn>2</m:mn><m:mo>+</m:mo></m:mrow></m:msup></m:mrow></m:math> is modeled by a voltage dependant ODE between 0 and 1, <m:math><m:mi>p</m:mi></m:math>. The form for this current and it's gating variable <m:math><m:mi>p</m:mi></m:math> is the following:</para>
+        <equation id="id2258900">
+          <m:math mode="display">
+            <m:mtable displaystyle="true">
+              <m:mtr>
+                <m:mtd columnalign="right">
+                  <m:msub>
+                    <m:mi>I</m:mi>
+                    <m:mrow>
+                      <m:mi>N</m:mi>
+                      <m:mi>M</m:mi>
+                      <m:mi>D</m:mi>
+                      <m:mi>A</m:mi>
+                    </m:mrow>
+                  </m:msub>
+                </m:mtd>
+                <m:mtd columnalign="left">
+                  <m:mrow>
+                    <m:mo>=</m:mo>
+                    <m:mrow>
+                      <m:mo>(</m:mo>
+                      <m:msub>
+                        <m:mi>V</m:mi>
+                        <m:mrow>
+                          <m:mi>N</m:mi>
+                          <m:mi>M</m:mi>
+                          <m:mi>D</m:mi>
+                          <m:mi>A</m:mi>
+                        </m:mrow>
+                      </m:msub>
+                      <m:mo>-</m:mo>
+                      <m:mi>V</m:mi>
+                      <m:mo>)</m:mo>
+                    </m:mrow>
+                    <m:msub>
+                      <m:mi>G</m:mi>
+                      <m:mrow>
+                        <m:mi>N</m:mi>
+                        <m:mi>M</m:mi>
+                        <m:mi>D</m:mi>
+                        <m:mi>A</m:mi>
+                      </m:mrow>
+                    </m:msub>
+                    <m:mi>p</m:mi>
+                    <m:mi>s</m:mi>
+                    <m:mo>.</m:mo>
+                  </m:mrow>
+                </m:mtd>
+              </m:mtr>
+              <m:mtr>
+                <m:mtd columnalign="right">
+                  <m:mfrac>
+                    <m:mrow>
+                      <m:mi>d</m:mi>
+                      <m:mi>p</m:mi>
+                    </m:mrow>
+                    <m:mrow>
+                      <m:mi>d</m:mi>
+                      <m:mi>t</m:mi>
+                    </m:mrow>
+                  </m:mfrac>
+                </m:mtd>
+                <m:mtd columnalign="left">
+                  <m:mrow>
+                    <m:mo>=</m:mo>
+                    <m:msub>
+                      <m:mi>α</m:mi>
+                      <m:mi>p</m:mi>
+                    </m:msub>
+                    <m:mrow>
+                      <m:mo>(</m:mo>
+                      <m:mn>1</m:mn>
+                      <m:mo>-</m:mo>
+                      <m:mi>p</m:mi>
+                      <m:mo>)</m:mo>
+                    </m:mrow>
+                    <m:mo>-</m:mo>
+                    <m:msub>
+                      <m:mi>β</m:mi>
+                      <m:mi>p</m:mi>
+                    </m:msub>
+                    <m:mi>p</m:mi>
+                    <m:mo>.</m:mo>
+                  </m:mrow>
+                </m:mtd>
+              </m:mtr>
+              <m:mtr>
+                <m:mtd columnalign="right">
+                  <m:msub>
+                    <m:mi>α</m:mi>
+                    <m:mi>p</m:mi>
+                  </m:msub>
+                </m:mtd>
+                <m:mtd columnalign="left">
+                  <m:mrow>
+                    <m:mo>=</m:mo>
+                    <m:mi>A</m:mi>
+                    <m:msup>
+                      <m:mi>e</m:mi>
+                      <m:mrow>
+                        <m:mi>E</m:mi>
+                        <m:mo>/</m:mo>
+                        <m:mi>C</m:mi>
+                      </m:mrow>
+                    </m:msup>
+                  </m:mrow>
+                </m:mtd>
+                <m:mtd columnalign="right">
+                  <m:msub>
+                    <m:mi>β</m:mi>
+                    <m:mi>p</m:mi>
+                  </m:msub>
+                </m:mtd>
+                <m:mtd columnalign="left">
+                  <m:mrow>
+                    <m:mo>=</m:mo>
+                    <m:mi>A</m:mi>
+                    <m:msup>
+                      <m:mi>e</m:mi>
+                      <m:mrow>
+                        <m:mo>-</m:mo>
+                        <m:mi>E</m:mi>
+                        <m:mo>/</m:mo>
+                        <m:mi>C</m:mi>
+                      </m:mrow>
+                    </m:msup>
+                  </m:mrow>
+                </m:mtd>
+              </m:mtr>
+            </m:mtable>
+          </m:math>
+        </equation>
+        <para id="id2259110">The NMDA channels are also permeable to <m:math><m:mrow><m:mi>C</m:mi><m:msup><m:mi>a</m:mi><m:mrow><m:mn>2</m:mn><m:mo>+</m:mo></m:mrow></m:msup></m:mrow></m:math> so we need to track another pool of calcium. This calcium is modeled by a differential equation. The influx rate is dependent on the <m:math><m:mi>s</m:mi></m:math> and <m:math><m:mi>p</m:mi></m:math> variable, as well as a characteristic influx conductance term, <m:math><m:msub><m:mi>ρ</m:mi><m:mrow><m:mi>N</m:mi><m:mi>M</m:mi><m:mi>D</m:mi><m:mi>A</m:mi></m:mrow></m:msub></m:math>. This influx term varies from each synapse and is proportional to the synapse strength (something which is determined in later a section when connection weighting is addressed). The efflux is a constant <m:math><m:msub><m:mi>δ</m:mi><m:mrow><m:mi>N</m:mi><m:mi>M</m:mi><m:mi>D</m:mi><m:mi>A</m:mi></m:mrow></m:msub></m:math>. The <m:math><m:mi>s</m:mi></m:math> variable here is the sum of all the binary s variables which connection to the specific cells whose Calcium pool is being calculated.</para>
+        <equation id="id2259217">
+          <m:math mode="display">
+            <m:mrow>
+              <m:mfrac>
+                <m:mrow>
+                  <m:mi>d</m:mi>
+                  <m:mo>[</m:mo>
+                  <m:mi>C</m:mi>
+                  <m:msub>
+                    <m:mi>a</m:mi>
+                    <m:mrow>
+                      <m:mi>N</m:mi>
+                      <m:mi>M</m:mi>
+                      <m:mi>D</m:mi>
+                      <m:mi>A</m:mi>
+                    </m:mrow>
+                  </m:msub>
+                  <m:mo>]</m:mo>
+                </m:mrow>
+                <m:mrow>
+                  <m:mi>d</m:mi>
+                  <m:mi>t</m:mi>
+                </m:mrow>
+              </m:mfrac>
+              <m:mo>=</m:mo>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:msub>
+                  <m:mi>V</m:mi>
+                  <m:mrow>
+                    <m:mi>N</m:mi>
+                    <m:mi>M</m:mi>
+                    <m:mi>D</m:mi>
+                    <m:mi>A</m:mi>
+                  </m:mrow>
+                </m:msub>
+                <m:mo>-</m:mo>
+                <m:mi>V</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:msub>
+                <m:mi>ρ</m:mi>
+                <m:mrow>
+                  <m:mi>N</m:mi>
+                  <m:mi>M</m:mi>
+                  <m:mi>D</m:mi>
+                  <m:mi>A</m:mi>
+                </m:mrow>
+              </m:msub>
+              <m:mi>p</m:mi>
+              <m:mi>s</m:mi>
+              <m:mo>-</m:mo>
+              <m:msub>
+                <m:mi>δ</m:mi>
+                <m:mrow>
+                  <m:mi>N</m:mi>
+                  <m:mi>M</m:mi>
+                  <m:mi>D</m:mi>
+                  <m:mi>A</m:mi>
+                </m:mrow>
+              </m:msub>
+              <m:mrow>
+                <m:mo>[</m:mo>
+                <m:mi>C</m:mi>
+                <m:msub>
+                  <m:mi>a</m:mi>
+                  <m:mrow>
+                    <m:mi>N</m:mi>
+                    <m:mi>M</m:mi>
+                    <m:mi>D</m:mi>
+                    <m:mi>A</m:mi>
+                  </m:mrow>
+                </m:msub>
+                <m:mo>]</m:mo>
+              </m:mrow>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id2259345">This term actually looks a little more complicated. There are generally many synapses where <m:math><m:mrow><m:mi>C</m:mi><m:msup><m:mi>a</m:mi><m:mrow><m:mn>2</m:mn><m:mo>+</m:mo></m:mrow></m:msup></m:mrow></m:math> can enter a neuron and the entry rate at each synapse is a product of the activation variable <m:math><m:msub><m:mi>s</m:mi><m:mrow><m:mi>k</m:mi><m:mi>j</m:mi></m:mrow></m:msub></m:math> (which is 1 if the pre-synaptic neuron j which synapses onto k fired recently, 0 if not) and the connection weight <m:math><m:msub><m:mi>ρ</m:mi><m:mrow><m:mi>N</m:mi><m:mi>M</m:mi><m:mi>D</m:mi><m:mi>A</m:mi></m:mrow></m:msub></m:math>, which is proportional to the conductance wieghting (i.e. <m:math><m:mrow><m:msub><m:mi>ρ</m:mi><m:mrow><m:mi>N</m:mi><m:mi>M</m:mi><m:mi>D</m:mi><m:mi>A</m:mi></m:mrow></m:msub><m:mo>=</m:mo><m:mi>N</m:mi><m:mi>M</m:mi><m:mi>D</m:mi><m:msub><m:mi>A</m:mi><m:mrow><m:mi>s</m:mi><m:mi>c</m:mi><m:mi>a</m:mi><m:mi>l</m:mi><m:mi>a</m:mi><m:mi>r</m:mi></m:mrow></m:msub><m:msub><m:mi>G</m:mi><m:mrow><m:mi>k</m:mi><m:mi>j</m:mi></m:mrow></m:msub></m:mrow></m:math>). We must write this term as a summation of all the <m:math><m:mrow><m:mi>C</m:mi><m:msup><m:mi>a</m:mi><m:mrow><m:mn>2</m:mn><m:mo>+</m:mo></m:mrow></m:msup></m:mrow></m:math> coming in from different synapses. There are now subscripts and superscripts <m:math><m:mi>j</m:mi></m:math> and <m:math><m:mi>k</m:mi></m:math> being used to indicate which cells are be tracked. In the below equation is the differential equation for cell <m:math><m:mi>k</m:mi></m:math>. The <m:math><m:mi>j</m:mi></m:math> index is used for other cells that synapse onto <m:math><m:mi>k</m:mi></m:math>. The compartment here is assumed to be the soma as we will not bother to track the calcium flow from the end compartment to the soma.</para>
+        <equation id="id2259552">
+          <m:math mode="display">
+            <m:mrow>
+              <m:mfrac>
+                <m:mrow>
+                  <m:mi>d</m:mi>
+                  <m:msup>
+                    <m:mrow>
+                      <m:mo>[</m:mo>
+                      <m:mi>C</m:mi>
+                      <m:msub>
+                        <m:mi>a</m:mi>
+                        <m:mrow>
+                          <m:mi>N</m:mi>
+                          <m:mi>M</m:mi>
+                          <m:mi>D</m:mi>
+                          <m:mi>A</m:mi>
+                        </m:mrow>
+                      </m:msub>
+                      <m:mo>]</m:mo>
+                    </m:mrow>
+                    <m:mi>k</m:mi>
+                  </m:msup>
+                </m:mrow>
+                <m:mrow>
+                  <m:mi>d</m:mi>
+                  <m:mi>t</m:mi>
+                </m:mrow>
+              </m:mfrac>
+              <m:mo>=</m:mo>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:msub>
+                  <m:mi>V</m:mi>
+                  <m:mrow>
+                    <m:mi>N</m:mi>
+                    <m:mi>M</m:mi>
+                    <m:mi>D</m:mi>
+                    <m:mi>A</m:mi>
+                  </m:mrow>
+                </m:msub>
+                <m:mo>-</m:mo>
+                <m:msup>
+                  <m:mi>V</m:mi>
+                  <m:mi>k</m:mi>
+                </m:msup>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:msub>
+                <m:mi>p</m:mi>
+                <m:mi>k</m:mi>
+              </m:msub>
+              <m:munder>
+                <m:mo>∑</m:mo>
+                <m:mrow>
+                  <m:mtext>j</m:mtext>
+                  <m:mspace width="4.pt"/>
+                  <m:mtext>onto</m:mtext>
+                  <m:mspace width="4.pt"/>
+                  <m:mtext>k</m:mtext>
+                </m:mrow>
+              </m:munder>
+              <m:mi>N</m:mi>
+              <m:mi>M</m:mi>
+              <m:mi>D</m:mi>
+              <m:msub>
+                <m:mi>A</m:mi>
+                <m:mrow>
+                  <m:mi>s</m:mi>
+                  <m:mi>c</m:mi>
+                  <m:mi>a</m:mi>
+                  <m:mi>l</m:mi>
+                  <m:mi>a</m:mi>
+                  <m:mi>r</m:mi>
+                </m:mrow>
+              </m:msub>
+              <m:msub>
+                <m:mi>G</m:mi>
+                <m:mrow>
+                  <m:mi>k</m:mi>
+                  <m:mi>j</m:mi>
+                </m:mrow>
+              </m:msub>
+              <m:msub>
+                <m:mi>s</m:mi>
+                <m:mrow>
+                  <m:mi>k</m:mi>
+                  <m:mi>j</m:mi>
+                </m:mrow>
+              </m:msub>
+              <m:mo>-</m:mo>
+              <m:msub>
+                <m:mi>δ</m:mi>
+                <m:mrow>
+                  <m:mi>N</m:mi>
+                  <m:mi>M</m:mi>
+                  <m:mi>D</m:mi>
+                  <m:mi>A</m:mi>
+                </m:mrow>
+              </m:msub>
+              <m:msup>
+                <m:mrow>
+                  <m:mo>[</m:mo>
+                  <m:mi>C</m:mi>
+                  <m:msub>
+                    <m:mi>a</m:mi>
+                    <m:mrow>
+                      <m:mi>N</m:mi>
+                      <m:mi>M</m:mi>
+                      <m:mi>D</m:mi>
+                      <m:mi>A</m:mi>
+                    </m:mrow>
+                  </m:msub>
+                  <m:mo>]</m:mo>
+                </m:mrow>
+                <m:mi>k</m:mi>
+              </m:msup>
+            </m:mrow>
+          </m:math>
+        </equation>
+      </section>
+      <section id="uid9">
+        <title>Computational Methods for Solving Differential Equations</title>
+        <para id="id2259760">There are several differential equations that need to be solved in order to advance the system. A time-stepping method is used and updates each variable given the selected step size (typically .01 milliseconds). A hybrid Euler scheme is used. In a differential equation the derivative is replaced with the approximation <m:math><m:mrow><m:mo>(</m:mo><m:msub><m:mi>v</m:mi><m:mrow><m:mi>i</m:mi><m:mo>+</m:mo><m:mn>1</m:mn></m:mrow></m:msub><m:mo>-</m:mo><m:msub><m:mi>v</m:mi><m:mi>i</m:mi></m:msub><m:mo>)</m:mo><m:mo>/</m:mo><m:mi>d</m:mi><m:mi>t</m:mi></m:mrow></m:math>. The right hand side <m:math><m:msub><m:mi>v</m:mi><m:mrow><m:mi>i</m:mi><m:mo>+</m:mo><m:mn>1</m:mn></m:mrow></m:msub></m:math> is plugged in for <m:math><m:mi>v</m:mi></m:math> when the equation can be explicitly solved for, this is backward Euler which has better stability properties. However, when we cannot solve for <m:math><m:msub><m:mi>v</m:mi><m:mrow><m:mi>i</m:mi><m:mo>+</m:mo><m:mn>1</m:mn></m:mrow></m:msub></m:math> we use <m:math><m:msub><m:mi>v</m:mi><m:mi>i</m:mi></m:msub></m:math> instead, this is a forward Euler stepping scheme. In our main differential equation for cell voltage some terms we can use the backward method. The <m:math><m:mrow><m:mi>m</m:mi><m:mo>,</m:mo><m:mi>h</m:mi><m:mo>,</m:mo><m:mi>n</m:mi><m:mo>,</m:mo><m:mi>q</m:mi><m:mo>,</m:mo><m:mo>[</m:mo><m:mi>C</m:mi><m:mi>a</m:mi><m:mi>A</m:mi><m:mi>P</m:mi><m:mo>]</m:mo></m:mrow></m:math> and <m:math><m:mrow><m:mo>[</m:mo><m:mi>C</m:mi><m:mi>a</m:mi><m:mi>N</m:mi><m:mi>M</m:mi><m:mi>D</m:mi><m:mi>A</m:mi><m:mo>]</m:mo></m:mrow></m:math> variables have to updated using a forward Euler update first. Then they are plugging into their ion current components of the main cell voltage differential equation. This is all then solved for <m:math><m:msub><m:mi>V</m:mi><m:mrow><m:mi>i</m:mi><m:mo>+</m:mo><m:mn>1</m:mn></m:mrow></m:msub></m:math>. The set up is below. Remember the ion currents are only at the soma, below we imagine we are updating the soma compartment. Other compartments are done the same way except the ion currents are not there and some parameters such as <m:math><m:msub><m:mi>C</m:mi><m:mi>m</m:mi></m:msub></m:math> take different values. We start with an example of how the <m:math><m:mi>m</m:mi></m:math> gating variable would be updated.</para>
+        <equation id="id2259994">
+          <m:math mode="display">
+            <m:mtable displaystyle="true">
+              <m:mtr>
+                <m:mtd columnalign="right">
+                  <m:mfrac>
+                    <m:mrow>
+                      <m:mo>(</m:mo>
+                      <m:msub>
+                        <m:mi>m</m:mi>
+                        <m:mrow>
+                          <m:mi>i</m:mi>
+                          <m:mo>+</m:mo>
+                          <m:mn>1</m:mn>
+                        </m:mrow>
+                      </m:msub>
+                      <m:mo>-</m:mo>
+                      <m:msub>
+                        <m:mi>m</m:mi>
+                        <m:mi>i</m:mi>
+                      </m:msub>
+                      <m:mo>)</m:mo>
+                    </m:mrow>
+                    <m:mrow>
+                      <m:mi>d</m:mi>
+                      <m:mi>t</m:mi>
+                    </m:mrow>
+                  </m:mfrac>
+                </m:mtd>
+                <m:mtd columnalign="left">
+                  <m:mrow>
+                    <m:mo>=</m:mo>
+                    <m:msub>
+                      <m:mi>α</m:mi>
+                      <m:mi>m</m:mi>
+                    </m:msub>
+                    <m:mrow>
+                      <m:mo>[</m:mo>
+                      <m:msub>
+                        <m:mi>V</m:mi>
+                        <m:mi>i</m:mi>
+                      </m:msub>
+                      <m:mo>]</m:mo>
+                    </m:mrow>
+                    <m:mrow>
+                      <m:mo>(</m:mo>
+                      <m:mn>1</m:mn>
+                      <m:mo>-</m:mo>
+                      <m:msub>
+                        <m:mi>m</m:mi>
+                        <m:mrow>
+                          <m:mi>i</m:mi>
+                          <m:mo>+</m:mo>
+                          <m:mn>1</m:mn>
+                        </m:mrow>
+                      </m:msub>
+                      <m:mo>)</m:mo>
+                    </m:mrow>
+                    <m:mo>-</m:mo>
+                    <m:msub>
+                      <m:mi>β</m:mi>
+                      <m:mi>m</m:mi>
+                    </m:msub>
+                    <m:mrow>
+                      <m:mo>[</m:mo>
+                      <m:msub>
+                        <m:mi>V</m:mi>
+                        <m:mi>i</m:mi>
+                      </m:msub>
+                      <m:mo>]</m:mo>
+                    </m:mrow>
+                    <m:msub>
+                      <m:mi>m</m:mi>
+                      <m:mrow>
+                        <m:mi>i</m:mi>
+                        <m:mo>+</m:mo>
+                        <m:mn>1</m:mn>
+                      </m:mrow>
+                    </m:msub>
+                  </m:mrow>
+                </m:mtd>
+              </m:mtr>
+              <m:mtr>
+                <m:mtd/>
+                <m:mtd columnalign="left">
+                  <m:mrow>
+                    <m:mo>=</m:mo>
+                    <m:mfrac>
+                      <m:mrow>
+                        <m:msub>
+                          <m:mi>A</m:mi>
+                          <m:msub>
+                            <m:mi>α</m:mi>
+                            <m:mi>m</m:mi>
+                          </m:msub>
+                        </m:msub>
+                        <m:mrow>
+                          <m:mo>(</m:mo>
+                          <m:msub>
+                            <m:mi>V</m:mi>
+                            <m:mi>i</m:mi>
+                          </m:msub>
+                          <m:mo>-</m:mo>
+                          <m:msub>
+                            <m:mi>B</m:mi>
+                            <m:msub>
+                              <m:mi>α</m:mi>
+                              <m:mi>m</m:mi>
+                            </m:msub>
+                          </m:msub>
+                          <m:mo>)</m:mo>
+                        </m:mrow>
+                      </m:mrow>
+                      <m:mrow>
+                        <m:mn>1</m:mn>
+                        <m:mo>-</m:mo>
+                        <m:msup>
+                          <m:mi>e</m:mi>
+                          <m:mrow>
+                            <m:mrow>
+                              <m:mo>(</m:mo>
+                              <m:msub>
+                                <m:mi>B</m:mi>
+                                <m:msub>
+                                  <m:mi>α</m:mi>
+                                  <m:mi>m</m:mi>
+                                </m:msub>
+                              </m:msub>
+                              <m:mo>-</m:mo>
+                              <m:msub>
+                                <m:mi>V</m:mi>
+                                <m:mi>i</m:mi>
+                              </m:msub>
+                              <m:mo>)</m:mo>
+                            </m:mrow>
+                            <m:mo>/</m:mo>
+                            <m:msub>
+                              <m:mi>C</m:mi>
+                              <m:msub>
+                                <m:mi>α</m:mi>
+                                <m:mi>m</m:mi>
+                              </m:msub>
+                            </m:msub>
+                          </m:mrow>
+                        </m:msup>
+                      </m:mrow>
+                    </m:mfrac>
+                    <m:mrow>
+                      <m:mo>(</m:mo>
+                      <m:mn>1</m:mn>
+                      <m:mo>-</m:mo>
+                      <m:msub>
+                        <m:mi>m</m:mi>
+                        <m:mrow>
+                          <m:mi>i</m:mi>
+                          <m:mo>+</m:mo>
+                          <m:mn>1</m:mn>
+                        </m:mrow>
+                      </m:msub>
+                      <m:mo>)</m:mo>
+                    </m:mrow>
+                    <m:mo>-</m:mo>
+                    <m:mfrac>
+                      <m:mrow>
+                        <m:msub>
+                          <m:mi>A</m:mi>
+                          <m:msub>
+                            <m:mi>β</m:mi>
+                            <m:mi>m</m:mi>
+                          </m:msub>
+                        </m:msub>
+                        <m:mrow>
+                          <m:mo>(</m:mo>
+                          <m:msub>
+                            <m:mi>B</m:mi>
+                            <m:msub>
+                              <m:mi>β</m:mi>
+                              <m:mi>m</m:mi>
+                            </m:msub>
+                          </m:msub>
+                          <m:mo>-</m:mo>
+                          <m:msub>
+                            <m:mi>V</m:mi>
+                            <m:mi>i</m:mi>
+                          </m:msub>
+                          <m:mo>)</m:mo>
+                        </m:mrow>
+                      </m:mrow>
+                      <m:mrow>
+                        <m:mn>1</m:mn>
+                        <m:mo>-</m:mo>
+                        <m:msup>
+                          <m:mi>e</m:mi>
+                          <m:mrow>
+                            <m:mrow>
+                              <m:mo>(</m:mo>
+                              <m:msub>
+                                <m:mi>V</m:mi>
+                                <m:mi>i</m:mi>
+                              </m:msub>
+                              <m:mo>-</m:mo>
+                              <m:msub>
+                                <m:mi>B</m:mi>
+                                <m:msub>
+                                  <m:mi>β</m:mi>
+                                  <m:mi>m</m:mi>
+                                </m:msub>
+                              </m:msub>
+                              <m:mo>)</m:mo>
+                            </m:mrow>
+                            <m:mo>/</m:mo>
+                            <m:msub>
+                              <m:mi>C</m:mi>
+                              <m:msub>
+                                <m:mi>β</m:mi>
+                                <m:mi>m</m:mi>
+                              </m:msub>
+                            </m:msub>
+                          </m:mrow>
+                        </m:msup>
+                      </m:mrow>
+                    </m:mfrac>
+                    <m:msub>
+                      <m:mi>m</m:mi>
+                      <m:mrow>
+                        <m:mi>i</m:mi>
+                        <m:mo>+</m:mo>
+                        <m:mn>1</m:mn>
+                      </m:mrow>
+                    </m:msub>
+                  </m:mrow>
+                </m:mtd>
+              </m:mtr>
+            </m:mtable>
+          </m:math>
+        </equation>
+        <para id="id2260375">Solving for <m:math><m:msub><m:mi>m</m:mi><m:mrow><m:mi>i</m:mi><m:mo>+</m:mo><m:mn>1</m:mn></m:mrow></m:msub></m:math> gives:</para>
+        <equation id="id2260400">
+          <m:math mode="display">
+            <m:mrow>
+              <m:msub>
+                <m:mi>m</m:mi>
+                <m:mrow>
+                  <m:mi>i</m:mi>
+                  <m:mo>+</m:mo>
+                  <m:mn>1</m:mn>
+                </m:mrow>
+              </m:msub>
+              <m:mo>=</m:mo>
+              <m:mfrac>
+                <m:mrow>
+                  <m:msub>
+                    <m:mi>m</m:mi>
+                    <m:mi>i</m:mi>
+                  </m:msub>
+                  <m:mo>+</m:mo>
+                  <m:mi>d</m:mi>
+                  <m:mi>t</m:mi>
+                  <m:msub>
+                    <m:mi>α</m:mi>
+                    <m:mi>m</m:mi>
+                  </m:msub>
+                  <m:mrow>
+                    <m:mo>[</m:mo>
+                    <m:msub>
+                      <m:mi>V</m:mi>
+                      <m:mi>i</m:mi>
+                    </m:msub>
+                    <m:mo>]</m:mo>
+                  </m:mrow>
+                </m:mrow>
+                <m:mrow>
+                  <m:mn>1</m:mn>
+                  <m:mo>+</m:mo>
+                  <m:mi>d</m:mi>
+                  <m:mi>t</m:mi>
+                  <m:mfenced separators="" open="(" close=")">
+                    <m:msub>
+                      <m:mi>α</m:mi>
+                      <m:mi>m</m:mi>
+                    </m:msub>
+                    <m:mrow>
+                      <m:mo>[</m:mo>
+                      <m:msub>
+                        <m:mi>V</m:mi>
+                        <m:mi>i</m:mi>
+                      </m:msub>
+                      <m:mo>]</m:mo>
+                    </m:mrow>
+                    <m:mo>+</m:mo>
+                    <m:msub>
+                      <m:mi>β</m:mi>
+                      <m:mi>m</m:mi>
+                    </m:msub>
+                    <m:mrow>
+                      <m:mo>[</m:mo>
+                      <m:msub>
+                        <m:mi>V</m:mi>
+                        <m:mi>i</m:mi>
+                      </m:msub>
+                      <m:mo>]</m:mo>
+                    </m:mrow>
+                  </m:mfenced>
+                </m:mrow>
+              </m:mfrac>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id2260522">Update <m:math><m:mrow><m:mi>n</m:mi><m:mo>,</m:mo><m:mi>h</m:mi><m:mo>,</m:mo><m:mi>q</m:mi><m:mo>,</m:mo><m:mrow><m:mo>[</m:mo><m:mi>C</m:mi><m:msub><m:mi>a</m:mi><m:mrow><m:mi>A</m:mi><m:mi>P</m:mi></m:mrow></m:msub><m:mo>]</m:mo></m:mrow><m:mo>,</m:mo><m:mrow><m:mo>[</m:mo><m:mi>C</m:mi><m:msub><m:mi>a</m:mi><m:mrow><m:mi>N</m:mi><m:mi>M</m:mi><m:mi>D</m:mi><m:mi>A</m:mi></m:mrow></m:msub><m:mo>]</m:mo></m:mrow></m:mrow></m:math> likewise solving for the <m:math><m:mrow><m:mi>i</m:mi><m:mo>+</m:mo><m:mn>1</m:mn></m:mrow></m:math> step. Notice <m:math><m:msub><m:mi>α</m:mi><m:mi>m</m:mi></m:msub></m:math> and <m:math><m:msub><m:mi>β</m:mi><m:mi>m</m:mi></m:msub></m:math> are functions of voltage. Plug these results into below equation which is then solved for <m:math><m:msub><m:mi>V</m:mi><m:mrow><m:mi>i</m:mi><m:mo>+</m:mo><m:mn>1</m:mn></m:mrow></m:msub></m:math></para>
+        <equation id="id2260660">
+          <m:math mode="display">
+            <m:mrow>
+              <m:mfrac>
+                <m:mrow>
+                  <m:msub>
+                    <m:mi>V</m:mi>
+                    <m:mrow>
+                      <m:mi>i</m:mi>
+                      <m:mo>+</m:mo>
+                      <m:mn>1</m:mn>
+                    </m:mrow>
+                  </m:msub>
+                  <m:mo>-</m:mo>
+                  <m:msub>
+                    <m:mi>V</m:mi>
+                    <m:mi>i</m:mi>
+                  </m:msub>
+                </m:mrow>
+                <m:mrow>
+                  <m:mi>d</m:mi>
+                  <m:mi>t</m:mi>
+                </m:mrow>
+              </m:mfrac>
+              <m:mo>=</m:mo>
+              <m:mfrac>
+                <m:mrow>
+                  <m:mfenced separators="" open="(" close=")">
+                    <m:msub>
+                      <m:mi>V</m:mi>
+                      <m:mrow>
+                        <m:mi>l</m:mi>
+                        <m:mi>e</m:mi>
+                        <m:mi>a</m:mi>
+                        <m:mi>k</m:mi>
+                      </m:mrow>
+                    </m:msub>
+                    <m:mo>-</m:mo>
+                    <m:msub>
+                      <m:mi>V</m:mi>
+                      <m:mrow>
+                        <m:mi>i</m:mi>
+                        <m:mo>+</m:mo>
+                        <m:mn>1</m:mn>
+                      </m:mrow>
+                    </m:msub>
+                  </m:mfenced>
+                  <m:msub>
+                    <m:mi>G</m:mi>
+                    <m:mi>m</m:mi>
+                  </m:msub>
+                  <m:mo>+</m:mo>
+                  <m:mo>∑</m:mo>
+                  <m:mfenced separators="" open="(" close=")">
+                    <m:msub>
+                      <m:mi>V</m:mi>
+                      <m:mrow>
+                        <m:mi>c</m:mi>
+                        <m:mi>o</m:mi>
+                        <m:mi>m</m:mi>
+                        <m:mi>p</m:mi>
+                      </m:mrow>
+                    </m:msub>
+                    <m:mo>-</m:mo>
+                    <m:msub>
+                      <m:mi>V</m:mi>
+                      <m:mrow>
+                        <m:mi>i</m:mi>
+                        <m:mo>+</m:mo>
+                        <m:mn>1</m:mn>
+                      </m:mrow>
+                    </m:msub>
+                  </m:mfenced>
+                  <m:msub>
+                    <m:mi>G</m:mi>
+                    <m:mrow>
+                      <m:mi>c</m:mi>
+                      <m:mi>o</m:mi>
+                      <m:mi>r</m:mi>
+                      <m:mi>e</m:mi>
+                    </m:mrow>
+                  </m:msub>
+                  <m:mo>+</m:mo>
+                  <m:msub>
+                    <m:mi>I</m:mi>
+                    <m:mrow>
+                      <m:mi>N</m:mi>
+                      <m:mi>a</m:mi>
+                    </m:mrow>
+                  </m:msub>
+                  <m:mo>+</m:mo>
+                  <m:msub>
+                    <m:mi>I</m:mi>
+                    <m:mi>K</m:mi>
+                  </m:msub>
+                  <m:mo>+</m:mo>
+                  <m:msub>
+                    <m:mi>I</m:mi>
+                    <m:mrow>
+                      <m:mi>C</m:mi>
+                      <m:mi>a</m:mi>
+                    </m:mrow>
+                  </m:msub>
+                  <m:mo>+</m:mo>
+                  <m:msub>
+                    <m:mi>I</m:mi>
+                    <m:mrow>
+                      <m:mi>K</m:mi>
+                      <m:mo>(</m:mo>
+                      <m:mi>C</m:mi>
+                      <m:mi>a</m:mi>
+                      <m:mo>)</m:mo>
+                    </m:mrow>
+                  </m:msub>
+                  <m:mo>+</m:mo>
+                  <m:msub>
+                    <m:mi>I</m:mi>
+                    <m:mrow>
+                      <m:mi>s</m:mi>
+                      <m:mi>y</m:mi>
+                      <m:mi>n</m:mi>
+                    </m:mrow>
+                  </m:msub>
+                </m:mrow>
+                <m:msub>
+                  <m:mi>C</m:mi>
+                  <m:mi>m</m:mi>
+                </m:msub>
+              </m:mfrac>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id2260884">
+The ion channels have the <m:math><m:msub><m:mi>V</m:mi><m:mrow><m:mi>i</m:mi><m:mo>+</m:mo><m:mn>1</m:mn></m:mrow></m:msub></m:math> term in them. For example the <m:math><m:mrow><m:mi>N</m:mi><m:msup><m:mi>a</m:mi><m:mo>+</m:mo></m:msup></m:mrow></m:math> channel looks like this:</para>
+        <equation id="id2260932">
+          <m:math mode="display">
+            <m:mrow>
+              <m:msub>
+                <m:mi>I</m:mi>
+                <m:mrow>
+                  <m:mi>N</m:mi>
+                  <m:mi>a</m:mi>
+                </m:mrow>
+              </m:msub>
+              <m:mo>=</m:mo>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:msub>
+                  <m:mi>V</m:mi>
+                  <m:mrow>
+                    <m:mi>N</m:mi>
+                    <m:mi>a</m:mi>
+                  </m:mrow>
+                </m:msub>
+                <m:mo>-</m:mo>
+                <m:msub>
+                  <m:mi>V</m:mi>
+                  <m:mrow>
+                    <m:mi>i</m:mi>
+                    <m:mo>+</m:mo>
+                    <m:mn>1</m:mn>
+                  </m:mrow>
+                </m:msub>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:msub>
+                <m:mi>G</m:mi>
+                <m:mrow>
+                  <m:mi>N</m:mi>
+                  <m:mi>a</m:mi>
+                </m:mrow>
+              </m:msub>
+              <m:msubsup>
+                <m:mi>m</m:mi>
+                <m:mrow>
+                  <m:mi>i</m:mi>
+                  <m:mo>+</m:mo>
+                  <m:mn>1</m:mn>
+                </m:mrow>
+                <m:mn>3</m:mn>
+              </m:msubsup>
+              <m:msub>
+                <m:mi>h</m:mi>
+                <m:mrow>
+                  <m:mi>i</m:mi>
+                  <m:mo>+</m:mo>
+                  <m:mn>1</m:mn>
+                </m:mrow>
+              </m:msub>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id2261024">The final result term after solving for <m:math><m:msub><m:mi>V</m:mi><m:mrow><m:mi>i</m:mi><m:mo>+</m:mo><m:mn>1</m:mn></m:mrow></m:msub></m:math>:
+
+</para>
+        <equation id="id2261054">
+          <m:math mode="display">
+            <m:mrow>
+              <m:msub>
+                <m:mi>V</m:mi>
+                <m:mrow>
+                  <m:mi>i</m:mi>
+                  <m:mo>+</m:mo>
+                  <m:mn>1</m:mn>
+                </m:mrow>
+              </m:msub>
+              <m:mo>=</m:mo>
+              <m:mfrac>
+                <m:mrow>
+                  <m:msub>
+                    <m:mi>C</m:mi>
+                    <m:mi>m</m:mi>
+                  </m:msub>
+                  <m:msub>
+                    <m:mi>V</m:mi>
+                    <m:mi>i</m:mi>
+                  </m:msub>
+                  <m:mrow>
+                    <m:mo>+</m:mo>
+                    <m:mi>d</m:mi>
+                    <m:mi>t</m:mi>
+                    <m:mo>(</m:mo>
+                  </m:mrow>
+                  <m:msub>
+                    <m:mi>G</m:mi>
+                    <m:mi>m</m:mi>
+                  </m:msub>
+                  <m:msub>
+                    <m:mi>V</m:mi>
+                    <m:mrow>
+                      <m:mi>l</m:mi>
+                      <m:mi>e</m:mi>
+                      <m:mi>a</m:mi>
+                      <m:mi>k</m:mi>
+                    </m:mrow>
+                  </m:msub>
+                  <m:mo>+</m:mo>
+                  <m:msub>
+                    <m:mi>G</m:mi>
+                    <m:mrow>
+                      <m:mi>N</m:mi>
+                      <m:mi>a</m:mi>
+                    </m:mrow>
+                  </m:msub>
+                  <m:msubsup>
+                    <m:mi>m</m:mi>
+                    <m:mrow>
+                      <m:mi>i</m:mi>
+                      <m:mo>+</m:mo>
+                      <m:mn>1</m:mn>
+                    </m:mrow>
+                    <m:mn>3</m:mn>
+                  </m:msubsup>
+                  <m:msub>
+                    <m:mi>h</m:mi>
+                    <m:mrow>
+                      <m:mi>i</m:mi>
+                      <m:mo>+</m:mo>
+                      <m:mn>1</m:mn>
+                    </m:mrow>
+                  </m:msub>
+                  <m:msub>
+                    <m:mi>V</m:mi>
+                    <m:mrow>
+                      <m:mi>N</m:mi>
+                      <m:mi>a</m:mi>
+                    </m:mrow>
+                  </m:msub>
+                  <m:mo>+</m:mo>
+                  <m:msub>
+                    <m:mi>G</m:mi>
+                    <m:mi>K</m:mi>
+                  </m:msub>
+                  <m:msubsup>
+                    <m:mi>n</m:mi>
+                    <m:mrow>
+                      <m:mi>i</m:mi>
+                      <m:mo>+</m:mo>
+                      <m:mn>1</m:mn>
+                    </m:mrow>
+                    <m:mn>4</m:mn>
+                  </m:msubsup>
+                  <m:msub>
+                    <m:mi>V</m:mi>
+                    <m:mi>K</m:mi>
+                  </m:msub>
+                  <m:mo>+</m:mo>
+                  <m:msub>
+                    <m:mi>G</m:mi>
+                    <m:mrow>
+                      <m:mi>K</m:mi>
+                      <m:mo>(</m:mo>
+                      <m:mi>C</m:mi>
+                      <m:mi>a</m:mi>
+                      <m:mo>)</m:mo>
+                    </m:mrow>
+                  </m:msub>
+                  <m:msub>
+                    <m:mi>V</m:mi>
+                    <m:mi>K</m:mi>
+                  </m:msub>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:msub>
+                      <m:mrow>
+                        <m:mo>[</m:mo>
+                        <m:mi>C</m:mi>
+                        <m:msub>
+                          <m:mi>a</m:mi>
+                          <m:mrow>
+                            <m:mi>A</m:mi>
+                            <m:mi>P</m:mi>
+                          </m:mrow>
+                        </m:msub>
+                        <m:mo>]</m:mo>
+                      </m:mrow>
+                      <m:mrow>
+                        <m:mi>i</m:mi>
+                        <m:mo>+</m:mo>
+                        <m:mn>1</m:mn>
+                      </m:mrow>
+                    </m:msub>
+                    <m:mo>+</m:mo>
+                    <m:msub>
+                      <m:mrow>
+                        <m:mo>[</m:mo>
+                        <m:mi>C</m:mi>
+                        <m:msub>
+                          <m:mi>a</m:mi>
+                          <m:mrow>
+                            <m:mi>N</m:mi>
+                            <m:mi>M</m:mi>
+                            <m:mi>D</m:mi>
+                            <m:mi>A</m:mi>
+                          </m:mrow>
+                        </m:msub>
+                        <m:mo>]</m:mo>
+                      </m:mrow>
+                      <m:mrow>
+                        <m:mi>i</m:mi>
+                        <m:mo>+</m:mo>
+                        <m:mn>1</m:mn>
+                      </m:mrow>
+                    </m:msub>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                  <m:mo>+</m:mo>
+                  <m:msub>
+                    <m:mi>I</m:mi>
+                    <m:mrow>
+                      <m:mi>S</m:mi>
+                      <m:mi>y</m:mi>
+                      <m:mi>n</m:mi>
+                    </m:mrow>
+                  </m:msub>
+                  <m:mo>+</m:mo>
+                  <m:msub>
+                    <m:mi>I</m:mi>
+                    <m:mrow>
+                      <m:mi>S</m:mi>
+                      <m:mi>t</m:mi>
+                      <m:mi>i</m:mi>
+                      <m:mi>m</m:mi>
+                    </m:mrow>
+                  </m:msub>
+                </m:mrow>
+                <m:mrow>
+                  <m:msub>
+                    <m:mi>C</m:mi>
+                    <m:mi>m</m:mi>
+                  </m:msub>
+                  <m:mrow>
+                    <m:mo>+</m:mo>
+                    <m:mi>d</m:mi>
+                    <m:mi>t</m:mi>
+                    <m:mo>(</m:mo>
+                  </m:mrow>
+                  <m:msub>
+                    <m:mi>G</m:mi>
+                    <m:mi>m</m:mi>
+                  </m:msub>
+                  <m:mo>+</m:mo>
+                  <m:msub>
+                    <m:mi>G</m:mi>
+                    <m:mrow>
+                      <m:mi>N</m:mi>
+                      <m:mi>a</m:mi>
+                    </m:mrow>
+                  </m:msub>
+                  <m:msubsup>
+                    <m:mi>m</m:mi>
+                    <m:mrow>
+                      <m:mi>i</m:mi>
+                      <m:mo>+</m:mo>
+                      <m:mn>1</m:mn>
+                    </m:mrow>
+                    <m:mn>3</m:mn>
+                  </m:msubsup>
+                  <m:msub>
+                    <m:mi>h</m:mi>
+                    <m:mrow>
+                      <m:mi>i</m:mi>
+                      <m:mo>+</m:mo>
+                      <m:mn>1</m:mn>
+                    </m:mrow>
+                  </m:msub>
+                  <m:mo>+</m:mo>
+                  <m:msub>
+                    <m:mi>G</m:mi>
+                    <m:mi>K</m:mi>
+                  </m:msub>
+                  <m:msubsup>
+                    <m:mi>n</m:mi>
+                    <m:mrow>
+                      <m:mi>i</m:mi>
+                      <m:mo>+</m:mo>
+                      <m:mn>1</m:mn>
+                    </m:mrow>
+                    <m:mn>4</m:mn>
+                  </m:msubsup>
+                  <m:mo>+</m:mo>
+                  <m:msub>
+                    <m:mi>G</m:mi>
+                    <m:mrow>
+                      <m:mi>K</m:mi>
+                      <m:mo>(</m:mo>
+                      <m:mi>C</m:mi>
+                      <m:mi>a</m:mi>
+                      <m:mo>)</m:mo>
+                    </m:mrow>
+                  </m:msub>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:msub>
+                      <m:mrow>
+                        <m:mo>[</m:mo>
+                        <m:mi>C</m:mi>
+                        <m:msub>
+                          <m:mi>a</m:mi>
+                          <m:mrow>
+                            <m:mi>A</m:mi>
+                            <m:mi>P</m:mi>
+                          </m:mrow>
+                        </m:msub>
+                        <m:mo>]</m:mo>
+                      </m:mrow>
+                      <m:mrow>
+                        <m:mi>i</m:mi>
+                        <m:mo>+</m:mo>
+                        <m:mn>1</m:mn>
+                      </m:mrow>
+                    </m:msub>
+                    <m:mo>+</m:mo>
+                    <m:msub>
+                      <m:mrow>
+                        <m:mo>[</m:mo>
+                        <m:mi>C</m:mi>
+                        <m:msub>
+                          <m:mi>a</m:mi>
+                          <m:mrow>
+                            <m:mi>N</m:mi>
+                            <m:mi>M</m:mi>
+                            <m:mi>D</m:mi>
+                            <m:mi>A</m:mi>
+                          </m:mrow>
+                        </m:msub>
+                        <m:mo>]</m:mo>
+                      </m:mrow>
+                      <m:mrow>
+                        <m:mi>i</m:mi>
+                        <m:mo>+</m:mo>
+                        <m:mn>1</m:mn>
+                      </m:mrow>
+                    </m:msub>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                </m:mrow>
+              </m:mfrac>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id2261523"/>
+      </section>
+    </section>
+    <section id="uid10">
+      <title>Building Networks</title>
+      <para id="id2261538">After constructing models for the individual neurons it is necessary to connect the cells. The mission is to have a small network (50 excitatory and 50 inhibitory neurons will be used in the simulations, more details on why in a bit) and have the cells trained with pre-selected assemblies/patterns. Given different patterns or events we want to construct a weighting scheme that will assign a proper weighting. Proper in the sense that cells within a pattern will have strong excitatory connections and cells that are ever in the same pattern will have inhibitory connections. The goal is to have the network able to activate patterns. This means that when a sufficient number of cells belonging a pattern are stimulated it will fully resolve.</para>
+      <para id="id2261563">The weighting algorithm will output weights that are effective in proportion to another, but will require proper scaling. Should the overall weighting magnitudes be too high the network will seizure (meaning all the cells start firing). If the weighting magnitudes are too low, the network will go dormant once stimulation is removed.</para>
+      <section id="uid11">
+        <title>Picking Weights</title>
+        <para id="id2261581">The term weight is used loosely; it signifies the choice of the measure of conductance at synapse where two neurons meet. This parameter will suffice as way of quantifying the strength of a synapse which is physiologically determined by the amount of neurotransmitter that would be released into the cleft and the number of receptor channels. Look back at the form for a synaptic current to see the conductance term we now will give more detail on:</para>
+        <equation id="id2261592">
+          <m:math mode="display">
+            <m:mrow>
+              <m:msub>
+                <m:mi>I</m:mi>
+                <m:mrow>
+                  <m:mi>s</m:mi>
+                  <m:mi>y</m:mi>
+                  <m:mi>n</m:mi>
+                </m:mrow>
+              </m:msub>
+              <m:mo>=</m:mo>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:msub>
+                  <m:mi>V</m:mi>
+                  <m:mrow>
+                    <m:mi>s</m:mi>
+                    <m:mi>y</m:mi>
+                    <m:mi>n</m:mi>
+                  </m:mrow>
+                </m:msub>
+                <m:mo>-</m:mo>
+                <m:mi>V</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:msub>
+                <m:mi>G</m:mi>
+                <m:mrow>
+                  <m:mi>s</m:mi>
+                  <m:mi>y</m:mi>
+                  <m:mi>n</m:mi>
+                </m:mrow>
+              </m:msub>
+              <m:mi>s</m:mi>
+              <m:mo>.</m:mo>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id2261657">The <m:math><m:msub><m:mi>G</m:mi><m:mrow><m:mi>s</m:mi><m:mi>y</m:mi><m:mi>n</m:mi></m:mrow></m:msub></m:math> is the conductance term that reflect the weighting. It is expressed as the product of a weighting term that is an output of the weighting algorithm and an overall weighting scale constant that will determined later. Thus, <m:math><m:mrow><m:msub><m:mi>G</m:mi><m:mrow><m:mi>i</m:mi><m:mi>j</m:mi></m:mrow></m:msub><m:mo>=</m:mo><m:msub><m:mi>w</m:mi><m:mrow><m:mi>i</m:mi><m:mi>j</m:mi></m:mrow></m:msub><m:mo>*</m:mo><m:mi>w</m:mi><m:mi>e</m:mi><m:mi>i</m:mi><m:mi>g</m:mi><m:mi>h</m:mi><m:msub><m:mi>t</m:mi><m:mrow><m:mi>s</m:mi><m:mi>y</m:mi><m:mi>n</m:mi></m:mrow></m:msub></m:mrow></m:math>. Note: there will be several different <m:math><m:mrow><m:mi>w</m:mi><m:mi>e</m:mi><m:mi>i</m:mi><m:mi>g</m:mi><m:mi>h</m:mi><m:msub><m:mi>t</m:mi><m:mrow><m:mi>s</m:mi><m:mi>y</m:mi><m:mi>n</m:mi></m:mrow></m:msub></m:mrow></m:math> constants for the several synaptic currents used in the model.</para>
+        <para id="id2261776">The scheme used to produce weights will use a probabilistic approach. Using a simple intuitive approach we want to characterize the level of support a cell gets by the term:</para>
+        <equation id="id2261788">
+          <m:math mode="display">
+            <m:mrow>
+              <m:msub>
+                <m:mi>s</m:mi>
+                <m:mi>q</m:mi>
+              </m:msub>
+              <m:mo>=</m:mo>
+              <m:msub>
+                <m:mi>b</m:mi>
+                <m:mi>q</m:mi>
+              </m:msub>
+              <m:mo>+</m:mo>
+              <m:munder>
+                <m:mo>∑</m:mo>
+                <m:mi>h</m:mi>
+              </m:munder>
+              <m:msub>
+                <m:mi>w</m:mi>
+                <m:mrow>
+                  <m:mi>h</m:mi>
+                  <m:mi>q</m:mi>
+                </m:mrow>
+              </m:msub>
+              <m:msub>
+                <m:mi>π</m:mi>
+                <m:mi>h</m:mi>
+              </m:msub>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id2261843">Here <m:math><m:msub><m:mi>s</m:mi><m:mi>q</m:mi></m:msub></m:math> is the support level of the cell. The term <m:math><m:msub><m:mi>b</m:mi><m:mi>q</m:mi></m:msub></m:math> will represent a bias of a cell (this would be a way of characterizing a cells firing property independent from other cell activity, since some cells may appear simply more activate in general). <m:math><m:msub><m:mi>w</m:mi><m:mrow><m:mi>h</m:mi><m:mi>q</m:mi></m:mrow></m:msub></m:math> is the connection weight from <m:math><m:mi>h</m:mi></m:math> to <m:math><m:mi>q</m:mi></m:math>. Variable <m:math><m:msub><m:mi>π</m:mi><m:mi>h</m:mi></m:msub></m:math> is the activity level of cell <m:math><m:mi>h</m:mi></m:math>. Assume either 0 or 1 then we reduce this system to a summation over the active cells in all the different patterns, set A.</para>
+        <equation id="id2261948">
+          <m:math mode="display">
+            <m:mrow>
+              <m:msub>
+                <m:mi>s</m:mi>
+                <m:mi>q</m:mi>
+              </m:msub>
+              <m:mo>=</m:mo>
+              <m:msub>
+                <m:mi>b</m:mi>
+                <m:mi>q</m:mi>
+              </m:msub>
+              <m:mo>+</m:mo>
+              <m:munder>
+                <m:mo>∑</m:mo>
+                <m:mrow>
+                  <m:mi>h</m:mi>
+                  <m:mi>ϵ</m:mi>
+                  <m:mi>A</m:mi>
+                </m:mrow>
+              </m:munder>
+              <m:msub>
+                <m:mi>w</m:mi>
+                <m:mrow>
+                  <m:mi>h</m:mi>
+                  <m:mi>q</m:mi>
+                </m:mrow>
+              </m:msub>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id2262000">From conditional probability rule</para>
+        <equation id="id2262006">
+          <m:math mode="display">
+            <m:mrow>
+              <m:mi>p</m:mi>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>q</m:mi>
+                <m:mo>|</m:mo>
+                <m:mi>i</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>=</m:mo>
+              <m:mfrac>
+                <m:mrow>
+                  <m:mi>p</m:mi>
+                  <m:mo>(</m:mo>
+                  <m:mi>q</m:mi>
+                  <m:mo>&amp;</m:mo>
+                  <m:mi>i</m:mi>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mrow>
+                  <m:mi>p</m:mi>
+                  <m:mo>(</m:mo>
+                  <m:mi>i</m:mi>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+              </m:mfrac>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id2262058">arises Bayes Rule, which can then be iterated.</para>
+        <equation id="id2262065">
+          <m:math mode="display">
+            <m:mtable displaystyle="true">
+              <m:mtr>
+                <m:mtd columnalign="right">
+                  <m:mrow>
+                    <m:mi>p</m:mi>
+                    <m:mo>(</m:mo>
+                    <m:mi>q</m:mi>
+                    <m:mo>|</m:mo>
+                    <m:mi>i</m:mi>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                </m:mtd>
+                <m:mtd columnalign="left">
+                  <m:mrow>
+                    <m:mo>=</m:mo>
+                    <m:mfrac>
+                      <m:mrow>
+                        <m:mi>p</m:mi>
+                        <m:mo>(</m:mo>
+                        <m:mi>q</m:mi>
+                        <m:mo>)</m:mo>
+                        <m:mi>p</m:mi>
+                        <m:mo>(</m:mo>
+                        <m:mi>q</m:mi>
+                        <m:mo>|</m:mo>
+                        <m:mi>i</m:mi>
+                        <m:mo>)</m:mo>
+                      </m:mrow>
+                      <m:mrow>
+                        <m:mi>p</m:mi>
+                        <m:mo>(</m:mo>
+                        <m:mi>i</m:mi>
+                        <m:mo>)</m:mo>
+                      </m:mrow>
+                    </m:mfrac>
+                    <m:mo>.</m:mo>
+                  </m:mrow>
+                </m:mtd>
+                <m:mtd/>
+              </m:mtr>
+              <m:mtr>
+                <m:mtd columnalign="right">
+                  <m:mrow>
+                    <m:mi>p</m:mi>
+                    <m:mo>(</m:mo>
+                    <m:mi>q</m:mi>
+                    <m:mo>|</m:mo>
+                    <m:mi>i</m:mi>
+                    <m:mo>&amp;</m:mo>
+                    <m:mi>j</m:mi>
+                    <m:mo>&amp;</m:mo>
+                    <m:mi>k</m:mi>
+                    <m:mo>&amp;</m:mo>
+                    <m:mo>.</m:mo>
+                    <m:mo>.</m:mo>
+                    <m:mo>.</m:mo>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                </m:mtd>
+                <m:mtd columnalign="left">
+                  <m:mrow>
+                    <m:mo>=</m:mo>
+                    <m:mi>p</m:mi>
+                    <m:mrow>
+                      <m:mo>(</m:mo>
+                      <m:mi>q</m:mi>
+                      <m:mo>)</m:mo>
+                    </m:mrow>
+                    <m:mfrac>
+                      <m:mrow>
+                        <m:mi>p</m:mi>
+                        <m:mo>(</m:mo>
+                        <m:mi>q</m:mi>
+                        <m:mo>|</m:mo>
+                        <m:mi>i</m:mi>
+                        <m:mo>)</m:mo>
+                      </m:mrow>
+                      <m:mrow>
+                        <m:mi>p</m:mi>
+                        <m:mo>(</m:mo>
+                        <m:mi>i</m:mi>
+                        <m:mo>)</m:mo>
+                      </m:mrow>
+                    </m:mfrac>
+                    <m:mfrac>
+                      <m:mrow>
+                        <m:mi>p</m:mi>
+                        <m:mo>(</m:mo>
+                        <m:mi>q</m:mi>
+                        <m:mo>|</m:mo>
+                        <m:mi>j</m:mi>
+                        <m:mo>)</m:mo>
+                      </m:mrow>
+                      <m:mrow>
+                        <m:mi>p</m:mi>
+                        <m:mo>(</m:mo>
+                        <m:mi>j</m:mi>
+                        <m:mo>)</m:mo>
+                      </m:mrow>
+                    </m:mfrac>
+                    <m:mfrac>
+                      <m:mrow>
+                        <m:mi>p</m:mi>
+                        <m:mo>(</m:mo>
+                        <m:mi>q</m:mi>
+                        <m:mo>|</m:mo>
+                        <m:mi>k</m:mi>
+                        <m:mo>)</m:mo>
+                      </m:mrow>
+                      <m:mrow>
+                        <m:mi>p</m:mi>
+                        <m:mo>(</m:mo>
+                        <m:mi>k</m:mi>
+                        <m:mo>)</m:mo>
+                      </m:mrow>
+                    </m:mfrac>
+                    <m:mo>.</m:mo>
+                    <m:mo>.</m:mo>
+                    <m:mo>.</m:mo>
+                    <m:mo>=</m:mo>
+                    <m:mi>p</m:mi>
+                    <m:mrow>
+                      <m:mo>(</m:mo>
+                      <m:mi>q</m:mi>
+                      <m:mo>)</m:mo>
+                    </m:mrow>
+                    <m:munder>
+                      <m:mo>∏</m:mo>
+                      <m:mrow>
+                        <m:mi>h</m:mi>
+                        <m:mi>ϵ</m:mi>
+                        <m:mi>A</m:mi>
+                      </m:mrow>
+                    </m:munder>
+                    <m:mfrac>
+                      <m:mrow>
+                        <m:mi>p</m:mi>
+                        <m:mo>(</m:mo>
+                        <m:mi>h</m:mi>
+                        <m:mo>|</m:mo>
+                        <m:mi>q</m:mi>
+                        <m:mo>)</m:mo>
+                      </m:mrow>
+                      <m:mrow>
+                        <m:mi>p</m:mi>
+                        <m:mo>(</m:mo>
+                        <m:mi>h</m:mi>
+                        <m:mo>)</m:mo>
+                      </m:mrow>
+                    </m:mfrac>
+                    <m:mo>.</m:mo>
+                  </m:mrow>
+                </m:mtd>
+              </m:mtr>
+            </m:mtable>
+          </m:math>
+        </equation>
+        <para id="id2262327">Taking the logrithm of this term gives us something in the form we wanted:</para>
+        <equation id="id2262333">
+          <m:math mode="display">
+            <m:mrow>
+              <m:mi>l</m:mi>
+              <m:mi>o</m:mi>
+              <m:mi>g</m:mi>
+              <m:mspace width="3.61371pt"/>
+              <m:mi>p</m:mi>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>q</m:mi>
+                <m:mo>|</m:mo>
+                <m:mi>A</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>=</m:mo>
+              <m:mi>l</m:mi>
+              <m:mi>o</m:mi>
+              <m:mi>g</m:mi>
+              <m:mspace width="3.61371pt"/>
+              <m:mi>p</m:mi>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>q</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>+</m:mo>
+              <m:munder>
+                <m:mo>∑</m:mo>
+                <m:mrow>
+                  <m:mi>h</m:mi>
+                  <m:mi>ϵ</m:mi>
+                  <m:mi>A</m:mi>
+                </m:mrow>
+              </m:munder>
+              <m:mi>l</m:mi>
+              <m:mi>o</m:mi>
+              <m:mi>g</m:mi>
+              <m:mfrac>
+                <m:mrow>
+                  <m:mi>p</m:mi>
+                  <m:mo>(</m:mo>
+                  <m:mi>h</m:mi>
+                  <m:mo>|</m:mo>
+                  <m:mi>q</m:mi>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mrow>
+                  <m:mi>p</m:mi>
+                  <m:mo>(</m:mo>
+                  <m:mi>q</m:mi>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+              </m:mfrac>
+              <m:mo>.</m:mo>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id2262439">Thus we have that:</para>
+        <equation id="id2262444">
+          <m:math mode="display">
+            <m:mrow>
+              <m:msub>
+                <m:mi>w</m:mi>
+                <m:mrow>
+                  <m:mi>h</m:mi>
+                  <m:mi>q</m:mi>
+                </m:mrow>
+              </m:msub>
+              <m:mo>=</m:mo>
+              <m:mi>l</m:mi>
+              <m:mi>o</m:mi>
+              <m:mi>g</m:mi>
+              <m:mfrac>
+                <m:mrow>
+                  <m:mi>p</m:mi>
+                  <m:mo>(</m:mo>
+                  <m:mi>h</m:mi>
+                  <m:mo>|</m:mo>
+                  <m:mi>q</m:mi>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mrow>
+                  <m:mi>p</m:mi>
+                  <m:mo>(</m:mo>
+                  <m:mi>q</m:mi>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+              </m:mfrac>
+              <m:mo>=</m:mo>
+              <m:mi>l</m:mi>
+              <m:mi>o</m:mi>
+              <m:mi>g</m:mi>
+              <m:mfrac>
+                <m:mrow>
+                  <m:mi>p</m:mi>
+                  <m:mo>(</m:mo>
+                  <m:mi>h</m:mi>
+                  <m:mo>&amp;</m:mo>
+                  <m:mi>q</m:mi>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mrow>
+                  <m:mi>p</m:mi>
+                  <m:mo>(</m:mo>
+                  <m:mi>q</m:mi>
+                  <m:mo>)</m:mo>
+                  <m:mi>p</m:mi>
+                  <m:mo>(</m:mo>
+                  <m:mi>h</m:mi>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+              </m:mfrac>
+              <m:mo>.</m:mo>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id2262545">The method for computing the probabilities is now explicated. For single probabilities (such as <m:math><m:mrow><m:mi>p</m:mi><m:mo>(</m:mo><m:mi>q</m:mi><m:mo>)</m:mo></m:mrow></m:math>), we simply look at each pattern and compute the proportion in which cell q is are active. If either <m:math><m:mrow><m:mi>p</m:mi><m:mo>(</m:mo><m:mi>q</m:mi><m:mo>)</m:mo></m:mrow></m:math> or <m:math><m:mrow><m:mi>p</m:mi><m:mo>(</m:mo><m:mi>h</m:mi><m:mo>)</m:mo></m:mrow></m:math> be zero set <m:math><m:msub><m:mi>w</m:mi><m:mrow><m:mi>h</m:mi><m:mi>q</m:mi></m:mrow></m:msub></m:math> to zero. For joint probabilities (such as <m:math><m:mrow><m:mi>p</m:mi><m:mo>(</m:mo><m:mi>h</m:mi><m:mo>&amp;</m:mo><m:mi>q</m:mi><m:mo>)</m:mo></m:mrow></m:math>), compute the proportion in which both are active. If both <m:math><m:mrow><m:mi>p</m:mi><m:mo>(</m:mo><m:mi>q</m:mi><m:mo>)</m:mo></m:mrow></m:math> and <m:math><m:mrow><m:mi>p</m:mi><m:mo>(</m:mo><m:mi>h</m:mi><m:mo>)</m:mo></m:mrow></m:math> are not zero but <m:math><m:mrow><m:mi>p</m:mi><m:mo>(</m:mo><m:mi>h</m:mi><m:mo>&amp;</m:mo><m:mi>q</m:mi><m:mo>)</m:mo></m:mrow></m:math> is zero, set <m:math><m:msub><m:mi>w</m:mi><m:mrow><m:mi>h</m:mi><m:mi>q</m:mi></m:mrow></m:msub></m:math> to <m:math><m:mrow><m:mi>l</m:mi><m:mi>o</m:mi><m:mi>g</m:mi><m:mo>(</m:mo><m:mn>1</m:mn><m:mo>/</m:mo><m:mo>#</m:mo><m:mi>p</m:mi><m:mi>a</m:mi><m:mi>t</m:mi><m:mi>t</m:mi><m:mi>e</m:mi><m:mi>r</m:mi><m:mi>n</m:mi><m:mi>s</m:mi><m:mo>)</m:mo></m:mrow></m:math>.</para>
+        <para id="id2262758">There exists a more complicated version in which different events/patterns carry more significance than others and are then weighted accordingly by <m:math><m:msup><m:mi>κ</m:mi><m:mrow><m:mo>(</m:mo><m:mi>α</m:mi><m:mo>)</m:mo></m:mrow></m:msup></m:math>, this capability is not implemented in our simulations but the code can handle this option. The code for building the weight matrix (where entry <m:math><m:msub><m:mi>w</m:mi><m:mrow><m:mi>i</m:mi><m:mi>j</m:mi></m:mrow></m:msub></m:math> is connection strength from <m:math><m:mi>i</m:mi></m:math> to <m:math><m:mi>j</m:mi></m:math>) is carried out by the code make<m:math><m:mo>_</m:mo></m:math>W.m.</para>
+        <para id="id2262834">The method that produces the weight matrix <m:math><m:mi>W</m:mi></m:math> will produce a symmetric matrix. This should not be that limiting on the network model, but is not exactly representative of physiology.</para>
+      </section>
+      <section id="uid12">
+        <title>Hooking up the Network</title>
+        <para id="id2262860">The output from the weight matrix will yield positive and negative entries. If the entry is positive we have an excitatory connection. If an entry is negative there is an inhibitory connection. If the absolute value is less than a chosen tolerance then there is no connection.</para>
+        <para id="id2262868">Now comes an important step that is not entirely biologically correct but serves to make the over network model simpler. The patterns that we used in constructing the weight matrix in fact will consist of all excitatory cells. For each of these excitatory cells we will now designate a inhibitory companion cell through that only synapses onto the excitatory cell. All inhibition of the excitatory cells is achieved by other excitatory cells that synapse onto the inhibitory companion. Thus, there are an equal number of E and I cells. (as mentioned earlier there will be 50 E and 50 I cells in the simulations produced ahead).</para>
+        <figure id="uid13" orient="horizontal"><media id="idp11458112" alt=""><image src="../../media/networkdiagram2.png" mime-type="image/png" width="650"/><image for="pdf" src="../../media/networkdiagram2.eps" mime-type="application/postscript" print-width="4in"/></media>
+          <caption>Here we see an 8 cells network that has a the same conventions. The excitatory cells have 4 compartments each. Excitatory cell connections synapse onto the end compartment of other E-Cells and the second compartment of I-Cells (Since I-Cells only have 2 compartments). Inhibitory cells synapse onto the Soma's of the excitatory cells.</caption>
+        </figure>
+        <figure id="uid14" orient="horizontal"><media id="idp11464432" alt=""><image src="../../media/cell_diagram1.png" mime-type="image/png" width="650"/><image for="pdf" src="../../media/cell_diagram1.eps" mime-type="application/postscript" print-width="4in"/></media>
+          <caption>This is a diagram for an excitatory-inhibitory pair. In some sense we can regard this as a full neuron unit. Here the compartments are not show as they are above.</caption>
+        </figure>
+      </section>
+    </section>
+    <section id="uid15">
+      <title>Simulations</title>
+      <para id="id2262923">The bulk of the theory is completed. Now, the specifications for the simulations are presented. The parameters that are used in the biological model presented earlier are given values. Then there is a few examples of how to use the matlab code. The code used can be downloaded at <link url="http://www.caam.rice.edu/~cox/hippo.html#code"> http://www.caam.rice.edu/~cox/hippo.html#code </link>.</para>
+      <section id="uid16">
+        <title>Network Size and Patterns</title>
+        <para id="id2262938">In the simulations there will be 50 E-cells and 50 I-cells. The Network will be "trained" to encode assemblies by running the weight producing algorithm on a set of patterns, each which represents a cell assembly (remember weights are only produced between the E-cells initially). There will be 8 patterns that contain 8 E-Cells in each. Each "event" or pattern will carry equal significance when the weighting algorithm runs. To help visualize the patterns look at the diagram below.</para>
+      </section>
+      <section id="uid17">
+        <title>Parameters For Cells</title>
+        <para id="id2262958">Below are tables with parameter that are given exactly from A Lansner and E Fransen.</para>
+        <table id="uid18" summary="">
+          <tgroup cols="3">
+            <tbody>
+              <row>
+                <entry>Parameter</entry>
+                <entry>E-Cell</entry>
+                <entry>I-Cell</entry>
+              </row>
+              <row>
+                <entry><m:math><m:msub><m:mi>V</m:mi><m:mrow><m:mi>l</m:mi><m:mi>e</m:mi><m:mi>a</m:mi><m:mi>k</m:mi></m:mrow></m:msub></m:math> (mV)</entry>
+                <entry>-50</entry>
+                <entry>-70</entry>
+              </row>
+              <row>
+                <entry>
+                  <m:math>
+                    <m:msub>
+                      <m:mi>G</m:mi>
+                      <m:mrow>
+                        <m:mi>c</m:mi>
+                        <m:mi>o</m:mi>
+                        <m:mi>r</m:mi>
+                        <m:mi>e</m:mi>
+                      </m:mrow>
+                    </m:msub>
+                  </m:math>
+                </entry>
+                <entry>0.04</entry>
+                <entry>0.0638</entry>
+              </row>
+              <row>
+                <entry><m:math><m:msub><m:mi>G</m:mi><m:mi>m</m:mi></m:msub></m:math> Soma <m:math><m:mrow><m:mo>(</m:mo><m:mi>μ</m:mi><m:mi>S</m:mi><m:mo>)</m:mo></m:mrow></m:math></entry>
+                <entry>0.0032</entry>
+                <entry>0.0016</entry>
+              </row>
+              <row>
+                <entry><m:math><m:msub><m:mi>C</m:mi><m:mi>m</m:mi></m:msub></m:math> Soma <m:math><m:mrow><m:mo>(</m:mo><m:mi>n</m:mi><m:mi>F</m:mi><m:mo>)</m:mo></m:mrow></m:math></entry>
+                <entry>0.032</entry>
+                <entry>0.016</entry>
+              </row>
+              <row>
+                <entry><m:math><m:msub><m:mi>G</m:mi><m:mi>m</m:mi></m:msub></m:math><m:math><m:mrow><m:mo>(</m:mo><m:mi>μ</m:mi><m:mi>S</m:mi><m:mo>)</m:mo></m:mrow></m:math> Dentrites</entry>
+                <entry>0.0096</entry>
+                <entry>0.0096</entry>
+              </row>
+              <row>
+                <entry><m:math><m:msub><m:mi>C</m:mi><m:mi>m</m:mi></m:msub></m:math> Dentrites <m:math><m:mrow><m:mo>(</m:mo><m:mi>n</m:mi><m:mi>F</m:mi><m:mo>)</m:mo></m:mrow></m:math></entry>
+                <entry>0.288</entry>
+                <entry>0.288</entry>
+              </row>
+              <row>
+                <entry>
+                  <m:math>
+                    <m:msub>
+                      <m:mi>V</m:mi>
+                      <m:mrow>
+                        <m:mi>N</m:mi>
+                        <m:mi>a</m:mi>
+                      </m:mrow>
+                    </m:msub>
+                  </m:math>
+                </entry>
+                <entry>40</entry>
+                <entry>50</entry>
+              </row>
+              <row>
+                <entry>
+                  <m:math>
+                    <m:msub>
+                      <m:mi>G</m:mi>
+                      <m:mrow>
+                        <m:mi>N</m:mi>
+                        <m:mi>a</m:mi>
+                      </m:mrow>
+                    </m:msub>
+                  </m:math>
+                  <m:math>
+                    <m:mrow>
+                      <m:mo>(</m:mo>
+                      <m:mi>μ</m:mi>
+                      <m:mi>S</m:mi>
+                      <m:mo>)</m:mo>
+                    </m:mrow>
+                  </m:math>
+                </entry>
+                <entry>1.0</entry>
+                <entry>1.0</entry>
+              </row>
+              <row>
+                <entry>
+                  <m:math>
+                    <m:msub>
+                      <m:mi>V</m:mi>
+                      <m:mi>K</m:mi>
+                    </m:msub>
+                  </m:math>
+                </entry>
+                <entry>-70</entry>
+                <entry>-90</entry>
+              </row>
+              <row>
+                <entry>
+                  <m:math>
+                    <m:msub>
+                      <m:mi>G</m:mi>
+                      <m:mi>K</m:mi>
+                    </m:msub>
+                  </m:math>
+                  <m:math>
+                    <m:mrow>
+                      <m:mo>(</m:mo>
+                      <m:mi>μ</m:mi>
+                      <m:mi>S</m:mi>
+                      <m:mo>)</m:mo>
+                    </m:mrow>
+                  </m:math>
+                </entry>
+                <entry>0.5</entry>
+                <entry>1.0</entry>
+              </row>
+              <row>
+                <entry>
+                  <m:math>
+                    <m:msub>
+                      <m:mi>V</m:mi>
+                      <m:mrow>
+                        <m:mi>C</m:mi>
+                        <m:mi>a</m:mi>
+                      </m:mrow>
+                    </m:msub>
+                  </m:math>
+                </entry>
+                <entry>150</entry>
+                <entry>150</entry>
+              </row>
+              <row>
+                <entry>
+                  <m:math>
+                    <m:msub>
+                      <m:mi>G</m:mi>
+                      <m:mrow>
+                        <m:mi>C</m:mi>
+                        <m:mi>a</m:mi>
+                      </m:mrow>
+                    </m:msub>
+                  </m:math>
+                  <m:math>
+                    <m:mrow>
+                      <m:mo>(</m:mo>
+                      <m:mi>μ</m:mi>
+                      <m:mi>S</m:mi>
+                      <m:mo>)</m:mo>
+                    </m:mrow>
+                  </m:math>
+                </entry>
+                <entry>0</entry>
+                <entry>0</entry>
+              </row>
+              <row>
+                <entry>
+                  <m:math>
+                    <m:msub>
+                      <m:mi>G</m:mi>
+                      <m:mrow>
+                        <m:mi>K</m:mi>
+                        <m:mo>(</m:mo>
+                        <m:mi>C</m:mi>
+                        <m:mi>a</m:mi>
+                        <m:mo>)</m:mo>
+                      </m:mrow>
+                    </m:msub>
+                  </m:math>
+                  <m:math>
+                    <m:mrow>
+                      <m:mo>(</m:mo>
+                      <m:mi>μ</m:mi>
+                      <m:mi>S</m:mi>
+                      <m:mo>)</m:mo>
+                    </m:mrow>
+                  </m:math>
+                </entry>
+                <entry>0.0017</entry>
+                <entry>0.01</entry>
+              </row>
+              <row>
+                <entry><m:math><m:msub><m:mi>ρ</m:mi><m:mrow><m:mi>A</m:mi><m:mi>P</m:mi></m:mrow></m:msub></m:math> (mV<m:math><m:msup><m:mrow/><m:mrow><m:mo>-</m:mo><m:mn>1</m:mn></m:mrow></m:msup></m:math>ms<m:math><m:msup><m:mrow/><m:mrow><m:mo>-</m:mo><m:mn>1</m:mn></m:mrow></m:msup></m:math>)</entry>
+                <entry>4</entry>
+                <entry>0.013</entry>
+              </row>
+              <row>
+                <entry><m:math><m:msub><m:mi>δ</m:mi><m:mrow><m:mi>A</m:mi><m:mi>P</m:mi></m:mrow></m:msub></m:math> ms<m:math><m:msup><m:mrow/><m:mrow><m:mo>-</m:mo><m:mn>1</m:mn></m:mrow></m:msup></m:math></entry>
+                <entry>.075</entry>
+                <entry>.02</entry>
+              </row>
+            </tbody>
+          </tgroup>
+          <caption>Parameter Values</caption>
+        </table>
+        <table id="uid19" summary="">
+          <tgroup cols="7">
+            <tbody>
+              <row>
+                <entry/>
+                <entry/>
+                <entry>m</entry>
+                <entry>h</entry>
+                <entry>n</entry>
+                <entry>q</entry>
+                <entry>p</entry>
+              </row>
+              <row>
+                <entry/>
+                <entry>A (mV<m:math><m:msup><m:mrow/><m:mrow><m:mo>-</m:mo><m:mn>1</m:mn></m:mrow></m:msup></m:math>ms<m:math><m:msup><m:mrow/><m:mrow><m:mo>-</m:mo><m:mn>1</m:mn></m:mrow></m:msup></m:math>)</entry>
+                <entry>0.2</entry>
+                <entry>0.08</entry>
+                <entry>0.02</entry>
+                <entry>0.08</entry>
+                <entry>0.7 (ms<m:math><m:msup><m:mrow/><m:mrow><m:mo>-</m:mo><m:mn>1</m:mn></m:mrow></m:msup></m:math>)</entry>
+              </row>
+              <row>
+                <entry>
+                  <m:math>
+                    <m:mi>α</m:mi>
+                  </m:math>
+                </entry>
+                <entry>B (mV)</entry>
+                <entry>-40</entry>
+                <entry>-40</entry>
+                <entry>-15</entry>
+                <entry>-25</entry>
+                <entry/>
+              </row>
+              <row>
+                <entry/>
+                <entry>C (mV)</entry>
+                <entry>1</entry>
+                <entry>1</entry>
+                <entry>0.8</entry>
+                <entry>1</entry>
+                <entry>17</entry>
+              </row>
+              <row>
+                <entry/>
+                <entry/>
+                <entry/>
+                <entry/>
+                <entry/>
+                <entry/>
+              </row>
+              <row>
+                <entry/>
+                <entry>A (mV<m:math><m:msup><m:mrow/><m:mrow><m:mo>-</m:mo><m:mn>1</m:mn></m:mrow></m:msup></m:math>ms<m:math><m:msup><m:mrow/><m:mrow><m:mo>-</m:mo><m:mn>1</m:mn></m:mrow></m:msup></m:math>)</entry>
+                <entry>0.06</entry>
+                <entry>0.4</entry>
+                <entry>0.04</entry>
+                <entry>0.005</entry>
+                <entry>0.1 (ms<m:math><m:msup><m:mrow/><m:mrow><m:mo>-</m:mo><m:mn>1</m:mn></m:mrow></m:msup></m:math>)</entry>
+              </row>
+              <row>
+                <entry>
+                  <m:math>
+                    <m:mi>β</m:mi>
+                  </m:math>
+                </entry>
+                <entry>B (mV)</entry>
+                <entry>-49</entry>
+                <entry>-36</entry>
+                <entry>-40</entry>
+                <entry>-20</entry>
+              </row>
+              <row>
+                <entry/>
+                <entry>C (mV)</entry>
+                <entry>20</entry>
+                <entry>2</entry>
+                <entry>0.4</entry>
+                <entry>20</entry>
+                <entry>17</entry>
+              </row>
+            </tbody>
+          </tgroup>
+          <caption>Values for E-Cells</caption>
+        </table>
+        <table id="uid20" summary="">
+          <tgroup cols="6">
+            <tbody>
+              <row>
+                <entry/>
+                <entry/>
+                <entry>m</entry>
+                <entry>h</entry>
+                <entry>n</entry>
+                <entry>q</entry>
+              </row>
+              <row>
+                <entry/>
+                <entry>A (mV<m:math><m:msup><m:mrow/><m:mrow><m:mo>-</m:mo><m:mn>1</m:mn></m:mrow></m:msup></m:math>ms<m:math><m:msup><m:mrow/><m:mrow><m:mo>-</m:mo><m:mn>1</m:mn></m:mrow></m:msup></m:math>)</entry>
+                <entry>0.2</entry>
+                <entry>0.08</entry>
+                <entry>0.02</entry>
+                <entry>0.08</entry>
+              </row>
+              <row>
+                <entry>
+                  <m:math>
+                    <m:mi>α</m:mi>
+                  </m:math>
+                </entry>
+                <entry>B (mV)</entry>
+                <entry>-30</entry>
+                <entry>-30</entry>
+                <entry>-21</entry>
+                <entry>-15</entry>
+              </row>
+              <row>
+                <entry/>
+                <entry>C (mV)</entry>
+                <entry>1</entry>
+                <entry>0.2</entry>
+                <entry>0.2</entry>
+                <entry>1</entry>
+              </row>
+              <row>
+                <entry/>
+                <entry/>
+                <entry/>
+                <entry/>
+                <entry/>
+                <entry/>
+              </row>
+              <row>
+                <entry/>
+                <entry>A (mV<m:math><m:msup><m:mrow/><m:mrow><m:mo>-</m:mo><m:mn>1</m:mn></m:mrow></m:msup></m:math>ms<m:math><m:msup><m:mrow/><m:mrow><m:mo>-</m:mo><m:mn>1</m:mn></m:mrow></m:msup></m:math>)</entry>
+                <entry>0.06</entry>
+                <entry>0.4</entry>
+                <entry>0.02</entry>
+                <entry>0.005</entry>
+              </row>
+              <row>
+                <entry>
+                  <m:math>
+                    <m:mi>β</m:mi>
+                  </m:math>
+                </entry>
+                <entry>B (mV)</entry>
+                <entry>-38</entry>
+                <entry>-26</entry>
+                <entry>-18</entry>
+                <entry>-10</entry>
+              </row>
+              <row>
+                <entry/>
+                <entry>C (mV)</entry>
+                <entry>20</entry>
+                <entry>0.2</entry>
+                <entry>0.2</entry>
+                <entry>20</entry>
+              </row>
+            </tbody>
+          </tgroup>
+          <caption>Values for I-Cells</caption>
+        </table>
+        <table id="uid21" summary="">
+          <tgroup cols="2">
+            <tbody>
+              <row>
+                <entry><m:math><m:msub><m:mi>V</m:mi><m:mrow><m:mi>s</m:mi><m:mi>y</m:mi><m:mi>n</m:mi></m:mrow></m:msub></m:math> Excitatory</entry>
+                <entry>0 <m:math><m:mrow><m:mi>m</m:mi><m:mi>V</m:mi></m:mrow></m:math></entry>
+              </row>
+              <row>
+                <entry><m:math><m:msub><m:mi>V</m:mi><m:mrow><m:mi>s</m:mi><m:mi>y</m:mi><m:mi>n</m:mi></m:mrow></m:msub></m:math> Inhibitory</entry>
+                <entry>-85 <m:math><m:mrow><m:mi>m</m:mi><m:mi>V</m:mi></m:mrow></m:math></entry>
+              </row>
+              <row>
+                <entry>
+                  <m:math>
+                    <m:mi>s</m:mi>
+                  </m:math>
+                </entry>
+                <entry>variable</entry>
+              </row>
+              <row>
+                <entry><m:math><m:msub><m:mi>G</m:mi><m:mrow><m:mi>s</m:mi><m:mi>y</m:mi><m:mi>n</m:mi></m:mrow></m:msub></m:math> E to E (AMPA)</entry>
+                <entry><m:math><m:msub><m:mi>w</m:mi><m:mrow><m:mi>i</m:mi><m:mi>j</m:mi></m:mrow></m:msub></m:math>x<m:math><m:msub><m:mi>w</m:mi><m:mrow><m:mi>E</m:mi><m:mn>2</m:mn><m:mi>E</m:mi></m:mrow></m:msub></m:math></entry>
+              </row>
+              <row>
+                <entry><m:math><m:msub><m:mi>G</m:mi><m:mrow><m:mi>s</m:mi><m:mi>y</m:mi><m:mi>n</m:mi></m:mrow></m:msub></m:math> E to I (AMPA)</entry>
+                <entry><m:math><m:msub><m:mi>w</m:mi><m:mrow><m:mi>i</m:mi><m:mi>j</m:mi></m:mrow></m:msub></m:math>x<m:math><m:msub><m:mi>w</m:mi><m:mrow><m:mi>E</m:mi><m:mn>2</m:mn><m:mi>I</m:mi></m:mrow></m:msub></m:math></entry>
+              </row>
+              <row>
+                <entry><m:math><m:msub><m:mi>G</m:mi><m:mrow><m:mi>s</m:mi><m:mi>y</m:mi><m:mi>n</m:mi></m:mrow></m:msub></m:math> I to E</entry>
+                <entry>
+                  <m:math>
+                    <m:msub>
+                      <m:mi>g</m:mi>
+                      <m:mrow>
+                        <m:mi>I</m:mi>
+                        <m:mn>2</m:mn>
+                        <m:mi>E</m:mi>
+                      </m:mrow>
+                    </m:msub>
+                  </m:math>
+                </entry>
+              </row>
+              <row>
+                <entry><m:math><m:msub><m:mi>G</m:mi><m:mrow><m:mi>N</m:mi><m:mi>M</m:mi><m:mi>D</m:mi><m:mi>A</m:mi></m:mrow></m:msub></m:math> E to E</entry>
+                <entry><m:math><m:msub><m:mi>G</m:mi><m:mrow><m:mi>s</m:mi><m:mi>y</m:mi><m:mi>n</m:mi></m:mrow></m:msub></m:math>x<m:math><m:mrow><m:msub><m:mi>w</m:mi><m:mrow><m:mi>N</m:mi><m:mi>M</m:mi><m:mi>D</m:mi><m:mi>A</m:mi></m:mrow></m:msub><m:mi>s</m:mi><m:mi>c</m:mi><m:mi>a</m:mi><m:mi>l</m:mi><m:mi>a</m:mi><m:mi>r</m:mi></m:mrow></m:math></entry>
+              </row>
+              <row>
+                <entry><m:math><m:msub><m:mi>ρ</m:mi><m:mrow><m:mi>N</m:mi><m:mi>M</m:mi><m:mi>D</m:mi><m:mi>A</m:mi></m:mrow></m:msub></m:math> E to E</entry>
+                <entry><m:math><m:msub><m:mi>G</m:mi><m:mrow><m:mi>s</m:mi><m:mi>y</m:mi><m:mi>n</m:mi></m:mrow></m:msub></m:math>x<m:math><m:mrow><m:msub><m:mi>ρ</m:mi><m:mrow><m:mi>N</m:mi><m:mi>M</m:mi><m:mi>D</m:mi><m:mi>A</m:mi></m:mrow></m:msub><m:mi>s</m:mi><m:mi>c</m:mi><m:mi>a</m:mi><m:mi>l</m:mi><m:mi>a</m:mi><m:mi>r</m:mi></m:mrow></m:math></entry>
+              </row>
+              <row>
+                <entry>
+                  <m:math>
+                    <m:msub>
+                      <m:mi>δ</m:mi>
+                      <m:mrow>
+                        <m:mi>N</m:mi>
+                        <m:mi>M</m:mi>
+                        <m:mi>D</m:mi>
+                        <m:mi>A</m:mi>
+                      </m:mrow>
+                    </m:msub>
+                  </m:math>
+                  <m:math>
+                    <m:mrow>
+                      <m:mi>m</m:mi>
+                      <m:msup>
+                        <m:mi>s</m:mi>
+                        <m:mrow>
+                          <m:mo>-</m:mo>
+                          <m:mn>1</m:mn>
+                        </m:mrow>
+                      </m:msup>
+                    </m:mrow>
+                  </m:math>
+                </entry>
+                <entry>.02</entry>
+              </row>
+            </tbody>
+          </tgroup>
+          <caption>Values for Synapses</caption>
+        </table>
+      </section>
+      <section id="uid22">
+        <title>Remaining Parameters</title>
+        <para id="id2265537">There are a few parameters that remain to be given values. A Lanser and Fransen do not give exact values for these unknown parameters, but instead a desired range for EPSP's (Excitatory Post Synaptic Potentials) that the parameters help determine. By experimenting with a single neuron we can find the ideal range for these unknown parameters. Hence, we can then scale the resulting Weights from the algorithm so they are mapped to the ideal range. We need an overall weighting scale constant for connections from E to E cells (AMPA), <m:math><m:msub><m:mi>w</m:mi><m:mrow><m:mi>E</m:mi><m:mn>2</m:mn><m:mi>E</m:mi></m:mrow></m:msub></m:math>. A weighting scale constant for E to I cells, <m:math><m:msub><m:mi>w</m:mi><m:mrow><m:mi>E</m:mi><m:mn>2</m:mn><m:mi>I</m:mi></m:mrow></m:msub></m:math> Also, a scale general conductance constant for all I to E connections, <m:math><m:msub><m:mi>g</m:mi><m:mrow><m:mi>I</m:mi><m:mn>2</m:mn><m:mi>E</m:mi></m:mrow></m:msub></m:math>. The NMDA connections will be proportional to the AMPA weight but scaled by a constant <m:math><m:mrow><m:msub><m:mi>w</m:mi><m:mrow><m:mi>N</m:mi><m:mi>M</m:mi><m:mi>D</m:mi><m:mi>A</m:mi></m:mrow></m:msub><m:mi>s</m:mi><m:mi>c</m:mi><m:mi>a</m:mi><m:mi>l</m:mi><m:mi>a</m:mi><m:mi>r</m:mi></m:mrow></m:math>. The influx parameter <m:math><m:msub><m:mi>ρ</m:mi><m:mrow><m:mi>N</m:mi><m:mi>M</m:mi><m:mi>D</m:mi><m:mi>A</m:mi></m:mrow></m:msub></m:math> for the <m:math><m:mrow><m:mo>[</m:mo><m:mi>C</m:mi><m:msub><m:mi>a</m:mi><m:mrow><m:mi>N</m:mi><m:mi>M</m:mi><m:mi>D</m:mi><m:mi>A</m:mi></m:mrow></m:msub><m:mo>]</m:mo></m:mrow></m:math> pool is also proportional to the AMPA weight. Lastly, the binary variable <m:math><m:mi>s</m:mi></m:math> needs to be given a time duration to stay active for. This time duration may be chosen different for each type of connection class as well (meaning E to E, E to I, and I to E).</para>
+        <para id="id2265713">Most of these unfixed variables relate to the strength of connections between cells and the EPSPs or IPSPs they create. The reason they won't be fixed for all different size simulations is that the values should vary according to size of the networks and assemblies. For instance, if we model on large networks that have large assemblies we would desire that a cell would require synaptic input from more cells in order to fire, than when the network is small. By picking these numbers accordingly we will be able to roughly determine how many cells of an assembly need to be firing in order to fully activate the assembly.</para>
+      </section>
+    </section>
+    <section id="uid23">
+      <title>Running Simulations</title>
+      <para id="id2265738">In this section we will step through 2 different simulations using the matlab code. In the First simulation we will stimulate several cells in an assembly and several "noise" cells. Then the assembly will activate, shut down the noise and eventually die out. In the second we will have to different assemblies "compete".</para>
+      <section id="uid24">
+        <title>Simulation 1</title>
+        <para id="id2265754">I have created a code called pattern<m:math><m:mo>_</m:mo></m:math>maker.m which is an easy way to get a matrix will a designated number of cells, number of patterns, and number of cells per pattern. We will start with a network with 50 excitatory cells and train it with 8 patterns, containing 8 cells in each pattern. Type help pattern<m:math><m:mo>_</m:mo></m:math>maker into a matlab prompt to get the details:</para>
+        <code display="block" id="idp4990800">&gt;&gt; help pattern_maker
+pattern_maker.m - creates a pattern matrix. Each row represents a
+pattern with 1's for active cells, 0's for inactive cells.
+pattern = pattern_maker(n_cells,n_patterns,n_active)
+where: n_cells = number of cells
+n_pattern = number of patterns
+n_active = number active units per pattern
+output: pattern = n_patterns x n_cells matrix with each row a
+randomized pattern with n_active units
+</code>
+        <para id="id2265886">Now lets create a variable pp which will store the pattern matrix.</para>
+        <code display="block" id="idp12238752">&gt;&gt; pp = pattern_maker(50,8,8);
+</code>
+        <para id="id2265908">Now that we have a pattern we can run the main piece of code that will do the simulation: LF<m:math><m:mo>_</m:mo></m:math>network.m. Note that many of the parameters are only accessible in the code and would have to be directly edited if the user wishes to change them.</para>
+        <code display="block" id="idp11096960">&gt;&gt; help LF_network
+LF_network.m - This function runs the Lansner-Fransen type simulations as
+detailed in their paper - "Modelling Hebbian cell assemblies comprised of
+cortical neurons". There are an equal number of excitory and inhibitory
+cells. Each excitory cell has a companion inhibitory cell which synapses
+onto it. The network is trained with different patterns loaded in. Then
+its calls a code which produces connection strengths. Positive strengths
+form Excitory to Excitory connections. Negative strengths form
+connections from Excitory to Inhibitory cells.
+[v_ex,v_in] = LF_network(dt,Tcutoff,Tfin,I0,stim_cells,Patterns)
+where: dt = time step
+Tcutoff = time cutoff for stimulated cells
+Tfin = time end simulation
+I0 = stimulation size for cells
+stim_cells = vector of cells recieving stimulus
+Patterns = matrix where each row is a pattern the network is
+trained with
+returns: v_ex = Voltages for excitory cells, indexed as
+ve(cell,timestep,compartment)
+v_in = Voltages for inhibitory cells, indexed as
+vi(cell,timestep,compartment)
+ex. pp = pattern_maker(50,8,8)
+[v_ex, v_in] = LF_network(.01,50,350,1,[1 6 8 10 25],pp);
+</code>
+        <para id="id2266177">As explained in the help file above one must choose the cell numbers to stimulate. In order to pick several cells in one assembly we will enter the following command to get the indices of one of the patterns:</para>
+        <code display="block" id="idp2329936">&gt;&gt; find(p(1,:)==1)
+ans =
+19 23 28 29 32 35 36 42
+</code>
+        <para id="id2266219">Thus we will choose to stimulate cells 19, 23, 28, 29 and add the noise stimuli of cells 45, 46, and 47. The simulation will last for 350 ms and the stimulation will last for 50 ms. A 1.5 nA stimulus is injected into each respective cell soma. After the output is saved we load the results in a code which displays the results: viewer.m.</para>
+        <code display="block" id="idp4017936">&gt;&gt; [v_ex,v_in] = LF_network(.01,50,350,1.5,[19 23 28 29 45 46 47],pp);
+&gt;&gt; help viewer
+viewer.m takes in output from LF_network and plots voltage traces of all
+the cells. If you wish to only look at one cell enter that as a
+optional 3rd input.
+viewer(v_ex,v_in,cell_trace)
+&gt;&gt; viewer(v_ex,v_in)
+</code>
+        <figure id="uid25" orient="horizontal">
+          <media id="idp13498272" alt=""><image src="../../media/sim1.png" mime-type="image/png" width="580"/><image for="pdf" src="../../media/sim1.eps" mime-type="application/postscript" print-width="6in"/></media>
+          <caption>Cells 19, 23, 28 and 29 of pattern [19 23 28 29 32 35 36 42] are stimulated as well as noise cells 45, 46, and 47. The blue traces are the excitatory cells, red are the inhibitory companions. The full assembly activates and then dies out around 250ms. The noise cells shut down before 50ms even passes.</caption>
+        </figure>
+        <para id="id2266333">We can get a better look by looking up close at the trace of cell 36, one of the cells in the assembly that did not receive a stimuli. Just type viewer(v<m:math><m:mo>_</m:mo></m:math>ex,v<m:math><m:mo>_</m:mo></m:math>in,36) into the prompt.</para>
+        <figure id="uid26" orient="horizontal">
+          <media id="idp7305024" alt=""><image src="../../media/sim136.png" mime-type="image/png" width="707"/><image for="pdf" src="../../media/sim136.eps" mime-type="application/postscript" print-width="5in"/></media>
+          <caption>This is a close up of cell 36 Excitatory and Inhibitory from the simulation above. The blue trace of the excitatory cell slowly increases until it reaches a threshold where upon it fires rapidly. The interspike intervals decrease until the cell shut off. The inhibitory cell show by the red trace receives no input once the noise cells have been shut down.</caption>
+        </figure>
+        <figure id="uid27" orient="horizontal">
+          <media id="idp5155376" alt=""><image src="../../media/sim1ca36.png" mime-type="image/png" width="627"/><image for="pdf" src="../../media/sim1ca36.eps" mime-type="application/postscript" print-width="5in"/></media>
+          <caption>Here the two <m:math><m:mrow><m:mi>C</m:mi><m:msup><m:mi>a</m:mi><m:mrow><m:mn>2</m:mn><m:mo>+</m:mo></m:mrow></m:msup></m:mrow></m:math> pools are plotted for excitatory cell 36. Note the AP calcium enters quicker, the NMDA calcium has a slower time course and helps shut down the assembly.</caption>
+        </figure>
+      </section>
+      <section id="uid28">
+        <title>Simulation 2 - Pattern Competition</title>
+        <para id="id2266421">In this simulation we will stimulate cells in two different patterns and see if one will "win" by activating its full pattern and suppressing the competing pattern. We will use the pattern from above and also another pattern.</para>
+        <code display="block" id="idp7379872">&gt;&gt; find(p(6,:)==1)
+ans =
+11 12 19 22 27 29 33 39
+</code>
+        <para id="id2266465">This pattern 6 should be interesting since it has two overlapping cells with pattern 1 (that is <m:math><m:mo>#</m:mo></m:math> 19 and <m:math><m:mo>#</m:mo></m:math> 29). Lets run a simulation that picks one of the overlapping cells (19), 4 others from pattern 1 (28 32 35 36) and 3 more from pattern <m:math><m:mo>#</m:mo></m:math> 6 (11 12 22).</para>
+        <code display="block" id="idp11576240">&gt;&gt; [v_ex,v_in] = LF_network(.01,50,350,1.5,[11 12 19 28 32 35 22 36],pp);
+</code>
+        <figure id="uid29" orient="horizontal">
+          <media id="idp5808608" alt=""><image src="../../media/sim3.png" mime-type="image/png" width="596"/><image for="pdf" src="../../media/sim3.eps" mime-type="application/postscript" print-width="5in"/></media>
+          <caption>5 cells from pattern 1 and 4 cells from pattern 6 are stimulated. Pattern 1 resolves and shuts down around 250 ms</caption>
+        </figure>
+        <para id="id2266535">We can now try stimulated 4 cells from pattern <m:math><m:mrow><m:mo>#</m:mo><m:mn>1</m:mn></m:mrow></m:math> and 5 cells from pattern <m:math><m:mrow><m:mo>#</m:mo><m:mn>6</m:mn></m:mrow></m:math>.</para>
+        <code display="block" id="idp3714512">&gt;&gt; [v_ex,v_in] = LF_network(.01,50,350,1.5,[11 12 19 22 27 28 32 35 ],pp);
+</code>
+        <figure id="uid30" orient="horizontal">
+          <media id="idp7127936" alt=""><image src="../../media/sim4.png" mime-type="image/png" width="560"/><image for="pdf" src="../../media/sim4.eps" mime-type="application/postscript" print-width="5in"/></media>
+          <caption>4 cells from pattern 1 and 5 cells from pattern 6 are stimulated. This time Pattern 6 resolves and shuts down around 250 ms</caption>
+        </figure>
+      </section>
+    </section>
+    <section id="uid31">
+      <title>Conclusion</title>
+      <para id="id2266603">This module has shown how results from the paper being followed can be reproduced. Hopefully, this will be helpful should future VIGRE students wish to pick up on these ideas. Extracting all the information out of the papers is difficult, so this module should serve as an easier way to follow the research we have done in the CAAM 499 Hippocampus Neuroscience Research Class in the Fall 07 and Spring 08 Semesters.</para>
+    </section>
+    <section id="uid32">
+      <title>Acknowledgements</title>
+      <para id="id2266621">This work was partially supported by NSF DMS Grant 0240058. I would like to thank Dr. Steve Cox for leading our Hippocampus Computational Neuroscience research team. Also, thanks to the entire PFUG whose members included Chris Conner, Jay Raol, Tony Kellems, Charlie Peck, Jim Wang, Darren DeFreeuw, Eva Dyer, Paul Smolen, Michell Bettelheim, and Katherine Ward.</para>
+    </section>
+    <section id="uid33">
+      <title>References</title>
+      <para id="id2266638">1. Hebb, Donald. (1949) The Organization of Behavior. (New York: John Wiley).</para>
+      <para id="id2266643">2. Lansner, A. and Ekeberg, Ö.. 1989. A one-layer feedback, artificial neural network with a Bayesian learning rule. Int. J. Neural Systems 1. p. 77-87.</para>
+      <para id="id2266653">3. Ekeberg, Ö., Wallen, P., Lansner, A., Traven, H., Brodin, L., and Grillner, S.. 1991. A computer based model for realistic simulations of neural networks. I: The single neuron and synaptic interaction. Biol. Cybern. p. 65 81-90.</para>
+      <para id="id2266667">4. Lansner, A. and Fransén, E.. 1992. Modelling Hebbian cell assemblies comprised of cortical neurons. Network 3. p.105-119.</para>
+<!--empty paragraphs get left behind.-->
+    </section>
+  </content>
+</document>

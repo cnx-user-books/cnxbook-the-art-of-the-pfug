@@ -1,0 +1,2219 @@
+<document xmlns="http://cnx.rice.edu/cnxml" xmlns:m="http://www.w3.org/1998/Math/MathML" xmlns:bib="http://bibtexml.sf.net/">
+  <title>Arithmetic Sums of Cantor Sets</title>
+<metadata xmlns:md="http://cnx.rice.edu/mdml">
+  <md:content-id>m44263</md:content-id>
+  <md:title>Arithmetic Sums of Cantor Sets</md:title>
+  <md:abstract>This report summarizes work done as part of Rice University's VIGRE program.  VIGRE is a program of Vertically Integrated Grants for Research and Education in the Mathematical Sciences under the direction of the National Science Foundation. This module explores the topolgical properties of the sum of two central homogeneous Cantor sets and presents stronger sufficient conditions for these properties. This study was led by Dr. Danijela Damjanovic and Dr. David Damanik.</md:abstract>
+  <md:uuid>8b377e37-e2a1-440e-bf2f-427ffd5f66ca</md:uuid>
+</metadata>
+
+<content>
+    <section id="cid1">
+      <title>Introduction</title>
+      <para id="id256829">The primary objective of this study is to give stronger characterizations for the arithmetic sum of two Cantor sets. We limited ourselves to the case of sums of two different mid-<m:math overflow="scroll"><m:mi>α</m:mi></m:math> Cantor sets. It is a straightforward question but still unsolved in the majority of cases. It was first posed by J. Palis and F. Takens in the context of Dynamical Systems <link target-id="bid0"/>. It also has applications in Number Theory <link target-id="bid1"/>, Physics <link target-id="bid2"/>, and is interesting from a purely topological perspective.</para>
+      <para id="id256860">In this module, we will give preliminary definitions, provide known results, and then present the results from our study.</para>
+    </section>
+    <section id="cid2">
+      <title>Preliminaries</title>
+      <section id="uid1">
+        <title>Mid-<m:math overflow="scroll"><m:mi>α</m:mi></m:math>
+ Cantor Sets</title>
+        <para id="id257231">A <emphasis effect="bold">Cantor Set </emphasis><m:math overflow="scroll"><m:mi>C</m:mi></m:math> is a set with the following properties:</para><list id="id257248" display="block" list-type="bulleted">
+          <item id="uid2"><m:math overflow="scroll"><m:mi>C</m:mi></m:math> is non-empty.
+</item>
+          <item id="uid3"><m:math overflow="scroll"><m:mi>C</m:mi></m:math> is compact.
+</item>
+          <item id="uid4"><m:math overflow="scroll"><m:mi>C</m:mi></m:math> is perfect.
+</item>
+          <item id="uid5"><m:math overflow="scroll"><m:mi>C</m:mi></m:math> is totally disconnected.
+</item>
+        </list>
+        <para id="id257324">These properties imply that <m:math overflow="scroll"><m:mi>C</m:mi></m:math> is uncountable. The canonical example is the Cantor ternary set <m:math overflow="scroll"><m:mi>T</m:mi></m:math>, constructed in the following way:</para>
+        <list id="id257344" display="block" list-type="enumerated">
+          <item id="uid6">Take <m:math overflow="scroll"><m:mrow><m:msub><m:mi>T</m:mi><m:mn>0</m:mn></m:msub><m:mo>=</m:mo><m:mfenced separators="" open="[" close="]"><m:mn>0</m:mn><m:mo>,</m:mo><m:mn>1</m:mn></m:mfenced></m:mrow></m:math> to be the unit interval, and remove the "middle third" from <m:math overflow="scroll"><m:msub><m:mi>T</m:mi><m:mn>0</m:mn></m:msub></m:math> to get <m:math overflow="scroll"><m:mrow><m:msub><m:mi>T</m:mi><m:mn>1</m:mn></m:msub><m:mo>=</m:mo><m:mfenced separators="" open="[" close="]"><m:mn>0</m:mn><m:mo>,</m:mo><m:mfrac><m:mn>1</m:mn><m:mn>3</m:mn></m:mfrac></m:mfenced><m:mo>∪</m:mo><m:mfenced separators="" open="[" close="]"><m:mfrac><m:mn>2</m:mn><m:mn>3</m:mn></m:mfrac><m:mo>,</m:mo><m:mn>1</m:mn></m:mfenced></m:mrow></m:math> (<link target-id="uid9"/>).
+</item>
+          <item id="uid7">Remove again the "middle thirds" from the two remaining connected components of <m:math overflow="scroll"><m:msub><m:mi>T</m:mi><m:mn>1</m:mn></m:msub></m:math> to get <m:math overflow="scroll"><m:mrow><m:msub><m:mi>T</m:mi><m:mn>2</m:mn></m:msub><m:mo>=</m:mo><m:mfenced separators="" open="[" close="]"><m:mn>0</m:mn><m:mo>,</m:mo><m:mfrac><m:mn>1</m:mn><m:mn>9</m:mn></m:mfrac></m:mfenced><m:mo>∪</m:mo><m:mfenced separators="" open="[" close="]"><m:mfrac><m:mn>2</m:mn><m:mn>9</m:mn></m:mfrac><m:mo>,</m:mo><m:mfrac><m:mn>1</m:mn><m:mn>3</m:mn></m:mfrac></m:mfenced><m:mo>∪</m:mo><m:mfenced separators="" open="[" close="]"><m:mfrac><m:mn>2</m:mn><m:mn>3</m:mn></m:mfrac><m:mo>,</m:mo><m:mfrac><m:mn>7</m:mn><m:mn>9</m:mn></m:mfrac></m:mfenced><m:mo>∪</m:mo><m:mfenced separators="" open="[" close="]"><m:mfrac><m:mn>8</m:mn><m:mn>9</m:mn></m:mfrac><m:mo>,</m:mo><m:mn>1</m:mn></m:mfenced></m:mrow></m:math> (<link target-id="uid10"/>).
+</item>
+          <item id="uid8">Repeat this process. The desired Cantor ternary set is <m:math overflow="scroll"><m:mrow><m:mi>T</m:mi><m:mo>=</m:mo><m:munderover><m:mo>⋂</m:mo><m:mrow><m:mi>j</m:mi><m:mo>=</m:mo><m:mn>0</m:mn></m:mrow><m:mi>∞</m:mi></m:munderover><m:msub><m:mi>T</m:mi><m:mi>j</m:mi></m:msub></m:mrow></m:math> (<link target-id="uid11"/>).
+</item>
+        </list>
+        <figure id="uid9">
+          <media id="uid9_media" alt="">
+            <image mime-type="image/png" src="../../media/cantor1.png" id="uid9_onlineimage" width="750"><!-- NOTE: attribute width changes image size online (pixels). original width is 750. --></image>
+            <image mime-type="application/postscript" for="pdf" src="../../media/cantor1.eps" id="uid9_printimage" print-width=".6">
+              <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+            </image>
+          </media>
+          <caption>The first stage in the construction of the Cantor ternary set.</caption>
+        </figure>
+        <figure id="uid10">
+          <media id="uid10_media" alt="">
+            <image mime-type="image/png" src="../../media/cantor2.png" id="uid10_onlineimage" width="750"><!-- NOTE: attribute width changes image size online (pixels). original width is 750. --></image>
+            <image mime-type="application/postscript" for="pdf" src="../../media/cantor2.eps" id="uid10_printimage" print-width=".6">
+              <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+            </image>
+          </media>
+          <caption>The second stage in the construction of the Cantor ternary set.</caption>
+        </figure>
+        <figure id="uid11">
+          <media id="uid11_media" alt="">
+            <image mime-type="image/png" src="../../media/cantor3.png" id="uid11_onlineimage" width="750"><!-- NOTE: attribute width changes image size online (pixels). original width is 750. --></image>
+            <image mime-type="application/postscript" for="pdf" src="../../media/cantor3.eps" id="uid11_printimage" print-width=".6">
+              <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+            </image>
+          </media>
+          <caption>This is only a visual approximation of the Cantor ternary set. The actual set contains no intervals, and all of the intervals seen here are broken up by gaps of size less than one pixel.</caption>
+        </figure>
+        <para id="id257868">The construction of the Cantor ternary set may be generalized slightly by giving ourselves a varying parameter <m:math overflow="scroll"><m:mi>α</m:mi></m:math>. In this case, we had <m:math overflow="scroll"><m:mrow><m:mi>α</m:mi><m:mo>=</m:mo><m:mfrac><m:mn>1</m:mn><m:mn>3</m:mn></m:mfrac></m:mrow></m:math>. For example, if we take <m:math overflow="scroll"><m:mrow><m:mi>α</m:mi><m:mo>=</m:mo><m:mfrac><m:mn>1</m:mn><m:mn>2</m:mn></m:mfrac></m:mrow></m:math>, then we remove the "middle halves" of intervals at each stage.</para>
+        <para id="id257916">These so-called <emphasis effect="bold">mid-<m:math overflow="scroll"><m:mi>α</m:mi></m:math></emphasis> Cantor sets are the building blocks for our study. However, it becomes more convenient to reference them in terms of <m:math overflow="scroll"><m:mrow><m:mi>λ</m:mi><m:mo>=</m:mo><m:mfrac><m:mn>1</m:mn><m:mn>2</m:mn></m:mfrac><m:mfenced separators="" open="(" close=")"><m:mn>1</m:mn><m:mo>-</m:mo><m:mi>α</m:mi></m:mfenced></m:mrow></m:math>, i.e. the lengths of the remaining intervals in the first stage of the construction. For a given <m:math overflow="scroll"><m:mi>λ</m:mi></m:math>, as done by Mendes and Oliveira, we denote the corresponding mid-<m:math overflow="scroll"><m:mfenced separators="" open="(" close=")"><m:mn>1</m:mn><m:mo>-</m:mo><m:mn>2</m:mn><m:mi>λ</m:mi></m:mfenced></m:math> Cantor set as <m:math overflow="scroll"><m:mrow><m:mi>C</m:mi><m:mfenced open="(" close=")"><m:mi>λ</m:mi></m:mfenced></m:mrow></m:math><link target-id="bid3"/>.</para>
+        <para id="id258015">We may represent an arbitrary point <m:math overflow="scroll"><m:mrow><m:mi>x</m:mi><m:mo>∈</m:mo><m:mi>C</m:mi><m:mfenced open="(" close=")"><m:mi>λ</m:mi></m:mfenced></m:mrow></m:math> in the form</para>
+        <equation id="id258039">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:mi>x</m:mi>
+              <m:mo>=</m:mo>
+              <m:munderover>
+                <m:mo>∑</m:mo>
+                <m:mrow>
+                  <m:mi>n</m:mi>
+                  <m:mo>=</m:mo>
+                  <m:mn>0</m:mn>
+                </m:mrow>
+                <m:mi>∞</m:mi>
+              </m:munderover>
+              <m:msub>
+                <m:mi>α</m:mi>
+                <m:mi>n</m:mi>
+              </m:msub>
+              <m:msup>
+                <m:mi>λ</m:mi>
+                <m:mi>n</m:mi>
+              </m:msup>
+              <m:mspace width="1.em"/>
+              <m:mtext>where</m:mtext>
+              <m:mspace width="1.em"/>
+              <m:msub>
+                <m:mi>α</m:mi>
+                <m:mi>n</m:mi>
+              </m:msub>
+              <m:mo>∈</m:mo>
+              <m:mi>A</m:mi>
+              <m:mfenced open="(" close=")">
+                <m:mi>λ</m:mi>
+              </m:mfenced>
+              <m:mo>=</m:mo>
+              <m:mfenced separators="" open="{" close="}">
+                <m:mn>0</m:mn>
+                <m:mo>,</m:mo>
+                <m:mn>1</m:mn>
+                <m:mo>-</m:mo>
+                <m:mi>λ</m:mi>
+              </m:mfenced>
+              <m:mspace width="3.33333pt"/>
+              <m:mo>∀</m:mo>
+              <m:mi>n</m:mi>
+              <m:mo>.</m:mo>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id258140">With this notation in mind, we think of <m:math overflow="scroll"><m:mi>λ</m:mi></m:math> as a scaling factor and <m:math overflow="scroll"><m:mrow><m:mi>A</m:mi><m:mfenced open="(" close=")"><m:mi>λ</m:mi></m:mfenced></m:mrow></m:math> as a set of offsets in the sense that <m:math overflow="scroll"><m:mrow><m:mi>C</m:mi><m:mfenced open="(" close=")"><m:mi>λ</m:mi></m:mfenced></m:mrow></m:math> consists of two copies of itself, scaled by <m:math overflow="scroll"><m:mi>λ</m:mi></m:math>, and translated by the elements of <m:math overflow="scroll"><m:mrow><m:mi>A</m:mi><m:mfenced open="(" close=")"><m:mi>λ</m:mi></m:mfenced></m:mrow></m:math>. That is,</para>
+        <equation id="id258208">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:mi>C</m:mi>
+              <m:mfenced open="(" close=")">
+                <m:mi>λ</m:mi>
+              </m:mfenced>
+              <m:mo>=</m:mo>
+              <m:mi>λ</m:mi>
+              <m:mo>·</m:mo>
+              <m:mi>C</m:mi>
+              <m:mfenced open="(" close=")">
+                <m:mi>λ</m:mi>
+              </m:mfenced>
+              <m:mo>∪</m:mo>
+              <m:mfenced separators="" open="[" close="]">
+                <m:mi>λ</m:mi>
+                <m:mo>·</m:mo>
+                <m:mi>C</m:mi>
+                <m:mfenced open="(" close=")">
+                  <m:mi>λ</m:mi>
+                </m:mfenced>
+                <m:mo>+</m:mo>
+                <m:mfenced separators="" open="(" close=")">
+                  <m:mn>1</m:mn>
+                  <m:mo>-</m:mo>
+                  <m:mi>λ</m:mi>
+                </m:mfenced>
+              </m:mfenced>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id258280">where <m:math overflow="scroll"><m:mrow><m:mi>λ</m:mi><m:mo>·</m:mo><m:mi>C</m:mi><m:mfenced open="(" close=")"><m:mi>λ</m:mi></m:mfenced><m:mo>+</m:mo><m:mfenced separators="" open="(" close=")"><m:mn>1</m:mn><m:mo>-</m:mo><m:mi>λ</m:mi></m:mfenced></m:mrow></m:math> is interpreted as</para>
+        <equation id="id258321">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:mfenced separators="" open="{" close="}">
+                <m:mi>λ</m:mi>
+                <m:mo>·</m:mo>
+                <m:mi>x</m:mi>
+                <m:mo>+</m:mo>
+                <m:mfenced separators="" open="(" close=")">
+                  <m:mn>1</m:mn>
+                  <m:mo>-</m:mo>
+                  <m:mi>λ</m:mi>
+                </m:mfenced>
+                <m:mo>∣</m:mo>
+                <m:mi>x</m:mi>
+                <m:mo>∈</m:mo>
+                <m:mi>C</m:mi>
+                <m:mfenced open="(" close=")">
+                  <m:mi>λ</m:mi>
+                </m:mfenced>
+              </m:mfenced>
+              <m:mo>.</m:mo>
+            </m:mrow>
+          </m:math>
+        </equation>
+      </section>
+      <section id="uid12">
+        <title>Homogeneous Cantor Sets</title>
+        <para id="id258387">We may further generalize the construction of the Cantor sets <m:math overflow="scroll"><m:mrow><m:mi>C</m:mi><m:mfenced open="(" close=")"><m:mi>λ</m:mi></m:mfenced></m:mrow></m:math> to allow for more possibilities for the set of offsets <m:math overflow="scroll"><m:mrow><m:mi>A</m:mi><m:mo>=</m:mo><m:mfenced separators="" open="{" close="}"><m:msub><m:mi>a</m:mi><m:mn>0</m:mn></m:msub><m:mo>,</m:mo><m:msub><m:mi>a</m:mi><m:mn>1</m:mn></m:msub><m:mo>,</m:mo><m:mo>⋯</m:mo><m:mo>,</m:mo><m:msub><m:mi>a</m:mi><m:mi>k</m:mi></m:msub></m:mfenced></m:mrow></m:math> for some <m:math overflow="scroll"><m:mrow><m:mi>k</m:mi><m:mo>≥</m:mo><m:mn>1</m:mn></m:mrow></m:math>. In this case, we have a <emphasis effect="bold">homogeneous</emphasis> Cantor set <m:math overflow="scroll"><m:mrow><m:mi>C</m:mi><m:mfenced separators="" open="(" close=")"><m:mi>λ</m:mi><m:mo>,</m:mo><m:mi>A</m:mi></m:mfenced></m:mrow></m:math>, which can be represented (with a slight abuse of notation) as</para>
+        <equation id="id258498">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:mi>C</m:mi>
+              <m:mfenced separators="" open="(" close=")">
+                <m:mi>λ</m:mi>
+                <m:mo>,</m:mo>
+                <m:mi>A</m:mi>
+              </m:mfenced>
+              <m:mo>=</m:mo>
+              <m:munderover>
+                <m:mo>∑</m:mo>
+                <m:mrow>
+                  <m:mi>n</m:mi>
+                  <m:mo>=</m:mo>
+                  <m:mn>0</m:mn>
+                </m:mrow>
+                <m:mi>∞</m:mi>
+              </m:munderover>
+              <m:msub>
+                <m:mi>α</m:mi>
+                <m:mi>n</m:mi>
+              </m:msub>
+              <m:msup>
+                <m:mi>λ</m:mi>
+                <m:mi>n</m:mi>
+              </m:msup>
+              <m:mspace width="1.em"/>
+              <m:mtext>where</m:mtext>
+              <m:mspace width="1.em"/>
+              <m:msub>
+                <m:mi>α</m:mi>
+                <m:mi>n</m:mi>
+              </m:msub>
+              <m:mo>∈</m:mo>
+              <m:mi>A</m:mi>
+              <m:mspace width="3.33333pt"/>
+              <m:mo>∀</m:mo>
+              <m:mi>n</m:mi>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id258583">with the following constraints on <m:math overflow="scroll"><m:mi>A</m:mi></m:math>:</para>
+        <equation id="id258596">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:msub>
+                <m:mi>a</m:mi>
+                <m:mn>0</m:mn>
+              </m:msub>
+              <m:mo>=</m:mo>
+              <m:mn>0</m:mn>
+              <m:mo>,</m:mo>
+              <m:mspace width="1.em"/>
+              <m:msub>
+                <m:mi>a</m:mi>
+                <m:mi>k</m:mi>
+              </m:msub>
+              <m:mo>=</m:mo>
+              <m:mn>1</m:mn>
+              <m:mo>-</m:mo>
+              <m:mi>λ</m:mi>
+              <m:mo>,</m:mo>
+              <m:mspace width="1.em"/>
+              <m:mfenced separators="" open="(" close=")">
+                <m:msub>
+                  <m:mi>a</m:mi>
+                  <m:mrow>
+                    <m:mi>i</m:mi>
+                    <m:mo>+</m:mo>
+                    <m:mn>1</m:mn>
+                  </m:mrow>
+                </m:msub>
+                <m:mo>-</m:mo>
+                <m:msub>
+                  <m:mi>a</m:mi>
+                  <m:mi>i</m:mi>
+                </m:msub>
+              </m:mfenced>
+              <m:mo>&gt;</m:mo>
+              <m:mi>λ</m:mi>
+              <m:mspace width="3.33333pt"/>
+              <m:mtext>for</m:mtext>
+              <m:mspace width="3.33333pt"/>
+              <m:mn>0</m:mn>
+              <m:mo>≤</m:mo>
+              <m:mi>i</m:mi>
+              <m:mo>≤</m:mo>
+              <m:mi>k</m:mi>
+              <m:mo>-</m:mo>
+              <m:mn>1</m:mn>
+              <m:mo>.</m:mo>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id258702">As in the case of the mid-<m:math overflow="scroll"><m:mi>α</m:mi></m:math> Cantor sets <m:math overflow="scroll"><m:mrow><m:mi>C</m:mi><m:mfenced open="(" close=")"><m:mi>λ</m:mi></m:mfenced></m:mrow></m:math>, homogeneous Cantor sets exhibit self-similarity in the following sense:</para>
+        <equation id="id258730">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:mi>C</m:mi>
+              <m:mfenced separators="" open="(" close=")">
+                <m:mi>λ</m:mi>
+                <m:mo>,</m:mo>
+                <m:mi>A</m:mi>
+              </m:mfenced>
+              <m:mo>=</m:mo>
+              <m:munderover>
+                <m:mo>⋃</m:mo>
+                <m:mrow>
+                  <m:mi>j</m:mi>
+                  <m:mo>=</m:mo>
+                  <m:mn>0</m:mn>
+                </m:mrow>
+                <m:mi>k</m:mi>
+              </m:munderover>
+              <m:mfenced separators="" open="(" close=")">
+                <m:mi>λ</m:mi>
+                <m:mo>·</m:mo>
+                <m:mi>C</m:mi>
+                <m:mfenced separators="" open="(" close=")">
+                  <m:mi>λ</m:mi>
+                  <m:mo>,</m:mo>
+                  <m:mi>A</m:mi>
+                </m:mfenced>
+                <m:mo>+</m:mo>
+                <m:msub>
+                  <m:mi>a</m:mi>
+                  <m:mi>j</m:mi>
+                </m:msub>
+              </m:mfenced>
+              <m:mo>.</m:mo>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id258811">An example of this self-similarity can be seen in <link target-id="uid13"/>.</para>
+        <figure id="uid13">
+          <media id="uid13_media" alt="">
+            <image mime-type="image/png" src="../../media/hcantor.png" id="uid13_onlineimage" width="750"><!-- NOTE: attribute width changes image size online (pixels). original width is 750. --></image>
+            <image mime-type="application/postscript" for="pdf" src="../../media/hcantor.eps" id="uid13_printimage" print-width=".6">
+              <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+            </image>
+          </media>
+          <caption>The first, second, and third stages in the construction of a homogeneous Cantor set with <m:math overflow="scroll"><m:mrow><m:mi>λ</m:mi><m:mo>=</m:mo><m:mn>0</m:mn><m:mo>.</m:mo><m:mn>2</m:mn></m:mrow></m:math> and <m:math overflow="scroll"><m:mrow><m:mi>A</m:mi><m:mo>=</m:mo><m:mfenced separators="" open="{" close="}"><m:mn>0</m:mn><m:mo>,</m:mo><m:mn>0</m:mn><m:mo>.</m:mo><m:mn>3</m:mn><m:mo>,</m:mo><m:mn>0</m:mn><m:mo>.</m:mo><m:mn>8</m:mn></m:mfenced></m:mrow></m:math>.</caption>
+        </figure>
+      </section>
+      <section id="uid14">
+        <title>Cantorvals</title>
+        <para id="id258898">Another relevant topological structure is the <emphasis effect="bold">Cantorval</emphasis>. In loose terms, one could consider Cantorvals as "Cantor sets that contain intervals." To be more precise about this definition, we need to first define a <emphasis effect="bold">gap</emphasis> of a set to be a bounded connected component of the complement. For example, in the Cantor ternary set <m:math overflow="scroll"><m:mi>T</m:mi></m:math>, the interval <m:math overflow="scroll"><m:mfenced separators="" open="(" close=")"><m:mfrac><m:mn>1</m:mn><m:mn>3</m:mn></m:mfrac><m:mo>,</m:mo><m:mfrac><m:mn>2</m:mn><m:mn>3</m:mn></m:mfrac></m:mfenced></m:math> is the largest gap of <m:math overflow="scroll"><m:mi>T</m:mi></m:math>.</para>
+        <para id="id258960">Now we can formally define a Cantorval. We say that a compact, perfect set <m:math overflow="scroll"><m:mrow><m:mi>C</m:mi><m:mo>⊆</m:mo><m:mi mathvariant="double-struck">R</m:mi></m:mrow></m:math> is an 
+<emphasis effect="italics"><emphasis effect="bold">M</emphasis></emphasis><emphasis effect="bold">-Cantorval</emphasis> if every gap of <m:math overflow="scroll"><m:mi>C</m:mi></m:math> is accumulated on each side by other gaps and intervals of <m:math overflow="scroll"><m:mi>C</m:mi></m:math>. An example of an <emphasis effect="italics">M</emphasis>-Cantorval is given by Anisca and Chlebovec in <link target-id="bid4"/>; see <link target-id="uid15"/>.</para>
+        <para id="id259030">Similarly, we say that <m:math overflow="scroll"><m:mi>C</m:mi></m:math> is an 
+<emphasis effect="italics"><emphasis effect="bold">L</emphasis></emphasis><emphasis effect="bold">-Cantorval</emphasis> (or an 
+<emphasis effect="italics"><emphasis effect="bold">R</emphasis></emphasis><emphasis effect="bold">-Cantorval</emphasis>) if every gap of <m:math overflow="scroll"><m:mi>C</m:mi></m:math> is accumulated on the left (or right) by gaps and intervals of <m:math overflow="scroll"><m:mi>C</m:mi></m:math>, and if each gap of <m:math overflow="scroll"><m:mi>C</m:mi></m:math> has an interval adjacent to its right (or left). See <link target-id="uid16"/>.</para>
+        <figure id="uid15">
+          <media id="uid15_media" alt="">
+            <image mime-type="image/png" src="../../media/Mcantorval.png" id="uid15_onlineimage" width="750"><!-- NOTE: attribute width changes image size online (pixels). original width is 750. --></image>
+            <image mime-type="application/postscript" for="pdf" src="../../media/Mcantorval.eps" id="uid15_printimage" print-width=".6">
+              <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+            </image>
+          </media>
+          <caption>An <emphasis effect="italics">M</emphasis>-Cantorval constructed in a manner similar to the construction of the Cantor ternary set <m:math overflow="scroll"><m:mi>T</m:mi></m:math>, except one only removes intervals at the odd stages; no intervals get removed at even stages.</caption>
+        </figure>
+        <figure id="uid16">
+          <media id="uid16_media" alt="">
+            <image mime-type="image/png" src="../../media/Lcantorval.png" id="uid16_onlineimage" width="750"><!-- NOTE: attribute width changes image size online (pixels). original width is 750. --></image>
+            <image mime-type="application/postscript" for="pdf" src="../../media/Lcantorval.eps" id="uid16_printimage" print-width=".6">
+              <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+            </image>
+          </media>
+          <caption>An example of an <emphasis effect="italics">L</emphasis>-Cantorval. Note (or, given the limited resolution, imagine) that every gap has an interval on its right and is accumulated on the left by points, intervals, and gaps.</caption>
+        </figure>
+      </section>
+      <section id="uid17">
+        <title>Sums of Mid-<m:math overflow="scroll"><m:mi>α</m:mi></m:math>
+ Cantor Sets</title>
+        <para id="id259181">The problem tackled in this study revolves around characterizing the topological properties of the sum of two mid-<m:math overflow="scroll"><m:mi>α</m:mi></m:math> Cantor sets <m:math overflow="scroll"><m:mrow><m:mi>C</m:mi><m:mfenced open="(" close=")"><m:mi>λ</m:mi></m:mfenced></m:mrow></m:math> and <m:math overflow="scroll"><m:mrow><m:mi>C</m:mi><m:mfenced open="(" close=")"><m:mi>γ</m:mi></m:mfenced></m:mrow></m:math>, given by</para>
+        <equation id="id259229">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:mi>C</m:mi>
+              <m:mfenced open="(" close=")">
+                <m:mi>λ</m:mi>
+              </m:mfenced>
+              <m:mo>+</m:mo>
+              <m:mi>C</m:mi>
+              <m:mfenced open="(" close=")">
+                <m:mi>γ</m:mi>
+              </m:mfenced>
+              <m:mo>=</m:mo>
+              <m:mfenced separators="" open="{" close="}">
+                <m:mi>x</m:mi>
+                <m:mo>+</m:mo>
+                <m:mi>y</m:mi>
+                <m:mo>∣</m:mo>
+                <m:mi>x</m:mi>
+                <m:mo>∈</m:mo>
+                <m:mi>C</m:mi>
+                <m:mfenced open="(" close=")">
+                  <m:mi>λ</m:mi>
+                </m:mfenced>
+                <m:mo>,</m:mo>
+                <m:mspace width="3.33333pt"/>
+                <m:mi>y</m:mi>
+                <m:mo>∈</m:mo>
+                <m:mi>C</m:mi>
+                <m:mfenced open="(" close=")">
+                  <m:mi>γ</m:mi>
+                </m:mfenced>
+              </m:mfenced>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id259312">in terms of <m:math overflow="scroll"><m:mi>λ</m:mi></m:math> and <m:math overflow="scroll"><m:mi>γ</m:mi></m:math>.</para>
+        <para id="id259337">It is known that this sum can be an interval, as in the case of <m:math overflow="scroll"><m:mrow><m:mi>C</m:mi><m:mfenced separators="" open="(" close=")"><m:mfrac><m:mn>1</m:mn><m:mn>3</m:mn></m:mfrac></m:mfenced><m:mo>+</m:mo><m:mi>C</m:mi><m:mfenced separators="" open="(" close=")"><m:mfrac><m:mn>1</m:mn><m:mn>3</m:mn></m:mfrac></m:mfenced><m:mo>=</m:mo><m:mfenced separators="" open="[" close="]"><m:mn>0</m:mn><m:mo>,</m:mo><m:mn>2</m:mn></m:mfenced></m:mrow></m:math>. However, such a sum can result in another Cantor set, as with <m:math overflow="scroll"><m:mrow><m:mi>C</m:mi><m:mfenced separators="" open="(" close=")"><m:mfrac><m:mn>1</m:mn><m:mn>5</m:mn></m:mfrac></m:mfenced><m:mo>+</m:mo><m:mi>C</m:mi><m:mfenced separators="" open="(" close=")"><m:mfrac><m:mn>1</m:mn><m:mn>5</m:mn></m:mfrac></m:mfenced></m:mrow></m:math>. The proofs of these facts are in <link target-id="cid3">"Known Results"</link>.</para>
+        <para id="id259443">When studying this sum, it is more convenient to characterize it in terms of <m:math overflow="scroll"><m:mi>λ</m:mi></m:math> and <m:math overflow="scroll"><m:mrow><m:msup><m:mi>λ</m:mi><m:mi>θ</m:mi></m:msup><m:mo>=</m:mo><m:mi>γ</m:mi></m:mrow></m:math> with <m:math overflow="scroll"><m:mrow><m:mi>θ</m:mi><m:mo>≥</m:mo><m:mn>1</m:mn></m:mrow></m:math> as opposed to simply just <m:math overflow="scroll"><m:mi>λ</m:mi></m:math> and <m:math overflow="scroll"><m:mi>γ</m:mi></m:math>. This is due to a result from <link target-id="bid3"/> discussed below.</para>
+      </section>
+      <section id="uid18">
+        <title>Hausdorff Dimension</title>
+        <para id="id259525">A useful way of characterizing these types of sum sets in terms of <emphasis effect="bold">Hausdorff dimension</emphasis>. To define Hausdorff dimension, as done in <link target-id="bid0"/>, we need first to define the <emphasis effect="bold">Hausdorff <m:math overflow="scroll"><m:mi>α</m:mi></m:math>-measure</emphasis>. (Note that the <m:math overflow="scroll"><m:mi>α</m:mi></m:math> here is different from the <m:math overflow="scroll"><m:mi>α</m:mi></m:math> used to define the mid-<m:math overflow="scroll"><m:mi>α</m:mi></m:math> Cantor sets.)</para>
+        <para id="id259584">Given a set <m:math overflow="scroll"><m:mrow><m:mi>K</m:mi><m:mo>⊆</m:mo><m:mi mathvariant="double-struck">R</m:mi></m:mrow></m:math> and a finite covering <m:math overflow="scroll"><m:mrow><m:mi mathvariant="script">U</m:mi><m:mo>=</m:mo><m:msub><m:mfenced separators="" open="{" close="}"><m:msub><m:mi>U</m:mi><m:mi>i</m:mi></m:msub></m:mfenced><m:mrow><m:mi>i</m:mi><m:mo>∈</m:mo><m:mi>I</m:mi></m:mrow></m:msub></m:mrow></m:math> of <m:math overflow="scroll"><m:mi>K</m:mi></m:math> by open intervals, we define <m:math overflow="scroll"><m:msub><m:mi>ℓ</m:mi><m:mi>i</m:mi></m:msub></m:math> to be the length of <m:math overflow="scroll"><m:msub><m:mi>U</m:mi><m:mi>i</m:mi></m:msub></m:math>, and then <m:math overflow="scroll"><m:mrow><m:mtext>diam</m:mtext><m:mfenced open="(" close=")"><m:mi mathvariant="script">U</m:mi></m:mfenced></m:mrow></m:math> to be the maximum of the <m:math overflow="scroll"><m:msub><m:mi>ℓ</m:mi><m:mi>i</m:mi></m:msub></m:math>. Then, the Hausdorff <m:math overflow="scroll"><m:mi>α</m:mi></m:math>-measure <m:math overflow="scroll"><m:mrow><m:msub><m:mi>m</m:mi><m:mi>α</m:mi></m:msub><m:mfenced open="(" close=")"><m:mi>K</m:mi></m:mfenced></m:mrow></m:math> of <m:math overflow="scroll"><m:mi>K</m:mi></m:math> is</para>
+        <equation id="id259758">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:msub>
+                <m:mi>m</m:mi>
+                <m:mi>α</m:mi>
+              </m:msub>
+              <m:mfenced open="(" close=")">
+                <m:mi>K</m:mi>
+              </m:mfenced>
+              <m:mo>=</m:mo>
+              <m:munder>
+                <m:mo movablelimits="false" form="prefix">lim</m:mo>
+                <m:mrow>
+                  <m:mi>ε</m:mi>
+                  <m:mo>→</m:mo>
+                  <m:mn>0</m:mn>
+                </m:mrow>
+              </m:munder>
+              <m:mfenced separators="" open="(" close=")">
+                <m:munder>
+                  <m:mo movablelimits="false" form="prefix">inf</m:mo>
+                  <m:mtable>
+                    <m:mtr>
+                      <m:mtd>
+                        <m:mrow>
+                          <m:mi mathvariant="script">U</m:mi>
+                          <m:mspace width="0.166667em"/>
+                          <m:mtext>covers</m:mtext>
+                          <m:mspace width="0.166667em"/>
+                          <m:mi>K</m:mi>
+                        </m:mrow>
+                      </m:mtd>
+                    </m:mtr>
+                    <m:mtr>
+                      <m:mtd>
+                        <m:mrow>
+                          <m:mtext>diam</m:mtext>
+                          <m:mfenced open="(" close=")">
+                            <m:mi mathvariant="script">U</m:mi>
+                          </m:mfenced>
+                          <m:mo>&lt;</m:mo>
+                          <m:mi>ε</m:mi>
+                        </m:mrow>
+                      </m:mtd>
+                    </m:mtr>
+                  </m:mtable>
+                </m:munder>
+                <m:mfenced separators="" open="(" close=")">
+                  <m:munder>
+                    <m:mo>∑</m:mo>
+                    <m:mrow>
+                      <m:mi>i</m:mi>
+                      <m:mo>∈</m:mo>
+                      <m:mi>I</m:mi>
+                    </m:mrow>
+                  </m:munder>
+                  <m:msubsup>
+                    <m:mi>ℓ</m:mi>
+                    <m:mrow>
+                      <m:mi>i</m:mi>
+                    </m:mrow>
+                    <m:mi>α</m:mi>
+                  </m:msubsup>
+                </m:mfenced>
+              </m:mfenced>
+              <m:mo>.</m:mo>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id259893">Then, there is a unique number <m:math overflow="scroll"><m:mrow><m:mi>H</m:mi><m:mi>D</m:mi><m:mfenced open="(" close=")"><m:mi>K</m:mi></m:mfenced></m:mrow></m:math> such that for <m:math overflow="scroll"><m:mrow><m:mi>α</m:mi><m:mo>&lt;</m:mo><m:mi>H</m:mi><m:mi>D</m:mi><m:mfenced open="(" close=")"><m:mi>K</m:mi></m:mfenced></m:mrow></m:math>, <m:math overflow="scroll"><m:mrow><m:msub><m:mi>m</m:mi><m:mi>α</m:mi></m:msub><m:mfenced open="(" close=")"><m:mi>K</m:mi></m:mfenced><m:mo>=</m:mo><m:mi>∞</m:mi></m:mrow></m:math>, and for <m:math overflow="scroll"><m:mrow><m:mi>α</m:mi><m:mo>&gt;</m:mo><m:mi>H</m:mi><m:mi>D</m:mi><m:mfenced open="(" close=")"><m:mi>K</m:mi></m:mfenced></m:mrow></m:math>, <m:math overflow="scroll"><m:mrow><m:msub><m:mi>m</m:mi><m:mi>α</m:mi></m:msub><m:mfenced open="(" close=")"><m:mi>K</m:mi></m:mfenced><m:mo>=</m:mo><m:mn>0</m:mn></m:mrow></m:math>. We call this number the Hausdorff dimension of <m:math overflow="scroll"><m:mi>K</m:mi></m:math>.</para>
+        <para id="id260030">From this definition, it is clear that any set with Hausdorff dimension less than 1 must have zero Lebesgue measure. Note that it is possible to have a Cantor set that has both Hausdorff dimension equal to 1 and Lebesgue measure zero. There is also another class of Cantor sets that have Hausdorff dimension 1 and positive Lebesgue measure.</para>
+        <para id="id260036">It is easy to see that the Hausdorff dimension of a mid-<m:math overflow="scroll"><m:mfenced separators="" open="(" close=")"><m:mn>1</m:mn><m:mo>-</m:mo><m:mn>2</m:mn><m:mi>λ</m:mi></m:mfenced></m:math> Cantor set is given by</para>
+        <equation id="id260062">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:mi>H</m:mi>
+              <m:mi>D</m:mi>
+              <m:mfenced separators="" open="(" close=")">
+                <m:mi>C</m:mi>
+                <m:mfenced open="(" close=")">
+                  <m:mi>λ</m:mi>
+                </m:mfenced>
+              </m:mfenced>
+              <m:mo>=</m:mo>
+              <m:mfrac>
+                <m:mrow>
+                  <m:mo form="prefix">log</m:mo>
+                  <m:mn>2</m:mn>
+                </m:mrow>
+                <m:mrow>
+                  <m:mo form="prefix">log</m:mo>
+                  <m:mrow>
+                    <m:mn>1</m:mn>
+                    <m:mo>/</m:mo>
+                    <m:mi>λ</m:mi>
+                  </m:mrow>
+                </m:mrow>
+              </m:mfrac>
+              <m:mo>.</m:mo>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id260120">Because Cantorvals have positive measure, they must have Hausdorff dimension 1.</para>
+      </section>
+    </section>
+    <section id="cid3">
+      <title>Known Results</title>
+      <para id="id260134">A theorem from Mendes and Oliveira completely characterizes the types of topological structures that result from taking the sum of two homogeneous Cantor sets. In 1994 they proved the following result <link target-id="bid3"/>.</para>
+      <para id="id260144"><emphasis effect="bold">Theorem 3.1 (Mendes and Oliveira 1994)</emphasis> 
+
+If <m:math overflow="scroll"><m:mrow><m:mi>C</m:mi><m:mfenced separators="" open="(" close=")"><m:mi>λ</m:mi><m:mo>,</m:mo><m:mi>A</m:mi></m:mfenced></m:mrow></m:math> and <m:math overflow="scroll"><m:mrow><m:mi>C</m:mi><m:mfenced separators="" open="(" close=")"><m:mi>γ</m:mi><m:mo>,</m:mo><m:mi>B</m:mi></m:mfenced></m:mrow></m:math> are homogeneous Cantor sets, then we have one of the following possibilities:</para>
+      <list id="id260205" display="block" list-type="labeled-item">
+        <item id="uid20"><label>(i)</label><m:math overflow="scroll"><m:mrow><m:mi>C</m:mi><m:mfenced separators="" open="(" close=")"><m:mi>λ</m:mi><m:mo>,</m:mo><m:mi>A</m:mi></m:mfenced><m:mo>+</m:mo><m:mi>C</m:mi><m:mfenced separators="" open="(" close=")"><m:mi>γ</m:mi><m:mo>,</m:mo><m:mi>B</m:mi></m:mfenced></m:mrow></m:math> is a Cantor set;
+</item>
+        <item id="uid21"><label>(ii)</label><m:math overflow="scroll"><m:mrow><m:mi>C</m:mi><m:mfenced separators="" open="(" close=")"><m:mi>λ</m:mi><m:mo>,</m:mo><m:mi>A</m:mi></m:mfenced><m:mo>+</m:mo><m:mi>C</m:mi><m:mfenced separators="" open="(" close=")"><m:mi>γ</m:mi><m:mo>,</m:mo><m:mi>B</m:mi></m:mfenced><m:mo>=</m:mo><m:mfenced separators="" open="[" close="]"><m:mn>0</m:mn><m:mo>,</m:mo><m:mn>2</m:mn></m:mfenced></m:mrow></m:math>;
+</item>
+        <item id="uid22"><label>(iii)</label><m:math overflow="scroll"><m:mrow><m:mi>C</m:mi><m:mfenced separators="" open="(" close=")"><m:mi>λ</m:mi><m:mo>,</m:mo><m:mi>A</m:mi></m:mfenced><m:mo>+</m:mo><m:mi>C</m:mi><m:mfenced separators="" open="(" close=")"><m:mi>γ</m:mi><m:mo>,</m:mo><m:mi>B</m:mi></m:mfenced></m:mrow></m:math> is an L-Cantorval such that <m:math overflow="scroll"><m:mfenced separators="" open="[" close="]"><m:mn>0</m:mn><m:mo>,</m:mo><m:mn>1</m:mn></m:mfenced></m:math> is contained in an interval of <m:math overflow="scroll"><m:mrow><m:mi>C</m:mi><m:mfenced separators="" open="(" close=")"><m:mi>λ</m:mi><m:mo>,</m:mo><m:mi>A</m:mi></m:mfenced><m:mo>+</m:mo><m:mi>C</m:mi><m:mfenced separators="" open="(" close=")"><m:mi>γ</m:mi><m:mo>,</m:mo><m:mi>B</m:mi></m:mfenced></m:mrow></m:math> and 2 is a point of <m:math overflow="scroll"><m:mrow><m:mi>C</m:mi><m:mfenced separators="" open="(" close=")"><m:mi>λ</m:mi><m:mo>,</m:mo><m:mi>A</m:mi></m:mfenced><m:mo>+</m:mo><m:mi>C</m:mi><m:mfenced separators="" open="(" close=")"><m:mi>γ</m:mi><m:mo>,</m:mo><m:mi>B</m:mi></m:mfenced></m:mrow></m:math>;
+</item>
+        <item id="uid23"><label>(iv)</label><m:math overflow="scroll"><m:mrow><m:mi>C</m:mi><m:mfenced separators="" open="(" close=")"><m:mi>λ</m:mi><m:mo>,</m:mo><m:mi>A</m:mi></m:mfenced><m:mo>+</m:mo><m:mi>C</m:mi><m:mfenced separators="" open="(" close=")"><m:mi>γ</m:mi><m:mo>,</m:mo><m:mi>B</m:mi></m:mfenced></m:mrow></m:math> is an R-Cantorval such that <m:math overflow="scroll"><m:mfenced separators="" open="[" close="]"><m:mn>1</m:mn><m:mo>,</m:mo><m:mn>2</m:mn></m:mfenced></m:math> is contained in an interval of <m:math overflow="scroll"><m:mrow><m:mi>C</m:mi><m:mfenced separators="" open="(" close=")"><m:mi>λ</m:mi><m:mo>,</m:mo><m:mi>A</m:mi></m:mfenced><m:mo>+</m:mo><m:mi>C</m:mi><m:mfenced separators="" open="(" close=")"><m:mi>γ</m:mi><m:mo>,</m:mo><m:mi>B</m:mi></m:mfenced></m:mrow></m:math> and 0 is a point of <m:math overflow="scroll"><m:mrow><m:mi>C</m:mi><m:mfenced separators="" open="(" close=")"><m:mi>λ</m:mi><m:mo>,</m:mo><m:mi>A</m:mi></m:mfenced><m:mo>+</m:mo><m:mi>C</m:mi><m:mfenced separators="" open="(" close=")"><m:mi>γ</m:mi><m:mo>,</m:mo><m:mi>B</m:mi></m:mfenced></m:mrow></m:math>;
+</item>
+        <item id="uid24"><label>(v)</label><m:math overflow="scroll"><m:mrow><m:mi>C</m:mi><m:mfenced separators="" open="(" close=")"><m:mi>λ</m:mi><m:mo>,</m:mo><m:mi>A</m:mi></m:mfenced><m:mo>+</m:mo><m:mi>C</m:mi><m:mfenced separators="" open="(" close=")"><m:mi>γ</m:mi><m:mo>,</m:mo><m:mi>B</m:mi></m:mfenced></m:mrow></m:math> is an M-Cantorval such that 0 and 2 are points of <m:math overflow="scroll"><m:mrow><m:mi>C</m:mi><m:mfenced separators="" open="(" close=")"><m:mi>λ</m:mi><m:mo>,</m:mo><m:mi>A</m:mi></m:mfenced><m:mo>+</m:mo><m:mi>C</m:mi><m:mfenced separators="" open="(" close=")"><m:mi>γ</m:mi><m:mo>,</m:mo><m:mi>B</m:mi></m:mfenced></m:mrow></m:math>.
+</item>
+      </list>
+      <para id="id260747">In this study, the only possible structures for the sum of two mid-<m:math overflow="scroll"><m:mi>α</m:mi></m:math> Cantor sets are <emphasis effect="italics">(i)</emphasis>, <emphasis effect="italics">(ii)</emphasis>, and <emphasis effect="italics">(v)</emphasis>. This is due to the fact that the sum of two symmetric sets must be symmetric.</para>
+      <para id="id260777">Another well-known result gives a sufficient, but not necessary, condition for the sum of two mid-<m:math overflow="scroll"><m:mi>α</m:mi></m:math> Cantor sets being another Cantor set, though not necessarily homogeneous. This result is presented in the following Lemma.</para>
+      <para id="id260792"><emphasis effect="bold">Lemma 3.2</emphasis> 
+For any two sets <m:math overflow="scroll"><m:mrow><m:msub><m:mi>K</m:mi><m:mn>1</m:mn></m:msub><m:mo>,</m:mo><m:msub><m:mi>K</m:mi><m:mn>2</m:mn></m:msub><m:mo>⊆</m:mo><m:mi mathvariant="double-struck">R</m:mi></m:mrow></m:math>,</para>
+      <equation id="id260835">
+        <m:math overflow="scroll" mode="display">
+          <m:mrow>
+            <m:mi>H</m:mi>
+            <m:mi>D</m:mi>
+            <m:mfenced separators="" open="(" close=")">
+              <m:msub>
+                <m:mi>K</m:mi>
+                <m:mn>1</m:mn>
+              </m:msub>
+              <m:mo>+</m:mo>
+              <m:msub>
+                <m:mi>K</m:mi>
+                <m:mn>2</m:mn>
+              </m:msub>
+            </m:mfenced>
+            <m:mo>≤</m:mo>
+            <m:mi>H</m:mi>
+            <m:mi>D</m:mi>
+            <m:mfenced separators="" open="(" close=")">
+              <m:msub>
+                <m:mi>K</m:mi>
+                <m:mn>1</m:mn>
+              </m:msub>
+            </m:mfenced>
+            <m:mo>+</m:mo>
+            <m:mi>H</m:mi>
+            <m:mi>D</m:mi>
+            <m:mfenced separators="" open="(" close=")">
+              <m:msub>
+                <m:mi>K</m:mi>
+                <m:mn>2</m:mn>
+              </m:msub>
+            </m:mfenced>
+            <m:mo>.</m:mo>
+          </m:mrow>
+        </m:math>
+      </equation>
+      <para id="id260925">[Sketch of Proof]
+We offer a quick sketch of the proof in the case where <m:math overflow="scroll"><m:msub><m:mi>K</m:mi><m:mn>1</m:mn></m:msub></m:math> and <m:math overflow="scroll"><m:msub><m:mi>K</m:mi><m:mn>2</m:mn></m:msub></m:math> are mid-<m:math overflow="scroll"><m:mi>α</m:mi></m:math> Cantor sets, based on a method described in <link target-id="bid3"/>. Let <m:math overflow="scroll"><m:mi>π</m:mi></m:math> be the projection of <m:math overflow="scroll"><m:msup><m:mi mathvariant="double-struck">R</m:mi><m:mn>2</m:mn></m:msup></m:math> to the x-axis in the direction of the vector <m:math overflow="scroll"><m:mfenced separators="" open="(" close=")"><m:mn>1</m:mn><m:mo>,</m:mo><m:mo>-</m:mo><m:mn>1</m:mn></m:mfenced></m:math>. Then,</para>
+      <equation id="id261022">
+        <m:math overflow="scroll" mode="display">
+          <m:mrow>
+            <m:mi>π</m:mi>
+            <m:mfenced separators="" open="(" close=")">
+              <m:msub>
+                <m:mi>K</m:mi>
+                <m:mn>1</m:mn>
+              </m:msub>
+              <m:mo>×</m:mo>
+              <m:msub>
+                <m:mi>K</m:mi>
+                <m:mn>2</m:mn>
+              </m:msub>
+            </m:mfenced>
+            <m:mo>=</m:mo>
+            <m:msub>
+              <m:mi>K</m:mi>
+              <m:mn>1</m:mn>
+            </m:msub>
+            <m:mo>+</m:mo>
+            <m:msub>
+              <m:mi>K</m:mi>
+              <m:mn>2</m:mn>
+            </m:msub>
+            <m:mo>.</m:mo>
+          </m:mrow>
+        </m:math>
+      </equation>
+      <para id="id261079">See Figures <link target-id="uid26"/> and <link target-id="uid27"/>. It is easy to see from the definition of Hausdorff dimension that</para>
+      <equation id="id261094">
+        <m:math overflow="scroll" mode="display">
+          <m:mrow>
+            <m:mi>H</m:mi>
+            <m:mi>D</m:mi>
+            <m:mfenced separators="" open="(" close=")">
+              <m:msub>
+                <m:mi>K</m:mi>
+                <m:mn>1</m:mn>
+              </m:msub>
+              <m:mo>×</m:mo>
+              <m:msub>
+                <m:mi>K</m:mi>
+                <m:mn>2</m:mn>
+              </m:msub>
+            </m:mfenced>
+            <m:mo>≤</m:mo>
+            <m:mi>H</m:mi>
+            <m:mi>D</m:mi>
+            <m:mfenced separators="" open="(" close=")">
+              <m:msub>
+                <m:mi>K</m:mi>
+                <m:mn>1</m:mn>
+              </m:msub>
+            </m:mfenced>
+            <m:mo>+</m:mo>
+            <m:mi>H</m:mi>
+            <m:mi>D</m:mi>
+            <m:mfenced separators="" open="(" close=")">
+              <m:msub>
+                <m:mi>K</m:mi>
+                <m:mn>2</m:mn>
+              </m:msub>
+            </m:mfenced>
+            <m:mo>.</m:mo>
+          </m:mrow>
+        </m:math>
+      </equation>
+      <para id="id261177">It can also be seen from the figures that</para>
+      <equation id="id261183">
+        <m:math overflow="scroll" mode="display">
+          <m:mrow>
+            <m:mi>H</m:mi>
+            <m:mi>D</m:mi>
+            <m:mfenced separators="" open="(" close=")">
+              <m:msub>
+                <m:mi>K</m:mi>
+                <m:mn>1</m:mn>
+              </m:msub>
+              <m:mo>+</m:mo>
+              <m:msub>
+                <m:mi>K</m:mi>
+                <m:mn>2</m:mn>
+              </m:msub>
+            </m:mfenced>
+            <m:mo>=</m:mo>
+            <m:mi>H</m:mi>
+            <m:mi>D</m:mi>
+            <m:mfenced separators="" open="(" close=")">
+              <m:mi>π</m:mi>
+              <m:mfenced separators="" open="(" close=")">
+                <m:msub>
+                  <m:mi>K</m:mi>
+                  <m:mn>1</m:mn>
+                </m:msub>
+                <m:mo>×</m:mo>
+                <m:msub>
+                  <m:mi>K</m:mi>
+                  <m:mn>2</m:mn>
+                </m:msub>
+              </m:mfenced>
+            </m:mfenced>
+            <m:mo>≤</m:mo>
+            <m:mi>H</m:mi>
+            <m:mi>D</m:mi>
+            <m:mfenced separators="" open="(" close=")">
+              <m:msub>
+                <m:mi>K</m:mi>
+                <m:mn>1</m:mn>
+              </m:msub>
+              <m:mo>×</m:mo>
+              <m:msub>
+                <m:mi>K</m:mi>
+                <m:mn>2</m:mn>
+              </m:msub>
+            </m:mfenced>
+            <m:mo>.</m:mo>
+          </m:mrow>
+        </m:math>
+      </equation>
+      <para id="id261294">This finishes the sketch of the proof of Lemma 3.2.</para>
+      <figure id="uid26">
+        <media id="uid26_media" alt="">
+          <image mime-type="image/png" src="../../media/CantorProduct1.png" id="uid26_onlineimage" width="750"><!-- NOTE: attribute width changes image size online (pixels). original width is 750. --></image>
+          <image mime-type="application/postscript" for="pdf" src="../../media/CantorProduct1.eps" id="uid26_printimage" print-width=".6">
+            <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+          </image>
+        </media>
+        <caption><m:math overflow="scroll"><m:mrow><m:msub><m:mi>K</m:mi><m:mn>1</m:mn></m:msub><m:mo>×</m:mo><m:msub><m:mi>K</m:mi><m:mn>2</m:mn></m:msub></m:mrow></m:math>, where <m:math overflow="scroll"><m:mrow><m:msub><m:mi>K</m:mi><m:mn>1</m:mn></m:msub><m:mo>=</m:mo><m:msub><m:mi>K</m:mi><m:mn>2</m:mn></m:msub><m:mo>=</m:mo><m:mi>C</m:mi><m:mfenced separators="" open="(" close=")"><m:mfrac><m:mn>1</m:mn><m:mn>4</m:mn></m:mfrac></m:mfenced></m:mrow></m:math>. The lines indicate the direction of the projection <m:math overflow="scroll"><m:mi>π</m:mi></m:math>.</caption>
+      </figure>
+      <figure id="uid27">
+        <media id="uid27_media" alt="">
+          <image mime-type="image/png" src="../../media/CantorProduct.png" id="uid27_onlineimage" width="750"><!-- NOTE: attribute width changes image size online (pixels). original width is 750. --></image>
+          <image mime-type="application/postscript" for="pdf" src="../../media/CantorProduct.eps" id="uid27_printimage" print-width=".6">
+            <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+          </image>
+        </media>
+        <caption><m:math overflow="scroll"><m:mrow><m:msub><m:mi>K</m:mi><m:mn>1</m:mn></m:msub><m:mo>+</m:mo><m:msub><m:mi>K</m:mi><m:mn>2</m:mn></m:msub></m:mrow></m:math> where <m:math overflow="scroll"><m:mrow><m:msub><m:mi>K</m:mi><m:mn>1</m:mn></m:msub><m:mo>=</m:mo><m:msub><m:mi>K</m:mi><m:mn>2</m:mn></m:msub><m:mo>=</m:mo><m:mi>C</m:mi><m:mfenced separators="" open="(" close=")"><m:mfrac><m:mn>1</m:mn><m:mn>4</m:mn></m:mfrac></m:mfenced></m:mrow></m:math>. This happens to be the homogeneous Cantor set <m:math overflow="scroll"><m:mrow><m:mi>C</m:mi><m:mfenced separators="" open="(" close=")"><m:mfrac><m:mn>1</m:mn><m:mn>4</m:mn></m:mfrac><m:mo>,</m:mo><m:mfenced separators="" open="{" close="}"><m:mn>0</m:mn><m:mo>,</m:mo><m:mfrac><m:mn>3</m:mn><m:mn>8</m:mn></m:mfrac><m:mo>,</m:mo><m:mfrac><m:mn>3</m:mn><m:mn>4</m:mn></m:mfrac></m:mfenced></m:mfenced></m:mrow></m:math>.</caption>
+      </figure>
+      <para id="id261523">This result tells us that if <m:math overflow="scroll"><m:mrow><m:mi>H</m:mi><m:mi>D</m:mi><m:mfenced separators="" open="(" close=")"><m:mi>C</m:mi><m:mfenced open="(" close=")"><m:mi>λ</m:mi></m:mfenced></m:mfenced><m:mo>+</m:mo><m:mi>H</m:mi><m:mi>D</m:mi><m:mfenced separators="" open="(" close=")"><m:mi>C</m:mi><m:mfenced separators="" open="(" close=")"><m:msup><m:mi>λ</m:mi><m:mi>θ</m:mi></m:msup></m:mfenced></m:mfenced><m:mo>&lt;</m:mo><m:mn>1</m:mn></m:mrow></m:math>, then <m:math overflow="scroll"><m:mrow><m:mi>C</m:mi><m:mfenced open="(" close=")"><m:mi>λ</m:mi></m:mfenced><m:mo>+</m:mo><m:mi>C</m:mi><m:mfenced separators="" open="(" close=")"><m:msup><m:mi>λ</m:mi><m:mi>θ</m:mi></m:msup></m:mfenced></m:mrow></m:math> must be a Cantor set with zero Lebesgue measure. This area can be seen below in <link target-id="uid35"/> as the region below the green line, given by <m:math overflow="scroll"><m:mrow><m:mi>λ</m:mi><m:mo>=</m:mo><m:msup><m:mn>2</m:mn><m:mrow><m:mo>-</m:mo><m:mfenced separators="" open="(" close=")"><m:mn>1</m:mn><m:mo>+</m:mo><m:mn>1</m:mn><m:mo>/</m:mo><m:mi>θ</m:mi></m:mfenced></m:mrow></m:msup></m:mrow></m:math>.</para>
+      <para id="id261671">As mentioned earlier, this condition is not necessary. It is known that for rational <m:math overflow="scroll"><m:mi>θ</m:mi></m:math>, there are <m:math overflow="scroll"><m:mi>λ</m:mi></m:math> such that <m:math overflow="scroll"><m:mrow><m:mi>H</m:mi><m:mi>D</m:mi><m:mfenced separators="" open="(" close=")"><m:mi>C</m:mi><m:mfenced open="(" close=")"><m:mi>λ</m:mi></m:mfenced></m:mfenced><m:mo>+</m:mo><m:mi>H</m:mi><m:mi>D</m:mi><m:mfenced separators="" open="(" close=")"><m:mi>C</m:mi><m:mfenced separators="" open="(" close=")"><m:msup><m:mi>λ</m:mi><m:mi>θ</m:mi></m:msup></m:mfenced></m:mfenced><m:mo>&gt;</m:mo><m:mn>1</m:mn></m:mrow></m:math> but <m:math overflow="scroll"><m:mrow><m:mi>C</m:mi><m:mfenced open="(" close=")"><m:mi>λ</m:mi></m:mfenced><m:mo>+</m:mo><m:mi>C</m:mi><m:mfenced separators="" open="(" close=")"><m:msup><m:mi>λ</m:mi><m:mi>θ</m:mi></m:msup></m:mfenced></m:mrow></m:math> is a Cantor set with zero Lebesgue measure. We will have more to say about this when we discuss our new results in <link target-id="cid4">"Results from the Study"</link>.</para>
+      <para id="id261798">A partial converse to this was shown for irrational <m:math overflow="scroll"><m:mi>θ</m:mi></m:math> by Peres and Shmerkin in <link target-id="bid5"/>.</para>
+      <para id="id261817"><emphasis effect="bold">Theorem 3.3 (Peres and Shmerkin 2009)</emphasis> 
+
+Let <m:math overflow="scroll"><m:mrow><m:mi>C</m:mi><m:mfenced open="(" close=")"><m:mi>λ</m:mi></m:mfenced></m:mrow></m:math> and <m:math overflow="scroll"><m:mrow><m:mi>C</m:mi><m:mfenced separators="" open="(" close=")"><m:msup><m:mi>λ</m:mi><m:mi>θ</m:mi></m:msup></m:mfenced></m:mrow></m:math> be two mid-<m:math overflow="scroll"><m:mi>α</m:mi></m:math> Cantor sets. Then, if <m:math overflow="scroll"><m:mi>θ</m:mi></m:math> is irrational,</para>
+      <equation id="id261890">
+        <m:math overflow="scroll" mode="display">
+          <m:mrow>
+            <m:mi>H</m:mi>
+            <m:mi>D</m:mi>
+            <m:mfenced separators="" open="(" close=")">
+              <m:mi>C</m:mi>
+              <m:mfenced open="(" close=")">
+                <m:mi>λ</m:mi>
+              </m:mfenced>
+              <m:mo>+</m:mo>
+              <m:mi>C</m:mi>
+              <m:mfenced separators="" open="(" close=")">
+                <m:msup>
+                  <m:mi>λ</m:mi>
+                  <m:mi>θ</m:mi>
+                </m:msup>
+              </m:mfenced>
+            </m:mfenced>
+            <m:mo>=</m:mo>
+            <m:mo movablelimits="true" form="prefix">min</m:mo>
+            <m:mfenced separators="" open="(" close=")">
+              <m:mi>H</m:mi>
+              <m:mi>D</m:mi>
+              <m:mfenced separators="" open="(" close=")">
+                <m:mi>C</m:mi>
+                <m:mfenced open="(" close=")">
+                  <m:mi>λ</m:mi>
+                </m:mfenced>
+              </m:mfenced>
+              <m:mo>+</m:mo>
+              <m:mi>H</m:mi>
+              <m:mi>D</m:mi>
+              <m:mfenced separators="" open="(" close=")">
+                <m:mi>C</m:mi>
+                <m:mfenced separators="" open="(" close=")">
+                  <m:msup>
+                    <m:mi>λ</m:mi>
+                    <m:mi>θ</m:mi>
+                  </m:msup>
+                </m:mfenced>
+              </m:mfenced>
+              <m:mo>,</m:mo>
+              <m:mn>1</m:mn>
+            </m:mfenced>
+            <m:mo>.</m:mo>
+          </m:mrow>
+        </m:math>
+      </equation>
+      <para id="id262014">There are also results pertaining to sufficient conditions for when the sum of two mid-<m:math overflow="scroll"><m:mi>α</m:mi></m:math> Cantor sets is the full interval <m:math overflow="scroll"><m:mfenced separators="" open="[" close="]"><m:mn>0</m:mn><m:mo>,</m:mo><m:mn>2</m:mn></m:mfenced></m:math>. The following result is also from Mendes and Oliveira <link target-id="bid3"/>.</para>
+      <para id="id262054"><emphasis effect="bold">Theorem 3.4 (Mendes and Oliveira 1994)</emphasis> 
+
+Let <m:math overflow="scroll"><m:mrow><m:mi>C</m:mi><m:mfenced open="(" close=")"><m:mi>λ</m:mi></m:mfenced></m:mrow></m:math> and <m:math overflow="scroll"><m:mrow><m:mi>C</m:mi><m:mfenced separators="" open="(" close=")"><m:msup><m:mi>λ</m:mi><m:mi>θ</m:mi></m:msup></m:mfenced></m:mrow></m:math> be two mid-<m:math overflow="scroll"><m:mi>α</m:mi></m:math> Cantor sets, with <m:math overflow="scroll"><m:mrow><m:mi>θ</m:mi><m:mo>≥</m:mo><m:mn>1</m:mn></m:mrow></m:math>. For each <m:math overflow="scroll"><m:mrow><m:mi>θ</m:mi><m:mo>≥</m:mo><m:mn>1</m:mn></m:mrow></m:math>, we denote by <m:math overflow="scroll"><m:mrow><m:msub><m:mi>λ</m:mi><m:mn>1</m:mn></m:msub><m:mfenced open="(" close=")"><m:mi>θ</m:mi></m:mfenced><m:mo>∈</m:mo><m:mfenced separators="" open="(" close=")"><m:mn>0</m:mn><m:mo>,</m:mo><m:mfrac><m:mn>1</m:mn><m:mn>2</m:mn></m:mfrac></m:mfenced></m:mrow></m:math> the unique solution to the equation <m:math overflow="scroll"><m:mrow><m:msup><m:mi>λ</m:mi><m:mi>θ</m:mi></m:msup><m:mo>=</m:mo><m:mn>1</m:mn><m:mo>-</m:mo><m:mn>2</m:mn><m:mi>λ</m:mi></m:mrow></m:math>, and we denote by <m:math overflow="scroll"><m:mrow><m:msub><m:mi>λ</m:mi><m:mn>2</m:mn></m:msub><m:mfenced open="(" close=")"><m:mi>θ</m:mi></m:mfenced><m:mo>∈</m:mo><m:mfenced separators="" open="(" close=")"><m:mn>0</m:mn><m:mo>,</m:mo><m:mfrac><m:mn>1</m:mn><m:mn>2</m:mn></m:mfrac></m:mfenced></m:mrow></m:math> the unique solution to <m:math overflow="scroll"><m:mrow><m:mfrac><m:mi>λ</m:mi><m:mrow><m:mn>1</m:mn><m:mo>-</m:mo><m:mi>λ</m:mi></m:mrow></m:mfrac><m:mo>+</m:mo><m:mfrac><m:msup><m:mi>λ</m:mi><m:mi>θ</m:mi></m:msup><m:mrow><m:mn>1</m:mn><m:mo>-</m:mo><m:msup><m:mi>λ</m:mi><m:mi>θ</m:mi></m:msup></m:mrow></m:mfrac></m:mrow></m:math>. Note that <m:math overflow="scroll"><m:mrow><m:msub><m:mi>λ</m:mi><m:mn>1</m:mn></m:msub><m:mfenced open="(" close=")"><m:mn>1</m:mn></m:mfenced><m:mo>=</m:mo><m:msub><m:mi>λ</m:mi><m:mn>2</m:mn></m:msub><m:mfenced open="(" close=")"><m:mn>1</m:mn></m:mfenced><m:mo>=</m:mo><m:mfrac><m:mn>1</m:mn><m:mn>3</m:mn></m:mfrac></m:mrow></m:math> and <m:math overflow="scroll"><m:mrow><m:msub><m:mi>λ</m:mi><m:mn>1</m:mn></m:msub><m:mfenced open="(" close=")"><m:mi>θ</m:mi></m:mfenced><m:mo>&lt;</m:mo><m:msub><m:mi>λ</m:mi><m:mn>2</m:mn></m:msub><m:mfenced open="(" close=")"><m:mi>θ</m:mi></m:mfenced></m:mrow></m:math> for all <m:math overflow="scroll"><m:mrow><m:mi>θ</m:mi><m:mo>&gt;</m:mo><m:mn>1</m:mn></m:mrow></m:math>. With this notation, we have the following:</para>
+      <para id="id262409">For each <m:math overflow="scroll"><m:mrow><m:mi>θ</m:mi><m:mo>≥</m:mo><m:mn>1</m:mn></m:mrow></m:math> there is a unique <m:math overflow="scroll"><m:mrow><m:mi>λ</m:mi><m:mfenced open="(" close=")"><m:mi>θ</m:mi></m:mfenced><m:mo>∈</m:mo><m:mfenced separators="" open="[" close="]"><m:msub><m:mi>λ</m:mi><m:mn>1</m:mn></m:msub><m:mfenced open="(" close=")"><m:mi>θ</m:mi></m:mfenced><m:mo>,</m:mo><m:msub><m:mi>λ</m:mi><m:mn>2</m:mn></m:msub><m:mfenced open="(" close=")"><m:mi>θ</m:mi></m:mfenced></m:mfenced></m:mrow></m:math> such that <m:math overflow="scroll"><m:mrow><m:mi>C</m:mi><m:mfenced open="(" close=")"><m:mi>λ</m:mi></m:mfenced><m:mo>+</m:mo><m:mi>C</m:mi><m:mfenced separators="" open="(" close=")"><m:msup><m:mi>λ</m:mi><m:mi>θ</m:mi></m:msup></m:mfenced><m:mo>=</m:mo><m:mfenced separators="" open="[" close="]"><m:mn>0</m:mn><m:mo>,</m:mo><m:mn>2</m:mn></m:mfenced></m:mrow></m:math> if and only if <m:math overflow="scroll"><m:mrow><m:mi>λ</m:mi><m:mo>≥</m:mo><m:msup><m:mi>λ</m:mi><m:mi>θ</m:mi></m:msup></m:mrow></m:math>. Moreover,</para>
+      <list id="id262559" display="block" list-type="labeled-item">
+        <item id="uid30"><label>(i)</label>if <m:math overflow="scroll"><m:mi>θ</m:mi></m:math> is irrational, then <m:math overflow="scroll"><m:mrow><m:mi>λ</m:mi><m:mfenced open="(" close=")"><m:mi>θ</m:mi></m:mfenced><m:mo>=</m:mo><m:msub><m:mi>λ</m:mi><m:mn>2</m:mn></m:msub><m:mfenced open="(" close=")"><m:mi>θ</m:mi></m:mfenced></m:mrow></m:math>;
+</item>
+        <item id="uid31"><label>(ii)</label>if <m:math overflow="scroll"><m:mrow><m:mi>θ</m:mi><m:mo>=</m:mo><m:mi>n</m:mi></m:mrow></m:math> or <m:math overflow="scroll"><m:mrow><m:mi>θ</m:mi><m:mo>=</m:mo><m:mn>1</m:mn><m:mo>+</m:mo><m:mfrac><m:mn>1</m:mn><m:mi>n</m:mi></m:mfrac></m:mrow></m:math> where <m:math overflow="scroll"><m:mi>n</m:mi></m:math> is a positive integer, then <m:math overflow="scroll"><m:mrow><m:mi>λ</m:mi><m:mfenced open="(" close=")"><m:mi>θ</m:mi></m:mfenced><m:mo>=</m:mo><m:msub><m:mi>λ</m:mi><m:mn>1</m:mn></m:msub><m:mfenced open="(" close=")"><m:mi>θ</m:mi></m:mfenced></m:mrow></m:math>.
+</item>
+      </list>
+      <para id="id262716">The lines <m:math overflow="scroll"><m:mrow><m:msub><m:mi>λ</m:mi><m:mn>1</m:mn></m:msub><m:mfenced open="(" close=")"><m:mi>θ</m:mi></m:mfenced></m:mrow></m:math> and <m:math overflow="scroll"><m:mrow><m:msub><m:mi>λ</m:mi><m:mn>2</m:mn></m:msub><m:mfenced open="(" close=")"><m:mi>θ</m:mi></m:mfenced></m:mrow></m:math> can be seen in <link target-id="uid35"/> as the blue and red lines, respectively.</para>
+      <para id="id262771">A partial to this result was given by Cabrelli, Hare, and Molter in 2002, regarding the possibilities that <m:math overflow="scroll"><m:mrow><m:mi>λ</m:mi><m:mfenced open="(" close=")"><m:mi>θ</m:mi></m:mfenced><m:mo>=</m:mo><m:msub><m:mi>λ</m:mi><m:mn>1</m:mn></m:msub><m:mfenced open="(" close=")"><m:mi>θ</m:mi></m:mfenced></m:mrow></m:math> or <m:math overflow="scroll"><m:mrow><m:mi>λ</m:mi><m:mfenced open="(" close=")"><m:mi>θ</m:mi></m:mfenced><m:mo>=</m:mo><m:msub><m:mi>λ</m:mi><m:mn>2</m:mn></m:msub><m:mfenced open="(" close=")"><m:mi>θ</m:mi></m:mfenced></m:mrow></m:math><link target-id="bid6"/>.</para>
+      <para id="id262850"><emphasis effect="bold">Theorem 3.5 (Cabrelli, Hare, and Molter 2002)</emphasis> 
+
+Using the notation from above, we have the following results:</para>
+      <list id="id262863" display="block" list-type="labeled-item">
+        <item id="uid33"><label>(i)</label><m:math overflow="scroll"><m:mrow><m:mi>λ</m:mi><m:mfenced open="(" close=")"><m:mi>θ</m:mi></m:mfenced><m:mo>=</m:mo><m:msub><m:mi>λ</m:mi><m:mn>1</m:mn></m:msub><m:mfenced open="(" close=")"><m:mi>θ</m:mi></m:mfenced></m:mrow></m:math> if and only if <m:math overflow="scroll"><m:mrow><m:mi>θ</m:mi><m:mo>=</m:mo><m:mi>n</m:mi></m:mrow></m:math> or <m:math overflow="scroll"><m:mrow><m:mi>θ</m:mi><m:mo>=</m:mo><m:mn>1</m:mn><m:mo>+</m:mo><m:mfrac><m:mn>1</m:mn><m:mi>n</m:mi></m:mfrac></m:mrow></m:math> for some positive integer <m:math overflow="scroll"><m:mi>n</m:mi></m:math>;
+</item>
+        <item id="uid34"><label>(ii)</label>Let <m:math overflow="scroll"><m:mrow><m:mi>θ</m:mi><m:mo>=</m:mo><m:mn>1</m:mn><m:mo>+</m:mo><m:mfrac><m:mi>p</m:mi><m:mi>q</m:mi></m:mfrac></m:mrow></m:math> where <m:math overflow="scroll"><m:mrow><m:mo movablelimits="true" form="prefix">gcd</m:mo><m:mfenced separators="" open="(" close=")"><m:mi>p</m:mi><m:mo>,</m:mo><m:mi>q</m:mi></m:mfenced><m:mo>=</m:mo><m:mn>1</m:mn></m:mrow></m:math> and <m:math overflow="scroll"><m:mrow><m:mi>p</m:mi><m:mo>=</m:mo><m:mn>1</m:mn><m:mo>,</m:mo><m:mn>2</m:mn><m:mo>,</m:mo><m:mo>⋯</m:mo><m:mo>,</m:mo><m:mn>8</m:mn></m:mrow></m:math> or let <m:math overflow="scroll"><m:mrow><m:mi>θ</m:mi><m:mo>=</m:mo><m:mi>n</m:mi><m:mo>+</m:mo><m:mfrac><m:mn>1</m:mn><m:mn>2</m:mn></m:mfrac></m:mrow></m:math> with <m:math overflow="scroll"><m:mrow><m:mi>n</m:mi><m:mo>∈</m:mo><m:mi mathvariant="double-struck">N</m:mi></m:mrow></m:math>. Then, <m:math overflow="scroll"><m:mrow><m:mi>λ</m:mi><m:mfenced open="(" close=")"><m:mi>θ</m:mi></m:mfenced><m:mo>&lt;</m:mo><m:msub><m:mi>λ</m:mi><m:mn>2</m:mn></m:msub><m:mfenced open="(" close=")"><m:mi>θ</m:mi></m:mfenced></m:mrow></m:math>.
+</item>
+      </list>
+      <para id="id263133">Theorem 3.4 proved that <emphasis effect="italics">(i)</emphasis> is sufficient, and this theorem proves that it is also necessary. As for <emphasis effect="italics">(ii)</emphasis>, we now know that there are some rational <m:math overflow="scroll"><m:mi>θ</m:mi></m:math>, but not necessarily all, for which <m:math overflow="scroll"><m:mrow><m:mi>λ</m:mi><m:mfenced open="(" close=")"><m:mi>θ</m:mi></m:mfenced></m:mrow></m:math> must lie strictly below <m:math overflow="scroll"><m:mrow><m:msub><m:mi>λ</m:mi><m:mn>2</m:mn></m:msub><m:mfenced open="(" close=")"><m:mi>θ</m:mi></m:mfenced></m:mrow></m:math>. It is conjectured, but not known, that this is true for all rational <m:math overflow="scroll"><m:mi>θ</m:mi></m:math>.</para>
+      <para id="id263209">A summary of the known results presented in this section is given below in <link target-id="uid35"/>.</para>
+      <para id="id263217">As mentioned in <link target-id="uid17">"Sums of Mid-α Cantor Sets"</link>, we now know that <m:math overflow="scroll"><m:mrow><m:mi>C</m:mi><m:mfenced separators="" open="(" close=")"><m:mfrac><m:mn>1</m:mn><m:mn>3</m:mn></m:mfrac></m:mfenced><m:mo>+</m:mo><m:mi>C</m:mi><m:mfenced separators="" open="(" close=")"><m:mfrac><m:mn>1</m:mn><m:mn>3</m:mn></m:mfrac></m:mfenced><m:mo>=</m:mo><m:mfenced separators="" open="[" close="]"><m:mn>0</m:mn><m:mo>,</m:mo><m:mn>2</m:mn></m:mfenced></m:mrow></m:math> because <m:math overflow="scroll"><m:mrow><m:mfrac><m:mn>1</m:mn><m:mn>3</m:mn></m:mfrac><m:mo>≥</m:mo><m:mi>λ</m:mi><m:mfenced open="(" close=")"><m:mn>1</m:mn></m:mfenced><m:mo>=</m:mo><m:mfrac><m:mn>1</m:mn><m:mn>3</m:mn></m:mfrac></m:mrow></m:math> and that <m:math overflow="scroll"><m:mrow><m:mi>C</m:mi><m:mfenced separators="" open="(" close=")"><m:mfrac><m:mn>1</m:mn><m:mn>5</m:mn></m:mfrac></m:mfenced><m:mo>+</m:mo><m:mi>C</m:mi><m:mfenced separators="" open="(" close=")"><m:mfrac><m:mn>1</m:mn><m:mn>5</m:mn></m:mfrac></m:mfenced></m:mrow></m:math> is a Cantor set because the point <m:math overflow="scroll"><m:mfenced separators="" open="(" close=")"><m:mn>1</m:mn><m:mo>,</m:mo><m:mfrac><m:mn>1</m:mn><m:mn>5</m:mn></m:mfrac></m:mfenced></m:math> in the <m:math overflow="scroll"><m:mfenced separators="" open="(" close=")"><m:mi>θ</m:mi><m:mo>,</m:mo><m:mi>λ</m:mi></m:mfenced></m:math>-plane lies in Region I.</para>
+      <figure id="uid35">
+        <media id="uid35_media" alt="">
+          <image mime-type="image/png" src="../../media/RBGlines.png" id="uid35_onlineimage" width="750"><!-- NOTE: attribute width changes image size online (pixels). original width is 750. --></image>
+          <image mime-type="application/postscript" for="pdf" src="../../media/RBGlines.eps" id="uid35_printimage" print-width=".6">
+            <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+          </image>
+        </media>
+        <caption>A visualization of the <m:math overflow="scroll"><m:mfenced separators="" open="(" close=")"><m:mi>θ</m:mi><m:mo>,</m:mo><m:mi>λ</m:mi></m:mfenced></m:math>-plane. Region I indicates the area where <m:math overflow="scroll"><m:mrow><m:mi>H</m:mi><m:mi>D</m:mi><m:mfenced separators="" open="(" close=")"><m:mi>C</m:mi><m:mfenced open="(" close=")"><m:mi>λ</m:mi></m:mfenced></m:mfenced><m:mo>+</m:mo><m:mi>H</m:mi><m:mi>D</m:mi><m:mfenced separators="" open="(" close=")"><m:mi>C</m:mi><m:mfenced separators="" open="(" close=")"><m:msup><m:mi>λ</m:mi><m:mi>θ</m:mi></m:msup></m:mfenced></m:mfenced><m:mo>&lt;</m:mo><m:mn>1</m:mn></m:mrow></m:math>, thus <m:math overflow="scroll"><m:mrow><m:mi>C</m:mi><m:mfenced open="(" close=")"><m:mi>λ</m:mi></m:mfenced><m:mo>+</m:mo><m:mi>C</m:mi><m:mfenced separators="" open="(" close=")"><m:msup><m:mi>λ</m:mi><m:mi>θ</m:mi></m:msup></m:mfenced></m:mrow></m:math> must be a Cantor set with zero Lebesgue measure by Lemma 3.2. By Theorem 3.3, we have Hausdorff dimension 1 for irrational <m:math overflow="scroll"><m:mi>θ</m:mi></m:math> in Regions II and III. By Theorems 3.4 and 3.5, we have the full interval <m:math overflow="scroll"><m:mfenced separators="" open="[" close="]"><m:mn>0</m:mn><m:mo>,</m:mo><m:mn>2</m:mn></m:mfenced></m:math> in Region III and, for some <m:math overflow="scroll"><m:mi>θ</m:mi></m:math>, in Region II as well. However, the full interval never occurs below the blue line.</caption>
+      </figure>
+    </section>
+    <section id="cid4">
+      <title>Results from the Study</title>
+      <para id="id263588">In our study, we decided to focus on rational <m:math overflow="scroll"><m:mi>θ</m:mi></m:math>. We found a nice way to write the sum set <m:math overflow="scroll"><m:mrow><m:mi>C</m:mi><m:mfenced open="(" close=")"><m:mi>λ</m:mi></m:mfenced><m:mo>+</m:mo><m:mi>C</m:mi><m:mfenced separators="" open="(" close=")"><m:msup><m:mi>λ</m:mi><m:mi>θ</m:mi></m:msup></m:mfenced></m:mrow></m:math> when <m:math overflow="scroll"><m:mrow><m:mi>θ</m:mi><m:mo>=</m:mo><m:mfrac><m:mi>p</m:mi><m:mi>q</m:mi></m:mfrac></m:mrow></m:math>, where <m:math overflow="scroll"><m:mrow><m:mo movablelimits="true" form="prefix">gcd</m:mo><m:mfenced separators="" open="(" close=")"><m:mi>p</m:mi><m:mo>,</m:mo><m:mi>q</m:mi></m:mfenced><m:mo>=</m:mo><m:mn>1</m:mn></m:mrow></m:math>, that is similar to the notation used for homogeneous Cantor sets. Sets of this form may be homogeneous Cantor sets, but in many cases they are not. We will present this process first for <m:math overflow="scroll"><m:mrow><m:mi>θ</m:mi><m:mo>=</m:mo><m:mn>2</m:mn></m:mrow></m:math> and then for general rational <m:math overflow="scroll"><m:mi>θ</m:mi></m:math>.</para>
+      <para id="id263714">The idea behind this process is to write the two mid-<m:math overflow="scroll"><m:mi>α</m:mi></m:math> Cantor sets as homogeneous Cantor sets with the same scaling factor. For <m:math overflow="scroll"><m:mrow><m:mi>θ</m:mi><m:mo>=</m:mo><m:mn>2</m:mn></m:mrow></m:math>, remember that we may write <m:math overflow="scroll"><m:mrow><m:mi>C</m:mi><m:mfenced open="(" close=")"><m:mi>λ</m:mi></m:mfenced></m:mrow></m:math> as a homogeneous Cantor set with scaling factor <m:math overflow="scroll"><m:mi>λ</m:mi></m:math>, as in</para>
+      <equation id="id263768">
+        <m:math overflow="scroll" mode="display">
+          <m:mrow>
+            <m:mi>C</m:mi>
+            <m:mfenced open="(" close=")">
+              <m:mi>λ</m:mi>
+            </m:mfenced>
+            <m:mo>=</m:mo>
+            <m:munderover>
+              <m:mo>∑</m:mo>
+              <m:mrow>
+                <m:mi>n</m:mi>
+                <m:mo>=</m:mo>
+                <m:mn>0</m:mn>
+              </m:mrow>
+              <m:mi>∞</m:mi>
+            </m:munderover>
+            <m:msub>
+              <m:mi>α</m:mi>
+              <m:mi>n</m:mi>
+            </m:msub>
+            <m:msup>
+              <m:mi>λ</m:mi>
+              <m:mi>n</m:mi>
+            </m:msup>
+            <m:mo>,</m:mo>
+            <m:mspace width="1.em"/>
+            <m:msub>
+              <m:mi>α</m:mi>
+              <m:mi>n</m:mi>
+            </m:msub>
+            <m:mo>∈</m:mo>
+            <m:mi>A</m:mi>
+            <m:mfenced open="(" close=")">
+              <m:mi>λ</m:mi>
+            </m:mfenced>
+            <m:mo>=</m:mo>
+            <m:mfenced separators="" open="{" close="}">
+              <m:mn>0</m:mn>
+              <m:mo>,</m:mo>
+              <m:mn>1</m:mn>
+              <m:mo>-</m:mo>
+              <m:mi>λ</m:mi>
+            </m:mfenced>
+            <m:mo>.</m:mo>
+          </m:mrow>
+        </m:math>
+      </equation>
+      <para id="id263870">The second stage of the construction of <m:math overflow="scroll"><m:mrow><m:mi>C</m:mi><m:mfenced open="(" close=")"><m:mi>λ</m:mi></m:mfenced></m:mrow></m:math>, as described in <link target-id="uid1">"Mid-α Cantor Sets"</link>, is the union of 4 intervals, each of length <m:math overflow="scroll"><m:msup><m:mi>λ</m:mi><m:mn>2</m:mn></m:msup></m:math>, starting at the points <m:math overflow="scroll"><m:mrow><m:mn>0</m:mn><m:mo>,</m:mo><m:mi>λ</m:mi><m:mfenced separators="" open="(" close=")"><m:mn>1</m:mn><m:mo>-</m:mo><m:mi>λ</m:mi></m:mfenced><m:mo>,</m:mo><m:mn>1</m:mn><m:mo>-</m:mo><m:mi>λ</m:mi><m:mo>,</m:mo><m:mspace width="0.166667em"/><m:mtext>and</m:mtext><m:mspace width="0.166667em"/><m:mfenced separators="" open="(" close=")"><m:mn>1</m:mn><m:mo>+</m:mo><m:mi>λ</m:mi></m:mfenced><m:mfenced separators="" open="(" close=")"><m:mn>1</m:mn><m:mo>-</m:mo><m:mi>λ</m:mi></m:mfenced></m:mrow></m:math>. With this in mind, we can rewrite <m:math overflow="scroll"><m:mrow><m:mi>C</m:mi><m:mfenced open="(" close=")"><m:mi>λ</m:mi></m:mfenced></m:mrow></m:math> as a homogeneous Cantor set with scaling factor <m:math overflow="scroll"><m:msup><m:mi>λ</m:mi><m:mn>2</m:mn></m:msup></m:math> and 4 offsets. That is,</para>
+      <equation id="id264021">
+        <m:math overflow="scroll" mode="display">
+          <m:mrow>
+            <m:mi>C</m:mi>
+            <m:mfenced open="(" close=")">
+              <m:mi>λ</m:mi>
+            </m:mfenced>
+            <m:mo>=</m:mo>
+            <m:munderover>
+              <m:mo>∑</m:mo>
+              <m:mrow>
+                <m:mi>n</m:mi>
+                <m:mo>=</m:mo>
+                <m:mn>0</m:mn>
+              </m:mrow>
+              <m:mi>∞</m:mi>
+            </m:munderover>
+            <m:msub>
+              <m:mi>α</m:mi>
+              <m:mi>n</m:mi>
+            </m:msub>
+            <m:msup>
+              <m:mi>λ</m:mi>
+              <m:mrow>
+                <m:mn>2</m:mn>
+                <m:mi>n</m:mi>
+              </m:mrow>
+            </m:msup>
+            <m:mo>,</m:mo>
+            <m:mspace width="1.em"/>
+            <m:msub>
+              <m:mi>α</m:mi>
+              <m:mi>n</m:mi>
+            </m:msub>
+            <m:mo>∈</m:mo>
+            <m:mi>A</m:mi>
+            <m:mo>=</m:mo>
+            <m:mfenced separators="" open="{" close="}">
+              <m:mn>0</m:mn>
+              <m:mo>,</m:mo>
+              <m:mi>λ</m:mi>
+              <m:mfenced separators="" open="(" close=")">
+                <m:mn>1</m:mn>
+                <m:mo>-</m:mo>
+                <m:mi>λ</m:mi>
+              </m:mfenced>
+              <m:mo>,</m:mo>
+              <m:mn>1</m:mn>
+              <m:mo>-</m:mo>
+              <m:mi>λ</m:mi>
+              <m:mo>,</m:mo>
+              <m:mn>1</m:mn>
+              <m:mo>-</m:mo>
+              <m:msup>
+                <m:mi>λ</m:mi>
+                <m:mn>2</m:mn>
+              </m:msup>
+            </m:mfenced>
+            <m:mo>.</m:mo>
+          </m:mrow>
+        </m:math>
+      </equation>
+      <para id="id264150">One might notice here that <m:math overflow="scroll"><m:mrow><m:mi>A</m:mi><m:mo>=</m:mo><m:mi>A</m:mi><m:mfenced open="(" close=")"><m:mi>λ</m:mi></m:mfenced><m:mo>+</m:mo><m:mi>λ</m:mi><m:mo>·</m:mo><m:mi>A</m:mi><m:mfenced open="(" close=")"><m:mi>λ</m:mi></m:mfenced></m:mrow></m:math>. And since <m:math overflow="scroll"><m:mrow><m:mi>θ</m:mi><m:mo>=</m:mo><m:mn>2</m:mn></m:mrow></m:math>, we have also that</para>
+      <equation id="id264208">
+        <m:math overflow="scroll" mode="display">
+          <m:mrow>
+            <m:mi>C</m:mi>
+            <m:mfenced separators="" open="(" close=")">
+              <m:msup>
+                <m:mi>λ</m:mi>
+                <m:mn>2</m:mn>
+              </m:msup>
+            </m:mfenced>
+            <m:mo>=</m:mo>
+            <m:munderover>
+              <m:mo>∑</m:mo>
+              <m:mrow>
+                <m:mi>n</m:mi>
+                <m:mo>=</m:mo>
+                <m:mn>0</m:mn>
+              </m:mrow>
+              <m:mi>∞</m:mi>
+            </m:munderover>
+            <m:msub>
+              <m:mi>β</m:mi>
+              <m:mi>n</m:mi>
+            </m:msub>
+            <m:msup>
+              <m:mi>λ</m:mi>
+              <m:mrow>
+                <m:mn>2</m:mn>
+                <m:mi>n</m:mi>
+              </m:mrow>
+            </m:msup>
+            <m:mo>,</m:mo>
+            <m:mspace width="1.em"/>
+            <m:msub>
+              <m:mi>β</m:mi>
+              <m:mi>n</m:mi>
+            </m:msub>
+            <m:mo>∈</m:mo>
+            <m:mi>B</m:mi>
+            <m:mo>=</m:mo>
+            <m:mfenced separators="" open="{" close="}">
+              <m:mn>0</m:mn>
+              <m:mo>,</m:mo>
+              <m:mn>1</m:mn>
+              <m:mo>-</m:mo>
+              <m:msup>
+                <m:mi>λ</m:mi>
+                <m:mn>2</m:mn>
+              </m:msup>
+            </m:mfenced>
+            <m:mo>.</m:mo>
+          </m:mrow>
+        </m:math>
+      </equation>
+      <para id="id264318">Now, we can take the sum</para>
+      <equation id="id264324">
+        <m:math overflow="scroll" mode="display">
+          <m:mtable displaystyle="true">
+            <m:mtr>
+              <m:mtd columnalign="right">
+                <m:mrow>
+                  <m:mi>C</m:mi>
+                  <m:mfenced open="(" close=")">
+                    <m:mi>λ</m:mi>
+                  </m:mfenced>
+                  <m:mo>+</m:mo>
+                  <m:mi>C</m:mi>
+                  <m:mfenced separators="" open="(" close=")">
+                    <m:msup>
+                      <m:mi>λ</m:mi>
+                      <m:mn>2</m:mn>
+                    </m:msup>
+                  </m:mfenced>
+                  <m:mo>=</m:mo>
+                  <m:munderover>
+                    <m:mo>∑</m:mo>
+                    <m:mrow>
+                      <m:mi>n</m:mi>
+                      <m:mo>=</m:mo>
+                      <m:mn>0</m:mn>
+                    </m:mrow>
+                    <m:mi>∞</m:mi>
+                  </m:munderover>
+                  <m:mfenced separators="" open="(" close=")">
+                    <m:msub>
+                      <m:mi>α</m:mi>
+                      <m:mi>n</m:mi>
+                    </m:msub>
+                    <m:mo>+</m:mo>
+                    <m:msub>
+                      <m:mi>β</m:mi>
+                      <m:mi>n</m:mi>
+                    </m:msub>
+                  </m:mfenced>
+                  <m:msup>
+                    <m:mi>λ</m:mi>
+                    <m:mrow>
+                      <m:mn>2</m:mn>
+                      <m:mi>n</m:mi>
+                    </m:mrow>
+                  </m:msup>
+                  <m:mo>,</m:mo>
+                  <m:mspace width="1.em"/>
+                </m:mrow>
+              </m:mtd>
+              <m:mtd columnalign="left">
+                <m:mrow>
+                  <m:msub>
+                    <m:mi>α</m:mi>
+                    <m:mi>n</m:mi>
+                  </m:msub>
+                  <m:mo>∈</m:mo>
+                  <m:mi>A</m:mi>
+                  <m:mo>=</m:mo>
+                  <m:mfenced separators="" open="{" close="}">
+                    <m:mn>0</m:mn>
+                    <m:mo>,</m:mo>
+                    <m:mi>λ</m:mi>
+                    <m:mfenced separators="" open="(" close=")">
+                      <m:mn>1</m:mn>
+                      <m:mo>-</m:mo>
+                      <m:mi>λ</m:mi>
+                    </m:mfenced>
+                    <m:mo>,</m:mo>
+                    <m:mn>1</m:mn>
+                    <m:mo>-</m:mo>
+                    <m:mi>λ</m:mi>
+                    <m:mo>,</m:mo>
+                    <m:mn>1</m:mn>
+                    <m:mo>-</m:mo>
+                    <m:msup>
+                      <m:mi>λ</m:mi>
+                      <m:mn>2</m:mn>
+                    </m:msup>
+                  </m:mfenced>
+                  <m:mo>,</m:mo>
+                </m:mrow>
+              </m:mtd>
+            </m:mtr>
+            <m:mtr>
+              <m:mtd/>
+              <m:mtd columnalign="left">
+                <m:mrow>
+                  <m:msub>
+                    <m:mi>β</m:mi>
+                    <m:mi>n</m:mi>
+                  </m:msub>
+                  <m:mo>∈</m:mo>
+                  <m:mi>B</m:mi>
+                  <m:mo>=</m:mo>
+                  <m:mfenced separators="" open="{" close="}">
+                    <m:mn>0</m:mn>
+                    <m:mo>,</m:mo>
+                    <m:mn>1</m:mn>
+                    <m:mo>-</m:mo>
+                    <m:msup>
+                      <m:mi>λ</m:mi>
+                      <m:mn>2</m:mn>
+                    </m:msup>
+                  </m:mfenced>
+                  <m:mo>.</m:mo>
+                </m:mrow>
+              </m:mtd>
+            </m:mtr>
+          </m:mtable>
+        </m:math>
+      </equation>
+      <para id="id264549">Or equivalently,</para>
+      <equation id="id264554">
+        <m:math overflow="scroll" mode="display">
+          <m:mrow>
+            <m:mi>C</m:mi>
+            <m:mfenced open="(" close=")">
+              <m:mi>λ</m:mi>
+            </m:mfenced>
+            <m:mo>+</m:mo>
+            <m:mi>C</m:mi>
+            <m:mfenced separators="" open="(" close=")">
+              <m:msup>
+                <m:mi>λ</m:mi>
+                <m:mn>2</m:mn>
+              </m:msup>
+            </m:mfenced>
+            <m:mo>=</m:mo>
+            <m:munderover>
+              <m:mo>∑</m:mo>
+              <m:mrow>
+                <m:mi>n</m:mi>
+                <m:mo>=</m:mo>
+                <m:mn>0</m:mn>
+              </m:mrow>
+              <m:mi>∞</m:mi>
+            </m:munderover>
+            <m:msub>
+              <m:mi>γ</m:mi>
+              <m:mi>n</m:mi>
+            </m:msub>
+            <m:msup>
+              <m:mi>λ</m:mi>
+              <m:mrow>
+                <m:mn>2</m:mn>
+                <m:mi>n</m:mi>
+              </m:mrow>
+            </m:msup>
+            <m:mo>,</m:mo>
+            <m:mspace width="1.em"/>
+            <m:msub>
+              <m:mi>γ</m:mi>
+              <m:mi>n</m:mi>
+            </m:msub>
+            <m:mo>∈</m:mo>
+            <m:mi>A</m:mi>
+            <m:mo>+</m:mo>
+            <m:mi>B</m:mi>
+          </m:mrow>
+        </m:math>
+      </equation>
+      <para id="id264652">where <m:math overflow="scroll"><m:mrow><m:mi>A</m:mi><m:mo>+</m:mo><m:mi>B</m:mi></m:mrow></m:math> is considered as the normal set-wise sum. In this case, we have</para>
+      <equation id="id264673">
+        <m:math overflow="scroll" mode="display">
+          <m:mrow>
+            <m:mi>A</m:mi>
+            <m:mo>+</m:mo>
+            <m:mi>B</m:mi>
+            <m:mo>=</m:mo>
+            <m:mfenced separators="" open="{" close="}">
+              <m:mn>0</m:mn>
+              <m:mo>,</m:mo>
+              <m:mi>λ</m:mi>
+              <m:mfenced separators="" open="(" close=")">
+                <m:mn>1</m:mn>
+                <m:mo>-</m:mo>
+                <m:mi>λ</m:mi>
+              </m:mfenced>
+              <m:mo>,</m:mo>
+              <m:mn>1</m:mn>
+              <m:mo>-</m:mo>
+              <m:mi>λ</m:mi>
+              <m:mo>,</m:mo>
+              <m:mfenced separators="" open="(" close=")">
+                <m:mn>1</m:mn>
+                <m:mo>+</m:mo>
+                <m:mi>λ</m:mi>
+              </m:mfenced>
+              <m:mfenced separators="" open="(" close=")">
+                <m:mn>1</m:mn>
+                <m:mo>-</m:mo>
+                <m:mi>λ</m:mi>
+              </m:mfenced>
+              <m:mo>,</m:mo>
+              <m:mfenced separators="" open="(" close=")">
+                <m:mn>1</m:mn>
+                <m:mo>+</m:mo>
+                <m:mn>2</m:mn>
+                <m:mi>λ</m:mi>
+              </m:mfenced>
+              <m:mfenced separators="" open="(" close=")">
+                <m:mn>1</m:mn>
+                <m:mo>-</m:mo>
+                <m:mi>λ</m:mi>
+              </m:mfenced>
+              <m:mo>,</m:mo>
+              <m:mfenced separators="" open="(" close=")">
+                <m:mn>2</m:mn>
+                <m:mo>+</m:mo>
+                <m:mi>λ</m:mi>
+              </m:mfenced>
+              <m:mfenced separators="" open="(" close=")">
+                <m:mn>1</m:mn>
+                <m:mo>-</m:mo>
+                <m:mi>λ</m:mi>
+              </m:mfenced>
+              <m:mo>,</m:mo>
+              <m:mfenced separators="" open="(" close=")">
+                <m:mn>2</m:mn>
+                <m:mo>+</m:mo>
+                <m:mn>2</m:mn>
+                <m:mi>λ</m:mi>
+              </m:mfenced>
+              <m:mfenced separators="" open="(" close=")">
+                <m:mn>1</m:mn>
+                <m:mo>-</m:mo>
+                <m:mi>λ</m:mi>
+              </m:mfenced>
+            </m:mfenced>
+            <m:mo>.</m:mo>
+          </m:mrow>
+        </m:math>
+      </equation>
+      <para id="id264852">This sum <m:math overflow="scroll"><m:mrow><m:mi>C</m:mi><m:mfenced open="(" close=")"><m:mi>λ</m:mi></m:mfenced><m:mo>+</m:mo><m:mi>C</m:mi><m:mfenced separators="" open="(" close=")"><m:msup><m:mi>λ</m:mi><m:mn>2</m:mn></m:msup></m:mfenced></m:mrow></m:math> is contained in the interval <m:math overflow="scroll"><m:mfenced separators="" open="[" close="]"><m:mn>0</m:mn><m:mo>,</m:mo><m:mn>2</m:mn></m:mfenced></m:math>. However, due to our notation, it is much simpler and more convenient to consider a scaled-down copy of this set so that it is contained in the interval <m:math overflow="scroll"><m:mfenced separators="" open="[" close="]"><m:mn>0</m:mn><m:mo>,</m:mo><m:mn>1</m:mn></m:mfenced></m:math>. We do this by halving the offsets. This does not change any properties of the set. Also, each offset contains a factor of <m:math overflow="scroll"><m:mrow><m:mo>(</m:mo><m:mn>1</m:mn><m:mo>-</m:mo><m:mi>λ</m:mi><m:mo>)</m:mo></m:mrow></m:math>. This is not an accident, and we will use it here to condense the notation, writing</para>
+      <equation id="id264957">
+        <m:math overflow="scroll" mode="display">
+          <m:mtable displaystyle="true">
+            <m:mtr>
+              <m:mtd columnalign="right">
+                <m:mrow>
+                  <m:mi>S</m:mi>
+                  <m:mfenced separators="" open="(" close=")">
+                    <m:mn>2</m:mn>
+                    <m:mo>,</m:mo>
+                    <m:mi>λ</m:mi>
+                  </m:mfenced>
+                </m:mrow>
+              </m:mtd>
+              <m:mtd columnalign="left">
+                <m:mrow>
+                  <m:mo>=</m:mo>
+                  <m:mfrac>
+                    <m:mn>1</m:mn>
+                    <m:mn>2</m:mn>
+                  </m:mfrac>
+                  <m:mfenced separators="" open="(" close=")">
+                    <m:mi>C</m:mi>
+                    <m:mfenced open="(" close=")">
+                      <m:mi>λ</m:mi>
+                    </m:mfenced>
+                    <m:mo>+</m:mo>
+                    <m:mi>C</m:mi>
+                    <m:mfenced separators="" open="(" close=")">
+                      <m:msup>
+                        <m:mi>λ</m:mi>
+                        <m:mn>2</m:mn>
+                      </m:msup>
+                    </m:mfenced>
+                  </m:mfenced>
+                </m:mrow>
+              </m:mtd>
+            </m:mtr>
+            <m:mtr>
+              <m:mtd/>
+              <m:mtd columnalign="left">
+                <m:mrow>
+                  <m:mo>=</m:mo>
+                  <m:munderover>
+                    <m:mo>∑</m:mo>
+                    <m:mrow>
+                      <m:mi>n</m:mi>
+                      <m:mo>=</m:mo>
+                      <m:mn>0</m:mn>
+                    </m:mrow>
+                    <m:mi>∞</m:mi>
+                  </m:munderover>
+                  <m:msub>
+                    <m:mi>γ</m:mi>
+                    <m:mi>n</m:mi>
+                  </m:msub>
+                  <m:msup>
+                    <m:mi>λ</m:mi>
+                    <m:mrow>
+                      <m:mn>2</m:mn>
+                      <m:mi>n</m:mi>
+                    </m:mrow>
+                  </m:msup>
+                  <m:mo>,</m:mo>
+                  <m:mspace width="1.em"/>
+                  <m:msub>
+                    <m:mi>γ</m:mi>
+                    <m:mi>n</m:mi>
+                  </m:msub>
+                  <m:mo>∈</m:mo>
+                  <m:mfrac>
+                    <m:mrow>
+                      <m:mn>1</m:mn>
+                      <m:mo>-</m:mo>
+                      <m:mi>λ</m:mi>
+                    </m:mrow>
+                    <m:mn>2</m:mn>
+                  </m:mfrac>
+                  <m:mfenced separators="" open="{" close="}">
+                    <m:mn>0</m:mn>
+                    <m:mo>,</m:mo>
+                    <m:mi>λ</m:mi>
+                    <m:mo>,</m:mo>
+                    <m:mn>1</m:mn>
+                    <m:mo>,</m:mo>
+                    <m:mn>1</m:mn>
+                    <m:mo>+</m:mo>
+                    <m:mi>λ</m:mi>
+                    <m:mo>,</m:mo>
+                    <m:mn>1</m:mn>
+                    <m:mo>+</m:mo>
+                    <m:mn>2</m:mn>
+                    <m:mi>λ</m:mi>
+                    <m:mo>,</m:mo>
+                    <m:mn>2</m:mn>
+                    <m:mo>+</m:mo>
+                    <m:mi>λ</m:mi>
+                    <m:mo>,</m:mo>
+                    <m:mn>2</m:mn>
+                    <m:mo>+</m:mo>
+                    <m:mn>2</m:mn>
+                    <m:mi>λ</m:mi>
+                  </m:mfenced>
+                  <m:mo>.</m:mo>
+                </m:mrow>
+              </m:mtd>
+            </m:mtr>
+          </m:mtable>
+        </m:math>
+      </equation>
+      <para id="id265170">In general, we will write <m:math overflow="scroll"><m:mrow><m:mi>S</m:mi><m:mfenced separators="" open="(" close=")"><m:mfrac><m:mi>p</m:mi><m:mi>q</m:mi></m:mfrac><m:mo>,</m:mo><m:mi>λ</m:mi></m:mfenced><m:mo>=</m:mo><m:mfrac><m:mn>1</m:mn><m:mn>2</m:mn></m:mfrac><m:mfenced separators="" open="(" close=")"><m:mi>C</m:mi><m:mfenced open="(" close=")"><m:mi>λ</m:mi></m:mfenced><m:mo>+</m:mo><m:mi>C</m:mi><m:mfenced separators="" open="(" close=")"><m:msup><m:mi>λ</m:mi><m:mrow><m:mi>p</m:mi><m:mo>/</m:mo><m:mi>q</m:mi></m:mrow></m:msup></m:mfenced></m:mfenced></m:mrow></m:math>, where <m:math overflow="scroll"><m:mi>p</m:mi></m:math> and <m:math overflow="scroll"><m:mi>q</m:mi></m:math> are relatively prime.</para>
+      <para id="id265271">Now we will present the construction of <m:math overflow="scroll"><m:mrow><m:mi>S</m:mi><m:mfenced separators="" open="(" close=")"><m:mfrac><m:mi>p</m:mi><m:mi>q</m:mi></m:mfrac><m:mo>,</m:mo><m:mi>λ</m:mi></m:mfenced></m:mrow></m:math> for general <m:math overflow="scroll"><m:mfrac><m:mi>p</m:mi><m:mi>q</m:mi></m:mfrac></m:math>. Again, the idea will be to write both <m:math overflow="scroll"><m:mrow><m:mi>C</m:mi><m:mfenced open="(" close=")"><m:mi>λ</m:mi></m:mfenced></m:mrow></m:math> and <m:math overflow="scroll"><m:mrow><m:mi>C</m:mi><m:mfenced separators="" open="(" close=")"><m:msup><m:mi>λ</m:mi><m:mrow><m:mi>p</m:mi><m:mo>/</m:mo><m:mi>q</m:mi></m:mrow></m:msup></m:mfenced></m:mrow></m:math> as homogeneous Cantor sets with the same scaling factor, in this case, <m:math overflow="scroll"><m:msup><m:mi>λ</m:mi><m:mi>p</m:mi></m:msup></m:math>. For convenience, we will define <m:math overflow="scroll"><m:mrow><m:mi>ℓ</m:mi><m:mo>=</m:mo><m:msup><m:mi>λ</m:mi><m:mrow><m:mn>1</m:mn><m:mo>/</m:mo><m:mi>q</m:mi></m:mrow></m:msup></m:mrow></m:math>.</para>
+      <para id="id265404">We start with the set <m:math overflow="scroll"><m:mrow><m:mi>C</m:mi><m:mfenced open="(" close=")"><m:mi>λ</m:mi></m:mfenced></m:mrow></m:math>. Remember that we may write this set in the form</para>
+      <equation id="id265425">
+        <m:math overflow="scroll" mode="display">
+          <m:mrow>
+            <m:mi>C</m:mi>
+            <m:mfenced open="(" close=")">
+              <m:mi>λ</m:mi>
+            </m:mfenced>
+            <m:mo>=</m:mo>
+            <m:munderover>
+              <m:mo>∑</m:mo>
+              <m:mrow>
+                <m:mi>n</m:mi>
+                <m:mo>=</m:mo>
+                <m:mn>0</m:mn>
+              </m:mrow>
+              <m:mi>∞</m:mi>
+            </m:munderover>
+            <m:msub>
+              <m:mi>α</m:mi>
+              <m:mi>n</m:mi>
+            </m:msub>
+            <m:msup>
+              <m:mi>λ</m:mi>
+              <m:mi>n</m:mi>
+            </m:msup>
+            <m:mo>,</m:mo>
+            <m:mspace width="1.em"/>
+            <m:msub>
+              <m:mi>α</m:mi>
+              <m:mi>n</m:mi>
+            </m:msub>
+            <m:mo>∈</m:mo>
+            <m:mfenced separators="" open="{" close="}">
+              <m:mn>0</m:mn>
+              <m:mo>,</m:mo>
+              <m:mn>1</m:mn>
+              <m:mo>-</m:mo>
+              <m:mi>λ</m:mi>
+            </m:mfenced>
+          </m:mrow>
+        </m:math>
+      </equation>
+      <para id="id265512">so that an offset <m:math overflow="scroll"><m:mi>a</m:mi></m:math> at the <m:math overflow="scroll"><m:msup><m:mi>p</m:mi><m:mrow><m:mi>t</m:mi><m:mi>h</m:mi></m:mrow></m:msup></m:math> stage of the construction may be represented as</para>
+      <equation id="id265545">
+        <m:math overflow="scroll" mode="display">
+          <m:mrow>
+            <m:mi>a</m:mi>
+            <m:mo>=</m:mo>
+            <m:munderover>
+              <m:mo>∑</m:mo>
+              <m:mrow>
+                <m:mi>n</m:mi>
+                <m:mo>=</m:mo>
+                <m:mn>0</m:mn>
+              </m:mrow>
+              <m:mrow>
+                <m:mi>p</m:mi>
+                <m:mo>-</m:mo>
+                <m:mn>1</m:mn>
+              </m:mrow>
+            </m:munderover>
+            <m:msub>
+              <m:mi>α</m:mi>
+              <m:mi>n</m:mi>
+            </m:msub>
+            <m:msup>
+              <m:mi>λ</m:mi>
+              <m:mi>n</m:mi>
+            </m:msup>
+            <m:mo>,</m:mo>
+            <m:mspace width="1.em"/>
+            <m:msub>
+              <m:mi>α</m:mi>
+              <m:mi>n</m:mi>
+            </m:msub>
+            <m:mo>∈</m:mo>
+            <m:mfenced separators="" open="{" close="}">
+              <m:mn>0</m:mn>
+              <m:mo>,</m:mo>
+              <m:mn>1</m:mn>
+              <m:mo>-</m:mo>
+              <m:mi>λ</m:mi>
+            </m:mfenced>
+            <m:mo>.</m:mo>
+          </m:mrow>
+        </m:math>
+      </equation>
+      <para id="id265632">Then, we factor out a <m:math overflow="scroll"><m:mfenced separators="" open="(" close=")"><m:mn>1</m:mn><m:mo>-</m:mo><m:mi>λ</m:mi></m:mfenced></m:math> and substitute <m:math overflow="scroll"><m:mi>λ</m:mi></m:math> with <m:math overflow="scroll"><m:msup><m:mi>ℓ</m:mi><m:mi>q</m:mi></m:msup></m:math> to get</para>
+      <equation id="id265682">
+        <m:math overflow="scroll" mode="display">
+          <m:mrow>
+            <m:mi>a</m:mi>
+            <m:mo>=</m:mo>
+            <m:mfenced separators="" open="(" close=")">
+              <m:mn>1</m:mn>
+              <m:mo>-</m:mo>
+              <m:msup>
+                <m:mi>ℓ</m:mi>
+                <m:mi>q</m:mi>
+              </m:msup>
+            </m:mfenced>
+            <m:munderover>
+              <m:mo>∑</m:mo>
+              <m:mrow>
+                <m:mi>n</m:mi>
+                <m:mo>=</m:mo>
+                <m:mn>0</m:mn>
+              </m:mrow>
+              <m:mrow>
+                <m:mi>p</m:mi>
+                <m:mo>-</m:mo>
+                <m:mn>1</m:mn>
+              </m:mrow>
+            </m:munderover>
+            <m:msub>
+              <m:mi>z</m:mi>
+              <m:mi>n</m:mi>
+            </m:msub>
+            <m:msup>
+              <m:mi>ℓ</m:mi>
+              <m:mrow>
+                <m:mi>n</m:mi>
+                <m:mi>q</m:mi>
+              </m:mrow>
+            </m:msup>
+            <m:mo>,</m:mo>
+            <m:mspace width="1.em"/>
+            <m:msub>
+              <m:mi>z</m:mi>
+              <m:mi>n</m:mi>
+            </m:msub>
+            <m:mo>∈</m:mo>
+            <m:mfenced separators="" open="{" close="}">
+              <m:mn>0</m:mn>
+              <m:mo>,</m:mo>
+              <m:mn>1</m:mn>
+            </m:mfenced>
+            <m:mo>.</m:mo>
+          </m:mrow>
+        </m:math>
+      </equation>
+      <para id="id265787">Rewriting <m:math overflow="scroll"><m:mfenced separators="" open="(" close=")"><m:mn>1</m:mn><m:mo>-</m:mo><m:msup><m:mi>ℓ</m:mi><m:mi>q</m:mi></m:msup></m:mfenced></m:math>,</para>
+      <equation id="id265818">
+        <m:math overflow="scroll" mode="display">
+          <m:mrow>
+            <m:mi>a</m:mi>
+            <m:mo>=</m:mo>
+            <m:mfenced separators="" open="(" close=")">
+              <m:mn>1</m:mn>
+              <m:mo>-</m:mo>
+              <m:mi>ℓ</m:mi>
+            </m:mfenced>
+            <m:mfenced separators="" open="(" close=")">
+              <m:munderover>
+                <m:mo>∑</m:mo>
+                <m:mrow>
+                  <m:mi>j</m:mi>
+                  <m:mo>=</m:mo>
+                  <m:mn>0</m:mn>
+                </m:mrow>
+                <m:mrow>
+                  <m:mi>q</m:mi>
+                  <m:mo>-</m:mo>
+                  <m:mn>1</m:mn>
+                </m:mrow>
+              </m:munderover>
+              <m:msup>
+                <m:mi>ℓ</m:mi>
+                <m:mi>j</m:mi>
+              </m:msup>
+            </m:mfenced>
+            <m:mfenced separators="" open="(" close=")">
+              <m:munderover>
+                <m:mo>∑</m:mo>
+                <m:mrow>
+                  <m:mi>n</m:mi>
+                  <m:mo>=</m:mo>
+                  <m:mn>0</m:mn>
+                </m:mrow>
+                <m:mrow>
+                  <m:mi>p</m:mi>
+                  <m:mo>-</m:mo>
+                  <m:mn>1</m:mn>
+                </m:mrow>
+              </m:munderover>
+              <m:msub>
+                <m:mi>z</m:mi>
+                <m:mi>n</m:mi>
+              </m:msub>
+              <m:msup>
+                <m:mi>ℓ</m:mi>
+                <m:mrow>
+                  <m:mi>n</m:mi>
+                  <m:mi>q</m:mi>
+                </m:mrow>
+              </m:msup>
+            </m:mfenced>
+            <m:mo>,</m:mo>
+            <m:mspace width="1.em"/>
+            <m:msub>
+              <m:mi>z</m:mi>
+              <m:mi>n</m:mi>
+            </m:msub>
+            <m:mo>∈</m:mo>
+            <m:mfenced separators="" open="{" close="}">
+              <m:mn>0</m:mn>
+              <m:mo>,</m:mo>
+              <m:mn>1</m:mn>
+            </m:mfenced>
+            <m:mo>.</m:mo>
+          </m:mrow>
+        </m:math>
+      </equation>
+      <para id="id265961">Then we combine the sums to get</para>
+      <equation id="id265966">
+        <m:math overflow="scroll" mode="display">
+          <m:mrow>
+            <m:mi>a</m:mi>
+            <m:mo>=</m:mo>
+            <m:mfenced separators="" open="(" close=")">
+              <m:mn>1</m:mn>
+              <m:mo>-</m:mo>
+              <m:mi>ℓ</m:mi>
+            </m:mfenced>
+            <m:munderover>
+              <m:mo>∑</m:mo>
+              <m:mrow>
+                <m:mi>n</m:mi>
+                <m:mo>=</m:mo>
+                <m:mn>0</m:mn>
+              </m:mrow>
+              <m:mrow>
+                <m:mi>p</m:mi>
+                <m:mi>q</m:mi>
+                <m:mo>-</m:mo>
+                <m:mn>1</m:mn>
+              </m:mrow>
+            </m:munderover>
+            <m:msub>
+              <m:mi>u</m:mi>
+              <m:mi>n</m:mi>
+            </m:msub>
+            <m:msup>
+              <m:mi>ℓ</m:mi>
+              <m:mi>n</m:mi>
+            </m:msup>
+            <m:mo>,</m:mo>
+            <m:mspace width="1.em"/>
+            <m:msub>
+              <m:mi>u</m:mi>
+              <m:mi>n</m:mi>
+            </m:msub>
+            <m:mo>=</m:mo>
+            <m:msub>
+              <m:mi>z</m:mi>
+              <m:mrow>
+                <m:mo>⌊</m:mo>
+                <m:mi>n</m:mi>
+                <m:mo>/</m:mo>
+                <m:mi>q</m:mi>
+                <m:mo>⌋</m:mo>
+              </m:mrow>
+            </m:msub>
+          </m:mrow>
+        </m:math>
+      </equation>
+      <para id="id266066">where <m:math overflow="scroll"><m:mrow><m:mo>⌊</m:mo><m:mi>n</m:mi><m:mo>/</m:mo><m:mi>q</m:mi><m:mo>⌋</m:mo></m:mrow></m:math> is the standard floor function. Note that <m:math overflow="scroll"><m:mrow><m:mi>u</m:mi><m:mo>=</m:mo><m:msub><m:mi>u</m:mi><m:mn>0</m:mn></m:msub><m:msub><m:mi>u</m:mi><m:mn>1</m:mn></m:msub><m:mo>⋯</m:mo><m:msub><m:mi>u</m:mi><m:mrow><m:mi>p</m:mi><m:mi>q</m:mi><m:mo>-</m:mo><m:mn>1</m:mn></m:mrow></m:msub></m:mrow></m:math> is a binary word of length <m:math overflow="scroll"><m:mrow><m:mi>p</m:mi><m:mi>q</m:mi></m:mrow></m:math> composed of <m:math overflow="scroll"><m:mi>p</m:mi></m:math> groups of <m:math overflow="scroll"><m:mi>q</m:mi></m:math> repeated letters. There are <m:math overflow="scroll"><m:msup><m:mn>2</m:mn><m:mi>p</m:mi></m:msup></m:math> such words corresponding to the <m:math overflow="scroll"><m:msup><m:mn>2</m:mn><m:mi>p</m:mi></m:msup></m:math> offsets of <m:math overflow="scroll"><m:mrow><m:mi>C</m:mi><m:mfenced open="(" close=")"><m:mi>λ</m:mi></m:mfenced></m:mrow></m:math> at this stage, so that all <m:math overflow="scroll"><m:msup><m:mn>2</m:mn><m:mi>p</m:mi></m:msup></m:math> possibilities for <m:math overflow="scroll"><m:mi>u</m:mi></m:math> are obtained. Similarly, we may write a <m:math overflow="scroll"><m:msup><m:mi>q</m:mi><m:mrow><m:mi>t</m:mi><m:mi>h</m:mi></m:mrow></m:msup></m:math>-stage offset <m:math overflow="scroll"><m:mi>b</m:mi></m:math> of <m:math overflow="scroll"><m:mrow><m:mi>C</m:mi><m:mfenced separators="" open="(" close=")"><m:msup><m:mi>λ</m:mi><m:mrow><m:mi>p</m:mi><m:mo>/</m:mo><m:mi>q</m:mi></m:mrow></m:msup></m:mfenced></m:mrow></m:math> in the form</para>
+      <equation id="id266291">
+        <m:math overflow="scroll" mode="display">
+          <m:mrow>
+            <m:mi>b</m:mi>
+            <m:mo>=</m:mo>
+            <m:mfenced separators="" open="(" close=")">
+              <m:mn>1</m:mn>
+              <m:mo>-</m:mo>
+              <m:mi>ℓ</m:mi>
+            </m:mfenced>
+            <m:munderover>
+              <m:mo>∑</m:mo>
+              <m:mrow>
+                <m:mi>n</m:mi>
+                <m:mo>=</m:mo>
+                <m:mn>0</m:mn>
+              </m:mrow>
+              <m:mrow>
+                <m:mi>p</m:mi>
+                <m:mi>q</m:mi>
+                <m:mo>-</m:mo>
+                <m:mn>1</m:mn>
+              </m:mrow>
+            </m:munderover>
+            <m:msub>
+              <m:mi>v</m:mi>
+              <m:mi>n</m:mi>
+            </m:msub>
+            <m:msup>
+              <m:mi>ℓ</m:mi>
+              <m:mi>n</m:mi>
+            </m:msup>
+          </m:mrow>
+        </m:math>
+      </equation>
+      <para id="id266357">so that <m:math overflow="scroll"><m:mrow><m:mi>v</m:mi><m:mo>=</m:mo><m:msub><m:mi>v</m:mi><m:mn>0</m:mn></m:msub><m:msub><m:mi>v</m:mi><m:mn>1</m:mn></m:msub><m:mo>⋯</m:mo><m:msub><m:mi>v</m:mi><m:mrow><m:mi>p</m:mi><m:mi>q</m:mi><m:mo>-</m:mo><m:mn>1</m:mn></m:mrow></m:msub></m:mrow></m:math> is also a binary word of length <m:math overflow="scroll"><m:mrow><m:mi>p</m:mi><m:mi>q</m:mi></m:mrow></m:math> composed of <m:math overflow="scroll"><m:mi>q</m:mi></m:math> groups of <m:math overflow="scroll"><m:mi>p</m:mi></m:math> repeated letters. Then, finally, we let <m:math overflow="scroll"><m:mi>A</m:mi></m:math> be the set of <m:math overflow="scroll"><m:msup><m:mi>p</m:mi><m:mrow><m:mi>t</m:mi><m:mi>h</m:mi></m:mrow></m:msup></m:math>-stage offsets of <m:math overflow="scroll"><m:mrow><m:mi>C</m:mi><m:mfenced open="(" close=")"><m:mi>λ</m:mi></m:mfenced></m:mrow></m:math>, <m:math overflow="scroll"><m:mi>B</m:mi></m:math> be the set of <m:math overflow="scroll"><m:msup><m:mi>q</m:mi><m:mrow><m:mi>t</m:mi><m:mi>h</m:mi></m:mrow></m:msup></m:math>-stage offsets of <m:math overflow="scroll"><m:mrow><m:mi>C</m:mi><m:mfenced separators="" open="(" close=")"><m:msup><m:mi>λ</m:mi><m:mrow><m:mi>p</m:mi><m:mo>/</m:mo><m:mi>q</m:mi></m:mrow></m:msup></m:mfenced></m:mrow></m:math> and write</para>
+      <equation id="id266537">
+        <m:math overflow="scroll" mode="display">
+          <m:mrow>
+            <m:mi>S</m:mi>
+            <m:mfenced separators="" open="(" close=")">
+              <m:mfrac>
+                <m:mi>p</m:mi>
+                <m:mi>q</m:mi>
+              </m:mfrac>
+              <m:mo>,</m:mo>
+              <m:mi>λ</m:mi>
+            </m:mfenced>
+            <m:mo>=</m:mo>
+            <m:mfrac>
+              <m:mn>1</m:mn>
+              <m:mn>2</m:mn>
+            </m:mfrac>
+            <m:munderover>
+              <m:mo>∑</m:mo>
+              <m:mrow>
+                <m:mi>n</m:mi>
+                <m:mo>=</m:mo>
+                <m:mn>0</m:mn>
+              </m:mrow>
+              <m:mi>∞</m:mi>
+            </m:munderover>
+            <m:msub>
+              <m:mi>γ</m:mi>
+              <m:mi>n</m:mi>
+            </m:msub>
+            <m:msup>
+              <m:mi>λ</m:mi>
+              <m:mrow>
+                <m:mi>p</m:mi>
+                <m:mi>n</m:mi>
+              </m:mrow>
+            </m:msup>
+            <m:mo>,</m:mo>
+            <m:mspace width="1.em"/>
+            <m:msub>
+              <m:mi>γ</m:mi>
+              <m:mi>n</m:mi>
+            </m:msub>
+            <m:mo>∈</m:mo>
+            <m:mi>A</m:mi>
+            <m:mo>+</m:mo>
+            <m:mi>B</m:mi>
+          </m:mrow>
+        </m:math>
+      </equation>
+      <para id="id266632">where we look at <m:math overflow="scroll"><m:mrow><m:mi>A</m:mi><m:mo>+</m:mo><m:mi>B</m:mi></m:mrow></m:math> in the following way: given <m:math overflow="scroll"><m:mrow><m:mi>a</m:mi><m:mo>∈</m:mo><m:mi>A</m:mi></m:mrow></m:math> and <m:math overflow="scroll"><m:mrow><m:mi>b</m:mi><m:mo>∈</m:mo><m:mi>B</m:mi></m:mrow></m:math>, we have</para>
+      <equation id="id266681">
+        <m:math overflow="scroll" mode="display">
+          <m:mtable displaystyle="true">
+            <m:mtr>
+              <m:mtd columnalign="right">
+                <m:mrow>
+                  <m:mi>a</m:mi>
+                  <m:mo>+</m:mo>
+                  <m:mi>b</m:mi>
+                </m:mrow>
+              </m:mtd>
+              <m:mtd columnalign="left">
+                <m:mrow>
+                  <m:mo>=</m:mo>
+                  <m:mfenced separators="" open="(" close=")">
+                    <m:mn>1</m:mn>
+                    <m:mo>-</m:mo>
+                    <m:mi>ℓ</m:mi>
+                  </m:mfenced>
+                  <m:munderover>
+                    <m:mo>∑</m:mo>
+                    <m:mrow>
+                      <m:mi>n</m:mi>
+                      <m:mo>=</m:mo>
+                      <m:mn>0</m:mn>
+                    </m:mrow>
+                    <m:mrow>
+                      <m:mi>p</m:mi>
+                      <m:mi>q</m:mi>
+                      <m:mo>-</m:mo>
+                      <m:mn>1</m:mn>
+                    </m:mrow>
+                  </m:munderover>
+                  <m:msub>
+                    <m:mi>u</m:mi>
+                    <m:mi>n</m:mi>
+                  </m:msub>
+                  <m:msup>
+                    <m:mi>ℓ</m:mi>
+                    <m:mi>n</m:mi>
+                  </m:msup>
+                  <m:mo>+</m:mo>
+                  <m:mfenced separators="" open="(" close=")">
+                    <m:mn>1</m:mn>
+                    <m:mo>-</m:mo>
+                    <m:mi>ℓ</m:mi>
+                  </m:mfenced>
+                  <m:munderover>
+                    <m:mo>∑</m:mo>
+                    <m:mrow>
+                      <m:mi>n</m:mi>
+                      <m:mo>=</m:mo>
+                      <m:mn>0</m:mn>
+                    </m:mrow>
+                    <m:mrow>
+                      <m:mi>p</m:mi>
+                      <m:mi>q</m:mi>
+                      <m:mo>-</m:mo>
+                      <m:mn>1</m:mn>
+                    </m:mrow>
+                  </m:munderover>
+                  <m:msub>
+                    <m:mi>v</m:mi>
+                    <m:mi>n</m:mi>
+                  </m:msub>
+                  <m:msup>
+                    <m:mi>ℓ</m:mi>
+                    <m:mi>n</m:mi>
+                  </m:msup>
+                </m:mrow>
+              </m:mtd>
+            </m:mtr>
+            <m:mtr>
+              <m:mtd/>
+              <m:mtd columnalign="left">
+                <m:mrow>
+                  <m:mo>=</m:mo>
+                  <m:mfenced separators="" open="(" close=")">
+                    <m:mn>1</m:mn>
+                    <m:mo>-</m:mo>
+                    <m:mi>ℓ</m:mi>
+                  </m:mfenced>
+                  <m:munderover>
+                    <m:mo>∑</m:mo>
+                    <m:mrow>
+                      <m:mi>n</m:mi>
+                      <m:mo>=</m:mo>
+                      <m:mn>0</m:mn>
+                    </m:mrow>
+                    <m:mrow>
+                      <m:mi>p</m:mi>
+                      <m:mi>q</m:mi>
+                      <m:mo>-</m:mo>
+                      <m:mn>1</m:mn>
+                    </m:mrow>
+                  </m:munderover>
+                  <m:mfenced separators="" open="(" close=")">
+                    <m:msub>
+                      <m:mi>u</m:mi>
+                      <m:mi>n</m:mi>
+                    </m:msub>
+                    <m:mo>+</m:mo>
+                    <m:msub>
+                      <m:mi>v</m:mi>
+                      <m:mi>n</m:mi>
+                    </m:msub>
+                  </m:mfenced>
+                  <m:msup>
+                    <m:mi>ℓ</m:mi>
+                    <m:mi>n</m:mi>
+                  </m:msup>
+                </m:mrow>
+              </m:mtd>
+            </m:mtr>
+            <m:mtr>
+              <m:mtd/>
+              <m:mtd columnalign="left">
+                <m:mrow>
+                  <m:mo>=</m:mo>
+                  <m:mfenced separators="" open="(" close=")">
+                    <m:mn>1</m:mn>
+                    <m:mo>-</m:mo>
+                    <m:mi>ℓ</m:mi>
+                  </m:mfenced>
+                  <m:munderover>
+                    <m:mo>∑</m:mo>
+                    <m:mrow>
+                      <m:mi>n</m:mi>
+                      <m:mo>=</m:mo>
+                      <m:mn>0</m:mn>
+                    </m:mrow>
+                    <m:mrow>
+                      <m:mi>p</m:mi>
+                      <m:mi>q</m:mi>
+                      <m:mo>-</m:mo>
+                      <m:mn>1</m:mn>
+                    </m:mrow>
+                  </m:munderover>
+                  <m:msub>
+                    <m:mi>w</m:mi>
+                    <m:mi>n</m:mi>
+                  </m:msub>
+                  <m:msup>
+                    <m:mi>ℓ</m:mi>
+                    <m:mi>n</m:mi>
+                  </m:msup>
+                </m:mrow>
+              </m:mtd>
+            </m:mtr>
+          </m:mtable>
+        </m:math>
+      </equation>
+      <para id="id266958">and we can write a ternary word <m:math overflow="scroll"><m:mrow><m:mi>w</m:mi><m:mo>=</m:mo><m:msub><m:mi>w</m:mi><m:mn>0</m:mn></m:msub><m:msub><m:mi>w</m:mi><m:mn>1</m:mn></m:msub><m:mo>⋯</m:mo><m:msub><m:mi>w</m:mi><m:mrow><m:mi>p</m:mi><m:mi>q</m:mi><m:mo>-</m:mo><m:mn>1</m:mn></m:mrow></m:msub></m:mrow></m:math> to describe this offset <m:math overflow="scroll"><m:mrow><m:mi>a</m:mi><m:mo>+</m:mo><m:mi>b</m:mi></m:mrow></m:math>. With a slight abuse of notation, we write <m:math overflow="scroll"><m:mrow><m:mi>w</m:mi><m:mo>=</m:mo><m:mi>u</m:mi><m:mo>+</m:mo><m:mi>v</m:mi></m:mrow></m:math> and call <m:math overflow="scroll"><m:mrow><m:mi>W</m:mi><m:mfenced separators="" open="(" close=")"><m:mfrac><m:mi>p</m:mi><m:mi>q</m:mi></m:mfrac></m:mfenced></m:mrow></m:math> the set of all such <m:math overflow="scroll"><m:mi>w</m:mi></m:math>.</para>
+      <para id="id267074">It is clear that this sum <m:math overflow="scroll"><m:mrow><m:mi>S</m:mi><m:mfenced separators="" open="(" close=")"><m:mfrac><m:mi>p</m:mi><m:mi>q</m:mi></m:mfrac><m:mo>,</m:mo><m:mi>λ</m:mi></m:mfenced></m:mrow></m:math> is self-similar in the sense discussed previously with homogeneous Cantor sets. This, along with the fact that <m:math overflow="scroll"><m:mrow><m:mn>0</m:mn><m:mo>,</m:mo><m:mn>1</m:mn><m:mo>∈</m:mo><m:mi>S</m:mi><m:mfenced separators="" open="(" close=")"><m:mfrac><m:mi>p</m:mi><m:mi>q</m:mi></m:mfrac><m:mo>,</m:mo><m:mi>λ</m:mi></m:mfenced><m:mo>⊆</m:mo><m:mfenced separators="" open="[" close="]"><m:mn>0</m:mn><m:mo>,</m:mo><m:mn>1</m:mn></m:mfenced></m:mrow></m:math>, allows us to consider this set as the infinite intersection</para>
+      <equation id="id267159">
+        <m:math overflow="scroll" mode="display">
+          <m:mrow>
+            <m:mi>S</m:mi>
+            <m:mfenced separators="" open="(" close=")">
+              <m:mfrac>
+                <m:mi>p</m:mi>
+                <m:mi>q</m:mi>
+              </m:mfrac>
+              <m:mo>,</m:mo>
+              <m:mi>λ</m:mi>
+            </m:mfenced>
+            <m:mo>=</m:mo>
+            <m:munderover>
+              <m:mo>⋂</m:mo>
+              <m:mrow>
+                <m:mi>j</m:mi>
+                <m:mo>=</m:mo>
+                <m:mn>0</m:mn>
+              </m:mrow>
+              <m:mi>∞</m:mi>
+            </m:munderover>
+            <m:msub>
+              <m:mi>S</m:mi>
+              <m:mi>j</m:mi>
+            </m:msub>
+            <m:mo>.</m:mo>
+          </m:mrow>
+        </m:math>
+      </equation>
+      <para id="id267216">Here, <m:math overflow="scroll"><m:msub><m:mi>S</m:mi><m:mi>j</m:mi></m:msub></m:math> is the <m:math overflow="scroll"><m:msup><m:mi>j</m:mi><m:mrow><m:mi>t</m:mi><m:mi>h</m:mi></m:mrow></m:msup></m:math> stage of the construction of <m:math overflow="scroll"><m:mrow><m:mi>S</m:mi><m:mfenced separators="" open="(" close=")"><m:mfrac><m:mi>p</m:mi><m:mi>q</m:mi></m:mfrac><m:mo>,</m:mo><m:mi>λ</m:mi></m:mfenced></m:mrow></m:math>, in the sense that it is the union of <m:math overflow="scroll"><m:msup><m:mi>N</m:mi><m:mi>j</m:mi></m:msup></m:math> intervals of length <m:math overflow="scroll"><m:msup><m:mi>λ</m:mi><m:mrow><m:mi>p</m:mi><m:mi>j</m:mi></m:mrow></m:msup></m:math> where <m:math overflow="scroll"><m:mi>N</m:mi></m:math> is the number of offsets in <m:math overflow="scroll"><m:mrow><m:mi>A</m:mi><m:mo>+</m:mo><m:mi>B</m:mi></m:mrow></m:math>. Note that some of these intervals might overlap. The next proposition is concerned with the computation of the value of <m:math overflow="scroll"><m:mi>N</m:mi></m:math>.</para>
+      <para id="id267347"><emphasis effect="bold">Proposition 4.1</emphasis> 
+For every <m:math overflow="scroll"><m:mrow><m:mfrac><m:mi>p</m:mi><m:mi>q</m:mi></m:mfrac><m:mo>≥</m:mo><m:mn>1</m:mn></m:mrow></m:math> where <m:math overflow="scroll"><m:mrow><m:mo movablelimits="true" form="prefix">gcd</m:mo><m:mfenced separators="" open="(" close=")"><m:mi>p</m:mi><m:mo>,</m:mo><m:mi>q</m:mi></m:mfenced><m:mo>=</m:mo><m:mn>1</m:mn></m:mrow></m:math>, the set <m:math overflow="scroll"><m:mrow><m:mi>W</m:mi><m:mfenced separators="" open="(" close=")"><m:mfrac><m:mi>p</m:mi><m:mi>q</m:mi></m:mfrac></m:mfenced></m:mrow></m:math> has exactly <m:math overflow="scroll"><m:mrow><m:msup><m:mn>2</m:mn><m:mrow><m:mi>p</m:mi><m:mo>+</m:mo><m:mi>q</m:mi></m:mrow></m:msup><m:mo>-</m:mo><m:mn>1</m:mn></m:mrow></m:math> elements.</para>
+      <para id="id267458">For ease of reading, we will write <m:math overflow="scroll"><m:mi>W</m:mi></m:math> in place of <m:math overflow="scroll"><m:mrow><m:mi>W</m:mi><m:mfenced separators="" open="(" close=")"><m:mfrac><m:mi>p</m:mi><m:mi>q</m:mi></m:mfrac></m:mfenced></m:mrow></m:math>.
+[Proof of the Proposition]
+Let such a fraction <m:math overflow="scroll"><m:mfrac><m:mi>p</m:mi><m:mi>q</m:mi></m:mfrac></m:math> be given. Clearly, we have that <m:math overflow="scroll"><m:mrow><m:mrow><m:mo>|</m:mo><m:mi>W</m:mi><m:mo>|</m:mo></m:mrow><m:mo>≤</m:mo><m:msup><m:mn>2</m:mn><m:mrow><m:mi>p</m:mi><m:mo>+</m:mo><m:mi>q</m:mi></m:mrow></m:msup></m:mrow></m:math> since each element <m:math overflow="scroll"><m:mrow><m:mi>w</m:mi><m:mo>∈</m:mo><m:mi>W</m:mi></m:mrow></m:math> can be expressed as the "sum" of two binary words <m:math overflow="scroll"><m:mi>u</m:mi></m:math> and <m:math overflow="scroll"><m:mi>v</m:mi></m:math>. Since there are <m:math overflow="scroll"><m:msup><m:mn>2</m:mn><m:mi>p</m:mi></m:msup></m:math> such <m:math overflow="scroll"><m:mi>u</m:mi></m:math> and <m:math overflow="scroll"><m:msup><m:mn>2</m:mn><m:mi>q</m:mi></m:msup></m:math> such <m:math overflow="scroll"><m:mi>v</m:mi></m:math>, there are at most <m:math overflow="scroll"><m:msup><m:mn>2</m:mn><m:mrow><m:mi>p</m:mi><m:mo>+</m:mo><m:mi>q</m:mi></m:mrow></m:msup></m:math> possibilities for <m:math overflow="scroll"><m:mrow><m:mi>w</m:mi><m:mo>=</m:mo><m:mi>u</m:mi><m:mo>+</m:mo><m:mi>v</m:mi></m:mrow></m:math>. Additionally, since <m:math overflow="scroll"><m:mi>p</m:mi></m:math> and <m:math overflow="scroll"><m:mi>q</m:mi></m:math> are relatively prime, it is easy to see that <m:math overflow="scroll"><m:mrow><m:mi>u</m:mi><m:mo>=</m:mo><m:mi>v</m:mi></m:mrow></m:math> if and only if <m:math overflow="scroll"><m:mrow><m:mi>u</m:mi><m:mo>=</m:mo><m:mi>v</m:mi><m:mo>=</m:mo><m:mn>000</m:mn><m:mo>⋯</m:mo><m:mn>0</m:mn></m:mrow></m:math> or <m:math overflow="scroll"><m:mrow><m:mi>u</m:mi><m:mo>=</m:mo><m:mi>v</m:mi><m:mo>=</m:mo><m:mn>111</m:mn><m:mo>⋯</m:mo><m:mn>1</m:mn></m:mrow></m:math>. What is left to show is that there are exactly two pairs <m:math overflow="scroll"><m:mfenced separators="" open="(" close=")"><m:mi>u</m:mi><m:mo>,</m:mo><m:mi>v</m:mi></m:mfenced></m:math> and <m:math overflow="scroll"><m:mfenced separators="" open="(" close=")"><m:msup><m:mi>u</m:mi><m:mo>'</m:mo></m:msup><m:mo>,</m:mo><m:msup><m:mi>v</m:mi><m:mo>'</m:mo></m:msup></m:mfenced></m:math>, with <m:math overflow="scroll"><m:mrow><m:mi>u</m:mi><m:mo>≠</m:mo><m:msup><m:mi>u</m:mi><m:mo>'</m:mo></m:msup></m:mrow></m:math> or <m:math overflow="scroll"><m:mrow><m:mi>v</m:mi><m:mo>≠</m:mo><m:msup><m:mi>v</m:mi><m:mo>'</m:mo></m:msup></m:mrow></m:math>, such that <m:math overflow="scroll"><m:mrow><m:mi>u</m:mi><m:mo>+</m:mo><m:mi>v</m:mi><m:mo>=</m:mo><m:msup><m:mi>u</m:mi><m:mo>'</m:mo></m:msup><m:mo>+</m:mo><m:msup><m:mi>v</m:mi><m:mo>'</m:mo></m:msup></m:mrow></m:math>. In fact, these pairs are <m:math overflow="scroll"><m:mfenced separators="" open="(" close=")"><m:mn>111</m:mn><m:mo>⋯</m:mo><m:mn>1</m:mn><m:mo>,</m:mo><m:mn>000</m:mn><m:mo>⋯</m:mo><m:mn>0</m:mn></m:mfenced></m:math> and <m:math overflow="scroll"><m:mfenced separators="" open="(" close=")"><m:mn>000</m:mn><m:mo>⋯</m:mo><m:mn>0</m:mn><m:mo>,</m:mo><m:mn>111</m:mn><m:mo>⋯</m:mo><m:mn>1</m:mn></m:mfenced></m:math>; in both cases, we have</para>
+      <equation id="id267926">
+        <m:math overflow="scroll" mode="display">
+          <m:mrow>
+            <m:mi>w</m:mi>
+            <m:mo>=</m:mo>
+            <m:mi>u</m:mi>
+            <m:mo>+</m:mo>
+            <m:mi>v</m:mi>
+            <m:mo>=</m:mo>
+            <m:msup>
+              <m:mi>u</m:mi>
+              <m:mo>'</m:mo>
+            </m:msup>
+            <m:mo>+</m:mo>
+            <m:msup>
+              <m:mi>v</m:mi>
+              <m:mo>'</m:mo>
+            </m:msup>
+            <m:mo>=</m:mo>
+            <m:mn>111</m:mn>
+            <m:mo>⋯</m:mo>
+            <m:mn>1</m:mn>
+            <m:mo>.</m:mo>
+          </m:mrow>
+        </m:math>
+      </equation>
+      <para id="id267976">First, we will show that for all <m:math overflow="scroll"><m:mrow><m:mi>w</m:mi><m:mo>∈</m:mo><m:mi>W</m:mi></m:mrow></m:math> with <m:math overflow="scroll"><m:mrow><m:mi>w</m:mi><m:mo>≠</m:mo><m:mn>111</m:mn><m:mo>⋯</m:mo><m:mn>1</m:mn></m:mrow></m:math>, there is a unique pair <m:math overflow="scroll"><m:mfenced separators="" open="(" close=")"><m:mi>u</m:mi><m:mo>,</m:mo><m:mi>v</m:mi></m:mfenced></m:math> such that <m:math overflow="scroll"><m:mrow><m:mi>u</m:mi><m:mo>+</m:mo><m:mi>v</m:mi><m:mo>=</m:mo><m:mi>w</m:mi></m:mrow></m:math>, and then we will show that when <m:math overflow="scroll"><m:mrow><m:mi>w</m:mi><m:mo>=</m:mo><m:mn>111</m:mn><m:mo>⋯</m:mo><m:mn>1</m:mn></m:mrow></m:math>, the only pairs <m:math overflow="scroll"><m:mfenced separators="" open="(" close=")"><m:mi>u</m:mi><m:mo>,</m:mo><m:mi>v</m:mi></m:mfenced></m:math> for which <m:math overflow="scroll"><m:mrow><m:mi>u</m:mi><m:mo>+</m:mo><m:mi>v</m:mi><m:mo>=</m:mo><m:mi>w</m:mi></m:mrow></m:math> are the two given above. Both of these statements rest on the following lemma.</para>
+      <para id="id268113"><emphasis effect="bold">Lemma 4.2</emphasis> 
+Given <m:math overflow="scroll"><m:mrow><m:mi>w</m:mi><m:mo>=</m:mo><m:mi>u</m:mi><m:mo>+</m:mo><m:mi>v</m:mi></m:mrow></m:math>, where <m:math overflow="scroll"><m:mi>u</m:mi></m:math> and <m:math overflow="scroll"><m:mi>v</m:mi></m:math> are initially unknown, and one letter of <m:math overflow="scroll"><m:mi>u</m:mi></m:math> or <m:math overflow="scroll"><m:mi>v</m:mi></m:math>, the remaining letters of <m:math overflow="scroll"><m:mi>u</m:mi></m:math> and <m:math overflow="scroll"><m:mi>v</m:mi></m:math> are uniquely determined.</para>
+      <para id="id268204">[Proof of the Lemma]
+Let <m:math overflow="scroll"><m:mrow><m:mi>w</m:mi><m:mo>=</m:mo><m:mi>u</m:mi><m:mo>+</m:mo><m:mi>v</m:mi><m:mo>∈</m:mo><m:mi>W</m:mi></m:mrow></m:math> be given, and assume without loss of generality that we know the <m:math overflow="scroll"><m:msup><m:mi>j</m:mi><m:mrow><m:mi>t</m:mi><m:mi>h</m:mi></m:mrow></m:msup></m:math> letter <m:math overflow="scroll"><m:msub><m:mi>u</m:mi><m:mi>j</m:mi></m:msub></m:math> of <m:math overflow="scroll"><m:mi>u</m:mi></m:math>. We partition <m:math overflow="scroll"><m:mi>w</m:mi></m:math> into <m:math overflow="scroll"><m:mi>p</m:mi></m:math><m:math overflow="scroll"><m:mi>q</m:mi></m:math>-groups (that is, <m:math overflow="scroll"><m:mi>p</m:mi></m:math> groups of <m:math overflow="scroll"><m:mi>q</m:mi></m:math> letters) and into <m:math overflow="scroll"><m:mi>q</m:mi></m:math><m:math overflow="scroll"><m:mi>p</m:mi></m:math>-groups. Because <m:math overflow="scroll"><m:mi>p</m:mi></m:math> and <m:math overflow="scroll"><m:mi>q</m:mi></m:math> are relatively prime, the initial letter of a <m:math overflow="scroll"><m:mi>q</m:mi></m:math>-group will only coincide with the initial letter of a <m:math overflow="scroll"><m:mi>p</m:mi></m:math>-group at the first letter of <m:math overflow="scroll"><m:mi>w</m:mi></m:math>. Similarly, the final letter of a <m:math overflow="scroll"><m:mi>q</m:mi></m:math>-group will only coincide with the final letter of a <m:math overflow="scroll"><m:mi>p</m:mi></m:math>-group at the last letter of <m:math overflow="scroll"><m:mi>w</m:mi></m:math>.</para>
+      <para id="id268404">Since we know <m:math overflow="scroll"><m:msub><m:mi>u</m:mi><m:mi>j</m:mi></m:msub></m:math>, it follows immediately that <m:math overflow="scroll"><m:mrow><m:msub><m:mi>v</m:mi><m:mi>j</m:mi></m:msub><m:mo>=</m:mo><m:msub><m:mi>w</m:mi><m:mi>j</m:mi></m:msub><m:mo>-</m:mo><m:msub><m:mi>u</m:mi><m:mi>j</m:mi></m:msub></m:mrow></m:math>, and in general, if we know the <m:math overflow="scroll"><m:msup><m:mi>k</m:mi><m:mrow><m:mi>t</m:mi><m:mi>h</m:mi></m:mrow></m:msup></m:math> letter of <m:math overflow="scroll"><m:mi>u</m:mi></m:math>, we also know the <m:math overflow="scroll"><m:msup><m:mi>k</m:mi><m:mrow><m:mi>t</m:mi><m:mi>h</m:mi></m:mrow></m:msup></m:math> letter of <m:math overflow="scroll"><m:mi>v</m:mi></m:math>, and vice versa.</para>
+      <para id="id268509">Take <m:math overflow="scroll"><m:mi>n</m:mi></m:math> such that <m:math overflow="scroll"><m:mrow><m:mi>n</m:mi><m:mi>q</m:mi><m:mo>≤</m:mo><m:mi>j</m:mi><m:mo>&lt;</m:mo><m:mfenced separators="" open="(" close=")"><m:mi>n</m:mi><m:mo>+</m:mo><m:mn>1</m:mn></m:mfenced><m:mi>q</m:mi></m:mrow></m:math>. Because <m:math overflow="scroll"><m:mi>u</m:mi></m:math> is of the form of <m:math overflow="scroll"><m:mi>p</m:mi></m:math> groups of <m:math overflow="scroll"><m:mi>q</m:mi></m:math> repeated letters, and because we know <m:math overflow="scroll"><m:msub><m:mi>u</m:mi><m:mi>j</m:mi></m:msub></m:math>, we also know the letters <m:math overflow="scroll"><m:msub><m:mi>u</m:mi><m:mrow><m:mi>n</m:mi><m:mi>q</m:mi></m:mrow></m:msub></m:math> through <m:math overflow="scroll"><m:msub><m:mi>u</m:mi><m:mrow><m:mfenced separators="" open="(" close=")"><m:mi>n</m:mi><m:mo>+</m:mo><m:mn>1</m:mn></m:mfenced><m:mi>q</m:mi><m:mo>-</m:mo><m:mn>1</m:mn></m:mrow></m:msub></m:math>, allowing us to fill in <m:math overflow="scroll"><m:msub><m:mi>v</m:mi><m:mrow><m:mi>n</m:mi><m:mi>q</m:mi></m:mrow></m:msub></m:math> through <m:math overflow="scroll"><m:msub><m:mi>v</m:mi><m:mrow><m:mfenced separators="" open="(" close=")"><m:mi>n</m:mi><m:mo>+</m:mo><m:mn>1</m:mn></m:mfenced><m:mi>q</m:mi><m:mo>-</m:mo><m:mn>1</m:mn></m:mrow></m:msub></m:math>. We repeat this process now on <m:math overflow="scroll"><m:mi>v</m:mi></m:math>; take <m:math overflow="scroll"><m:msub><m:mi>m</m:mi><m:mn>0</m:mn></m:msub></m:math> such that <m:math overflow="scroll"><m:mrow><m:msub><m:mi>m</m:mi><m:mn>0</m:mn></m:msub><m:mi>p</m:mi><m:mo>≤</m:mo><m:mi>n</m:mi><m:mi>q</m:mi><m:mo>&lt;</m:mo><m:mfenced separators="" open="(" close=")"><m:msub><m:mi>m</m:mi><m:mn>0</m:mn></m:msub><m:mo>+</m:mo><m:mn>1</m:mn></m:mfenced><m:mi>p</m:mi></m:mrow></m:math> and <m:math overflow="scroll"><m:msub><m:mi>m</m:mi><m:mn>1</m:mn></m:msub></m:math> such that <m:math overflow="scroll"><m:mrow><m:mfenced separators="" open="(" close=")"><m:msub><m:mi>m</m:mi><m:mn>1</m:mn></m:msub><m:mo>-</m:mo><m:mn>1</m:mn></m:mfenced><m:mi>p</m:mi><m:mo>≤</m:mo><m:mfenced separators="" open="(" close=")"><m:mi>n</m:mi><m:mo>+</m:mo><m:mn>1</m:mn></m:mfenced><m:mi>q</m:mi><m:mo>-</m:mo><m:mn>1</m:mn><m:mo>&lt;</m:mo><m:msub><m:mi>m</m:mi><m:mn>1</m:mn></m:msub><m:mi>p</m:mi></m:mrow></m:math>. This gives us <m:math overflow="scroll"><m:msub><m:mi>v</m:mi><m:mrow><m:msub><m:mi>m</m:mi><m:mn>0</m:mn></m:msub><m:mi>p</m:mi></m:mrow></m:msub></m:math> through <m:math overflow="scroll"><m:msub><m:mi>v</m:mi><m:mrow><m:msub><m:mi>m</m:mi><m:mn>1</m:mn></m:msub><m:mi>p</m:mi><m:mo>-</m:mo><m:mn>1</m:mn></m:mrow></m:msub></m:math>, which in turn gives us the corresponding letters for <m:math overflow="scroll"><m:mi>u</m:mi></m:math>. Because of the condition described above about the initial and final letters of <m:math overflow="scroll"><m:mi>p</m:mi></m:math>- and <m:math overflow="scroll"><m:mi>q</m:mi></m:math>-groups, we will always be able to extend the range of uniquely determined letters at each step. We repeat this process until all of <m:math overflow="scroll"><m:mi>u</m:mi></m:math> and <m:math overflow="scroll"><m:mi>v</m:mi></m:math> are determined. Because <m:math overflow="scroll"><m:mi>u</m:mi></m:math> and <m:math overflow="scroll"><m:mi>v</m:mi></m:math> are finite, this process will terminate at a finite step.</para>
+      <para id="id268958">Now, we can apply this Lemma to the claim above. In the case where <m:math overflow="scroll"><m:mrow><m:mi>w</m:mi><m:mo>≠</m:mo><m:mn>111</m:mn><m:mo>⋯</m:mo><m:mn>1</m:mn></m:mrow></m:math>, there is some <m:math overflow="scroll"><m:mi>j</m:mi></m:math> for which <m:math overflow="scroll"><m:mrow><m:msub><m:mi>w</m:mi><m:mi>j</m:mi></m:msub><m:mo>=</m:mo><m:mn>0</m:mn></m:mrow></m:math> or <m:math overflow="scroll"><m:mrow><m:msub><m:mi>w</m:mi><m:mi>j</m:mi></m:msub><m:mo>=</m:mo><m:mn>2</m:mn></m:mrow></m:math>. In either case, this uniquely determines the corresponding <m:math overflow="scroll"><m:msub><m:mi>u</m:mi><m:mi>j</m:mi></m:msub></m:math> and <m:math overflow="scroll"><m:msub><m:mi>v</m:mi><m:mi>j</m:mi></m:msub></m:math>: They must be both 0 in the former case and both 1 in the latter case. Applying Lemma 4.2, we get a unique pair <m:math overflow="scroll"><m:mfenced separators="" open="(" close=")"><m:mi>u</m:mi><m:mo>,</m:mo><m:mi>v</m:mi></m:mfenced></m:math> with <m:math overflow="scroll"><m:mrow><m:mi>u</m:mi><m:mo>+</m:mo><m:mi>v</m:mi><m:mo>=</m:mo><m:mi>w</m:mi></m:mrow></m:math>.</para>
+      <para id="id269096">In the case where <m:math overflow="scroll"><m:mrow><m:mi>w</m:mi><m:mo>=</m:mo><m:mn>111</m:mn><m:mo>⋯</m:mo><m:mn>1</m:mn></m:mrow></m:math>, there are no 0s or 2s, so we must make a choice. We can choose either <m:math overflow="scroll"><m:mrow><m:msub><m:mi>u</m:mi><m:mn>0</m:mn></m:msub><m:mo>=</m:mo><m:mn>1</m:mn></m:mrow></m:math> and <m:math overflow="scroll"><m:mrow><m:msub><m:mi>v</m:mi><m:mn>0</m:mn></m:msub><m:mo>=</m:mo><m:mn>0</m:mn></m:mrow></m:math>, or <m:math overflow="scroll"><m:mrow><m:msub><m:mi>u</m:mi><m:mn>0</m:mn></m:msub><m:mo>=</m:mo><m:mn>0</m:mn></m:mrow></m:math> and <m:math overflow="scroll"><m:mrow><m:msub><m:mi>v</m:mi><m:mn>0</m:mn></m:msub><m:mo>=</m:mo><m:mn>1</m:mn></m:mrow></m:math>, but nothing else. With either choice, by Lemma 4.2, the rest of <m:math overflow="scroll"><m:mi>u</m:mi></m:math> and <m:math overflow="scroll"><m:mi>v</m:mi></m:math> are uniquely determined. These two choices correspond to the two pairs given above.</para>
+      <para id="id269216">Thus, for all but one <m:math overflow="scroll"><m:mrow><m:mi>w</m:mi><m:mo>∈</m:mo><m:mi>W</m:mi></m:mrow></m:math>, there is a unique pair <m:math overflow="scroll"><m:mfenced separators="" open="(" close=")"><m:mi>u</m:mi><m:mo>,</m:mo><m:mi>v</m:mi></m:mfenced></m:math> for which <m:math overflow="scroll"><m:mrow><m:mi>u</m:mi><m:mo>+</m:mo><m:mi>v</m:mi><m:mo>=</m:mo><m:mi>w</m:mi></m:mrow></m:math>. Since there are <m:math overflow="scroll"><m:msup><m:mn>2</m:mn><m:mrow><m:mi>p</m:mi><m:mo>+</m:mo><m:mi>q</m:mi></m:mrow></m:msup></m:math> unique pairs of <m:math overflow="scroll"><m:mi>u</m:mi></m:math> and <m:math overflow="scroll"><m:mi>v</m:mi></m:math>, there must be exactly <m:math overflow="scroll"><m:mrow><m:msup><m:mn>2</m:mn><m:mrow><m:mi>p</m:mi><m:mo>+</m:mo><m:mi>q</m:mi></m:mrow></m:msup><m:mo>-</m:mo><m:mn>1</m:mn></m:mrow></m:math> elements <m:math overflow="scroll"><m:mrow><m:mi>w</m:mi><m:mo>∈</m:mo><m:mi>W</m:mi></m:mrow></m:math>, as desired.</para>
+      <para id="id269348">This Proposition leads us to several results regarding the set <m:math overflow="scroll"><m:mrow><m:mi>S</m:mi><m:mfenced separators="" open="(" close=")"><m:mfrac><m:mi>p</m:mi><m:mi>q</m:mi></m:mfrac><m:mo>,</m:mo><m:mi>λ</m:mi></m:mfenced></m:mrow></m:math>, presented here as Corollaries.</para>
+      <para id="id269380"><emphasis effect="bold">Corollary 4.3</emphasis> 
+The set of offsets <m:math overflow="scroll"><m:mrow><m:mi>A</m:mi><m:mo>+</m:mo><m:mi>B</m:mi></m:mrow></m:math> of <m:math overflow="scroll"><m:mrow><m:mi>S</m:mi><m:mfenced separators="" open="(" close=")"><m:mfrac><m:mi>p</m:mi><m:mi>q</m:mi></m:mfrac><m:mo>,</m:mo><m:mi>λ</m:mi></m:mfenced></m:mrow></m:math> contains exactly <m:math overflow="scroll"><m:mrow><m:msup><m:mn>2</m:mn><m:mrow><m:mi>p</m:mi><m:mo>+</m:mo><m:mi>q</m:mi></m:mrow></m:msup><m:mo>-</m:mo><m:mn>1</m:mn></m:mrow></m:math> elements for all but finitely many <m:math overflow="scroll"><m:mi>λ</m:mi></m:math>.</para>
+      <para id="id269475">This is an easy consequence of the Proposition and the construction of <m:math overflow="scroll"><m:mrow><m:mi>S</m:mi><m:mfenced separators="" open="(" close=")"><m:mfrac><m:mi>p</m:mi><m:mi>q</m:mi></m:mfrac><m:mo>,</m:mo><m:mi>λ</m:mi></m:mfenced></m:mrow></m:math> above.</para>
+      <para id="id269507"><emphasis effect="bold">Corollary 4.4</emphasis> 
+The set <m:math overflow="scroll"><m:mrow><m:mi>S</m:mi><m:mfenced separators="" open="(" close=")"><m:mfrac><m:mi>p</m:mi><m:mi>q</m:mi></m:mfrac><m:mo>,</m:mo><m:mi>λ</m:mi></m:mfenced></m:mrow></m:math> has zero Lebesgue measure for all <m:math overflow="scroll"><m:mrow><m:mi>λ</m:mi><m:mo>&lt;</m:mo><m:msup><m:mfenced separators="" open="(" close=")"><m:msup><m:mn>2</m:mn><m:mrow><m:mi>p</m:mi><m:mo>+</m:mo><m:mi>q</m:mi></m:mrow></m:msup><m:mo>-</m:mo><m:mn>1</m:mn></m:mfenced><m:mrow><m:mo>-</m:mo><m:mn>1</m:mn><m:mo>/</m:mo><m:mi>p</m:mi></m:mrow></m:msup></m:mrow></m:math>.</para>
+      <para id="id269597">This is an improvement of the result of Lemma 3.2.
+
+It is clear that a set <m:math overflow="scroll"><m:mi>K</m:mi></m:math> in this form (defined by a set of <m:math overflow="scroll"><m:mi>N</m:mi></m:math> offsets and a scaling factor <m:math overflow="scroll"><m:mi>σ</m:mi></m:math>) has length <m:math overflow="scroll"><m:mrow><m:msub><m:mi>μ</m:mi><m:mi>j</m:mi></m:msub><m:mfenced open="(" close=")"><m:mi>K</m:mi></m:mfenced></m:mrow></m:math> at the <m:math overflow="scroll"><m:msup><m:mi>j</m:mi><m:mrow><m:mi>t</m:mi><m:mi>h</m:mi></m:mrow></m:msup></m:math> stage bounded by</para>
+      <equation id="id269677">
+        <m:math overflow="scroll" mode="display">
+          <m:mrow>
+            <m:msub>
+              <m:mi>μ</m:mi>
+              <m:mi>j</m:mi>
+            </m:msub>
+            <m:mfenced open="(" close=")">
+              <m:mi>K</m:mi>
+            </m:mfenced>
+            <m:mo>≤</m:mo>
+            <m:msup>
+              <m:mi>N</m:mi>
+              <m:mi>j</m:mi>
+            </m:msup>
+            <m:msup>
+              <m:mi>σ</m:mi>
+              <m:mi>j</m:mi>
+            </m:msup>
+          </m:mrow>
+        </m:math>
+      </equation>
+      <para id="id269719">so that its Lebesgue measure <m:math overflow="scroll"><m:mrow><m:mi>μ</m:mi><m:mfenced open="(" close=")"><m:mi>K</m:mi></m:mfenced></m:mrow></m:math> must be bounded by</para>
+      <equation id="id269742">
+        <m:math overflow="scroll" mode="display">
+          <m:mrow>
+            <m:mi>μ</m:mi>
+            <m:mfenced open="(" close=")">
+              <m:mi>K</m:mi>
+            </m:mfenced>
+            <m:mo>≤</m:mo>
+            <m:munder>
+              <m:mo movablelimits="true" form="prefix">lim</m:mo>
+              <m:mrow>
+                <m:mi>j</m:mi>
+                <m:mo>→</m:mo>
+                <m:mi>∞</m:mi>
+              </m:mrow>
+            </m:munder>
+            <m:msub>
+              <m:mi>μ</m:mi>
+              <m:mi>j</m:mi>
+            </m:msub>
+            <m:mfenced open="(" close=")">
+              <m:mi>K</m:mi>
+            </m:mfenced>
+            <m:mo>≤</m:mo>
+            <m:munder>
+              <m:mo movablelimits="true" form="prefix">lim</m:mo>
+              <m:mrow>
+                <m:mi>j</m:mi>
+                <m:mo>→</m:mo>
+                <m:mi>∞</m:mi>
+              </m:mrow>
+            </m:munder>
+            <m:msup>
+              <m:mi>N</m:mi>
+              <m:mi>j</m:mi>
+            </m:msup>
+            <m:msup>
+              <m:mi>σ</m:mi>
+              <m:mi>j</m:mi>
+            </m:msup>
+          </m:mrow>
+        </m:math>
+      </equation>
+      <para id="id269832">implying that <m:math overflow="scroll"><m:mrow><m:mi>μ</m:mi><m:mfenced open="(" close=")"><m:mi>K</m:mi></m:mfenced><m:mo>=</m:mo><m:mn>0</m:mn></m:mrow></m:math> when <m:math overflow="scroll"><m:mrow><m:mi>N</m:mi><m:mi>σ</m:mi><m:mo>&lt;</m:mo><m:mn>1</m:mn></m:mrow></m:math>. In this case, we have <m:math overflow="scroll"><m:mrow><m:mi>N</m:mi><m:mo>=</m:mo><m:msup><m:mn>2</m:mn><m:mrow><m:mi>p</m:mi><m:mo>+</m:mo><m:mi>q</m:mi></m:mrow></m:msup><m:mo>-</m:mo><m:mn>1</m:mn></m:mrow></m:math> and <m:math overflow="scroll"><m:mrow><m:mi>σ</m:mi><m:mo>=</m:mo><m:msup><m:mi>λ</m:mi><m:mi>p</m:mi></m:msup></m:mrow></m:math>, so that <m:math overflow="scroll"><m:mrow><m:mi>μ</m:mi><m:mfenced separators="" open="(" close=")"><m:mi>S</m:mi><m:mfenced separators="" open="(" close=")"><m:mfrac><m:mi>p</m:mi><m:mi>q</m:mi></m:mfrac><m:mo>,</m:mo><m:mi>λ</m:mi></m:mfenced></m:mfenced><m:mo>=</m:mo><m:mn>0</m:mn></m:mrow></m:math> when <m:math overflow="scroll"><m:mrow><m:mi>λ</m:mi><m:mo>&lt;</m:mo><m:msup><m:mfenced separators="" open="(" close=")"><m:msup><m:mn>2</m:mn><m:mrow><m:mi>p</m:mi><m:mo>+</m:mo><m:mi>q</m:mi></m:mrow></m:msup><m:mo>-</m:mo><m:mn>1</m:mn></m:mfenced><m:mrow><m:mo>-</m:mo><m:mn>1</m:mn><m:mo>/</m:mo><m:mi>p</m:mi></m:mrow></m:msup></m:mrow></m:math>, as desired.
+
+To see this result graphically, see <link target-id="uid40"/>.</para>
+      <figure id="uid40">
+        <media id="uid40_media" alt="">
+          <image mime-type="image/png" src="../../media/RevisedGreen.png" id="uid40_onlineimage" width="750"><!-- NOTE: attribute width changes image size online (pixels). original width is 750. --></image>
+          <image mime-type="application/postscript" for="pdf" src="../../media/RevisedGreen.eps" id="uid40_printimage" print-width=".6">
+            <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+          </image>
+        </media>
+        <caption>The light green line in this figure represents the previous sufficient condition for <m:math overflow="scroll"><m:mrow><m:mi>S</m:mi><m:mfenced separators="" open="(" close=")"><m:mfrac><m:mi>p</m:mi><m:mi>q</m:mi></m:mfrac><m:mo>,</m:mo><m:mi>λ</m:mi></m:mfenced></m:mrow></m:math> having zero Lebesgue measure. the darker green points represent the new condition given by Corollary 4.4, applied to <m:math overflow="scroll"><m:mrow><m:mi>θ</m:mi><m:mo>=</m:mo><m:mfrac><m:mi>p</m:mi><m:mi>q</m:mi></m:mfrac></m:mrow></m:math> where <m:math overflow="scroll"><m:mrow><m:mn>1</m:mn><m:mo>≤</m:mo><m:mfrac><m:mi>p</m:mi><m:mi>q</m:mi></m:mfrac><m:mo>≤</m:mo><m:mn>10</m:mn></m:mrow></m:math> and <m:math overflow="scroll"><m:mrow><m:mn>1</m:mn><m:mo>≤</m:mo><m:mi>q</m:mi><m:mo>≤</m:mo><m:mn>6</m:mn></m:mrow></m:math>. As <m:math overflow="scroll"><m:mi>p</m:mi></m:math> and <m:math overflow="scroll"><m:mi>q</m:mi></m:math> increase, these points move closer to the light green line. While some of these points appear on the light green line, the new condition presented in the above Corollary is indeed strictly stronger than the condition given by Lemma 3.2. Recall that the light green line is given for rational <m:math overflow="scroll"><m:mi>θ</m:mi></m:math> by <m:math overflow="scroll"><m:mrow><m:mi>λ</m:mi><m:mo>=</m:mo><m:msup><m:mfenced separators="" open="(" close=")"><m:msup><m:mn>2</m:mn><m:mrow><m:mi>p</m:mi><m:mo>+</m:mo><m:mi>q</m:mi></m:mrow></m:msup></m:mfenced><m:mrow><m:mo>-</m:mo><m:mn>1</m:mn><m:mo>/</m:mo><m:mi>p</m:mi></m:mrow></m:msup></m:mrow></m:math>.</caption>
+      </figure>
+      <para id="id270200">The next result from this study involves the results from Theorems 3.4 and 3.5. Using the notation developed above, we can compute algorithmically the value <m:math overflow="scroll"><m:mrow><m:mi>λ</m:mi><m:mfenced open="(" close=")"><m:mi>θ</m:mi></m:mfenced></m:mrow></m:math> for any rational <m:math overflow="scroll"><m:mi>θ</m:mi></m:math>. Recall that this value is already known for irrational <m:math overflow="scroll"><m:mi>θ</m:mi></m:math>. To do this, we need the following proposition.</para>
+      <para id="id270241"><emphasis effect="bold">Proposition 4.5</emphasis> 
+The set <m:math overflow="scroll"><m:mrow><m:mi>S</m:mi><m:mfenced separators="" open="(" close=")"><m:mfrac><m:mi>p</m:mi><m:mi>q</m:mi></m:mfrac><m:mo>,</m:mo><m:mi>λ</m:mi></m:mfenced><m:mo>=</m:mo><m:mfenced separators="" open="[" close="]"><m:mn>0</m:mn><m:mo>,</m:mo><m:mn>1</m:mn></m:mfenced></m:mrow></m:math> if and only if there are no gaps in the first stage <m:math overflow="scroll"><m:msub><m:mi>S</m:mi><m:mn>1</m:mn></m:msub></m:math> of its construction.</para>
+      <para id="id270318">[Proof of the Proposition]
+<m:math overflow="scroll"><m:munder><m:mo>⇒</m:mo><m:mo>̲</m:mo></m:munder></m:math>: Remember that <m:math overflow="scroll"><m:msub><m:mi>S</m:mi><m:mn>1</m:mn></m:msub></m:math> is the union of intervals of length <m:math overflow="scroll"><m:msup><m:mi>λ</m:mi><m:mi>p</m:mi></m:msup></m:math> with left endpoints at the offsets in the set <m:math overflow="scroll"><m:mrow><m:mi>A</m:mi><m:mo>+</m:mo><m:mi>B</m:mi></m:mrow></m:math>. We have</para>
+      <equation id="id270379">
+        <m:math overflow="scroll" mode="display">
+          <m:mrow>
+            <m:mi>S</m:mi>
+            <m:mfenced separators="" open="(" close=")">
+              <m:mfrac>
+                <m:mi>p</m:mi>
+                <m:mi>q</m:mi>
+              </m:mfrac>
+              <m:mo>,</m:mo>
+              <m:mi>λ</m:mi>
+            </m:mfenced>
+            <m:mo>=</m:mo>
+            <m:munderover>
+              <m:mo>⋂</m:mo>
+              <m:mrow>
+                <m:mi>j</m:mi>
+                <m:mo>=</m:mo>
+                <m:mn>0</m:mn>
+              </m:mrow>
+              <m:mi>∞</m:mi>
+            </m:munderover>
+            <m:msub>
+              <m:mi>S</m:mi>
+              <m:mi>j</m:mi>
+            </m:msub>
+          </m:mrow>
+        </m:math>
+      </equation>
+      <para id="id270434">so that</para>
+      <equation id="id270440">
+        <m:math overflow="scroll" mode="display">
+          <m:mrow>
+            <m:mfenced separators="" open="[" close="]">
+              <m:mn>0</m:mn>
+              <m:mo>,</m:mo>
+              <m:mn>1</m:mn>
+            </m:mfenced>
+            <m:mo>⊆</m:mo>
+            <m:msub>
+              <m:mi>S</m:mi>
+              <m:mi>j</m:mi>
+            </m:msub>
+            <m:mo>⊆</m:mo>
+            <m:mfenced separators="" open="[" close="]">
+              <m:mn>0</m:mn>
+              <m:mo>,</m:mo>
+              <m:mn>1</m:mn>
+            </m:mfenced>
+            <m:mo>,</m:mo>
+            <m:mspace width="1.em"/>
+            <m:mo>∀</m:mo>
+            <m:mi>j</m:mi>
+            <m:mo>.</m:mo>
+          </m:mrow>
+        </m:math>
+      </equation>
+      <para id="id270501">In particular,</para>
+      <equation id="id270506">
+        <m:math overflow="scroll" mode="display">
+          <m:mrow>
+            <m:msub>
+              <m:mi>S</m:mi>
+              <m:mn>1</m:mn>
+            </m:msub>
+            <m:mo>=</m:mo>
+            <m:mfenced separators="" open="[" close="]">
+              <m:mn>0</m:mn>
+              <m:mo>,</m:mo>
+              <m:mn>1</m:mn>
+            </m:mfenced>
+          </m:mrow>
+        </m:math>
+      </equation>
+      <para id="id270540">as desired.</para>
+      <para id="id270545"><m:math overflow="scroll"><m:munder><m:mo>⇐</m:mo><m:mo>̲</m:mo></m:munder></m:math>: Assume that <m:math overflow="scroll"><m:mrow><m:mi>S</m:mi><m:mfenced separators="" open="(" close=")"><m:mfrac><m:mi>p</m:mi><m:mi>q</m:mi></m:mfrac><m:mo>,</m:mo><m:mi>λ</m:mi></m:mfenced><m:mo>≠</m:mo><m:mfenced separators="" open="[" close="]"><m:mn>0</m:mn><m:mo>,</m:mo><m:mn>1</m:mn></m:mfenced></m:mrow></m:math>. Thus, <m:math overflow="scroll"><m:mrow><m:mi>S</m:mi><m:mfenced separators="" open="(" close=")"><m:mfrac><m:mi>p</m:mi><m:mi>q</m:mi></m:mfrac><m:mo>,</m:mo><m:mi>λ</m:mi></m:mfenced></m:mrow></m:math> must contain a gap of positive length, and this gap must show up in a finite stage, so it must be a scaled-down copy (or the overlap of multiple scaled-down copies) of a gap/gaps in the first stage of the construction <m:math overflow="scroll"><m:msub><m:mi>S</m:mi><m:mn>1</m:mn></m:msub></m:math>. Thus, <m:math overflow="scroll"><m:mrow><m:msub><m:mi>S</m:mi><m:mn>1</m:mn></m:msub><m:mo>≠</m:mo><m:mfenced separators="" open="[" close="]"><m:mn>0</m:mn><m:mo>,</m:mo><m:mn>1</m:mn></m:mfenced></m:mrow></m:math>, as desired.</para>
+      <para id="id270682">This Proposition tells us that <m:math overflow="scroll"><m:mrow><m:mi>λ</m:mi><m:mfenced open="(" close=")"><m:mi>θ</m:mi></m:mfenced></m:mrow></m:math> is the unique point for which</para>
+      <equation id="id270703">
+        <m:math overflow="scroll" mode="display">
+          <m:mrow>
+            <m:msub>
+              <m:mi>S</m:mi>
+              <m:mn>1</m:mn>
+            </m:msub>
+            <m:mo>=</m:mo>
+            <m:mfenced separators="" open="[" close="]">
+              <m:mn>0</m:mn>
+              <m:mo>,</m:mo>
+              <m:mn>1</m:mn>
+            </m:mfenced>
+            <m:mspace width="1.em"/>
+            <m:mtext>when</m:mtext>
+            <m:mspace width="1.em"/>
+            <m:mi>λ</m:mi>
+            <m:mo>≥</m:mo>
+            <m:mi>λ</m:mi>
+            <m:mfenced open="(" close=")">
+              <m:mi>θ</m:mi>
+            </m:mfenced>
+            <m:mo>.</m:mo>
+          </m:mrow>
+        </m:math>
+      </equation>
+      <para id="id270762">This point can be computed by finding all the offsets of <m:math overflow="scroll"><m:mrow><m:mi>S</m:mi><m:mfenced separators="" open="(" close=")"><m:mfrac><m:mi>p</m:mi><m:mi>q</m:mi></m:mfrac><m:mo>,</m:mo><m:mi>λ</m:mi></m:mfenced></m:mrow></m:math>, ordering them from least to greatest, and checking the differences of adjacent offsets against <m:math overflow="scroll"><m:msup><m:mi>λ</m:mi><m:mi>p</m:mi></m:msup></m:math>. This has been done for several values of <m:math overflow="scroll"><m:mrow><m:mi>θ</m:mi><m:mo>=</m:mo><m:mfrac><m:mi>p</m:mi><m:mi>q</m:mi></m:mfrac></m:mrow></m:math> in <link target-id="uid42"/>.</para>
+      <figure id="uid42">
+        <media id="uid42_media" alt="">
+          <image mime-type="image/png" src="../../media/algorithm.png" id="uid42_onlineimage" width="750"><!-- NOTE: attribute width changes image size online (pixels). original width is 750. --></image>
+          <image mime-type="application/postscript" for="pdf" src="../../media/algorithm.eps" id="uid42_printimage" print-width=".6">
+            <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+          </image>
+        </media>
+        <caption>The values <m:math overflow="scroll"><m:mrow><m:mi>λ</m:mi><m:mfenced separators="" open="(" close=")"><m:mfrac><m:mi>p</m:mi><m:mi>q</m:mi></m:mfrac></m:mfenced></m:mrow></m:math> for <m:math overflow="scroll"><m:mrow><m:mn>1</m:mn><m:mo>≤</m:mo><m:mfrac><m:mi>p</m:mi><m:mi>q</m:mi></m:mfrac><m:mo>≤</m:mo><m:mn>4</m:mn></m:mrow></m:math> and <m:math overflow="scroll"><m:mrow><m:mn>1</m:mn><m:mo>≤</m:mo><m:mi>q</m:mi><m:mo>≤</m:mo><m:mn>5</m:mn></m:mrow></m:math> are shown in black, along with the blue and red lines given by Theorems 3.4 and 3.5. As expected, when <m:math overflow="scroll"><m:mrow><m:mi>θ</m:mi><m:mo>=</m:mo><m:mi>n</m:mi></m:mrow></m:math> or <m:math overflow="scroll"><m:mrow><m:mi>θ</m:mi><m:mo>=</m:mo><m:mn>1</m:mn><m:mo>+</m:mo><m:mfrac><m:mn>1</m:mn><m:mi>n</m:mi></m:mfrac></m:mrow></m:math> for some positive integer <m:math overflow="scroll"><m:mi>n</m:mi></m:math>, the points lie on the lower line.</caption>
+      </figure>
+      <para id="id270962">The question of what happens below these points and above the points given by Corollary 4.4 is still open. We conjecture that strictly between these points, <m:math overflow="scroll"><m:mrow><m:mi>S</m:mi><m:mfenced separators="" open="(" close=")"><m:mi>θ</m:mi><m:mo>,</m:mo><m:mi>λ</m:mi></m:mfenced></m:mrow></m:math> is an <emphasis effect="italics">M</emphasis>-Cantorval, and that at the points given by Corollary 4.4, <m:math overflow="scroll"><m:mrow><m:mi>S</m:mi><m:mfenced separators="" open="(" close=")"><m:mi>θ</m:mi><m:mo>,</m:mo><m:mi>λ</m:mi></m:mfenced></m:mrow></m:math> where <m:math overflow="scroll"><m:mrow><m:mi>θ</m:mi><m:mo>&gt;</m:mo><m:mn>1</m:mn></m:mrow></m:math> is a Cantor set with Hausdorff dimension 1 and zero Lebesgue measure.</para>
+    </section>
+    <section id="cid5">
+      <title>Acknowledgments</title>
+      <para id="id271044">This Connexions module describes work conducted as part of Rice University's VIGRE program, supported by National Science Foundation grant DMS–0739420.</para>
+      <para id="id271050">We would also like to thank Dr. Danijela Damjanović and Dr. David Damanik for leading this study.</para>
+    </section>
+  </content>
+  <bib:file>
+    <bib:entry id="bid4">
+      <bib:article>
+        <!--required fields-->
+        <bib:author>Anisca, R and Chlebovec, C</bib:author>
+        <bib:title>On the structure of arithmetic sums of Cantor sets with constant ratios of dissection</bib:title>
+        <bib:journal>Nonlinearity</bib:journal>
+        <bib:year>2009</bib:year>
+        <!--optional fields-->
+        <bib:volume>22</bib:volume>
+        <bib:number/>
+        <bib:pages>2127-2140</bib:pages>
+        <bib:month/>
+        <bib:note/>
+      </bib:article>
+    </bib:entry>
+    <bib:entry id="bid6">
+      <bib:article>
+        <!--required fields-->
+        <bib:author>Cabrelli, C A and Hare, K E and Molter, U M</bib:author>
+        <bib:title>Sums of Cantor sets yielding an interval</bib:title>
+        <bib:journal>Journal of the Australian Mathematical Society</bib:journal>
+        <bib:year>2002</bib:year>
+        <!--optional fields-->
+        <bib:volume>73</bib:volume>
+        <bib:number/>
+        <bib:pages>405-418</bib:pages>
+        <bib:month/>
+        <bib:note/>
+      </bib:article>
+    </bib:entry>
+    <bib:entry id="bid2">
+      <bib:article>
+        <!--required fields-->
+        <bib:author>Damanik, D and Gorodetski, A</bib:author>
+        <bib:title>Spectral and Quantum Dynamical Properties of the Weakly Coupled Fibonacci Hamiltonian</bib:title>
+        <bib:journal>Communications in Mathematical Physics</bib:journal>
+        <bib:year>2011</bib:year>
+        <!--optional fields-->
+        <bib:volume>305</bib:volume>
+        <bib:number/>
+        <bib:pages>221-277</bib:pages>
+        <bib:month/>
+        <bib:note/>
+      </bib:article>
+    </bib:entry>
+    <bib:entry id="bid3">
+      <bib:article>
+        <!--required fields-->
+        <bib:author>Mendes, P and Oliveira, F</bib:author>
+        <bib:title>On the topological structure of the arithmetic sum of two Cantor sets</bib:title>
+        <bib:journal>Nonlinearity</bib:journal>
+        <bib:year>1994</bib:year>
+        <!--optional fields-->
+        <bib:volume>7</bib:volume>
+        <bib:number/>
+        <bib:pages>329-343</bib:pages>
+        <bib:month/>
+        <bib:note/>
+      </bib:article>
+    </bib:entry>
+    <bib:entry id="bid1">
+      <bib:article>
+        <!--required fields-->
+        <bib:author>Moreira, C G</bib:author>
+        <bib:title>Sums of regular Cantor sets, dynamics and applications to number theory</bib:title>
+        <bib:journal>Periodica Mathematica Hungarica</bib:journal>
+        <bib:year>1998</bib:year>
+        <!--optional fields-->
+        <bib:volume>37</bib:volume>
+        <bib:number/>
+        <bib:pages>55-63</bib:pages>
+        <bib:month/>
+        <bib:note/>
+      </bib:article>
+    </bib:entry>
+    <bib:entry id="bid5">
+      <bib:article>
+        <!--required fields-->
+        <bib:author>Peres, Y and Shmerkin, P</bib:author>
+        <bib:title>Resonance between Cantor sets</bib:title>
+        <bib:journal>Ergodic Theory and Dynamical Systems</bib:journal>
+        <bib:year>2009</bib:year>
+        <!--optional fields-->
+        <bib:volume>29</bib:volume>
+        <bib:number/>
+        <bib:pages>201-221</bib:pages>
+        <bib:month/>
+        <bib:note/>
+      </bib:article>
+    </bib:entry>
+    <bib:entry id="bid0">
+      <bib:book>
+        <!--required fields-->
+        <bib:author>Palis, J and Takens, F</bib:author>
+        <bib:title>Hyperbolicity and sensitive chaotic dynamics at homoclinic bifurcations</bib:title>
+        <bib:publisher>Cambridge University Press</bib:publisher>
+        <bib:year>1993</bib:year>
+        <!--optional fields-->
+        <bib:volume/>
+        <bib:series/>
+        <bib:address>Cambridge</bib:address>
+        <bib:edition/>
+        <bib:month/>
+        <bib:note/>
+      </bib:book>
+    </bib:entry>
+  </bib:file>
+</document>

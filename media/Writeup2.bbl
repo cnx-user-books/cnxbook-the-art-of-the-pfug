@@ -1,0 +1,39 @@
+\begin{thebibliography}{1}
+
+\bibitem{Cox}
+F.~Gabbiani and S.~J. Cox.
+\newblock {\em Mathematics for Neuroscientists}.
+\newblock Elsevier Academic Press, 2010.
+
+\bibitem{KnierimDRE}
+I.~Lee, D.~Yoganarasimha, G.~Rao, and J.~J. Knierim.
+\newblock Comparison of population coherence of place cells in hippocampal
+  subfields ca1 and ca3.
+\newblock {\em Nature}, 430:456--459, July 2004.
+
+\bibitem{Mehta}
+M.~R. Mehta, C.~A. Barnes, and B.~L. McNaughton.
+\newblock Experience-dependent, asymmetric expansion of hippocampal place
+  fields.
+\newblock {\em Proceedings of the National Academy of Sciences of the United
+  States of America}, 94(16):8918--8921, August 1997.
+
+\bibitem{Moser}
+E.~I. Moser, E.~Kropff, and M.~B. Moser.
+\newblock Place cells, grid cells, and the brain's spatial representation
+  system.
+\newblock {\em Annual Review of Neuroscience}, 31:69--89, February 2008.
+
+\bibitem{Katie}
+Kathryn~Ruth Ward.
+\newblock The effect of synaptic plasticity on spatial representation and
+  navigation.
+\newblock Master's thesis, Rice University, April 2009.
+
+\bibitem{KnierimSTDP}
+X.~Yu, J.~J. Knierim, I.~Lee, and H.~Z. Shouval.
+\newblock Simulating place field dynamics using spike timing-dependent
+  plasticity.
+\newblock {\em Neurocomputing}, 69:1253--1259, February 2006.
+
+\end{thebibliography}

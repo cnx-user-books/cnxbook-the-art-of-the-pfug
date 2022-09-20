@@ -1,0 +1,136 @@
+\documentclass[11pt]{article}
+\usepackage{html}
+
+\def\summary{%  (Please manually insert the following text at in the
+%"Summary" of your Connexions module.  This will not affect the LaTeX.)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+This report summarizes work done as part of the [INSERT PFUG NAME] PFUG under Rice University's VIGRE program.  VIGRE is a program of Vertically Integrated Grants for Research and Education in the Mathematical Sciences under the direction of the National Science Foundation.  A PFUG is a group of Postdocs, Faculty, Undergraduates and Graduate students formed round the study of a common problem.  This module [INSERT DESCRIPTION HERE].
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+}
+
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Introduction}
+
+This small template is designed to illustrate one way to embed hyperlinks
+in your LaTeX document in a way that Connexions will readily translate.
+This requires use of the \verb|html| package; you might need to download
+\verb|html.sty| and supporting \verb|.sty| files.  
+Details are addressed in Section~\ref{sec:download} below.
+The popular alternative, \verb|hyperref.sty|, is not presently
+supported by the LaTeX-to-Connexions translator.
+Alternatively, you can embed links manually in Connexions once you
+have imported your document.  You might well find this manual route 
+to be rather simpler at present.
+
+For general advice about LaTeX-to-Connexions translations, 
+see the accompanying \htmladdnormallink{Connexions module}{http://cnx.org/content/m18243/latest/}. 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Examples of hyperlinks}
+
+The \verb|\htmladdnormallink| and \verb|\htmladdnormallinkfoot| commands
+allow you to embed links in your LaTeX document.
+For example, the command
+\begin{verbatim}
+ \htmladdnormallink{Rice website}{http://www.rice.edu}
+\end{verbatim}
+adds a link to the Rice university website.
+The first argument to the command \verb|\htmladdnormallink| will be printed 
+as text, whereas the second is the web address (URL) itself.
+Thus, the command shown above displays as: \htmladdnormallink{Rice website}{http://www.rice.edu}.
+
+In some cases you might like to also include the URL itself as the first argument,
+to get a link such as
+\begin{verbatim}
+ \htmladdnormallink{http://www.rice.edu}{http://www.rice.edu}
+\end{verbatim}
+which displays as: \htmladdnormallink{http://www.rice.edu}{http://www.rice.edu}.
+If you want the link to appear in the LaTeX document, the 
+\verb|\htmladdnormallinkfoot| command adds the URL as a footnote.
+For example,
+\begin{verbatim}
+ \htmladdnormallinkfoot{Rice website}{http://www.rice.edu}
+\end{verbatim}
+produces the output: \htmladdnormallinkfoot{Rice website}{http://www.rice.edu}.
+The Connexions translator treats \verb|\htmladdnormallink|
+and \verb|\htmladdnormallinkfoot| identically.
+
+\subsection{A word of caution}
+One must beware of one complication: if the URL contains characters
+that have special meaning in LaTeX, then you can get run into frustrating errors.
+For example, if you wish to link to the page \verb|http://cnx.org/join_form|,
+the underscore can cause trouble.
+\begin{verbatim}
+ \htmladdnormallink{http://cnx.org/join_form}{http://cnx.org/join_form}  % error!
+\end{verbatim}
+will give an error due to the underscore in the \emph{first argument}.
+(The underscore in the second argument, the link itself, is fine.)
+You can get around this problem by simply using normal next for the first argument,
+\begin{verbatim}
+ \htmladdnormallink{Join Connexions}{http://cnx.org/join_form} 
+\end{verbatim}
+which appears as: \htmladdnormallink{Join Connexions}{http://cnx.org/join_form}.
+
+Note that the footnote version,
+\verb|htmladdnormallinkfoot|,
+does not perform well for URLs that contain special characters.
+For example,
+\begin{verbatim}
+ \htmladdnormallinkfoot{Join Connexions}{http://cnx.org/join_form}  % error!
+\end{verbatim}
+causes an error despite the absence of problematic characters in the first argument.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Downloading the html.sty file} \label{sec:download}
+
+In drafting this guide, we experimented with several versions of
+\verb|html.sty|.  
+
+First, we worked with version~95.1, which is available from, for example,
+\htmladdnormallink{this link}{http://www.see.ed.ac.uk/~ltex/latex2e/html.sty}.
+This version is easy to work with, but it does not actually embed clickable
+links in your LaTeX output; the links will show up properly in the Connexions
+translation. 
+
+If you want clickable links in your LaTeX document as well as Connexions,
+you will need a more recent version of \verb|html.sty|.  
+We tested with version~1.39 (which, counterintuitively, is newer than
+version~95.1).  You can download this version from 
+\htmladdnormallink{this link}{http://www.eng.fsu.edu/~dommelen/l2hfu/notes/html.sty}.
+This version requires a number of subordinate files that might not be included
+in your LaTeX installation.  You can find most or all
+of these packages in the \verb|oberdiek| bundle on the
+ \emph{Comphensive TeX Archive Network} (CTAN); follow
+\htmladdnormallink{this link}{http://tug.ctan.org/pkg/oberdiek}
+and download the entire bundle.
+
+Which version of \verb|html.sty| should you use?
+Try version~1.39 first; if it fails, then start
+downloading the missing packages, or just use version~95.1.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Preparing your LaTeX file for import}
+
+When you create the \verb|.zip| file that contains your LaTeX source,
+graphics, and bibliography files, be sure to include the \verb|html.sty|
+file.  If this file is missing, the Connexions translator will fail to 
+convert your file with minimal details about the error.
+(Note that if you use \verb|html.sty| version~1.39, you do not need to 
+include the subordinate \verb|.sty| files referred to in the previous section.)
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Please leave this Acknowlegement to VIGRE in your modules
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Acknowledgements}
+We thank Jonathan Emmons and Brian West for their advice concerning
+conversion of LaTeX hyperlinks into Connexions. 
+
+This Connexions module describes work conducted as part of Rice 
+University's VIGRE program, supported by National Science Foundation
+grant DMS--0739420.  
+
+
+
+\end{document}

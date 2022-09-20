@@ -1,0 +1,4042 @@
+<document xmlns="http://cnx.rice.edu/cnxml" xmlns:m="http://www.w3.org/1998/Math/MathML">
+  <title>Networks of Uniform Strings</title>
+  <metadata xmlns:md="http://cnx.rice.edu/mdml">
+  <md:content-id>m32575</md:content-id>
+  <md:title>Networks of Uniform Strings</md:title>
+  <md:abstract>This report summarizes work done as part of the Physics of Strings PFUG under Rice University's VIGRE program.  VIGRE is a program of Vertically Integrated Grants for Research and Education in the Mathematical Sciences under the direction of the National Science Foundation.  A PFUG is a group of Postdocs, Faculty, Undergraduates and Graduate students formed round the study of a common problem.  This module explores how the eigenvalues of planar networks vary as we alter the stiffness.</md:abstract>
+  <md:uuid>a2a1ef9c-5eee-456e-b3a4-1d3be48559dd</md:uuid>
+</metadata>
+
+<content>
+    <para id="id2258268">Networks of Uniform Strings</para>
+    <para id="id2258930">In this module we take an analytic approach to
+determining the eigenvalues and eigenmodes for
+various planar string networks. In future work
+we may ask under what conditions can one determine
+the structure of the network from eigenvalue
+information. The networks we considered are uniform,
+all the strings have the same transverse and longitudinal
+stiffness. For each network we determined the
+charactersitic equation and observed the behavior
+of the eigenvalues as we varied the transverse stiffness.</para>
+    <para id="id2258942">We wish to determine eigenvalues and eigenmodes
+of the planar network wave equation.
+The planar network wave equation has the following form.</para>
+    <equation id="id2258948">
+      <m:math overflow="scroll" mode="display">
+        <m:mtable displaystyle="true">
+          <m:mtr>
+            <m:mtd/>
+            <m:mtd>
+              <m:mrow>
+                <m:msub>
+                  <m:mi>P</m:mi>
+                  <m:mi>i</m:mi>
+                </m:msub>
+                <m:mfrac>
+                  <m:mrow>
+                    <m:msup>
+                      <m:mi>∂</m:mi>
+                      <m:mn>2</m:mn>
+                    </m:msup>
+                    <m:msub>
+                      <m:mi>u</m:mi>
+                      <m:mi>i</m:mi>
+                    </m:msub>
+                  </m:mrow>
+                  <m:mrow>
+                    <m:mi>∂</m:mi>
+                    <m:msup>
+                      <m:mi>s</m:mi>
+                      <m:mn>2</m:mn>
+                    </m:msup>
+                  </m:mrow>
+                </m:mfrac>
+                <m:mo>=</m:mo>
+                <m:mfrac>
+                  <m:mrow>
+                    <m:msup>
+                      <m:mi>∂</m:mi>
+                      <m:mn>2</m:mn>
+                    </m:msup>
+                    <m:msub>
+                      <m:mi>u</m:mi>
+                      <m:mi>i</m:mi>
+                    </m:msub>
+                  </m:mrow>
+                  <m:mrow>
+                    <m:mi>∂</m:mi>
+                    <m:msup>
+                      <m:mi>t</m:mi>
+                      <m:mn>2</m:mn>
+                    </m:msup>
+                  </m:mrow>
+                </m:mfrac>
+              </m:mrow>
+            </m:mtd>
+          </m:mtr>
+          <m:mtr>
+            <m:mtd/>
+            <m:mtd>
+              <m:mrow>
+                <m:msub>
+                  <m:mi>u</m:mi>
+                  <m:mi>i</m:mi>
+                </m:msub>
+                <m:mo>:</m:mo>
+                <m:mi>s</m:mi>
+                <m:mo>∈</m:mo>
+                <m:mrow>
+                  <m:mo>[</m:mo>
+                  <m:mn>0</m:mn>
+                  <m:mo>,</m:mo>
+                  <m:mn>1</m:mn>
+                  <m:mo>]</m:mo>
+                </m:mrow>
+                <m:mspace width="4pt"/>
+                <m:mi>t</m:mi>
+                <m:mo>∈</m:mo>
+                <m:mrow>
+                  <m:mo>[</m:mo>
+                  <m:mn>0</m:mn>
+                  <m:mo>,</m:mo>
+                  <m:mi>∞</m:mi>
+                  <m:mo>]</m:mo>
+                </m:mrow>
+                <m:mo>→</m:mo>
+                <m:msup>
+                  <m:mrow>
+                    <m:mi mathvariant="double-struck">C</m:mi>
+                  </m:mrow>
+                  <m:mn>2</m:mn>
+                </m:msup>
+                <m:mspace width="1.em"/>
+                <m:mtext>for</m:mtext>
+                <m:mspace width="4.pt"/>
+                <m:mi>i</m:mi>
+                <m:mo>=</m:mo>
+                <m:mn>1</m:mn>
+                <m:mo>,</m:mo>
+                <m:mn>2</m:mn>
+                <m:mo>,</m:mo>
+                <m:mo>...</m:mo>
+                <m:mi>N</m:mi>
+              </m:mrow>
+            </m:mtd>
+          </m:mtr>
+        </m:mtable>
+      </m:math>
+    </equation>
+    <para id="id2259360">The above says the vector displacement, <emphasis effect="italics">u<sub>i</sub></emphasis>, of each string
+in our network, which we have numbered 1 through <emphasis effect="italics">N</emphasis>,
+satisfies the wave equation. <emphasis effect="italics">P<sub>i</sub></emphasis> is a matrix which encodes
+the stiffness of the string in the longitudinal(along the string)and the transvere(perpendicular to the string) directions. The <emphasis effect="italics">P<sub>i</sub></emphasis> will have
+the form</para>
+    <equation id="id2259418">
+      <m:math overflow="scroll" mode="display">
+        <m:mrow>
+          <m:msub>
+            <m:mi>P</m:mi>
+            <m:mi>i</m:mi>
+          </m:msub>
+          <m:mo>=</m:mo>
+          <m:mi>σ</m:mi>
+          <m:msub>
+            <m:mover accent="true">
+              <m:mi>v</m:mi>
+              <m:mo>^</m:mo>
+            </m:mover>
+            <m:mi>i</m:mi>
+          </m:msub>
+          <m:msubsup>
+            <m:mover accent="true">
+              <m:mi>v</m:mi>
+              <m:mo>^</m:mo>
+            </m:mover>
+            <m:mi>i</m:mi>
+            <m:mo>*</m:mo>
+          </m:msubsup>
+          <m:mo>+</m:mo>
+          <m:mi>k</m:mi>
+          <m:mrow>
+            <m:mo>(</m:mo>
+            <m:mi>I</m:mi>
+            <m:mo>-</m:mo>
+            <m:msub>
+              <m:mover accent="true">
+                <m:mi>v</m:mi>
+                <m:mo>^</m:mo>
+              </m:mover>
+              <m:mi>i</m:mi>
+            </m:msub>
+            <m:msubsup>
+              <m:mover accent="true">
+                <m:mi>v</m:mi>
+                <m:mo>^</m:mo>
+              </m:mover>
+              <m:mi>i</m:mi>
+              <m:mo>*</m:mo>
+            </m:msubsup>
+            <m:mo>)</m:mo>
+          </m:mrow>
+        </m:mrow>
+      </m:math>
+    </equation>
+    <para id="id2259515">where <emphasis effect="italics">σ</emphasis> is the longitudinal stiffness, <emphasis effect="italics">k</emphasis> is the transverse stiffness and <m:math overflow="scroll"><m:msub><m:mover accent="true"><m:mi>v</m:mi><m:mo>^</m:mo></m:mover><m:mi>i</m:mi></m:msub></m:math> is a unit vector in the direction of the undistrubed string assuming that the undisturbed string is straight.
+Without any loss in generality we shall always assume <m:math overflow="scroll"><m:mrow><m:mi>σ</m:mi><m:mo>=</m:mo><m:mn>1</m:mn></m:mrow></m:math></para>
+    <para id="id2259574">The nodes or vertices in our network are where the
+strings are joined or “tied”. As a way of keeping
+track of how the strings our connected we number the
+nodes, 1 through <emphasis effect="italics">n</emphasis>.</para>
+    <para id="id2259592">If one is dealing with just
+one network, to indicate orientation and connectivity
+of the strings it suffices to draw and label network.
+To emphasize that at some point we may wish to distinguish between
+different networks, we shall be more precise.
+The connectivity, how the strings are connected,
+and orientation, how <emphasis effect="italics">s</emphasis> relate to a strings nodes, can
+be specified mathemaically using what are called adjacency
+<m:math overflow="scroll"><m:mrow><m:mo>(</m:mo><m:mi mathvariant="script">E</m:mi><m:mo>)</m:mo></m:mrow></m:math> and incidence<m:math overflow="scroll"><m:mrow><m:mo>(</m:mo><m:mi mathvariant="script">D</m:mi><m:mo>)</m:mo></m:mrow></m:math> matrices.
+The adjacency matrix is a square matrix whose dimension
+is equal to the number of nodes, <emphasis effect="italics">n</emphasis>. The incidence matrix
+is a rectangular matrix whose number of rows is equal
+to the number of nodes in the network, <emphasis effect="italics">n</emphasis>, and whose
+number of columns is equal to the number of edges, <emphasis effect="italics">N</emphasis>.</para>
+    <equation id="id2259673">
+      <m:math overflow="scroll" mode="display">
+        <m:mtable displaystyle="true">
+          <m:mtr>
+            <m:mtd columnalign="right">
+              <m:msub>
+                <m:mrow>
+                  <m:mo>[</m:mo>
+                  <m:mi mathvariant="script">E</m:mi>
+                  <m:mo>]</m:mo>
+                </m:mrow>
+                <m:mrow>
+                  <m:mi>i</m:mi>
+                  <m:mi>j</m:mi>
+                </m:mrow>
+              </m:msub>
+            </m:mtd>
+            <m:mtd>
+              <m:mo>=</m:mo>
+            </m:mtd>
+            <m:mtd columnalign="left">
+              <m:mfenced separators="" open="{" close="">
+                <m:mtable>
+                  <m:mtr>
+                    <m:mtd columnalign="right">
+                      <m:mn>1</m:mn>
+                    </m:mtd>
+                    <m:mtd columnalign="left">
+                      <m:mrow>
+                        <m:mtext>if</m:mtext>
+                        <m:mspace width="4.pt"/>
+                        <m:mtext>there</m:mtext>
+                        <m:mspace width="4.pt"/>
+                        <m:mtext>is</m:mtext>
+                        <m:mspace width="4.pt"/>
+                        <m:mtext>a</m:mtext>
+                        <m:mspace width="4.pt"/>
+                        <m:mtext>string</m:mtext>
+                        <m:mspace width="4.pt"/>
+                        <m:mtext>connecting</m:mtext>
+                        <m:mspace width="4.pt"/>
+                        <m:mtext>nodes</m:mtext>
+                        <m:mspace width="4.pt"/>
+                        <m:mi>i</m:mi>
+                        <m:mspace width="4.pt"/>
+                        <m:mtext>and</m:mtext>
+                        <m:mspace width="4.pt"/>
+                        <m:mi>j</m:mi>
+                        <m:mo>,</m:mo>
+                      </m:mrow>
+                    </m:mtd>
+                  </m:mtr>
+                  <m:mtr>
+                    <m:mtd columnalign="right">
+                      <m:mn>0</m:mn>
+                    </m:mtd>
+                    <m:mtd columnalign="left">
+                      <m:mtext>otherwise.</m:mtext>
+                    </m:mtd>
+                  </m:mtr>
+                </m:mtable>
+              </m:mfenced>
+            </m:mtd>
+          </m:mtr>
+          <m:mtr>
+            <m:mtd columnalign="right">
+              <m:mrow>
+                <m:mrow/>
+                <m:msub>
+                  <m:mrow>
+                    <m:mo>[</m:mo>
+                    <m:mi mathvariant="script">D</m:mi>
+                    <m:mo>]</m:mo>
+                  </m:mrow>
+                  <m:mrow>
+                    <m:mi>i</m:mi>
+                    <m:mi>j</m:mi>
+                  </m:mrow>
+                </m:msub>
+              </m:mrow>
+            </m:mtd>
+            <m:mtd>
+              <m:mo>=</m:mo>
+            </m:mtd>
+            <m:mtd columnalign="left">
+              <m:mfenced separators="" open="{" close="">
+                <m:mtable>
+                  <m:mtr>
+                    <m:mtd columnalign="right">
+                      <m:mrow>
+                        <m:mo>-</m:mo>
+                        <m:mn>1</m:mn>
+                      </m:mrow>
+                    </m:mtd>
+                    <m:mtd columnalign="left">
+                      <m:mrow>
+                        <m:mtext>if</m:mtext>
+                        <m:mspace width="4.pt"/>
+                        <m:mtext>string</m:mtext>
+                        <m:mspace width="4.pt"/>
+                        <m:mi>j</m:mi>
+                        <m:mspace width="4.pt"/>
+                        <m:mtext>starts</m:mtext>
+                        <m:mspace width="4.pt"/>
+                        <m:mtext>on</m:mtext>
+                        <m:mspace width="4.pt"/>
+                        <m:mtext>node</m:mtext>
+                        <m:mspace width="4.pt"/>
+                        <m:mi>i</m:mi>
+                        <m:mo>.</m:mo>
+                      </m:mrow>
+                    </m:mtd>
+                  </m:mtr>
+                  <m:mtr>
+                    <m:mtd columnalign="right">
+                      <m:mn>1</m:mn>
+                    </m:mtd>
+                    <m:mtd columnalign="left">
+                      <m:mrow>
+                        <m:mtext>if</m:mtext>
+                        <m:mspace width="4.pt"/>
+                        <m:mtext>string</m:mtext>
+                        <m:mspace width="4.pt"/>
+                        <m:mi>j</m:mi>
+                        <m:mspace width="4.pt"/>
+                        <m:mtext>ends</m:mtext>
+                        <m:mspace width="4.pt"/>
+                        <m:mtext>on</m:mtext>
+                        <m:mspace width="4.pt"/>
+                        <m:mtext>node</m:mtext>
+                        <m:mspace width="4.pt"/>
+                        <m:mi>i</m:mi>
+                        <m:mo>.</m:mo>
+                      </m:mrow>
+                    </m:mtd>
+                  </m:mtr>
+                  <m:mtr>
+                    <m:mtd columnalign="right">
+                      <m:mn>0</m:mn>
+                    </m:mtd>
+                    <m:mtd columnalign="left">
+                      <m:mtext>otherwise</m:mtext>
+                    </m:mtd>
+                  </m:mtr>
+                </m:mtable>
+              </m:mfenced>
+            </m:mtd>
+          </m:mtr>
+        </m:mtable>
+      </m:math>
+    </equation>
+    <para id="id2259941">There are several boundary conditions which must be
+satisfied at the nodes.</para>
+    <list id="id2259945" display="block" list-type="enumerated">
+      <item id="uid1">Clamped: Zero Displacement on boundary of network.
+</item>
+      <item id="uid2">Continuity: Displacement at a node must be the same for all the strings joined at the node
+</item>
+      <item id="uid3">Force Balance: The net force acting on a node due to the strings joined at the node must be zero.
+</item>
+    </list>
+    <para id="id2259988">The boundary of the network are the nodes that are associated with only one string. Also tension at a point in the string is equal to the following</para>
+    <equation id="id2259993">
+      <m:math overflow="scroll" mode="display">
+        <m:mrow>
+          <m:msub>
+            <m:mi>P</m:mi>
+            <m:mi>i</m:mi>
+          </m:msub>
+          <m:mstyle scriptlevel="0" displaystyle="true">
+            <m:mfrac>
+              <m:mrow>
+                <m:mi>∂</m:mi>
+                <m:msub>
+                  <m:mi>u</m:mi>
+                  <m:mi>i</m:mi>
+                </m:msub>
+              </m:mrow>
+              <m:mrow>
+                <m:mi>∂</m:mi>
+                <m:mi>s</m:mi>
+              </m:mrow>
+            </m:mfrac>
+          </m:mstyle>
+          <m:mrow>
+            <m:mo>(</m:mo>
+            <m:mover accent="true">
+              <m:mi>s</m:mi>
+              <m:mo>^</m:mo>
+            </m:mover>
+            <m:mo>,</m:mo>
+            <m:mi>t</m:mi>
+            <m:mo>)</m:mo>
+          </m:mrow>
+        </m:mrow>
+      </m:math>
+    </equation>
+    <para id="id2260052">One should interpret this tension as the force that the segment of string <emphasis effect="italics">i</emphasis> from <m:math overflow="scroll"><m:mover accent="true"><m:mi>s</m:mi><m:mo>^</m:mo></m:mover></m:math> to 1 would exert upon the segment of string <emphasis effect="italics">i</emphasis> from 0 to <m:math overflow="scroll"><m:mover accent="true"><m:mi>s</m:mi><m:mo>^</m:mo></m:mover></m:math>.</para>
+    <para id="id2260106">To solve the network wave equation we must also have initial conditions, <m:math overflow="scroll"><m:mrow><m:msub><m:mi>u</m:mi><m:mi>i</m:mi></m:msub><m:mrow><m:mo>(</m:mo><m:mi>s</m:mi><m:mo>,</m:mo><m:mn>0</m:mn><m:mo>)</m:mo></m:mrow><m:mo>=</m:mo><m:msub><m:mi>f</m:mi><m:mi>i</m:mi></m:msub><m:mrow><m:mo>(</m:mo><m:mi>s</m:mi><m:mo>)</m:mo></m:mrow></m:mrow></m:math> and <m:math overflow="scroll"><m:mrow><m:mstyle scriptlevel="0" displaystyle="true"><m:mfrac><m:mrow><m:mi>∂</m:mi><m:msub><m:mi>u</m:mi><m:mi>i</m:mi></m:msub></m:mrow><m:mrow><m:mi>∂</m:mi><m:mi>t</m:mi></m:mrow></m:mfrac></m:mstyle><m:mrow><m:mo>(</m:mo><m:mi>s</m:mi><m:mo>,</m:mo><m:mn>0</m:mn><m:mo>)</m:mo></m:mrow><m:mo>=</m:mo><m:msub><m:mi>g</m:mi><m:mi>i</m:mi></m:msub><m:mrow><m:mo>(</m:mo><m:mi>s</m:mi><m:mo>)</m:mo></m:mrow></m:mrow></m:math>. However since we are concerned with determining eigenvalues and eigenmodes, initial conditions are not necessary. In this context an eigenvalue/eigenmode of the network wave equation is a solution whose shape is independent of time that is the shape is invariant. The amplitude may change but the shape is the same. More concretely we are assuming that solutions have the form</para>
+    <equation id="id2260220">
+      <m:math overflow="scroll" mode="display">
+        <m:mrow>
+          <m:msub>
+            <m:mi>u</m:mi>
+            <m:mi>i</m:mi>
+          </m:msub>
+          <m:mrow>
+            <m:mo>(</m:mo>
+            <m:mi>s</m:mi>
+            <m:mo>,</m:mo>
+            <m:mi>t</m:mi>
+            <m:mo>)</m:mo>
+          </m:mrow>
+          <m:mo>=</m:mo>
+          <m:msub>
+            <m:mi>c</m:mi>
+            <m:mi>i</m:mi>
+          </m:msub>
+          <m:msup>
+            <m:mi>e</m:mi>
+            <m:mrow>
+              <m:mi>i</m:mi>
+              <m:mi>λ</m:mi>
+              <m:mi>t</m:mi>
+            </m:mrow>
+          </m:msup>
+          <m:msub>
+            <m:mi>u</m:mi>
+            <m:mi>i</m:mi>
+          </m:msub>
+          <m:mrow>
+            <m:mo>(</m:mo>
+            <m:mi>s</m:mi>
+            <m:mo>)</m:mo>
+          </m:mrow>
+        </m:mrow>
+      </m:math>
+    </equation>
+    <para id="id2260286">where we have used <emphasis effect="italics">u<sub>i</sub></emphasis> with two parameters to denote the solution of the wave equation and with one parameter is an eigensolution to the wave equation. The use of complex numbers is a bit of mathematical trickery and to get at something which has physical meaning we would work with the real part of <emphasis effect="italics">u<sub>i</sub></emphasis>. For the form we have assumed our eigenmodes are oscillatory, such assumption is reasonable considering that the wave equation conserves energy.</para>
+    <para id="id2260327">To compute eigenvalues for the network wave equation we must determine solutions, <emphasis effect="italics">λ</emphasis> and <emphasis effect="italics">u<sub>i</sub></emphasis> which satisfy the following:</para>
+    <equation id="id2260355">
+      <m:math overflow="scroll" mode="display">
+        <m:mtable displaystyle="true">
+          <m:mtr>
+            <m:mtd/>
+            <m:mtd>
+              <m:mrow>
+                <m:msub>
+                  <m:mi>P</m:mi>
+                  <m:mi>i</m:mi>
+                </m:msub>
+                <m:mstyle scriptlevel="0" displaystyle="true">
+                  <m:mfrac>
+                    <m:mrow>
+                      <m:msup>
+                        <m:mi>d</m:mi>
+                        <m:mn>2</m:mn>
+                      </m:msup>
+                      <m:msub>
+                        <m:mi>u</m:mi>
+                        <m:mi>i</m:mi>
+                      </m:msub>
+                    </m:mrow>
+                    <m:mrow>
+                      <m:mi>d</m:mi>
+                      <m:msup>
+                        <m:mi>s</m:mi>
+                        <m:mn>2</m:mn>
+                      </m:msup>
+                    </m:mrow>
+                  </m:mfrac>
+                </m:mstyle>
+                <m:mo>=</m:mo>
+                <m:mo>-</m:mo>
+                <m:msup>
+                  <m:mi>λ</m:mi>
+                  <m:mn>2</m:mn>
+                </m:msup>
+                <m:msub>
+                  <m:mi>u</m:mi>
+                  <m:mi>i</m:mi>
+                </m:msub>
+              </m:mrow>
+            </m:mtd>
+          </m:mtr>
+          <m:mtr>
+            <m:mtd/>
+            <m:mtd>
+              <m:mrow>
+                <m:msub>
+                  <m:mi>u</m:mi>
+                  <m:mi>i</m:mi>
+                </m:msub>
+                <m:mo>:</m:mo>
+                <m:mi>s</m:mi>
+                <m:mo>∈</m:mo>
+                <m:mrow>
+                  <m:mo>[</m:mo>
+                  <m:mn>0</m:mn>
+                  <m:mo>,</m:mo>
+                  <m:mn>1</m:mn>
+                  <m:mo>]</m:mo>
+                </m:mrow>
+                <m:mo>→</m:mo>
+                <m:msup>
+                  <m:mrow>
+                    <m:mi mathvariant="double-struck">C</m:mi>
+                  </m:mrow>
+                  <m:mn>2</m:mn>
+                </m:msup>
+                <m:mspace width="1.em"/>
+                <m:mtext>for</m:mtext>
+                <m:mspace width="4.pt"/>
+                <m:mi>i</m:mi>
+                <m:mo>=</m:mo>
+                <m:mn>1</m:mn>
+                <m:mo>,</m:mo>
+                <m:mn>2</m:mn>
+                <m:mo>,</m:mo>
+                <m:mo>...</m:mo>
+                <m:mi>N</m:mi>
+              </m:mrow>
+            </m:mtd>
+          </m:mtr>
+        </m:mtable>
+      </m:math>
+    </equation>
+    <para id="id2260500">as well as the boundary conditions given above. From a first course in
+differential equations one might suspect the general solution for each string
+would involve a combination of sines and cosines. Such suspicions would be correct.
+For any given string we have two coupled second order differential equations for the x and y components of the displacement of the string. By appealing to one's physical intuition or to the eigenvectors of the <emphasis effect="italics">P<sub>i</sub></emphasis> matrix one can decouple these equations yielding equations for
+the transverse and longitudinal displacements.
+The general solution is as follows</para>
+    <equation id="id2260529">
+      <m:math overflow="scroll" mode="display">
+        <m:mrow>
+          <m:msub>
+            <m:mi>u</m:mi>
+            <m:mi>i</m:mi>
+          </m:msub>
+          <m:mrow>
+            <m:mo>(</m:mo>
+            <m:mi>s</m:mi>
+            <m:mo>)</m:mo>
+          </m:mrow>
+          <m:mo>=</m:mo>
+          <m:msub>
+            <m:mover accent="true">
+              <m:mi>v</m:mi>
+              <m:mo>^</m:mo>
+            </m:mover>
+            <m:mi>i</m:mi>
+          </m:msub>
+          <m:mfenced separators="" open="(" close=")">
+            <m:msub>
+              <m:mi>a</m:mi>
+              <m:mrow>
+                <m:mi>i</m:mi>
+                <m:mn>1</m:mn>
+              </m:mrow>
+            </m:msub>
+            <m:mo form="prefix">cos</m:mo>
+            <m:mfenced separators="" open="(" close=")">
+              <m:mstyle scriptlevel="0" displaystyle="true">
+                <m:mfrac>
+                  <m:mi>λ</m:mi>
+                  <m:msqrt>
+                    <m:mi>σ</m:mi>
+                  </m:msqrt>
+                </m:mfrac>
+              </m:mstyle>
+              <m:mi>s</m:mi>
+            </m:mfenced>
+            <m:mo>+</m:mo>
+            <m:msub>
+              <m:mi>a</m:mi>
+              <m:mrow>
+                <m:mi>i</m:mi>
+                <m:mn>2</m:mn>
+              </m:mrow>
+            </m:msub>
+            <m:mo form="prefix">sin</m:mo>
+            <m:mfenced separators="" open="(" close=")">
+              <m:mstyle scriptlevel="0" displaystyle="true">
+                <m:mfrac>
+                  <m:mi>λ</m:mi>
+                  <m:msqrt>
+                    <m:mi>σ</m:mi>
+                  </m:msqrt>
+                </m:mfrac>
+              </m:mstyle>
+              <m:mi>s</m:mi>
+            </m:mfenced>
+          </m:mfenced>
+          <m:mo>+</m:mo>
+          <m:msubsup>
+            <m:mover accent="true">
+              <m:mi>v</m:mi>
+              <m:mo>^</m:mo>
+            </m:mover>
+            <m:mi>i</m:mi>
+            <m:mo>⊥</m:mo>
+          </m:msubsup>
+          <m:mfenced separators="" open="(" close=")">
+            <m:msub>
+              <m:mi>a</m:mi>
+              <m:mrow>
+                <m:mi>i</m:mi>
+                <m:mn>3</m:mn>
+              </m:mrow>
+            </m:msub>
+            <m:mo form="prefix">cos</m:mo>
+            <m:mfenced separators="" open="(" close=")">
+              <m:mstyle scriptlevel="0" displaystyle="true">
+                <m:mfrac>
+                  <m:mi>λ</m:mi>
+                  <m:msqrt>
+                    <m:mi>k</m:mi>
+                  </m:msqrt>
+                </m:mfrac>
+              </m:mstyle>
+              <m:mi>s</m:mi>
+            </m:mfenced>
+            <m:mo>+</m:mo>
+            <m:msub>
+              <m:mi>a</m:mi>
+              <m:mrow>
+                <m:mi>i</m:mi>
+                <m:mn>4</m:mn>
+              </m:mrow>
+            </m:msub>
+            <m:mo form="prefix">sin</m:mo>
+            <m:mfenced separators="" open="(" close=")">
+              <m:mstyle scriptlevel="0" displaystyle="true">
+                <m:mfrac>
+                  <m:mi>λ</m:mi>
+                  <m:msqrt>
+                    <m:mi>k</m:mi>
+                  </m:msqrt>
+                </m:mfrac>
+              </m:mstyle>
+              <m:mi>s</m:mi>
+            </m:mfenced>
+          </m:mfenced>
+        </m:mrow>
+      </m:math>
+    </equation>
+    <para id="id2260753">where the first term accounts for the longitudinal displacement and the second term accounts for the transverse displacement. In light of the general solution, the eigenvalue problemamounts to determining the <emphasis effect="italics">λ</emphasis> for which there exist <m:math overflow="scroll"><m:msub><m:mi>a</m:mi><m:mrow><m:mi>i</m:mi><m:mi>j</m:mi></m:mrow></m:msub></m:math> that will satisfy all the boundary conditions. To answer this question one must have a total of <m:math overflow="scroll"><m:mrow><m:mn>4</m:mn><m:mi>N</m:mi></m:mrow></m:math> equations.</para>
+    <para id="id2260802">In the examples to follow, we let the longituidnal stiffness be one, <m:math overflow="scroll"><m:mrow><m:mi>σ</m:mi><m:mo>=</m:mo><m:mn>1</m:mn></m:mrow></m:math> and we observe how the eigenvalues of different string networks vary as we alter the transvere stiffness. The eigenvalues should exhibit three different kinds of behavior. The eigenvalues whose modes consist solely longitudinal displacements should not vary at all as the longiutdinal stiffness is constant. Eigenvalues whose modes consist solely of transverse displacements should vary as <m:math overflow="scroll"><m:mstyle scriptlevel="0" displaystyle="true"><m:mfrac><m:mn>1</m:mn><m:msqrt><m:mi>k</m:mi></m:msqrt></m:mfrac></m:mstyle></m:math>. We would like to understand the behavior of eigenvalues whose modes involve both transverse and longitudinal displacements. An understanding of these mixed modes may prove useful in solving inverse problems, deducing connectivity of network based on the behavior of the egienvalues.</para>
+    <section id="cid1">
+      <title>Example #1: The Tritar</title>
+      <figure id="uid4">
+        <media id="uid4_media" alt="">
+          <image mime-type="image/png" src="../../media/tritar2.png" id="uid4_onlineimage" width="221"><!-- NOTE: attribute width changes image size online (pixels). original width is 221. --></image>
+          <image for="pdf" mime-type="application/postscript" src="../../media/tritar2.eps" id="uid4_printimage"/>
+        </media>
+        <caption>The Tritar</caption>
+      </figure>
+      <para id="id2260871">Depicted above is a network of three strings called a tritar. We are interested in how the eigenvalues of this simple
+network vary with changes in the transverse stiffness <emphasis effect="italics">k<sub>i</sub></emphasis> of each string. We assume that the longitudinal stiffnesses
+<emphasis effect="italics">σ<sub>i</sub></emphasis> are 1 for each string, and we also assume that the lengths of the strings are all 1 for conveninence.</para>
+      <para id="id2260908">We define our orientation vectors by</para>
+      <equation id="id2260913">
+        <m:math overflow="scroll" mode="display">
+          <m:mtable displaystyle="true">
+            <m:mtr>
+              <m:mtd columnalign="right">
+                <m:mrow>
+                  <m:mover accent="true">
+                    <m:msub>
+                      <m:mi>v</m:mi>
+                      <m:mn>1</m:mn>
+                    </m:msub>
+                    <m:mo>^</m:mo>
+                  </m:mover>
+                  <m:mo>=</m:mo>
+                  <m:mfenced separators="" open="[" close="]">
+                    <m:mtable>
+                      <m:mtr>
+                        <m:mtd>
+                          <m:mn>1</m:mn>
+                        </m:mtd>
+                      </m:mtr>
+                      <m:mtr>
+                        <m:mtd>
+                          <m:mn>0</m:mn>
+                        </m:mtd>
+                      </m:mtr>
+                    </m:mtable>
+                  </m:mfenced>
+                  <m:mspace width="1.em"/>
+                  <m:mspace width="1.em"/>
+                  <m:mover accent="true">
+                    <m:msub>
+                      <m:mi>v</m:mi>
+                      <m:mn>2</m:mn>
+                    </m:msub>
+                    <m:mo>^</m:mo>
+                  </m:mover>
+                  <m:mo>=</m:mo>
+                  <m:mfrac>
+                    <m:mn>1</m:mn>
+                    <m:msqrt>
+                      <m:mn>2</m:mn>
+                    </m:msqrt>
+                  </m:mfrac>
+                  <m:mfenced separators="" open="[" close="]">
+                    <m:mtable>
+                      <m:mtr>
+                        <m:mtd>
+                          <m:mn>1</m:mn>
+                        </m:mtd>
+                      </m:mtr>
+                      <m:mtr>
+                        <m:mtd>
+                          <m:mn>1</m:mn>
+                        </m:mtd>
+                      </m:mtr>
+                    </m:mtable>
+                  </m:mfenced>
+                  <m:mspace width="1.em"/>
+                  <m:mspace width="1.em"/>
+                  <m:mover accent="true">
+                    <m:msub>
+                      <m:mi>v</m:mi>
+                      <m:mn>3</m:mn>
+                    </m:msub>
+                    <m:mo>^</m:mo>
+                  </m:mover>
+                  <m:mo>=</m:mo>
+                  <m:mfrac>
+                    <m:mn>1</m:mn>
+                    <m:msqrt>
+                      <m:mn>2</m:mn>
+                    </m:msqrt>
+                  </m:mfrac>
+                  <m:mfenced separators="" open="[" close="]">
+                    <m:mtable>
+                      <m:mtr>
+                        <m:mtd>
+                          <m:mn>1</m:mn>
+                        </m:mtd>
+                      </m:mtr>
+                      <m:mtr>
+                        <m:mtd>
+                          <m:mrow>
+                            <m:mo>-</m:mo>
+                            <m:mn>1</m:mn>
+                          </m:mrow>
+                        </m:mtd>
+                      </m:mtr>
+                    </m:mtable>
+                  </m:mfenced>
+                </m:mrow>
+              </m:mtd>
+            </m:mtr>
+          </m:mtable>
+        </m:math>
+      </equation>
+      <para id="id2261059">First, we compute the stiffness matrices. For the first string, we obtain</para>
+      <equation id="id2261063">
+        <m:math overflow="scroll" mode="display">
+          <m:mtable displaystyle="true">
+            <m:mtr>
+              <m:mtd columnalign="right">
+                <m:msub>
+                  <m:mi>P</m:mi>
+                  <m:mn>1</m:mn>
+                </m:msub>
+              </m:mtd>
+              <m:mtd>
+                <m:mo>=</m:mo>
+              </m:mtd>
+              <m:mtd columnalign="left">
+                <m:mrow>
+                  <m:msub>
+                    <m:mi>K</m:mi>
+                    <m:mn>1</m:mn>
+                  </m:msub>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:mi>I</m:mi>
+                    <m:mo>-</m:mo>
+                    <m:mover accent="true">
+                      <m:msub>
+                        <m:mi>v</m:mi>
+                        <m:mn>1</m:mn>
+                      </m:msub>
+                      <m:mo>^</m:mo>
+                    </m:mover>
+                    <m:msup>
+                      <m:mover accent="true">
+                        <m:msub>
+                          <m:mi>v</m:mi>
+                          <m:mn>1</m:mn>
+                        </m:msub>
+                        <m:mo>^</m:mo>
+                      </m:mover>
+                      <m:mi>T</m:mi>
+                    </m:msup>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                  <m:mo>+</m:mo>
+                  <m:msub>
+                    <m:mi>σ</m:mi>
+                    <m:mn>1</m:mn>
+                  </m:msub>
+                  <m:mover accent="true">
+                    <m:msub>
+                      <m:mi>v</m:mi>
+                      <m:mn>1</m:mn>
+                    </m:msub>
+                    <m:mo>^</m:mo>
+                  </m:mover>
+                  <m:msup>
+                    <m:mover accent="true">
+                      <m:msub>
+                        <m:mi>v</m:mi>
+                        <m:mn>1</m:mn>
+                      </m:msub>
+                      <m:mo>^</m:mo>
+                    </m:mover>
+                    <m:mi>T</m:mi>
+                  </m:msup>
+                </m:mrow>
+              </m:mtd>
+            </m:mtr>
+            <m:mtr>
+              <m:mtd/>
+              <m:mtd>
+                <m:mo>=</m:mo>
+              </m:mtd>
+              <m:mtd columnalign="left">
+                <m:mrow>
+                  <m:mi>k</m:mi>
+                  <m:mfenced separators="" open="(" close=")">
+                    <m:mfenced separators="" open="[" close="]">
+                      <m:mtable>
+                        <m:mtr>
+                          <m:mtd>
+                            <m:mn>1</m:mn>
+                          </m:mtd>
+                          <m:mtd>
+                            <m:mn>0</m:mn>
+                          </m:mtd>
+                        </m:mtr>
+                        <m:mtr>
+                          <m:mtd>
+                            <m:mn>0</m:mn>
+                          </m:mtd>
+                          <m:mtd>
+                            <m:mn>1</m:mn>
+                          </m:mtd>
+                        </m:mtr>
+                      </m:mtable>
+                    </m:mfenced>
+                    <m:mo>-</m:mo>
+                    <m:mfenced separators="" open="[" close="]">
+                      <m:mtable>
+                        <m:mtr>
+                          <m:mtd>
+                            <m:mn>1</m:mn>
+                          </m:mtd>
+                          <m:mtd>
+                            <m:mn>0</m:mn>
+                          </m:mtd>
+                        </m:mtr>
+                        <m:mtr>
+                          <m:mtd>
+                            <m:mn>0</m:mn>
+                          </m:mtd>
+                          <m:mtd>
+                            <m:mn>0</m:mn>
+                          </m:mtd>
+                        </m:mtr>
+                      </m:mtable>
+                    </m:mfenced>
+                  </m:mfenced>
+                  <m:mo>+</m:mo>
+                  <m:mfenced separators="" open="[" close="]">
+                    <m:mtable>
+                      <m:mtr>
+                        <m:mtd>
+                          <m:mn>1</m:mn>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mn>0</m:mn>
+                        </m:mtd>
+                      </m:mtr>
+                      <m:mtr>
+                        <m:mtd>
+                          <m:mn>0</m:mn>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mn>0</m:mn>
+                        </m:mtd>
+                      </m:mtr>
+                    </m:mtable>
+                  </m:mfenced>
+                </m:mrow>
+              </m:mtd>
+            </m:mtr>
+            <m:mtr>
+              <m:mtd/>
+              <m:mtd>
+                <m:mo>=</m:mo>
+              </m:mtd>
+              <m:mtd columnalign="left">
+                <m:mrow>
+                  <m:mfenced separators="" open="[" close="]">
+                    <m:mtable>
+                      <m:mtr>
+                        <m:mtd>
+                          <m:mn>1</m:mn>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mn>0</m:mn>
+                        </m:mtd>
+                      </m:mtr>
+                      <m:mtr>
+                        <m:mtd>
+                          <m:mn>0</m:mn>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mi>k</m:mi>
+                        </m:mtd>
+                      </m:mtr>
+                    </m:mtable>
+                  </m:mfenced>
+                  <m:mo>.</m:mo>
+                </m:mrow>
+              </m:mtd>
+            </m:mtr>
+          </m:mtable>
+        </m:math>
+      </equation>
+      <para id="id2261313">For the second string, we get</para>
+      <equation id="id2261317">
+        <m:math overflow="scroll" mode="display">
+          <m:mtable displaystyle="true">
+            <m:mtr>
+              <m:mtd columnalign="right">
+                <m:msub>
+                  <m:mi>P</m:mi>
+                  <m:mn>2</m:mn>
+                </m:msub>
+              </m:mtd>
+              <m:mtd>
+                <m:mo>=</m:mo>
+              </m:mtd>
+              <m:mtd columnalign="left">
+                <m:mrow>
+                  <m:msub>
+                    <m:mi>K</m:mi>
+                    <m:mn>2</m:mn>
+                  </m:msub>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:mi>I</m:mi>
+                    <m:mo>-</m:mo>
+                    <m:mover accent="true">
+                      <m:msub>
+                        <m:mi>v</m:mi>
+                        <m:mn>2</m:mn>
+                      </m:msub>
+                      <m:mo>^</m:mo>
+                    </m:mover>
+                    <m:msup>
+                      <m:mover accent="true">
+                        <m:msub>
+                          <m:mi>v</m:mi>
+                          <m:mn>2</m:mn>
+                        </m:msub>
+                        <m:mo>^</m:mo>
+                      </m:mover>
+                      <m:mi>T</m:mi>
+                    </m:msup>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                  <m:mo>+</m:mo>
+                  <m:msub>
+                    <m:mi>σ</m:mi>
+                    <m:mn>2</m:mn>
+                  </m:msub>
+                  <m:mover accent="true">
+                    <m:msub>
+                      <m:mi>v</m:mi>
+                      <m:mn>2</m:mn>
+                    </m:msub>
+                    <m:mo>^</m:mo>
+                  </m:mover>
+                  <m:msup>
+                    <m:mover accent="true">
+                      <m:msub>
+                        <m:mi>v</m:mi>
+                        <m:mn>2</m:mn>
+                      </m:msub>
+                      <m:mo>^</m:mo>
+                    </m:mover>
+                    <m:mi>T</m:mi>
+                  </m:msup>
+                </m:mrow>
+              </m:mtd>
+            </m:mtr>
+            <m:mtr>
+              <m:mtd/>
+              <m:mtd>
+                <m:mo>=</m:mo>
+              </m:mtd>
+              <m:mtd columnalign="left">
+                <m:mrow>
+                  <m:mi>k</m:mi>
+                  <m:mfenced separators="" open="(" close=")">
+                    <m:mfenced separators="" open="[" close="]">
+                      <m:mtable>
+                        <m:mtr>
+                          <m:mtd>
+                            <m:mn>1</m:mn>
+                          </m:mtd>
+                          <m:mtd>
+                            <m:mn>0</m:mn>
+                          </m:mtd>
+                        </m:mtr>
+                        <m:mtr>
+                          <m:mtd>
+                            <m:mn>0</m:mn>
+                          </m:mtd>
+                          <m:mtd>
+                            <m:mn>1</m:mn>
+                          </m:mtd>
+                        </m:mtr>
+                      </m:mtable>
+                    </m:mfenced>
+                    <m:mo>-</m:mo>
+                    <m:mfrac>
+                      <m:mn>1</m:mn>
+                      <m:mn>2</m:mn>
+                    </m:mfrac>
+                    <m:mfenced separators="" open="[" close="]">
+                      <m:mtable>
+                        <m:mtr>
+                          <m:mtd>
+                            <m:mn>1</m:mn>
+                          </m:mtd>
+                          <m:mtd>
+                            <m:mn>1</m:mn>
+                          </m:mtd>
+                        </m:mtr>
+                        <m:mtr>
+                          <m:mtd>
+                            <m:mn>1</m:mn>
+                          </m:mtd>
+                          <m:mtd>
+                            <m:mn>1</m:mn>
+                          </m:mtd>
+                        </m:mtr>
+                      </m:mtable>
+                    </m:mfenced>
+                  </m:mfenced>
+                  <m:mo>+</m:mo>
+                  <m:mfrac>
+                    <m:mn>1</m:mn>
+                    <m:mn>2</m:mn>
+                  </m:mfrac>
+                  <m:mfenced separators="" open="[" close="]">
+                    <m:mtable>
+                      <m:mtr>
+                        <m:mtd>
+                          <m:mn>1</m:mn>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mn>1</m:mn>
+                        </m:mtd>
+                      </m:mtr>
+                      <m:mtr>
+                        <m:mtd>
+                          <m:mn>1</m:mn>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mn>1</m:mn>
+                        </m:mtd>
+                      </m:mtr>
+                    </m:mtable>
+                  </m:mfenced>
+                </m:mrow>
+              </m:mtd>
+            </m:mtr>
+            <m:mtr>
+              <m:mtd/>
+              <m:mtd>
+                <m:mo>=</m:mo>
+              </m:mtd>
+              <m:mtd columnalign="left">
+                <m:mrow>
+                  <m:mfrac>
+                    <m:mn>1</m:mn>
+                    <m:mn>2</m:mn>
+                  </m:mfrac>
+                  <m:mfenced separators="" open="[" close="]">
+                    <m:mtable>
+                      <m:mtr>
+                        <m:mtd>
+                          <m:mrow>
+                            <m:mi>k</m:mi>
+                            <m:mo>+</m:mo>
+                            <m:mn>1</m:mn>
+                          </m:mrow>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mrow>
+                            <m:mo>-</m:mo>
+                            <m:mi>k</m:mi>
+                            <m:mo>+</m:mo>
+                            <m:mn>1</m:mn>
+                          </m:mrow>
+                        </m:mtd>
+                      </m:mtr>
+                      <m:mtr>
+                        <m:mtd>
+                          <m:mrow>
+                            <m:mo>-</m:mo>
+                            <m:mi>k</m:mi>
+                            <m:mo>+</m:mo>
+                            <m:mn>1</m:mn>
+                          </m:mrow>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mrow>
+                            <m:mi>k</m:mi>
+                            <m:mo>+</m:mo>
+                            <m:mn>1</m:mn>
+                          </m:mrow>
+                        </m:mtd>
+                      </m:mtr>
+                    </m:mtable>
+                  </m:mfenced>
+                  <m:mo>,</m:mo>
+                </m:mrow>
+              </m:mtd>
+            </m:mtr>
+          </m:mtable>
+        </m:math>
+      </equation>
+      <para id="id2261612">and for string number three, we have</para>
+      <equation id="id2261615">
+        <m:math overflow="scroll" mode="display">
+          <m:mtable displaystyle="true">
+            <m:mtr>
+              <m:mtd columnalign="right">
+                <m:msub>
+                  <m:mi>P</m:mi>
+                  <m:mn>3</m:mn>
+                </m:msub>
+              </m:mtd>
+              <m:mtd>
+                <m:mo>=</m:mo>
+              </m:mtd>
+              <m:mtd columnalign="left">
+                <m:mrow>
+                  <m:msub>
+                    <m:mi>K</m:mi>
+                    <m:mn>3</m:mn>
+                  </m:msub>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:mi>I</m:mi>
+                    <m:mo>-</m:mo>
+                    <m:mover accent="true">
+                      <m:msub>
+                        <m:mi>v</m:mi>
+                        <m:mn>3</m:mn>
+                      </m:msub>
+                      <m:mo>^</m:mo>
+                    </m:mover>
+                    <m:msup>
+                      <m:mover accent="true">
+                        <m:msub>
+                          <m:mi>v</m:mi>
+                          <m:mn>3</m:mn>
+                        </m:msub>
+                        <m:mo>^</m:mo>
+                      </m:mover>
+                      <m:mi>T</m:mi>
+                    </m:msup>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                  <m:mo>+</m:mo>
+                  <m:msub>
+                    <m:mi>σ</m:mi>
+                    <m:mn>3</m:mn>
+                  </m:msub>
+                  <m:mover accent="true">
+                    <m:msub>
+                      <m:mi>v</m:mi>
+                      <m:mn>3</m:mn>
+                    </m:msub>
+                    <m:mo>^</m:mo>
+                  </m:mover>
+                  <m:msup>
+                    <m:mover accent="true">
+                      <m:msub>
+                        <m:mi>v</m:mi>
+                        <m:mn>3</m:mn>
+                      </m:msub>
+                      <m:mo>^</m:mo>
+                    </m:mover>
+                    <m:mi>T</m:mi>
+                  </m:msup>
+                </m:mrow>
+              </m:mtd>
+            </m:mtr>
+            <m:mtr>
+              <m:mtd/>
+              <m:mtd>
+                <m:mo>=</m:mo>
+              </m:mtd>
+              <m:mtd columnalign="left">
+                <m:mrow>
+                  <m:mi>k</m:mi>
+                  <m:mfenced separators="" open="(" close=")">
+                    <m:mfenced separators="" open="[" close="]">
+                      <m:mtable>
+                        <m:mtr>
+                          <m:mtd>
+                            <m:mn>1</m:mn>
+                          </m:mtd>
+                          <m:mtd>
+                            <m:mn>0</m:mn>
+                          </m:mtd>
+                        </m:mtr>
+                        <m:mtr>
+                          <m:mtd>
+                            <m:mn>0</m:mn>
+                          </m:mtd>
+                          <m:mtd>
+                            <m:mn>1</m:mn>
+                          </m:mtd>
+                        </m:mtr>
+                      </m:mtable>
+                    </m:mfenced>
+                    <m:mo>-</m:mo>
+                    <m:mfrac>
+                      <m:mn>1</m:mn>
+                      <m:mn>2</m:mn>
+                    </m:mfrac>
+                    <m:mfenced separators="" open="[" close="]">
+                      <m:mtable>
+                        <m:mtr>
+                          <m:mtd>
+                            <m:mn>1</m:mn>
+                          </m:mtd>
+                          <m:mtd>
+                            <m:mrow>
+                              <m:mo>-</m:mo>
+                              <m:mn>1</m:mn>
+                            </m:mrow>
+                          </m:mtd>
+                        </m:mtr>
+                        <m:mtr>
+                          <m:mtd>
+                            <m:mrow>
+                              <m:mo>-</m:mo>
+                              <m:mn>1</m:mn>
+                            </m:mrow>
+                          </m:mtd>
+                          <m:mtd>
+                            <m:mn>1</m:mn>
+                          </m:mtd>
+                        </m:mtr>
+                      </m:mtable>
+                    </m:mfenced>
+                  </m:mfenced>
+                  <m:mo>+</m:mo>
+                  <m:mfrac>
+                    <m:mn>1</m:mn>
+                    <m:mn>2</m:mn>
+                  </m:mfrac>
+                  <m:mfenced separators="" open="[" close="]">
+                    <m:mtable>
+                      <m:mtr>
+                        <m:mtd>
+                          <m:mn>1</m:mn>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mrow>
+                            <m:mo>-</m:mo>
+                            <m:mn>1</m:mn>
+                          </m:mrow>
+                        </m:mtd>
+                      </m:mtr>
+                      <m:mtr>
+                        <m:mtd>
+                          <m:mrow>
+                            <m:mo>-</m:mo>
+                            <m:mn>1</m:mn>
+                          </m:mrow>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mn>1</m:mn>
+                        </m:mtd>
+                      </m:mtr>
+                    </m:mtable>
+                  </m:mfenced>
+                </m:mrow>
+              </m:mtd>
+            </m:mtr>
+            <m:mtr>
+              <m:mtd/>
+              <m:mtd>
+                <m:mo>=</m:mo>
+              </m:mtd>
+              <m:mtd columnalign="left">
+                <m:mrow>
+                  <m:mfrac>
+                    <m:mn>1</m:mn>
+                    <m:mn>2</m:mn>
+                  </m:mfrac>
+                  <m:mfenced separators="" open="[" close="]">
+                    <m:mtable>
+                      <m:mtr>
+                        <m:mtd>
+                          <m:mrow>
+                            <m:mi>k</m:mi>
+                            <m:mo>+</m:mo>
+                            <m:mn>1</m:mn>
+                          </m:mrow>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mrow>
+                            <m:mi>k</m:mi>
+                            <m:mo>-</m:mo>
+                            <m:mn>1</m:mn>
+                          </m:mrow>
+                        </m:mtd>
+                      </m:mtr>
+                      <m:mtr>
+                        <m:mtd>
+                          <m:mrow>
+                            <m:mi>k</m:mi>
+                            <m:mo>-</m:mo>
+                            <m:mn>1</m:mn>
+                          </m:mrow>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mrow>
+                            <m:mi>k</m:mi>
+                            <m:mo>+</m:mo>
+                            <m:mn>1</m:mn>
+                          </m:mrow>
+                        </m:mtd>
+                      </m:mtr>
+                    </m:mtable>
+                  </m:mfenced>
+                  <m:mo>.</m:mo>
+                </m:mrow>
+              </m:mtd>
+            </m:mtr>
+          </m:mtable>
+        </m:math>
+      </equation>
+      <para id="id2261919">Letting the vector <m:math overflow="scroll"><m:mrow><m:msub><m:mi>u</m:mi><m:mi>i</m:mi></m:msub><m:mo>=</m:mo><m:msup><m:mrow><m:mo>[</m:mo><m:msub><m:mi>u</m:mi><m:mrow><m:mi>i</m:mi><m:mn>1</m:mn></m:mrow></m:msub><m:mspace width="0.222222em"/><m:msub><m:mi>u</m:mi><m:mrow><m:mi>i</m:mi><m:mn>2</m:mn></m:mrow></m:msub><m:mo>]</m:mo></m:mrow><m:mi>T</m:mi></m:msup></m:mrow></m:math> represent the displacements of string <emphasis effect="italics">i</emphasis>, we obtain the following system of
+differential equations:</para>
+      <equation id="id2261985">
+        <m:math overflow="scroll" mode="display">
+          <m:mtable displaystyle="true">
+            <m:mtr>
+              <m:mtd columnalign="right">
+                <m:mrow>
+                  <m:msub>
+                    <m:mi>P</m:mi>
+                    <m:mn>1</m:mn>
+                  </m:msub>
+                  <m:msubsup>
+                    <m:mi>u</m:mi>
+                    <m:mn>1</m:mn>
+                    <m:mrow>
+                      <m:mo>'</m:mo>
+                      <m:mo>'</m:mo>
+                    </m:mrow>
+                  </m:msubsup>
+                </m:mrow>
+              </m:mtd>
+              <m:mtd>
+                <m:mo>=</m:mo>
+              </m:mtd>
+              <m:mtd columnalign="left">
+                <m:mrow>
+                  <m:mo>-</m:mo>
+                  <m:msup>
+                    <m:mi>λ</m:mi>
+                    <m:mn>2</m:mn>
+                  </m:msup>
+                  <m:msub>
+                    <m:mi>u</m:mi>
+                    <m:mn>1</m:mn>
+                  </m:msub>
+                </m:mrow>
+              </m:mtd>
+            </m:mtr>
+            <m:mtr>
+              <m:mtd columnalign="right">
+                <m:mrow>
+                  <m:msub>
+                    <m:mi>P</m:mi>
+                    <m:mn>2</m:mn>
+                  </m:msub>
+                  <m:msubsup>
+                    <m:mi>u</m:mi>
+                    <m:mn>2</m:mn>
+                    <m:mrow>
+                      <m:mo>'</m:mo>
+                      <m:mo>'</m:mo>
+                    </m:mrow>
+                  </m:msubsup>
+                </m:mrow>
+              </m:mtd>
+              <m:mtd>
+                <m:mo>=</m:mo>
+              </m:mtd>
+              <m:mtd columnalign="left">
+                <m:mrow>
+                  <m:mo>-</m:mo>
+                  <m:msup>
+                    <m:mi>λ</m:mi>
+                    <m:mn>2</m:mn>
+                  </m:msup>
+                  <m:msub>
+                    <m:mi>u</m:mi>
+                    <m:mn>2</m:mn>
+                  </m:msub>
+                </m:mrow>
+              </m:mtd>
+            </m:mtr>
+            <m:mtr>
+              <m:mtd columnalign="right">
+                <m:mrow>
+                  <m:msub>
+                    <m:mi>P</m:mi>
+                    <m:mn>3</m:mn>
+                  </m:msub>
+                  <m:msubsup>
+                    <m:mi>u</m:mi>
+                    <m:mn>3</m:mn>
+                    <m:mrow>
+                      <m:mo>'</m:mo>
+                      <m:mo>'</m:mo>
+                    </m:mrow>
+                  </m:msubsup>
+                </m:mrow>
+              </m:mtd>
+              <m:mtd>
+                <m:mo>=</m:mo>
+              </m:mtd>
+              <m:mtd columnalign="left">
+                <m:mrow>
+                  <m:mo>-</m:mo>
+                  <m:msup>
+                    <m:mi>λ</m:mi>
+                    <m:mn>2</m:mn>
+                  </m:msup>
+                  <m:msub>
+                    <m:mi>u</m:mi>
+                    <m:mn>3</m:mn>
+                  </m:msub>
+                  <m:mo>.</m:mo>
+                </m:mrow>
+              </m:mtd>
+            </m:mtr>
+          </m:mtable>
+        </m:math>
+      </equation>
+      <para id="id2262152">Expanding via matrix multiplication, we see that, component-wise, this translates into</para>
+      <equation id="id2262157">
+        <m:math overflow="scroll" mode="display">
+          <m:mtable displaystyle="true">
+            <m:mtr>
+              <m:mtd columnalign="right">
+                <m:msubsup>
+                  <m:mi>u</m:mi>
+                  <m:mrow>
+                    <m:mn>11</m:mn>
+                  </m:mrow>
+                  <m:mrow>
+                    <m:mo>'</m:mo>
+                    <m:mo>'</m:mo>
+                  </m:mrow>
+                </m:msubsup>
+              </m:mtd>
+              <m:mtd>
+                <m:mo>=</m:mo>
+              </m:mtd>
+              <m:mtd columnalign="left">
+                <m:mrow>
+                  <m:mo>-</m:mo>
+                  <m:msup>
+                    <m:mi>λ</m:mi>
+                    <m:mn>2</m:mn>
+                  </m:msup>
+                  <m:msub>
+                    <m:mi>u</m:mi>
+                    <m:mn>11</m:mn>
+                  </m:msub>
+                </m:mrow>
+              </m:mtd>
+            </m:mtr>
+            <m:mtr>
+              <m:mtd columnalign="right">
+                <m:mrow>
+                  <m:mi>k</m:mi>
+                  <m:msubsup>
+                    <m:mi>u</m:mi>
+                    <m:mrow>
+                      <m:mn>12</m:mn>
+                    </m:mrow>
+                    <m:mrow>
+                      <m:mo>'</m:mo>
+                      <m:mo>'</m:mo>
+                    </m:mrow>
+                  </m:msubsup>
+                </m:mrow>
+              </m:mtd>
+              <m:mtd>
+                <m:mo>=</m:mo>
+              </m:mtd>
+              <m:mtd columnalign="left">
+                <m:mrow>
+                  <m:mo>-</m:mo>
+                  <m:msup>
+                    <m:mi>λ</m:mi>
+                    <m:mn>2</m:mn>
+                  </m:msup>
+                  <m:msub>
+                    <m:mi>u</m:mi>
+                    <m:mn>12</m:mn>
+                  </m:msub>
+                </m:mrow>
+              </m:mtd>
+            </m:mtr>
+            <m:mtr>
+              <m:mtd columnalign="right">
+                <m:msubsup>
+                  <m:mi>s</m:mi>
+                  <m:mn>2</m:mn>
+                  <m:mrow>
+                    <m:mo>'</m:mo>
+                    <m:mo>'</m:mo>
+                  </m:mrow>
+                </m:msubsup>
+              </m:mtd>
+              <m:mtd>
+                <m:mo>=</m:mo>
+              </m:mtd>
+              <m:mtd columnalign="left">
+                <m:mrow>
+                  <m:mo>-</m:mo>
+                  <m:msup>
+                    <m:mi>λ</m:mi>
+                    <m:mn>2</m:mn>
+                  </m:msup>
+                  <m:msub>
+                    <m:mi>s</m:mi>
+                    <m:mn>2</m:mn>
+                  </m:msub>
+                </m:mrow>
+              </m:mtd>
+            </m:mtr>
+            <m:mtr>
+              <m:mtd columnalign="right">
+                <m:mrow>
+                  <m:mi>k</m:mi>
+                  <m:msubsup>
+                    <m:mi>d</m:mi>
+                    <m:mn>2</m:mn>
+                    <m:mrow>
+                      <m:mo>'</m:mo>
+                      <m:mo>'</m:mo>
+                    </m:mrow>
+                  </m:msubsup>
+                </m:mrow>
+              </m:mtd>
+              <m:mtd>
+                <m:mo>=</m:mo>
+              </m:mtd>
+              <m:mtd columnalign="left">
+                <m:mrow>
+                  <m:mo>-</m:mo>
+                  <m:msup>
+                    <m:mi>λ</m:mi>
+                    <m:mn>2</m:mn>
+                  </m:msup>
+                  <m:msub>
+                    <m:mi>d</m:mi>
+                    <m:mn>2</m:mn>
+                  </m:msub>
+                </m:mrow>
+              </m:mtd>
+            </m:mtr>
+            <m:mtr>
+              <m:mtd columnalign="right">
+                <m:mrow>
+                  <m:mi>k</m:mi>
+                  <m:msubsup>
+                    <m:mi>s</m:mi>
+                    <m:mn>3</m:mn>
+                    <m:mrow>
+                      <m:mo>'</m:mo>
+                      <m:mo>'</m:mo>
+                    </m:mrow>
+                  </m:msubsup>
+                </m:mrow>
+              </m:mtd>
+              <m:mtd>
+                <m:mo>=</m:mo>
+              </m:mtd>
+              <m:mtd columnalign="left">
+                <m:mrow>
+                  <m:mo>-</m:mo>
+                  <m:msup>
+                    <m:mi>λ</m:mi>
+                    <m:mn>2</m:mn>
+                  </m:msup>
+                  <m:msub>
+                    <m:mi>s</m:mi>
+                    <m:mn>3</m:mn>
+                  </m:msub>
+                </m:mrow>
+              </m:mtd>
+            </m:mtr>
+            <m:mtr>
+              <m:mtd columnalign="right">
+                <m:msubsup>
+                  <m:mi>d</m:mi>
+                  <m:mn>3</m:mn>
+                  <m:mrow>
+                    <m:mo>'</m:mo>
+                    <m:mo>'</m:mo>
+                  </m:mrow>
+                </m:msubsup>
+              </m:mtd>
+              <m:mtd>
+                <m:mo>=</m:mo>
+              </m:mtd>
+              <m:mtd columnalign="left">
+                <m:mrow>
+                  <m:mo>-</m:mo>
+                  <m:msup>
+                    <m:mi>λ</m:mi>
+                    <m:mn>2</m:mn>
+                  </m:msup>
+                  <m:msub>
+                    <m:mi>d</m:mi>
+                    <m:mn>3</m:mn>
+                  </m:msub>
+                  <m:mo>,</m:mo>
+                </m:mrow>
+              </m:mtd>
+            </m:mtr>
+          </m:mtable>
+        </m:math>
+      </equation>
+      <para id="id2262446">where</para>
+      <equation id="id2262449">
+        <m:math overflow="scroll" mode="display">
+          <m:mtable displaystyle="true">
+            <m:mtr>
+              <m:mtd columnalign="right">
+                <m:mrow>
+                  <m:msub>
+                    <m:mi>s</m:mi>
+                    <m:mi>i</m:mi>
+                  </m:msub>
+                  <m:mo>=</m:mo>
+                  <m:msub>
+                    <m:mi>u</m:mi>
+                    <m:mrow>
+                      <m:mi>i</m:mi>
+                      <m:mn>1</m:mn>
+                    </m:mrow>
+                  </m:msub>
+                  <m:mo>+</m:mo>
+                  <m:msub>
+                    <m:mi>u</m:mi>
+                    <m:mrow>
+                      <m:mi>i</m:mi>
+                      <m:mn>2</m:mn>
+                    </m:mrow>
+                  </m:msub>
+                </m:mrow>
+              </m:mtd>
+            </m:mtr>
+            <m:mtr>
+              <m:mtd columnalign="right">
+                <m:mrow>
+                  <m:msub>
+                    <m:mi>d</m:mi>
+                    <m:mi>i</m:mi>
+                  </m:msub>
+                  <m:mo>=</m:mo>
+                  <m:msub>
+                    <m:mi>u</m:mi>
+                    <m:mrow>
+                      <m:mi>i</m:mi>
+                      <m:mn>2</m:mn>
+                    </m:mrow>
+                  </m:msub>
+                  <m:mo>-</m:mo>
+                  <m:msub>
+                    <m:mi>u</m:mi>
+                    <m:mrow>
+                      <m:mi>i</m:mi>
+                      <m:mn>2</m:mn>
+                    </m:mrow>
+                  </m:msub>
+                  <m:mo>.</m:mo>
+                </m:mrow>
+              </m:mtd>
+            </m:mtr>
+          </m:mtable>
+        </m:math>
+      </equation>
+      <para id="id2262540">for <m:math overflow="scroll"><m:mrow><m:mi>i</m:mi><m:mo>=</m:mo><m:mn>1</m:mn><m:mo>,</m:mo><m:mn>2</m:mn></m:mrow></m:math>. For boundary conditions, we require that the ends be clamped:</para>
+      <equation id="id2262564">
+        <m:math overflow="scroll" mode="display">
+          <m:mtable displaystyle="true">
+            <m:mtr>
+              <m:mtd columnalign="right">
+                <m:mrow>
+                  <m:msub>
+                    <m:mi>u</m:mi>
+                    <m:mn>1</m:mn>
+                  </m:msub>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:mn>0</m:mn>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                </m:mrow>
+              </m:mtd>
+              <m:mtd>
+                <m:mo>=</m:mo>
+              </m:mtd>
+              <m:mtd columnalign="left">
+                <m:mn>0</m:mn>
+              </m:mtd>
+            </m:mtr>
+            <m:mtr>
+              <m:mtd columnalign="right">
+                <m:mrow>
+                  <m:msub>
+                    <m:mi>u</m:mi>
+                    <m:mn>2</m:mn>
+                  </m:msub>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:mn>1</m:mn>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                </m:mrow>
+              </m:mtd>
+              <m:mtd>
+                <m:mo>=</m:mo>
+              </m:mtd>
+              <m:mtd columnalign="left">
+                <m:mn>0</m:mn>
+              </m:mtd>
+            </m:mtr>
+            <m:mtr>
+              <m:mtd columnalign="right">
+                <m:mrow>
+                  <m:msub>
+                    <m:mi>u</m:mi>
+                    <m:mn>3</m:mn>
+                  </m:msub>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:mn>1</m:mn>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                </m:mrow>
+              </m:mtd>
+              <m:mtd>
+                <m:mo>=</m:mo>
+              </m:mtd>
+              <m:mtd columnalign="left">
+                <m:mrow>
+                  <m:mn>0</m:mn>
+                  <m:mo>,</m:mo>
+                </m:mrow>
+              </m:mtd>
+            </m:mtr>
+          </m:mtable>
+        </m:math>
+      </equation>
+      <para id="id2262666">that there be continuity at the central node:</para>
+      <equation id="id2262670">
+        <m:math overflow="scroll" mode="display">
+          <m:mtable displaystyle="true">
+            <m:mtr>
+              <m:mtd columnalign="right">
+                <m:mrow>
+                  <m:msub>
+                    <m:mi>u</m:mi>
+                    <m:mn>1</m:mn>
+                  </m:msub>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:mn>1</m:mn>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                  <m:mo>=</m:mo>
+                  <m:msub>
+                    <m:mi>u</m:mi>
+                    <m:mn>2</m:mn>
+                  </m:msub>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:mn>0</m:mn>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                  <m:mo>=</m:mo>
+                  <m:msub>
+                    <m:mi>u</m:mi>
+                    <m:mn>3</m:mn>
+                  </m:msub>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:mn>0</m:mn>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                  <m:mo>,</m:mo>
+                </m:mrow>
+              </m:mtd>
+            </m:mtr>
+          </m:mtable>
+        </m:math>
+      </equation>
+      <para id="id2262739">and that the forces balance at the central node:</para>
+      <equation id="id2262743">
+        <m:math overflow="scroll" mode="display">
+          <m:mtable displaystyle="true">
+            <m:mtr>
+              <m:mtd columnalign="right">
+                <m:mrow>
+                  <m:msub>
+                    <m:mi>P</m:mi>
+                    <m:mn>1</m:mn>
+                  </m:msub>
+                  <m:msubsup>
+                    <m:mi>u</m:mi>
+                    <m:mn>1</m:mn>
+                    <m:mo>'</m:mo>
+                  </m:msubsup>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:mn>1</m:mn>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                  <m:mo>-</m:mo>
+                  <m:msub>
+                    <m:mi>P</m:mi>
+                    <m:mn>2</m:mn>
+                  </m:msub>
+                  <m:msubsup>
+                    <m:mi>u</m:mi>
+                    <m:mn>2</m:mn>
+                    <m:mo>'</m:mo>
+                  </m:msubsup>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:mn>0</m:mn>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                  <m:mo>-</m:mo>
+                  <m:msub>
+                    <m:mi>P</m:mi>
+                    <m:mn>3</m:mn>
+                  </m:msub>
+                  <m:msubsup>
+                    <m:mi>u</m:mi>
+                    <m:mn>3</m:mn>
+                    <m:mo>'</m:mo>
+                  </m:msubsup>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:mn>0</m:mn>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                  <m:mo>=</m:mo>
+                  <m:mn>0</m:mn>
+                  <m:mo>.</m:mo>
+                </m:mrow>
+              </m:mtd>
+            </m:mtr>
+          </m:mtable>
+        </m:math>
+      </equation>
+      <para id="id2262849">As with many systems of differential equations, this one can be solved via the time-honored method of guessing. Noting that
+the differential equations of this form equate the second derivative of a function with a constant multiple of itself, we
+hypothesize that the solution for each component of displacement is some linear combination of sines and cosines:</para>
+      <equation id="id2262859">
+        <m:math overflow="scroll" mode="display">
+          <m:mtable displaystyle="true">
+            <m:mtr>
+              <m:mtd columnalign="right">
+                <m:msub>
+                  <m:mi>u</m:mi>
+                  <m:mn>11</m:mn>
+                </m:msub>
+              </m:mtd>
+              <m:mtd>
+                <m:mo>=</m:mo>
+              </m:mtd>
+              <m:mtd columnalign="left">
+                <m:mrow>
+                  <m:msub>
+                    <m:mi>a</m:mi>
+                    <m:mrow>
+                      <m:mn>1</m:mn>
+                      <m:mo>,</m:mo>
+                      <m:mn>1</m:mn>
+                    </m:mrow>
+                  </m:msub>
+                  <m:mo form="prefix">cos</m:mo>
+                  <m:mi>λ</m:mi>
+                  <m:mi>x</m:mi>
+                  <m:mo>+</m:mo>
+                  <m:msub>
+                    <m:mi>b</m:mi>
+                    <m:mrow>
+                      <m:mn>1</m:mn>
+                      <m:mo>,</m:mo>
+                      <m:mn>1</m:mn>
+                    </m:mrow>
+                  </m:msub>
+                  <m:mo form="prefix">sin</m:mo>
+                  <m:mi>λ</m:mi>
+                  <m:mi>x</m:mi>
+                </m:mrow>
+              </m:mtd>
+            </m:mtr>
+            <m:mtr>
+              <m:mtd columnalign="right">
+                <m:msub>
+                  <m:mi>u</m:mi>
+                  <m:mn>12</m:mn>
+                </m:msub>
+              </m:mtd>
+              <m:mtd>
+                <m:mo>=</m:mo>
+              </m:mtd>
+              <m:mtd columnalign="left">
+                <m:mrow>
+                  <m:msub>
+                    <m:mi>a</m:mi>
+                    <m:mrow>
+                      <m:mn>1</m:mn>
+                      <m:mo>,</m:mo>
+                      <m:mn>2</m:mn>
+                    </m:mrow>
+                  </m:msub>
+                  <m:mo form="prefix">cos</m:mo>
+                  <m:mfrac>
+                    <m:mi>λ</m:mi>
+                    <m:msqrt>
+                      <m:mi>k</m:mi>
+                    </m:msqrt>
+                  </m:mfrac>
+                  <m:mi>x</m:mi>
+                  <m:mo>+</m:mo>
+                  <m:msub>
+                    <m:mi>b</m:mi>
+                    <m:mrow>
+                      <m:mn>1</m:mn>
+                      <m:mo>,</m:mo>
+                      <m:mn>2</m:mn>
+                    </m:mrow>
+                  </m:msub>
+                  <m:mo form="prefix">sin</m:mo>
+                  <m:mfrac>
+                    <m:mi>λ</m:mi>
+                    <m:msqrt>
+                      <m:mi>k</m:mi>
+                    </m:msqrt>
+                  </m:mfrac>
+                  <m:mi>x</m:mi>
+                </m:mrow>
+              </m:mtd>
+            </m:mtr>
+            <m:mtr>
+              <m:mtd columnalign="right">
+                <m:msub>
+                  <m:mi>u</m:mi>
+                  <m:mn>21</m:mn>
+                </m:msub>
+              </m:mtd>
+              <m:mtd>
+                <m:mo>=</m:mo>
+              </m:mtd>
+              <m:mtd columnalign="left">
+                <m:mrow>
+                  <m:msub>
+                    <m:mi>a</m:mi>
+                    <m:mn>2</m:mn>
+                  </m:msub>
+                  <m:mo form="prefix">cos</m:mo>
+                  <m:mi>λ</m:mi>
+                  <m:mi>x</m:mi>
+                  <m:mo>+</m:mo>
+                  <m:msub>
+                    <m:mi>b</m:mi>
+                    <m:mn>2</m:mn>
+                  </m:msub>
+                  <m:mo form="prefix">sin</m:mo>
+                  <m:mi>λ</m:mi>
+                  <m:mi>x</m:mi>
+                  <m:mo>+</m:mo>
+                  <m:msub>
+                    <m:mi>α</m:mi>
+                    <m:mn>2</m:mn>
+                  </m:msub>
+                  <m:mo form="prefix">cos</m:mo>
+                  <m:mfrac>
+                    <m:mi>λ</m:mi>
+                    <m:msqrt>
+                      <m:mi>k</m:mi>
+                    </m:msqrt>
+                  </m:mfrac>
+                  <m:mi>x</m:mi>
+                  <m:mo>+</m:mo>
+                  <m:msub>
+                    <m:mi>β</m:mi>
+                    <m:mn>2</m:mn>
+                  </m:msub>
+                  <m:mo form="prefix">sin</m:mo>
+                  <m:mfrac>
+                    <m:mi>λ</m:mi>
+                    <m:msqrt>
+                      <m:mi>k</m:mi>
+                    </m:msqrt>
+                  </m:mfrac>
+                  <m:mi>x</m:mi>
+                </m:mrow>
+              </m:mtd>
+            </m:mtr>
+            <m:mtr>
+              <m:mtd columnalign="right">
+                <m:msub>
+                  <m:mi>u</m:mi>
+                  <m:mn>22</m:mn>
+                </m:msub>
+              </m:mtd>
+              <m:mtd>
+                <m:mo>=</m:mo>
+              </m:mtd>
+              <m:mtd columnalign="left">
+                <m:mrow>
+                  <m:msub>
+                    <m:mi>a</m:mi>
+                    <m:mn>2</m:mn>
+                  </m:msub>
+                  <m:mo form="prefix">cos</m:mo>
+                  <m:mi>λ</m:mi>
+                  <m:mi>x</m:mi>
+                  <m:mo>+</m:mo>
+                  <m:msub>
+                    <m:mi>b</m:mi>
+                    <m:mn>2</m:mn>
+                  </m:msub>
+                  <m:mo form="prefix">sin</m:mo>
+                  <m:mi>λ</m:mi>
+                  <m:mi>x</m:mi>
+                  <m:mo>-</m:mo>
+                  <m:msub>
+                    <m:mi>α</m:mi>
+                    <m:mn>2</m:mn>
+                  </m:msub>
+                  <m:mo form="prefix">cos</m:mo>
+                  <m:mfrac>
+                    <m:mi>λ</m:mi>
+                    <m:msqrt>
+                      <m:mi>k</m:mi>
+                    </m:msqrt>
+                  </m:mfrac>
+                  <m:mi>x</m:mi>
+                  <m:mo>-</m:mo>
+                  <m:msub>
+                    <m:mi>β</m:mi>
+                    <m:mn>2</m:mn>
+                  </m:msub>
+                  <m:mo form="prefix">sin</m:mo>
+                  <m:mfrac>
+                    <m:mi>λ</m:mi>
+                    <m:msqrt>
+                      <m:mi>k</m:mi>
+                    </m:msqrt>
+                  </m:mfrac>
+                  <m:mi>x</m:mi>
+                </m:mrow>
+              </m:mtd>
+            </m:mtr>
+            <m:mtr>
+              <m:mtd columnalign="right">
+                <m:msub>
+                  <m:mi>u</m:mi>
+                  <m:mn>31</m:mn>
+                </m:msub>
+              </m:mtd>
+              <m:mtd>
+                <m:mo>=</m:mo>
+              </m:mtd>
+              <m:mtd columnalign="left">
+                <m:mrow>
+                  <m:msub>
+                    <m:mi>a</m:mi>
+                    <m:mn>3</m:mn>
+                  </m:msub>
+                  <m:mo form="prefix">cos</m:mo>
+                  <m:mfrac>
+                    <m:mi>λ</m:mi>
+                    <m:msqrt>
+                      <m:mi>k</m:mi>
+                    </m:msqrt>
+                  </m:mfrac>
+                  <m:mi>x</m:mi>
+                  <m:mo>+</m:mo>
+                  <m:msub>
+                    <m:mi>b</m:mi>
+                    <m:mn>3</m:mn>
+                  </m:msub>
+                  <m:mo form="prefix">sin</m:mo>
+                  <m:mfrac>
+                    <m:mi>λ</m:mi>
+                    <m:msqrt>
+                      <m:mi>k</m:mi>
+                    </m:msqrt>
+                  </m:mfrac>
+                  <m:mi>x</m:mi>
+                  <m:mo>+</m:mo>
+                  <m:msub>
+                    <m:mi>α</m:mi>
+                    <m:mn>3</m:mn>
+                  </m:msub>
+                  <m:mo form="prefix">cos</m:mo>
+                  <m:mi>λ</m:mi>
+                  <m:mi>x</m:mi>
+                  <m:mo>+</m:mo>
+                  <m:msub>
+                    <m:mi>β</m:mi>
+                    <m:mn>3</m:mn>
+                  </m:msub>
+                  <m:mo form="prefix">sin</m:mo>
+                  <m:mi>λ</m:mi>
+                  <m:mi>x</m:mi>
+                </m:mrow>
+              </m:mtd>
+            </m:mtr>
+            <m:mtr>
+              <m:mtd columnalign="right">
+                <m:msub>
+                  <m:mi>u</m:mi>
+                  <m:mn>32</m:mn>
+                </m:msub>
+              </m:mtd>
+              <m:mtd>
+                <m:mo>=</m:mo>
+              </m:mtd>
+              <m:mtd columnalign="left">
+                <m:mrow>
+                  <m:msub>
+                    <m:mi>a</m:mi>
+                    <m:mn>3</m:mn>
+                  </m:msub>
+                  <m:mo form="prefix">cos</m:mo>
+                  <m:mfrac>
+                    <m:mi>λ</m:mi>
+                    <m:msqrt>
+                      <m:mi>k</m:mi>
+                    </m:msqrt>
+                  </m:mfrac>
+                  <m:mi>x</m:mi>
+                  <m:mo>+</m:mo>
+                  <m:msub>
+                    <m:mi>b</m:mi>
+                    <m:mn>3</m:mn>
+                  </m:msub>
+                  <m:mo form="prefix">sin</m:mo>
+                  <m:mfrac>
+                    <m:mi>λ</m:mi>
+                    <m:msqrt>
+                      <m:mi>k</m:mi>
+                    </m:msqrt>
+                  </m:mfrac>
+                  <m:mi>x</m:mi>
+                  <m:mo>-</m:mo>
+                  <m:msub>
+                    <m:mi>α</m:mi>
+                    <m:mn>3</m:mn>
+                  </m:msub>
+                  <m:mo form="prefix">cos</m:mo>
+                  <m:mi>λ</m:mi>
+                  <m:mi>x</m:mi>
+                  <m:mo>-</m:mo>
+                  <m:msub>
+                    <m:mi>β</m:mi>
+                    <m:mn>3</m:mn>
+                  </m:msub>
+                  <m:mo form="prefix">sin</m:mo>
+                  <m:mi>λ</m:mi>
+                  <m:mi>x</m:mi>
+                  <m:mo>.</m:mo>
+                </m:mrow>
+              </m:mtd>
+            </m:mtr>
+          </m:mtable>
+        </m:math>
+      </equation>
+      <para id="id2263425">where we have guessed</para>
+      <equation id="id2263428">
+        <m:math overflow="scroll" mode="display">
+          <m:mtable displaystyle="true">
+            <m:mtr>
+              <m:mtd columnalign="right">
+                <m:msub>
+                  <m:mi>s</m:mi>
+                  <m:mn>2</m:mn>
+                </m:msub>
+              </m:mtd>
+              <m:mtd>
+                <m:mo>=</m:mo>
+              </m:mtd>
+              <m:mtd columnalign="left">
+                <m:mrow>
+                  <m:mn>2</m:mn>
+                  <m:msub>
+                    <m:mi>a</m:mi>
+                    <m:mn>2</m:mn>
+                  </m:msub>
+                  <m:mo form="prefix">cos</m:mo>
+                  <m:mi>λ</m:mi>
+                  <m:mi>x</m:mi>
+                  <m:mo>+</m:mo>
+                  <m:mn>2</m:mn>
+                  <m:msub>
+                    <m:mi>b</m:mi>
+                    <m:mn>2</m:mn>
+                  </m:msub>
+                  <m:mo form="prefix">sin</m:mo>
+                  <m:mi>λ</m:mi>
+                  <m:mi>x</m:mi>
+                </m:mrow>
+              </m:mtd>
+            </m:mtr>
+            <m:mtr>
+              <m:mtd columnalign="right">
+                <m:msub>
+                  <m:mi>d</m:mi>
+                  <m:mn>2</m:mn>
+                </m:msub>
+              </m:mtd>
+              <m:mtd>
+                <m:mo>=</m:mo>
+              </m:mtd>
+              <m:mtd columnalign="left">
+                <m:mrow>
+                  <m:mn>2</m:mn>
+                  <m:msub>
+                    <m:mi>α</m:mi>
+                    <m:mn>2</m:mn>
+                  </m:msub>
+                  <m:mo form="prefix">cos</m:mo>
+                  <m:mfrac>
+                    <m:mi>λ</m:mi>
+                    <m:msqrt>
+                      <m:mi>k</m:mi>
+                    </m:msqrt>
+                  </m:mfrac>
+                  <m:mi>x</m:mi>
+                  <m:mo>+</m:mo>
+                  <m:mn>2</m:mn>
+                  <m:msub>
+                    <m:mi>β</m:mi>
+                    <m:mn>2</m:mn>
+                  </m:msub>
+                  <m:mo form="prefix">sin</m:mo>
+                  <m:mfrac>
+                    <m:mi>λ</m:mi>
+                    <m:msqrt>
+                      <m:mi>k</m:mi>
+                    </m:msqrt>
+                  </m:mfrac>
+                  <m:mi>x</m:mi>
+                </m:mrow>
+              </m:mtd>
+            </m:mtr>
+            <m:mtr>
+              <m:mtd columnalign="right">
+                <m:msub>
+                  <m:mi>s</m:mi>
+                  <m:mn>3</m:mn>
+                </m:msub>
+              </m:mtd>
+              <m:mtd>
+                <m:mo>=</m:mo>
+              </m:mtd>
+              <m:mtd columnalign="left">
+                <m:mrow>
+                  <m:mn>2</m:mn>
+                  <m:msub>
+                    <m:mi>a</m:mi>
+                    <m:mn>3</m:mn>
+                  </m:msub>
+                  <m:mo form="prefix">cos</m:mo>
+                  <m:mfrac>
+                    <m:mi>λ</m:mi>
+                    <m:msqrt>
+                      <m:mi>k</m:mi>
+                    </m:msqrt>
+                  </m:mfrac>
+                  <m:mi>x</m:mi>
+                  <m:mo>+</m:mo>
+                  <m:mn>2</m:mn>
+                  <m:msub>
+                    <m:mi>b</m:mi>
+                    <m:mn>3</m:mn>
+                  </m:msub>
+                  <m:mo form="prefix">sin</m:mo>
+                  <m:mfrac>
+                    <m:mi>λ</m:mi>
+                    <m:msqrt>
+                      <m:mi>k</m:mi>
+                    </m:msqrt>
+                  </m:mfrac>
+                  <m:mi>x</m:mi>
+                </m:mrow>
+              </m:mtd>
+            </m:mtr>
+            <m:mtr>
+              <m:mtd columnalign="right">
+                <m:msub>
+                  <m:mi>d</m:mi>
+                  <m:mn>3</m:mn>
+                </m:msub>
+              </m:mtd>
+              <m:mtd>
+                <m:mo>=</m:mo>
+              </m:mtd>
+              <m:mtd columnalign="left">
+                <m:mrow>
+                  <m:mn>2</m:mn>
+                  <m:msub>
+                    <m:mi>α</m:mi>
+                    <m:mn>3</m:mn>
+                  </m:msub>
+                  <m:mo form="prefix">cos</m:mo>
+                  <m:mi>λ</m:mi>
+                  <m:mi>x</m:mi>
+                  <m:mo>+</m:mo>
+                  <m:mn>2</m:mn>
+                  <m:msub>
+                    <m:mi>β</m:mi>
+                    <m:mn>3</m:mn>
+                  </m:msub>
+                  <m:mo form="prefix">sin</m:mo>
+                  <m:mi>λ</m:mi>
+                  <m:mi>x</m:mi>
+                </m:mrow>
+              </m:mtd>
+            </m:mtr>
+          </m:mtable>
+        </m:math>
+      </equation>
+      <para id="id2263698">and have used the above to translate these into <emphasis effect="italics">u<sub>21</sub></emphasis>, <emphasis effect="italics">u<sub>22</sub></emphasis>, <emphasis effect="italics">u<sub>31</sub></emphasis>, and <emphasis effect="italics">u<sub>32</sub></emphasis>. We need to determine the
+coefficients. Applying the boundary condition that <m:math overflow="scroll"><m:mrow><m:msub><m:mi>u</m:mi><m:mn>1</m:mn></m:msub><m:mrow><m:mo>(</m:mo><m:mn>0</m:mn><m:mo>)</m:mo></m:mrow><m:mo>=</m:mo><m:mn>0</m:mn></m:mrow></m:math>, we get</para>
+      <equation id="id2263788">
+        <m:math overflow="scroll" mode="display">
+          <m:mtable displaystyle="true">
+            <m:mtr>
+              <m:mtd columnalign="right">
+                <m:msub>
+                  <m:mi>a</m:mi>
+                  <m:mrow>
+                    <m:mn>1</m:mn>
+                    <m:mo>,</m:mo>
+                    <m:mn>1</m:mn>
+                  </m:mrow>
+                </m:msub>
+              </m:mtd>
+              <m:mtd>
+                <m:mo>=</m:mo>
+              </m:mtd>
+              <m:mtd columnalign="left">
+                <m:mn>0</m:mn>
+              </m:mtd>
+            </m:mtr>
+            <m:mtr>
+              <m:mtd columnalign="right">
+                <m:msub>
+                  <m:mi>a</m:mi>
+                  <m:mrow>
+                    <m:mn>1</m:mn>
+                    <m:mo>,</m:mo>
+                    <m:mn>2</m:mn>
+                  </m:mrow>
+                </m:msub>
+              </m:mtd>
+              <m:mtd>
+                <m:mo>=</m:mo>
+              </m:mtd>
+              <m:mtd columnalign="left">
+                <m:mrow>
+                  <m:mn>0</m:mn>
+                  <m:mo>.</m:mo>
+                </m:mrow>
+              </m:mtd>
+            </m:mtr>
+          </m:mtable>
+        </m:math>
+      </equation>
+      <para id="id2263855">The fact that <m:math overflow="scroll"><m:mrow><m:msub><m:mi>u</m:mi><m:mn>2</m:mn></m:msub><m:mrow><m:mo>(</m:mo><m:mn>1</m:mn><m:mo>)</m:mo></m:mrow><m:mo>=</m:mo><m:mn>0</m:mn></m:mrow></m:math> implies that</para>
+      <equation id="id2263886">
+        <m:math overflow="scroll" mode="display">
+          <m:mtable displaystyle="true">
+            <m:mtr>
+              <m:mtd columnalign="right">
+                <m:mrow>
+                  <m:msub>
+                    <m:mi>a</m:mi>
+                    <m:mn>2</m:mn>
+                  </m:msub>
+                  <m:mo form="prefix">cos</m:mo>
+                  <m:mi>λ</m:mi>
+                  <m:mo>+</m:mo>
+                  <m:msub>
+                    <m:mi>b</m:mi>
+                    <m:mn>2</m:mn>
+                  </m:msub>
+                  <m:mo form="prefix">sin</m:mo>
+                  <m:mi>λ</m:mi>
+                </m:mrow>
+              </m:mtd>
+              <m:mtd>
+                <m:mo>=</m:mo>
+              </m:mtd>
+              <m:mtd columnalign="left">
+                <m:mn>0</m:mn>
+              </m:mtd>
+            </m:mtr>
+            <m:mtr>
+              <m:mtd columnalign="right">
+                <m:mrow>
+                  <m:msub>
+                    <m:mi>α</m:mi>
+                    <m:mn>2</m:mn>
+                  </m:msub>
+                  <m:mo form="prefix">cos</m:mo>
+                  <m:mfrac>
+                    <m:mi>λ</m:mi>
+                    <m:msqrt>
+                      <m:mi>k</m:mi>
+                    </m:msqrt>
+                  </m:mfrac>
+                  <m:mo>+</m:mo>
+                  <m:msub>
+                    <m:mi>β</m:mi>
+                    <m:mn>2</m:mn>
+                  </m:msub>
+                  <m:mo form="prefix">sin</m:mo>
+                  <m:mfrac>
+                    <m:mi>λ</m:mi>
+                    <m:msqrt>
+                      <m:mi>k</m:mi>
+                    </m:msqrt>
+                  </m:mfrac>
+                </m:mrow>
+              </m:mtd>
+              <m:mtd>
+                <m:mo>=</m:mo>
+              </m:mtd>
+              <m:mtd columnalign="left">
+                <m:mrow>
+                  <m:mn>0</m:mn>
+                  <m:mo>.</m:mo>
+                </m:mrow>
+              </m:mtd>
+            </m:mtr>
+          </m:mtable>
+        </m:math>
+      </equation>
+      <para id="id2264002">Likewise, for <m:math overflow="scroll"><m:mrow><m:msub><m:mi>u</m:mi><m:mn>3</m:mn></m:msub><m:mrow><m:mo>(</m:mo><m:mn>1</m:mn><m:mo>)</m:mo></m:mrow><m:mo>=</m:mo><m:mn>0</m:mn></m:mrow></m:math>, we get</para>
+      <equation id="id2264034">
+        <m:math overflow="scroll" mode="display">
+          <m:mtable displaystyle="true">
+            <m:mtr>
+              <m:mtd columnalign="right">
+                <m:mrow>
+                  <m:msub>
+                    <m:mi>a</m:mi>
+                    <m:mn>3</m:mn>
+                  </m:msub>
+                  <m:mo form="prefix">cos</m:mo>
+                  <m:mfrac>
+                    <m:mi>λ</m:mi>
+                    <m:msqrt>
+                      <m:mi>k</m:mi>
+                    </m:msqrt>
+                  </m:mfrac>
+                  <m:mo>+</m:mo>
+                  <m:msub>
+                    <m:mi>b</m:mi>
+                    <m:mn>3</m:mn>
+                  </m:msub>
+                  <m:mo form="prefix">sin</m:mo>
+                  <m:mfrac>
+                    <m:mi>λ</m:mi>
+                    <m:msqrt>
+                      <m:mi>k</m:mi>
+                    </m:msqrt>
+                  </m:mfrac>
+                </m:mrow>
+              </m:mtd>
+              <m:mtd>
+                <m:mo>=</m:mo>
+              </m:mtd>
+              <m:mtd columnalign="left">
+                <m:mn>0</m:mn>
+              </m:mtd>
+            </m:mtr>
+            <m:mtr>
+              <m:mtd columnalign="right">
+                <m:mrow>
+                  <m:msub>
+                    <m:mi>α</m:mi>
+                    <m:mn>3</m:mn>
+                  </m:msub>
+                  <m:mo form="prefix">cos</m:mo>
+                  <m:mi>λ</m:mi>
+                  <m:mo>+</m:mo>
+                  <m:msub>
+                    <m:mi>β</m:mi>
+                    <m:mn>3</m:mn>
+                  </m:msub>
+                  <m:mo form="prefix">sin</m:mo>
+                  <m:mi>λ</m:mi>
+                </m:mrow>
+              </m:mtd>
+              <m:mtd>
+                <m:mo>=</m:mo>
+              </m:mtd>
+              <m:mtd columnalign="left">
+                <m:mrow>
+                  <m:mn>0</m:mn>
+                  <m:mo>.</m:mo>
+                </m:mrow>
+              </m:mtd>
+            </m:mtr>
+          </m:mtable>
+        </m:math>
+      </equation>
+      <para id="id2264148">Next, we apply the continuity conditions. Since <m:math overflow="scroll"><m:mrow><m:msub><m:mi>u</m:mi><m:mn>1</m:mn></m:msub><m:mrow><m:mo>(</m:mo><m:mn>1</m:mn><m:mo>)</m:mo></m:mrow><m:mo>=</m:mo><m:msub><m:mi>u</m:mi><m:mn>2</m:mn></m:msub><m:mrow><m:mo>(</m:mo><m:mn>0</m:mn><m:mo>)</m:mo></m:mrow></m:mrow></m:math>, we see that</para>
+      <equation id="id2264194">
+        <m:math overflow="scroll" mode="display">
+          <m:mtable displaystyle="true">
+            <m:mtr>
+              <m:mtd columnalign="right">
+                <m:mrow>
+                  <m:msub>
+                    <m:mi>a</m:mi>
+                    <m:mrow>
+                      <m:mn>1</m:mn>
+                      <m:mo>,</m:mo>
+                      <m:mn>1</m:mn>
+                    </m:mrow>
+                  </m:msub>
+                  <m:mo form="prefix">cos</m:mo>
+                  <m:mi>λ</m:mi>
+                  <m:mo>+</m:mo>
+                  <m:msub>
+                    <m:mi>b</m:mi>
+                    <m:mrow>
+                      <m:mn>1</m:mn>
+                      <m:mo>,</m:mo>
+                      <m:mn>1</m:mn>
+                    </m:mrow>
+                  </m:msub>
+                  <m:mo form="prefix">sin</m:mo>
+                  <m:mi>λ</m:mi>
+                  <m:mo>-</m:mo>
+                  <m:msub>
+                    <m:mi>a</m:mi>
+                    <m:mn>2</m:mn>
+                  </m:msub>
+                  <m:mo>-</m:mo>
+                  <m:msub>
+                    <m:mi>α</m:mi>
+                    <m:mn>2</m:mn>
+                  </m:msub>
+                </m:mrow>
+              </m:mtd>
+              <m:mtd>
+                <m:mo>=</m:mo>
+              </m:mtd>
+              <m:mtd columnalign="left">
+                <m:mn>0</m:mn>
+              </m:mtd>
+            </m:mtr>
+            <m:mtr>
+              <m:mtd columnalign="right">
+                <m:mrow>
+                  <m:msub>
+                    <m:mi>a</m:mi>
+                    <m:mrow>
+                      <m:mn>1</m:mn>
+                      <m:mo>,</m:mo>
+                      <m:mn>2</m:mn>
+                    </m:mrow>
+                  </m:msub>
+                  <m:mo form="prefix">cos</m:mo>
+                  <m:mfrac>
+                    <m:mi>λ</m:mi>
+                    <m:msqrt>
+                      <m:mi>k</m:mi>
+                    </m:msqrt>
+                  </m:mfrac>
+                  <m:mo>+</m:mo>
+                  <m:msub>
+                    <m:mi>b</m:mi>
+                    <m:mrow>
+                      <m:mn>1</m:mn>
+                      <m:mo>,</m:mo>
+                      <m:mn>2</m:mn>
+                    </m:mrow>
+                  </m:msub>
+                  <m:mo form="prefix">sin</m:mo>
+                  <m:mfrac>
+                    <m:mi>λ</m:mi>
+                    <m:msqrt>
+                      <m:mi>k</m:mi>
+                    </m:msqrt>
+                  </m:mfrac>
+                  <m:mo>-</m:mo>
+                  <m:msub>
+                    <m:mi>a</m:mi>
+                    <m:mn>2</m:mn>
+                  </m:msub>
+                  <m:mo>+</m:mo>
+                  <m:msub>
+                    <m:mi>α</m:mi>
+                    <m:mn>2</m:mn>
+                  </m:msub>
+                </m:mrow>
+              </m:mtd>
+              <m:mtd>
+                <m:mo>=</m:mo>
+              </m:mtd>
+              <m:mtd columnalign="left">
+                <m:mrow>
+                  <m:mn>0</m:mn>
+                  <m:mo>,</m:mo>
+                </m:mrow>
+              </m:mtd>
+            </m:mtr>
+          </m:mtable>
+        </m:math>
+      </equation>
+      <para id="id2264370">and because <m:math overflow="scroll"><m:mrow><m:msub><m:mi>u</m:mi><m:mn>2</m:mn></m:msub><m:mrow><m:mo>(</m:mo><m:mn>0</m:mn><m:mo>)</m:mo></m:mrow><m:mo>=</m:mo><m:msub><m:mi>u</m:mi><m:mn>3</m:mn></m:msub><m:mrow><m:mo>(</m:mo><m:mn>0</m:mn><m:mo>)</m:mo></m:mrow></m:mrow></m:math> we have</para>
+      <equation id="id2264414">
+        <m:math overflow="scroll" mode="display">
+          <m:mtable displaystyle="true">
+            <m:mtr>
+              <m:mtd columnalign="right">
+                <m:mrow>
+                  <m:msub>
+                    <m:mi>a</m:mi>
+                    <m:mn>2</m:mn>
+                  </m:msub>
+                  <m:mo>-</m:mo>
+                  <m:msub>
+                    <m:mi>a</m:mi>
+                    <m:mn>3</m:mn>
+                  </m:msub>
+                </m:mrow>
+              </m:mtd>
+              <m:mtd>
+                <m:mo>=</m:mo>
+              </m:mtd>
+              <m:mtd columnalign="left">
+                <m:mn>0</m:mn>
+              </m:mtd>
+            </m:mtr>
+            <m:mtr>
+              <m:mtd columnalign="right">
+                <m:mrow>
+                  <m:msub>
+                    <m:mi>α</m:mi>
+                    <m:mn>2</m:mn>
+                  </m:msub>
+                  <m:mo>-</m:mo>
+                  <m:msub>
+                    <m:mi>α</m:mi>
+                    <m:mn>3</m:mn>
+                  </m:msub>
+                </m:mrow>
+              </m:mtd>
+              <m:mtd>
+                <m:mo>=</m:mo>
+              </m:mtd>
+              <m:mtd columnalign="left">
+                <m:mrow>
+                  <m:mn>0</m:mn>
+                  <m:mo>.</m:mo>
+                </m:mrow>
+              </m:mtd>
+            </m:mtr>
+          </m:mtable>
+        </m:math>
+      </equation>
+      <para id="id2264492">Finally, from the force-balance equation, we have</para>
+      <equation id="id2264496">
+        <m:math overflow="scroll" mode="display">
+          <m:mtable displaystyle="true">
+            <m:mtr>
+              <m:mtd columnalign="right">
+                <m:mrow>
+                  <m:mo>-</m:mo>
+                  <m:msub>
+                    <m:mi>a</m:mi>
+                    <m:mrow>
+                      <m:mn>1</m:mn>
+                      <m:mo>,</m:mo>
+                      <m:mn>1</m:mn>
+                    </m:mrow>
+                  </m:msub>
+                  <m:mi>λ</m:mi>
+                  <m:mo form="prefix">sin</m:mo>
+                  <m:mi>λ</m:mi>
+                </m:mrow>
+              </m:mtd>
+              <m:mtd>
+                <m:mo>+</m:mo>
+              </m:mtd>
+              <m:mtd columnalign="left">
+                <m:mrow>
+                  <m:msub>
+                    <m:mi>b</m:mi>
+                    <m:mrow>
+                      <m:mn>1</m:mn>
+                      <m:mo>,</m:mo>
+                      <m:mn>1</m:mn>
+                    </m:mrow>
+                  </m:msub>
+                  <m:mi>λ</m:mi>
+                  <m:mo form="prefix">cos</m:mo>
+                  <m:mi>λ</m:mi>
+                  <m:mo>-</m:mo>
+                  <m:mfrac>
+                    <m:mn>1</m:mn>
+                    <m:mn>2</m:mn>
+                  </m:mfrac>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:mi>k</m:mi>
+                    <m:mo>+</m:mo>
+                    <m:mn>1</m:mn>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                  <m:mfenced separators="" open="(" close=")">
+                    <m:msub>
+                      <m:mi>b</m:mi>
+                      <m:mn>2</m:mn>
+                    </m:msub>
+                    <m:mi>λ</m:mi>
+                    <m:mo>+</m:mo>
+                    <m:msub>
+                      <m:mi>β</m:mi>
+                      <m:mn>2</m:mn>
+                    </m:msub>
+                    <m:mfrac>
+                      <m:mi>λ</m:mi>
+                      <m:msqrt>
+                        <m:mi>k</m:mi>
+                      </m:msqrt>
+                    </m:mfrac>
+                  </m:mfenced>
+                  <m:mo>-</m:mo>
+                  <m:mfrac>
+                    <m:mn>1</m:mn>
+                    <m:mn>2</m:mn>
+                  </m:mfrac>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:mi>k</m:mi>
+                    <m:mo>+</m:mo>
+                    <m:mn>1</m:mn>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                  <m:mfenced separators="" open="(" close=")">
+                    <m:msub>
+                      <m:mi>b</m:mi>
+                      <m:mn>2</m:mn>
+                    </m:msub>
+                    <m:mi>λ</m:mi>
+                    <m:mo>-</m:mo>
+                    <m:msub>
+                      <m:mi>β</m:mi>
+                      <m:mn>2</m:mn>
+                    </m:msub>
+                    <m:mfrac>
+                      <m:mi>λ</m:mi>
+                      <m:msqrt>
+                        <m:mi>k</m:mi>
+                      </m:msqrt>
+                    </m:mfrac>
+                  </m:mfenced>
+                  <m:mo>-</m:mo>
+                  <m:mfrac>
+                    <m:mn>1</m:mn>
+                    <m:mn>2</m:mn>
+                  </m:mfrac>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:mi>k</m:mi>
+                    <m:mo>-</m:mo>
+                    <m:mn>1</m:mn>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                  <m:mfenced separators="" open="(" close=")">
+                    <m:msub>
+                      <m:mi>b</m:mi>
+                      <m:mn>3</m:mn>
+                    </m:msub>
+                    <m:mfrac>
+                      <m:mi>λ</m:mi>
+                      <m:msqrt>
+                        <m:mi>k</m:mi>
+                      </m:msqrt>
+                    </m:mfrac>
+                    <m:mo>+</m:mo>
+                    <m:msub>
+                      <m:mi>β</m:mi>
+                      <m:mn>3</m:mn>
+                    </m:msub>
+                    <m:mi>λ</m:mi>
+                  </m:mfenced>
+                </m:mrow>
+              </m:mtd>
+            </m:mtr>
+            <m:mtr>
+              <m:mtd/>
+              <m:mtd>
+                <m:mo>-</m:mo>
+              </m:mtd>
+              <m:mtd columnalign="left">
+                <m:mrow>
+                  <m:mfrac>
+                    <m:mn>1</m:mn>
+                    <m:mn>2</m:mn>
+                  </m:mfrac>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:mi>k</m:mi>
+                    <m:mo>+</m:mo>
+                    <m:mn>1</m:mn>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                  <m:mfenced separators="" open="(" close=")">
+                    <m:msub>
+                      <m:mi>b</m:mi>
+                      <m:mn>3</m:mn>
+                    </m:msub>
+                    <m:mfrac>
+                      <m:mi>λ</m:mi>
+                      <m:msqrt>
+                        <m:mi>k</m:mi>
+                      </m:msqrt>
+                    </m:mfrac>
+                    <m:mo>-</m:mo>
+                    <m:msub>
+                      <m:mi>β</m:mi>
+                      <m:mn>3</m:mn>
+                    </m:msub>
+                    <m:mi>λ</m:mi>
+                  </m:mfenced>
+                  <m:mo>=</m:mo>
+                  <m:mn>0</m:mn>
+                </m:mrow>
+              </m:mtd>
+            </m:mtr>
+          </m:mtable>
+        </m:math>
+      </equation>
+      <para id="id2264799">and</para>
+      <equation id="id2264802">
+        <m:math overflow="scroll" mode="display">
+          <m:mtable displaystyle="true">
+            <m:mtr>
+              <m:mtd columnalign="right">
+                <m:mrow>
+                  <m:mo>-</m:mo>
+                  <m:msub>
+                    <m:mi>a</m:mi>
+                    <m:mrow>
+                      <m:mn>1</m:mn>
+                      <m:mo>,</m:mo>
+                      <m:mn>2</m:mn>
+                    </m:mrow>
+                  </m:msub>
+                  <m:mfrac>
+                    <m:mi>λ</m:mi>
+                    <m:msqrt>
+                      <m:mi>k</m:mi>
+                    </m:msqrt>
+                  </m:mfrac>
+                  <m:mo form="prefix">sin</m:mo>
+                  <m:mfrac>
+                    <m:mi>λ</m:mi>
+                    <m:msqrt>
+                      <m:mi>k</m:mi>
+                    </m:msqrt>
+                  </m:mfrac>
+                </m:mrow>
+              </m:mtd>
+              <m:mtd>
+                <m:mo>+</m:mo>
+              </m:mtd>
+              <m:mtd columnalign="left">
+                <m:mrow>
+                  <m:msub>
+                    <m:mi>b</m:mi>
+                    <m:mrow>
+                      <m:mn>1</m:mn>
+                      <m:mo>,</m:mo>
+                      <m:mn>2</m:mn>
+                    </m:mrow>
+                  </m:msub>
+                  <m:mfrac>
+                    <m:mi>λ</m:mi>
+                    <m:msqrt>
+                      <m:mi>k</m:mi>
+                    </m:msqrt>
+                  </m:mfrac>
+                  <m:mo form="prefix">cos</m:mo>
+                  <m:mfrac>
+                    <m:mi>λ</m:mi>
+                    <m:msqrt>
+                      <m:mi>k</m:mi>
+                    </m:msqrt>
+                  </m:mfrac>
+                  <m:mo>-</m:mo>
+                  <m:mfrac>
+                    <m:mn>1</m:mn>
+                    <m:mn>2</m:mn>
+                  </m:mfrac>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:mn>1</m:mn>
+                    <m:mo>-</m:mo>
+                    <m:mi>k</m:mi>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                  <m:mfenced separators="" open="(" close=")">
+                    <m:msub>
+                      <m:mi>b</m:mi>
+                      <m:mn>2</m:mn>
+                    </m:msub>
+                    <m:mi>λ</m:mi>
+                    <m:mo>+</m:mo>
+                    <m:msub>
+                      <m:mi>β</m:mi>
+                      <m:mn>2</m:mn>
+                    </m:msub>
+                    <m:mfrac>
+                      <m:mi>λ</m:mi>
+                      <m:msqrt>
+                        <m:mi>k</m:mi>
+                      </m:msqrt>
+                    </m:mfrac>
+                  </m:mfenced>
+                  <m:mo>-</m:mo>
+                  <m:mfrac>
+                    <m:mn>1</m:mn>
+                    <m:mn>2</m:mn>
+                  </m:mfrac>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:mi>k</m:mi>
+                    <m:mo>+</m:mo>
+                    <m:mn>1</m:mn>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                  <m:mfenced separators="" open="(" close=")">
+                    <m:msub>
+                      <m:mi>b</m:mi>
+                      <m:mn>2</m:mn>
+                    </m:msub>
+                    <m:mi>λ</m:mi>
+                    <m:mo>-</m:mo>
+                    <m:msub>
+                      <m:mi>β</m:mi>
+                      <m:mn>2</m:mn>
+                    </m:msub>
+                    <m:mfrac>
+                      <m:mi>λ</m:mi>
+                      <m:msqrt>
+                        <m:mi>k</m:mi>
+                      </m:msqrt>
+                    </m:mfrac>
+                  </m:mfenced>
+                  <m:mo>-</m:mo>
+                  <m:mfrac>
+                    <m:mn>1</m:mn>
+                    <m:mn>2</m:mn>
+                  </m:mfrac>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:mi>k</m:mi>
+                    <m:mo>-</m:mo>
+                    <m:mn>1</m:mn>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                  <m:mfenced separators="" open="(" close=")">
+                    <m:msub>
+                      <m:mi>b</m:mi>
+                      <m:mn>3</m:mn>
+                    </m:msub>
+                    <m:mfrac>
+                      <m:mi>λ</m:mi>
+                      <m:msqrt>
+                        <m:mi>k</m:mi>
+                      </m:msqrt>
+                    </m:mfrac>
+                    <m:mo>+</m:mo>
+                    <m:msub>
+                      <m:mi>β</m:mi>
+                      <m:mn>3</m:mn>
+                    </m:msub>
+                    <m:mi>λ</m:mi>
+                  </m:mfenced>
+                </m:mrow>
+              </m:mtd>
+            </m:mtr>
+            <m:mtr>
+              <m:mtd/>
+              <m:mtd>
+                <m:mo>-</m:mo>
+              </m:mtd>
+              <m:mtd columnalign="left">
+                <m:mrow>
+                  <m:mfrac>
+                    <m:mn>1</m:mn>
+                    <m:mn>2</m:mn>
+                  </m:mfrac>
+                  <m:mrow>
+                    <m:mi>k</m:mi>
+                    <m:mo>+</m:mo>
+                    <m:mn>1</m:mn>
+                  </m:mrow>
+                  <m:mfenced separators="" open="(" close=")">
+                    <m:msub>
+                      <m:mi>b</m:mi>
+                      <m:mn>3</m:mn>
+                    </m:msub>
+                    <m:mfrac>
+                      <m:mi>λ</m:mi>
+                      <m:msqrt>
+                        <m:mi>k</m:mi>
+                      </m:msqrt>
+                    </m:mfrac>
+                    <m:mo>-</m:mo>
+                    <m:msub>
+                      <m:mi>β</m:mi>
+                      <m:mn>3</m:mn>
+                    </m:msub>
+                    <m:mi>λ</m:mi>
+                  </m:mfenced>
+                  <m:mo>=</m:mo>
+                  <m:mn>0</m:mn>
+                  <m:mo>.</m:mo>
+                </m:mrow>
+              </m:mtd>
+            </m:mtr>
+          </m:mtable>
+        </m:math>
+      </equation>
+      <para id="id2265124">These twelve equations can be represented by a single matrix equation with the following coefficient matrix:</para>
+      <equation id="id2265129">
+        <m:math overflow="scroll" mode="display">
+          <m:mtable displaystyle="true">
+            <m:mtr>
+              <m:mtd columnalign="right">
+                <m:mrow>
+                  <m:mfenced separators="" open="[" close="]">
+                    <m:mtable>
+                      <m:mtr>
+                        <m:mtd>
+                          <m:mn>1</m:mn>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mn>0</m:mn>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mn>0</m:mn>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mn>0</m:mn>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mn>0</m:mn>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mn>0</m:mn>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mn>0</m:mn>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mn>0</m:mn>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mn>0</m:mn>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mn>0</m:mn>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mn>0</m:mn>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mn>0</m:mn>
+                        </m:mtd>
+                      </m:mtr>
+                      <m:mtr>
+                        <m:mtd>
+                          <m:mn>0</m:mn>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mn>1</m:mn>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mn>0</m:mn>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mn>0</m:mn>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mn>0</m:mn>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mn>0</m:mn>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mn>0</m:mn>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mn>0</m:mn>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mn>0</m:mn>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mn>0</m:mn>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mn>0</m:mn>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mn>0</m:mn>
+                        </m:mtd>
+                      </m:mtr>
+                      <m:mtr>
+                        <m:mtd>
+                          <m:mn>0</m:mn>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mn>0</m:mn>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mn>0</m:mn>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mn>0</m:mn>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mrow>
+                            <m:mo form="prefix">cos</m:mo>
+                            <m:mi>λ</m:mi>
+                          </m:mrow>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mrow>
+                            <m:mo form="prefix">sin</m:mo>
+                            <m:mi>λ</m:mi>
+                          </m:mrow>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mn>0</m:mn>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mn>0</m:mn>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mn>0</m:mn>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mn>0</m:mn>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mn>0</m:mn>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mn>0</m:mn>
+                        </m:mtd>
+                      </m:mtr>
+                      <m:mtr>
+                        <m:mtd>
+                          <m:mn>0</m:mn>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mn>0</m:mn>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mn>0</m:mn>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mn>0</m:mn>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mn>0</m:mn>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mn>0</m:mn>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mrow>
+                            <m:mo form="prefix">cos</m:mo>
+                            <m:mfrac>
+                              <m:mi>λ</m:mi>
+                              <m:msqrt>
+                                <m:mi>k</m:mi>
+                              </m:msqrt>
+                            </m:mfrac>
+                          </m:mrow>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mrow>
+                            <m:mo form="prefix">sin</m:mo>
+                            <m:mfrac>
+                              <m:mi>λ</m:mi>
+                              <m:msqrt>
+                                <m:mi>k</m:mi>
+                              </m:msqrt>
+                            </m:mfrac>
+                          </m:mrow>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mn>0</m:mn>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mn>0</m:mn>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mn>0</m:mn>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mn>0</m:mn>
+                        </m:mtd>
+                      </m:mtr>
+                      <m:mtr>
+                        <m:mtd>
+                          <m:mn>0</m:mn>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mn>0</m:mn>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mn>0</m:mn>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mn>0</m:mn>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mn>0</m:mn>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mn>0</m:mn>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mn>0</m:mn>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mn>0</m:mn>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mrow>
+                            <m:mo form="prefix">cos</m:mo>
+                            <m:mfrac>
+                              <m:mi>λ</m:mi>
+                              <m:msqrt>
+                                <m:mi>k</m:mi>
+                              </m:msqrt>
+                            </m:mfrac>
+                          </m:mrow>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mrow>
+                            <m:mo form="prefix">sin</m:mo>
+                            <m:mfrac>
+                              <m:mi>λ</m:mi>
+                              <m:msqrt>
+                                <m:mi>k</m:mi>
+                              </m:msqrt>
+                            </m:mfrac>
+                          </m:mrow>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mn>0</m:mn>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mn>0</m:mn>
+                        </m:mtd>
+                      </m:mtr>
+                      <m:mtr>
+                        <m:mtd>
+                          <m:mn>0</m:mn>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mn>0</m:mn>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mn>0</m:mn>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mn>0</m:mn>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mn>0</m:mn>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mn>0</m:mn>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mn>0</m:mn>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mn>0</m:mn>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mn>0</m:mn>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mn>0</m:mn>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mrow>
+                            <m:mo form="prefix">cos</m:mo>
+                            <m:mi>λ</m:mi>
+                          </m:mrow>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mrow>
+                            <m:mo form="prefix">sin</m:mo>
+                            <m:mi>λ</m:mi>
+                          </m:mrow>
+                        </m:mtd>
+                      </m:mtr>
+                      <m:mtr>
+                        <m:mtd>
+                          <m:mrow>
+                            <m:mo form="prefix">cos</m:mo>
+                            <m:mi>λ</m:mi>
+                          </m:mrow>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mn>0</m:mn>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mrow>
+                            <m:mo form="prefix">sin</m:mo>
+                            <m:mi>λ</m:mi>
+                          </m:mrow>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mn>0</m:mn>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mrow>
+                            <m:mo>-</m:mo>
+                            <m:mn>1</m:mn>
+                          </m:mrow>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mn>0</m:mn>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mrow>
+                            <m:mo>-</m:mo>
+                            <m:mn>1</m:mn>
+                          </m:mrow>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mn>0</m:mn>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mn>0</m:mn>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mn>0</m:mn>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mn>0</m:mn>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mn>0</m:mn>
+                        </m:mtd>
+                      </m:mtr>
+                      <m:mtr>
+                        <m:mtd>
+                          <m:mn>0</m:mn>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mrow>
+                            <m:mo form="prefix">cos</m:mo>
+                            <m:mfrac>
+                              <m:mi>λ</m:mi>
+                              <m:msqrt>
+                                <m:mi>k</m:mi>
+                              </m:msqrt>
+                            </m:mfrac>
+                          </m:mrow>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mn>0</m:mn>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mrow>
+                            <m:mo form="prefix">sin</m:mo>
+                            <m:mfrac>
+                              <m:mi>λ</m:mi>
+                              <m:msqrt>
+                                <m:mi>k</m:mi>
+                              </m:msqrt>
+                            </m:mfrac>
+                          </m:mrow>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mrow>
+                            <m:mo>-</m:mo>
+                            <m:mn>1</m:mn>
+                          </m:mrow>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mn>0</m:mn>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mn>1</m:mn>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mn>0</m:mn>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mn>0</m:mn>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mn>0</m:mn>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mn>0</m:mn>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mn>0</m:mn>
+                        </m:mtd>
+                      </m:mtr>
+                      <m:mtr>
+                        <m:mtd>
+                          <m:mn>0</m:mn>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mn>0</m:mn>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mn>0</m:mn>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mn>0</m:mn>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mn>1</m:mn>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mn>0</m:mn>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mn>0</m:mn>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mn>0</m:mn>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mrow>
+                            <m:mo>-</m:mo>
+                            <m:mn>1</m:mn>
+                          </m:mrow>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mn>0</m:mn>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mn>0</m:mn>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mn>0</m:mn>
+                        </m:mtd>
+                      </m:mtr>
+                      <m:mtr>
+                        <m:mtd>
+                          <m:mn>0</m:mn>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mn>0</m:mn>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mn>0</m:mn>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mn>0</m:mn>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mn>0</m:mn>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mn>0</m:mn>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mn>1</m:mn>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mn>0</m:mn>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mn>0</m:mn>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mn>0</m:mn>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mrow>
+                            <m:mo>-</m:mo>
+                            <m:mn>1</m:mn>
+                          </m:mrow>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mn>0</m:mn>
+                        </m:mtd>
+                      </m:mtr>
+                      <m:mtr>
+                        <m:mtd>
+                          <m:mrow>
+                            <m:mo>-</m:mo>
+                            <m:mi>λ</m:mi>
+                            <m:mo form="prefix">sin</m:mo>
+                            <m:mi>λ</m:mi>
+                          </m:mrow>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mn>0</m:mn>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mrow>
+                            <m:mi>λ</m:mi>
+                            <m:mo form="prefix">cos</m:mo>
+                            <m:mi>λ</m:mi>
+                          </m:mrow>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mn>0</m:mn>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mn>0</m:mn>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mrow>
+                            <m:mo>-</m:mo>
+                            <m:mi>λ</m:mi>
+                          </m:mrow>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mn>0</m:mn>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mfrac>
+                            <m:mi>λ</m:mi>
+                            <m:msqrt>
+                              <m:mi>k</m:mi>
+                            </m:msqrt>
+                          </m:mfrac>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mn>0</m:mn>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mrow>
+                            <m:mrow>
+                              <m:mo>(</m:mo>
+                              <m:mn>1</m:mn>
+                              <m:mo>-</m:mo>
+                              <m:mi>k</m:mi>
+                              <m:mo>)</m:mo>
+                            </m:mrow>
+                            <m:mfrac>
+                              <m:mi>λ</m:mi>
+                              <m:msqrt>
+                                <m:mi>k</m:mi>
+                              </m:msqrt>
+                            </m:mfrac>
+                          </m:mrow>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mn>0</m:mn>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mrow>
+                            <m:mo>-</m:mo>
+                            <m:mi>λ</m:mi>
+                          </m:mrow>
+                        </m:mtd>
+                      </m:mtr>
+                      <m:mtr>
+                        <m:mtd>
+                          <m:mn>0</m:mn>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mrow>
+                            <m:mo>-</m:mo>
+                            <m:mfrac>
+                              <m:mi>λ</m:mi>
+                              <m:msqrt>
+                                <m:mi>k</m:mi>
+                              </m:msqrt>
+                            </m:mfrac>
+                            <m:mo form="prefix">sin</m:mo>
+                            <m:mfrac>
+                              <m:mi>λ</m:mi>
+                              <m:msqrt>
+                                <m:mi>k</m:mi>
+                              </m:msqrt>
+                            </m:mfrac>
+                          </m:mrow>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mn>0</m:mn>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mrow>
+                            <m:mfrac>
+                              <m:mi>λ</m:mi>
+                              <m:msqrt>
+                                <m:mi>k</m:mi>
+                              </m:msqrt>
+                            </m:mfrac>
+                            <m:mo form="prefix">cos</m:mo>
+                            <m:mfrac>
+                              <m:mi>λ</m:mi>
+                              <m:msqrt>
+                                <m:mi>k</m:mi>
+                              </m:msqrt>
+                            </m:mfrac>
+                          </m:mrow>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mn>0</m:mn>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mrow>
+                            <m:mo>-</m:mo>
+                            <m:mi>λ</m:mi>
+                          </m:mrow>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mn>0</m:mn>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mfrac>
+                            <m:mi>λ</m:mi>
+                            <m:msqrt>
+                              <m:mi>k</m:mi>
+                            </m:msqrt>
+                          </m:mfrac>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mn>0</m:mn>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mrow>
+                            <m:mo>-</m:mo>
+                            <m:mfrac>
+                              <m:mi>λ</m:mi>
+                              <m:msqrt>
+                                <m:mi>k</m:mi>
+                              </m:msqrt>
+                            </m:mfrac>
+                          </m:mrow>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mn>0</m:mn>
+                        </m:mtd>
+                        <m:mtd>
+                          <m:mi>λ</m:mi>
+                        </m:mtd>
+                      </m:mtr>
+                    </m:mtable>
+                  </m:mfenced>
+                  <m:mo>.</m:mo>
+                </m:mrow>
+              </m:mtd>
+            </m:mtr>
+          </m:mtable>
+        </m:math>
+      </equation>
+      <para id="id2265854">The determinant of this matrix is</para>
+      <equation id="id2265858">
+        <m:math overflow="scroll" mode="display">
+          <m:mtable displaystyle="true">
+            <m:mtr>
+              <m:mtd/>
+              <m:mtd/>
+              <m:mtd columnalign="left">
+                <m:mrow>
+                  <m:mo>-</m:mo>
+                  <m:mo form="prefix">sin</m:mo>
+                  <m:mfenced separators="" open="(" close=")">
+                    <m:mfrac>
+                      <m:mi>λ</m:mi>
+                      <m:msqrt>
+                        <m:mi>k</m:mi>
+                      </m:msqrt>
+                    </m:mfrac>
+                  </m:mfenced>
+                  <m:mo form="prefix">sin</m:mo>
+                  <m:mfenced open="(" close=")">
+                    <m:mi>λ</m:mi>
+                  </m:mfenced>
+                  <m:msup>
+                    <m:mrow>
+                      <m:mi>l</m:mi>
+                    </m:mrow>
+                    <m:mn>2</m:mn>
+                  </m:msup>
+                  <m:mfenced separators="" open="(" close="">
+                    <m:mn>6</m:mn>
+                    <m:mspace width="0.166667em"/>
+                    <m:mo form="prefix">cos</m:mo>
+                    <m:mfenced open="(" close=")">
+                      <m:mi>λ</m:mi>
+                    </m:mfenced>
+                    <m:mo form="prefix">sin</m:mo>
+                    <m:mfenced separators="" open="(" close=")">
+                      <m:mfrac>
+                        <m:mi>λ</m:mi>
+                        <m:msqrt>
+                          <m:mi>k</m:mi>
+                        </m:msqrt>
+                      </m:mfrac>
+                    </m:mfenced>
+                    <m:msup>
+                      <m:mrow>
+                        <m:mi>k</m:mi>
+                      </m:mrow>
+                      <m:mn>2</m:mn>
+                    </m:msup>
+                    <m:mo form="prefix">cos</m:mo>
+                    <m:mfenced separators="" open="(" close=")">
+                      <m:mfrac>
+                        <m:mi>λ</m:mi>
+                        <m:msqrt>
+                          <m:mi>k</m:mi>
+                        </m:msqrt>
+                      </m:mfrac>
+                    </m:mfenced>
+                    <m:mo form="prefix">sin</m:mo>
+                    <m:mfenced open="(" close=")">
+                      <m:mi>λ</m:mi>
+                    </m:mfenced>
+                    <m:mo>+</m:mo>
+                    <m:mn>4</m:mn>
+                    <m:mspace width="0.166667em"/>
+                    <m:msup>
+                      <m:mfenced separators="" open="(" close=")">
+                        <m:mo form="prefix">cos</m:mo>
+                        <m:mfenced open="(" close=")">
+                          <m:mi>λ</m:mi>
+                        </m:mfenced>
+                      </m:mfenced>
+                      <m:mn>2</m:mn>
+                    </m:msup>
+                    <m:msup>
+                      <m:mfenced separators="" open="(" close=")">
+                        <m:mo form="prefix">sin</m:mo>
+                        <m:mfenced separators="" open="(" close=")">
+                          <m:mfrac>
+                            <m:mi>λ</m:mi>
+                            <m:msqrt>
+                              <m:mi>k</m:mi>
+                            </m:msqrt>
+                          </m:mfrac>
+                        </m:mfenced>
+                      </m:mfenced>
+                      <m:mn>2</m:mn>
+                    </m:msup>
+                    <m:msup>
+                      <m:mrow>
+                        <m:mi>k</m:mi>
+                      </m:mrow>
+                      <m:mrow>
+                        <m:mn>3</m:mn>
+                        <m:mo>/</m:mo>
+                        <m:mn>2</m:mn>
+                      </m:mrow>
+                    </m:msup>
+                  </m:mfenced>
+                </m:mrow>
+              </m:mtd>
+            </m:mtr>
+            <m:mtr>
+              <m:mtd/>
+              <m:mtd/>
+              <m:mtd columnalign="left">
+                <m:mrow>
+                  <m:mspace width="1.em"/>
+                  <m:mfenced separators="" open="" close="">
+                    <m:mo>+</m:mo>
+                    <m:mn>3</m:mn>
+                    <m:mspace width="0.166667em"/>
+                    <m:mo form="prefix">cos</m:mo>
+                    <m:mfenced open="(" close=")">
+                      <m:mi>λ</m:mi>
+                    </m:mfenced>
+                    <m:mo form="prefix">sin</m:mo>
+                    <m:mfenced separators="" open="(" close=")">
+                      <m:mfrac>
+                        <m:mi>λ</m:mi>
+                        <m:msqrt>
+                          <m:mi>k</m:mi>
+                        </m:msqrt>
+                      </m:mfrac>
+                    </m:mfenced>
+                    <m:mi>k</m:mi>
+                    <m:mo form="prefix">cos</m:mo>
+                    <m:mfenced separators="" open="(" close=")">
+                      <m:mfrac>
+                        <m:mi>λ</m:mi>
+                        <m:msqrt>
+                          <m:mi>k</m:mi>
+                        </m:msqrt>
+                      </m:mfrac>
+                    </m:mfenced>
+                    <m:mo form="prefix">sin</m:mo>
+                    <m:mfenced open="(" close=")">
+                      <m:mi>λ</m:mi>
+                    </m:mfenced>
+                    <m:mo>+</m:mo>
+                    <m:msup>
+                      <m:mfenced separators="" open="(" close=")">
+                        <m:mo form="prefix">sin</m:mo>
+                        <m:mfenced open="(" close=")">
+                          <m:mi>λ</m:mi>
+                        </m:mfenced>
+                      </m:mfenced>
+                      <m:mn>2</m:mn>
+                    </m:msup>
+                    <m:msup>
+                      <m:mfenced separators="" open="(" close=")">
+                        <m:mo form="prefix">cos</m:mo>
+                        <m:mfenced separators="" open="(" close=")">
+                          <m:mfrac>
+                            <m:mi>λ</m:mi>
+                            <m:msqrt>
+                              <m:mi>k</m:mi>
+                            </m:msqrt>
+                          </m:mfrac>
+                        </m:mfenced>
+                      </m:mfenced>
+                      <m:mn>2</m:mn>
+                    </m:msup>
+                    <m:msup>
+                      <m:mrow>
+                        <m:mi>k</m:mi>
+                      </m:mrow>
+                      <m:mrow>
+                        <m:mn>3</m:mn>
+                        <m:mo>/</m:mo>
+                        <m:mn>2</m:mn>
+                      </m:mrow>
+                    </m:msup>
+                    <m:mo>-</m:mo>
+                    <m:msup>
+                      <m:mfenced separators="" open="(" close=")">
+                        <m:mo form="prefix">sin</m:mo>
+                        <m:mfenced open="(" close=")">
+                          <m:mi>λ</m:mi>
+                        </m:mfenced>
+                      </m:mfenced>
+                      <m:mn>2</m:mn>
+                    </m:msup>
+                    <m:msup>
+                      <m:mfenced separators="" open="(" close=")">
+                        <m:mo form="prefix">cos</m:mo>
+                        <m:mfenced separators="" open="(" close=")">
+                          <m:mfrac>
+                            <m:mi>λ</m:mi>
+                            <m:msqrt>
+                              <m:mi>k</m:mi>
+                            </m:msqrt>
+                          </m:mfrac>
+                        </m:mfenced>
+                      </m:mfenced>
+                      <m:mn>2</m:mn>
+                    </m:msup>
+                    <m:msqrt>
+                      <m:mi>k</m:mi>
+                    </m:msqrt>
+                  </m:mfenced>
+                </m:mrow>
+              </m:mtd>
+            </m:mtr>
+            <m:mtr>
+              <m:mtd/>
+              <m:mtd/>
+              <m:mtd columnalign="left">
+                <m:mrow>
+                  <m:mspace width="1.em"/>
+                  <m:mfenced separators="" open="" close=")">
+                    <m:mo>+</m:mo>
+                    <m:mn>2</m:mn>
+                    <m:mspace width="0.166667em"/>
+                    <m:msup>
+                      <m:mfenced separators="" open="(" close=")">
+                        <m:mo form="prefix">sin</m:mo>
+                        <m:mfenced open="(" close=")">
+                          <m:mi>λ</m:mi>
+                        </m:mfenced>
+                      </m:mfenced>
+                      <m:mn>2</m:mn>
+                    </m:msup>
+                    <m:msup>
+                      <m:mfenced separators="" open="(" close=")">
+                        <m:mo form="prefix">cos</m:mo>
+                        <m:mfenced separators="" open="(" close=")">
+                          <m:mfrac>
+                            <m:mi>λ</m:mi>
+                            <m:msqrt>
+                              <m:mi>k</m:mi>
+                            </m:msqrt>
+                          </m:mfrac>
+                        </m:mfenced>
+                      </m:mfenced>
+                      <m:mn>2</m:mn>
+                    </m:msup>
+                    <m:msup>
+                      <m:mrow>
+                        <m:mi>k</m:mi>
+                      </m:mrow>
+                      <m:mrow>
+                        <m:mn>5</m:mn>
+                        <m:mo>/</m:mo>
+                        <m:mn>2</m:mn>
+                      </m:mrow>
+                    </m:msup>
+                  </m:mfenced>
+                  <m:msup>
+                    <m:mrow>
+                      <m:mi>k</m:mi>
+                    </m:mrow>
+                    <m:mrow>
+                      <m:mo>-</m:mo>
+                      <m:mn>3</m:mn>
+                      <m:mo>/</m:mo>
+                      <m:mn>2</m:mn>
+                    </m:mrow>
+                  </m:msup>
+                  <m:mo>,</m:mo>
+                </m:mrow>
+              </m:mtd>
+            </m:mtr>
+          </m:mtable>
+        </m:math>
+      </equation>
+      <para id="id2266416">and by substituting in the desired value of <emphasis effect="italics">k</emphasis> and setting this determiniant to zero we can then solve for the eigenvalues
+<emphasis effect="italics">λ</emphasis> of our tritar net. A plot of the first seven eigenvalues as a function of <emphasis effect="italics">k</emphasis> is displayed below:</para>
+      <figure id="uid5">
+        <media id="uid5_media" alt="">
+          <image mime-type="image/png" src="../../media/triteig.png" id="uid5_onlineimage" width="560"><!-- NOTE: attribute width changes image size online (pixels). original width is 560. --></image>
+          <image for="pdf" mime-type="application/postscript" src="../../media/triteig.eps" id="uid5_printimage"/>
+        </media>
+        <caption>First seven planar eigenvalues for a tritar net, computed with fzero().</caption>
+      </figure>
+      <para id="id2266465">As expected, the eigenvalues increase as <emphasis effect="italics">k</emphasis> increases; however for eigenvalues beyond the first, we observe some rather
+strange behavior, which suggests that something has gone wrong in the above process. The eigenvalues in the above plot were
+computed using MATLAB's fzero() function at a tolerance of 1e-10. Using a more naive bisection method (which is less likely
+to lock onto the wrong root) at the same tolerance, we obtain the following plot:</para>
+      <figure id="uid6">
+        <media id="uid6_media" alt="">
+          <image mime-type="image/png" src="../../media/triteigbis.png" id="uid6_onlineimage" width="560"><!-- NOTE: attribute width changes image size online (pixels). original width is 560. --></image>
+          <image for="pdf" mime-type="application/postscript" src="../../media/triteigbis.eps" id="uid6_printimage"/>
+        </media>
+        <caption>First seven planar eigenvalues for a tritar net, computed with the bisection method.</caption>
+      </figure>
+      <para id="id2266498">This seems to have fixed some of the erratic behavior, but neither tightening the tolerance nor increasing the fine-ness of
+the mesh along which the determinant is evaluated provides much further improvement. On the other hand, it is apparent that
+the solver's structure and parameters impacts the shape of the plots. Perhaps a better solver of some sort (e.g. Newton's
+method, but adapted to search only in a given interval) can fix more of the problem.</para>
+    </section>
+    <section id="cid2">
+      <title>Example #2: The Quintar</title>
+      <figure id="uid7">
+        <media id="uid7_media" alt="">
+          <image mime-type="image/png" src="../../media/quintar.png" id="uid7_onlineimage" width="291"><!-- NOTE: attribute width changes image size online (pixels). original width is 291. --></image>
+          <image for="pdf" mime-type="application/postscript" src="../../media/quintar.eps" id="uid7_printimage"/>
+        </media>
+        <caption>A depiction of the quintar, with the end angles at 90 degrees.</caption>
+      </figure>
+      <para id="id2266532">Rather than develop all of the mathematical relations as in the previous example, it should suffice to say that the same procedure is followed. The solutions to the differential equations are still sums of sines and cosines, but more equations have been added to the system. The function obtained by setting the determinant equal to zero is not enlightening and longer than that for the quintar, and so only the final plots will be presented here. By iteratively increasing the angle at the ends of the network, a plot of the angle versus the eigenvalues is obtained in which traces are formed as the eigenvalues change. It is interesting to note how some of the eigenvalues increase in magnitude while others decrease.</para>
+      <para id="id2266548">A second plot is presented in which the first nine eigenvalues are plotted versus the transverse stiffness parameter for our analytic model. A region of stiffnesses was chosen where the root-finding algorithm is able to successfully lock onto the zeroes of the determinant as they change. It is clear from this plot that for this range of stiffnesses, increasing stiffness results in the modes of vibration increasing in frequency. This result is expected, since in general stiffer members possess higher vibrational frequencies.</para>
+      <figure id="uid8">
+        <media id="uid8_media" alt="">
+          <image mime-type="image/png" src="../../media/eigs_theta_200.png" id="uid8_onlineimage" width="560"><!-- NOTE: attribute width changes image size online (pixels). original width is 560. --></image>
+          <image for="pdf" mime-type="application/postscript" src="../../media/eigs_theta_200.eps" id="uid8_printimage"/>
+        </media>
+        <caption>A plot of the opening angle at the ends versus the eigenvalues.</caption>
+      </figure>
+      <figure id="uid9">
+        <media id="uid9_media" alt="">
+          <image mime-type="image/png" src="../../media/eigs_k_9.png" id="uid9_onlineimage" width="560"><!-- NOTE: attribute width changes image size online (pixels). original width is 560. --></image>
+          <image for="pdf" mime-type="application/postscript" src="../../media/eigs_k_9.eps" id="uid9_printimage"/>
+        </media>
+        <caption>A plot of the first nine eigenvalues for planar modes versus the transverse stiffness.</caption>
+      </figure>
+    </section>
+  </content>
+</document>

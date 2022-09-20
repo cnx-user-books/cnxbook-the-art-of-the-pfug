@@ -1,0 +1,220 @@
+<document xmlns="http://cnx.rice.edu/cnxml" xmlns:m="http://www.w3.org/1998/Math/MathML" xmlns:md="http://cnx.rice.edu/mdml">
+  <title>The Coordinated Max-Median Rule for Portfolio Selection</title>
+  <metadata>
+  <md:content-id>m32523</md:content-id><md:title>The Coordinated Max-Median Rule for Portfolio Selection</md:title>
+  <md:abstract>A partial summary of the work performed by one Computational Finance PFUG [under Rice University's VIGRE Summer Reserach Program] is provided in this module.  VIGRE (Vertically Integrated Grants for Research and Education) is funded by the NSF (National Science Foundation).  Empirical Research was geared towards assessing the performance of an "improved" n-at-a-time stock selection rule for portfolio construction. The "Coordinated Max-Median" algorithm developed is described in detail along with its computational challenges. Also included are various evaluations performed with real world data (S&amp;P 500 Index). This Connexions Module summarizes the details of such research.</md:abstract>
+  <md:uuid>b62a85b3-9c98-433c-a5c5-dd181c4b1811</md:uuid>
+</metadata>
+
+<content>
+    
+    
+    <section id="id2258965">
+      <title>Motivation</title>
+      <section id="id2258971">
+        <title>The Max-Median Rule for Portfolio Selection</title>
+        <para id="id2258979">Previous research suggests that there exist strategies that, when implemented over a long period of time, might provide higher returns than overall market performance (see, e.g. [1]). One of these strategies, namely the “<emphasis effect="italics">Max-Median Rule</emphasis>”, was investigated by Thompson and Baggett (see [2]), and served as a general motivation for this research. By selecting a handful of stocks, according to some robust criterion (e.g. the median) and rebalancing consistently without straying away from the strategy, virtually any investor could easily manage his or her portfolio quite reasonably. Over the long-haul, this strategy would provide decent returns when compared to a benchmark index (e.g. the S&amp;P 500 Index). It is worthwhile noting that in strategies such as these, time is a major consideration (and one which investors can control, e.g. when investing retirement funds such as a <m:math overflow="scroll"><m:mrow><m:mn>401</m:mn><m:mi>K</m:mi></m:mrow></m:math>), and that these methods do not constitute day-trading strategies, and should be adhered-to consistently over a given period.</para>
+        <para id="id2259026">Several salient points of this motivating investment strategy are:</para>
+        <list id="id2259032" display="block" list-type="enumerated" number-style="arabic"><item id="uid1">It is accessible to any individual investor.
+</item>
+          <item id="uid2">Over an extensive time-period for which it was examined (i.e. 37 years - 1970 through 2006) it outperformed the S&amp;P 500 Index by about 50%.
+</item>
+          <item id="uid3">It was slightly more volatile on a yearly-basis. An effect that can, to a reasonable extent, be used to an investor's advantage in “longer”-term investment strategies.
+</item>
+        </list>
+        <para id="id2259089">These points clearly serve us as a motivation for further investigation and potential improvements. In particular, through recognizing that the existing strategy, albeit well-performing, is inherently a “one-at-a-time” strategy and therefore does not capture any correlation-related dynamics through its selection criteria.</para>
+        <para id="id2259105">Lastly, we were also motivated to investigate (at least initially) equally-weighted portfolios. An interesting finding (see, e.g. Wojciechowski, Baggett, and Thompson [3]), is that “for the 33 years from 1970 through 2002, not simply a flukish few, but a staggering 65 percent of the portfolios selected randomly from the 1,000 largest market cap stocks lie above the Capital Market Line (CML).” Also, it has been shown (see [2]) that any individual who invested equally in the S&amp;P 500 Constituents (time period of 1970 through 2006) would have made, on a yearly average, 13.7%, as opposed to 8.9% with a competing market-cap weighted strategy. Both of these empirical realities make, at least preliminarily, a case against considering long-term market-cap weighted strategies.</para>
+      </section>
+    </section>
+    <section id="id2259128">
+      <title>The Coordinated Max-Median Rule</title>
+      <section id="id2259135">
+        <title>Introduction</title>
+        <para id="id2259141">We now consider a strategy which allows us to implicitly capture the joint performance of securities as part of our selection criteria. Our goal is to pick, from the universe of investible stocks, a meaningful handful on which to equally allocate a given investment quantity on a yearly basis. As a first step, we consider the S&amp;P 500 constituents to be our universe of stocks from which can select a critical few (a number which we have set initially, and somewhat arbitrarily, to 20. This quantity seemed both appealing and reasonable in terms of being financially manageable and computationally feasible). It is also worthwhile noting, that we regard limiting an investor to select from the S&amp;P 500 (or any other well-known index) as both a reasonable and soundly restricted starting point. Furthermore, we also know that stocks listed in the S&amp;P 500 are representative of various market sectors (inherently diversified) as well as of various reasonable company sizes (in terms of market capitalization). Additionally, other filtering criteria inherent in a reasonable-size index (in terms of the number of constituents), seem to provide a good baseline both as a benchmark (to outperform) and as a sensible constraint to the universe of all potentially-considered stocks.</para>
+      </section>
+      <section id="id2259182">
+        <title>Preliminary Setup</title>
+        <para id="id2259189">Our first step is to select a subset of stocks from a given index in which to allocate a given investment at any given point in time. Here, and in general, we can start by considering a subset of <emphasis effect="italics">n</emphasis> stocks from a given index <emphasis effect="italics">I</emphasis> with <emphasis effect="italics">K</emphasis> constituents. Our evaluations considered <emphasis effect="italics">I</emphasis>=S&amp;P 500 (for which <m:math overflow="scroll"><m:mrow><m:mi>K</m:mi><m:mo>=</m:mo><m:mn>500</m:mn></m:mrow></m:math>) and assembling baskets of <m:math overflow="scroll"><m:mrow><m:mi>n</m:mi><m:mo>=</m:mo><m:mn>20</m:mn></m:mrow></m:math> each time. Based on this setup, there is a total of <m:math overflow="scroll"><m:mrow><m:msubsup><m:mi>C</m:mi><m:mrow><m:mn>20</m:mn></m:mrow><m:mn>500</m:mn></m:msubsup><m:mo>≈</m:mo><m:mn>2</m:mn><m:mo>.</m:mo><m:mn>667</m:mn><m:mo>×</m:mo><m:msup><m:mn>10</m:mn><m:mn>35</m:mn></m:msup></m:mrow></m:math> unique baskets of randomly selected securities that we could potentially consider. Clearly, if we require evaluating some optimal objective function over all possible combinations, this becomes computationally infeasible.</para>
+        <para id="id2259310">Instead, we proceed by selecting stocks according to some plausible robust criterion that can be applied to any randomly assembled basket (the most appealing, both in terms of interpretation and prior results, being the median of the portfolio daily-returns). We also note, and quite emphatically so, that to both evaluate a meaningful amount of portfolios as well as to assess procedure repeatability, we clearly need to <emphasis effect="italics">parallelize</emphasis> this effort.</para>
+      </section>
+      <section id="id2258799">
+        <title>Algorithm</title>
+        <para id="id2258806">Consider the following algorithm:</para>
+        <list id="id2258812" display="block" list-type="enumerated" class="stepwise"><item id="uid4">Pick <emphasis effect="italics">n</emphasis>-stocks (e.g. <m:math overflow="scroll"><m:mrow><m:mi>n</m:mi><m:mo>=</m:mo><m:mn>20</m:mn></m:mrow></m:math>) from the S&amp;P 500 Index at random.
+</item>
+          <item id="uid5">Form Portfolio <emphasis effect="italics">j</emphasis> (start with <m:math overflow="scroll"><m:mrow><m:mi>j</m:mi><m:mo>=</m:mo><m:mn>1</m:mn></m:mrow></m:math>) at time <m:math overflow="scroll"><m:mrow><m:mi>t</m:mi><m:mo>=</m:mo><m:mn>0</m:mn></m:mrow></m:math>, i.e. <m:math overflow="scroll"><m:mrow><m:msub><m:mi>P</m:mi><m:mi>j</m:mi></m:msub><m:mrow><m:mo>(</m:mo><m:mi>t</m:mi><m:mo>=</m:mo><m:mn>0</m:mn><m:mo>)</m:mo></m:mrow></m:mrow></m:math>, by equal-weight investment in these <emphasis effect="italics">n</emphasis>-stocks.
+</item>
+          <item id="uid6">On a day-to-day basis (and for <emphasis effect="italics">T</emphasis> trading days in any given year) compute the daily-returns for Portfolio <emphasis effect="italics">j</emphasis>:
+<equation id="id2259880"><m:math overflow="scroll" mode="display"><m:mrow><m:msub><m:mi>r</m:mi><m:mi>j</m:mi></m:msub><m:mrow><m:mo>(</m:mo><m:mi>t</m:mi><m:mo>)</m:mo></m:mrow><m:mo>:</m:mo><m:mo>=</m:mo><m:mfrac><m:mrow><m:msub><m:mi>P</m:mi><m:mi>j</m:mi></m:msub><m:mrow><m:mo>(</m:mo><m:mi>t</m:mi><m:mo>)</m:mo></m:mrow><m:mo>-</m:mo><m:msub><m:mi>P</m:mi><m:mi>j</m:mi></m:msub><m:mrow><m:mo>(</m:mo><m:mi>t</m:mi><m:mo>-</m:mo><m:mn>1</m:mn><m:mo>)</m:mo></m:mrow></m:mrow><m:mrow><m:msub><m:mi>P</m:mi><m:mi>j</m:mi></m:msub><m:mrow><m:mo>(</m:mo><m:mi>t</m:mi><m:mo>-</m:mo><m:mn>1</m:mn><m:mo>)</m:mo></m:mrow></m:mrow></m:mfrac><m:mo>;</m:mo><m:mspace width="0.222222em"/><m:mspace width="0.222222em"/><m:mi>t</m:mi><m:mo>=</m:mo><m:mn>1</m:mn><m:mo>,</m:mo><m:mn>2</m:mn><m:mo>,</m:mo><m:mo>...</m:mo><m:mo>,</m:mo><m:mi>T</m:mi></m:mrow></m:math></equation></item>
+          <item id="uid7">Sort these for the years trading days.
+</item>
+          <item id="uid8">Calculate the median daily-return for Portfolio <emphasis effect="italics">j</emphasis>, let <m:math overflow="scroll"><m:mrow><m:mover accent="true"><m:msub><m:mi>P</m:mi><m:mi>j</m:mi></m:msub><m:mo>˜</m:mo></m:mover><m:mo>:</m:mo><m:mo>=</m:mo><m:mi mathvariant="monospace">median</m:mi><m:mrow><m:mo>(</m:mo><m:msub><m:mi>P</m:mi><m:mi>j</m:mi></m:msub><m:mo>)</m:mo></m:mrow></m:mrow></m:math>.
+</item>
+          <item id="uid9">Repeat Steps (1-5) above for <m:math overflow="scroll"><m:mrow><m:mi>j</m:mi><m:mo>=</m:mo><m:mn>1</m:mn><m:mo>,</m:mo><m:mn>2</m:mn><m:mo>,</m:mo><m:mo>...</m:mo><m:mo>,</m:mo><m:mi>J</m:mi></m:mrow></m:math> (e.g. <m:math overflow="scroll"><m:mrow><m:mi>J</m:mi><m:mo>=</m:mo><m:mn>10</m:mn><m:mo>,</m:mo><m:mn>000</m:mn></m:mrow></m:math>) additional randomly selected portfolios.
+</item>
+          <item id="uid10">Pick the portfolio with the highest median, i.e. <m:math overflow="scroll"><m:msub><m:mi>P</m:mi><m:msup><m:mi>j</m:mi><m:mo>*</m:mo></m:msup></m:msub></m:math> s.t. <m:math overflow="scroll"><m:mrow><m:msup><m:mi>j</m:mi><m:mo>*</m:mo></m:msup><m:mo>=</m:mo><m:munder><m:mo form="prefix">argmax</m:mo><m:mrow><m:mi>j</m:mi><m:mo>∈</m:mo><m:mo>{</m:mo><m:mn>1</m:mn><m:mo>,</m:mo><m:mn>2</m:mn><m:mo>,</m:mo><m:mo>...</m:mo><m:mo>,</m:mo><m:mi>J</m:mi><m:mo>}</m:mo></m:mrow></m:munder><m:mspace width="0.277778em"/><m:mrow><m:mo>[</m:mo><m:mover accent="true"><m:msub><m:mi>P</m:mi><m:mi>j</m:mi></m:msub><m:mo>˜</m:mo></m:mover><m:mo>]</m:mo></m:mrow></m:mrow></m:math>.
+</item>
+          <item id="uid11">Invest equally in <m:math overflow="scroll"><m:msub><m:mi>P</m:mi><m:msup><m:mi>j</m:mi><m:mo>*</m:mo></m:msup></m:msub></m:math>.
+</item>
+          <item id="uid12">Hold for one year, then liquidate.
+</item>
+          <item id="uid13">Repeat Steps (1-9), yearly, over the time-frame of interest.
+</item>
+        </list>
+        <para id="id2260301">We pick a subset of <m:math overflow="scroll"><m:mrow><m:mi>n</m:mi><m:mo>=</m:mo><m:mn>20</m:mn></m:mrow></m:math> yearly “investible” stocks according to the aforedescribed criterion at the end of any given year (using the most recent one-year data). We then allocate our investment quantity in this portfolio, on the first trading day of the subsequent year, holding it for one year and concurrently collecting data during this year to repeat this procedure at the end of the year. We essentially keep on repeating this procedure over the period for which we want to evaluate the strategy.</para>
+        <para id="id2260331">It is also interesting to note that under the previous motivating rule (i.e. the <emphasis effect="italics">Max-Median Rule</emphasis>), we would always get an exact answer regarding which stocks had the single highest max-medians, in a finite, rather short, amount of time (an essentially <m:math overflow="scroll"><m:mrow><m:mi>N</m:mi><m:mi>P</m:mi></m:mrow></m:math>-complete problem). This implied determinism, in the sense that any subsequent runs would produce the same results, amounts to a variance of zero. However, it is rather evident that our modified algorithm is inherently stochastic as we cannot evaluate all possibly imaginable combinations of portfolios. As a direct consequence, and by randomly selecting a reasonable number of portfolios for evaluation we expect to observe some natural variation, in the sense of the procedure's repeatability (each run will be essentially unique). It is possible (and rather interesting) to exploit this natural variation to assess the overall repeatability of this modified procedure.</para>
+      </section>
+      <section id="id2260370">
+        <title>Data Summary and Description</title>
+        <para id="id2260376">Data were obtained from the University of Pennsylvania Wharton/WRDS Repository [4]. The following data were utilized for our evaluations:</para>
+        <list id="id2260384" display="block" list-type="enumerated"><item id="uid14">S&amp;P 500 December Constituents' <code display="inline">GVKEY</code>s, 1965 to 2006 (<code display="inline">Compustat</code>).
+</item>
+          <item id="uid15">S&amp;P 500 Daily Data [including: Returns with Dividends, Share Price, Shares Outstanding, Adjustment Factors, <code display="inline">PERMNO</code>s (<code display="inline">CRSP</code>)].
+</item>
+          <item id="uid16">Mapping Table from <code display="inline">GVKEY</code>s to <code display="inline">PERMNO</code>s.
+</item>
+        </list>
+        <para id="id2260465">Data were also obtained from <code display="inline">Yahoo!</code> Finance:</para>
+        <list id="id2260476" display="block" list-type="enumerated"><item id="uid17">Company Tickers for S&amp;P 500 December 2007 Constituents.
+</item>
+          <item id="uid18">Index Returns for <code display="inline">SPX</code> (S&amp; P 500 Market-Cap Weighted).
+</item>
+          <item id="uid19">Index Returns for <code display="inline">SPX.EW</code> (S&amp; P 500 Equally Weighted, available from mid-2003 to present).
+</item>
+        </list>
+        <para id="id2260538">For our evaluations we note that our yearly returns with dividends were calculated from the <emphasis effect="underline">first trading day</emphasis> to the <emphasis effect="underline">last trading day</emphasis> per year and that dividends were included. Also the size of the data files analyzed was approximately <code display="inline">900MB</code>.</para>
+      </section>
+      <section id="id2260565">
+        <title>Parallel Processing Environment and Software</title>
+        <para id="id2260572">It is worthwhile mentioning some general details regarding the overall <emphasis effect="italics">parallelized</emphasis> implementation of this procedure. It was successfully implemented using the software <code display="inline">R</code>, widely and freely available from the Comprehensive R Archive Network (<code display="inline">CRAN</code>). Several packages available for <code display="inline">R</code>, make a <emphasis effect="italics">parallelized</emphasis> implementation of the algorithm very straightforward. In particular, we made use of <code display="inline">snow</code> (see, e.g. [5] and [6]), and <code display="inline">snowfall</code> (see [7]), both running over <code display="inline">open-MPI</code>. Some of the reasons for choosing this implementation were:</para>
+        <list id="id2260629" display="block" list-type="enumerated"><item id="uid20">Framework provides a powerful programming interface to a computational cluster (such as those available at Rice University, e.g. <code display="inline">SUG@R</code> and <code display="inline">ADA</code>).
+</item>
+          <item id="uid21">Freely available under the Comprehensive R Archive Network (<code display="inline">CRAN</code>).
+</item>
+          <item id="uid22">Easily distributes computations of existing functions (after pertinent modifications) to various computation nodes.
+</item>
+          <item id="uid23">Excellent for embarrassingly-parallel implementations and computations.
+</item>
+        </list>
+        <para id="id2260709">In essence, this approach was very appealing in terms of performance, development time, and cost (essentially free). Although faster and more efficient implementations are possible (e.g. <code display="inline">C/C++</code> and <code display="inline">Fortran</code> with <code display="inline">open-MPI</code>, the aforementioned implementation was sufficient for our purposes).</para>
+        <para id="id2260733">The code utilized was initially developed for sequential execution (in <code display="inline">SAS</code>) and then converted to <code display="inline">R</code> with similar performance. It was subsequently converted from sequential to parallel to exploit the benefits of a parallel <code display="inline">R</code>-implementation. The standard steps for this conversion process are pretty standard, essentially:</para>
+        <list id="id2260760" display="block" list-type="enumerated"><item id="uid24">We identify the loops which carry independent computations. we have two main loops. Firstly, simulating <emphasis effect="italics">J</emphasis> portfolios can be regarded as <emphasis effect="italics">J</emphasis> independent operations, which we can execute concurrently. Secondly, running the algorithm over a number of <emphasis effect="italics">N</emphasis> years, can be regarded as <emphasis effect="italics">N</emphasis> independent computational efforts.
+</item>
+          <item id="uid25">Vectorize loops (<code display="inline">Workhorse</code> Functions).
+</item>
+          <item id="uid26">Gather results (<code display="inline">Combine/Gather</code> Functions).
+</item>
+          <item id="uid27">Distribute Execution (Call functions with <code display="inline">snow</code>).
+</item>
+        </list>
+        <para id="id2260876">Several 64 processor jobs were submitted to Rice's <code display="inline">Cray XD1 Research Cluster (ADA)</code> - occupying 16 nodes, each with a total of 4 processors. The jobs would take less than 20 hours to complete, for about 64 simulated tracks of 40 years each.</para>
+      </section>
+    </section>
+    <section id="id2260892">
+      <title>Results</title>
+      <section id="id2260898">
+        <title>Preliminary Results</title>
+        <para id="id2260905">Several simulations were run with observed, above average performance (number of portfolios inspected per simulation was in the range of <m:math overflow="scroll"><m:mrow><m:mi>J</m:mi><m:mo>=</m:mo><m:mn>25</m:mn><m:mo>,</m:mo><m:mn>000</m:mn></m:mrow></m:math> to <m:math overflow="scroll"><m:mrow><m:mi>J</m:mi><m:mo>=</m:mo><m:mn>50</m:mn><m:mo>,</m:mo><m:mn>000</m:mn></m:mrow></m:math>). Figure 1 shows a simulation of <m:math overflow="scroll"><m:mrow><m:mi>J</m:mi><m:mo>=</m:mo><m:mn>50</m:mn><m:mo>,</m:mo><m:mn>000</m:mn></m:mrow></m:math> portfolios per year over a period of 43 years. Several interesting features can be noted through this figure. We can appreciate that any investor that made up a portfolio with an initial investment of $100,000 in 1970 and selected the same stocks chosen by our algorithm would have allowed his or her portfolio to compound to a total of $3.7M (by the end of 2008), which performed better than both an equal-investment strategy in the S&amp;P 500 Index (about $2.7M) or a market-cap weighted investment strategy in the S&amp;P 500 Index (slightly below $1M). Of course, we can imagine that the computational power that was used was not available in the early seventies, but moving forward it will be and to an extent this is what matters. Also it is clearly seen that the <emphasis effect="italics">Coordinated Max-Median Rule</emphasis> is inherently a more volatile rule (as compared to the S&amp;P 500). Next, Figure 2 describes 1 of 3 pilot runs that were evaluated with various measures suggesting the superiority of the max-median (as opposed to, say for instance the mean, as well as the benefit of using the “max” rather than the “min”). This seems plausible, at least heuristically, as the median is most robust (the mean is least robust), and in some sense the previous years “best” performing companies are more likely to perform better next year than the previous years “worst” performing companies (in terms of returns).</para>
+        <figure id="uid28">
+          <media id="uid28_media" alt="">
+            <image mime-type="image/png" src="../../media/FIGURE1.png" id="uid28_onlineimage" width="1077"><!-- NOTE: attribute width changes image size online (pixels). original width is 1077. --></image>
+            <image for="pdf" mime-type="application/postscript" src="../../media/FIGURE1.eps" id="uid28_printimage"/>
+          </media>
+          <caption><emphasis effect="italics">Coordinated Max-Median Rule</emphasis> (Single Run) 50,000 Portfolios Evaluated per Year</caption>
+        </figure>
+        <figure id="uid29">
+          <media id="uid29_media" alt="">
+            <image mime-type="image/png" src="../../media/FIGURE2.png" id="uid29_onlineimage" width="1048"><!-- NOTE: attribute width changes image size online (pixels). original width is 1048. --></image>
+            <image for="pdf" mime-type="application/postscript" src="../../media/FIGURE2.eps" id="uid29_printimage"/>
+          </media>
+          <caption><emphasis effect="italics">Coordinated Max-Median Rule</emphasis> (Single Run) 25,000 Portfolios Evaluated per Year with additional evaluations</caption>
+        </figure>
+      </section>
+      <section id="id2261058">
+        <title>Recent Evaluations and Results</title>
+        <para id="id2261065">Recent evaluations have been mostly focused on evaluating the following:</para>
+        <list id="id2261070" display="block" list-type="enumerated"><item id="uid30">Repeatability of the procedure in terms of the variability associated with its possible tracks for each realization.
+</item>
+          <item id="uid31">Determining any additional gain (if any) in terms of returns as a function of the number of portfolios evaluated (<emphasis effect="italics">J</emphasis>) at any given year.
+</item>
+          <item id="uid32">The existence of any indications between current year portfolios' medians and subsequent year (same portfolio) performance. Are there any associations and if so how weak or strong are these?
+</item>
+          <item id="uid33">Investigating a stable and plausible stopping rule and assessing how beneficial it might be to run the random search until this condition is met.
+</item>
+        </list>
+        <para id="id2261147">Several experiments were set up to determine if it would be worthwhile to inspect more randomly sought portfolios on a yearly basis as part of the overall procedure. A job simulating a total of 104 tracks (each consisting of <m:math overflow="scroll"><m:mrow><m:mi>J</m:mi><m:mo>=</m:mo><m:mn>25</m:mn><m:mo>,</m:mo><m:mn>000</m:mn></m:mrow></m:math> portfolios per year over a 43 year period, 1965 though 2008) was submitted to <code display="inline">ADA</code> and took approximately three days to complete. Several important observations can be made from the outcomes of these simulations (shown in Figures 3 and 4, below). We note that, here, we can exploit the independence regarding the portfolios evaluated to get 52 tracks of <m:math overflow="scroll"><m:mrow><m:mi>J</m:mi><m:mo>=</m:mo><m:mn>50</m:mn><m:mo>,</m:mo><m:mn>000</m:mn></m:mrow></m:math> portfolios each by combining pairs of <m:math overflow="scroll"><m:mrow><m:mi>J</m:mi><m:mo>=</m:mo><m:mn>25</m:mn><m:mo>,</m:mo><m:mn>000</m:mn></m:mrow></m:math> tracks and selecting the maximum of the pair (simply the maximum of a longer execution). Essentially this gives us information regarding what would have happened (in terms of the performance of the strategy should we have run it for twice as long). Analogously, tracks for <m:math overflow="scroll"><m:mrow><m:mi>J</m:mi><m:mo>=</m:mo><m:mn>100</m:mn><m:mo>,</m:mo><m:mn>000</m:mn></m:mrow></m:math> and <m:math overflow="scroll"><m:mrow><m:mi>J</m:mi><m:mo>=</m:mo><m:mn>200</m:mn><m:mo>,</m:mo><m:mn>000</m:mn></m:mrow></m:math> portfolios were constructed. Finally, some overall discussion of the results is given after the figures.</para>
+        <figure id="uid34">
+          <media id="uid34_media" alt="">
+            <image mime-type="image/png" src="../../media/FIGURE3.png" id="uid34_onlineimage" width="1547"><!-- NOTE: attribute width changes image size online (pixels). original width is 1547. --></image>
+            <image for="pdf" mime-type="application/postscript" src="../../media/FIGURE3.eps" id="uid34_printimage"/>
+          </media>
+          <caption>Procedure Repeatability and Number of Portfolios Sampled Simulation (Left: <m:math overflow="scroll"><m:mrow><m:mi>J</m:mi><m:mo>=</m:mo><m:mn>25</m:mn><m:mo>,</m:mo><m:mn>000</m:mn></m:mrow></m:math> tracks, Right: <m:math overflow="scroll"><m:mrow><m:mi>J</m:mi><m:mo>=</m:mo><m:mn>50</m:mn><m:mo>,</m:mo><m:mn>000</m:mn></m:mrow></m:math> tracks)</caption>
+        </figure>
+        <figure id="uid35">
+          <media id="uid35_media" alt="">
+            <image mime-type="image/png" src="../../media/FIGURE4.png" id="uid35_onlineimage" width="1554"><!-- NOTE: attribute width changes image size online (pixels). original width is 1554. --></image>
+            <image for="pdf" mime-type="application/postscript" src="../../media/FIGURE4.eps" id="uid35_printimage"/>
+          </media>
+          <caption>Procedure Repeatability and Number of Portfolios Sampled Simulation (Left: <m:math overflow="scroll"><m:mrow><m:mi>J</m:mi><m:mo>=</m:mo><m:mn>100</m:mn><m:mo>,</m:mo><m:mn>000</m:mn></m:mrow></m:math> tracks, Right: <m:math overflow="scroll"><m:mrow><m:mi>J</m:mi><m:mo>=</m:mo><m:mn>200</m:mn><m:mo>,</m:mo><m:mn>000</m:mn></m:mrow></m:math> tracks)</caption>
+        </figure>
+        <para id="id2261386">The total portfolio value was evaluated at the end of both years 2006 and 2008 and contrasted to both market performance (blue track) and the performance of a single track of a whopping <m:math overflow="scroll"><m:mrow><m:mi>J</m:mi><m:mo>=</m:mo><m:mn>2</m:mn><m:mo>,</m:mo><m:mn>600</m:mn><m:mo>,</m:mo><m:mn>000</m:mn></m:mrow></m:math> portfolios considered yearly (green track). As expected the variability of the procedure compounds as a function of time, and by chance we might under-perform the market. However, more often than not the procedure out-performed the market and by a quite reasonable amount. The proportion of portfolio-tracks simulated that were over an equally-weighted alternative at the end of 2006 was over 80% (for the cases where <m:math overflow="scroll"><m:mrow><m:mi>J</m:mi><m:mo>=</m:mo><m:mn>25</m:mn><m:mo>,</m:mo><m:mn>000</m:mn></m:mrow></m:math> and <m:math overflow="scroll"><m:mrow><m:mi>J</m:mi><m:mo>=</m:mo><m:mn>50</m:mn><m:mo>,</m:mo><m:mn>000</m:mn></m:mrow></m:math>) and over 90% (for the cases where we assessed more randomly sought portfolios, i.e. <m:math overflow="scroll"><m:mrow><m:mi>J</m:mi><m:mo>=</m:mo><m:mn>100</m:mn><m:mo>,</m:mo><m:mn>000</m:mn></m:mrow></m:math>, and <m:math overflow="scroll"><m:mrow><m:mi>J</m:mi><m:mo>=</m:mo><m:mn>200</m:mn><m:mo>,</m:mo><m:mn>000</m:mn></m:mrow></m:math>). Also, there is weak evidence suggesting that, although running as many as <m:math overflow="scroll"><m:mrow><m:mi>J</m:mi><m:mo>=</m:mo><m:mn>2</m:mn><m:mo>,</m:mo><m:mn>600</m:mn><m:mo>,</m:mo><m:mn>000</m:mn></m:mrow></m:math> portfolios might at times outperform the market, this approach is generally not consistently higher on-average than considering tracks consisting of less yearly-evaluated portfolios.</para>
+        <para id="id2261526">Another rather interesting observation is made through the <emphasis effect="italics">scatter-grams</emphasis> produced (see Figure 5, below) assessing the correlation between current year portfolio median and (same portfolio) next year performance contrasted to the performance of the S&amp;P 500 index. The number of portfolios evaluated for this purpose was <m:math overflow="scroll"><m:mrow><m:mn>2</m:mn><m:mo>,</m:mo><m:mn>000</m:mn><m:mo>,</m:mo><m:mn>000</m:mn></m:mrow></m:math> and the those that are highlighted as producing the maximum of the medians represent (<m:math overflow="scroll"><m:mrow><m:mo>&lt;</m:mo><m:mn>0</m:mn><m:mo>.</m:mo><m:mn>1</m:mn><m:mo>%</m:mo></m:mrow></m:math>, i.e. <m:math overflow="scroll"><m:mrow><m:mo>&lt;</m:mo><m:mn>2</m:mn><m:mo>,</m:mo><m:mn>000</m:mn></m:mrow></m:math>). The main purpose of this effort was to assess any associations between the current year medians as a forward-looking measure of portfolio performance (as we intend to pick the maximum and by chance we can pick portfolios of performance similar to those in the top 0.999 percentile). As expected the associations are weak, though not extremely weak (correlations are <m:math overflow="scroll"><m:mrow><m:mn>0</m:mn><m:mo>.</m:mo><m:mn>209</m:mn></m:mrow></m:math> for the first case and <m:math overflow="scroll"><m:mrow><m:mo>-</m:mo><m:mn>0</m:mn><m:mo>.</m:mo><m:mn>182</m:mn></m:mrow></m:math> for the second), however can be noticed and depend highly of the year evaluated.</para>
+        <para id="id2261636">More often than not, we observed a positive correlation for the years inspected (the strongest correlations are those shown in the figures below). It turns out that for certain years (those with a negative correlation), we ought to utilize the “min-median” as a selection criterion. However, this cannot be known <emphasis effect="italics">ex-ante</emphasis>, and the best we can do is utilize a measure that more often than not, produces above-average results. Here again, we can appreciate how these conflicting effects would average-out with time in a favorable direction, reiterating the fact that a strategy such as this one, if considered, should be evaluated over the long-haul.</para>
+        <figure id="uid36">
+          <media id="uid36_media" alt="">
+            <image mime-type="image/png" src="../../media/FIGURE5.png" id="uid36_onlineimage" width="1271"><!-- NOTE: attribute width changes image size online (pixels). original width is 1271. --></image>
+            <image for="pdf" mime-type="application/postscript" src="../../media/FIGURE5.eps" id="uid36_printimage"/>
+          </media>
+          <caption>Next Year Portfolio Performances vs. Current Year Portfolio Medians (Left: 1998 vs. 1997, Right: 2001 vs. 2000)</caption>
+        </figure>
+        <para id="id2261687">Lastly, several evaluations were performed comparing the various max-medians of the portfolios simulated as a function of the number of portfolios run (i.e. <emphasis effect="italics">J</emphasis>) and compared to the <emphasis effect="italics">single-stock max-median</emphasis> (See Figure 6 below), which could, at least heuristically, serve as an upper bound. This resulted (empirically) to be somewhat unstable as there is no guarantee that any thresholds set in terms of percentage to the bound could be attained in any reasonable computing time, mainly due to the fact the after a reasonable amount of simulations (namely <m:math overflow="scroll"><m:mrow><m:mi>J</m:mi><m:mo>=</m:mo><m:mn>500</m:mn><m:mo>,</m:mo><m:mn>000</m:mn></m:mrow></m:math> and up to <m:math overflow="scroll"><m:mrow><m:mi>J</m:mi><m:mo>=</m:mo><m:mn>2</m:mn><m:mo>,</m:mo><m:mn>000</m:mn><m:mo>,</m:mo><m:mn>000</m:mn></m:mrow></m:math>) the percentages of this <emphasis effect="italics">single-stock max-median</emphasis> attained depended considerably on the year inspected, making a generalization impossible. The most recent evaluations were performed with stopping after 5 ticks past <m:math overflow="scroll"><m:mrow><m:mi>J</m:mi><m:mo>=</m:mo><m:mn>10</m:mn><m:mo>,</m:mo><m:mn>000</m:mn></m:mrow></m:math> simulations, which seems stable, however based on aforementioned results it seems to not provide any incremental benefit when contrasted to, for instance a hard-coded constant <emphasis effect="italics">J</emphasis> stopping rule.</para>
+        <figure id="uid37">
+          <media id="uid37_media" alt="">
+            <image mime-type="image/png" src="../../media/FIGURE6.png" id="uid37_onlineimage" width="1631"><!-- NOTE: attribute width changes image size online (pixels). original width is 1631. --></image>
+            <image for="pdf" mime-type="application/postscript" src="../../media/FIGURE6.eps" id="uid37_printimage"/>
+          </media>
+          <caption>Max-Median Searches as a function of <emphasis effect="italics">J</emphasis> (Left: 1984, Right: 1991)</caption>
+        </figure>
+      </section>
+      <section id="id2261830">
+        <title>Future Directions</title>
+        <para id="id2261837">Several items are open at this point that might be worthwhile investigating in future research. Amongst them are the following (to mention a few):</para>
+        <list id="id2261845" display="block" list-type="enumerated"><item id="uid38">The identification and investigation of any exogenous variables contributing to any observable associations between current-year portfolio medians and next-year portfolio performances. This is of particular interest as it would provide us with the possibility of meaningfully modifying the simple-criterion to make more informed decisions based on empirical evidence.
+</item>
+          <item id="uid39">Considering data from previous years to make the decision at a given year (rather than only considering data from the previous year) as well as investigating any robust-type interpolations (e.g. median or quantile related regression methods).
+</item>
+          <item id="uid40">Assessing the reproducibility of the procedure (or in general its performance) in other markets (international) and or other indexes (S&amp;P 100, Russel 1000, NASDAQ, etc.)
+</item>
+          <item id="uid41">Investigating a more meaningful rule regarding when to stop the random-search, and how it relates to overall procedure performance.
+</item>
+        </list>
+      </section>
+    </section>
+    <section id="id2261922">
+      <title>Conclusions</title>
+      <para id="id2261929">In this module, we have presented the details of a modified version of the existing <emphasis effect="italics">Max-Median Rule</emphasis> allowing for the joint selection of securities within this long-term investment strategy. This modified rule, namely the <emphasis effect="italics">Coordinated Max-Median Rule</emphasis>, essentially bases the median selection criterion on the joint portfolio performance, rather than on single-stock individual performances. We saw that these modifications came with a cost of increased combinatorial complexity and that due to the impossibility of evaluating all potentially-investible portfolios, a parallelized computational approach had to be considered to assess a satisfactory number of portfolios on a yearly basis for potential investment. The algorithm's implementation was discussed, and several conclusions were drawn, the most significant being that our modified algorithm, much more often than not, seems to out-perform the market (in terms of the S&amp;P 500 Index) when a disciplined investor adheres to it for a reasonable amount of time. The data suggest that one of the contributing factors for this on-average higher performance, at least in part, are the correlations between current year portfolio medians and next year portfolio performance, which seem both weak and not always positive. We noted that, more often than not, these correlations tend to be positive, an effect that seemingly averages out in a positive direction over the long-haul. We have also evaluated the performance of the described procedure on real-world S&amp;P 500 data consisting of 43 years, and several potential future improvements, such as further work regarding a more robust stopping rule and the assessment of the procedure reproducibility with other indexes and or markets, were discussed.</para>
+    </section>
+    <section id="id2262004">
+      <title>Acknowledgements</title>
+      <para id="id2262010">Special thanks are given to Drs. James Thompson and Scott Baggett, as well as to Drs. Linda Driskill and Tracy Volz, for their overall help and coaching throughout this summer research project. In particular special thanks are given to both the NSF and VIGRE for making this research a reality.</para>
+    </section>
+    <section id="id2262022">
+      <title>Bibliography</title>
+      <list id="id2262028" display="block" list-type="enumerated"><item id="uid42">O'Shaughnessy, James P. (2003). What Works on Wall Street. A Guide to the Best-Performing Investment Strategies of All Time (Third Edition).
+</item>
+        <item id="uid43">Thompson, James R., Baggett, L. Scott (2005). Everyman's Max-Median Rule for Portfolio Selection.
+</item>
+        <item id="uid44">Thompson, James R., Baggett, L. Scott, Wojciechowski, William C. and Williams, Edward E. (2006). Nobels for Nonsense. The Journal of Post Keynesian Economics, Fall, pp. 3-18.
+</item>
+        <item id="uid45">Wharton Research Data Services (URL: http://wrds.wharton.upenn.edu/)
+</item>
+        <item id="uid46">Rossini, A., Tierney, L., and Li, N. (2003). Simple parallel statistical computing. in R. UW Biostatistics working paper series, Paper 193, University of Washington.
+</item>
+        <item id="uid47">Tierney, L., Rossini, A., Li, N., and Sevcikova, H. (2004). The snow Package: Simple Network of Workstations. Version 0.2-1.
+</item>
+        <item id="uid48">Knaus, Jochen (2008). Developing parallel programs using snowfall
+</item>
+      </list>
+    </section>
+  </content>
+</document>

@@ -1,0 +1,783 @@
+<document xmlns="http://cnx.rice.edu/cnxml" xmlns:m="http://www.w3.org/1998/Math/MathML" xmlns:md="http://cnx.rice.edu/mdml" xmlns:bib="http://bibtexml.sf.net/">
+  <title>A Model of a Grid Cell</title>
+  <metadata>
+  <md:content-id>m22377</md:content-id><md:title>A Model of a Grid Cell</md:title>
+  <md:abstract>The brain has the ability to build an internal map of its environment, and an active area of research concerns understanding how the brain performs this important function.  One type of cell believed to play a vital role is known as a grid cell.  Many experiments are being performed in which the researcher records the firing patterns of grid cells as a rat explores an environment, and it is often necessary to simulate these experiments.  This module explains how to set the grid, simulate the rat's motion, calculate the rat's distance to the grid, and determine the firing pattern of a grid cell.</md:abstract>
+  <md:uuid>7f4f5a05-f4c0-42b7-a2bb-2c3aabb52529</md:uuid>
+</metadata>
+
+<content>
+    <section id="cid1">
+      <title>Introduction</title>
+      <para id="id189064">A network spanning several regions in the brain provides the mechanisms for spatial representation. The hippocampus, a center for both learning and memory, is an important component of this network (O'Keefe and Nadel <link target-id="bid0"/>). The majority of cells in the hippocampus will primarily spike at one location in an environment. These cells, known as place cells, can collectively represent the position within an environment (Solstad et al. <link target-id="bid1"/>). One large source of input to place cells are a group of cells in the medial entorhinal cortex (MEC) known as grid cells, which primarily spike in hexagonal patterns in the environment (Witter and Moser <link target-id="bid2"/>). Thus, in order to understand the brain's spatial representation of its environment, it is essential to understand the behavior of grid cells in the MEC, place cells in the hippocampus, and the interaction between them. The work presented here focuses on one portion of this problem: modelling grid cells. We consider the setting of a rat exploring a rectangular enclosure, but this model could easily be extended to a variety of settings.</para>
+    </section>
+    <section id="cid2">
+      <title>Properties of the Grid</title>
+      <para id="id189107">To simulate the behavior of a grid cell, it is first necessary to set its grid. We parameterize a grid with three scalars,
+the tilt</para>
+      <equation id="uid1">
+        <m:math overflow="scroll" mode="display">
+          <m:mrow>
+            <m:mn>0</m:mn>
+            <m:mo>≤</m:mo>
+            <m:mi>θ</m:mi>
+            <m:mo>&lt;</m:mo>
+            <m:mi>π</m:mi>
+            <m:mo>/</m:mo>
+            <m:mn>3</m:mn>
+            <m:mo>,</m:mo>
+          </m:mrow>
+        </m:math>
+      </equation>
+      <para id="id189142">the base length</para>
+      <equation id="uid2">
+        <m:math overflow="scroll" mode="display">
+          <m:mrow>
+            <m:mspace width="1.em"/>
+            <m:mn>0</m:mn>
+            <m:mo>&lt;</m:mo>
+            <m:mi>b</m:mi>
+            <m:mo>&lt;</m:mo>
+            <m:mi>∞</m:mi>
+            <m:mo>,</m:mo>
+          </m:mrow>
+        </m:math>
+      </equation>
+      <para id="id189176">and the offset <m:math overflow="scroll"><m:mrow><m:mi>δ</m:mi><m:mo>=</m:mo><m:mo>(</m:mo><m:mi>ρ</m:mi><m:mo>,</m:mo><m:mi>φ</m:mi><m:mo>)</m:mo><m:mo>,</m:mo></m:mrow></m:math> which has a magnitude</para>
+      <equation id="uid3">
+        <m:math overflow="scroll" mode="display">
+          <m:mrow>
+            <m:mn>0</m:mn>
+            <m:mo>&lt;</m:mo>
+            <m:mi>ρ</m:mi>
+            <m:mo>&lt;</m:mo>
+            <m:mi>b</m:mi>
+          </m:mrow>
+        </m:math>
+      </equation>
+      <para id="id189228">and a direction</para>
+      <equation id="uid4">
+        <m:math overflow="scroll" mode="display">
+          <m:mrow>
+            <m:mn>0</m:mn>
+            <m:mo>≤</m:mo>
+            <m:mi>φ</m:mi>
+            <m:mo>&lt;</m:mo>
+            <m:mn>2</m:mn>
+            <m:mi>π</m:mi>
+            <m:mo>.</m:mo>
+          </m:mrow>
+        </m:math>
+      </equation>
+      <para id="id189261">We will make frequent use of the grid height</para>
+      <equation id="uid5">
+        <m:math overflow="scroll" mode="display">
+          <m:mrow>
+            <m:mi>h</m:mi>
+            <m:mo>=</m:mo>
+            <m:mi>b</m:mi>
+            <m:mo form="prefix">tan</m:mo>
+            <m:mo>(</m:mo>
+            <m:mi>π</m:mi>
+            <m:mo>/</m:mo>
+            <m:mn>3</m:mn>
+            <m:mo>)</m:mo>
+            <m:mo>/</m:mo>
+            <m:mn>2</m:mn>
+          </m:mrow>
+        </m:math>
+      </equation>
+      <para id="id189305">and grid center</para>
+      <equation id="uid6">
+        <m:math overflow="scroll" mode="display">
+          <m:mrow>
+            <m:mi mathvariant="bold">c</m:mi>
+            <m:mo>=</m:mo>
+            <m:mo>(</m:mo>
+            <m:mi>ρ</m:mi>
+            <m:mo form="prefix">cos</m:mo>
+            <m:mi>φ</m:mi>
+            <m:mo>,</m:mo>
+            <m:mi>ρ</m:mi>
+            <m:mo form="prefix">sin</m:mo>
+            <m:mi>φ</m:mi>
+            <m:mo>)</m:mo>
+            <m:mo>.</m:mo>
+          </m:mrow>
+        </m:math>
+      </equation>
+      <para id="id189355">The set of grid points, <m:math overflow="scroll"><m:mrow><m:mi>G</m:mi><m:mo>(</m:mo><m:mi>θ</m:mi><m:mo>,</m:mo><m:mi>b</m:mi><m:mo>,</m:mo><m:mi>δ</m:mi><m:mo>)</m:mo><m:mo>,</m:mo></m:mrow></m:math> forms hexagonal patterns. This set is the union of two sets, <m:math overflow="scroll"><m:mrow><m:msub><m:mi>G</m:mi><m:mn>1</m:mn></m:msub><m:mrow><m:mo>(</m:mo><m:mi>θ</m:mi><m:mo>,</m:mo><m:mi>b</m:mi><m:mo>,</m:mo><m:mi>δ</m:mi><m:mo>)</m:mo></m:mrow></m:mrow></m:math> and <m:math overflow="scroll"><m:mrow><m:msub><m:mi>G</m:mi><m:mn>2</m:mn></m:msub><m:mrow><m:mo>(</m:mo><m:mi>θ</m:mi><m:mo>,</m:mo><m:mi>b</m:mi><m:mo>,</m:mo><m:mi>δ</m:mi><m:mo>)</m:mo></m:mrow><m:mo>,</m:mo></m:mrow></m:math> that are staggered with respect to each other. The set is defined by</para>
+      <equation id="uid7">
+        <m:math overflow="scroll" mode="display">
+          <m:mrow>
+            <m:mi>G</m:mi>
+            <m:mrow>
+              <m:mo>(</m:mo>
+              <m:mi>θ</m:mi>
+              <m:mo>,</m:mo>
+              <m:mi>b</m:mi>
+              <m:mo>,</m:mo>
+              <m:mi>δ</m:mi>
+              <m:mo>)</m:mo>
+            </m:mrow>
+            <m:mo>=</m:mo>
+            <m:msub>
+              <m:mi>G</m:mi>
+              <m:mn>1</m:mn>
+            </m:msub>
+            <m:mrow>
+              <m:mo>(</m:mo>
+              <m:mi>θ</m:mi>
+              <m:mo>,</m:mo>
+              <m:mi>b</m:mi>
+              <m:mo>,</m:mo>
+              <m:mi>δ</m:mi>
+              <m:mo>)</m:mo>
+            </m:mrow>
+            <m:mo>⋃</m:mo>
+            <m:msub>
+              <m:mi>G</m:mi>
+              <m:mn>2</m:mn>
+            </m:msub>
+            <m:mrow>
+              <m:mo>(</m:mo>
+              <m:mi>θ</m:mi>
+              <m:mo>,</m:mo>
+              <m:mi>b</m:mi>
+              <m:mo>,</m:mo>
+              <m:mi>δ</m:mi>
+              <m:mo>)</m:mo>
+            </m:mrow>
+            <m:mo>,</m:mo>
+          </m:mrow>
+        </m:math>
+      </equation>
+      <para id="id189712">where</para>
+      <equation id="uid8">
+        <m:math overflow="scroll" mode="display">
+          <m:mrow>
+            <m:msub>
+              <m:mi>G</m:mi>
+              <m:mn>1</m:mn>
+            </m:msub>
+            <m:mrow>
+              <m:mo>(</m:mo>
+              <m:mi>θ</m:mi>
+              <m:mo>,</m:mo>
+              <m:mi>b</m:mi>
+              <m:mo>,</m:mo>
+              <m:mi>δ</m:mi>
+              <m:mo>)</m:mo>
+            </m:mrow>
+            <m:mo>=</m:mo>
+            <m:mfenced separators="" open="{" close="}">
+              <m:mi mathvariant="bold">c</m:mi>
+              <m:mo>+</m:mo>
+              <m:mi>k</m:mi>
+              <m:mi>b</m:mi>
+              <m:mo>(</m:mo>
+              <m:mo form="prefix">cos</m:mo>
+              <m:mi>θ</m:mi>
+              <m:mo>,</m:mo>
+              <m:mo form="prefix">sin</m:mo>
+              <m:mi>θ</m:mi>
+              <m:mo>)</m:mo>
+              <m:mo>+</m:mo>
+              <m:mn>2</m:mn>
+              <m:mi>j</m:mi>
+              <m:mi>h</m:mi>
+              <m:mo>(</m:mo>
+              <m:mo>-</m:mo>
+              <m:mo form="prefix">sin</m:mo>
+              <m:mi>θ</m:mi>
+              <m:mo>,</m:mo>
+              <m:mo form="prefix">cos</m:mo>
+              <m:mi>θ</m:mi>
+              <m:mo>)</m:mo>
+              <m:mo>:</m:mo>
+              <m:mi>j</m:mi>
+              <m:mo>,</m:mo>
+              <m:mi>k</m:mi>
+              <m:mo>∈</m:mo>
+              <m:mi mathvariant="double-struck">Z</m:mi>
+            </m:mfenced>
+            <m:mo>,</m:mo>
+          </m:mrow>
+        </m:math>
+      </equation>
+      <equation id="uid9">
+        <m:math overflow="scroll" mode="display">
+          <m:mrow>
+            <m:msub>
+              <m:mi>G</m:mi>
+              <m:mn>2</m:mn>
+            </m:msub>
+            <m:mrow>
+              <m:mo>(</m:mo>
+              <m:mi>θ</m:mi>
+              <m:mo>,</m:mo>
+              <m:mi>b</m:mi>
+              <m:mo>,</m:mo>
+              <m:mi>δ</m:mi>
+              <m:mo>)</m:mo>
+            </m:mrow>
+            <m:mo>=</m:mo>
+            <m:mfenced separators="" open="{" close="}">
+              <m:mi mathvariant="bold">c</m:mi>
+              <m:mo>+</m:mo>
+              <m:mo>(</m:mo>
+              <m:mi>k</m:mi>
+              <m:mo>+</m:mo>
+              <m:mo>(</m:mo>
+              <m:mn>1</m:mn>
+              <m:mo>/</m:mo>
+              <m:mn>2</m:mn>
+              <m:mo>)</m:mo>
+              <m:mo>)</m:mo>
+              <m:mi>b</m:mi>
+              <m:mo>(</m:mo>
+              <m:mo form="prefix">cos</m:mo>
+              <m:mi>θ</m:mi>
+              <m:mo>,</m:mo>
+              <m:mo form="prefix">sin</m:mo>
+              <m:mi>θ</m:mi>
+              <m:mo>)</m:mo>
+              <m:mo>+</m:mo>
+              <m:mo>(</m:mo>
+              <m:mn>2</m:mn>
+              <m:mi>j</m:mi>
+              <m:mo>-</m:mo>
+              <m:mn>1</m:mn>
+              <m:mo>)</m:mo>
+              <m:mi>h</m:mi>
+              <m:mo>(</m:mo>
+              <m:mo>-</m:mo>
+              <m:mo form="prefix">sin</m:mo>
+              <m:mi>θ</m:mi>
+              <m:mo>,</m:mo>
+              <m:mo form="prefix">cos</m:mo>
+              <m:mi>θ</m:mi>
+              <m:mo>)</m:mo>
+              <m:mo>:</m:mo>
+              <m:mi>j</m:mi>
+              <m:mo>,</m:mo>
+              <m:mi>k</m:mi>
+              <m:mo>∈</m:mo>
+              <m:mi mathvariant="double-struck">Z</m:mi>
+            </m:mfenced>
+            <m:mo>.</m:mo>
+          </m:mrow>
+        </m:math>
+      </equation>
+      <para id="id189987"><link target-id="uid12"/> shows an example of <m:math overflow="scroll"><m:mrow><m:mi>G</m:mi><m:mo>,</m:mo></m:mrow></m:math> where the elements of <emphasis effect="italics">G<sub>1</sub></emphasis> are marked with black circles, and the elements of <emphasis effect="italics">G<sub>2</sub></emphasis> are marked with red diamonds. The three grid parameters, height, and center are also shown.</para>
+      <para id="id190035">The latitudes of the grid have slope <m:math overflow="scroll"><m:mrow><m:mi>m</m:mi><m:mspace width="4pt"/><m:mo>=</m:mo><m:mspace width="4pt"/><m:mo form="prefix">tan</m:mo><m:mi>θ</m:mi><m:mo>.</m:mo></m:mrow></m:math> The grid meridian, <emphasis effect="italics">M</emphasis>, is the line that intersects the grid center and runs perpendicular to the grid latitudes, given by</para>
+      <equation id="uid10">
+        <m:math overflow="scroll" mode="display">
+          <m:mrow>
+            <m:mi>M</m:mi>
+            <m:mo>=</m:mo>
+            <m:mfenced separators="" open="{" close="}">
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:msub>
+                  <m:mi>y</m:mi>
+                  <m:mn>1</m:mn>
+                </m:msub>
+                <m:mo>,</m:mo>
+                <m:msub>
+                  <m:mi>y</m:mi>
+                  <m:mn>2</m:mn>
+                </m:msub>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>∈</m:mo>
+              <m:msup>
+                <m:mi>ℜ</m:mi>
+                <m:mn>2</m:mn>
+              </m:msup>
+              <m:mo>:</m:mo>
+              <m:msub>
+                <m:mi>y</m:mi>
+                <m:mn>2</m:mn>
+              </m:msub>
+              <m:mo>=</m:mo>
+              <m:msub>
+                <m:mi>c</m:mi>
+                <m:mn>2</m:mn>
+              </m:msub>
+              <m:mo>-</m:mo>
+              <m:mfrac>
+                <m:mrow>
+                  <m:msub>
+                    <m:mi>y</m:mi>
+                    <m:mn>1</m:mn>
+                  </m:msub>
+                  <m:mo>-</m:mo>
+                  <m:msub>
+                    <m:mi>c</m:mi>
+                    <m:mn>1</m:mn>
+                  </m:msub>
+                </m:mrow>
+                <m:mi>m</m:mi>
+              </m:mfrac>
+            </m:mfenced>
+            <m:mspace width="4pt"/>
+            <m:mi> if </m:mi>
+            <m:mspace width="4pt"/>
+            <m:mi>θ</m:mi>
+            <m:mo>≠</m:mo>
+            <m:mn>0</m:mn>
+            <m:mo>,</m:mo>
+          </m:mrow>
+        </m:math>
+      </equation>
+      <equation id="uid11">
+        <m:math overflow="scroll" mode="display">
+          <m:mrow>
+            <m:mi>M</m:mi>
+            <m:mo>=</m:mo>
+            <m:mfenced separators="" open="{" close="}">
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:msub>
+                  <m:mi>y</m:mi>
+                  <m:mn>1</m:mn>
+                </m:msub>
+                <m:mo>,</m:mo>
+                <m:msub>
+                  <m:mi>y</m:mi>
+                  <m:mn>2</m:mn>
+                </m:msub>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>∈</m:mo>
+              <m:msup>
+                <m:mi>ℜ</m:mi>
+                <m:mn>2</m:mn>
+              </m:msup>
+              <m:mo>:</m:mo>
+              <m:msub>
+                <m:mi>y</m:mi>
+                <m:mn>1</m:mn>
+              </m:msub>
+              <m:mo>=</m:mo>
+              <m:mn>0</m:mn>
+            </m:mfenced>
+            <m:mspace width="4pt"/>
+            <m:mi> if </m:mi>
+            <m:mspace width="4pt"/>
+            <m:mi>θ</m:mi>
+            <m:mo>=</m:mo>
+            <m:mn>0</m:mn>
+            <m:mo>.</m:mo>
+          </m:mrow>
+        </m:math>
+      </equation>
+      <para id="id190280">The grid meridian is marked with a bold line in <link target-id="uid21"/>.</para>
+      <figure id="uid12">
+        <media id="uid12_media" alt="">
+          <image mime-type="image/png" src="../../media/gridParam.png" id="uid12_onlineimage" width="757"><!-- NOTE: attribute width changes image size online (pixels). original width is 757. --></image>
+          <image for="pdf" mime-type="application/postscript" src="../../media/gridParam.eps" id="uid12_printimage" print-width="5in">
+            <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+          </image>
+        </media>
+        <caption>Graphical demonstration of parameters. This plot shows an example of a grid, <m:math overflow="scroll"><m:mrow><m:mi>G</m:mi><m:mo>(</m:mo><m:mi>θ</m:mi><m:mo>,</m:mo><m:mspace width="4pt"/><m:mi>b</m:mi><m:mo>,</m:mo><m:mspace width="4pt"/><m:mi>δ</m:mi><m:mo>)</m:mo></m:mrow></m:math>, where <m:math overflow="scroll"><m:mrow><m:mi>θ</m:mi><m:mo>=</m:mo><m:mn>0</m:mn><m:mo>.</m:mo><m:mn>925</m:mn><m:mo>,</m:mo><m:mspace width="4pt"/><m:mi>b</m:mi><m:mo>=</m:mo><m:mn>1</m:mn><m:mo>.</m:mo><m:mn>146</m:mn><m:mo>,</m:mo><m:mspace width="4pt"/><m:mi>ρ</m:mi><m:mo>=</m:mo><m:mn>0</m:mn><m:mo>.</m:mo><m:mn>496</m:mn><m:mo>,</m:mo></m:mrow></m:math> and <m:math overflow="scroll"><m:mrow><m:mi>φ</m:mi><m:mo>=</m:mo><m:mn>0</m:mn><m:mo>.</m:mo><m:mn>925</m:mn><m:mo>.</m:mo></m:mrow></m:math> The black circles and red diamonds represent the elements of <emphasis effect="italics">G<sub>1</sub></emphasis> and <m:math overflow="scroll"><m:mrow><m:msub><m:mi>G</m:mi><m:mn>2</m:mn></m:msub><m:mo>,</m:mo></m:mrow></m:math> respectively. We have drawn a large circle around the grid center, <emphasis effect="bold">c</emphasis>.</caption>
+      </figure>
+    </section>
+    <section id="cid3">
+      <title>Motion of the Rat</title>
+      <para id="id190450">We model experiments in which a rat explores a rectangular enclosure. Before determining the behavior of the grid cells, we must simulate the rat's motion within its enclosure. We begin by uniformly discretizing over time and setting the parameters defined in <link target-id="uid13"/> and <link target-id="uid14"/>.</para>
+      <table id="uid13" summary="">
+        <tgroup cols="2">
+          <tbody>
+            <row>
+              <entry>
+                <m:math overflow="scroll">
+                  <m:mrow>
+                    <m:mi mathvariant="bold">s</m:mi>
+                    <m:mo>=</m:mo>
+                    <m:mo>(</m:mo>
+                    <m:msub>
+                      <m:mi>s</m:mi>
+                      <m:mn>1</m:mn>
+                    </m:msub>
+                    <m:mo>,</m:mo>
+                    <m:msub>
+                      <m:mi>s</m:mi>
+                      <m:mn>2</m:mn>
+                    </m:msub>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                </m:math>
+              </entry>
+              <entry>(width, height) of enclosure</entry>
+            </row>
+            <row>
+              <entry>
+                <m:math overflow="scroll">
+                  <m:mrow>
+                    <m:mi mathvariant="bold">r</m:mi>
+                    <m:mo>=</m:mo>
+                    <m:mo>(</m:mo>
+                    <m:msub>
+                      <m:mi>r</m:mi>
+                      <m:mn>1</m:mn>
+                    </m:msub>
+                    <m:mo>,</m:mo>
+                    <m:msub>
+                      <m:mi>r</m:mi>
+                      <m:mn>2</m:mn>
+                    </m:msub>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                </m:math>
+              </entry>
+              <entry>rat's dimensions</entry>
+            </row>
+            <row>
+              <entry>
+                <m:math overflow="scroll">
+                  <m:mrow>
+                    <m:mi mathvariant="bold">x</m:mi>
+                    <m:mo>=</m:mo>
+                    <m:mo>(</m:mo>
+                    <m:msub>
+                      <m:mi>x</m:mi>
+                      <m:mn>1</m:mn>
+                    </m:msub>
+                    <m:mo>,</m:mo>
+                    <m:msub>
+                      <m:mi>x</m:mi>
+                      <m:mn>2</m:mn>
+                    </m:msub>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                </m:math>
+              </entry>
+              <entry>rat's position</entry>
+            </row>
+            <row>
+              <entry>
+                <m:math overflow="scroll">
+                  <m:mrow>
+                    <m:mi mathvariant="bold">v</m:mi>
+                    <m:mo>=</m:mo>
+                    <m:mo>(</m:mo>
+                    <m:msub>
+                      <m:mi>v</m:mi>
+                      <m:mn>1</m:mn>
+                    </m:msub>
+                    <m:mo>,</m:mo>
+                    <m:msub>
+                      <m:mi>v</m:mi>
+                      <m:mn>2</m:mn>
+                    </m:msub>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                </m:math>
+              </entry>
+              <entry>rat's velocity</entry>
+            </row>
+            <row>
+              <entry>
+                <m:math overflow="scroll">
+                  <m:mrow>
+                    <m:mi mathvariant="bold">a</m:mi>
+                    <m:mo>=</m:mo>
+                    <m:mo>(</m:mo>
+                    <m:msub>
+                      <m:mi>a</m:mi>
+                      <m:mn>1</m:mn>
+                    </m:msub>
+                    <m:mo>,</m:mo>
+                    <m:msub>
+                      <m:mi>a</m:mi>
+                      <m:mn>2</m:mn>
+                    </m:msub>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                </m:math>
+              </entry>
+              <entry>rat's acceleration</entry>
+            </row>
+            <row>
+              <entry>
+                <m:math overflow="scroll">
+                  <m:mrow>
+                    <m:mi>Δ</m:mi>
+                    <m:mi>t</m:mi>
+                  </m:mrow>
+                </m:math>
+              </entry>
+              <entry>length of each time interval</entry>
+            </row>
+          </tbody>
+        </tgroup>
+        <caption>Parameter Definitions. The rat's motion is determined by its position, velocity, and acceleration vectors. We assume the rat is confined in a rectangular enclosure defined by its width <emphasis effect="italics">s<sub>1</sub></emphasis> and height <m:math overflow="scroll"><m:mrow><m:msub><m:mi>s</m:mi><m:mn>2</m:mn></m:msub><m:mo>.</m:mo></m:mrow></m:math> We also assume the rat is rectangular and specify its its radius <m:math overflow="scroll"><m:mrow><m:mi mathvariant="bold">r</m:mi><m:mo>=</m:mo><m:mo>(</m:mo><m:msub><m:mi>r</m:mi><m:mn>1</m:mn></m:msub><m:mo>,</m:mo><m:msub><m:mi>r</m:mi><m:mn>2</m:mn></m:msub><m:mo>)</m:mo><m:mo>,</m:mo></m:mrow></m:math> where <emphasis effect="italics">r<sub>1</sub></emphasis> is half the rat's length, and <emphasis effect="italics">r<sub>2</sub></emphasis> is half the rat's width. We take the rat's position, <m:math overflow="scroll"><m:mrow><m:mi mathvariant="bold">x</m:mi><m:mo>,</m:mo></m:mrow></m:math> to be the location of the rat's center.</caption>
+      </table>
+      <figure id="uid14">
+        <media id="uid14_media" alt="">
+          <image mime-type="image/png" src="../../media/ratFig.png" id="uid14_onlineimage" width="497"><!-- NOTE: attribute width changes image size online (pixels). original width is 497. --></image>
+          <image for="pdf" mime-type="application/postscript" src="../../media/ratFig.eps" id="uid14_printimage" print-width="7.5cm">
+            <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+          </image>
+        </media>
+        <caption>Demonstration of parameters specifying the rat's size.</caption>
+      </figure>
+      <para id="id190894">We let <m:math overflow="scroll"><m:mrow><m:msup><m:mi>t</m:mi><m:mi>i</m:mi></m:msup><m:mo>=</m:mo><m:mi>i</m:mi><m:mi>Δ</m:mi><m:mi>t</m:mi><m:mspace width="4pt"/><m:mo>∀</m:mo><m:mi>i</m:mi><m:mo>&gt;</m:mo><m:mn>0</m:mn><m:mo>.</m:mo></m:mrow></m:math> We assume the rat's acceleration is constant over each time interval and set <m:math overflow="scroll"><m:mrow><m:msup><m:mrow><m:mi mathvariant="bold">a</m:mi></m:mrow><m:mi>i</m:mi></m:msup><m:mo>=</m:mo><m:mi mathvariant="bold">a</m:mi><m:mrow><m:mo>(</m:mo><m:mi>t</m:mi><m:mo>)</m:mo></m:mrow></m:mrow></m:math> for <m:math overflow="scroll"><m:mrow><m:msup><m:mi>t</m:mi><m:mi>i</m:mi></m:msup><m:mo>≤</m:mo><m:mi>t</m:mi><m:mo>&lt;</m:mo><m:msup><m:mi>t</m:mi><m:mrow><m:mi>i</m:mi><m:mo>+</m:mo><m:mn>1</m:mn></m:mrow></m:msup><m:mo>.</m:mo></m:mrow></m:math> We begin by initializing the rat's position and velocity, <m:math overflow="scroll"><m:mrow><m:mi mathvariant="bold">x</m:mi><m:mo>(</m:mo><m:msup><m:mi>t</m:mi><m:mn>0</m:mn></m:msup><m:mo>)</m:mo></m:mrow></m:math> and <m:math overflow="scroll"><m:mrow><m:mi mathvariant="bold">v</m:mi><m:mo>(</m:mo><m:msup><m:mi>t</m:mi><m:mn>0</m:mn></m:msup><m:mo>)</m:mo><m:mo>.</m:mo></m:mrow></m:math> Then, <m:math overflow="scroll"><m:mrow><m:mo>∀</m:mo><m:mi>i</m:mi><m:mo>&gt;</m:mo><m:mn>0</m:mn></m:mrow></m:math>, given <m:math overflow="scroll"><m:mrow><m:mi mathvariant="bold">x</m:mi><m:mo>(</m:mo><m:msup><m:mi>t</m:mi><m:mi>i</m:mi></m:msup><m:mo>)</m:mo></m:mrow></m:math> and <m:math overflow="scroll"><m:mrow><m:mi mathvariant="bold">v</m:mi><m:mo>(</m:mo><m:msup><m:mi>t</m:mi><m:mi>i</m:mi></m:msup><m:mo>)</m:mo></m:mrow></m:math>, we follow the algorithm outlined below to find <m:math overflow="scroll"><m:mrow><m:mi mathvariant="bold">x</m:mi><m:mo>(</m:mo><m:msup><m:mi>t</m:mi><m:mrow><m:mi>i</m:mi><m:mo>+</m:mo><m:mn>1</m:mn></m:mrow></m:msup><m:mo>)</m:mo></m:mrow></m:math> and <m:math overflow="scroll"><m:mrow><m:mi mathvariant="bold">v</m:mi><m:mo>(</m:mo><m:msup><m:mi>t</m:mi><m:mrow><m:mi>i</m:mi><m:mo>+</m:mo><m:mn>1</m:mn></m:mrow></m:msup><m:mo>)</m:mo><m:mo>.</m:mo></m:mrow></m:math> This algorithm is adapted from the algorithm presented by Samsonovich and Ascoli <link target-id="bid3"/>.</para>
+      <para id="id191191">Algorithm: Simulation of the Rat's Motion</para>
+      <list id="id191197" display="block" list-type="enumerated">
+        <item id="uid15">Select <m:math overflow="scroll"><m:msup><m:mover accent="true"><m:mi mathvariant="bold">a</m:mi><m:mo>˜</m:mo></m:mover><m:mi>i</m:mi></m:msup></m:math> from a Gaussian distribution with mean <m:math overflow="scroll"><m:mrow><m:mi>μ</m:mi><m:mo>=</m:mo><m:mn>0</m:mn></m:mrow></m:math> and standard deviation <m:math overflow="scroll"><m:mrow><m:mi>σ</m:mi><m:mo>.</m:mo></m:mrow></m:math></item>
+        <item id="uid16">Set <m:math overflow="scroll"><m:mrow><m:mover accent="true"><m:mi mathvariant="bold">x</m:mi><m:mo>˜</m:mo></m:mover><m:mrow><m:mo>(</m:mo><m:msup><m:mi>t</m:mi><m:mrow><m:mi>i</m:mi><m:mo>+</m:mo><m:mn>1</m:mn></m:mrow></m:msup><m:mo>)</m:mo></m:mrow><m:mo>=</m:mo><m:mi mathvariant="bold">x</m:mi><m:mrow><m:mo>(</m:mo><m:msup><m:mi>t</m:mi><m:mi>i</m:mi></m:msup><m:mo>)</m:mo></m:mrow><m:mo>+</m:mo><m:mi mathvariant="bold">v</m:mi><m:mrow><m:mo>(</m:mo><m:msup><m:mi>t</m:mi><m:mi>i</m:mi></m:msup><m:mo>)</m:mo></m:mrow><m:mi>Δ</m:mi><m:mi>t</m:mi><m:mo>+</m:mo><m:msup><m:mover accent="true"><m:mi mathvariant="bold">a</m:mi><m:mo>˜</m:mo></m:mover><m:mi>i</m:mi></m:msup><m:msup><m:mrow><m:mo>(</m:mo><m:mi>Δ</m:mi><m:mi>t</m:mi><m:mo>)</m:mo></m:mrow><m:mn>2</m:mn></m:msup><m:mo>/</m:mo><m:mn>2</m:mn><m:mo>.</m:mo></m:mrow></m:math></item>
+        <item id="uid17">If <m:math overflow="scroll"><m:mrow><m:msub><m:mi>r</m:mi><m:mi>j</m:mi></m:msub><m:mo>≤</m:mo><m:mover accent="true"><m:msub><m:mi>x</m:mi><m:mi>j</m:mi></m:msub><m:mo>˜</m:mo></m:mover><m:mrow><m:mo>(</m:mo><m:msup><m:mi>t</m:mi><m:mrow><m:mi>i</m:mi><m:mo>+</m:mo><m:mn>1</m:mn></m:mrow></m:msup><m:mo>)</m:mo></m:mrow><m:mo>≤</m:mo><m:msub><m:mi>s</m:mi><m:mi>j</m:mi></m:msub><m:mo>-</m:mo><m:msub><m:mi>r</m:mi><m:mi>j</m:mi></m:msub></m:mrow></m:math> for <m:math overflow="scroll"><m:mrow><m:mi>j</m:mi><m:mo>=</m:mo><m:mn>1</m:mn><m:mo>,</m:mo><m:mn>2</m:mn><m:mo>,</m:mo></m:mrow></m:math> the proposed new position, <m:math overflow="scroll"><m:mrow><m:mover accent="true"><m:mi mathvariant="bold">x</m:mi><m:mo>˜</m:mo></m:mover><m:mrow><m:mo>(</m:mo><m:msup><m:mi>t</m:mi><m:mrow><m:mi>i</m:mi><m:mo>+</m:mo><m:mn>1</m:mn></m:mrow></m:msup><m:mo>)</m:mo></m:mrow><m:mo>,</m:mo></m:mrow></m:math> is within the enclosure. Set <m:math overflow="scroll"><m:mrow><m:mi mathvariant="bold">x</m:mi><m:mrow><m:mo>(</m:mo><m:msup><m:mi>t</m:mi><m:mrow><m:mi>i</m:mi><m:mo>+</m:mo><m:mn>1</m:mn></m:mrow></m:msup><m:mo>)</m:mo></m:mrow><m:mo>=</m:mo><m:mover accent="true"><m:mi mathvariant="bold">x</m:mi><m:mo>˜</m:mo></m:mover><m:mrow><m:mo>(</m:mo><m:msup><m:mi>t</m:mi><m:mrow><m:mi>i</m:mi><m:mo>+</m:mo><m:mn>1</m:mn></m:mrow></m:msup><m:mo>)</m:mo></m:mrow></m:mrow></m:math> and <m:math overflow="scroll"><m:mrow><m:msup><m:mrow><m:mi mathvariant="bold">a</m:mi></m:mrow><m:mi>i</m:mi></m:msup><m:mo>=</m:mo><m:msup><m:mover accent="true"><m:mi mathvariant="bold">a</m:mi><m:mo>˜</m:mo></m:mover><m:mi>i</m:mi></m:msup><m:mo>.</m:mo></m:mrow></m:math> Proceed to step (4). If not, the proposed position is outside the enclosure. Reject <m:math overflow="scroll"><m:mrow><m:mover accent="true"><m:mi mathvariant="bold">x</m:mi><m:mo>˜</m:mo></m:mover><m:mrow><m:mo>(</m:mo><m:msup><m:mi>t</m:mi><m:mrow><m:mi>i</m:mi><m:mo>+</m:mo><m:mn>1</m:mn></m:mrow></m:msup><m:mo>)</m:mo></m:mrow></m:mrow></m:math> and <m:math overflow="scroll"><m:msup><m:mover accent="true"><m:mi mathvariant="bold">a</m:mi><m:mo>˜</m:mo></m:mover><m:mi>i</m:mi></m:msup></m:math> and repeat steps (1) through (3).
+</item>
+        <item id="uid18">Set <m:math overflow="scroll"><m:mrow><m:mi mathvariant="bold">v</m:mi><m:mrow><m:mo>(</m:mo><m:msup><m:mi>t</m:mi><m:mrow><m:mi>i</m:mi><m:mo>+</m:mo><m:mn>1</m:mn></m:mrow></m:msup><m:mo>)</m:mo></m:mrow><m:mo>=</m:mo><m:mi mathvariant="bold">v</m:mi><m:mrow><m:mo>(</m:mo><m:msup><m:mi>t</m:mi><m:mi>i</m:mi></m:msup><m:mo>)</m:mo></m:mrow><m:mo>+</m:mo><m:mi mathvariant="bold">a</m:mi><m:mi>Δ</m:mi><m:mi>t</m:mi><m:mo>.</m:mo></m:mrow></m:math></item>
+      </list>
+      <para id="id191772">By following the above algorithm, the rat's motion can be simulated for any finite length of time. There are two modifications to the above algorithm, however, that make the resulting path more realistic. First, specify a maximum velocity, <m:math overflow="scroll"><m:mrow><m:msub><m:mi mathvariant="bold">v</m:mi><m:mrow><m:mi>m</m:mi><m:mi>a</m:mi><m:mi>x</m:mi></m:mrow></m:msub><m:mo>.</m:mo></m:mrow></m:math> In step (4), if <m:math overflow="scroll"><m:mrow><m:mrow><m:mo>|</m:mo><m:mi mathvariant="bold">v</m:mi></m:mrow><m:mrow><m:mo>(</m:mo><m:msup><m:mi>t</m:mi><m:mrow><m:mi>i</m:mi><m:mo>+</m:mo><m:mn>1</m:mn></m:mrow></m:msup><m:mo>)</m:mo></m:mrow><m:mrow><m:mo>|</m:mo><m:mo>≥</m:mo><m:mo>|</m:mo></m:mrow><m:msub><m:mi mathvariant="bold">v</m:mi><m:mrow><m:mi>m</m:mi><m:mi>a</m:mi><m:mi>x</m:mi></m:mrow></m:msub><m:mrow><m:mo>|</m:mo><m:mo>,</m:mo></m:mrow></m:mrow></m:math> reduce <m:math overflow="scroll"><m:mrow><m:mi mathvariant="bold">v</m:mi><m:mo>(</m:mo><m:msup><m:mi>t</m:mi><m:mrow><m:mi>i</m:mi><m:mo>+</m:mo><m:mn>1</m:mn></m:mrow></m:msup><m:mo>)</m:mo></m:mrow></m:math> to 90 percent of its value, effectively forcing the rat to decelerate over the next time interval. Second, if an acceptable value for <m:math overflow="scroll"><m:msup><m:mover accent="true"><m:mi mathvariant="bold">a</m:mi><m:mo>˜</m:mo></m:mover><m:mi>i</m:mi></m:msup></m:math> has not been found after several tries, set <m:math overflow="scroll"><m:mrow><m:mi mathvariant="bold">v</m:mi><m:mrow><m:mo>(</m:mo><m:msub><m:mi>t</m:mi><m:mi>i</m:mi></m:msub><m:mo>)</m:mo></m:mrow><m:mo>=</m:mo><m:mrow><m:mo>(</m:mo><m:mn>0</m:mn><m:mo>,</m:mo><m:mn>0</m:mn><m:mo>)</m:mo></m:mrow><m:mo>.</m:mo></m:mrow></m:math> This signifies that the rat has been stopped by a wall of the enclosure.</para>
+    </section>
+    <section id="cid4">
+      <title>Distance to the Grid</title>
+      <para id="id191971">We define the distance of the rat to the grid using the metric</para>
+      <equation id="uid19">
+        <m:math overflow="scroll" mode="display">
+          <m:mrow>
+            <m:mi mathvariant="normal">d</m:mi>
+            <m:mo>(</m:mo>
+            <m:mi mathvariant="bold">x</m:mi>
+            <m:mo>,</m:mo>
+            <m:mspace width="4pt"/>
+            <m:mi>G</m:mi>
+            <m:mo>(</m:mo>
+            <m:mi>θ</m:mi>
+            <m:mo>,</m:mo>
+            <m:mi>b</m:mi>
+            <m:mo>,</m:mo>
+            <m:mi>δ</m:mi>
+            <m:mo>)</m:mo>
+            <m:mo>)</m:mo>
+            <m:mo>=</m:mo>
+            <m:mo movablelimits="true" form="prefix">min</m:mo>
+            <m:mo>{</m:mo>
+            <m:mo>|</m:mo>
+            <m:mi mathvariant="bold">x</m:mi>
+            <m:mo>-</m:mo>
+            <m:mi mathvariant="bold">y</m:mi>
+            <m:mo>|</m:mo>
+            <m:mo>:</m:mo>
+            <m:mi mathvariant="bold">y</m:mi>
+            <m:mo>∈</m:mo>
+            <m:mi>G</m:mi>
+            <m:mo>(</m:mo>
+            <m:mi>θ</m:mi>
+            <m:mo>,</m:mo>
+            <m:mi>b</m:mi>
+            <m:mo>,</m:mo>
+            <m:mi>δ</m:mi>
+            <m:mo>)</m:mo>
+            <m:mo>}</m:mo>
+            <m:mo>,</m:mo>
+          </m:mrow>
+        </m:math>
+      </equation>
+      <para id="id192082">where <emphasis effect="bold">x</emphasis> denotes the position of the rat. We follow the algorithm outlined below to efficiently calculate <m:math overflow="scroll"><m:mrow><m:mi mathvariant="normal">d</m:mi><m:mo>(</m:mo><m:mi mathvariant="bold">x</m:mi><m:mo>,</m:mo><m:mi>G</m:mi><m:mo>)</m:mo><m:mo>.</m:mo></m:mrow></m:math> All formulas given are derived by examining the geometry of the grid and are based on the assumption that <m:math overflow="scroll"><m:mrow><m:mi>θ</m:mi><m:mo>≠</m:mo><m:mn>0</m:mn><m:mo>.</m:mo></m:mrow></m:math> <link target-id="uid20"/> and <link target-id=""/> each show an example of <m:math overflow="scroll"><m:mrow><m:mi>G</m:mi><m:mo>(</m:mo><m:mi>θ</m:mi><m:mo>,</m:mo><m:mi>b</m:mi><m:mo>,</m:mo><m:mi>δ</m:mi><m:mo>)</m:mo></m:mrow></m:math> that may assist in the understanding of the algorithm.</para>
+      <figure id="uid20">
+        <media id="uid20_media" alt="">
+          <image mime-type="image/png" src="../../media/gridEx1.png" id="uid20_onlineimage" width="571"><!-- NOTE: attribute width changes image size online (pixels). original width is 571. --></image>
+          <image for="pdf" mime-type="application/postscript" src="../../media/gridEx1.eps" id="uid20_printimage" print-width="7.5cm">
+            <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+          </image>
+        </media>
+        <caption>Demonstration of the distance algorithm. This example demonstrates our algorithm for calculating <m:math overflow="scroll"><m:mrow><m:mi mathvariant="normal">d</m:mi><m:mo>(</m:mo><m:mi mathvariant="bold">x</m:mi><m:mo>,</m:mo><m:mi>G</m:mi><m:mo>)</m:mo><m:mo>.</m:mo></m:mrow></m:math> As in <link target-id="uid12"/>, <emphasis effect="italics">G<sub>1</sub></emphasis> is marked with black circles, and <emphasis effect="italics">G<sub>2</sub></emphasis> is marked with red diamonds. The position of the rat is denoted with a large X. We have marked the grid meridian with a dark line, drawn a large circle around the grid center <emphasis effect="bold">c</emphasis>, and drawn a large square around <emphasis effect="bold">p</emphasis>, the projection of <emphasis effect="bold">x</emphasis> onto the meridian. For this example, <m:math overflow="scroll"><m:mrow><m:msub><m:mi>n</m:mi><m:mn>1</m:mn></m:msub><m:mo>=</m:mo><m:mn>1</m:mn><m:mo>,</m:mo></m:mrow></m:math><m:math overflow="scroll"><m:mrow><m:msub><m:mi>n</m:mi><m:mn>2</m:mn></m:msub><m:mo>=</m:mo><m:mn>3</m:mn><m:mo>,</m:mo></m:mrow></m:math><m:math overflow="scroll"><m:mrow><m:msubsup><m:mi>b</m:mi><m:mn>1</m:mn><m:mn>1</m:mn></m:msubsup><m:mrow><m:mo>(</m:mo><m:msub><m:mi mathvariant="bold">g</m:mi><m:mn mathvariant="bold">2</m:mn></m:msub><m:mo>)</m:mo></m:mrow><m:mo>=</m:mo><m:msubsup><m:mi>b</m:mi><m:mn>2</m:mn><m:mn>1</m:mn></m:msubsup><m:mrow><m:mo>(</m:mo><m:msub><m:mi mathvariant="bold">g</m:mi><m:mn mathvariant="bold">2</m:mn></m:msub><m:mo>)</m:mo></m:mrow><m:mo>,</m:mo></m:mrow></m:math> and <m:math overflow="scroll"><m:mrow><m:msubsup><m:mi>b</m:mi><m:mn>1</m:mn><m:mn>2</m:mn></m:msubsup><m:mrow><m:mo>(</m:mo><m:msub><m:mi mathvariant="bold">g</m:mi><m:mn mathvariant="bold">1</m:mn></m:msub><m:mo>)</m:mo></m:mrow><m:mo>=</m:mo><m:msubsup><m:mi>b</m:mi><m:mn>2</m:mn><m:mn>2</m:mn></m:msubsup><m:mrow><m:mo>(</m:mo><m:msub><m:mi mathvariant="bold">g</m:mi><m:mn mathvariant="bold">1</m:mn></m:msub><m:mo>)</m:mo></m:mrow><m:mo>.</m:mo></m:mrow></m:math> We used the following parameter values: <m:math overflow="scroll"><m:mrow><m:mi>θ</m:mi><m:mo>=</m:mo><m:mn>0</m:mn><m:mo>.</m:mo><m:mn>819</m:mn><m:mo>,</m:mo><m:mspace width="4pt"/><m:mi>b</m:mi><m:mo>=</m:mo><m:mn>1</m:mn><m:mo>.</m:mo><m:mn>146</m:mn><m:mo>,</m:mo><m:mspace width="4pt"/><m:mi>ρ</m:mi><m:mo>=</m:mo><m:mn>0</m:mn><m:mo>.</m:mo><m:mn>496</m:mn><m:mo>,</m:mo><m:mspace width="4pt"/><m:mi>φ</m:mi><m:mo>=</m:mo><m:mn>1</m:mn><m:mo>.</m:mo><m:mn>745</m:mn><m:mo>,</m:mo></m:mrow></m:math> and <m:math overflow="scroll"><m:mrow><m:mi mathvariant="bold">x</m:mi><m:mo>=</m:mo><m:mo>(</m:mo><m:mo>-</m:mo><m:mn>0</m:mn><m:mo>.</m:mo><m:mn>5</m:mn><m:mo>,</m:mo><m:mo>-</m:mo><m:mn>1</m:mn><m:mo>.</m:mo><m:mn>8</m:mn><m:mo>)</m:mo><m:mo>.</m:mo></m:mrow></m:math></caption>
+      </figure>
+      <figure id="uid21">
+        <media id="uid21_media" alt="">
+          <image mime-type="image/png" src="../../media/gridEx2.png" id="uid21_onlineimage" width="565"><!-- NOTE: attribute width changes image size online (pixels). original width is 565. --></image>
+          <image for="pdf" mime-type="application/postscript" src="../../media/gridEx2.eps" id="uid21_printimage" print-width="7.5cm">
+            <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+          </image>
+        </media>
+        <caption>Another demonstration of the distance algorithm. As in <link target-id="uid20"/>, this example demonstrates our algorithm for calculating <m:math overflow="scroll"><m:mrow><m:mi mathvariant="normal">d</m:mi><m:mo>(</m:mo><m:mi mathvariant="bold">x</m:mi><m:mo>,</m:mo><m:mi>G</m:mi><m:mo>)</m:mo><m:mo>.</m:mo></m:mrow></m:math> For this example, <m:math overflow="scroll"><m:mrow><m:msub><m:mi>n</m:mi><m:mn>1</m:mn></m:msub><m:mo>=</m:mo><m:mn>0</m:mn><m:mo>,</m:mo></m:mrow></m:math><m:math overflow="scroll"><m:mrow><m:msub><m:mi>n</m:mi><m:mn>2</m:mn></m:msub><m:mo>=</m:mo><m:mn>1</m:mn><m:mo>,</m:mo></m:mrow></m:math><m:math overflow="scroll"><m:mrow><m:msubsup><m:mi>b</m:mi><m:mn>1</m:mn><m:mn>1</m:mn></m:msubsup><m:mrow><m:mo>(</m:mo><m:msub><m:mi mathvariant="bold">g</m:mi><m:mn mathvariant="bold">1</m:mn></m:msub><m:mo>)</m:mo></m:mrow><m:mo>=</m:mo><m:msubsup><m:mi>b</m:mi><m:mn>2</m:mn><m:mn>2</m:mn></m:msubsup><m:mrow><m:mo>(</m:mo><m:msub><m:mi mathvariant="bold">g</m:mi><m:mn mathvariant="bold">1</m:mn></m:msub><m:mo>)</m:mo></m:mrow><m:mo>,</m:mo></m:mrow></m:math> and <m:math overflow="scroll"><m:mrow><m:msubsup><m:mi>b</m:mi><m:mn>1</m:mn><m:mn>2</m:mn></m:msubsup><m:mrow><m:mo>(</m:mo><m:msub><m:mi mathvariant="bold">g</m:mi><m:mn mathvariant="bold">2</m:mn></m:msub><m:mo>)</m:mo></m:mrow><m:mo>=</m:mo><m:msubsup><m:mi>b</m:mi><m:mn>2</m:mn><m:mn>1</m:mn></m:msubsup><m:mrow><m:mo>(</m:mo><m:msub><m:mi mathvariant="bold">g</m:mi><m:mn mathvariant="bold">2</m:mn></m:msub><m:mo>)</m:mo></m:mrow><m:mo>.</m:mo></m:mrow></m:math> We used the following parameter values: <m:math overflow="scroll"><m:mrow><m:mi>θ</m:mi><m:mo>=</m:mo><m:mn>0</m:mn><m:mo>.</m:mo><m:mn>641</m:mn><m:mo>,</m:mo><m:mspace width="4pt"/><m:mi>b</m:mi><m:mo>=</m:mo><m:mn>1</m:mn><m:mo>.</m:mo><m:mn>349</m:mn><m:mo>,</m:mo><m:mspace width="4pt"/><m:mi>ρ</m:mi><m:mo>=</m:mo><m:mn>0</m:mn><m:mo>.</m:mo><m:mn>319</m:mn><m:mo>,</m:mo><m:mi>φ</m:mi><m:mo>=</m:mo><m:mn>0</m:mn><m:mo>.</m:mo><m:mn>641</m:mn><m:mo>,</m:mo></m:mrow></m:math> and <m:math overflow="scroll"><m:mrow><m:mi mathvariant="bold">x</m:mi><m:mo>=</m:mo><m:mo>(</m:mo><m:mn>1</m:mn><m:mo>.</m:mo><m:mn>5</m:mn><m:mo>,</m:mo><m:mn>0</m:mn><m:mo>.</m:mo><m:mn>3</m:mn><m:mo>)</m:mo><m:mo>.</m:mo></m:mrow></m:math></caption>
+      </figure>
+      <para id="id192902">Algorithm: Calculation of <m:math overflow="scroll"><m:mrow><m:mi mathvariant="normal">d</m:mi><m:mo>(</m:mo><m:mi mathvariant="bold">x</m:mi><m:mo>,</m:mo><m:mi>G</m:mi><m:mo>)</m:mo></m:mrow></m:math></para>
+      <list id="id192931" display="block" list-type="enumerated">
+        <item id="uid22">Find <m:math overflow="scroll"><m:mrow><m:mi mathvariant="bold">p</m:mi><m:mo>=</m:mo><m:mo>(</m:mo><m:msub><m:mi>p</m:mi><m:mn>1</m:mn></m:msub><m:mo>,</m:mo><m:msub><m:mi>p</m:mi><m:mn>2</m:mn></m:msub><m:mo>)</m:mo></m:mrow></m:math>, the projection of <emphasis effect="bold">x</emphasis> onto the meridian, given by
+<equation id="uid23"><m:math overflow="scroll" mode="display"><m:mrow><m:msub><m:mi>p</m:mi><m:mn>1</m:mn></m:msub><m:mo>=</m:mo><m:mfrac><m:mrow><m:msup><m:mi>m</m:mi><m:mn>2</m:mn></m:msup><m:msub><m:mi>x</m:mi><m:mn>1</m:mn></m:msub><m:mo>-</m:mo><m:mi>m</m:mi><m:msub><m:mi>x</m:mi><m:mn>2</m:mn></m:msub><m:mo>+</m:mo><m:mi>m</m:mi><m:msub><m:mi>c</m:mi><m:mn>2</m:mn></m:msub><m:mo>+</m:mo><m:msub><m:mi>c</m:mi><m:mn>1</m:mn></m:msub></m:mrow><m:mrow><m:msup><m:mi>m</m:mi><m:mn>2</m:mn></m:msup><m:mo>+</m:mo><m:mn>1</m:mn></m:mrow></m:mfrac><m:mo>,</m:mo><m:mspace width="1.em"/><m:mi> and </m:mi><m:mspace width="1.em"/><m:msub><m:mi>p</m:mi><m:mn>2</m:mn></m:msub><m:mo>=</m:mo><m:msub><m:mi>c</m:mi><m:mn>2</m:mn></m:msub><m:mo>-</m:mo><m:mfrac><m:mrow><m:msub><m:mi>p</m:mi><m:mn>1</m:mn></m:msub><m:mo>-</m:mo><m:msub><m:mi>c</m:mi><m:mn>1</m:mn></m:msub></m:mrow><m:mi>m</m:mi></m:mfrac><m:mo>,</m:mo></m:mrow></m:math></equation>
+where <m:math overflow="scroll"><m:mrow><m:mi mathvariant="bold">c</m:mi><m:mo>=</m:mo><m:mo>(</m:mo><m:msub><m:mi>c</m:mi><m:mn>1</m:mn></m:msub><m:mo>,</m:mo><m:msub><m:mi>c</m:mi><m:mn>2</m:mn></m:msub><m:mo>)</m:mo><m:mo>.</m:mo></m:mrow></m:math> We have drawn a large square around this projection in <link target-id="uid21"/>.
+</item>
+        <item id="uid24">Compute the two distances
+<equation id="uid25"><m:math overflow="scroll" mode="display"><m:mrow><m:msub><m:mi>ℓ</m:mi><m:mn>1</m:mn></m:msub><m:mo>≡</m:mo><m:mrow><m:mo>|</m:mo><m:mi mathvariant="bold">p</m:mi><m:mo>-</m:mo><m:mi mathvariant="bold">c</m:mi><m:mo>|</m:mo><m:mspace width="1.em"/><m:mi> and </m:mi><m:mspace width="1.em"/></m:mrow><m:msub><m:mi>ℓ</m:mi><m:mn>2</m:mn></m:msub><m:mo>≡</m:mo><m:mrow><m:mo>|</m:mo><m:mi mathvariant="bold">p</m:mi><m:mo>-</m:mo><m:mi mathvariant="bold">x</m:mi><m:mo>|</m:mo></m:mrow></m:mrow></m:math></equation>
+and the associated integers
+<equation id="uid26"><m:math overflow="scroll" mode="display"><m:mrow><m:msub><m:mi>n</m:mi><m:mn>1</m:mn></m:msub><m:mo>=</m:mo><m:mi> floor </m:mi><m:mrow><m:mo>(</m:mo><m:msub><m:mi>ℓ</m:mi><m:mn>1</m:mn></m:msub><m:mo>/</m:mo><m:mi>h</m:mi><m:mo>)</m:mo></m:mrow><m:mspace width="1.em"/><m:mi> and </m:mi><m:mspace width="1.em"/><m:msub><m:mi>n</m:mi><m:mn>2</m:mn></m:msub><m:mo>=</m:mo><m:mi> floor </m:mi><m:mfenced separators="" open="(" close=")"><m:mfrac><m:msub><m:mi>ℓ</m:mi><m:mn>2</m:mn></m:msub><m:mrow><m:mo>(</m:mo><m:mi>b</m:mi><m:mo>/</m:mo><m:mn>2</m:mn><m:mo>)</m:mo></m:mrow></m:mfrac></m:mfenced><m:mo>.</m:mo></m:mrow></m:math></equation>
+These values permit us to box in the position, <m:math overflow="scroll"><m:mrow><m:mi mathvariant="bold">x</m:mi><m:mo>.</m:mo></m:mrow></m:math> The four lines used to create this box are shown by dotted lines in <link target-id="uid21"/> and are given by
+<equation id="uid27"><m:math overflow="scroll" mode="display"><m:mrow><m:msubsup><m:mi>b</m:mi><m:mn>1</m:mn><m:mi>k</m:mi></m:msubsup><m:mo>=</m:mo><m:mfenced separators="" open="{" close="}"><m:mrow><m:mo>(</m:mo><m:msub><m:mi>y</m:mi><m:mn>1</m:mn></m:msub><m:mo>,</m:mo><m:msub><m:mi>y</m:mi><m:mn>2</m:mn></m:msub><m:mo>)</m:mo></m:mrow><m:mo>∈</m:mo><m:msup><m:mi>ℜ</m:mi><m:mn>2</m:mn></m:msup><m:mo>:</m:mo><m:msub><m:mi>y</m:mi><m:mn>2</m:mn></m:msub><m:mo>=</m:mo><m:msubsup><m:mi>q</m:mi><m:mn>2</m:mn><m:mi>k</m:mi></m:msubsup><m:mo>+</m:mo><m:mrow><m:mo>(</m:mo><m:msub><m:mi>y</m:mi><m:mn>1</m:mn></m:msub><m:mo>-</m:mo><m:msubsup><m:mi>q</m:mi><m:mn>1</m:mn><m:mi>k</m:mi></m:msubsup><m:mo>)</m:mo></m:mrow><m:mi>m</m:mi><m:mo>,</m:mo><m:mspace width="1.em"/><m:mi> for </m:mi><m:mspace width="4pt"/><m:mi>k</m:mi><m:mo>=</m:mo><m:mn>0</m:mn><m:mo>,</m:mo><m:mn>1</m:mn></m:mfenced><m:mo>,</m:mo></m:mrow></m:math></equation><equation id="uid28"><m:math overflow="scroll" mode="display"><m:mrow><m:msubsup><m:mi>b</m:mi><m:mn>2</m:mn><m:mi>k</m:mi></m:msubsup><m:mo>=</m:mo><m:mfenced separators="" open="{" close="}"><m:mrow><m:mo>(</m:mo><m:msub><m:mi>y</m:mi><m:mn>1</m:mn></m:msub><m:mo>,</m:mo><m:msub><m:mi>y</m:mi><m:mn>2</m:mn></m:msub><m:mo>)</m:mo></m:mrow><m:mo>∈</m:mo><m:msup><m:mi>ℜ</m:mi><m:mn>2</m:mn></m:msup><m:mo>:</m:mo><m:msub><m:mi>y</m:mi><m:mn>2</m:mn></m:msub><m:mo>=</m:mo><m:msubsup><m:mi>w</m:mi><m:mn>2</m:mn><m:mi>k</m:mi></m:msubsup><m:mo>-</m:mo><m:mrow><m:mo>(</m:mo><m:msub><m:mi>y</m:mi><m:mn>1</m:mn></m:msub><m:mo>-</m:mo><m:msubsup><m:mi>w</m:mi><m:mn>1</m:mn><m:mi>k</m:mi></m:msubsup><m:mo>)</m:mo></m:mrow><m:mo>/</m:mo><m:mi>m</m:mi><m:mo>,</m:mo><m:mspace width="1.em"/><m:mi> for </m:mi><m:mspace width="4pt"/><m:mi>k</m:mi><m:mo>=</m:mo><m:mn>0</m:mn><m:mo>,</m:mo><m:mn>1</m:mn></m:mfenced><m:mo>,</m:mo></m:mrow></m:math></equation>
+where
+<equation id="uid29"><m:math overflow="scroll" mode="display"><m:mrow><m:mrow><m:mo>(</m:mo><m:msubsup><m:mi>q</m:mi><m:mn>1</m:mn><m:mi>k</m:mi></m:msubsup><m:mo>,</m:mo><m:msubsup><m:mi>q</m:mi><m:mn>2</m:mn><m:mi>k</m:mi></m:msubsup><m:mo>)</m:mo></m:mrow><m:mo>=</m:mo><m:mi mathvariant="bold">c</m:mi><m:mo>+</m:mo><m:mi>s</m:mi><m:mi>i</m:mi><m:mi>g</m:mi><m:mi>n</m:mi><m:mrow><m:mo>(</m:mo><m:msub><m:mi>p</m:mi><m:mn>2</m:mn></m:msub><m:mo>-</m:mo><m:msub><m:mi>c</m:mi><m:mn>2</m:mn></m:msub><m:mo>)</m:mo></m:mrow><m:mrow><m:mo>(</m:mo><m:msub><m:mi>n</m:mi><m:mn>1</m:mn></m:msub><m:mo>+</m:mo><m:mi>k</m:mi><m:mo>)</m:mo></m:mrow><m:mi>h</m:mi><m:mrow><m:mo>(</m:mo><m:mo>-</m:mo><m:mo form="prefix">sin</m:mo><m:mi>θ</m:mi><m:mo>,</m:mo><m:mo form="prefix">cos</m:mo><m:mi>θ</m:mi><m:mo>)</m:mo></m:mrow></m:mrow></m:math></equation>
+and
+<equation id="uid30"><m:math overflow="scroll" mode="display"><m:mrow><m:mrow><m:mo>(</m:mo><m:msubsup><m:mi>w</m:mi><m:mn>1</m:mn><m:mi>k</m:mi></m:msubsup><m:mo>,</m:mo><m:msubsup><m:mi>w</m:mi><m:mn>2</m:mn><m:mi>k</m:mi></m:msubsup><m:mo>)</m:mo></m:mrow><m:mo>=</m:mo><m:mi mathvariant="bold">p</m:mi><m:mo>+</m:mo><m:mi>s</m:mi><m:mi>i</m:mi><m:mi>g</m:mi><m:mi>n</m:mi><m:mrow><m:mo>(</m:mo><m:msub><m:mi>x</m:mi><m:mn>1</m:mn></m:msub><m:mo>-</m:mo><m:msub><m:mi>p</m:mi><m:mn>1</m:mn></m:msub><m:mo>)</m:mo></m:mrow><m:mrow><m:mo>(</m:mo><m:msub><m:mi>n</m:mi><m:mn>2</m:mn></m:msub><m:mo>+</m:mo><m:mi>k</m:mi><m:mo>)</m:mo></m:mrow><m:mrow><m:mo>(</m:mo><m:mi>b</m:mi><m:mo>/</m:mo><m:mn>2</m:mn><m:mo>)</m:mo></m:mrow><m:mrow><m:mo>(</m:mo><m:mo form="prefix">cos</m:mo><m:mi>θ</m:mi><m:mo>,</m:mo><m:mo form="prefix">sin</m:mo><m:mi>θ</m:mi><m:mo>)</m:mo></m:mrow><m:mo>.</m:mo></m:mrow></m:math></equation>
+The line <emphasis effect="italics">b<sub>1</sub><sup>k</sup></emphasis> parallels the latitudes, and the line <emphasis effect="italics">b<sub>2</sub><sup>k</sup></emphasis> parallels the meridian, for <m:math overflow="scroll"><m:mrow><m:mi>k</m:mi><m:mo>=</m:mo><m:mn>0</m:mn><m:mo>,</m:mo><m:mn>1</m:mn><m:mo>.</m:mo></m:mrow></m:math></item>
+        <item id="uid31">Find <m:math overflow="scroll"><m:mrow><m:msub><m:mi mathvariant="bold">g</m:mi><m:mn mathvariant="bold">1</m:mn></m:msub><m:mo>∈</m:mo><m:msub><m:mi>G</m:mi><m:mn>1</m:mn></m:msub></m:mrow></m:math> and <m:math overflow="scroll"><m:mrow><m:msub><m:mi mathvariant="bold">g</m:mi><m:mn mathvariant="bold">2</m:mn></m:msub><m:mo>∈</m:mo><m:msub><m:mi>G</m:mi><m:mn>2</m:mn></m:msub><m:mo>,</m:mo></m:mrow></m:math> the two elements of the grid <m:math overflow="scroll"><m:mrow><m:mi>G</m:mi><m:mo>(</m:mo><m:mi>θ</m:mi><m:mo>,</m:mo><m:mi>b</m:mi><m:mo>,</m:mo><m:mi>δ</m:mi><m:mo>)</m:mo></m:mrow></m:math> that lie on the boundary of the box. These two vertices are the closest vertices to the rat with respect to the metric <m:math overflow="scroll"><m:mrow><m:mi mathvariant="normal">d</m:mi><m:mo>(</m:mo><m:mi mathvariant="bold">x</m:mi><m:mo>,</m:mo><m:mi>G</m:mi><m:mo>)</m:mo><m:mo>.</m:mo></m:mrow></m:math> The four corners of the box are given by the four intersections of the lines <emphasis effect="italics">b<sub>1</sub><sup>k</sup></emphasis> and <emphasis effect="italics">b<sub>2</sub><sup>k</sup></emphasis> for <m:math overflow="scroll"><m:mrow><m:mi>k</m:mi><m:mo>=</m:mo><m:mn>0</m:mn><m:mo>,</m:mo><m:mn>1</m:mn><m:mo>.</m:mo></m:mrow></m:math> For <m:math overflow="scroll"><m:mrow><m:mi>j</m:mi><m:mo>=</m:mo><m:mn>0</m:mn><m:mo>,</m:mo><m:mn>1</m:mn><m:mo>,</m:mo></m:mrow></m:math> if <emphasis effect="italics">n<sub>j</sub></emphasis> is even, <emphasis effect="italics">b<sub>j</sub><sup>0</sup></emphasis> crosses only elements of <emphasis effect="italics">G<sub>1</sub></emphasis>, and <emphasis effect="italics">b<sub>j</sub><sup>1</sup></emphasis> crosses only elements of <m:math overflow="scroll"><m:mrow><m:msub><m:mi>G</m:mi><m:mn>2</m:mn></m:msub><m:mo>.</m:mo></m:mrow></m:math> On the other hand, if <emphasis effect="italics">n<sub>j</sub></emphasis> is odd, <emphasis effect="italics">b<sub>j</sub><sup>0</sup></emphasis> crosses only elements of <m:math overflow="scroll"><m:mrow><m:msub><m:mi>G</m:mi><m:mn>2</m:mn></m:msub><m:mo>,</m:mo></m:mrow></m:math> and <emphasis effect="italics">b<sub>j</sub><sup>1</sup></emphasis> crosses only elements of <m:math overflow="scroll"><m:mrow><m:msub><m:mi>G</m:mi><m:mn>1</m:mn></m:msub><m:mo>.</m:mo></m:mrow></m:math> Thus, the two corners of the box corresponding to the grid vertices <emphasis effect="italics">g<sub>1</sub></emphasis> and <emphasis effect="italics">g<sub>2</sub></emphasis> form a diagonal pair given by solving
+<equation id="uid32"><m:math overflow="scroll" mode="display"><m:mrow><m:msubsup><m:mi>b</m:mi><m:mn>1</m:mn><m:mn>0</m:mn></m:msubsup><m:mrow><m:mo>(</m:mo><m:mi>g</m:mi><m:mo>)</m:mo></m:mrow><m:mo>=</m:mo><m:msubsup><m:mi>b</m:mi><m:mn>2</m:mn><m:mn>0</m:mn></m:msubsup><m:mrow><m:mo>(</m:mo><m:mi>g</m:mi><m:mo>)</m:mo></m:mrow><m:mspace width="1.em"/><m:mi> and </m:mi><m:mspace width="1.em"/><m:msubsup><m:mi>b</m:mi><m:mn>1</m:mn><m:mn>1</m:mn></m:msubsup><m:mrow><m:mo>(</m:mo><m:msup><m:mi>g</m:mi><m:mo>'</m:mo></m:msup><m:mo>)</m:mo></m:mrow><m:mo>=</m:mo><m:msubsup><m:mi>b</m:mi><m:mn>2</m:mn><m:mn>1</m:mn></m:msubsup><m:mrow><m:mo>(</m:mo><m:msup><m:mi>g</m:mi><m:mo>'</m:mo></m:msup><m:mo>)</m:mo></m:mrow><m:mspace width="1.em"/><m:mi> if </m:mi><m:mspace width="4pt"/><m:msub><m:mi>n</m:mi><m:mn>1</m:mn></m:msub><m:mo>+</m:mo><m:msub><m:mi>n</m:mi><m:mn>2</m:mn></m:msub><m:mspace width="4pt"/><m:mi> is </m:mi><m:mspace width="4pt"/><m:mi> even </m:mi><m:mo>,</m:mo></m:mrow></m:math></equation><equation id="uid33"><m:math overflow="scroll" mode="display"><m:mrow><m:msubsup><m:mi>b</m:mi><m:mn>1</m:mn><m:mn>0</m:mn></m:msubsup><m:mrow><m:mo>(</m:mo><m:mi>g</m:mi><m:mo>)</m:mo></m:mrow><m:mo>=</m:mo><m:msubsup><m:mi>b</m:mi><m:mn>2</m:mn><m:mn>1</m:mn></m:msubsup><m:mrow><m:mo>(</m:mo><m:mi>g</m:mi><m:mo>)</m:mo></m:mrow><m:mspace width="1.em"/><m:mi> and </m:mi><m:mspace width="1.em"/><m:msubsup><m:mi>b</m:mi><m:mn>1</m:mn><m:mn>1</m:mn></m:msubsup><m:mrow><m:mo>(</m:mo><m:msup><m:mi>g</m:mi><m:mo>'</m:mo></m:msup><m:mo>)</m:mo></m:mrow><m:mo>=</m:mo><m:msubsup><m:mi>b</m:mi><m:mn>2</m:mn><m:mn>0</m:mn></m:msubsup><m:mrow><m:mo>(</m:mo><m:msup><m:mi>g</m:mi><m:mo>'</m:mo></m:msup><m:mo>)</m:mo></m:mrow><m:mspace width="1.em"/><m:mi> if </m:mi><m:mspace width="4pt"/><m:msub><m:mi>n</m:mi><m:mn>1</m:mn></m:msub><m:mo>+</m:mo><m:msub><m:mi>n</m:mi><m:mn>2</m:mn></m:msub><m:mspace width="4pt"/><m:mi> is </m:mi><m:mspace width="4pt"/><m:mi> odd </m:mi><m:mo>.</m:mo></m:mrow></m:math></equation></item>
+        <item id="uid34">Calculate
+<equation id="uid35"><m:math overflow="scroll" mode="display"><m:mrow><m:msup><m:mi mathvariant="normal">d</m:mi><m:mn>2</m:mn></m:msup><m:mrow><m:mo>(</m:mo><m:mi mathvariant="bold">x</m:mi><m:mo>,</m:mo><m:mi>G</m:mi><m:mrow><m:mo>(</m:mo><m:mi>θ</m:mi><m:mo>,</m:mo><m:mi>b</m:mi><m:mo>,</m:mo><m:mi>δ</m:mi><m:mo>)</m:mo></m:mrow><m:mo>)</m:mo></m:mrow><m:mo>=</m:mo><m:mrow><m:mo movablelimits="true" form="prefix">min</m:mo><m:mo>{</m:mo><m:mo>|</m:mo><m:mi mathvariant="bold">x</m:mi></m:mrow><m:mo>-</m:mo><m:msub><m:mi mathvariant="bold">g</m:mi><m:mn mathvariant="bold">1</m:mn></m:msub><m:msup><m:mrow><m:mo>|</m:mo></m:mrow><m:mn>2</m:mn></m:msup><m:mrow><m:mo>,</m:mo><m:mo>|</m:mo><m:mi mathvariant="bold">x</m:mi><m:mo>-</m:mo></m:mrow><m:msub><m:mi mathvariant="bold">g</m:mi><m:mn mathvariant="bold">2</m:mn></m:msub><m:mrow><m:msup><m:mo>|</m:mo><m:mn>2</m:mn></m:msup><m:mo>}</m:mo></m:mrow><m:mo>.</m:mo></m:mrow></m:math></equation></item>
+      </list>
+    </section>
+    <section id="cid5">
+      <title>Firing Pattern</title>
+      <para id="id194869">All that remains is to determine the firing pattern of the grid cell. Each grid cell has an efficacy value, <m:math overflow="scroll"><m:mrow><m:mi>ε</m:mi><m:mo>,</m:mo></m:mrow></m:math> that incorporates a refractory period. When the cell spikes, <emphasis effect="italics">ε</emphasis> is set to 0. Then, <emphasis effect="italics">ε</emphasis> recovers exponentially to its base value of 1 at a rate determined by the time constant <m:math overflow="scroll"><m:mrow><m:mi>τ</m:mi><m:mo>,</m:mo></m:mrow></m:math></para>
+      <equation id="uid36">
+        <m:math overflow="scroll" mode="display">
+          <m:mrow>
+            <m:mi>ε</m:mi>
+            <m:mrow>
+              <m:mo>(</m:mo>
+              <m:mi>t</m:mi>
+              <m:mo>)</m:mo>
+            </m:mrow>
+            <m:mo>=</m:mo>
+            <m:mn>1</m:mn>
+            <m:mo>-</m:mo>
+            <m:mo form="prefix">exp</m:mo>
+            <m:mo>(</m:mo>
+            <m:mo>-</m:mo>
+            <m:mrow>
+              <m:mo>(</m:mo>
+              <m:mi>t</m:mi>
+              <m:mo>-</m:mo>
+              <m:msub>
+                <m:mi>t</m:mi>
+                <m:mi>s</m:mi>
+              </m:msub>
+              <m:mo>)</m:mo>
+            </m:mrow>
+            <m:mo>/</m:mo>
+            <m:mi>τ</m:mi>
+            <m:mo>)</m:mo>
+            <m:mo>,</m:mo>
+          </m:mrow>
+        </m:math>
+      </equation>
+      <para id="id194980">where <emphasis effect="italics">t<sub>s</sub></emphasis> is the time of the most recent spike of the cell.</para>
+      <para id="id195002">The probability, <m:math overflow="scroll"><m:mrow><m:mi>P</m:mi><m:mo>(</m:mo><m:mi mathvariant="bold">x</m:mi><m:mo>,</m:mo><m:mi>G</m:mi><m:mo>,</m:mo><m:mi>ε</m:mi><m:mo>,</m:mo><m:mi>γ</m:mi><m:mo>)</m:mo></m:mrow></m:math>, that a grid cell fires is then taken from a Gaussian distribution with a width dependent on the rat's distance to the grid, the grid's base, the cell's efficacy value, and the scaling parameter <m:math overflow="scroll"><m:mrow><m:mi>γ</m:mi><m:mo>,</m:mo></m:mrow></m:math></para>
+      <equation id="uid37">
+        <m:math overflow="scroll" mode="display">
+          <m:mrow>
+            <m:mi>P</m:mi>
+            <m:mrow>
+              <m:mo>(</m:mo>
+              <m:mi mathvariant="bold">x</m:mi>
+              <m:mo>,</m:mo>
+              <m:mi>G</m:mi>
+              <m:mo>,</m:mo>
+              <m:mi>ε</m:mi>
+              <m:mo>,</m:mo>
+              <m:mi>γ</m:mi>
+              <m:mo>)</m:mo>
+            </m:mrow>
+            <m:mo>=</m:mo>
+            <m:mo form="prefix">exp</m:mo>
+            <m:mfenced separators="" open="(" close=")">
+              <m:mfrac>
+                <m:mrow>
+                  <m:mo>-</m:mo>
+                  <m:mi>ε</m:mi>
+                  <m:msup>
+                    <m:mi mathvariant="normal">d</m:mi>
+                    <m:mn>2</m:mn>
+                  </m:msup>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:mi mathvariant="bold">x</m:mi>
+                    <m:mo>,</m:mo>
+                    <m:mi>G</m:mi>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                </m:mrow>
+                <m:mrow>
+                  <m:mi>γ</m:mi>
+                  <m:msup>
+                    <m:mi>b</m:mi>
+                    <m:mn>2</m:mn>
+                  </m:msup>
+                </m:mrow>
+              </m:mfrac>
+            </m:mfenced>
+            <m:mo>.</m:mo>
+          </m:mrow>
+        </m:math>
+      </equation>
+      <para id="id195148">The parameter <emphasis effect="italics">γ</emphasis> is a constant used to determine the spread of the firing fields of the grid cell. After calculating the probability <m:math overflow="scroll"><m:mrow><m:mi>P</m:mi><m:mo>,</m:mo></m:mrow></m:math> we select a random number <emphasis effect="italics">η</emphasis> from a uniform distribution. If <m:math overflow="scroll"><m:mrow><m:mi>P</m:mi><m:mo>≥</m:mo><m:mi>η</m:mi><m:mo>,</m:mo></m:mrow></m:math> the grid cell fires; if <m:math overflow="scroll"><m:mrow><m:mi>P</m:mi><m:mo>&lt;</m:mo><m:mi>η</m:mi><m:mo>,</m:mo></m:mrow></m:math> the grid cell does not fire. Figure 4 shows the resulting firing fields for three different values of <m:math overflow="scroll"><m:mrow><m:mi>γ</m:mi><m:mo>.</m:mo></m:mrow></m:math> As expected, the firing fields of the grid cell form hexagonal patterns as the rat explores its enclosure.</para>
+      <figure id="uid38">
+        <media id="uid38_media" alt="">
+          <image mime-type="image/png" src="../../media/gammaComp.png" id="uid38_onlineimage" width="358"><!-- NOTE: attribute width changes image size online (pixels). original width is 358. --></image>
+          <image for="pdf" mime-type="application/postscript" src="../../media/gammaComp.eps" id="uid38_printimage" print-width="15.0cm">
+            <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+          </image>
+        </media>
+        <caption>Comparison of the effect of <emphasis effect="italics">γ</emphasis> values on the firing fields of the cell. As <emphasis effect="italics">γ</emphasis> increases, the width of the Gaussian increases, causing the spread of the firing fields to increase. (top left) Each dot represents a grid point in the set <m:math overflow="scroll"><m:mrow><m:mi>G</m:mi><m:mo>(</m:mo><m:mi>θ</m:mi><m:mo>,</m:mo><m:mi>b</m:mi><m:mo>,</m:mo><m:mi>δ</m:mi><m:mo>)</m:mo><m:mo>.</m:mo></m:mrow></m:math> For all plots, <m:math overflow="scroll"><m:mrow><m:mi>θ</m:mi><m:mo>=</m:mo><m:mfrac><m:mi>π</m:mi><m:mn>4</m:mn></m:mfrac></m:mrow></m:math> radians, <m:math overflow="scroll"><m:mrow><m:mi>b</m:mi><m:mo>=</m:mo><m:mn>15</m:mn></m:mrow></m:math> cm, <m:math overflow="scroll"><m:mrow><m:mi>ρ</m:mi><m:mo>=</m:mo><m:mn>2</m:mn></m:mrow></m:math> cm, and <m:math overflow="scroll"><m:mrow><m:mi>φ</m:mi><m:mo>=</m:mo><m:mfrac><m:mi>π</m:mi><m:mn>4</m:mn></m:mfrac></m:mrow></m:math> radians. The rat runs the same trajectory for all values of <emphasis effect="italics">γ</emphasis>, and each red dot represents a spike of the grid cell. Values of <emphasis effect="italics">γ</emphasis>: 0.01 (top right), 0.03 (bottom left), and 0.05 (bottom right).</caption>
+      </figure>
+    </section>
+  </content>
+  <bib:file>
+    <bib:entry id="bid0">
+      <bib:book>
+        <!--required fields-->
+        <bib:author>O'Keefe, J. and Nadel, L.</bib:author>
+        <bib:title>The Hippocampus as a Cognitive Map</bib:title>
+        <bib:publisher>Oxford</bib:publisher>
+        <bib:year>1978</bib:year>
+        <!--optional fields-->
+        <bib:volume/>
+        <bib:series/>
+        <bib:address>Clarendon</bib:address>
+        <bib:edition/>
+        <bib:month/>
+        <bib:note/>
+      </bib:book>
+    </bib:entry>
+    <bib:entry id="bid3">
+      <bib:article>
+        <!--required fields-->
+        <bib:author>Samsonovich, A. and Ascoli, G.</bib:author>
+        <bib:title>A simple neural network model of the hippocampus suggesting its pathfinding role in episodic memory retrieval</bib:title>
+        <bib:journal>Learning and Memory</bib:journal>
+        <bib:year>2005</bib:year>
+        <!--optional fields-->
+        <bib:volume>12</bib:volume>
+        <bib:number/>
+        <bib:pages>193-208</bib:pages>
+        <bib:month/>
+        <bib:note/>
+      </bib:article>
+    </bib:entry>
+    <bib:entry id="bid1">
+      <bib:article>
+        <!--required fields-->
+        <bib:author>Solstad, T. and Moser, E. and Einevoll, G.</bib:author>
+        <bib:title>From grid cells to place cells: a mathematical model</bib:title>
+        <bib:journal>Hippocampus</bib:journal>
+        <bib:year>2006</bib:year>
+        <!--optional fields-->
+        <bib:volume>16</bib:volume>
+        <bib:number/>
+        <bib:pages>1021-1031</bib:pages>
+        <bib:month/>
+        <bib:note/>
+      </bib:article>
+    </bib:entry>
+    <bib:entry id="bid2">
+      <bib:article>
+        <!--required fields-->
+        <bib:author>Witter, M.P. and Moser, E.I.</bib:author>
+        <bib:title>Spatial representation and the architecture of the entorhinal cortex</bib:title>
+        <bib:journal>Trends in Neuroscience</bib:journal>
+        <bib:year>2006</bib:year>
+        <!--optional fields-->
+        <bib:volume>29</bib:volume>
+        <bib:number/>
+        <bib:pages>671-678</bib:pages>
+        <bib:month/>
+        <bib:note/>
+      </bib:article>
+    </bib:entry>
+  </bib:file>
+</document>

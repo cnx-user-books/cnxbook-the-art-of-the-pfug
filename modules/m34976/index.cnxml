@@ -1,0 +1,3307 @@
+<document xmlns="http://cnx.rice.edu/cnxml" xmlns:m="http://www.w3.org/1998/Math/MathML">
+  <title>Minimizing the Energy of Vector Fields on Surfaces of Revolution, Part II</title>
+<metadata xmlns:md="http://cnx.rice.edu/mdml">
+  <md:content-id>m34976</md:content-id>
+  <md:title>Minimizing the Energy of Vector Fields on Surfaces of Revolution, Part II</md:title>
+  <md:abstract>This report summarizes work done as part of the Calculus of Variations
+PFUG under Rice University's VIGRE program. VIGRE is a program of
+Vertically Integrated Grants for Research and Education in the Mathematical
+Sciences under the direction of the National Science Foundation. A
+PFUG is a group of Postdocs, Faculty, Undergraduates and Graduate
+students formed around the study of a common problem. This module
+continues work from last year's research into {}``kinetic energy\char`\"{}
+of unit-length vector fields on surfaces of rotation, focusing mainly
+on minimizing energy given a surface and boundary conditions. We answer
+some of the questions posed by the previous summer's PFUG and extend
+their work onto new surfaces. This work was studied in the Rice University
+VIGRE 2010 Summer Undergraduate Internship Program.</md:abstract>
+  <md:uuid>39b42dd0-2d2b-45d0-b900-5429f1224888</md:uuid>
+</metadata>
+
+<content>
+    <section id="cid1">
+      <title>Introduction</title>
+      <para id="id86504">It is highly recommended that the reader familiarize themselves with
+<link url="http://cnx.org/content/m30944/latest/">[2]</link> before approaching this module. Both the problems and the
+techniques used to solve them will draw heavily from that work. We
+will first answer questions previously raised concerning the unit
+cylinder before moving on to the study of similar vector fields on
+the torus.</para>
+    </section>
+    <section id="cid2">
+      <title>The Cylinder</title>
+      <para id="id86524">First, we turn our attention to the unit cylinder (with radius and
+height 1) for futher investigation on <link url="http://cnx.org/content/m30944/latest/">[2]</link> work.</para>
+      <section id="uid1">
+        <title>Parametrization and equations</title>
+        <para id="id86880">We borrow heavily from <link url="http://cnx.org/content/m30944/latest/">[2]</link>. Our surface, the unit cylinder with
+radius <m:math overflow="scroll"><m:mrow><m:mi>r</m:mi><m:mo>=</m:mo><m:mn>1</m:mn></m:mrow></m:math> may be parameterized as <m:math overflow="scroll"><m:mrow><m:mi>Φ</m:mi><m:mo>(</m:mo><m:mi>θ</m:mi><m:mo>,</m:mo><m:mi>t</m:mi><m:mo>)</m:mo><m:mo>=</m:mo><m:mo>(</m:mo><m:mo form="prefix">cos</m:mo><m:mi>θ</m:mi><m:mo>,</m:mo><m:mo form="prefix">sin</m:mo><m:mi>θ</m:mi><m:mo>,</m:mo><m:mi>t</m:mi><m:mo>)</m:mo></m:mrow></m:math>.
+Our vector field is parameterized as <m:math overflow="scroll"><m:mrow><m:mi>V</m:mi><m:mo>(</m:mo><m:mi>ϕ</m:mi><m:mo>)</m:mo><m:mo>=</m:mo><m:mo>(</m:mo><m:mo>-</m:mo><m:mo form="prefix">sin</m:mo><m:mi>θ</m:mi><m:mo form="prefix">cos</m:mo><m:mi>ϕ</m:mi><m:mo>,</m:mo><m:mo form="prefix">cos</m:mo><m:mi>θ</m:mi><m:mo form="prefix">cos</m:mo><m:mi>ϕ</m:mi><m:mo>,</m:mo><m:mo form="prefix">sin</m:mo><m:mi>ϕ</m:mi><m:mo>)</m:mo><m:mo>:</m:mo><m:mn>0</m:mn><m:mo>≤</m:mo><m:mi>θ</m:mi><m:mo>≤</m:mo><m:mn>2</m:mn><m:mi>π</m:mi><m:mo>,</m:mo><m:mspace width="0.166667em"/><m:mn>0</m:mn><m:mo>≤</m:mo><m:mi>t</m:mi><m:mo>≤</m:mo><m:mn>1</m:mn></m:mrow></m:math>
+and the corresponding energy equation on the cylinder is</para>
+        <equation id="uid2">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:mi>E</m:mi>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>ϕ</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>=</m:mo>
+              <m:msubsup>
+                <m:mo>∫</m:mo>
+                <m:mrow>
+                  <m:mn>0</m:mn>
+                </m:mrow>
+                <m:mn>1</m:mn>
+              </m:msubsup>
+              <m:msubsup>
+                <m:mo>∫</m:mo>
+                <m:mrow>
+                  <m:mn>0</m:mn>
+                </m:mrow>
+                <m:mrow>
+                  <m:mn>2</m:mn>
+                  <m:mi>π</m:mi>
+                </m:mrow>
+              </m:msubsup>
+              <m:mo form="prefix">cos</m:mo>
+              <m:msup>
+                <m:mi>ϕ</m:mi>
+                <m:mn>2</m:mn>
+              </m:msup>
+              <m:mo>+</m:mo>
+              <m:msubsup>
+                <m:mi>ϕ</m:mi>
+                <m:mrow>
+                  <m:mi>θ</m:mi>
+                </m:mrow>
+                <m:mn>2</m:mn>
+              </m:msubsup>
+              <m:mo>+</m:mo>
+              <m:msubsup>
+                <m:mi>ϕ</m:mi>
+                <m:mrow>
+                  <m:mi>t</m:mi>
+                </m:mrow>
+                <m:mn>2</m:mn>
+              </m:msubsup>
+              <m:mi>d</m:mi>
+              <m:mi>θ</m:mi>
+              <m:mi>d</m:mi>
+              <m:mi>t</m:mi>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id86447">which, of course, is a specific case of the general equation</para>
+        <para id="id86451">As <link url="http://cnx.org/content/m30944/latest/">[2]</link> shows, the minimizing <m:math overflow="scroll"><m:mi>ϕ</m:mi></m:math> must satisfy</para>
+        <equation id="uid3">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:mi>Δ</m:mi>
+              <m:mi>ϕ</m:mi>
+              <m:mo>+</m:mo>
+              <m:mfrac>
+                <m:mrow>
+                  <m:mo form="prefix">sin</m:mo>
+                  <m:mn>2</m:mn>
+                  <m:mi>ϕ</m:mi>
+                </m:mrow>
+                <m:mn>2</m:mn>
+              </m:mfrac>
+              <m:mo>=</m:mo>
+              <m:mn>0</m:mn>
+              <m:mo>,</m:mo>
+              <m:mspace width="0.166667em"/>
+              <m:mn>0</m:mn>
+              <m:mo>≤</m:mo>
+              <m:mi>ϕ</m:mi>
+              <m:mo>≤</m:mo>
+              <m:mn>2</m:mn>
+              <m:mi>π</m:mi>
+              <m:mo>.</m:mo>
+            </m:mrow>
+          </m:math>
+        </equation>
+      </section>
+      <section id="uid4">
+        <title><m:math overflow="scroll"><m:mi>θ</m:mi></m:math>-independence</title>
+        <para id="id87411">We recall and restate Theorem 5 from <link url="http://cnx.org/content/m30944/latest/">[2]</link>:</para>
+        <para id="id87419">Let a surface <m:math overflow="scroll"><m:mi>S</m:mi></m:math> with radius <m:math overflow="scroll"><m:mrow><m:mi>r</m:mi><m:mo>(</m:mo><m:mi>t</m:mi><m:mo>)</m:mo></m:mrow></m:math> be given. Suppose that the
+boundary conditions <m:math overflow="scroll"><m:mrow><m:mi>ϕ</m:mi><m:mo>(</m:mo><m:mi>θ</m:mi><m:mo>,</m:mo><m:mn>0</m:mn><m:mo>)</m:mo><m:mo>,</m:mo><m:mi>ϕ</m:mi><m:mo>(</m:mo><m:mi>θ</m:mi><m:mo>,</m:mo><m:mi>h</m:mi><m:mo>)</m:mo></m:mrow></m:math> of a vector
+field on <m:math overflow="scroll"><m:mi>S</m:mi></m:math> do not depend on <m:math overflow="scroll"><m:mi>θ</m:mi></m:math>: that is, <m:math overflow="scroll"><m:mrow><m:mi>ϕ</m:mi><m:mrow><m:mo>(</m:mo><m:mi>θ</m:mi><m:mo>,</m:mo><m:mn>0</m:mn><m:mo>)</m:mo></m:mrow><m:mo>=</m:mo><m:msub><m:mi>ϕ</m:mi><m:mn>0</m:mn></m:msub><m:mo>,</m:mo><m:mi>ϕ</m:mi><m:mrow><m:mo>(</m:mo><m:mi>θ</m:mi><m:mo>,</m:mo><m:mi>h</m:mi><m:mo>)</m:mo></m:mrow><m:mo>=</m:mo><m:msub><m:mi>ϕ</m:mi><m:mi>h</m:mi></m:msub></m:mrow></m:math>
+for all <m:math overflow="scroll"><m:mrow><m:mi>θ</m:mi><m:mo>∈</m:mo><m:mo>[</m:mo><m:mn>0</m:mn><m:mo>,</m:mo><m:mn>2</m:mn><m:mi>π</m:mi><m:mo>]</m:mo></m:mrow></m:math> and constant <m:math overflow="scroll"><m:mrow><m:msub><m:mi>ϕ</m:mi><m:mn>0</m:mn></m:msub><m:mo>,</m:mo><m:msub><m:mi>ϕ</m:mi><m:mi>h</m:mi></m:msub></m:mrow></m:math>.
+The function <m:math overflow="scroll"><m:mrow><m:mi>ϕ</m:mi><m:mo>(</m:mo><m:mi>θ</m:mi><m:mo>,</m:mo><m:mi>t</m:mi><m:mo>)</m:mo></m:mrow></m:math> which minimizes energy given constant
+boundary conditions <m:math overflow="scroll"><m:mrow><m:mi>ϕ</m:mi><m:mrow><m:mo>(</m:mo><m:mi>θ</m:mi><m:mo>,</m:mo><m:mn>0</m:mn><m:mo>)</m:mo></m:mrow><m:mo>=</m:mo><m:msub><m:mi>ϕ</m:mi><m:mn>0</m:mn></m:msub><m:mo>,</m:mo><m:mi>ϕ</m:mi><m:mrow><m:mo>(</m:mo><m:mi>θ</m:mi><m:mo>,</m:mo><m:mi>h</m:mi><m:mo>)</m:mo></m:mrow><m:mo>=</m:mo><m:msub><m:mi>ϕ</m:mi><m:mi>h</m:mi></m:msub></m:mrow></m:math>
+does not depend on <m:math overflow="scroll"><m:mi>θ</m:mi></m:math>. In other words, the vector field described
+by <m:math overflow="scroll"><m:mi>ϕ</m:mi></m:math> is constant along every ”horizontal slice"
+of the surface.</para>
+      </section>
+      <section id="uid5">
+        <title>Existence and uniqueness</title>
+        <para id="id87703">We now aim to show that such a unique energy-minimizing <m:math overflow="scroll"><m:mi>ϕ</m:mi></m:math>
+does in fact exist on this cylinder.</para>
+        <section id="id87714">
+          <title>Theorem 1</title>
+          <para id="id87721">Let <m:math overflow="scroll"><m:mrow><m:mo>(</m:mo><m:mo>-</m:mo><m:mo form="prefix">sin</m:mo><m:mi>θ</m:mi><m:mo form="prefix">cos</m:mo><m:msub><m:mi>ϕ</m:mi><m:mn>0</m:mn></m:msub><m:mo>,</m:mo><m:mo form="prefix">cos</m:mo><m:mi>θ</m:mi><m:mo form="prefix">cos</m:mo><m:msub><m:mi>ϕ</m:mi><m:mn>0</m:mn></m:msub><m:mo>,</m:mo><m:mo form="prefix">sin</m:mo><m:msub><m:mi>ϕ</m:mi><m:mn>0</m:mn></m:msub><m:mo>)</m:mo></m:mrow></m:math> and <m:math overflow="scroll"><m:mrow><m:mo>(</m:mo><m:mo>-</m:mo><m:mo form="prefix">sin</m:mo><m:mi>θ</m:mi><m:mo form="prefix">cos</m:mo><m:msub><m:mi>ϕ</m:mi><m:mn>1</m:mn></m:msub><m:mo>,</m:mo><m:mo form="prefix">cos</m:mo><m:mi>θ</m:mi><m:mo form="prefix">cos</m:mo><m:msub><m:mi>ϕ</m:mi><m:mn>1</m:mn></m:msub><m:mo>,</m:mo><m:mo form="prefix">sin</m:mo><m:msub><m:mi>ϕ</m:mi><m:mn>1</m:mn></m:msub><m:mo>)</m:mo></m:mrow></m:math>
+be “constant” boundary data on the bottom and top of the unit
+cylinder respectively. Then the minimizer exists.</para>
+        </section>
+        <section id="id87858">
+          <title>Proof:</title>
+          <para id="id87864">Let <m:math overflow="scroll"><m:mrow><m:mi>E</m:mi><m:mo>=</m:mo><m:msub><m:mo movablelimits="true" form="prefix">inf</m:mo><m:mrow><m:mo>{</m:mo><m:mi>V</m:mi><m:mspace width="0.222222em"/><m:mi>t</m:mi><m:mi>a</m:mi><m:mi>n</m:mi><m:mi>g</m:mi><m:mi>e</m:mi><m:mi>n</m:mi><m:mi>t</m:mi><m:mspace width="0.222222em"/><m:mi>s</m:mi><m:mi>m</m:mi><m:mi>o</m:mi><m:mi>o</m:mi><m:mi>t</m:mi><m:mi>h</m:mi><m:mspace width="0.222222em"/><m:mi>u</m:mi><m:mi>n</m:mi><m:mi>i</m:mi><m:mi>t</m:mi><m:mspace width="0.222222em"/><m:mi>v</m:mi><m:mi>e</m:mi><m:mi>c</m:mi><m:mi>t</m:mi><m:mi>o</m:mi><m:mi>r</m:mi><m:mspace width="0.222222em"/><m:mi>f</m:mi><m:mi>i</m:mi><m:mi>e</m:mi><m:mi>l</m:mi><m:mi>d</m:mi><m:mo>}</m:mo></m:mrow></m:msub><m:mi>E</m:mi><m:mrow><m:mo>(</m:mo><m:mi>V</m:mi><m:mo>)</m:mo></m:mrow></m:mrow></m:math>.
+Let <m:math overflow="scroll"><m:mi mathvariant="script">C</m:mi></m:math> be the following the set of smooth functions:</para>
+          <equation id="uid6">
+            <m:math overflow="scroll" mode="display">
+              <m:mrow>
+                <m:mi mathvariant="script">C</m:mi>
+                <m:mo>=</m:mo>
+                <m:mo>{</m:mo>
+                <m:mi>ϕ</m:mi>
+                <m:mo>∈</m:mo>
+                <m:msup>
+                  <m:mi mathvariant="script">C</m:mi>
+                  <m:mi>∞</m:mi>
+                </m:msup>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mrow>
+                    <m:mo>[</m:mo>
+                    <m:mn>0</m:mn>
+                    <m:mo>,</m:mo>
+                    <m:mn>1</m:mn>
+                    <m:mo>]</m:mo>
+                  </m:mrow>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mo>:</m:mo>
+                <m:mi>ϕ</m:mi>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mn>0</m:mn>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mo>=</m:mo>
+                <m:msub>
+                  <m:mi>ϕ</m:mi>
+                  <m:mn>0</m:mn>
+                </m:msub>
+                <m:mo>,</m:mo>
+                <m:mi>ϕ</m:mi>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mn>1</m:mn>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mo>=</m:mo>
+                <m:msub>
+                  <m:mi>ϕ</m:mi>
+                  <m:mn>1</m:mn>
+                </m:msub>
+                <m:mo>,</m:mo>
+                <m:mo>|</m:mo>
+                <m:mi>ϕ</m:mi>
+                <m:mo>|</m:mo>
+                <m:mo>&lt;</m:mo>
+                <m:mn>2</m:mn>
+                <m:mi>π</m:mi>
+                <m:mo>,</m:mo>
+                <m:mspace width="4pt"/>
+                <m:mi>E</m:mi>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mi>ϕ</m:mi>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mo>&lt;</m:mo>
+                <m:mi>E</m:mi>
+                <m:mo>+</m:mo>
+                <m:mn>1</m:mn>
+                <m:mo>}</m:mo>
+                <m:mo>.</m:mo>
+              </m:mrow>
+            </m:math>
+          </equation>
+        </section>
+        <section id="id88130">
+          <title>Lemma 1</title>
+          <para id="id88136">Suppose that <m:math overflow="scroll"><m:msub><m:mi>V</m:mi><m:mi>k</m:mi></m:msub></m:math> are a sequence of unit tangent vector fields
+with <m:math overflow="scroll"><m:mrow><m:mi>E</m:mi><m:mo>(</m:mo><m:msub><m:mi>V</m:mi><m:mi>k</m:mi></m:msub><m:mo>)</m:mo><m:mo>→</m:mo><m:mi>E</m:mi></m:mrow></m:math>. Then we can replace this sequence
+by another sequence of vector fields <m:math overflow="scroll"><m:msub><m:mi>V</m:mi><m:mi>k</m:mi></m:msub></m:math> so that when we write
+the <m:math overflow="scroll"><m:msub><m:mi>V</m:mi><m:mi>k</m:mi></m:msub></m:math> using an angle fucntion <m:math overflow="scroll"><m:msub><m:mi>ϕ</m:mi><m:mi>k</m:mi></m:msub></m:math>, <m:math overflow="scroll"><m:msub><m:mi>ϕ</m:mi><m:mi>k</m:mi></m:msub></m:math>
+is constant in <m:math overflow="scroll"><m:mi>θ</m:mi></m:math> and so that the energies <m:math overflow="scroll"><m:mrow><m:mi>E</m:mi><m:mo>(</m:mo><m:msub><m:mi>V</m:mi><m:mi>k</m:mi></m:msub><m:mo>)</m:mo></m:mrow></m:math> still
+approach <m:math overflow="scroll"><m:mi>E</m:mi></m:math>.</para>
+        </section>
+        <section id="id88269">
+          <title>Proof:</title>
+          <para id="id88275">Suppose that <m:math overflow="scroll"><m:msub><m:mi>V</m:mi><m:mi>k</m:mi></m:msub></m:math> depends on <m:math overflow="scroll"><m:mi>θ</m:mi></m:math>. Then there exists a <m:math overflow="scroll"><m:mi>θ</m:mi></m:math>-independent
+<m:math overflow="scroll"><m:msub><m:mi>V</m:mi><m:mi>j</m:mi></m:msub></m:math> such that <m:math overflow="scroll"><m:mrow><m:mi>E</m:mi><m:mrow><m:mo>(</m:mo><m:msub><m:mi>V</m:mi><m:mi>j</m:mi></m:msub><m:mo>)</m:mo></m:mrow><m:mo>≤</m:mo><m:mi>E</m:mi><m:mrow><m:mo>(</m:mo><m:msub><m:mi>V</m:mi><m:mi>k</m:mi></m:msub><m:mo>)</m:mo></m:mrow></m:mrow></m:math>. <m:math overflow="scroll"><m:mrow><m:mi>E</m:mi><m:mo>(</m:mo><m:msub><m:mi>V</m:mi><m:mi>k</m:mi></m:msub><m:mo>)</m:mo><m:mo>→</m:mo><m:mi>E</m:mi></m:mrow></m:math>
+thus implies <m:math overflow="scroll"><m:mrow><m:mi>E</m:mi><m:mo>(</m:mo><m:msub><m:mi>V</m:mi><m:mi>j</m:mi></m:msub><m:mo>)</m:mo><m:mo>→</m:mo><m:mi>E</m:mi></m:mrow></m:math>.</para>
+        </section>
+        <section id="id88410">
+          <title>Lemma 2</title>
+          <para id="id88416">We may replace <m:math overflow="scroll"><m:msub><m:mi>V</m:mi><m:mi>k</m:mi></m:msub></m:math> with another sequence so that all the <m:math overflow="scroll"><m:msub><m:mi>ϕ</m:mi><m:mi>k</m:mi></m:msub></m:math>
+are continuous and differentiable and are <m:math overflow="scroll"><m:mrow><m:mn>2</m:mn><m:mi>π</m:mi><m:mo>-</m:mo></m:mrow></m:math>periodic.</para>
+        </section>
+        <section id="id88464">
+          <title>Proof: </title>
+          <para id="id88470">Let <m:math overflow="scroll"><m:msub><m:mi>ϕ</m:mi><m:mn>1</m:mn></m:msub></m:math> be a linear, piecewise approximation of <m:math overflow="scroll"><m:mi>ϕ</m:mi></m:math>
+(<m:math overflow="scroll"><m:mi>ϕ</m:mi></m:math> and <m:math overflow="scroll"><m:msub><m:mi>ϕ</m:mi><m:mn>1</m:mn></m:msub></m:math>have the same values at the endpoints
+of the interval). Because <m:math overflow="scroll"><m:mi>ϕ</m:mi></m:math> is piecewise continuous, the
+square integral of the approximation <m:math overflow="scroll"><m:msub><m:mi>ϕ</m:mi><m:mn>1</m:mn></m:msub></m:math> will also approximate
+the square integral of <m:math overflow="scroll"><m:mi>ϕ</m:mi></m:math>. The “edges” of <m:math overflow="scroll"><m:msub><m:mi>ϕ</m:mi><m:mn>1</m:mn></m:msub></m:math>
+may be smoothed out by composing <m:math overflow="scroll"><m:msub><m:mi>ϕ</m:mi><m:mn>1</m:mn></m:msub></m:math> with functions of
+the form <m:math overflow="scroll"><m:msup><m:mi>e</m:mi><m:mfrac><m:mn>1</m:mn><m:mi>x</m:mi></m:mfrac></m:msup></m:math> while retaining its properties of approximation.</para>
+          <para id="id88604">Let <m:math overflow="scroll"><m:mi mathvariant="script">H</m:mi></m:math> be the following subset of the set of square integrable
+functions <m:math overflow="scroll"><m:msup><m:mi>L</m:mi><m:mn>2</m:mn></m:msup></m:math>:</para>
+          <equation id="id88633">
+            <m:math overflow="scroll" mode="display">
+              <m:mrow>
+                <m:mi mathvariant="script">H</m:mi>
+                <m:mo>=</m:mo>
+                <m:mfenced separators="" open="{" close="}">
+                  <m:mi>ϕ</m:mi>
+                  <m:mo>∈</m:mo>
+                  <m:msup>
+                    <m:mi mathvariant="script">L</m:mi>
+                    <m:mn>2</m:mn>
+                  </m:msup>
+                  <m:mo>:</m:mo>
+                  <m:mtext>there</m:mtext>
+                  <m:mspace width="4.pt"/>
+                  <m:mtext>is</m:mtext>
+                  <m:mspace width="4.pt"/>
+                  <m:mtext>a</m:mtext>
+                  <m:mspace width="4.pt"/>
+                  <m:mtext>sequence</m:mtext>
+                  <m:mspace width="4.pt"/>
+                  <m:msub>
+                    <m:mi>ϕ</m:mi>
+                    <m:mi>k</m:mi>
+                  </m:msub>
+                  <m:mo>∈</m:mo>
+                  <m:mi>C</m:mi>
+                  <m:mspace width="4.pt"/>
+                  <m:mtext>such</m:mtext>
+                  <m:mspace width="4.pt"/>
+                  <m:mtext>that</m:mtext>
+                  <m:mo>∫</m:mo>
+                  <m:msup>
+                    <m:mrow>
+                      <m:mo>|</m:mo>
+                      <m:mi>ϕ</m:mi>
+                      <m:mo>-</m:mo>
+                      <m:msub>
+                        <m:mi>ϕ</m:mi>
+                        <m:mi>k</m:mi>
+                      </m:msub>
+                      <m:mo>|</m:mo>
+                    </m:mrow>
+                    <m:mn>2</m:mn>
+                  </m:msup>
+                  <m:mo>→</m:mo>
+                  <m:mn>0</m:mn>
+                </m:mfenced>
+                <m:mo>.</m:mo>
+              </m:mrow>
+            </m:math>
+          </equation>
+          <para id="id88751">We claim that every function <m:math overflow="scroll"><m:mrow><m:mi>ϕ</m:mi><m:mo>∈</m:mo><m:mi>H</m:mi></m:mrow></m:math> has a weak derivative.
+To do this, suppose that <m:math overflow="scroll"><m:mi>ϕ</m:mi></m:math> is a function which is an <m:math overflow="scroll"><m:msup><m:mi mathvariant="script">L</m:mi><m:mn>2</m:mn></m:msup></m:math>
+limit of a sequence <m:math overflow="scroll"><m:mrow><m:msub><m:mi>ϕ</m:mi><m:mi>k</m:mi></m:msub><m:mo>∈</m:mo><m:mi>C</m:mi></m:mrow></m:math>. Since <m:math overflow="scroll"><m:mrow><m:mi>E</m:mi><m:mo>(</m:mo><m:mi>ϕ</m:mi><m:mo>)</m:mo><m:mo>&lt;</m:mo><m:mi>E</m:mi><m:mo>+</m:mo><m:mn>1</m:mn></m:mrow></m:math>,
+then we may show that the sequence <m:math overflow="scroll"><m:msub><m:mrow><m:mo>(</m:mo><m:msub><m:mi>ϕ</m:mi><m:mi>k</m:mi></m:msub><m:mo>)</m:mo></m:mrow><m:mi>t</m:mi></m:msub></m:math> converges
+weakly to a limit <m:math overflow="scroll"><m:msub><m:mi>ϕ</m:mi><m:mi>t</m:mi></m:msub></m:math>. To do so, observe that if <m:math overflow="scroll"><m:msub><m:mi>f</m:mi><m:mi>k</m:mi></m:msub></m:math>
+is a sequence of functions in <m:math overflow="scroll"><m:msup><m:mi mathvariant="script">L</m:mi><m:mn>2</m:mn></m:msup></m:math> such that <m:math overflow="scroll"><m:mrow><m:mrow><m:mo>|</m:mo><m:mo>|</m:mo></m:mrow><m:msub><m:mi>f</m:mi><m:mi>k</m:mi></m:msub><m:msub><m:mrow><m:mo>|</m:mo><m:mo>|</m:mo></m:mrow><m:msup><m:mi mathvariant="script">L</m:mi><m:mn>2</m:mn></m:msup></m:msub></m:mrow></m:math>
+is bounded, then there is a weakly convergent subsequence.</para>
+        </section>
+        <section id="id88952">
+          <title>Lemma 3</title>
+          <para id="id88958">The derivatives <m:math overflow="scroll"><m:msub><m:mi>ϕ</m:mi><m:mrow><m:mi>k</m:mi><m:mo>,</m:mo><m:mi>θ</m:mi></m:mrow></m:msub></m:math>, <m:math overflow="scroll"><m:msub><m:mi>ϕ</m:mi><m:mrow><m:mi>k</m:mi><m:mo>,</m:mo><m:mi>t</m:mi></m:mrow></m:msub></m:math> are a bounded
+sequence in <m:math overflow="scroll"><m:msup><m:mi mathvariant="script">L</m:mi><m:mn>2</m:mn></m:msup></m:math>.</para>
+        </section>
+        <section id="id89019">
+          <title>Proof: 
+</title>
+          <para id="id89029">By Lemma 1, <m:math overflow="scroll"><m:mrow><m:mi>E</m:mi><m:mrow><m:mo>(</m:mo><m:msub><m:mi>ϕ</m:mi><m:mi>k</m:mi></m:msub><m:mo>)</m:mo></m:mrow><m:mo>→</m:mo><m:mi>E</m:mi><m:mrow><m:mo>(</m:mo><m:mi>ϕ</m:mi><m:mo>)</m:mo></m:mrow><m:mo>=</m:mo><m:mi>E</m:mi></m:mrow></m:math> for a finite
+<m:math overflow="scroll"><m:mi>E</m:mi></m:math>. Recall the definition of <m:math overflow="scroll"><m:mrow><m:mi>E</m:mi><m:mo>=</m:mo><m:mo>∫</m:mo><m:mo>∫</m:mo><m:mi>c</m:mi><m:mi>o</m:mi><m:msup><m:mi>s</m:mi><m:mn>2</m:mn></m:msup><m:mi>ϕ</m:mi><m:mo>+</m:mo><m:msubsup><m:mi>ϕ</m:mi><m:mrow><m:mi>t</m:mi></m:mrow><m:mn>2</m:mn></m:msubsup><m:mo>+</m:mo><m:msubsup><m:mi>ϕ</m:mi><m:mrow><m:mi>θ</m:mi></m:mrow><m:mn>2</m:mn></m:msubsup><m:mi>d</m:mi><m:mi>t</m:mi><m:mi>d</m:mi><m:mi>θ</m:mi></m:mrow></m:math>.
+Because <m:math overflow="scroll"><m:mi>E</m:mi></m:math> is the integral finite sum of these positive quantities,
+these positive quantities must in turn be finite and thus, bounded.</para>
+          <!--empty paragraphs get left behind.-->
+          <para id="id89164">Then, because these derivatives <m:math overflow="scroll"><m:msub><m:mi>ϕ</m:mi><m:mrow><m:mi>k</m:mi><m:mo>,</m:mo><m:mi>θ</m:mi></m:mrow></m:msub></m:math>, <m:math overflow="scroll"><m:msub><m:mi>ϕ</m:mi><m:mrow><m:mi>k</m:mi><m:mo>,</m:mo><m:mi>t</m:mi></m:mrow></m:msub></m:math>
+are a bounded sequence in <m:math overflow="scroll"><m:msup><m:mi>L</m:mi><m:mn>2</m:mn></m:msup></m:math>, they have corresponding subsequences
+which converge weakly to functions <m:math overflow="scroll"><m:mrow><m:msub><m:mi>ϕ</m:mi><m:mi>t</m:mi></m:msub><m:mo>,</m:mo><m:mspace width="0.166667em"/><m:msub><m:mi>ϕ</m:mi><m:mi>θ</m:mi></m:msub></m:mrow></m:math>.</para>
+          <para id="id89250">Hence, we can define the weak energy <m:math overflow="scroll"><m:mrow><m:mi>E</m:mi><m:mo>(</m:mo><m:mi>ϕ</m:mi><m:mo>)</m:mo></m:mrow></m:math> for any function<m:math overflow="scroll"><m:mrow><m:mi>ϕ</m:mi><m:mo>∈</m:mo><m:mi mathvariant="script">H</m:mi></m:mrow></m:math>.
+Let</para>
+          <equation id="id89287">
+            <m:math overflow="scroll" mode="display">
+              <m:mrow>
+                <m:msub>
+                  <m:mi>E</m:mi>
+                  <m:mi>H</m:mi>
+                </m:msub>
+                <m:mo>=</m:mo>
+                <m:munder>
+                  <m:mo movablelimits="true" form="prefix">inf</m:mo>
+                  <m:mrow>
+                    <m:mi>ϕ</m:mi>
+                    <m:mo>∈</m:mo>
+                    <m:mi mathvariant="script">H</m:mi>
+                  </m:mrow>
+                </m:munder>
+                <m:mi>E</m:mi>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mi>ϕ</m:mi>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mo>,</m:mo>
+              </m:mrow>
+            </m:math>
+          </equation>
+          <para id="id89338">then<m:math overflow="scroll"><m:mrow><m:mspace width="0.166667em"/><m:mspace width="0.166667em"/><m:mspace width="0.166667em"/><m:msub><m:mi>E</m:mi><m:mi>H</m:mi></m:msub><m:mo>≤</m:mo><m:mi>E</m:mi></m:mrow></m:math>
+. We will show that this inf is attained.</para>
+          <para id="id89374">Take a sequence <m:math overflow="scroll"><m:mrow><m:msub><m:mi>ϕ</m:mi><m:mi>k</m:mi></m:msub><m:mo>∈</m:mo><m:mi mathvariant="script">H</m:mi></m:mrow></m:math> so that <m:math overflow="scroll"><m:mrow><m:mi>E</m:mi><m:mrow><m:mo>(</m:mo><m:msub><m:mi>ϕ</m:mi><m:mi>k</m:mi></m:msub><m:mo>)</m:mo></m:mrow><m:mo>→</m:mo><m:msub><m:mi>E</m:mi><m:mi mathvariant="script">H</m:mi></m:msub><m:mo>.</m:mo></m:mrow></m:math>
+Here we prove that a subsequence <m:math overflow="scroll"><m:msub><m:mi>ϕ</m:mi><m:mi>k</m:mi></m:msub></m:math> have an <m:math overflow="scroll"><m:msup><m:mi mathvariant="script">L</m:mi><m:mn>2</m:mn></m:msup></m:math>
+limit <m:math overflow="scroll"><m:mrow><m:mi>ϕ</m:mi><m:mo>∈</m:mo><m:mi mathvariant="script">H</m:mi><m:mo>.</m:mo></m:mrow></m:math></para>
+          <para id="id89486">For this, note that by definition of <m:math overflow="scroll"><m:mi mathvariant="script">H</m:mi></m:math> we can choose
+for each <m:math overflow="scroll"><m:msub><m:mi>ϕ</m:mi><m:mi>k</m:mi></m:msub></m:math> a smooth function<m:math overflow="scroll"><m:mrow><m:msubsup><m:mi>ϕ</m:mi><m:mrow><m:mi>k</m:mi></m:mrow><m:mi>∞</m:mi></m:msubsup><m:mo>∈</m:mo><m:mi mathvariant="script">C</m:mi></m:mrow></m:math>
+so that</para>
+          <equation id="uid7">
+            <m:math overflow="scroll" mode="display">
+              <m:mrow>
+                <m:mrow>
+                  <m:mo>∥</m:mo>
+                </m:mrow>
+                <m:msub>
+                  <m:mi>ϕ</m:mi>
+                  <m:mi>k</m:mi>
+                </m:msub>
+                <m:mo>-</m:mo>
+                <m:msubsup>
+                  <m:mi>ϕ</m:mi>
+                  <m:mrow>
+                    <m:mi>k</m:mi>
+                  </m:mrow>
+                  <m:mi>∞</m:mi>
+                </m:msubsup>
+                <m:msub>
+                  <m:mrow>
+                    <m:mo>∥</m:mo>
+                  </m:mrow>
+                  <m:msup>
+                    <m:mi mathvariant="script">L</m:mi>
+                    <m:mn>2</m:mn>
+                  </m:msup>
+                </m:msub>
+                <m:mo>&lt;</m:mo>
+                <m:mfrac>
+                  <m:mn>1</m:mn>
+                  <m:mi>k</m:mi>
+                </m:mfrac>
+                <m:mo>.</m:mo>
+              </m:mrow>
+            </m:math>
+          </equation>
+          <!--empty paragraphs get left behind.-->
+        </section>
+        <section id="id89614">
+          <title>Lemma 4</title>
+          <para id="id89621">There is a continuous function <m:math overflow="scroll"><m:mi>ϕ</m:mi></m:math> such that <m:math overflow="scroll"><m:msub><m:mi>ϕ</m:mi><m:mi>k</m:mi></m:msub></m:math>
+converge uniformly to <m:math overflow="scroll"><m:mi>ϕ</m:mi></m:math>.</para>
+        </section>
+        <section id="id89659">
+          <title>Proof:</title>
+          <equation id="id89665">
+            <m:math overflow="scroll" mode="display">
+              <m:mrow>
+                <m:mrow>
+                  <m:mo>|</m:mo>
+                </m:mrow>
+                <m:msub>
+                  <m:mi>ϕ</m:mi>
+                  <m:mi>k</m:mi>
+                </m:msub>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mi>x</m:mi>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mo>-</m:mo>
+                <m:msub>
+                  <m:mi>ϕ</m:mi>
+                  <m:mi>k</m:mi>
+                </m:msub>
+                <m:mrow>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:mi>y</m:mi>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                  <m:mo>|</m:mo>
+                  <m:mo>=</m:mo>
+                  <m:mspace width="0.166667em"/>
+                  <m:mspace width="0.166667em"/>
+                </m:mrow>
+                <m:mfenced separators="" open="|" close="|">
+                  <m:msubsup>
+                    <m:mo>∫</m:mo>
+                    <m:mrow>
+                      <m:mi>y</m:mi>
+                    </m:mrow>
+                    <m:mi>x</m:mi>
+                  </m:msubsup>
+                  <m:msubsup>
+                    <m:mi>ϕ</m:mi>
+                    <m:mi>k</m:mi>
+                    <m:mo>'</m:mo>
+                  </m:msubsup>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:mi>t</m:mi>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                  <m:mi>d</m:mi>
+                  <m:mi>t</m:mi>
+                </m:mfenced>
+                <m:mo>≤</m:mo>
+                <m:msup>
+                  <m:mfenced separators="" open="(" close=")">
+                    <m:msubsup>
+                      <m:mo>∫</m:mo>
+                      <m:mrow>
+                        <m:mi>y</m:mi>
+                      </m:mrow>
+                      <m:mi>x</m:mi>
+                    </m:msubsup>
+                    <m:mi>d</m:mi>
+                    <m:mi>t</m:mi>
+                  </m:mfenced>
+                  <m:mfrac>
+                    <m:mn>1</m:mn>
+                    <m:mn>2</m:mn>
+                  </m:mfrac>
+                </m:msup>
+                <m:msup>
+                  <m:mfenced separators="" open="(" close=")">
+                    <m:msubsup>
+                      <m:mo>∫</m:mo>
+                      <m:mrow>
+                        <m:mi>y</m:mi>
+                      </m:mrow>
+                      <m:mi>x</m:mi>
+                    </m:msubsup>
+                    <m:mi>ϕ</m:mi>
+                    <m:msubsup>
+                      <m:mo>'</m:mo>
+                      <m:mrow>
+                        <m:mi>k</m:mi>
+                      </m:mrow>
+                      <m:mn>2</m:mn>
+                    </m:msubsup>
+                    <m:mrow>
+                      <m:mo>(</m:mo>
+                      <m:mi>t</m:mi>
+                      <m:mo>)</m:mo>
+                    </m:mrow>
+                  </m:mfenced>
+                  <m:mfrac>
+                    <m:mn>1</m:mn>
+                    <m:mn>2</m:mn>
+                  </m:mfrac>
+                </m:msup>
+              </m:mrow>
+            </m:math>
+          </equation>
+          <equation id="uid8">
+            <m:math overflow="scroll" mode="display">
+              <m:mrow>
+                <m:mo>=</m:mo>
+                <m:msup>
+                  <m:mrow>
+                    <m:mo>|</m:mo>
+                    <m:mi>x</m:mi>
+                    <m:mo>-</m:mo>
+                    <m:mi>y</m:mi>
+                    <m:mo>|</m:mo>
+                  </m:mrow>
+                  <m:mfrac>
+                    <m:mn>1</m:mn>
+                    <m:mn>2</m:mn>
+                  </m:mfrac>
+                </m:msup>
+                <m:mspace width="0.166667em"/>
+                <m:mspace width="0.166667em"/>
+                <m:msup>
+                  <m:mfenced separators="" open="(" close=")">
+                    <m:mo>∫</m:mo>
+                    <m:mi>ϕ</m:mi>
+                    <m:msubsup>
+                      <m:mo>'</m:mo>
+                      <m:mrow>
+                        <m:mi>k</m:mi>
+                      </m:mrow>
+                      <m:mn>2</m:mn>
+                    </m:msubsup>
+                    <m:mrow>
+                      <m:mo>(</m:mo>
+                      <m:mi>t</m:mi>
+                      <m:mo>)</m:mo>
+                    </m:mrow>
+                  </m:mfenced>
+                  <m:mfrac>
+                    <m:mn>1</m:mn>
+                    <m:mn>2</m:mn>
+                  </m:mfrac>
+                </m:msup>
+                <m:mo>≤</m:mo>
+                <m:msqrt>
+                  <m:mfrac>
+                    <m:mrow>
+                      <m:mo>|</m:mo>
+                      <m:mi>x</m:mi>
+                      <m:mo>-</m:mo>
+                      <m:mi>y</m:mi>
+                      <m:mo>|</m:mo>
+                      <m:mo>(</m:mo>
+                      <m:mi>E</m:mi>
+                      <m:mo>+</m:mo>
+                      <m:mn>1</m:mn>
+                      <m:mo>)</m:mo>
+                    </m:mrow>
+                    <m:mrow>
+                      <m:mn>2</m:mn>
+                      <m:mi>π</m:mi>
+                    </m:mrow>
+                  </m:mfrac>
+                </m:msqrt>
+              </m:mrow>
+            </m:math>
+          </equation>
+          <!--empty paragraphs get left behind.-->
+          <para id="id89974">Hence, the sequence <m:math overflow="scroll"><m:msubsup><m:mi>ϕ</m:mi><m:mrow><m:mi>k</m:mi></m:mrow><m:mi>∞</m:mi></m:msubsup></m:math> converges uniformly to
+some function <m:math overflow="scroll"><m:mi>ϕ</m:mi></m:math>. By the triangle inequality, <m:math overflow="scroll"><m:mrow><m:msub><m:mi>ϕ</m:mi><m:mi>k</m:mi></m:msub><m:mo>→</m:mo><m:mi>ϕ</m:mi></m:mrow></m:math>
+in <m:math overflow="scroll"><m:msup><m:mi mathvariant="script">L</m:mi><m:mn>2</m:mn></m:msup></m:math>, as well. Since <m:math overflow="scroll"><m:mi mathvariant="script">H</m:mi></m:math> is a closed set
+in <m:math overflow="scroll"><m:msup><m:mi mathvariant="script">L</m:mi><m:mn>2</m:mn></m:msup></m:math>, then <m:math overflow="scroll"><m:mrow><m:mi>ϕ</m:mi><m:mo>∈</m:mo><m:mi mathvariant="script">H</m:mi></m:mrow></m:math> and accordingly,
+<m:math overflow="scroll"><m:mi>ϕ</m:mi></m:math> has a weak derivative <m:math overflow="scroll"><m:msub><m:mi>ϕ</m:mi><m:mi>t</m:mi></m:msub></m:math>.</para>
+        </section>
+        <section id="id90112">
+          <title>Lemma 5</title>
+          <para id="id90118">The sequence <m:math overflow="scroll"><m:msub><m:mrow><m:mo>(</m:mo><m:msub><m:mi>ϕ</m:mi><m:mi>k</m:mi></m:msub><m:mo>)</m:mo></m:mrow><m:mi>t</m:mi></m:msub></m:math> converges weakly to <m:math overflow="scroll"><m:msub><m:mi>ϕ</m:mi><m:mi>t</m:mi></m:msub></m:math>.</para>
+        </section>
+        <section id="id90162">
+          <title>Proof:</title>
+          <para id="id90169">We take advantage of the fact that for every <m:math overflow="scroll"><m:mrow><m:mi>f</m:mi><m:mo>∈</m:mo><m:msup><m:mi mathvariant="script">L</m:mi><m:mn>2</m:mn></m:msup></m:mrow></m:math>,
+there is a sequence of test functions <m:math overflow="scroll"><m:mrow><m:msub><m:mi>f</m:mi><m:mi>m</m:mi></m:msub><m:mo>∈</m:mo><m:msubsup><m:mi>C</m:mi><m:mrow><m:mi>c</m:mi></m:mrow><m:mi>∞</m:mi></m:msubsup><m:mrow><m:mo>(</m:mo><m:mrow><m:mo>(</m:mo><m:mn>0</m:mn><m:mo>,</m:mo><m:mn>1</m:mn><m:mo>)</m:mo></m:mrow><m:mo>)</m:mo></m:mrow></m:mrow></m:math>
+such that <m:math overflow="scroll"><m:mrow><m:msub><m:mi>f</m:mi><m:mi>m</m:mi></m:msub><m:mo>→</m:mo><m:mi>f</m:mi></m:mrow></m:math> in <m:math overflow="scroll"><m:msup><m:mi mathvariant="script">L</m:mi><m:mn>2</m:mn></m:msup></m:math>.</para>
+          <para id="id90278">So then, take any <m:math overflow="scroll"><m:mrow><m:mi>f</m:mi><m:mo>∈</m:mo><m:msup><m:mi mathvariant="script">L</m:mi><m:mn>2</m:mn></m:msup><m:mo>.</m:mo></m:mrow></m:math> We need to show that</para>
+          <equation id="id90305">
+            <m:math overflow="scroll" mode="display">
+              <m:mrow>
+                <m:mfenced separators="" open="|" close="|">
+                  <m:mo>∫</m:mo>
+                  <m:msub>
+                    <m:mrow>
+                      <m:mo>(</m:mo>
+                      <m:msub>
+                        <m:mi>ϕ</m:mi>
+                        <m:mi>k</m:mi>
+                      </m:msub>
+                      <m:mo>)</m:mo>
+                    </m:mrow>
+                    <m:mi>t</m:mi>
+                  </m:msub>
+                  <m:mi>f</m:mi>
+                  <m:mo>-</m:mo>
+                  <m:mo>∫</m:mo>
+                  <m:msub>
+                    <m:mi>ϕ</m:mi>
+                    <m:mi>t</m:mi>
+                  </m:msub>
+                  <m:mi>f</m:mi>
+                </m:mfenced>
+                <m:mo>→</m:mo>
+                <m:mn>0</m:mn>
+                <m:mo>.</m:mo>
+              </m:mrow>
+            </m:math>
+          </equation>
+          <para id="id90366">For this, take using the triangle inequality:</para>
+          <equation id="id90372">
+            <m:math overflow="scroll" mode="display">
+              <m:mrow>
+                <m:mfenced separators="" open="|" close="|">
+                  <m:mo>∫</m:mo>
+                  <m:msub>
+                    <m:mrow>
+                      <m:mo>(</m:mo>
+                      <m:msub>
+                        <m:mi>ϕ</m:mi>
+                        <m:mi>k</m:mi>
+                      </m:msub>
+                      <m:mo>)</m:mo>
+                    </m:mrow>
+                    <m:mi>t</m:mi>
+                  </m:msub>
+                  <m:mi>f</m:mi>
+                  <m:mo>-</m:mo>
+                  <m:mo>∫</m:mo>
+                  <m:msub>
+                    <m:mi>ϕ</m:mi>
+                    <m:mi>t</m:mi>
+                  </m:msub>
+                  <m:mi>f</m:mi>
+                </m:mfenced>
+                <m:mrow>
+                  <m:mo>≤</m:mo>
+                  <m:mo>∫</m:mo>
+                  <m:mo>|</m:mo>
+                </m:mrow>
+                <m:msub>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:msub>
+                      <m:mi>ϕ</m:mi>
+                      <m:mi>k</m:mi>
+                    </m:msub>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                  <m:mi>t</m:mi>
+                </m:msub>
+                <m:mrow>
+                  <m:mo>|</m:mo>
+                  <m:mo>|</m:mo>
+                  <m:mi>f</m:mi>
+                </m:mrow>
+                <m:mo>-</m:mo>
+                <m:msub>
+                  <m:mi>f</m:mi>
+                  <m:mi>m</m:mi>
+                </m:msub>
+                <m:mrow>
+                  <m:mo>|</m:mo>
+                  <m:mo>+</m:mo>
+                </m:mrow>
+                <m:mfenced separators="" open="|" close="|">
+                  <m:mo>∫</m:mo>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:msub>
+                      <m:mrow>
+                        <m:mo>(</m:mo>
+                        <m:msub>
+                          <m:mi>ϕ</m:mi>
+                          <m:mi>k</m:mi>
+                        </m:msub>
+                        <m:mo>)</m:mo>
+                      </m:mrow>
+                      <m:mi>t</m:mi>
+                    </m:msub>
+                    <m:mo>-</m:mo>
+                    <m:msub>
+                      <m:mi>ϕ</m:mi>
+                      <m:mi>t</m:mi>
+                    </m:msub>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                  <m:msub>
+                    <m:mi>f</m:mi>
+                    <m:mi>m</m:mi>
+                  </m:msub>
+                </m:mfenced>
+                <m:mrow>
+                  <m:mo>+</m:mo>
+                  <m:mo>∫</m:mo>
+                  <m:mo>|</m:mo>
+                </m:mrow>
+                <m:msub>
+                  <m:mi>ϕ</m:mi>
+                  <m:mi>t</m:mi>
+                </m:msub>
+                <m:mrow>
+                  <m:mo>|</m:mo>
+                  <m:mo>|</m:mo>
+                  <m:mi>f</m:mi>
+                </m:mrow>
+                <m:mo>-</m:mo>
+                <m:msub>
+                  <m:mi>f</m:mi>
+                  <m:mi>m</m:mi>
+                </m:msub>
+                <m:mrow>
+                  <m:mo>|</m:mo>
+                </m:mrow>
+              </m:mrow>
+            </m:math>
+          </equation>
+          <para id="id90562">and using Cauchy-Schwartz:</para>
+          <equation id="id90568">
+            <m:math overflow="scroll" mode="display">
+              <m:mrow>
+                <m:mrow>
+                  <m:mo>≤</m:mo>
+                  <m:mo>∥</m:mo>
+                </m:mrow>
+                <m:msub>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:msub>
+                      <m:mi>ϕ</m:mi>
+                      <m:mi>k</m:mi>
+                    </m:msub>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                  <m:mi>t</m:mi>
+                </m:msub>
+                <m:msub>
+                  <m:mrow>
+                    <m:mo>∥</m:mo>
+                  </m:mrow>
+                  <m:msup>
+                    <m:mi mathvariant="script">L</m:mi>
+                    <m:mn>2</m:mn>
+                  </m:msup>
+                </m:msub>
+                <m:mrow>
+                  <m:mo>∥</m:mo>
+                  <m:mi>f</m:mi>
+                  <m:mo>-</m:mo>
+                </m:mrow>
+                <m:msub>
+                  <m:mi>f</m:mi>
+                  <m:mi>m</m:mi>
+                </m:msub>
+                <m:msub>
+                  <m:mrow>
+                    <m:mo>∥</m:mo>
+                  </m:mrow>
+                  <m:msup>
+                    <m:mi mathvariant="script">L</m:mi>
+                    <m:mn>2</m:mn>
+                  </m:msup>
+                </m:msub>
+                <m:mo>+</m:mo>
+                <m:mfenced separators="" open="|" close="|">
+                  <m:mo>∫</m:mo>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:msub>
+                      <m:mrow>
+                        <m:mo>(</m:mo>
+                        <m:msub>
+                          <m:mi>ϕ</m:mi>
+                          <m:mi>k</m:mi>
+                        </m:msub>
+                        <m:mo>)</m:mo>
+                      </m:mrow>
+                      <m:mi>t</m:mi>
+                    </m:msub>
+                    <m:mo>-</m:mo>
+                    <m:msub>
+                      <m:mi>ϕ</m:mi>
+                      <m:mi>t</m:mi>
+                    </m:msub>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                  <m:msub>
+                    <m:mi>f</m:mi>
+                    <m:mi>m</m:mi>
+                  </m:msub>
+                </m:mfenced>
+                <m:mrow>
+                  <m:mo>+</m:mo>
+                  <m:mo>∥</m:mo>
+                </m:mrow>
+                <m:msub>
+                  <m:mi>ϕ</m:mi>
+                  <m:mi>t</m:mi>
+                </m:msub>
+                <m:msub>
+                  <m:mrow>
+                    <m:mo>∥</m:mo>
+                  </m:mrow>
+                  <m:msup>
+                    <m:mi mathvariant="script">L</m:mi>
+                    <m:mn>2</m:mn>
+                  </m:msup>
+                </m:msub>
+                <m:msub>
+                  <m:mrow>
+                    <m:mo>∥</m:mo>
+                    <m:mi>f</m:mi>
+                    <m:mo>-</m:mo>
+                    <m:msub>
+                      <m:mi>f</m:mi>
+                      <m:mi>m</m:mi>
+                    </m:msub>
+                    <m:mo>∥</m:mo>
+                  </m:mrow>
+                  <m:msup>
+                    <m:mi mathvariant="script">L</m:mi>
+                    <m:mn>2</m:mn>
+                  </m:msup>
+                </m:msub>
+              </m:mrow>
+            </m:math>
+          </equation>
+          <para id="id90764">using the definition of the sequence <m:math overflow="scroll"><m:mrow><m:msub><m:mi>ϕ</m:mi><m:mi>k</m:mi></m:msub><m:mo>:</m:mo></m:mrow></m:math></para>
+          <equation id="id90786">
+            <m:math overflow="scroll" mode="display">
+              <m:mrow>
+                <m:mo>≤</m:mo>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:msub>
+                    <m:mi>E</m:mi>
+                    <m:mi>H</m:mi>
+                  </m:msub>
+                  <m:mo>+</m:mo>
+                  <m:mn>1</m:mn>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mrow>
+                  <m:mo>∥</m:mo>
+                  <m:mi>f</m:mi>
+                  <m:mo>-</m:mo>
+                </m:mrow>
+                <m:msub>
+                  <m:mi>f</m:mi>
+                  <m:mi>m</m:mi>
+                </m:msub>
+                <m:msub>
+                  <m:mrow>
+                    <m:mo>∥</m:mo>
+                  </m:mrow>
+                  <m:msup>
+                    <m:mi mathvariant="script">L</m:mi>
+                    <m:mn>2</m:mn>
+                  </m:msup>
+                </m:msub>
+                <m:mo>+</m:mo>
+                <m:mfenced separators="" open="|" close="|">
+                  <m:mo>∫</m:mo>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:msub>
+                      <m:mrow>
+                        <m:mo>(</m:mo>
+                        <m:msub>
+                          <m:mi>ϕ</m:mi>
+                          <m:mi>k</m:mi>
+                        </m:msub>
+                        <m:mo>)</m:mo>
+                      </m:mrow>
+                      <m:mi>t</m:mi>
+                    </m:msub>
+                    <m:mo>-</m:mo>
+                    <m:msub>
+                      <m:mi>ϕ</m:mi>
+                      <m:mi>t</m:mi>
+                    </m:msub>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                  <m:msub>
+                    <m:mi>f</m:mi>
+                    <m:mi>m</m:mi>
+                  </m:msub>
+                </m:mfenced>
+                <m:mrow>
+                  <m:mo>+</m:mo>
+                  <m:mo>∥</m:mo>
+                </m:mrow>
+                <m:msub>
+                  <m:mi>ϕ</m:mi>
+                  <m:mi>t</m:mi>
+                </m:msub>
+                <m:msub>
+                  <m:mrow>
+                    <m:mo>∥</m:mo>
+                  </m:mrow>
+                  <m:msup>
+                    <m:mi mathvariant="script">L</m:mi>
+                    <m:mn>2</m:mn>
+                  </m:msup>
+                </m:msub>
+                <m:msub>
+                  <m:mrow>
+                    <m:mo>∥</m:mo>
+                    <m:mi>f</m:mi>
+                    <m:mo>-</m:mo>
+                    <m:msub>
+                      <m:mi>f</m:mi>
+                      <m:mi>m</m:mi>
+                    </m:msub>
+                    <m:mo>∥</m:mo>
+                  </m:mrow>
+                  <m:msup>
+                    <m:mi mathvariant="script">L</m:mi>
+                    <m:mn>2</m:mn>
+                  </m:msup>
+                </m:msub>
+              </m:mrow>
+            </m:math>
+          </equation>
+          <para id="id90960">and using the definition of the weak derivative, since <m:math overflow="scroll"><m:msub><m:mi>f</m:mi><m:mi>m</m:mi></m:msub></m:math> is a smooth test function:</para>
+          <equation id="id90981">
+            <m:math overflow="scroll" mode="display">
+              <m:mrow>
+                <m:mo>=</m:mo>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:msub>
+                    <m:mi>E</m:mi>
+                    <m:mi>H</m:mi>
+                  </m:msub>
+                  <m:mo>+</m:mo>
+                  <m:mn>1</m:mn>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mrow>
+                  <m:mo>∥</m:mo>
+                  <m:mi>f</m:mi>
+                  <m:mo>-</m:mo>
+                </m:mrow>
+                <m:msub>
+                  <m:mi>f</m:mi>
+                  <m:mi>m</m:mi>
+                </m:msub>
+                <m:msub>
+                  <m:mrow>
+                    <m:mo>∥</m:mo>
+                  </m:mrow>
+                  <m:msup>
+                    <m:mi mathvariant="script">L</m:mi>
+                    <m:mn>2</m:mn>
+                  </m:msup>
+                </m:msub>
+                <m:mo>+</m:mo>
+                <m:mfenced separators="" open="|" close="|">
+                  <m:mo>∫</m:mo>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:msub>
+                      <m:mi>ϕ</m:mi>
+                      <m:mi>k</m:mi>
+                    </m:msub>
+                    <m:mo>-</m:mo>
+                    <m:mi>ϕ</m:mi>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                  <m:msub>
+                    <m:mrow>
+                      <m:mo>(</m:mo>
+                      <m:msub>
+                        <m:mi>f</m:mi>
+                        <m:mi>m</m:mi>
+                      </m:msub>
+                      <m:mo>)</m:mo>
+                    </m:mrow>
+                    <m:mi>t</m:mi>
+                  </m:msub>
+                </m:mfenced>
+                <m:mrow>
+                  <m:mo>+</m:mo>
+                  <m:mo>∥</m:mo>
+                </m:mrow>
+                <m:msub>
+                  <m:mi>ϕ</m:mi>
+                  <m:mi>t</m:mi>
+                </m:msub>
+                <m:msub>
+                  <m:mrow>
+                    <m:mo>∥</m:mo>
+                  </m:mrow>
+                  <m:msup>
+                    <m:mi mathvariant="script">L</m:mi>
+                    <m:mn>2</m:mn>
+                  </m:msup>
+                </m:msub>
+                <m:msub>
+                  <m:mrow>
+                    <m:mo>∥</m:mo>
+                    <m:mi>f</m:mi>
+                    <m:mo>-</m:mo>
+                    <m:msub>
+                      <m:mi>f</m:mi>
+                      <m:mi>m</m:mi>
+                    </m:msub>
+                    <m:mo>∥</m:mo>
+                  </m:mrow>
+                  <m:msup>
+                    <m:mi mathvariant="script">L</m:mi>
+                    <m:mn>2</m:mn>
+                  </m:msup>
+                </m:msub>
+              </m:mrow>
+            </m:math>
+          </equation>
+          <para id="id91149">and using Cauchy-Schwartz again we have:</para>
+          <equation id="id91155">
+            <m:math overflow="scroll" mode="display">
+              <m:mrow>
+                <m:mfenced separators="" open="|" close="|">
+                  <m:mo>∫</m:mo>
+                  <m:msub>
+                    <m:mrow>
+                      <m:mo>(</m:mo>
+                      <m:msub>
+                        <m:mi>ϕ</m:mi>
+                        <m:mi>k</m:mi>
+                      </m:msub>
+                      <m:mo>)</m:mo>
+                    </m:mrow>
+                    <m:mi>t</m:mi>
+                  </m:msub>
+                  <m:mi>f</m:mi>
+                  <m:mo>-</m:mo>
+                  <m:mo>∫</m:mo>
+                  <m:msub>
+                    <m:mi>ϕ</m:mi>
+                    <m:mi>t</m:mi>
+                  </m:msub>
+                  <m:mi>f</m:mi>
+                </m:mfenced>
+                <m:mo>≤</m:mo>
+              </m:mrow>
+            </m:math>
+          </equation>
+          <equation id="id91212">
+            <m:math overflow="scroll" mode="display">
+              <m:mrow>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:msub>
+                    <m:mi>E</m:mi>
+                    <m:mi>H</m:mi>
+                  </m:msub>
+                  <m:mo>+</m:mo>
+                  <m:mn>1</m:mn>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mrow>
+                  <m:mo>∥</m:mo>
+                  <m:mi>f</m:mi>
+                  <m:mo>-</m:mo>
+                </m:mrow>
+                <m:msub>
+                  <m:mi>f</m:mi>
+                  <m:mi>m</m:mi>
+                </m:msub>
+                <m:msub>
+                  <m:mrow>
+                    <m:mo>∥</m:mo>
+                  </m:mrow>
+                  <m:msup>
+                    <m:mi mathvariant="script">L</m:mi>
+                    <m:mn>2</m:mn>
+                  </m:msup>
+                </m:msub>
+                <m:mrow>
+                  <m:mo>+</m:mo>
+                  <m:mo>∥</m:mo>
+                </m:mrow>
+                <m:msub>
+                  <m:mi>ϕ</m:mi>
+                  <m:mi>k</m:mi>
+                </m:msub>
+                <m:msub>
+                  <m:mrow>
+                    <m:mo>-</m:mo>
+                    <m:mi>ϕ</m:mi>
+                    <m:mo>∥</m:mo>
+                  </m:mrow>
+                  <m:msup>
+                    <m:mi mathvariant="script">L</m:mi>
+                    <m:mn>2</m:mn>
+                  </m:msup>
+                </m:msub>
+                <m:mrow>
+                  <m:mo>∥</m:mo>
+                </m:mrow>
+                <m:msub>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:msub>
+                      <m:mi>f</m:mi>
+                      <m:mi>m</m:mi>
+                    </m:msub>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                  <m:mi>t</m:mi>
+                </m:msub>
+                <m:msub>
+                  <m:mrow>
+                    <m:mo>∥</m:mo>
+                  </m:mrow>
+                  <m:msup>
+                    <m:mi mathvariant="script">L</m:mi>
+                    <m:mn>2</m:mn>
+                  </m:msup>
+                </m:msub>
+                <m:mrow>
+                  <m:mo>+</m:mo>
+                  <m:mo>∥</m:mo>
+                </m:mrow>
+                <m:msub>
+                  <m:mi>ϕ</m:mi>
+                  <m:mi>t</m:mi>
+                </m:msub>
+                <m:msub>
+                  <m:mrow>
+                    <m:mo>∥</m:mo>
+                  </m:mrow>
+                  <m:msup>
+                    <m:mi mathvariant="script">L</m:mi>
+                    <m:mn>2</m:mn>
+                  </m:msup>
+                </m:msub>
+                <m:msub>
+                  <m:mrow>
+                    <m:mo>∥</m:mo>
+                    <m:mi>f</m:mi>
+                    <m:mo>-</m:mo>
+                    <m:msub>
+                      <m:mi>f</m:mi>
+                      <m:mi>m</m:mi>
+                    </m:msub>
+                    <m:mo>∥</m:mo>
+                  </m:mrow>
+                  <m:msup>
+                    <m:mi mathvariant="script">L</m:mi>
+                    <m:mn>2</m:mn>
+                  </m:msup>
+                </m:msub>
+                <m:mo>.</m:mo>
+              </m:mrow>
+            </m:math>
+          </equation>
+          <para id="id91405">Letting <m:math overflow="scroll"><m:mrow><m:mi>k</m:mi><m:mo>→</m:mo><m:mi>∞</m:mi></m:mrow></m:math> FIRST, and then <m:math overflow="scroll"><m:mrow><m:mi>m</m:mi><m:mo>→</m:mo><m:mi>∞</m:mi><m:mo>,</m:mo></m:mrow></m:math> we get the result.</para>
+          <para id="id91442">By Lemma 3, since <m:math overflow="scroll"><m:mrow><m:msub><m:mrow><m:mo>(</m:mo><m:msub><m:mi>ϕ</m:mi><m:mi>k</m:mi></m:msub><m:mo>)</m:mo></m:mrow><m:mi>t</m:mi></m:msub><m:mo>→</m:mo><m:msub><m:mi>ϕ</m:mi><m:mi>t</m:mi></m:msub></m:mrow></m:math> weakly,
+we get</para>
+          <equation id="uid9">
+            <m:math overflow="scroll" mode="display">
+              <m:mrow>
+                <m:mo>∫</m:mo>
+                <m:msubsup>
+                  <m:mi>ϕ</m:mi>
+                  <m:mrow>
+                    <m:mi>t</m:mi>
+                  </m:mrow>
+                  <m:mn>2</m:mn>
+                </m:msubsup>
+                <m:mo>≤</m:mo>
+                <m:munder>
+                  <m:mo movablelimits="true" form="prefix">lim</m:mo>
+                  <m:mrow>
+                    <m:mi>k</m:mi>
+                    <m:mo>→</m:mo>
+                    <m:mi>∞</m:mi>
+                  </m:mrow>
+                </m:munder>
+                <m:mo>∫</m:mo>
+                <m:msubsup>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:msub>
+                      <m:mi>ϕ</m:mi>
+                      <m:mi>k</m:mi>
+                    </m:msub>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                  <m:mrow>
+                    <m:mi>t</m:mi>
+                  </m:mrow>
+                  <m:mn>2</m:mn>
+                </m:msubsup>
+                <m:mo>.</m:mo>
+              </m:mrow>
+            </m:math>
+          </equation>
+          <para id="id91558">We may show that <m:math overflow="scroll"><m:mrow><m:mo>∫</m:mo><m:mi>c</m:mi><m:mi>o</m:mi><m:msup><m:mi>s</m:mi><m:mn>2</m:mn></m:msup><m:msub><m:mi>ϕ</m:mi><m:mi>k</m:mi></m:msub><m:mo>→</m:mo><m:mo>∫</m:mo><m:mi>c</m:mi><m:mi>o</m:mi><m:msup><m:mi>s</m:mi><m:mn>2</m:mn></m:msup><m:mi>ϕ</m:mi></m:mrow></m:math>.
+Because <m:math overflow="scroll"><m:mrow><m:mi>f</m:mi><m:mrow><m:mo>(</m:mo><m:mi>x</m:mi><m:mo>)</m:mo></m:mrow><m:mo>=</m:mo><m:mi>c</m:mi><m:mi>o</m:mi><m:msup><m:mi>s</m:mi><m:mn>2</m:mn></m:msup><m:mrow><m:mo>(</m:mo><m:mi>x</m:mi><m:mo>)</m:mo></m:mrow></m:mrow></m:math> is continuous, <m:math overflow="scroll"><m:mrow><m:mi>c</m:mi><m:mi>o</m:mi><m:msup><m:mi>s</m:mi><m:mn>2</m:mn></m:msup><m:mrow><m:mo>(</m:mo><m:mi>x</m:mi><m:mo>)</m:mo></m:mrow><m:mo>→</m:mo><m:mi>c</m:mi><m:mi>o</m:mi><m:mi>s</m:mi><m:mrow><m:mo>(</m:mo><m:mi>y</m:mi><m:mo>)</m:mo></m:mrow></m:mrow></m:math>
+as <m:math overflow="scroll"><m:mrow><m:mo>|</m:mo><m:mi>x</m:mi><m:mo>-</m:mo><m:mi>y</m:mi><m:mo>|</m:mo><m:mo>→</m:mo><m:mn>0</m:mn></m:mrow></m:math>; thus, because <m:math overflow="scroll"><m:mrow><m:mrow><m:mo>∥</m:mo></m:mrow><m:msub><m:mi>ϕ</m:mi><m:mi>k</m:mi></m:msub><m:mrow><m:mo>-</m:mo><m:mi>ϕ</m:mi><m:mo>∥</m:mo><m:mo>→</m:mo><m:mn>0</m:mn></m:mrow></m:mrow></m:math>
+by definition of weak convergence, <m:math overflow="scroll"><m:mrow><m:mi>c</m:mi><m:mi>o</m:mi><m:msup><m:mi>s</m:mi><m:mn>2</m:mn></m:msup><m:msub><m:mi>ϕ</m:mi><m:mi>k</m:mi></m:msub><m:mo>→</m:mo><m:mi>c</m:mi><m:mi>o</m:mi><m:msup><m:mi>s</m:mi><m:mn>2</m:mn></m:msup><m:mi>ϕ</m:mi></m:mrow></m:math>.</para>
+          <para id="id91790">We have shown that the components <m:math overflow="scroll"><m:mrow><m:mo>∫</m:mo><m:msubsup><m:mi>ϕ</m:mi><m:mrow><m:mi>t</m:mi></m:mrow><m:mn>2</m:mn></m:msubsup></m:mrow></m:math> and <m:math overflow="scroll"><m:mrow><m:mo>∫</m:mo><m:mi>c</m:mi><m:mi>o</m:mi><m:msup><m:mi>s</m:mi><m:mn>2</m:mn></m:msup><m:mi>ϕ</m:mi></m:mrow></m:math>
+allow <m:math overflow="scroll"><m:mi>ϕ</m:mi></m:math> to attain the minimum <m:math overflow="scroll"><m:msub><m:mi>E</m:mi><m:mi>H</m:mi></m:msub></m:math>. Now, note that if <m:math overflow="scroll"><m:mi>η</m:mi></m:math> is a test function, then <m:math overflow="scroll"><m:mrow><m:mi>ϕ</m:mi><m:mo>+</m:mo><m:mi>η</m:mi><m:mo>∈</m:mo><m:mi mathvariant="script">H</m:mi><m:mo>,</m:mo></m:mrow></m:math> and so we automatically get</para>
+          <equation id="id91896">
+            <m:math overflow="scroll" mode="display">
+              <m:mrow>
+                <m:mi>E</m:mi>
+                <m:mo>(</m:mo>
+                <m:mi>ϕ</m:mi>
+                <m:mo>)</m:mo>
+                <m:mo>≤</m:mo>
+                <m:mi>E</m:mi>
+                <m:mo>(</m:mo>
+                <m:mi>ϕ</m:mi>
+                <m:mo>+</m:mo>
+                <m:mi>η</m:mi>
+                <m:mo>)</m:mo>
+                <m:mo>.</m:mo>
+              </m:mrow>
+            </m:math>
+          </equation>
+          <para id="id91932">We now get that <m:math overflow="scroll"><m:mi>ϕ</m:mi></m:math> is a weak solution to the equation</para>
+          <equation id="id91948">
+            <m:math overflow="scroll" mode="display">
+              <m:mrow>
+                <m:mi>Δ</m:mi>
+                <m:mi>ϕ</m:mi>
+                <m:mo>+</m:mo>
+                <m:mfrac>
+                  <m:mrow>
+                    <m:mo form="prefix">sin</m:mo>
+                    <m:mn>2</m:mn>
+                    <m:mi>ϕ</m:mi>
+                  </m:mrow>
+                  <m:mn>2</m:mn>
+                </m:mfrac>
+                <m:mo>=</m:mo>
+                <m:mn>0</m:mn>
+              </m:mrow>
+            </m:math>
+          </equation>
+          <para id="id91983">By Theorem 1 of 6.3.1 <link target-id="bid0"/> , <m:math overflow="scroll"><m:mrow><m:mi>ϕ</m:mi><m:mo>∈</m:mo><m:msubsup><m:mi>H</m:mi><m:mrow><m:mi>l</m:mi><m:mi>o</m:mi><m:mi>c</m:mi></m:mrow><m:mn>2</m:mn></m:msubsup><m:mrow><m:mo>(</m:mo><m:mrow><m:mo>[</m:mo><m:mn>0</m:mn><m:mo>,</m:mo><m:mn>2</m:mn><m:mi>π</m:mi><m:mo>]</m:mo></m:mrow><m:mo>×</m:mo><m:mrow><m:mo>[</m:mo><m:mn>0</m:mn><m:mo>,</m:mo><m:mn>1</m:mn><m:mo>]</m:mo></m:mrow><m:mo>)</m:mo></m:mrow></m:mrow></m:math>.
+By Theorem 2 of the same section of <link target-id="bid0"/>, we may conclude
+that because <m:math overflow="scroll"><m:mrow><m:mi>ϕ</m:mi><m:mo>∈</m:mo><m:msubsup><m:mi>H</m:mi><m:mrow><m:mi>l</m:mi><m:mi>o</m:mi><m:mi>c</m:mi></m:mrow><m:mrow><m:mn>2</m:mn><m:mo>+</m:mo><m:mn>2</m:mn></m:mrow></m:msubsup><m:mrow><m:mo>(</m:mo><m:mrow><m:mo>[</m:mo><m:mn>0</m:mn><m:mo>,</m:mo><m:mn>2</m:mn><m:mi>π</m:mi><m:mo>]</m:mo></m:mrow><m:mo>×</m:mo><m:mrow><m:mo>[</m:mo><m:mn>0</m:mn><m:mo>,</m:mo><m:mn>1</m:mn><m:mo>]</m:mo></m:mrow><m:mo>)</m:mo></m:mrow></m:mrow></m:math>, <m:math overflow="scroll"><m:mi>ϕ</m:mi></m:math>
+is in every space <m:math overflow="scroll"><m:mrow><m:msubsup><m:mi>H</m:mi><m:mrow><m:mi>l</m:mi><m:mi>o</m:mi><m:mi>c</m:mi></m:mrow><m:mi>m</m:mi></m:msubsup><m:mrow><m:mo>(</m:mo><m:mrow><m:mo>[</m:mo><m:mn>0</m:mn><m:mo>,</m:mo><m:mn>2</m:mn><m:mi>π</m:mi><m:mo>]</m:mo></m:mrow><m:mo>×</m:mo><m:mrow><m:mo>[</m:mo><m:mn>0</m:mn><m:mo>,</m:mo><m:mn>1</m:mn><m:mo>]</m:mo></m:mrow><m:mo>)</m:mo></m:mrow></m:mrow></m:math>.</para>
+          <para id="id92194">We may apply Theorem 6 of 5.6.3 of <link target-id="bid0"/> to conclude that
+<m:math overflow="scroll"><m:mi>ϕ</m:mi></m:math> is smooth. Thus, <m:math overflow="scroll"><m:mi>ϕ</m:mi></m:math> is the minimizer we were looking
+for, which even minimizes the energy amongst a bigger class of vector
+fields.</para>
+        </section>
+      </section>
+      <section id="uid10">
+        <title>Computation on constant boundary conditions </title>
+        <para id="id92232">With the knowledge that this minimizer <m:math overflow="scroll"><m:mi>ϕ</m:mi></m:math> exists, we may now
+compute its explicit form. Recall the Euler-Lagrange equation <m:math overflow="scroll"><m:mrow><m:mi>Δ</m:mi><m:mi>ϕ</m:mi><m:mo>+</m:mo><m:mfrac><m:mrow><m:mo form="prefix">sin</m:mo><m:mn>2</m:mn><m:mi>ϕ</m:mi></m:mrow><m:mn>2</m:mn></m:mfrac><m:mo>=</m:mo><m:mn>0</m:mn></m:mrow></m:math>.
+As shown by <link url="http://cnx.org/content/m30944/latest/">[2]</link>, given <m:math overflow="scroll"><m:mrow><m:mi>θ</m:mi><m:mo>-</m:mo></m:mrow></m:math>independent boundaries, <m:math overflow="scroll"><m:mi>ϕ</m:mi></m:math>
+will at no point depend on <m:math overflow="scroll"><m:mi>θ</m:mi></m:math>. Therefore, we may rewrite the
+Euler-Lagrange equation simply as</para>
+        <equation id="uid11">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:msup>
+                <m:mi>ϕ</m:mi>
+                <m:mrow>
+                  <m:mo>'</m:mo>
+                  <m:mo>'</m:mo>
+                </m:mrow>
+              </m:msup>
+              <m:mo>+</m:mo>
+              <m:mfrac>
+                <m:mrow>
+                  <m:mo form="prefix">sin</m:mo>
+                  <m:mn>2</m:mn>
+                  <m:mi>ϕ</m:mi>
+                </m:mrow>
+                <m:mn>2</m:mn>
+              </m:mfrac>
+              <m:mo>=</m:mo>
+              <m:mn>0</m:mn>
+              <m:mo>.</m:mo>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id92363">We solve this ordinary differential equation:</para>
+        <equation id="id92367">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:mn>0</m:mn>
+              <m:mo>=</m:mo>
+              <m:mn>2</m:mn>
+              <m:msup>
+                <m:mi>ϕ</m:mi>
+                <m:mrow>
+                  <m:mo>'</m:mo>
+                  <m:mo>'</m:mo>
+                </m:mrow>
+              </m:msup>
+              <m:mo>+</m:mo>
+              <m:mo form="prefix">sin</m:mo>
+              <m:mn>2</m:mn>
+              <m:mi>ϕ</m:mi>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <equation id="id92405">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:mo>=</m:mo>
+              <m:mn>2</m:mn>
+              <m:msup>
+                <m:mi>ϕ</m:mi>
+                <m:mrow>
+                  <m:mo>'</m:mo>
+                  <m:mo>'</m:mo>
+                </m:mrow>
+              </m:msup>
+              <m:msup>
+                <m:mi>ϕ</m:mi>
+                <m:mo>'</m:mo>
+              </m:msup>
+              <m:mo>+</m:mo>
+              <m:msup>
+                <m:mi>ϕ</m:mi>
+                <m:mo>'</m:mo>
+              </m:msup>
+              <m:mo form="prefix">sin</m:mo>
+              <m:mn>2</m:mn>
+              <m:mi>ϕ</m:mi>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <equation id="id92458">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:mo>=</m:mo>
+              <m:msup>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:msup>
+                    <m:mi>ϕ</m:mi>
+                    <m:mrow>
+                      <m:mo>'</m:mo>
+                      <m:mn>2</m:mn>
+                    </m:mrow>
+                  </m:msup>
+                  <m:mo>-</m:mo>
+                  <m:mfrac>
+                    <m:mn>1</m:mn>
+                    <m:mn>2</m:mn>
+                  </m:mfrac>
+                  <m:mo form="prefix">cos</m:mo>
+                  <m:mn>2</m:mn>
+                  <m:mi>ϕ</m:mi>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mo>'</m:mo>
+              </m:msup>
+              <m:mo>=</m:mo>
+              <m:mn>0</m:mn>
+              <m:mo>.</m:mo>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <equation id="id92516">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:msup>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:msup>
+                    <m:mi>ϕ</m:mi>
+                    <m:mo>'</m:mo>
+                  </m:msup>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mn>2</m:mn>
+              </m:msup>
+              <m:mo>-</m:mo>
+              <m:mfrac>
+                <m:mn>1</m:mn>
+                <m:mn>2</m:mn>
+              </m:mfrac>
+              <m:mo form="prefix">cos</m:mo>
+              <m:mn>2</m:mn>
+              <m:mi>ϕ</m:mi>
+              <m:mo>=</m:mo>
+              <m:mi>k</m:mi>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <equation id="id92566">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:msup>
+                <m:mi>ϕ</m:mi>
+                <m:mo>'</m:mo>
+              </m:msup>
+              <m:mo>=</m:mo>
+              <m:msqrt>
+                <m:mrow>
+                  <m:mfrac>
+                    <m:mn>1</m:mn>
+                    <m:mn>2</m:mn>
+                  </m:mfrac>
+                  <m:mo form="prefix">cos</m:mo>
+                  <m:mn>2</m:mn>
+                  <m:mi>ϕ</m:mi>
+                  <m:mo>+</m:mo>
+                  <m:mi>k</m:mi>
+                </m:mrow>
+              </m:msqrt>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <equation id="id92608">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:mo>∫</m:mo>
+              <m:mfrac>
+                <m:mrow>
+                  <m:mi>d</m:mi>
+                  <m:mi>ϕ</m:mi>
+                </m:mrow>
+                <m:msqrt>
+                  <m:mrow>
+                    <m:mfrac>
+                      <m:mn>1</m:mn>
+                      <m:mn>2</m:mn>
+                    </m:mfrac>
+                    <m:mo form="prefix">cos</m:mo>
+                    <m:mn>2</m:mn>
+                    <m:mi>ϕ</m:mi>
+                    <m:mo>+</m:mo>
+                    <m:mi>k</m:mi>
+                  </m:mrow>
+                </m:msqrt>
+              </m:mfrac>
+              <m:mo>=</m:mo>
+              <m:mo>∫</m:mo>
+              <m:mi>d</m:mi>
+              <m:mi>t</m:mi>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <equation id="uid12">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:mfrac>
+                <m:mn>2</m:mn>
+                <m:msqrt>
+                  <m:mrow>
+                    <m:mi>k</m:mi>
+                    <m:mo>+</m:mo>
+                    <m:mn>2</m:mn>
+                  </m:mrow>
+                </m:msqrt>
+              </m:mfrac>
+              <m:mo>∫</m:mo>
+              <m:mfrac>
+                <m:mrow>
+                  <m:mi>d</m:mi>
+                  <m:mi>ϕ</m:mi>
+                </m:mrow>
+                <m:mrow>
+                  <m:mn>1</m:mn>
+                  <m:mo>-</m:mo>
+                  <m:mfrac>
+                    <m:mn>4</m:mn>
+                    <m:mrow>
+                      <m:mi>k</m:mi>
+                      <m:mo>-</m:mo>
+                      <m:mn>2</m:mn>
+                    </m:mrow>
+                  </m:mfrac>
+                  <m:msup>
+                    <m:mo form="prefix">sin</m:mo>
+                    <m:mn>2</m:mn>
+                  </m:msup>
+                  <m:mi>ϕ</m:mi>
+                </m:mrow>
+              </m:mfrac>
+              <m:mo>=</m:mo>
+              <m:mo>∫</m:mo>
+              <m:mi>d</m:mi>
+              <m:mi>t</m:mi>
+              <m:mo>.</m:mo>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id92735">The solution is thus a Jacobi elliptic function of the first kind.
+Note that, given the proper limits of integration, we may actually
+solve for <m:math overflow="scroll"><m:mi>k</m:mi></m:math>, yielding an exact expression for <m:math overflow="scroll"><m:mi>ϕ</m:mi></m:math>.</para>
+      </section>
+    </section>
+    <section id="cid3">
+      <title>The Torus</title>
+      <section id="uid13">
+        <title>The Problem</title>
+        <para id="id92776">Before we turn our attention to energy minimzation of unit tangent
+vector fields on the torus, it is important to notice the inherent
+differences between the problem on the cylinder and the problem on
+the torus. Most importantly, take note that it no longer makes sense
+to frame a problem in the context of boundary conditions – the torus
+has no boundaries. Thus, there is a unique minimizer <m:math overflow="scroll"><m:mi>ϕ</m:mi></m:math> (still
+the angle of the vector field with the horizontal tangent vector)
+for any given torus with fixed radii. Therefore, instead of various
+boundary conditions, it is the relationship between the value of these
+radii which will interest us later on.</para>
+      </section>
+      <section id="uid14">
+        <title>Parametrization and equations</title>
+        <para id="id92808">Using the same method of parametrization as used above, we may parameterize
+the torus as <m:math overflow="scroll"><m:mrow><m:mi>Φ</m:mi><m:mo>(</m:mo><m:mi>s</m:mi><m:mo>,</m:mo><m:mi>t</m:mi><m:mo>)</m:mo></m:mrow></m:math>, where</para>
+        <equation id="uid15">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:mi>Φ</m:mi>
+              <m:mo>(</m:mo>
+              <m:mi>s</m:mi>
+              <m:mo>,</m:mo>
+              <m:mi>t</m:mi>
+              <m:mo>)</m:mo>
+              <m:mo>=</m:mo>
+              <m:mo>(</m:mo>
+              <m:mo form="prefix">cos</m:mo>
+              <m:mo>(</m:mo>
+              <m:mi>s</m:mi>
+              <m:mo>)</m:mo>
+              <m:mo>(</m:mo>
+              <m:mi>R</m:mi>
+              <m:mo>+</m:mo>
+              <m:mi>r</m:mi>
+              <m:mo form="prefix">cos</m:mo>
+              <m:mo>(</m:mo>
+              <m:mi>t</m:mi>
+              <m:mo>)</m:mo>
+              <m:mo>)</m:mo>
+              <m:mo>,</m:mo>
+              <m:mo form="prefix">sin</m:mo>
+              <m:mo>(</m:mo>
+              <m:mi>s</m:mi>
+              <m:mo>)</m:mo>
+              <m:mo>(</m:mo>
+              <m:mi>R</m:mi>
+              <m:mo>+</m:mo>
+              <m:mi>r</m:mi>
+              <m:mo form="prefix">cos</m:mo>
+              <m:mo>(</m:mo>
+              <m:mi>t</m:mi>
+              <m:mo>)</m:mo>
+              <m:mo>)</m:mo>
+              <m:mo>,</m:mo>
+              <m:mi>r</m:mi>
+              <m:mo form="prefix">sin</m:mo>
+              <m:mo>(</m:mo>
+              <m:mi>t</m:mi>
+              <m:mo>)</m:mo>
+              <m:mo>)</m:mo>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id92948">for <m:math overflow="scroll"><m:mrow><m:mn>0</m:mn><m:mo>≤</m:mo><m:mi>s</m:mi><m:mo>,</m:mo><m:mi>r</m:mi><m:mo>≤</m:mo><m:mn>2</m:mn><m:mi>π</m:mi><m:mo>,</m:mo><m:mspace width="0.166667em"/><m:mi>R</m:mi><m:mo>&gt;</m:mo><m:mi>r</m:mi><m:mo>&gt;</m:mo><m:mn>0</m:mn><m:mo>.</m:mo></m:mrow></m:math></para>
+        <para id="id92997">To derive the corresponding vector field and energy equation, we use
+also the same method outlined by <link url="http://cnx.org/content/m30944/latest/">[2]</link>. On the torus, however, we
+calculate <m:math overflow="scroll"><m:mrow><m:mfrac><m:mrow><m:mi>∂</m:mi><m:mi>t</m:mi></m:mrow><m:mrow><m:mi>∂</m:mi><m:msub><m:mi>Φ</m:mi><m:mi>t</m:mi></m:msub></m:mrow></m:mfrac><m:mo>=</m:mo><m:mfrac><m:mn>1</m:mn><m:mi>r</m:mi></m:mfrac></m:mrow></m:math> and <m:math overflow="scroll"><m:mrow><m:mfrac><m:mrow><m:mi>∂</m:mi><m:mi>s</m:mi></m:mrow><m:mrow><m:mi>∂</m:mi><m:msub><m:mi>Φ</m:mi><m:mi>s</m:mi></m:msub></m:mrow></m:mfrac><m:mo>=</m:mo><m:mi>R</m:mi><m:mo>+</m:mo><m:mi>r</m:mi><m:mo form="prefix">cos</m:mo><m:mrow><m:mo>(</m:mo><m:mi>t</m:mi><m:mo>)</m:mo></m:mrow></m:mrow></m:math>
+where <m:math overflow="scroll"><m:mrow><m:msub><m:mi>Φ</m:mi><m:mi>t</m:mi></m:msub><m:mo>=</m:mo><m:mi>r</m:mi><m:mi>t</m:mi></m:mrow></m:math> and <m:math overflow="scroll"><m:mrow><m:msub><m:mi>Φ</m:mi><m:mi>s</m:mi></m:msub><m:mo>=</m:mo><m:mrow><m:mo>(</m:mo><m:mi>R</m:mi><m:mo>+</m:mo><m:mi>r</m:mi><m:mo form="prefix">cos</m:mo><m:mrow><m:mo>(</m:mo><m:mi>t</m:mi><m:mo>)</m:mo></m:mrow><m:mo>)</m:mo></m:mrow><m:mi>s</m:mi></m:mrow></m:math>. From here we determine
+that <m:math overflow="scroll"><m:mrow><m:mi>d</m:mi><m:mi>A</m:mi><m:mo>=</m:mo><m:mi>r</m:mi><m:mo>(</m:mo><m:mi>R</m:mi><m:mo>+</m:mo><m:mi>r</m:mi><m:mo form="prefix">cos</m:mo><m:mo>(</m:mo><m:mi>t</m:mi><m:mo>)</m:mo><m:mo>)</m:mo></m:mrow></m:math>.</para>
+        <para id="id93193">Our corresponding vector field is then</para>
+        <equation id="uid16">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:mi>V</m:mi>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>ϕ</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>=</m:mo>
+              <m:mfenced separators="" open="(" close=")">
+                <m:mtable>
+                  <m:mtr>
+                    <m:mtd>
+                      <m:mrow>
+                        <m:mo>-</m:mo>
+                        <m:mo form="prefix">cos</m:mo>
+                        <m:mo>(</m:mo>
+                        <m:mi>s</m:mi>
+                        <m:mo>)</m:mo>
+                        <m:mo form="prefix">sin</m:mo>
+                        <m:mo>(</m:mo>
+                        <m:mi>t</m:mi>
+                        <m:mo>)</m:mo>
+                        <m:mo form="prefix">sin</m:mo>
+                        <m:mo>(</m:mo>
+                        <m:mi>ϕ</m:mi>
+                        <m:mo>)</m:mo>
+                        <m:mo>-</m:mo>
+                        <m:mo form="prefix">sin</m:mo>
+                        <m:mo>(</m:mo>
+                        <m:mi>s</m:mi>
+                        <m:mo>)</m:mo>
+                        <m:mo form="prefix">cos</m:mo>
+                        <m:mo>(</m:mo>
+                        <m:mi>ϕ</m:mi>
+                        <m:mo>)</m:mo>
+                      </m:mrow>
+                    </m:mtd>
+                  </m:mtr>
+                  <m:mtr>
+                    <m:mtd>
+                      <m:mrow>
+                        <m:mo>-</m:mo>
+                        <m:mo form="prefix">sin</m:mo>
+                        <m:mo>(</m:mo>
+                        <m:mi>s</m:mi>
+                        <m:mo>)</m:mo>
+                        <m:mo form="prefix">sin</m:mo>
+                        <m:mo>(</m:mo>
+                        <m:mi>t</m:mi>
+                        <m:mo>)</m:mo>
+                        <m:mo form="prefix">sin</m:mo>
+                        <m:mo>(</m:mo>
+                        <m:mi>ϕ</m:mi>
+                        <m:mo>)</m:mo>
+                        <m:mo>+</m:mo>
+                        <m:mo form="prefix">cos</m:mo>
+                        <m:mo>(</m:mo>
+                        <m:mi>s</m:mi>
+                        <m:mo>)</m:mo>
+                        <m:mo form="prefix">cos</m:mo>
+                        <m:mo>(</m:mo>
+                        <m:mi>ϕ</m:mi>
+                        <m:mo>)</m:mo>
+                      </m:mrow>
+                    </m:mtd>
+                  </m:mtr>
+                  <m:mtr>
+                    <m:mtd>
+                      <m:mrow>
+                        <m:mo form="prefix">cos</m:mo>
+                        <m:mo>(</m:mo>
+                        <m:mi>t</m:mi>
+                        <m:mo>)</m:mo>
+                        <m:mo form="prefix">sin</m:mo>
+                        <m:mo>(</m:mo>
+                        <m:mi>ϕ</m:mi>
+                        <m:mo>)</m:mo>
+                        <m:mo>)</m:mo>
+                      </m:mrow>
+                    </m:mtd>
+                  </m:mtr>
+                </m:mtable>
+              </m:mfenced>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id93381">with an energy equation <m:math overflow="scroll"><m:mrow><m:msup><m:mrow><m:mo>∫</m:mo><m:mo>|</m:mo><m:mi>D</m:mi><m:mi>V</m:mi><m:mo>|</m:mo></m:mrow><m:mn>2</m:mn></m:msup><m:mi>d</m:mi><m:mi>A</m:mi><m:mi>r</m:mi><m:mi>e</m:mi><m:mi>a</m:mi></m:mrow></m:math>:</para>
+        <equation id="uid17">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:mi>E</m:mi>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>ϕ</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>=</m:mo>
+              <m:msubsup>
+                <m:mo>∫</m:mo>
+                <m:mrow>
+                  <m:mn>0</m:mn>
+                </m:mrow>
+                <m:mrow>
+                  <m:mn>2</m:mn>
+                  <m:mi>π</m:mi>
+                </m:mrow>
+              </m:msubsup>
+              <m:msubsup>
+                <m:mo>∫</m:mo>
+                <m:mrow>
+                  <m:mn>0</m:mn>
+                </m:mrow>
+                <m:mrow>
+                  <m:mn>2</m:mn>
+                  <m:mi>π</m:mi>
+                </m:mrow>
+              </m:msubsup>
+              <m:mrow>
+                <m:mo>[</m:mo>
+                <m:mi>a</m:mi>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mi>R</m:mi>
+                  <m:mo>,</m:mo>
+                  <m:mi>r</m:mi>
+                  <m:mo>,</m:mo>
+                  <m:mi>t</m:mi>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:msubsup>
+                  <m:mi>ϕ</m:mi>
+                  <m:mrow>
+                    <m:mi>t</m:mi>
+                  </m:mrow>
+                  <m:mn>2</m:mn>
+                </m:msubsup>
+                <m:mo>+</m:mo>
+                <m:mi>b</m:mi>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mi>R</m:mi>
+                  <m:mo>,</m:mo>
+                  <m:mi>r</m:mi>
+                  <m:mo>,</m:mo>
+                  <m:mi>t</m:mi>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:msubsup>
+                  <m:mi>ϕ</m:mi>
+                  <m:mrow>
+                    <m:mi>s</m:mi>
+                  </m:mrow>
+                  <m:mn>2</m:mn>
+                </m:msubsup>
+                <m:mo>+</m:mo>
+                <m:mi>c</m:mi>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mi>R</m:mi>
+                  <m:mo>,</m:mo>
+                  <m:mi>r</m:mi>
+                  <m:mo>,</m:mo>
+                  <m:mi>t</m:mi>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mo>+</m:mo>
+                <m:mover accent="true">
+                  <m:mi>c</m:mi>
+                  <m:mo>˜</m:mo>
+                </m:mover>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mi>R</m:mi>
+                  <m:mo>,</m:mo>
+                  <m:mi>r</m:mi>
+                  <m:mo>,</m:mo>
+                  <m:mi>t</m:mi>
+                  <m:mo>,</m:mo>
+                  <m:mi>ϕ</m:mi>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mo>]</m:mo>
+              </m:mrow>
+              <m:mi>d</m:mi>
+              <m:mi>s</m:mi>
+              <m:mi>d</m:mi>
+              <m:mi>t</m:mi>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id93606">where</para>
+        <equation id="id93609">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:mi>a</m:mi>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>R</m:mi>
+                <m:mo>,</m:mo>
+                <m:mi>r</m:mi>
+                <m:mo>,</m:mo>
+                <m:mi>t</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>=</m:mo>
+              <m:mfrac>
+                <m:mrow>
+                  <m:mi>R</m:mi>
+                  <m:mo>+</m:mo>
+                  <m:mi>r</m:mi>
+                  <m:mo form="prefix">cos</m:mo>
+                  <m:mo>(</m:mo>
+                  <m:mi>t</m:mi>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mi>r</m:mi>
+              </m:mfrac>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <equation id="id93662">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:mi>b</m:mi>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>R</m:mi>
+                <m:mo>,</m:mo>
+                <m:mi>r</m:mi>
+                <m:mo>,</m:mo>
+                <m:mi>t</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>=</m:mo>
+              <m:mfrac>
+                <m:mi>r</m:mi>
+                <m:mrow>
+                  <m:mi>R</m:mi>
+                  <m:mo>+</m:mo>
+                  <m:mi>r</m:mi>
+                  <m:mo form="prefix">cos</m:mo>
+                  <m:mo>(</m:mo>
+                  <m:mi>t</m:mi>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+              </m:mfrac>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <equation id="id93715">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:mi>c</m:mi>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>R</m:mi>
+                <m:mo>,</m:mo>
+                <m:mi>r</m:mi>
+                <m:mo>,</m:mo>
+                <m:mi>t</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>=</m:mo>
+              <m:mfrac>
+                <m:mrow>
+                  <m:mn>2</m:mn>
+                  <m:msup>
+                    <m:mi>r</m:mi>
+                    <m:mn>2</m:mn>
+                  </m:msup>
+                  <m:mo>+</m:mo>
+                  <m:msup>
+                    <m:mi>R</m:mi>
+                    <m:mn>2</m:mn>
+                  </m:msup>
+                  <m:mo>+</m:mo>
+                  <m:mn>2</m:mn>
+                  <m:mi>r</m:mi>
+                  <m:mi>R</m:mi>
+                  <m:mo form="prefix">cos</m:mo>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:mi>t</m:mi>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                </m:mrow>
+                <m:mrow>
+                  <m:mn>2</m:mn>
+                  <m:mi>r</m:mi>
+                  <m:mo>(</m:mo>
+                  <m:mi>R</m:mi>
+                  <m:mo>+</m:mo>
+                  <m:mi>r</m:mi>
+                  <m:mo form="prefix">cos</m:mo>
+                  <m:mo>(</m:mo>
+                  <m:mi>t</m:mi>
+                  <m:mo>)</m:mo>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+              </m:mfrac>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <equation id="id93814">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:mover accent="true">
+                <m:mi>c</m:mi>
+                <m:mo>˜</m:mo>
+              </m:mover>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>R</m:mi>
+                <m:mo>,</m:mo>
+                <m:mi>r</m:mi>
+                <m:mo>,</m:mo>
+                <m:mi>t</m:mi>
+                <m:mo>,</m:mo>
+                <m:mi>ϕ</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>=</m:mo>
+              <m:mfrac>
+                <m:mrow>
+                  <m:mo>-</m:mo>
+                  <m:mi>R</m:mi>
+                  <m:mo>(</m:mo>
+                  <m:mi>R</m:mi>
+                  <m:mo>+</m:mo>
+                  <m:mn>2</m:mn>
+                  <m:mi>r</m:mi>
+                  <m:mo form="prefix">cos</m:mo>
+                  <m:mo>(</m:mo>
+                  <m:mi>t</m:mi>
+                  <m:mo>)</m:mo>
+                  <m:mo form="prefix">cos</m:mo>
+                  <m:mo>(</m:mo>
+                  <m:mn>2</m:mn>
+                  <m:mi>ϕ</m:mi>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mrow>
+                  <m:mn>2</m:mn>
+                  <m:mi>r</m:mi>
+                  <m:mo>(</m:mo>
+                  <m:mi>R</m:mi>
+                  <m:mo>+</m:mo>
+                  <m:mi>r</m:mi>
+                  <m:mo form="prefix">cos</m:mo>
+                  <m:mo>(</m:mo>
+                  <m:mi>t</m:mi>
+                  <m:mo>)</m:mo>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+              </m:mfrac>
+              <m:mo>.</m:mo>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id93926">Note that <m:math overflow="scroll"><m:mi>E</m:mi></m:math> does not equal 0 even when <m:math overflow="scroll"><m:mi>ϕ</m:mi></m:math> is constant.
+Thus, there is an “inherent energy” associated with the vector
+field on the torus:</para>
+        <equation id="id93949">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:mn>2</m:mn>
+              <m:mi>π</m:mi>
+              <m:msubsup>
+                <m:mo>∫</m:mo>
+                <m:mrow>
+                  <m:mn>0</m:mn>
+                </m:mrow>
+                <m:mrow>
+                  <m:mn>2</m:mn>
+                  <m:mi>π</m:mi>
+                </m:mrow>
+              </m:msubsup>
+              <m:mi>c</m:mi>
+              <m:mi>d</m:mi>
+              <m:mi>t</m:mi>
+              <m:mo>=</m:mo>
+              <m:mfrac>
+                <m:mrow>
+                  <m:mn>2</m:mn>
+                  <m:msup>
+                    <m:mi>π</m:mi>
+                    <m:mn>2</m:mn>
+                  </m:msup>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:mn>2</m:mn>
+                    <m:msup>
+                      <m:mi>r</m:mi>
+                      <m:mn>2</m:mn>
+                    </m:msup>
+                    <m:mo>+</m:mo>
+                    <m:mi>R</m:mi>
+                    <m:mrow>
+                      <m:mo>(</m:mo>
+                      <m:mo>-</m:mo>
+                      <m:mi>R</m:mi>
+                      <m:mo>+</m:mo>
+                      <m:mn>2</m:mn>
+                      <m:msqrt>
+                        <m:mrow>
+                          <m:msup>
+                            <m:mi>R</m:mi>
+                            <m:mn>2</m:mn>
+                          </m:msup>
+                          <m:mo>-</m:mo>
+                          <m:msup>
+                            <m:mi>r</m:mi>
+                            <m:mn>2</m:mn>
+                          </m:msup>
+                        </m:mrow>
+                      </m:msqrt>
+                      <m:mo>)</m:mo>
+                    </m:mrow>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                </m:mrow>
+                <m:mrow>
+                  <m:mi>r</m:mi>
+                  <m:msqrt>
+                    <m:mrow>
+                      <m:msup>
+                        <m:mi>R</m:mi>
+                        <m:mn>2</m:mn>
+                      </m:msup>
+                      <m:mo>-</m:mo>
+                      <m:msup>
+                        <m:mi>r</m:mi>
+                        <m:mn>2</m:mn>
+                      </m:msup>
+                    </m:mrow>
+                  </m:msqrt>
+                </m:mrow>
+              </m:mfrac>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id94075">Once again, we seek vector fields which minimize energy amongst all
+the unit tangent vector fields <m:math overflow="scroll"><m:mi>V</m:mi></m:math>. By the usual method, we determine
+the Euler-Lagrange equation on the torus to be</para>
+        <equation id="uid18">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:mi>α</m:mi>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>R</m:mi>
+                <m:mo>,</m:mo>
+                <m:mi>r</m:mi>
+                <m:mo>,</m:mo>
+                <m:mi>t</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:msub>
+                <m:mi>ϕ</m:mi>
+                <m:mrow>
+                  <m:mi>s</m:mi>
+                  <m:mi>s</m:mi>
+                </m:mrow>
+              </m:msub>
+              <m:mo>+</m:mo>
+              <m:mi>β</m:mi>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>R</m:mi>
+                <m:mo>,</m:mo>
+                <m:mi>r</m:mi>
+                <m:mo>,</m:mo>
+                <m:mi>t</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:msub>
+                <m:mi>ϕ</m:mi>
+                <m:mrow>
+                  <m:mi>t</m:mi>
+                  <m:mi>t</m:mi>
+                </m:mrow>
+              </m:msub>
+              <m:mo>+</m:mo>
+              <m:mi>γ</m:mi>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>R</m:mi>
+                <m:mo>,</m:mo>
+                <m:mi>r</m:mi>
+                <m:mo>,</m:mo>
+                <m:mi>t</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:msub>
+                <m:mi>ϕ</m:mi>
+                <m:mi>t</m:mi>
+              </m:msub>
+              <m:mo>+</m:mo>
+              <m:mi>κ</m:mi>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>R</m:mi>
+                <m:mo>,</m:mo>
+                <m:mi>r</m:mi>
+                <m:mo>,</m:mo>
+                <m:mi>t</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo form="prefix">sin</m:mo>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mn>2</m:mn>
+                <m:mi>ϕ</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>=</m:mo>
+              <m:mn>0</m:mn>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id94233">where</para>
+        <equation id="id94237">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:mi>α</m:mi>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>R</m:mi>
+                <m:mo>,</m:mo>
+                <m:mi>r</m:mi>
+                <m:mo>,</m:mo>
+                <m:mi>t</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>=</m:mo>
+              <m:mfrac>
+                <m:mrow>
+                  <m:mo>-</m:mo>
+                  <m:mn>2</m:mn>
+                  <m:mi>r</m:mi>
+                </m:mrow>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mi>R</m:mi>
+                  <m:mo>+</m:mo>
+                  <m:mi>r</m:mi>
+                  <m:mo form="prefix">cos</m:mo>
+                  <m:mo>(</m:mo>
+                  <m:mi>t</m:mi>
+                  <m:mo>)</m:mo>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+              </m:mfrac>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <equation id="id94299">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:mi>β</m:mi>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>R</m:mi>
+                <m:mo>,</m:mo>
+                <m:mi>r</m:mi>
+                <m:mo>,</m:mo>
+                <m:mi>t</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>=</m:mo>
+              <m:mfrac>
+                <m:mrow>
+                  <m:mo>-</m:mo>
+                  <m:mn>2</m:mn>
+                  <m:mo>(</m:mo>
+                  <m:mi>R</m:mi>
+                  <m:mo>+</m:mo>
+                  <m:mi>r</m:mi>
+                  <m:mo form="prefix">cos</m:mo>
+                  <m:mo>(</m:mo>
+                  <m:mi>t</m:mi>
+                  <m:mo>)</m:mo>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mi>r</m:mi>
+              </m:mfrac>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <equation id="id94361">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:mi>γ</m:mi>
+              <m:mo>(</m:mo>
+              <m:mi>t</m:mi>
+              <m:mo>)</m:mo>
+              <m:mo>=</m:mo>
+              <m:mn>4</m:mn>
+              <m:mo form="prefix">sin</m:mo>
+              <m:mo>(</m:mo>
+              <m:mi>t</m:mi>
+              <m:mo>)</m:mo>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <equation id="id94394">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:mi>κ</m:mi>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>R</m:mi>
+                <m:mo>,</m:mo>
+                <m:mi>r</m:mi>
+                <m:mo>,</m:mo>
+                <m:mi>t</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>=</m:mo>
+              <m:mfrac>
+                <m:mrow>
+                  <m:mi>R</m:mi>
+                  <m:mo>(</m:mo>
+                  <m:mi>R</m:mi>
+                  <m:mo>+</m:mo>
+                  <m:mn>2</m:mn>
+                  <m:mi>r</m:mi>
+                  <m:mo form="prefix">cos</m:mo>
+                  <m:mo>(</m:mo>
+                  <m:mi>t</m:mi>
+                  <m:mo>)</m:mo>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mrow>
+                  <m:mi>r</m:mi>
+                  <m:mo>(</m:mo>
+                  <m:mi>R</m:mi>
+                  <m:mo>+</m:mo>
+                  <m:mi>r</m:mi>
+                  <m:mo form="prefix">cos</m:mo>
+                  <m:mo>(</m:mo>
+                  <m:mi>t</m:mi>
+                  <m:mo>)</m:mo>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+              </m:mfrac>
+              <m:mo>.</m:mo>
+            </m:mrow>
+          </m:math>
+        </equation>
+      </section>
+      <section id="uid19">
+        <title>Minimizers</title>
+        <section id="uid20">
+          <title><m:math overflow="scroll"><m:mi>t</m:mi></m:math>-independence</title>
+          <para id="id94507">Consider a <m:math overflow="scroll"><m:mi>ϕ</m:mi></m:math> that depends solely on <m:math overflow="scroll"><m:mi>s</m:mi></m:math> and is thus independent
+of <m:math overflow="scroll"><m:mi>t</m:mi></m:math>. In this case, the Euler-Lagrange equation is</para>
+          <equation id="uid21">
+            <m:math overflow="scroll" mode="display">
+              <m:mrow>
+                <m:mi>α</m:mi>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mi>R</m:mi>
+                  <m:mo>,</m:mo>
+                  <m:mi>r</m:mi>
+                  <m:mo>,</m:mo>
+                  <m:mi>t</m:mi>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:msup>
+                  <m:mi>ϕ</m:mi>
+                  <m:mrow>
+                    <m:mo>'</m:mo>
+                    <m:mo>'</m:mo>
+                  </m:mrow>
+                </m:msup>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mi>s</m:mi>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mo>+</m:mo>
+                <m:mi>κ</m:mi>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mi>R</m:mi>
+                  <m:mo>,</m:mo>
+                  <m:mi>r</m:mi>
+                  <m:mo>,</m:mo>
+                  <m:mi>t</m:mi>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mo form="prefix">sin</m:mo>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mn>2</m:mn>
+                  <m:mi>ϕ</m:mi>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:mi>s</m:mi>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mo>=</m:mo>
+                <m:mn>0</m:mn>
+              </m:mrow>
+            </m:math>
+          </equation>
+          <equation id="id94635">
+            <m:math overflow="scroll" mode="display">
+              <m:mrow>
+                <m:mi>α</m:mi>
+                <m:msup>
+                  <m:mi>ϕ</m:mi>
+                  <m:mrow>
+                    <m:mo>'</m:mo>
+                    <m:mo>'</m:mo>
+                  </m:mrow>
+                </m:msup>
+                <m:msup>
+                  <m:mi>ϕ</m:mi>
+                  <m:mo>'</m:mo>
+                </m:msup>
+                <m:mo>+</m:mo>
+                <m:mi>κ</m:mi>
+                <m:msup>
+                  <m:mi>ϕ</m:mi>
+                  <m:mo>'</m:mo>
+                </m:msup>
+                <m:mo form="prefix">sin</m:mo>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mn>2</m:mn>
+                  <m:mi>ϕ</m:mi>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mo>=</m:mo>
+                <m:mn>0</m:mn>
+              </m:mrow>
+            </m:math>
+          </equation>
+          <equation id="id94698">
+            <m:math overflow="scroll" mode="display">
+              <m:mrow>
+                <m:msup>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:mfrac>
+                      <m:mi>α</m:mi>
+                      <m:mn>2</m:mn>
+                    </m:mfrac>
+                    <m:msup>
+                      <m:mrow>
+                        <m:mo>(</m:mo>
+                        <m:msup>
+                          <m:mi>ϕ</m:mi>
+                          <m:mo>'</m:mo>
+                        </m:msup>
+                        <m:mo>)</m:mo>
+                      </m:mrow>
+                      <m:mn>2</m:mn>
+                    </m:msup>
+                    <m:mo>-</m:mo>
+                    <m:mfrac>
+                      <m:mi>κ</m:mi>
+                      <m:mn>2</m:mn>
+                    </m:mfrac>
+                    <m:mo form="prefix">cos</m:mo>
+                    <m:mrow>
+                      <m:mo>(</m:mo>
+                      <m:mn>2</m:mn>
+                      <m:mi>ϕ</m:mi>
+                      <m:mo>)</m:mo>
+                    </m:mrow>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                  <m:mo>'</m:mo>
+                </m:msup>
+                <m:mo>=</m:mo>
+                <m:mn>0</m:mn>
+              </m:mrow>
+            </m:math>
+          </equation>
+          <equation id="id94771">
+            <m:math overflow="scroll" mode="display">
+              <m:mrow>
+                <m:mi>α</m:mi>
+                <m:msup>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:msup>
+                      <m:mi>ϕ</m:mi>
+                      <m:mo>'</m:mo>
+                    </m:msup>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                  <m:mn>2</m:mn>
+                </m:msup>
+                <m:mo>-</m:mo>
+                <m:mi>κ</m:mi>
+                <m:mo form="prefix">cos</m:mo>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mn>2</m:mn>
+                  <m:mi>ϕ</m:mi>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mo>=</m:mo>
+                <m:mn>2</m:mn>
+                <m:mi>c</m:mi>
+              </m:mrow>
+            </m:math>
+          </equation>
+          <equation id="id94827">
+            <m:math overflow="scroll" mode="display">
+              <m:mrow>
+                <m:msup>
+                  <m:mi>ϕ</m:mi>
+                  <m:mo>'</m:mo>
+                </m:msup>
+                <m:mo>=</m:mo>
+                <m:msqrt>
+                  <m:mrow>
+                    <m:mfrac>
+                      <m:mi>κ</m:mi>
+                      <m:mi>α</m:mi>
+                    </m:mfrac>
+                    <m:mo form="prefix">cos</m:mo>
+                    <m:mrow>
+                      <m:mo>(</m:mo>
+                      <m:mn>2</m:mn>
+                      <m:mi>ϕ</m:mi>
+                      <m:mo>)</m:mo>
+                    </m:mrow>
+                    <m:mo>+</m:mo>
+                    <m:msub>
+                      <m:mi>c</m:mi>
+                      <m:mn>1</m:mn>
+                    </m:msub>
+                    <m:mrow>
+                      <m:mo>(</m:mo>
+                      <m:mi>t</m:mi>
+                      <m:mo>)</m:mo>
+                    </m:mrow>
+                  </m:mrow>
+                </m:msqrt>
+                <m:mo>,</m:mo>
+                <m:mspace width="0.166667em"/>
+                <m:msub>
+                  <m:mi>c</m:mi>
+                  <m:mn>1</m:mn>
+                </m:msub>
+                <m:mo>=</m:mo>
+                <m:mfrac>
+                  <m:mrow>
+                    <m:mn>2</m:mn>
+                    <m:mi>c</m:mi>
+                  </m:mrow>
+                  <m:mi>α</m:mi>
+                </m:mfrac>
+              </m:mrow>
+            </m:math>
+          </equation>
+          <equation id="uid22">
+            <m:math overflow="scroll" mode="display">
+              <m:mrow>
+                <m:mo>∫</m:mo>
+                <m:mfrac>
+                  <m:mrow>
+                    <m:mi>d</m:mi>
+                    <m:mi>ϕ</m:mi>
+                  </m:mrow>
+                  <m:msqrt>
+                    <m:mrow>
+                      <m:msub>
+                        <m:mi>c</m:mi>
+                        <m:mn>1</m:mn>
+                      </m:msub>
+                      <m:mo>+</m:mo>
+                      <m:mfrac>
+                        <m:mi>κ</m:mi>
+                        <m:mi>α</m:mi>
+                      </m:mfrac>
+                      <m:mo form="prefix">cos</m:mo>
+                      <m:mrow>
+                        <m:mo>(</m:mo>
+                        <m:mn>2</m:mn>
+                        <m:mi>ϕ</m:mi>
+                        <m:mo>)</m:mo>
+                      </m:mrow>
+                    </m:mrow>
+                  </m:msqrt>
+                </m:mfrac>
+                <m:mo>=</m:mo>
+                <m:mo>∫</m:mo>
+                <m:mi>d</m:mi>
+                <m:mi>s</m:mi>
+                <m:mo>.</m:mo>
+              </m:mrow>
+            </m:math>
+          </equation>
+          <para id="id94980">Thus, as in the case of the cylinder, we compute an explicit expression
+for <m:math overflow="scroll"><m:mi>ϕ</m:mi></m:math>.</para>
+        </section>
+        <section id="uid23">
+          <title>Special Minimizers</title>
+          <para id="id95003">However, we note that the minimizing <m:math overflow="scroll"><m:mi>ϕ</m:mi></m:math> must independent both
+of<emphasis effect="italics"><m:math overflow="scroll"><m:mi>s</m:mi></m:math> and <m:math overflow="scroll"><m:mi>t</m:mi></m:math></emphasis> . When <m:math overflow="scroll"><m:mi>ϕ</m:mi></m:math> is constant, <m:math overflow="scroll"><m:mrow><m:msub><m:mi>ϕ</m:mi><m:mi>t</m:mi></m:msub><m:mo>=</m:mo><m:msub><m:mi>ϕ</m:mi><m:mi>s</m:mi></m:msub><m:mo>≡</m:mo><m:mn>0</m:mn></m:mrow></m:math>.
+In this case, the Euler-Lagrange equation is condensed to</para>
+          <equation id="uid24">
+            <m:math overflow="scroll" mode="display">
+              <m:mrow>
+                <m:mfrac>
+                  <m:mrow>
+                    <m:mi>R</m:mi>
+                    <m:mo>(</m:mo>
+                    <m:mi>R</m:mi>
+                    <m:mo>+</m:mo>
+                    <m:mn>2</m:mn>
+                    <m:mi>r</m:mi>
+                    <m:mo form="prefix">cos</m:mo>
+                    <m:mo>(</m:mo>
+                    <m:mi>t</m:mi>
+                    <m:mo>)</m:mo>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                  <m:mrow>
+                    <m:mi>r</m:mi>
+                    <m:mo>(</m:mo>
+                    <m:mi>R</m:mi>
+                    <m:mo>+</m:mo>
+                    <m:mi>r</m:mi>
+                    <m:mo form="prefix">cos</m:mo>
+                    <m:mo>(</m:mo>
+                    <m:mi>t</m:mi>
+                    <m:mo>)</m:mo>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                </m:mfrac>
+                <m:mo form="prefix">sin</m:mo>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mn>2</m:mn>
+                  <m:mi>ϕ</m:mi>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mo>=</m:mo>
+                <m:mn>0</m:mn>
+              </m:mrow>
+            </m:math>
+          </equation>
+          <para id="id95163">which implies that, since <m:math overflow="scroll"><m:mrow><m:mi>R</m:mi><m:mo>&gt;</m:mo><m:mi>r</m:mi><m:mo>&gt;</m:mo><m:mn>0</m:mn></m:mrow></m:math>, <m:math overflow="scroll"><m:mrow><m:mo form="prefix">sin</m:mo><m:mn>2</m:mn><m:mi>ϕ</m:mi><m:mo>=</m:mo><m:mn>0</m:mn></m:mrow></m:math>. This in turn
+implies that the minimizing<m:math overflow="scroll"><m:mrow><m:mi>ϕ</m:mi><m:mo>=</m:mo><m:mn>0</m:mn></m:mrow></m:math> or <m:math overflow="scroll"><m:mfrac><m:mi>π</m:mi><m:mn>2</m:mn></m:mfrac></m:math>.</para>
+          <para id="id95235">We note that <m:math overflow="scroll"><m:mrow><m:mi>E</m:mi><m:mrow><m:mo>(</m:mo><m:mn>0</m:mn><m:mo>)</m:mo></m:mrow><m:mo>=</m:mo><m:mfrac><m:mrow><m:mn>4</m:mn><m:msup><m:mi>π</m:mi><m:mn>2</m:mn></m:msup><m:mi>r</m:mi></m:mrow><m:msqrt><m:mrow><m:msup><m:mi>R</m:mi><m:mn>2</m:mn></m:msup><m:mo>-</m:mo><m:msup><m:mi>r</m:mi><m:mn>2</m:mn></m:msup></m:mrow></m:msqrt></m:mfrac></m:mrow></m:math> and <m:math overflow="scroll"><m:mrow><m:mi>E</m:mi><m:mrow><m:mo>(</m:mo><m:mfrac><m:mi>π</m:mi><m:mn>2</m:mn></m:mfrac><m:mo>)</m:mo></m:mrow><m:mo>=</m:mo><m:mfrac><m:mrow><m:mo>-</m:mo><m:mn>4</m:mn><m:msup><m:mi>π</m:mi><m:mn>2</m:mn></m:msup><m:mrow><m:mo>(</m:mo><m:mo>-</m:mo><m:mn>2</m:mn><m:mi>R</m:mi><m:mo>+</m:mo><m:msqrt><m:mrow><m:msup><m:mi>R</m:mi><m:mn>2</m:mn></m:msup><m:mo>-</m:mo><m:msup><m:mi>r</m:mi><m:mn>2</m:mn></m:msup></m:mrow></m:msqrt><m:mo>)</m:mo></m:mrow></m:mrow><m:mi>r</m:mi></m:mfrac></m:mrow></m:math>.
+Thus, the relationship between <m:math overflow="scroll"><m:mrow><m:mi>E</m:mi><m:mo>(</m:mo><m:mn>0</m:mn><m:mo>)</m:mo></m:mrow></m:math> and <m:math overflow="scroll"><m:mrow><m:mi>E</m:mi><m:mo>(</m:mo><m:mfrac><m:mi>π</m:mi><m:mn>2</m:mn></m:mfrac><m:mo>)</m:mo></m:mrow></m:math> depends
+upon the relationship between <m:math overflow="scroll"><m:mi>r</m:mi></m:math> and <m:math overflow="scroll"><m:mi>R</m:mi></m:math>.</para>
+          <para id="id95421">The inequality <m:math overflow="scroll"><m:mrow><m:mi>E</m:mi><m:mrow><m:mo>(</m:mo><m:mn>0</m:mn><m:mo>)</m:mo></m:mrow><m:mo>&lt;</m:mo><m:mi>E</m:mi><m:mrow><m:mo>(</m:mo><m:mfrac><m:mi>π</m:mi><m:mn>2</m:mn></m:mfrac><m:mo>)</m:mo></m:mrow></m:mrow></m:math> , written equivalently</para>
+          <equation id="uid25">
+            <m:math overflow="scroll" mode="display">
+              <m:mrow>
+                <m:mfrac>
+                  <m:mrow>
+                    <m:mn>4</m:mn>
+                    <m:msup>
+                      <m:mi>π</m:mi>
+                      <m:mn>2</m:mn>
+                    </m:msup>
+                    <m:mi>r</m:mi>
+                  </m:mrow>
+                  <m:msqrt>
+                    <m:mrow>
+                      <m:msup>
+                        <m:mi>R</m:mi>
+                        <m:mn>2</m:mn>
+                      </m:msup>
+                      <m:mo>-</m:mo>
+                      <m:msup>
+                        <m:mi>r</m:mi>
+                        <m:mn>2</m:mn>
+                      </m:msup>
+                    </m:mrow>
+                  </m:msqrt>
+                </m:mfrac>
+                <m:mo>&lt;</m:mo>
+                <m:mfrac>
+                  <m:mrow>
+                    <m:mo>-</m:mo>
+                    <m:mn>4</m:mn>
+                    <m:msup>
+                      <m:mi>π</m:mi>
+                      <m:mn>2</m:mn>
+                    </m:msup>
+                    <m:mrow>
+                      <m:mo>(</m:mo>
+                      <m:mo>-</m:mo>
+                      <m:mn>2</m:mn>
+                      <m:mi>R</m:mi>
+                      <m:mo>+</m:mo>
+                      <m:msqrt>
+                        <m:mrow>
+                          <m:msup>
+                            <m:mi>R</m:mi>
+                            <m:mn>2</m:mn>
+                          </m:msup>
+                          <m:mo>-</m:mo>
+                          <m:msup>
+                            <m:mi>r</m:mi>
+                            <m:mn>2</m:mn>
+                          </m:msup>
+                        </m:mrow>
+                      </m:msqrt>
+                      <m:mo>)</m:mo>
+                    </m:mrow>
+                  </m:mrow>
+                  <m:mi>r</m:mi>
+                </m:mfrac>
+                <m:mo>,</m:mo>
+              </m:mrow>
+            </m:math>
+          </equation>
+          <para id="id95561">is true when <m:math overflow="scroll"><m:mrow><m:mi>r</m:mi><m:mo>&lt;</m:mo><m:mfrac><m:msqrt><m:mn>3</m:mn></m:msqrt><m:mn>2</m:mn></m:mfrac><m:mi>R</m:mi><m:mo>&lt;</m:mo><m:mi>R</m:mi></m:mrow></m:math>. In turn, <m:math overflow="scroll"><m:mrow><m:mi>E</m:mi><m:mrow><m:mo>(</m:mo><m:mn>0</m:mn><m:mo>)</m:mo></m:mrow><m:mo>&gt;</m:mo><m:mi>E</m:mi><m:mrow><m:mo>(</m:mo><m:mfrac><m:mi>π</m:mi><m:mn>2</m:mn></m:mfrac><m:mo>)</m:mo></m:mrow></m:mrow></m:math>
+when <m:math overflow="scroll"><m:mrow><m:mfrac><m:msqrt><m:mn>3</m:mn></m:msqrt><m:mn>2</m:mn></m:mfrac><m:mi>R</m:mi><m:mo>&lt;</m:mo><m:mi>r</m:mi><m:mo>&lt;</m:mo><m:mi>R</m:mi></m:mrow></m:math>. Notice <m:math overflow="scroll"><m:mrow><m:mo>∫</m:mo><m:mover accent="true"><m:mi>c</m:mi><m:mo>˜</m:mo></m:mover><m:mi>d</m:mi><m:mi>t</m:mi><m:mo>=</m:mo><m:mfrac><m:mrow><m:mi>π</m:mi><m:mi>r</m:mi><m:mrow><m:mo>(</m:mo><m:mo>-</m:mo><m:mn>2</m:mn><m:mo>+</m:mo><m:mfrac><m:mi>R</m:mi><m:msqrt><m:mrow><m:msup><m:mi>R</m:mi><m:mn>2</m:mn></m:msup><m:mo>-</m:mo><m:msup><m:mi>r</m:mi><m:mn>2</m:mn></m:msup></m:mrow></m:msqrt></m:mfrac><m:mo>)</m:mo></m:mrow><m:mo form="prefix">cos</m:mo><m:mrow><m:mo>(</m:mo><m:mn>2</m:mn><m:mi>ϕ</m:mi><m:mo>)</m:mo></m:mrow></m:mrow><m:mi>r</m:mi></m:mfrac></m:mrow></m:math>
+(when <m:math overflow="scroll"><m:mi>ϕ</m:mi></m:math> is independent of <m:math overflow="scroll"><m:mrow><m:mi>s</m:mi><m:mo>,</m:mo><m:mi>t</m:mi></m:mrow></m:math>) vanishes when <m:math overflow="scroll"><m:mrow><m:mi>r</m:mi><m:mo>=</m:mo><m:mfrac><m:msqrt><m:mn>3</m:mn></m:msqrt><m:mn>2</m:mn></m:mfrac><m:mi>R</m:mi></m:mrow></m:math>.
+This implies that when <m:math overflow="scroll"><m:mrow><m:mi>r</m:mi><m:mo>=</m:mo><m:mfrac><m:msqrt><m:mn>3</m:mn></m:msqrt><m:mn>2</m:mn></m:mfrac><m:mi>R</m:mi></m:mrow></m:math> , <emphasis effect="italics">any constant
+<m:math overflow="scroll"><m:mi>ϕ</m:mi></m:math> has equal energy</emphasis>.</para>
+        </section>
+        <section id="uid26">
+          <title>Limits and ratios of radii</title>
+          <para id="id95827">We may continue this investigation of the effect of the torus' radii
+upon the associated energy. We may choose a few promising limits and
+survey the resulting limits of energy.</para>
+          <table id="id95832" summary="">
+            <tgroup cols="3">
+              <tbody>
+                <row>
+                  <entry/>
+                  <entry>
+                    <m:math overflow="scroll">
+                      <m:mrow>
+                        <m:mi>E</m:mi>
+                        <m:mo>(</m:mo>
+                        <m:mn>0</m:mn>
+                        <m:mo>)</m:mo>
+                      </m:mrow>
+                    </m:math>
+                  </entry>
+                  <entry>
+                    <m:math overflow="scroll">
+                      <m:mrow>
+                        <m:mi>E</m:mi>
+                        <m:mo>(</m:mo>
+                        <m:mfrac>
+                          <m:mi>π</m:mi>
+                          <m:mn>2</m:mn>
+                        </m:mfrac>
+                        <m:mo>)</m:mo>
+                      </m:mrow>
+                    </m:math>
+                  </entry>
+                </row>
+                <row>
+                  <entry>
+                    <m:math overflow="scroll">
+                      <m:mrow>
+                        <m:mi>R</m:mi>
+                        <m:mo>→</m:mo>
+                        <m:mi>∞</m:mi>
+                      </m:mrow>
+                    </m:math>
+                  </entry>
+                  <entry>0</entry>
+                  <entry>
+                    <m:math overflow="scroll">
+                      <m:mi>∞</m:mi>
+                    </m:math>
+                  </entry>
+                </row>
+                <row>
+                  <entry>
+                    <m:math overflow="scroll">
+                      <m:mrow>
+                        <m:mi>r</m:mi>
+                        <m:mo>→</m:mo>
+                        <m:mi>R</m:mi>
+                      </m:mrow>
+                    </m:math>
+                  </entry>
+                  <entry>
+                    <m:math overflow="scroll">
+                      <m:mi>∞</m:mi>
+                    </m:math>
+                  </entry>
+                  <entry>
+                    <m:math overflow="scroll">
+                      <m:mrow>
+                        <m:mn>8</m:mn>
+                        <m:msup>
+                          <m:mi>π</m:mi>
+                          <m:mn>2</m:mn>
+                        </m:msup>
+                      </m:mrow>
+                    </m:math>
+                  </entry>
+                </row>
+                <row>
+                  <entry>
+                    <m:math overflow="scroll">
+                      <m:mrow>
+                        <m:mi>r</m:mi>
+                        <m:mo>→</m:mo>
+                        <m:mn>0</m:mn>
+                      </m:mrow>
+                    </m:math>
+                  </entry>
+                  <entry>0</entry>
+                  <entry>
+                    <m:math overflow="scroll">
+                      <m:mi>∞</m:mi>
+                    </m:math>
+                  </entry>
+                </row>
+              </tbody>
+            </tgroup>
+          </table>
+        </section>
+        <section id="uid27">
+          <title><m:math overflow="scroll"><m:mi>s</m:mi></m:math>-independence</title>
+          <para id="id96075">Let a torus <m:math overflow="scroll"><m:mrow><m:mi>Φ</m:mi><m:mo>(</m:mo><m:mi>s</m:mi><m:mo>,</m:mo><m:mi>t</m:mi><m:mo>)</m:mo><m:mo>=</m:mo><m:mo>(</m:mo><m:mo form="prefix">cos</m:mo><m:mo>(</m:mo><m:mi>s</m:mi><m:mo>)</m:mo><m:mo>(</m:mo><m:mi>R</m:mi><m:mo>+</m:mo><m:mi>r</m:mi><m:mo form="prefix">cos</m:mo><m:mo>(</m:mo><m:mi>t</m:mi><m:mo>)</m:mo><m:mo>)</m:mo><m:mo>,</m:mo><m:mo form="prefix">sin</m:mo><m:mo>(</m:mo><m:mi>s</m:mi><m:mo>)</m:mo><m:mo>(</m:mo><m:mi>R</m:mi><m:mo>+</m:mo><m:mi>r</m:mi><m:mo form="prefix">cos</m:mo><m:mo>(</m:mo><m:mi>t</m:mi><m:mo>)</m:mo><m:mo>)</m:mo><m:mo>,</m:mo><m:mi>r</m:mi><m:mo form="prefix">sin</m:mo><m:mo>(</m:mo><m:mi>t</m:mi><m:mo>)</m:mo><m:mo>)</m:mo><m:mo>,</m:mo></m:mrow></m:math> with <m:math overflow="scroll"><m:mrow><m:mn>0</m:mn><m:mo>≤</m:mo><m:mi>s</m:mi><m:mo>,</m:mo><m:mi>r</m:mi><m:mo>≤</m:mo><m:mn>2</m:mn><m:mi>π</m:mi><m:mo>,</m:mo><m:mspace width="0.166667em"/><m:mi>R</m:mi><m:mo>&gt;</m:mo><m:mi>r</m:mi><m:mo>&gt;</m:mo><m:mn>0</m:mn></m:mrow></m:math>
+be given.</para>
+        </section>
+        <section id="id96232">
+          <title>Theorem 2</title>
+          <para id="id96239">The function <m:math overflow="scroll"><m:mrow><m:mi>ϕ</m:mi><m:mo>(</m:mo><m:mi>s</m:mi><m:mo>,</m:mo><m:mi>t</m:mi><m:mo>)</m:mo></m:mrow></m:math> which minimizes energy does not depend
+on <m:math overflow="scroll"><m:mi>s</m:mi></m:math>.</para>
+        </section>
+        <section id="id96274">
+          <title>Proof:</title>
+          <para id="id96281">Let</para>
+          <equation id="uid28">
+            <m:math overflow="scroll" mode="display">
+              <m:mrow>
+                <m:mi>g</m:mi>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mi>s</m:mi>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mo>=</m:mo>
+                <m:msubsup>
+                  <m:mo>∫</m:mo>
+                  <m:mrow>
+                    <m:mn>0</m:mn>
+                  </m:mrow>
+                  <m:mrow>
+                    <m:mn>2</m:mn>
+                    <m:mi>π</m:mi>
+                  </m:mrow>
+                </m:msubsup>
+                <m:mi>a</m:mi>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mi>R</m:mi>
+                  <m:mo>,</m:mo>
+                  <m:mi>r</m:mi>
+                  <m:mo>,</m:mo>
+                  <m:mi>t</m:mi>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:msubsup>
+                  <m:mi>ϕ</m:mi>
+                  <m:mrow>
+                    <m:mi>t</m:mi>
+                  </m:mrow>
+                  <m:mn>2</m:mn>
+                </m:msubsup>
+                <m:mo>+</m:mo>
+                <m:mi>c</m:mi>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mi>R</m:mi>
+                  <m:mo>,</m:mo>
+                  <m:mi>r</m:mi>
+                  <m:mo>,</m:mo>
+                  <m:mi>t</m:mi>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mo>+</m:mo>
+                <m:mover accent="true">
+                  <m:mi>c</m:mi>
+                  <m:mo>˜</m:mo>
+                </m:mover>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mi>R</m:mi>
+                  <m:mo>,</m:mo>
+                  <m:mi>r</m:mi>
+                  <m:mo>,</m:mo>
+                  <m:mi>t</m:mi>
+                  <m:mo>,</m:mo>
+                  <m:mi>ϕ</m:mi>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:mi>s</m:mi>
+                    <m:mo>,</m:mo>
+                    <m:mi>t</m:mi>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mi>d</m:mi>
+                <m:mi>t</m:mi>
+              </m:mrow>
+            </m:math>
+          </equation>
+          <para id="id96422">
+            <m:math overflow="scroll">
+              <m:mrow>
+                <m:mi>s</m:mi>
+                <m:mo>∈</m:mo>
+                <m:mo>[</m:mo>
+                <m:mn>0</m:mn>
+                <m:mo>,</m:mo>
+                <m:mn>2</m:mn>
+                <m:mi>π</m:mi>
+                <m:mo>]</m:mo>
+              </m:mrow>
+            </m:math>
+          </para>
+          <para id="id96449">By compactness, <m:math overflow="scroll"><m:mrow><m:mi>g</m:mi><m:mo>(</m:mo><m:mi>s</m:mi><m:mo>)</m:mo></m:mrow></m:math> assumes a minimum at some <m:math overflow="scroll"><m:mrow><m:mi>s</m:mi><m:mo>=</m:mo><m:msub><m:mi>s</m:mi><m:mn>0</m:mn></m:msub></m:mrow></m:math>.</para>
+          <equation id="id96488">
+            <m:math overflow="scroll" mode="display">
+              <m:mrow>
+                <m:mi>E</m:mi>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mi>ϕ</m:mi>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:mi>s</m:mi>
+                    <m:mo>,</m:mo>
+                    <m:mi>t</m:mi>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mo>-</m:mo>
+                <m:mi>E</m:mi>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mi>ϕ</m:mi>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:msub>
+                      <m:mi>s</m:mi>
+                      <m:mn>0</m:mn>
+                    </m:msub>
+                    <m:mo>,</m:mo>
+                    <m:mi>t</m:mi>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mo>=</m:mo>
+              </m:mrow>
+            </m:math>
+          </equation>
+          <equation id="id96550">
+            <m:math overflow="scroll" mode="display">
+              <m:mrow>
+                <m:msubsup>
+                  <m:mo>∫</m:mo>
+                  <m:mrow>
+                    <m:mn>0</m:mn>
+                  </m:mrow>
+                  <m:mrow>
+                    <m:mn>2</m:mn>
+                    <m:mi>π</m:mi>
+                  </m:mrow>
+                </m:msubsup>
+                <m:mo>[</m:mo>
+                <m:mfenced separators="" open="(" close=")">
+                  <m:msubsup>
+                    <m:mo>∫</m:mo>
+                    <m:mrow>
+                      <m:mn>0</m:mn>
+                    </m:mrow>
+                    <m:mrow>
+                      <m:mn>2</m:mn>
+                      <m:mi>π</m:mi>
+                    </m:mrow>
+                  </m:msubsup>
+                  <m:mi>a</m:mi>
+                  <m:msup>
+                    <m:mrow>
+                      <m:mo>(</m:mo>
+                      <m:mi>R</m:mi>
+                      <m:mo>,</m:mo>
+                      <m:mi>r</m:mi>
+                      <m:mo>,</m:mo>
+                      <m:mi>t</m:mi>
+                      <m:mo>)</m:mo>
+                    </m:mrow>
+                    <m:mn>2</m:mn>
+                  </m:msup>
+                  <m:msub>
+                    <m:mi>ϕ</m:mi>
+                    <m:mi>t</m:mi>
+                  </m:msub>
+                  <m:msup>
+                    <m:mrow>
+                      <m:mo>(</m:mo>
+                      <m:mi>s</m:mi>
+                      <m:mo>,</m:mo>
+                      <m:mi>t</m:mi>
+                      <m:mo>)</m:mo>
+                    </m:mrow>
+                    <m:mn>2</m:mn>
+                  </m:msup>
+                  <m:mo>+</m:mo>
+                  <m:mi>c</m:mi>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:mi>R</m:mi>
+                    <m:mo>,</m:mo>
+                    <m:mi>r</m:mi>
+                    <m:mo>,</m:mo>
+                    <m:mi>t</m:mi>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                  <m:mo>+</m:mo>
+                  <m:mover accent="true">
+                    <m:mi>c</m:mi>
+                    <m:mo>˜</m:mo>
+                  </m:mover>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:mi>R</m:mi>
+                    <m:mo>,</m:mo>
+                    <m:mi>r</m:mi>
+                    <m:mo>,</m:mo>
+                    <m:mi>t</m:mi>
+                    <m:mo>,</m:mo>
+                    <m:mi>ϕ</m:mi>
+                    <m:mrow>
+                      <m:mo>(</m:mo>
+                      <m:mi>s</m:mi>
+                      <m:mo>,</m:mo>
+                      <m:mi>t</m:mi>
+                      <m:mo>)</m:mo>
+                    </m:mrow>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                  <m:mi>d</m:mi>
+                  <m:mi>t</m:mi>
+                </m:mfenced>
+              </m:mrow>
+            </m:math>
+          </equation>
+          <equation id="id96716">
+            <m:math overflow="scroll" mode="display">
+              <m:mrow>
+                <m:mo>-</m:mo>
+                <m:mfenced separators="" open="(" close=")">
+                  <m:msubsup>
+                    <m:mo>∫</m:mo>
+                    <m:mrow>
+                      <m:mn>0</m:mn>
+                    </m:mrow>
+                    <m:mrow>
+                      <m:mn>2</m:mn>
+                      <m:mi>π</m:mi>
+                    </m:mrow>
+                  </m:msubsup>
+                  <m:mi>a</m:mi>
+                  <m:msup>
+                    <m:mrow>
+                      <m:mo>(</m:mo>
+                      <m:mi>R</m:mi>
+                      <m:mo>,</m:mo>
+                      <m:mi>r</m:mi>
+                      <m:mo>,</m:mo>
+                      <m:mi>t</m:mi>
+                      <m:mo>)</m:mo>
+                    </m:mrow>
+                    <m:mn>2</m:mn>
+                  </m:msup>
+                  <m:msub>
+                    <m:mi>ϕ</m:mi>
+                    <m:mi>t</m:mi>
+                  </m:msub>
+                  <m:msup>
+                    <m:mrow>
+                      <m:mo>(</m:mo>
+                      <m:msub>
+                        <m:mi>s</m:mi>
+                        <m:mn>0</m:mn>
+                      </m:msub>
+                      <m:mo>,</m:mo>
+                      <m:mi>t</m:mi>
+                      <m:mo>)</m:mo>
+                    </m:mrow>
+                    <m:mn>2</m:mn>
+                  </m:msup>
+                  <m:mo>+</m:mo>
+                  <m:mi>c</m:mi>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:mi>R</m:mi>
+                    <m:mo>,</m:mo>
+                    <m:mi>r</m:mi>
+                    <m:mo>,</m:mo>
+                    <m:mi>t</m:mi>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                  <m:mo>+</m:mo>
+                  <m:mover accent="true">
+                    <m:mi>c</m:mi>
+                    <m:mo>˜</m:mo>
+                  </m:mover>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:mi>R</m:mi>
+                    <m:mo>,</m:mo>
+                    <m:mi>r</m:mi>
+                    <m:mo>,</m:mo>
+                    <m:mi>t</m:mi>
+                    <m:mo>,</m:mo>
+                    <m:mi>ϕ</m:mi>
+                    <m:mrow>
+                      <m:mo>(</m:mo>
+                      <m:msub>
+                        <m:mi>s</m:mi>
+                        <m:mn>0</m:mn>
+                      </m:msub>
+                      <m:mo>,</m:mo>
+                      <m:mi>t</m:mi>
+                      <m:mo>)</m:mo>
+                    </m:mrow>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                  <m:mi>d</m:mi>
+                  <m:mi>t</m:mi>
+                </m:mfenced>
+              </m:mrow>
+            </m:math>
+          </equation>
+          <equation id="uid29">
+            <m:math overflow="scroll" mode="display">
+              <m:mrow>
+                <m:mo>+</m:mo>
+                <m:mfenced separators="" open="(" close=")">
+                  <m:msubsup>
+                    <m:mo>∫</m:mo>
+                    <m:mrow>
+                      <m:mn>0</m:mn>
+                    </m:mrow>
+                    <m:mrow>
+                      <m:mn>2</m:mn>
+                      <m:mi>π</m:mi>
+                    </m:mrow>
+                  </m:msubsup>
+                  <m:mi>b</m:mi>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:mi>R</m:mi>
+                    <m:mo>,</m:mo>
+                    <m:mi>r</m:mi>
+                    <m:mo>,</m:mo>
+                    <m:mi>t</m:mi>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                  <m:msub>
+                    <m:mi>ϕ</m:mi>
+                    <m:mi>s</m:mi>
+                  </m:msub>
+                  <m:msup>
+                    <m:mrow>
+                      <m:mo>(</m:mo>
+                      <m:mi>s</m:mi>
+                      <m:mo>,</m:mo>
+                      <m:mi>t</m:mi>
+                      <m:mo>)</m:mo>
+                    </m:mrow>
+                    <m:mn>2</m:mn>
+                  </m:msup>
+                  <m:mi>d</m:mi>
+                  <m:mi>t</m:mi>
+                </m:mfenced>
+                <m:mo>]</m:mo>
+                <m:mi>d</m:mi>
+                <m:mi>s</m:mi>
+                <m:mo>&gt;</m:mo>
+                <m:mn>0</m:mn>
+                <m:mo>.</m:mo>
+              </m:mrow>
+            </m:math>
+          </equation>
+          <para id="id96976">Therefore, <m:math overflow="scroll"><m:mi>s</m:mi></m:math>-independent unit vector fields have a lower energy
+on the torus than any unit vector field that depends on <m:math overflow="scroll"><m:mi>s</m:mi></m:math>.</para>
+        </section>
+      </section>
+      <section id="uid30">
+        <title>Second variation</title>
+        <para id="id97008">We now examine the stability of the proposed minima <m:math overflow="scroll"><m:mrow><m:mi>ϕ</m:mi><m:mo>=</m:mo><m:mn>0</m:mn></m:mrow></m:math> and
+<m:math overflow="scroll"><m:mrow><m:mi>ϕ</m:mi><m:mo>=</m:mo><m:mfrac><m:mi>π</m:mi><m:mn>2</m:mn></m:mfrac></m:mrow></m:math>. We do so by examining the second variation
+by way of the Euler-Lagrange equation.</para>
+        <equation id="id97046">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:msup>
+                <m:mi>J</m:mi>
+                <m:mrow>
+                  <m:mo>'</m:mo>
+                  <m:mo>'</m:mo>
+                </m:mrow>
+              </m:msup>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mn>0</m:mn>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>=</m:mo>
+              <m:msubsup>
+                <m:mo>∫</m:mo>
+                <m:mrow>
+                  <m:mn>0</m:mn>
+                </m:mrow>
+                <m:mrow>
+                  <m:mn>2</m:mn>
+                  <m:mi>π</m:mi>
+                </m:mrow>
+              </m:msubsup>
+              <m:msubsup>
+                <m:mo>∫</m:mo>
+                <m:mrow>
+                  <m:mn>0</m:mn>
+                </m:mrow>
+                <m:mrow>
+                  <m:mn>2</m:mn>
+                  <m:mi>π</m:mi>
+                </m:mrow>
+              </m:msubsup>
+              <m:mfrac>
+                <m:mn>2</m:mn>
+                <m:mrow>
+                  <m:mi>r</m:mi>
+                  <m:mo>(</m:mo>
+                  <m:mi>R</m:mi>
+                  <m:mo>+</m:mo>
+                  <m:mi>r</m:mi>
+                  <m:mi>c</m:mi>
+                  <m:mi>o</m:mi>
+                  <m:mi>s</m:mi>
+                  <m:mo>(</m:mo>
+                  <m:mi>t</m:mi>
+                  <m:mo>)</m:mo>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+              </m:mfrac>
+              <m:mo>[</m:mo>
+              <m:msup>
+                <m:mi>η</m:mi>
+                <m:mn>2</m:mn>
+              </m:msup>
+              <m:mo form="prefix">cos</m:mo>
+              <m:mn>2</m:mn>
+              <m:mi>ϕ</m:mi>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:msup>
+                  <m:mi>R</m:mi>
+                  <m:mn>2</m:mn>
+                </m:msup>
+                <m:mo>+</m:mo>
+                <m:mn>2</m:mn>
+                <m:mi>R</m:mi>
+                <m:mi>r</m:mi>
+                <m:mo form="prefix">cos</m:mo>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mi>t</m:mi>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mo>)</m:mo>
+              </m:mrow>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <equation id="uid31">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:mo>+</m:mo>
+              <m:msubsup>
+                <m:mi>η</m:mi>
+                <m:mrow>
+                  <m:mi>t</m:mi>
+                </m:mrow>
+                <m:mn>2</m:mn>
+              </m:msubsup>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>R</m:mi>
+                <m:mo>+</m:mo>
+                <m:mi>r</m:mi>
+                <m:mo form="prefix">cos</m:mo>
+                <m:msup>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:mi>t</m:mi>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                  <m:mn>2</m:mn>
+                </m:msup>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>+</m:mo>
+              <m:msubsup>
+                <m:mi>η</m:mi>
+                <m:mrow>
+                  <m:mi>s</m:mi>
+                </m:mrow>
+                <m:mn>2</m:mn>
+              </m:msubsup>
+              <m:msup>
+                <m:mi>r</m:mi>
+                <m:mn>2</m:mn>
+              </m:msup>
+              <m:mo>]</m:mo>
+              <m:mspace width="4pt"/>
+              <m:mi>d</m:mi>
+              <m:mi>s</m:mi>
+              <m:mi>d</m:mi>
+              <m:mi>t</m:mi>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id97283"><m:math overflow="scroll"><m:mrow><m:mi>ϕ</m:mi><m:mo>≡</m:mo><m:mn>0</m:mn></m:mrow></m:math> is clearly a stable minimum when <m:math overflow="scroll"><m:mrow><m:mi>R</m:mi><m:mo>≥</m:mo><m:mn>2</m:mn><m:mi>r</m:mi></m:mrow></m:math>. When
+<m:math overflow="scroll"><m:mrow><m:mo>∫</m:mo><m:mo>∫</m:mo><m:mfrac><m:mn>2</m:mn><m:mrow><m:mi>r</m:mi><m:mo>(</m:mo><m:mi>R</m:mi><m:mo>+</m:mo><m:mi>r</m:mi><m:mo form="prefix">cos</m:mo><m:mo>(</m:mo><m:mi>t</m:mi><m:mo>)</m:mo><m:mo>)</m:mo></m:mrow></m:mfrac><m:mrow><m:mo>[</m:mo></m:mrow><m:msup><m:mi>η</m:mi><m:mn>2</m:mn></m:msup><m:mrow><m:mo>(</m:mo><m:msup><m:mi>R</m:mi><m:mn>2</m:mn></m:msup><m:mo>+</m:mo><m:mn>2</m:mn><m:mi>r</m:mi><m:mi>R</m:mi><m:mo form="prefix">cos</m:mo><m:mrow><m:mo>(</m:mo><m:mi>t</m:mi><m:mo>)</m:mo></m:mrow><m:mo>]</m:mo></m:mrow><m:mo>&lt;</m:mo><m:mfrac><m:mn>2</m:mn><m:mrow><m:mi>r</m:mi><m:mo>(</m:mo><m:mi>R</m:mi><m:mo>+</m:mo><m:mi>r</m:mi><m:mo form="prefix">cos</m:mo><m:mo>(</m:mo><m:mi>t</m:mi><m:mo>)</m:mo><m:mo>)</m:mo></m:mrow></m:mfrac><m:mrow><m:mo>[</m:mo><m:msubsup><m:mi>η</m:mi><m:mrow><m:mi>t</m:mi></m:mrow><m:mn>2</m:mn></m:msubsup><m:msup><m:mrow><m:mo>(</m:mo><m:mi>R</m:mi><m:mo>+</m:mo><m:mi>r</m:mi><m:mo form="prefix">cos</m:mo><m:mrow><m:mo>(</m:mo><m:mi>t</m:mi><m:mo>)</m:mo></m:mrow><m:mo>)</m:mo></m:mrow><m:mn>2</m:mn></m:msup><m:mo>+</m:mo><m:msubsup><m:mi>η</m:mi><m:mrow><m:mi>s</m:mi></m:mrow><m:mn>2</m:mn></m:msubsup><m:msup><m:mi>r</m:mi><m:mn>2</m:mn></m:msup><m:mo>]</m:mo></m:mrow></m:mrow></m:math>,
+<m:math overflow="scroll"><m:mrow><m:mi>ϕ</m:mi><m:mo>=</m:mo><m:mfrac><m:mi>π</m:mi><m:mn>2</m:mn></m:mfrac></m:mrow></m:math> is a stable minimum. More investigation on
+this last condition is a likely candidate for future work.</para>
+      </section>
+    </section>
+    <section id="cid4">
+      <title>Future Work</title>
+      <section id="uid32">
+        <title>General Surfaces of Revolution</title>
+        <para id="id97541">Although we focused our work largely on the torus and cylinder, we
+also began treating general surfaces of revolution. In doing so, we
+encountered several problems. First, we notice that any surface parametrized
+by <m:math overflow="scroll"><m:mrow><m:mi>Φ</m:mi><m:mo>(</m:mo><m:mi>x</m:mi><m:mo>,</m:mo><m:mi>y</m:mi><m:mo>)</m:mo><m:mo>=</m:mo><m:mo>(</m:mo><m:mi>x</m:mi><m:mo>,</m:mo><m:mi>y</m:mi><m:mo>,</m:mo><m:mi>g</m:mi><m:mo>(</m:mo><m:mi>x</m:mi><m:mo>,</m:mo><m:mi>y</m:mi><m:mo>)</m:mo><m:mo>)</m:mo></m:mrow></m:math> is difficult to work with due to the
+fact that using the Gram-Schmidt method to arrive at an expression
+for energy becomes unwieldy.</para>
+        <para id="id97597">A parametrization <m:math overflow="scroll"><m:mrow><m:mi>Φ</m:mi><m:mo>(</m:mo><m:mi>x</m:mi><m:mo>,</m:mo><m:mi>y</m:mi><m:mo>)</m:mo><m:mo>=</m:mo><m:mo>(</m:mo><m:mi>x</m:mi><m:mo>,</m:mo><m:mi>y</m:mi><m:mo>,</m:mo><m:mi>g</m:mi><m:mo>(</m:mo><m:mi>y</m:mi><m:mo>)</m:mo><m:mo>)</m:mo></m:mrow></m:math>is much easier to work with
+(<m:math overflow="scroll"><m:msub><m:mi>Φ</m:mi><m:mi>x</m:mi></m:msub></m:math> and <m:math overflow="scroll"><m:msub><m:mi>Φ</m:mi><m:mi>y</m:mi></m:msub></m:math> are, in fact, orthonormal), but defining
+boundary condtions becomes difficult. Parametrizing the surface as</para>
+        <equation id="uid33">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:mi>Φ</m:mi>
+              <m:mo>(</m:mo>
+              <m:mi>r</m:mi>
+              <m:mo>,</m:mo>
+              <m:mi>θ</m:mi>
+              <m:mo>)</m:mo>
+              <m:mo>=</m:mo>
+              <m:mo>(</m:mo>
+              <m:mi>r</m:mi>
+              <m:mo form="prefix">cos</m:mo>
+              <m:mi>θ</m:mi>
+              <m:mo>,</m:mo>
+              <m:mi>r</m:mi>
+              <m:mo form="prefix">sin</m:mo>
+              <m:mi>θ</m:mi>
+              <m:mo>,</m:mo>
+              <m:mi>f</m:mi>
+              <m:mo>(</m:mo>
+              <m:mi>r</m:mi>
+              <m:mo>)</m:mo>
+              <m:mo>)</m:mo>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id97738">(as <link url="http://cnx.org/content/m30944/latest/">[2]</link> does) greatly simplifies thinking about boundary conditions;
+they can be defined similarly to those on the unit cylinder. We must
+keep in mind, though, that <m:math overflow="scroll"><m:mrow><m:mi>r</m:mi><m:mo>&gt;</m:mo><m:mn>0</m:mn></m:mrow></m:math> to avoid a singularity at the origin.</para>
+        <para id="id97766">In the case of this last parametrization, we may hope to arrive at
+a proof that, for any boundary conditions, there exists a continuous
+tangent unit vector field on <m:math overflow="scroll"><m:mi>Φ</m:mi></m:math>. A fruitful approach might involve
+allowing <m:math overflow="scroll"><m:mi>ϕ</m:mi></m:math> to simply change linearly; we leave the details
+for the future.</para>
+      </section>
+      <section id="uid34">
+        <title>Other future work</title>
+        <para id="id97799">The most pressing piece of future work is the proof of the existence
+of a minimizer <m:math overflow="scroll"><m:mi>ϕ</m:mi></m:math> on the torus. It is our hope that the method
+that we used for the analogous proof on the cylinder might be adaptable
+to the torus; however, it seems that there are some fundamental differences
+between the two <m:math overflow="scroll"><m:mi>ϕ</m:mi></m:math> functions.</para>
+        <para id="id97823">As was mentioned earlier, more investigation into the stability of
+minima on the torus is required: we hope to further explore the nature
+of <m:math overflow="scroll"><m:mrow><m:mi>ϕ</m:mi><m:mo>=</m:mo><m:mfrac><m:mi>π</m:mi><m:mn>2</m:mn></m:mfrac></m:mrow></m:math> on the torus.</para>
+      </section>
+    </section>
+    <section id="cid5">
+      <title>Acknowledgments</title>
+      <para id="id97856">We would like to thank the Rice VIGRE program and the National Science
+Foundation for making our research possible. We would also like to
+thank our faculty and graduate advisors, Leobardo Rosales, Robert
+Hardt, Michael Wolf, Ryan Scott, and Evelyn Lamb, as well as the entire
+Rice University Department of Mathematics. We also thank our undergraduate students James Hart, Conor Loftis, Aneesh Mehta, and Anand Shah.</para>
+      <para id="id97863">This research was supported by National Science Foundation grant DMS-0739420</para>
+    </section>
+  </content>
+</document>

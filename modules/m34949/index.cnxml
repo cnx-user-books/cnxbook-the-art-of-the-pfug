@@ -1,0 +1,2632 @@
+<document xmlns="http://cnx.rice.edu/cnxml" xmlns:m="http://www.w3.org/1998/Math/MathML" xmlns:bib="http://bibtexml.sf.net/">
+  <title>Exact Sampling of Skew Young Diagrams</title>
+<metadata xmlns:md="http://cnx.rice.edu/mdml">
+  <md:content-id>m34949</md:content-id>
+  <md:title>Exact Sampling of Skew Young Diagrams</md:title>
+  <md:abstract>This module summarizes the research done by the Exact Sampling: Coupling from the Past PFUG of Rice University's VIGRE program during the summer of 2010. VIGRE is a program of Vertically Integrated Grants for Research and Education in the Mathematical Sciences under the direction of the National Science Foundation. A PFUG consists of Postdocs, Faculty, Undergraduates and Graduate students who work together on a common problem.
+We want to sample skew Young diagrams that fit in an a x b box with a specified probability distribution. We have two problems. In the first problem, we want to sample skew Young diagrams that fit in an a x b box that are greater than or equal to a fixed Young diagram. In the second problem, we want to sample skew Young diagrams that fit in an a x b box that are greater than one of two fixed Young diagrams.</md:abstract>
+  <md:uuid>f8e37060-79fb-4bea-ae86-e18bd48cac84</md:uuid>
+</metadata>
+
+<content>
+    <section id="cid1">
+      <title>Background</title>
+      <section id="uid1">
+        <title>Introduction</title>
+        <para id="id97059">A Young diagram (“YD", denoted <m:math overflow="scroll"><m:mi>λ</m:mi></m:math>) is a finite collection of squares arranged in such a way that the leftmost column is the tallest column and each subsequent column has height equal to or less than the preceding column. For example, the shaded region in <link target-id="uid2"/> is a YD. There is a natural partial ordering of Young diagrams–a YD is “larger" than a second YD if it contains the entire second YD. We will define a skew Young diagram (“SYD", denoted <m:math overflow="scroll"><m:msub><m:mi>λ</m:mi><m:mi>s</m:mi></m:msub></m:math>) as a pair of two YD's in this way: <m:math overflow="scroll"><m:mrow><m:msub><m:mi>λ</m:mi><m:mi>s</m:mi></m:msub><m:mo>=</m:mo><m:mrow><m:mo>(</m:mo><m:msub><m:mi>λ</m:mi><m:mi>U</m:mi></m:msub><m:mo>,</m:mo><m:msub><m:mi>λ</m:mi><m:mi>L</m:mi></m:msub><m:mo>)</m:mo></m:mrow></m:mrow></m:math> where <m:math overflow="scroll"><m:mrow><m:msub><m:mi>λ</m:mi><m:mi>U</m:mi></m:msub><m:mo>,</m:mo><m:msub><m:mi>λ</m:mi><m:mi>L</m:mi></m:msub></m:mrow></m:math> are YD's such that <m:math overflow="scroll"><m:mrow><m:msub><m:mi>λ</m:mi><m:mi>U</m:mi></m:msub><m:mo>≥</m:mo><m:msub><m:mi>λ</m:mi><m:mi>L</m:mi></m:msub></m:mrow></m:math>. For example, the shaded region in <link target-id="uid3"/> is a SYD whose <m:math overflow="scroll"><m:msub><m:mi>λ</m:mi><m:mi>U</m:mi></m:msub></m:math> is the YD in <link target-id="uid2"/> and <m:math overflow="scroll"><m:msub><m:mi>λ</m:mi><m:mi>L</m:mi></m:msub></m:math> has columns of height 3,2,1,1. A SYD <m:math overflow="scroll"><m:mrow><m:msub><m:mi>λ</m:mi><m:mi>s</m:mi></m:msub><m:mo>=</m:mo><m:mrow><m:mo>(</m:mo><m:msub><m:mi>λ</m:mi><m:mi>U</m:mi></m:msub><m:mo>,</m:mo><m:msub><m:mi>λ</m:mi><m:mi>L</m:mi></m:msub><m:mo>)</m:mo></m:mrow></m:mrow></m:math> is greater than a YD <m:math overflow="scroll"><m:mi>λ</m:mi></m:math> if <m:math overflow="scroll"><m:mrow><m:msub><m:mi>λ</m:mi><m:mi>L</m:mi></m:msub><m:mo>=</m:mo><m:mi>λ</m:mi></m:mrow></m:math>. A SYD <m:math overflow="scroll"><m:mrow><m:msub><m:mi>λ</m:mi><m:mi>s</m:mi></m:msub><m:mo>=</m:mo><m:mrow><m:mo>(</m:mo><m:msub><m:mi>λ</m:mi><m:mi>U</m:mi></m:msub><m:mo>,</m:mo><m:msub><m:mi>λ</m:mi><m:mi>L</m:mi></m:msub><m:mo>)</m:mo></m:mrow></m:mrow></m:math> is equal to a YD <m:math overflow="scroll"><m:mi>λ</m:mi></m:math> if <m:math overflow="scroll"><m:mrow><m:msub><m:mi>λ</m:mi><m:mi>U</m:mi></m:msub><m:mo>=</m:mo><m:msub><m:mi>λ</m:mi><m:mi>L</m:mi></m:msub><m:mo>=</m:mo><m:mi>λ</m:mi></m:mrow></m:math>.</para>
+        <figure id="uid2">
+          <media id="uid2_media" alt="">
+            <image mime-type="image/png" src="../../media/youngdiag.png" id="uid2_onlineimage" width="232"><!-- NOTE: attribute width changes image size online (pixels). original width is 232. --></image>
+            <image mime-type="application/postscript" for="pdf" src="../../media/youngdiag.eps" id="uid2_printimage" print-width="6cm">
+              <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+            </image>
+          </media>
+          <caption>Young Diagram in a 9<m:math overflow="scroll"><m:mo>×</m:mo></m:math>6 box</caption>
+        </figure>
+        <figure id="uid3">
+          <media id="uid3_media" alt="">
+            <image mime-type="image/png" src="../../media/skewyoungdiag.png" id="uid3_onlineimage" width="232"><!-- NOTE: attribute width changes image size online (pixels). original width is 232. --></image>
+            <image mime-type="application/postscript" for="pdf" src="../../media/skewyoungdiag.eps" id="uid3_printimage" print-width="6cm">
+              <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+            </image>
+          </media>
+          <caption>Skew Young Diagram in a 9<m:math overflow="scroll"><m:mo>×</m:mo></m:math>6 box</caption>
+        </figure>
+        <para id="id97737">To explain our problem, let us first define what a probability distribution is:</para>
+        <para id="id97741">
+          <emphasis effect="bold">Definition:</emphasis>
+          <emphasis effect="italics">A probability distribution, <m:math overflow="scroll"><m:mi>π</m:mi></m:math>, on a finite set S is a function that assigns a nonnegative real number, <m:math overflow="scroll"><m:mrow><m:mi>π</m:mi><m:mo>(</m:mo><m:mi>s</m:mi><m:mo>)</m:mo></m:mrow></m:math>, (the “probability" of choosing s) to each element s<m:math overflow="scroll"><m:mo>∈</m:mo></m:math>S such that</emphasis>
+        </para>
+        <equation id="id97785">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:munder>
+                <m:mo>∑</m:mo>
+                <m:mrow>
+                  <m:mi>s</m:mi>
+                  <m:mo>∈</m:mo>
+                  <m:mi>S</m:mi>
+                </m:mrow>
+              </m:munder>
+              <m:mi>π</m:mi>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>s</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>=</m:mo>
+              <m:mn>1</m:mn>
+              <m:mo>.</m:mo>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id97823"/>
+        <para id="id97830">We want to sample from SYD's that fit in an a<m:math overflow="scroll"><m:mo>×</m:mo></m:math>b box with this probability distribution:</para>
+        <equation id="uid4">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:mi>π</m:mi>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:msub>
+                  <m:mi>λ</m:mi>
+                  <m:mi>s</m:mi>
+                </m:msub>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>∝</m:mo>
+              <m:msup>
+                <m:mi>q</m:mi>
+                <m:mrow>
+                  <m:mrow>
+                    <m:mo>|</m:mo>
+                  </m:mrow>
+                  <m:msub>
+                    <m:mi>λ</m:mi>
+                    <m:mi>s</m:mi>
+                  </m:msub>
+                  <m:mrow>
+                    <m:mo>|</m:mo>
+                  </m:mrow>
+                </m:mrow>
+              </m:msup>
+              <m:mo>,</m:mo>
+              <m:mn>0</m:mn>
+              <m:mo>&lt;</m:mo>
+              <m:mi>q</m:mi>
+              <m:mo>≤</m:mo>
+              <m:mn>1</m:mn>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id96996">where <m:math overflow="scroll"><m:mrow><m:mrow><m:mo>|</m:mo></m:mrow><m:msub><m:mi>λ</m:mi><m:mi>s</m:mi></m:msub><m:mrow><m:mo>|</m:mo></m:mrow></m:mrow></m:math> denotes the size of the diagram <m:math overflow="scroll"><m:msub><m:mi>λ</m:mi><m:mi>s</m:mi></m:msub></m:math> or, simply, the number of boxes in the diagram (i.e. for <m:math overflow="scroll"><m:msub><m:mi>λ</m:mi><m:mi>s</m:mi></m:msub></m:math> in <link target-id="uid3"/>, <m:math overflow="scroll"><m:mrow><m:mrow><m:mo>|</m:mo></m:mrow><m:msub><m:mi>λ</m:mi><m:mi>s</m:mi></m:msub><m:mrow><m:mo>|</m:mo><m:mo>=</m:mo><m:mn>15</m:mn></m:mrow></m:mrow></m:math>).</para>
+        <para id="id98166">Propp and Wilson developed an algorithm for exact sampling by altering the Markov Chain Monte Carlo algorithm <link target-id="bid0"/>. Sampling by the Markov Chain Monte Carlo simulation does not return a value exactly according to the probability distribution desired, but instead samples according to a distribution whose values are within a small error of the corresponding values of the desired distribution. It is not exact sampling because it is forward simulation and can only be exact if a Markov Chain is taken infinitely many steps into the future, which is impossible. So instead of forward simulation, Propp and Wilson sample by taking steps of the Markov Chain from an indefinite point in the past to the present and have proven that this algorithm, called Coupling from the Past (“CFTP"), samples exactly according to a given probability distribution
+<link target-id="bid0"/>.</para>
+        <para id="id98193">Propp and Wilson's CFTP can be used to sample from lattice paths in an a<m:math overflow="scroll"><m:mo>×</m:mo></m:math>b square lattice that start in the top left corner and take only downward and leftward steps, terminating in the bottom right corner
+<link target-id="bid0"/>.
+Thankfully, there is a bijection between YD's and lattice paths–every lattice path corresponds to a unique YD consisting of the unit boxes under the path (and vice versa). Thus, there is a one-to-one correspondence between lattice paths and YD's. Due to this bijection, CFTP
+<link target-id="bid0"/>
+may be applied to sample from YD's.</para>
+        <para id="id98221">Our research revolves around devising an algorithm based on CFTP
+<link target-id="bid0"/>
+to exactly sample from SYD's, <m:math overflow="scroll"><m:msub><m:mi>λ</m:mi><m:mi>s</m:mi></m:msub></m:math>, that fit in an a<m:math overflow="scroll"><m:mo>×</m:mo></m:math>b box according to the probability distribution given by equation <link target-id="uid4"/>. We found two algorithms. The first algorithm, explained in <link target-id="cid2">"Exact Sampling of SYD's in an a×b Box Greater Than or Equal to a Fixed YD"</link>, exactly samples from SYD's that fit in an a<m:math overflow="scroll"><m:mo>×</m:mo></m:math>b box where <m:math overflow="scroll"><m:msub><m:mi>λ</m:mi><m:mi>s</m:mi></m:msub></m:math> is greater than or equal to a fixed YD <m:math overflow="scroll"><m:msub><m:mi>λ</m:mi><m:mn>0</m:mn></m:msub></m:math>. The second algorithm, explained in <link target-id="cid3">"Exact Sampling of SYD's in an a×b Box Greater Than or Equal to One of Two Fixed YD's"</link> exactly samples from SYD's that fit in an a<m:math overflow="scroll"><m:mo>×</m:mo></m:math>b box where <m:math overflow="scroll"><m:msub><m:mi>λ</m:mi><m:mi>s</m:mi></m:msub></m:math> is greater than or equal to <m:math overflow="scroll"><m:msub><m:mi>λ</m:mi><m:mn>0</m:mn></m:msub></m:math> or <m:math overflow="scroll"><m:msub><m:mi>λ</m:mi><m:mn>1</m:mn></m:msub></m:math>, where <m:math overflow="scroll"><m:msub><m:mi>λ</m:mi><m:mn>0</m:mn></m:msub></m:math> and <m:math overflow="scroll"><m:msub><m:mi>λ</m:mi><m:mn>1</m:mn></m:msub></m:math> are fixed YD's.</para>
+        <section id="uid5">
+          <title>Markov Chains</title>
+          <para id="id98383">Propp and Wilson call their algorithm for exactly sampling YD's the <emphasis effect="italics">monotone Monte Carlo</emphasis><link target-id="bid0"/>
+algorithm. This algorithm involves Markov chains and a process called Coupling from the Past.</para>
+          <figure id="uid6">
+            <media id="uid6_media" alt="">
+              <image mime-type="image/png" src="../../media/MarkovChainCropped.png" id="uid6_onlineimage" width="601"><!-- NOTE: attribute width changes image size online (pixels). original width is 601. --></image>
+              <image mime-type="application/postscript" for="pdf" src="../../media/MarkovChainCropped.eps" id="uid6_printimage" print-width="6cm">
+                <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+              </image>
+            </media>
+            <caption>A Markov Chain</caption>
+          </figure>
+          <para id="id98412">A Markov chain (“MC") consists of a finite number of states (which may be represented by circles) and paths between states with assigned probabilities (which may be represented by arrows). For example, see <link target-id="uid6"/>. The probabilities on all arrows leaving a state should add to one. Consider a walk on the set of states of a MC where each step follows an arrow in it. Choosing which state to go to next depends only on your current state and the probabilities on the arrows leaving your current state. In other words, each step is independent of all steps that happened before you landed on your current state (the “history" of that state).</para>
+          <para id="id98430">In a forward Monte Carlo Markov chain simulation, one starts with an initial distribution on the state space and runs the MC. The probability distribution on a state set changes with each step of the MC. It is known that if a MC is ergodic (aperiodic, positive recurrent, and irreducible), then if the number of steps you follow the MC into the future is taken to infinity, the probability distribution approaches what is called the steady state distribution. The steady state distribution, also called the stationary distribution, is the probability distribution that does not change after one step of the MC. The MC will approach its stationary distribution regardless of the distribution you start with, and if a MC is ergodic, it has a unique stationary distribution.</para>
+          <para id="id98440">To use a MC to sample from YD's or SYD's, we simply define our state set to consist of the finite number of YD's or SYD's that fit in an a<m:math overflow="scroll"><m:mo>×</m:mo></m:math>b box and assign probabilities to arrows from state to state in such a way that our MC is ergodic.</para>
+        </section>
+        <section id="uid7">
+          <title>Coupling From the Past</title>
+          <para id="id98463">Instead of forward simulation, Propp and Wilson simulate from the past and apply Coupling from the Past (“CFTP") <link target-id="bid0"/>. CFTP works with ergodic MC's that have their stationary distribution equal to the probability distribution you wish to sample the states with. CFTP is executed in the following manner.</para>
+          <figure id="uid8">
+            <media id="uid8_media" alt="">
+              <image mime-type="image/png" src="../../media/examplecftpcropped.png" id="uid8_onlineimage" width="904"><!-- NOTE: attribute width changes image size online (pixels). original width is 904. --></image>
+              <image mime-type="application/postscript" for="pdf" src="../../media/examplecftpcropped.eps" id="uid8_printimage" print-width="0.75">
+                <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+              </image>
+            </media>
+            <caption>Three Runs of CFTP of the MC from <link target-id="uid6"/></caption>
+          </figure>
+          <para id="id98491">Start with <m:math overflow="scroll"><m:mrow><m:mi>x</m:mi><m:mo>=</m:mo><m:mn>0</m:mn></m:mrow></m:math> at time <m:math overflow="scroll"><m:mrow><m:mi>t</m:mi><m:mo>=</m:mo><m:mo>-</m:mo><m:mo>(</m:mo><m:msup><m:mn>2</m:mn><m:mi>x</m:mi></m:msup><m:mo>)</m:mo></m:mrow></m:math>. Select one arrow leading from each state at time <m:math overflow="scroll"><m:mrow><m:mi>t</m:mi><m:mo>=</m:mo><m:mo>-</m:mo><m:mn>1</m:mn></m:mrow></m:math> (according to the probabilities assigned to the arrows) to some state at time <m:math overflow="scroll"><m:mrow><m:mi>t</m:mi><m:mo>=</m:mo><m:mn>0</m:mn></m:mrow></m:math>. Let <m:math overflow="scroll"><m:mi>k</m:mi></m:math> be the number of states in your state set. Thus you must select <m:math overflow="scroll"><m:mi>k</m:mi></m:math> arrows at each step. Each arrow indicates which path will be followed from time <m:math overflow="scroll"><m:mrow><m:mi>t</m:mi><m:mo>=</m:mo><m:mo>-</m:mo><m:mn>1</m:mn></m:mrow></m:math> to time <m:math overflow="scroll"><m:mrow><m:mi>t</m:mi><m:mo>=</m:mo><m:mn>0</m:mn></m:mrow></m:math> from the state the arrow leaves. You have completed one “run" of the CFTP algorithm. Now analyze the paths: do they all lead to the same state at time <m:math overflow="scroll"><m:mrow><m:mi>t</m:mi><m:mo>=</m:mo><m:mn>0</m:mn></m:mrow></m:math>?If they do, this is called “coalescence". If not, conduct another run of CFTP as stated in the next paragraph, making sure to “save" the arrows you chose in this step. If all histories coalesce, output the state they return at <m:math overflow="scroll"><m:mrow><m:mi>t</m:mi><m:mo>=</m:mo><m:mn>0</m:mn></m:mrow></m:math>.</para>
+          <para id="id98641">Increase <m:math overflow="scroll"><m:mi>x</m:mi></m:math> by 1 and repeat the selection process for the step from <m:math overflow="scroll"><m:mrow><m:mi>t</m:mi><m:mo>=</m:mo><m:mo>-</m:mo><m:mn>2</m:mn></m:mrow></m:math> to <m:math overflow="scroll"><m:mrow><m:mi>t</m:mi><m:mo>=</m:mo><m:mo>-</m:mo><m:mn>1</m:mn></m:mrow></m:math>, again selecting <m:math overflow="scroll"><m:mi>k</m:mi></m:math> arrows, one arrow leaving each state from <m:math overflow="scroll"><m:mrow><m:mi>t</m:mi><m:mo>=</m:mo><m:mo>-</m:mo><m:mn>2</m:mn></m:mrow></m:math>. You must not re-select arrows for the steps already completed in previous runs (here, the previous run covered the step from <m:math overflow="scroll"><m:mrow><m:mi>t</m:mi><m:mo>=</m:mo><m:mo>-</m:mo><m:mn>1</m:mn></m:mrow></m:math> to <m:math overflow="scroll"><m:mrow><m:mi>t</m:mi><m:mo>=</m:mo><m:mn>0</m:mn></m:mrow></m:math>) because you will introduce a bias that favors the arrows with larger probabilities. Instead, you must reuse them for every successive run of the CFTP process. Now, starting at each of the states of your state set, follow the <m:math overflow="scroll"><m:mi>k</m:mi></m:math> compositions of steps from <m:math overflow="scroll"><m:mrow><m:mi>t</m:mi><m:mo>=</m:mo><m:mo>-</m:mo><m:mn>2</m:mn></m:mrow></m:math> to <m:math overflow="scroll"><m:mrow><m:mi>t</m:mi><m:mo>=</m:mo><m:mn>0</m:mn></m:mrow></m:math> and check for coalescence. Start new runs of CFTP, increasing <m:math overflow="scroll"><m:mi>x</m:mi></m:math> by 1 for each run, until coalescence occurs (all <m:math overflow="scroll"><m:mi>k</m:mi></m:math> histories from <m:math overflow="scroll"><m:mrow><m:mi>t</m:mi><m:mo>=</m:mo><m:mo>-</m:mo><m:mo>(</m:mo><m:msup><m:mn>2</m:mn><m:mi>x</m:mi></m:msup><m:mo>)</m:mo></m:mrow></m:math> to <m:math overflow="scroll"><m:mrow><m:mi>t</m:mi><m:mo>=</m:mo><m:mn>0</m:mn></m:mrow></m:math> return the same state at <m:math overflow="scroll"><m:mrow><m:mi>t</m:mi><m:mo>=</m:mo><m:mn>0</m:mn></m:mrow></m:math>). Output the state at <m:math overflow="scroll"><m:mrow><m:mi>t</m:mi><m:mo>=</m:mo><m:mn>0</m:mn></m:mrow></m:math> that all histories return.
+Propp and Wilson have proven that this outputted state has been sampled according to the steady state distribution of the MC <link target-id="bid0"/>. See <link target-id="uid8"/>, which shows three runs of CFTP for the MC from <link target-id="uid6"/>.</para>
+          <para id="id98872">To simplify the task of choosing <m:math overflow="scroll"><m:mi>k</m:mi></m:math> arrows per step of CFTP, we can instead make only one decision by selecting a random variable which we will call <m:math overflow="scroll"><m:msub><m:mi>u</m:mi><m:mi>t</m:mi></m:msub></m:math>. The random variable may be represented in the following manner. Let <m:math overflow="scroll"><m:msub><m:mi>u</m:mi><m:mi>t</m:mi></m:msub></m:math> be a real number in the interval <m:math overflow="scroll"><m:mrow><m:mo>[</m:mo><m:mn>0</m:mn><m:mo>,</m:mo><m:mn>1</m:mn><m:mo>]</m:mo></m:mrow></m:math> with uniform distribution (every value of <m:math overflow="scroll"><m:msub><m:mi>u</m:mi><m:mi>t</m:mi></m:msub></m:math> has the same probability of being chosen). Since the sum of all probabilities on the arrows exiting one state also add to 1, arrange these probabilities in some specific order on the interval <m:math overflow="scroll"><m:mrow><m:mo>[</m:mo><m:mn>0</m:mn><m:mo>,</m:mo><m:mn>1</m:mn><m:mo>]</m:mo></m:mrow></m:math>. For each step of CFTP, select a value for <m:math overflow="scroll"><m:msub><m:mi>u</m:mi><m:mi>t</m:mi></m:msub></m:math> and where this value lands in the interval <m:math overflow="scroll"><m:mrow><m:mo>[</m:mo><m:mn>0</m:mn><m:mo>,</m:mo><m:mn>1</m:mn><m:mo>]</m:mo></m:mrow></m:math> dictates which arrows will be chosen leaving each of the <m:math overflow="scroll"><m:mi>k</m:mi></m:math> states.</para>
+        </section>
+        <section id="uid9">
+          <title>Monotonicity</title>
+          <para id="id99018">If <m:math overflow="scroll"><m:mi>k</m:mi></m:math> is very large, the CFTP algorithm would require lots of work, since you have to follow all <m:math overflow="scroll"><m:mi>k</m:mi></m:math> histories and look for coalescence of all <m:math overflow="scroll"><m:mi>k</m:mi></m:math> of these (making the algorithm acutally “k-tupling" from the past). To greatly reduce the number of histories that must be followed, Propp and Wilson prove that if the stationary distribution of the MC is “monotonic" with respect to a specified partial ordering of the states, you need only to follow two histories (true “coupling"). If a stationary distribution is monotonic, the partial ordering of the state set is preserved under steps of the MC. This means that we may simply follow two histories: that of the largest state and that of the smallest state. Then with the monotonic distribution, the coalescence of these two histories implies the coalescence of all <m:math overflow="scroll"><m:mi>k</m:mi></m:math> histories <link target-id="bid0"/>.</para>
+        </section>
+        <section id="uid10">
+          <title>Heat Bath Algorithm &amp; Monotonicity</title>
+          <para id="id99078">To discuss the concept of a heat bath algorithm, we will first define a spin system on a vertex set, <m:math overflow="scroll"><m:mi>V</m:mi></m:math>, to be the set of all spin configurations <m:math overflow="scroll"><m:mi>σ</m:mi></m:math>. Each configuration <m:math overflow="scroll"><m:mi>σ</m:mi></m:math> corresponds to a set of vertices in which each vertex <m:math overflow="scroll"><m:mrow><m:mi>i</m:mi><m:mo>∈</m:mo><m:mi>V</m:mi></m:mrow></m:math> is assigned either an “up” or a “down” spin. Each <m:math overflow="scroll"><m:mi>σ</m:mi></m:math> is given a probability, <m:math overflow="scroll"><m:mrow><m:mi>π</m:mi><m:mo>(</m:mo><m:mi>σ</m:mi><m:mo>)</m:mo></m:mrow></m:math>. For a configuration <m:math overflow="scroll"><m:mrow><m:mi>σ</m:mi><m:mo>,</m:mo><m:msubsup><m:mi>σ</m:mi><m:mo>↑</m:mo><m:mi>i</m:mi></m:msubsup></m:mrow></m:math> and <m:math overflow="scroll"><m:msubsup><m:mi>σ</m:mi><m:mo>↓</m:mo><m:mi>i</m:mi></m:msubsup></m:math> denote the configurations which agree with <m:math overflow="scroll"><m:mi>σ</m:mi></m:math> for all <m:math overflow="scroll"><m:mrow><m:mi>j</m:mi><m:mo>∈</m:mo><m:mi>V</m:mi></m:mrow></m:math> where <m:math overflow="scroll"><m:mrow><m:mi>j</m:mi><m:mo>≠</m:mo><m:mi>i</m:mi></m:mrow></m:math>. Let <m:math overflow="scroll"><m:msubsup><m:mi>σ</m:mi><m:mo>↑</m:mo><m:mi>i</m:mi></m:msubsup></m:math> denote the configuration that agrees with <m:math overflow="scroll"><m:mi>σ</m:mi></m:math> for all vertices <m:math overflow="scroll"><m:mrow><m:mi>j</m:mi><m:mo>∈</m:mo><m:mi>V</m:mi><m:mo>,</m:mo><m:mi>j</m:mi><m:mo>≠</m:mo><m:mi>i</m:mi></m:mrow></m:math> and has <m:math overflow="scroll"><m:mi>i</m:mi></m:math> spinning up and <m:math overflow="scroll"><m:msubsup><m:mi>σ</m:mi><m:mo>↓</m:mo><m:mi>i</m:mi></m:msubsup></m:math> denote the configuration that agrees with <m:math overflow="scroll"><m:mi>σ</m:mi></m:math> for all <m:math overflow="scroll"><m:mrow><m:mi>j</m:mi><m:mo>∈</m:mo><m:mi>V</m:mi><m:mo>,</m:mo><m:mi>j</m:mi><m:mo>≠</m:mo><m:mi>i</m:mi></m:mrow></m:math> and has <m:math overflow="scroll"><m:mi>i</m:mi></m:math> spinning down.</para>
+          <para id="id99350">A heat bath algorithm is simply a procedure of updating the vertices <m:math overflow="scroll"><m:mi>i</m:mi></m:math> one at a time based on the conditional probabilities given by <m:math overflow="scroll"><m:mi>π</m:mi></m:math>. All vertices must be chosen infinitely often so that there is no bias towards any assignments, <m:math overflow="scroll"><m:mi>σ</m:mi></m:math>. The following equation provided by Propp and Wilson <link target-id="bid0"/> indicates how <m:math overflow="scroll"><m:mi>i</m:mi></m:math> will be updated:</para>
+          <equation id="uid11">
+            <m:math overflow="scroll" mode="display">
+              <m:mrow>
+                <m:msub>
+                  <m:mi>f</m:mi>
+                  <m:mi>t</m:mi>
+                </m:msub>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mi>σ</m:mi>
+                  <m:mo>,</m:mo>
+                  <m:msub>
+                    <m:mi>u</m:mi>
+                    <m:mi>t</m:mi>
+                  </m:msub>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mo>=</m:mo>
+                <m:mfenced separators="" open="{" close="">
+                  <m:mtable>
+                    <m:mtr>
+                      <m:mtd columnalign="left">
+                        <m:msubsup>
+                          <m:mi>σ</m:mi>
+                          <m:mo>↓</m:mo>
+                          <m:mi>i</m:mi>
+                        </m:msubsup>
+                      </m:mtd>
+                      <m:mtd columnalign="left">
+                        <m:mrow>
+                          <m:msub>
+                            <m:mi>u</m:mi>
+                            <m:mi>t</m:mi>
+                          </m:msub>
+                          <m:mo>&lt;</m:mo>
+                          <m:mfrac>
+                            <m:mrow>
+                              <m:mi>π</m:mi>
+                              <m:mo>(</m:mo>
+                              <m:msubsup>
+                                <m:mi>σ</m:mi>
+                                <m:mo>↓</m:mo>
+                                <m:mi>i</m:mi>
+                              </m:msubsup>
+                              <m:mo>)</m:mo>
+                            </m:mrow>
+                            <m:mrow>
+                              <m:mi>π</m:mi>
+                              <m:mrow>
+                                <m:mo>(</m:mo>
+                                <m:msubsup>
+                                  <m:mi>σ</m:mi>
+                                  <m:mo>↓</m:mo>
+                                  <m:mi>i</m:mi>
+                                </m:msubsup>
+                                <m:mo>)</m:mo>
+                              </m:mrow>
+                              <m:mo>+</m:mo>
+                              <m:mi>π</m:mi>
+                              <m:mrow>
+                                <m:mo>(</m:mo>
+                                <m:msubsup>
+                                  <m:mi>σ</m:mi>
+                                  <m:mo>↑</m:mo>
+                                  <m:mi>i</m:mi>
+                                </m:msubsup>
+                                <m:mo>)</m:mo>
+                              </m:mrow>
+                            </m:mrow>
+                          </m:mfrac>
+                        </m:mrow>
+                      </m:mtd>
+                    </m:mtr>
+                    <m:mtr>
+                      <m:mtd columnalign="left">
+                        <m:msubsup>
+                          <m:mi>σ</m:mi>
+                          <m:mo>↑</m:mo>
+                          <m:mi>i</m:mi>
+                        </m:msubsup>
+                      </m:mtd>
+                      <m:mtd columnalign="left">
+                        <m:mrow>
+                          <m:msub>
+                            <m:mi>u</m:mi>
+                            <m:mi>t</m:mi>
+                          </m:msub>
+                          <m:mo>≥</m:mo>
+                          <m:mfrac>
+                            <m:mrow>
+                              <m:mi>π</m:mi>
+                              <m:mo>(</m:mo>
+                              <m:msubsup>
+                                <m:mi>σ</m:mi>
+                                <m:mo>↓</m:mo>
+                                <m:mi>i</m:mi>
+                              </m:msubsup>
+                              <m:mo>)</m:mo>
+                            </m:mrow>
+                            <m:mrow>
+                              <m:mi>π</m:mi>
+                              <m:mrow>
+                                <m:mo>(</m:mo>
+                                <m:msubsup>
+                                  <m:mi>σ</m:mi>
+                                  <m:mo>↓</m:mo>
+                                  <m:mi>i</m:mi>
+                                </m:msubsup>
+                                <m:mo>)</m:mo>
+                              </m:mrow>
+                              <m:mo>+</m:mo>
+                              <m:mi>π</m:mi>
+                              <m:mrow>
+                                <m:mo>(</m:mo>
+                                <m:msubsup>
+                                  <m:mi>σ</m:mi>
+                                  <m:mo>↑</m:mo>
+                                  <m:mi>i</m:mi>
+                                </m:msubsup>
+                                <m:mo>)</m:mo>
+                              </m:mrow>
+                            </m:mrow>
+                          </m:mfrac>
+                        </m:mrow>
+                      </m:mtd>
+                    </m:mtr>
+                  </m:mtable>
+                </m:mfenced>
+              </m:mrow>
+            </m:math>
+          </equation>
+          <para id="id99631">where <m:math overflow="scroll"><m:mi>t</m:mi></m:math> is time, and <m:math overflow="scroll"><m:msub><m:mi>u</m:mi><m:mi>t</m:mi></m:msub></m:math> is a random real number in <m:math overflow="scroll"><m:mrow><m:mo>[</m:mo><m:mn>0</m:mn><m:mo>,</m:mo><m:mn>1</m:mn><m:mo>]</m:mo></m:mrow></m:math> chosen according to the uniform distribution. All <m:math overflow="scroll"><m:msub><m:mi>u</m:mi><m:mi>t</m:mi></m:msub></m:math>'s are chosen independently of each other <link target-id="bid0"/>.</para>
+          <para id="id99699">We may order sets of configurations by the following definition: <m:math overflow="scroll"><m:mrow><m:mi>σ</m:mi><m:mo>≤</m:mo><m:mi>τ</m:mi></m:mrow></m:math> iff <m:math overflow="scroll"><m:mrow><m:mi>σ</m:mi><m:mo>(</m:mo><m:mi>i</m:mi><m:mo>)</m:mo><m:mo>≤</m:mo><m:mi>τ</m:mi><m:mo>(</m:mo><m:mi>i</m:mi><m:mo>)</m:mo></m:mrow></m:math><m:math overflow="scroll"><m:mrow><m:mo>∀</m:mo><m:mi>i</m:mi><m:mo>∈</m:mo><m:mi>V</m:mi></m:mrow></m:math>, where <m:math overflow="scroll"><m:mrow><m:mo>↑</m:mo><m:mo>&gt;</m:mo><m:mo>↓</m:mo></m:mrow></m:math>. Two configurations are incomparable if one is not greater than the other. We also say that a probability distribution, <m:math overflow="scroll"><m:mi>π</m:mi></m:math>, is monotonic if and only if</para>
+          <equation id="uid12">
+            <m:math overflow="scroll" mode="display">
+              <m:mrow>
+                <m:mfrac>
+                  <m:mrow>
+                    <m:mi>π</m:mi>
+                    <m:mo>(</m:mo>
+                    <m:msubsup>
+                      <m:mi>σ</m:mi>
+                      <m:mo>↓</m:mo>
+                      <m:mi>i</m:mi>
+                    </m:msubsup>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                  <m:mrow>
+                    <m:mi>π</m:mi>
+                    <m:mo>(</m:mo>
+                    <m:msubsup>
+                      <m:mi>σ</m:mi>
+                      <m:mo>↑</m:mo>
+                      <m:mi>i</m:mi>
+                    </m:msubsup>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                </m:mfrac>
+                <m:mo>≥</m:mo>
+                <m:mfrac>
+                  <m:mrow>
+                    <m:mi>π</m:mi>
+                    <m:mo>(</m:mo>
+                    <m:msubsup>
+                      <m:mi>τ</m:mi>
+                      <m:mo>↓</m:mo>
+                      <m:mi>i</m:mi>
+                    </m:msubsup>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                  <m:mrow>
+                    <m:mi>π</m:mi>
+                    <m:mo>(</m:mo>
+                    <m:msubsup>
+                      <m:mi>τ</m:mi>
+                      <m:mo>↑</m:mo>
+                      <m:mi>i</m:mi>
+                    </m:msubsup>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                </m:mfrac>
+                <m:mspace width="4.pt"/>
+                <m:mtext>for</m:mtext>
+                <m:mspace width="4.pt"/>
+                <m:mtext>all</m:mtext>
+                <m:mspace width="4.pt"/>
+                <m:mi>σ</m:mi>
+                <m:mo>≤</m:mo>
+                <m:mi>τ</m:mi>
+              </m:mrow>
+            </m:math>
+          </equation>
+          <para id="id99905">or equivalently, <m:math overflow="scroll"><m:mrow><m:mi>π</m:mi><m:mrow><m:mo>(</m:mo><m:msubsup><m:mi>σ</m:mi><m:mo>↓</m:mo><m:mi>i</m:mi></m:msubsup><m:mo>)</m:mo></m:mrow><m:mi>π</m:mi><m:mrow><m:mo>(</m:mo><m:msubsup><m:mi>τ</m:mi><m:mo>↑</m:mo><m:mi>i</m:mi></m:msubsup><m:mo>)</m:mo></m:mrow><m:mo>≥</m:mo><m:mi>π</m:mi><m:mrow><m:mo>(</m:mo><m:msubsup><m:mi>σ</m:mi><m:mo>↑</m:mo><m:mi>i</m:mi></m:msubsup><m:mo>)</m:mo></m:mrow><m:mrow><m:mi>π</m:mi><m:mo>(</m:mo></m:mrow><m:msubsup><m:mi>τ</m:mi><m:mo>↓</m:mo><m:mi>i</m:mi></m:msubsup></m:mrow></m:math>). If the probability distribution is monotonic (or “attractive"), then the partial ordering of <m:math overflow="scroll"><m:mi>σ</m:mi></m:math> and <m:math overflow="scroll"><m:mi>τ</m:mi></m:math> is preserved after the heat bath algorithm is applied. To see why this is true, note that if the inequality in formula <link target-id="uid12"/> holds, then <m:math overflow="scroll"><m:mrow><m:mi>π</m:mi><m:mo>(</m:mo><m:msub><m:mi>σ</m:mi><m:mo>↓</m:mo></m:msub><m:mo>)</m:mo></m:mrow></m:math> must be greater than or equal to <m:math overflow="scroll"><m:mrow><m:mi>π</m:mi><m:mo>(</m:mo><m:msub><m:mi>τ</m:mi><m:mo>↓</m:mo></m:msub></m:mrow></m:math>). The proof is as follows:</para>
+          <equation id="id100062">
+            <m:math overflow="scroll" mode="display">
+              <m:mrow>
+                <m:mi>π</m:mi>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:msubsup>
+                    <m:mi>σ</m:mi>
+                    <m:mo>↓</m:mo>
+                    <m:mi>i</m:mi>
+                  </m:msubsup>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mi>π</m:mi>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:msubsup>
+                    <m:mi>τ</m:mi>
+                    <m:mo>↑</m:mo>
+                    <m:mi>i</m:mi>
+                  </m:msubsup>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mo>≥</m:mo>
+                <m:mi>π</m:mi>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:msubsup>
+                    <m:mi>σ</m:mi>
+                    <m:mo>↑</m:mo>
+                    <m:mi>i</m:mi>
+                  </m:msubsup>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mi>π</m:mi>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:msubsup>
+                    <m:mi>τ</m:mi>
+                    <m:mo>↓</m:mo>
+                    <m:mi>i</m:mi>
+                  </m:msubsup>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+              </m:mrow>
+            </m:math>
+          </equation>
+          <equation id="id100150">
+            <m:math overflow="scroll" mode="display">
+              <m:mrow>
+                <m:mi>π</m:mi>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:msubsup>
+                    <m:mi>σ</m:mi>
+                    <m:mo>↓</m:mo>
+                    <m:mi>i</m:mi>
+                  </m:msubsup>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mi>π</m:mi>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:msubsup>
+                    <m:mi>τ</m:mi>
+                    <m:mo>↑</m:mo>
+                    <m:mi>i</m:mi>
+                  </m:msubsup>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mo>+</m:mo>
+                <m:mi>π</m:mi>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:msubsup>
+                    <m:mi>σ</m:mi>
+                    <m:mo>↓</m:mo>
+                    <m:mi>i</m:mi>
+                  </m:msubsup>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mi>π</m:mi>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:msubsup>
+                    <m:mi>τ</m:mi>
+                    <m:mo>↓</m:mo>
+                    <m:mi>i</m:mi>
+                  </m:msubsup>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mo>≥</m:mo>
+                <m:mi>π</m:mi>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:msubsup>
+                    <m:mi>σ</m:mi>
+                    <m:mo>↑</m:mo>
+                    <m:mi>i</m:mi>
+                  </m:msubsup>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mi>π</m:mi>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:msubsup>
+                    <m:mi>τ</m:mi>
+                    <m:mo>↓</m:mo>
+                    <m:mi>i</m:mi>
+                  </m:msubsup>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mo>+</m:mo>
+                <m:mi>π</m:mi>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:msubsup>
+                    <m:mi>σ</m:mi>
+                    <m:mo>↓</m:mo>
+                    <m:mi>i</m:mi>
+                  </m:msubsup>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mi>π</m:mi>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:msubsup>
+                    <m:mi>τ</m:mi>
+                    <m:mo>↓</m:mo>
+                    <m:mi>i</m:mi>
+                  </m:msubsup>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+              </m:mrow>
+            </m:math>
+          </equation>
+          <equation id="id100318">
+            <m:math overflow="scroll" mode="display">
+              <m:mrow>
+                <m:mi>π</m:mi>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:msubsup>
+                    <m:mi>σ</m:mi>
+                    <m:mo>↓</m:mo>
+                    <m:mi>i</m:mi>
+                  </m:msubsup>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mi>π</m:mi>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:msubsup>
+                      <m:mi>τ</m:mi>
+                      <m:mo>↑</m:mo>
+                      <m:mi>i</m:mi>
+                    </m:msubsup>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                  <m:mo>+</m:mo>
+                  <m:mi>π</m:mi>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:msubsup>
+                      <m:mi>τ</m:mi>
+                      <m:mo>↓</m:mo>
+                      <m:mi>i</m:mi>
+                    </m:msubsup>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mo>≥</m:mo>
+                <m:mi>π</m:mi>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:msubsup>
+                    <m:mi>τ</m:mi>
+                    <m:mo>↓</m:mo>
+                    <m:mi>i</m:mi>
+                  </m:msubsup>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mi>π</m:mi>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:msubsup>
+                      <m:mi>τ</m:mi>
+                      <m:mo>↑</m:mo>
+                      <m:mi>i</m:mi>
+                    </m:msubsup>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                  <m:mo>+</m:mo>
+                  <m:mi>π</m:mi>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:msubsup>
+                      <m:mi>τ</m:mi>
+                      <m:mo>↓</m:mo>
+                      <m:mi>i</m:mi>
+                    </m:msubsup>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+              </m:mrow>
+            </m:math>
+          </equation>
+          <equation id="id100459">
+            <m:math overflow="scroll" mode="display">
+              <m:mrow>
+                <m:mi>π</m:mi>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:msubsup>
+                    <m:mi>σ</m:mi>
+                    <m:mo>↓</m:mo>
+                    <m:mi>i</m:mi>
+                  </m:msubsup>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mo>≥</m:mo>
+                <m:mi>π</m:mi>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:msubsup>
+                    <m:mi>τ</m:mi>
+                    <m:mo>↓</m:mo>
+                    <m:mi>i</m:mi>
+                  </m:msubsup>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mo>.</m:mo>
+              </m:mrow>
+            </m:math>
+          </equation>
+          <para id="id100511">If we choose the same <m:math overflow="scroll"><m:msub><m:mi>u</m:mi><m:mi>t</m:mi></m:msub></m:math> for both <m:math overflow="scroll"><m:mi>σ</m:mi></m:math> and <m:math overflow="scroll"><m:mi>τ</m:mi></m:math>, it is impossible for <m:math overflow="scroll"><m:msubsup><m:mi>σ</m:mi><m:mo>↑</m:mo><m:mi>i</m:mi></m:msubsup></m:math> and <m:math overflow="scroll"><m:msubsup><m:mi>τ</m:mi><m:mo>↓</m:mo><m:mi>i</m:mi></m:msubsup></m:math> to occur simultaneously. Therefore after any amount of time, <m:math overflow="scroll"><m:mi>t</m:mi></m:math>, whatever configuration <m:math overflow="scroll"><m:mi>τ</m:mi></m:math> becomes after <m:math overflow="scroll"><m:mi>t</m:mi></m:math> updates must remain greater than or equal to whatever configuration <m:math overflow="scroll"><m:mi>σ</m:mi></m:math> becomes after <m:math overflow="scroll"><m:mi>t</m:mi></m:math> updates. This preservation of partial ordering leads to the theorem proved by Propp and Wilson:</para>
+          <para id="id100632"><emphasis effect="bold">Theorem:</emphasis><emphasis effect="italics">If one runs the heat bath for an attractive spin system under the coupling-from-the-past protocol, one will generate states of the system that are exactly governed by the target distribution, <m:math overflow="scroll"><m:mi>π</m:mi></m:math></emphasis><link target-id="bid0"/>.</para>
+        </section>
+      </section>
+      <section id="uid13">
+        <title>Exact Sampling of YD's in an a<m:math overflow="scroll"><m:mo>×</m:mo></m:math>b Box</title>
+        <para id="id100678">Expanding the Monotone Monte Carlo Algorithm to YD's is fairly simple, if we treat each YD as a configuration set, <m:math overflow="scroll"><m:mi>σ</m:mi></m:math>, in a spin system. The unit squares are vertices <m:math overflow="scroll"><m:mi>i</m:mi></m:math> in the vertex set of all <m:math overflow="scroll"><m:mi>i</m:mi></m:math> in the a<m:math overflow="scroll"><m:mo>×</m:mo></m:math>b box, where <m:math overflow="scroll"><m:mi>i</m:mi></m:math> spins up if <m:math overflow="scroll"><m:mi>i</m:mi></m:math> is in the YD <m:math overflow="scroll"><m:mi>σ</m:mi></m:math> and <m:math overflow="scroll"><m:mi>i</m:mi></m:math> spins down otherwise.
+The configurations are selected according to the probability distribution</para>
+        <equation id="uid14">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:mi>π</m:mi>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>σ</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>∝</m:mo>
+              <m:msup>
+                <m:mi>q</m:mi>
+                <m:mrow>
+                  <m:mo>|</m:mo>
+                  <m:mi>σ</m:mi>
+                  <m:mo>|</m:mo>
+                </m:mrow>
+              </m:msup>
+              <m:mo>,</m:mo>
+              <m:mn>0</m:mn>
+              <m:mo>&lt;</m:mo>
+              <m:mi>q</m:mi>
+              <m:mo>≤</m:mo>
+              <m:mn>1</m:mn>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id100807">where <m:math overflow="scroll"><m:mrow><m:mo>|</m:mo><m:mi>σ</m:mi><m:mo>|</m:mo></m:mrow></m:math> denotes how many vertices in <m:math overflow="scroll"><m:mi>σ</m:mi></m:math> spin up. The vertices are updated according to the conditional probabilities given by <m:math overflow="scroll"><m:mi>π</m:mi></m:math>. There are three equations to update by: 1) if <m:math overflow="scroll"><m:mrow><m:mi>σ</m:mi><m:mo>(</m:mo><m:mi>i</m:mi><m:mo>)</m:mo><m:mo>=</m:mo><m:mo>↑</m:mo></m:mrow></m:math> is improbable, <m:math overflow="scroll"><m:mrow><m:msub><m:mi>f</m:mi><m:mi>t</m:mi></m:msub><m:mrow><m:mo>(</m:mo><m:mi>σ</m:mi></m:mrow></m:mrow></m:math>, <m:math overflow="scroll"><m:mrow><m:msub><m:mi>u</m:mi><m:mi>t</m:mi></m:msub><m:mrow><m:mo>)</m:mo><m:mo>=</m:mo></m:mrow><m:msubsup><m:mi>σ</m:mi><m:mo>↓</m:mo><m:mi>i</m:mi></m:msubsup></m:mrow></m:math>; 2) if <m:math overflow="scroll"><m:mrow><m:mi>σ</m:mi><m:mo>(</m:mo><m:mi>i</m:mi><m:mo>)</m:mo><m:mo>=</m:mo><m:mo>↓</m:mo></m:mrow></m:math> is improbable <m:math overflow="scroll"><m:mrow><m:msub><m:mi>f</m:mi><m:mi>t</m:mi></m:msub><m:mrow><m:mo>(</m:mo><m:mi>σ</m:mi></m:mrow></m:mrow></m:math>, <m:math overflow="scroll"><m:mrow><m:msub><m:mi>u</m:mi><m:mi>t</m:mi></m:msub><m:mrow><m:mo>)</m:mo><m:mo>=</m:mo></m:mrow><m:msubsup><m:mi>σ</m:mi><m:mo>↑</m:mo><m:mi>i</m:mi></m:msubsup></m:mrow></m:math>; 3) if both <m:math overflow="scroll"><m:mrow><m:mi>σ</m:mi><m:mo>(</m:mo><m:mi>i</m:mi><m:mo>)</m:mo><m:mo>=</m:mo><m:mo>↑</m:mo></m:mrow></m:math> and <m:math overflow="scroll"><m:mrow><m:mi>σ</m:mi><m:mo>(</m:mo><m:mi>i</m:mi><m:mo>)</m:mo><m:mo>=</m:mo><m:mo>↓</m:mo></m:mrow></m:math> have positive probability, update <m:math overflow="scroll"><m:mi>i</m:mi></m:math> according to the equation</para>
+        <equation id="uid15">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:msub>
+                <m:mi>f</m:mi>
+                <m:mi>t</m:mi>
+              </m:msub>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>σ</m:mi>
+                <m:mo>,</m:mo>
+                <m:msub>
+                  <m:mi>u</m:mi>
+                  <m:mi>t</m:mi>
+                </m:msub>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>=</m:mo>
+              <m:mfenced separators="" open="{" close="">
+                <m:mtable>
+                  <m:mtr>
+                    <m:mtd columnalign="left">
+                      <m:msubsup>
+                        <m:mi>σ</m:mi>
+                        <m:mo>↓</m:mo>
+                        <m:mi>i</m:mi>
+                      </m:msubsup>
+                    </m:mtd>
+                    <m:mtd columnalign="left">
+                      <m:mrow>
+                        <m:msub>
+                          <m:mi>u</m:mi>
+                          <m:mi>t</m:mi>
+                        </m:msub>
+                        <m:mo>&lt;</m:mo>
+                        <m:mfrac>
+                          <m:mn>1</m:mn>
+                          <m:mrow>
+                            <m:mn>1</m:mn>
+                            <m:mo>+</m:mo>
+                            <m:mi>q</m:mi>
+                          </m:mrow>
+                        </m:mfrac>
+                      </m:mrow>
+                    </m:mtd>
+                  </m:mtr>
+                  <m:mtr>
+                    <m:mtd columnalign="left">
+                      <m:msubsup>
+                        <m:mi>σ</m:mi>
+                        <m:mo>↑</m:mo>
+                        <m:mi>i</m:mi>
+                      </m:msubsup>
+                    </m:mtd>
+                    <m:mtd columnalign="left">
+                      <m:mrow>
+                        <m:msub>
+                          <m:mi>u</m:mi>
+                          <m:mi>t</m:mi>
+                        </m:msub>
+                        <m:mo>≥</m:mo>
+                        <m:mfrac>
+                          <m:mn>1</m:mn>
+                          <m:mrow>
+                            <m:mn>1</m:mn>
+                            <m:mo>+</m:mo>
+                            <m:mi>q</m:mi>
+                          </m:mrow>
+                        </m:mfrac>
+                      </m:mrow>
+                    </m:mtd>
+                  </m:mtr>
+                </m:mtable>
+              </m:mfenced>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id101177">where <m:math overflow="scroll"><m:mi>t</m:mi></m:math> is time, and <m:math overflow="scroll"><m:msub><m:mi>u</m:mi><m:mi>t</m:mi></m:msub></m:math> is a random real number in <m:math overflow="scroll"><m:mrow><m:mo>[</m:mo><m:mn>0</m:mn><m:mo>,</m:mo><m:mn>1</m:mn><m:mo>]</m:mo></m:mrow></m:math> chosen according to the uniform distribution where all <m:math overflow="scroll"><m:msub><m:mi>u</m:mi><m:mi>t</m:mi></m:msub></m:math>'s are chosen independently of each other.</para>
+        <para id="id101240">It is easy to demonstrate using the three equations that for all possible <m:math overflow="scroll"><m:mrow><m:mi>σ</m:mi><m:mo>,</m:mo><m:mi>τ</m:mi></m:mrow></m:math>, and <m:math overflow="scroll"><m:mi>i</m:mi></m:math>, formula <link target-id="uid12"/> holds given <m:math overflow="scroll"><m:mrow><m:mi>σ</m:mi><m:mo>≤</m:mo><m:mi>τ</m:mi></m:mrow></m:math>. Essentially, we have 5 possible cases:</para>
+        <para id="id101287">1.) If <m:math overflow="scroll"><m:mi>i</m:mi></m:math> is chosen to be a box in <m:math overflow="scroll"><m:mi>σ</m:mi></m:math> such that <m:math overflow="scroll"><m:msubsup><m:mi>σ</m:mi><m:mo>↓</m:mo><m:mi>i</m:mi></m:msubsup></m:math> is not a valid YD, then <m:math overflow="scroll"><m:msubsup><m:mi>τ</m:mi><m:mo>↓</m:mo><m:mi>i</m:mi></m:msubsup></m:math> is not a valid YD either, since <m:math overflow="scroll"><m:mrow><m:mi>σ</m:mi><m:mo>≤</m:mo><m:mi>τ</m:mi></m:mrow></m:math>. Therefore <m:math overflow="scroll"><m:mrow><m:mi>π</m:mi><m:mo>(</m:mo><m:msubsup><m:mi>σ</m:mi><m:mo>↓</m:mo><m:mi>i</m:mi></m:msubsup><m:mo>)</m:mo><m:mo>=</m:mo><m:mn>0</m:mn></m:mrow></m:math> and <m:math overflow="scroll"><m:mrow><m:mi>π</m:mi><m:mo>(</m:mo><m:msubsup><m:mi>τ</m:mi><m:mo>↓</m:mo><m:mi>i</m:mi></m:msubsup><m:mo>)</m:mo><m:mo>=</m:mo><m:mn>0</m:mn></m:mrow></m:math>. Formula <link target-id="uid12"/> becomes <m:math overflow="scroll"><m:mrow><m:mn>0</m:mn><m:mo>=</m:mo><m:mn>0</m:mn></m:mrow></m:math>.</para>
+        <para id="id101438">2.) If <m:math overflow="scroll"><m:mi>i</m:mi></m:math> is chosen to be a box such that both <m:math overflow="scroll"><m:msubsup><m:mi>σ</m:mi><m:mo>↓</m:mo><m:mi>i</m:mi></m:msubsup></m:math> and <m:math overflow="scroll"><m:msubsup><m:mi>σ</m:mi><m:mo>↑</m:mo><m:mi>i</m:mi></m:msubsup></m:math> are YD's, but <m:math overflow="scroll"><m:msubsup><m:mi>τ</m:mi><m:mo>↓</m:mo><m:mi>i</m:mi></m:msubsup></m:math> is not a valid YD, then</para>
+        <equation id="id101504">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:mfrac>
+                <m:mrow>
+                  <m:mi>π</m:mi>
+                  <m:mo>(</m:mo>
+                  <m:msubsup>
+                    <m:mi>σ</m:mi>
+                    <m:mo>↓</m:mo>
+                    <m:mi>i</m:mi>
+                  </m:msubsup>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mrow>
+                  <m:mi>π</m:mi>
+                  <m:mo>(</m:mo>
+                  <m:msubsup>
+                    <m:mi>σ</m:mi>
+                    <m:mo>↑</m:mo>
+                    <m:mi>i</m:mi>
+                  </m:msubsup>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+              </m:mfrac>
+              <m:mo>=</m:mo>
+              <m:mfrac>
+                <m:mrow>
+                  <m:mn>1</m:mn>
+                  <m:mo>/</m:mo>
+                  <m:mo>(</m:mo>
+                  <m:mn>1</m:mn>
+                  <m:mo>+</m:mo>
+                  <m:mi>q</m:mi>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mrow>
+                  <m:mi>q</m:mi>
+                  <m:mo>/</m:mo>
+                  <m:mo>(</m:mo>
+                  <m:mn>1</m:mn>
+                  <m:mo>+</m:mo>
+                  <m:mi>q</m:mi>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+              </m:mfrac>
+              <m:mo>=</m:mo>
+              <m:mfrac>
+                <m:mn>1</m:mn>
+                <m:mi>q</m:mi>
+              </m:mfrac>
+              <m:mo>.</m:mo>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id101600">Since <m:math overflow="scroll"><m:mrow><m:mi>π</m:mi><m:mo>(</m:mo><m:msubsup><m:mi>τ</m:mi><m:mo>↓</m:mo><m:mi>i</m:mi></m:msubsup><m:mo>)</m:mo><m:mo>=</m:mo><m:mn>0</m:mn></m:mrow></m:math>,</para>
+        <equation id="id101636">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:mfrac>
+                <m:mrow>
+                  <m:mi>π</m:mi>
+                  <m:mo>(</m:mo>
+                  <m:msubsup>
+                    <m:mi>τ</m:mi>
+                    <m:mo>↓</m:mo>
+                    <m:mi>i</m:mi>
+                  </m:msubsup>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mrow>
+                  <m:mi>π</m:mi>
+                  <m:mo>(</m:mo>
+                  <m:msubsup>
+                    <m:mi>τ</m:mi>
+                    <m:mo>↑</m:mo>
+                    <m:mi>i</m:mi>
+                  </m:msubsup>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+              </m:mfrac>
+              <m:mo>=</m:mo>
+              <m:mn>0</m:mn>
+              <m:mo>.</m:mo>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id101692">Thus, formula <link target-id="uid12"/> becomes <m:math overflow="scroll"><m:mrow><m:mfrac><m:mn>1</m:mn><m:mi>q</m:mi></m:mfrac><m:mo>&gt;</m:mo><m:mn>0</m:mn></m:mrow></m:math>.</para>
+        <para id="id101721">3.) If <m:math overflow="scroll"><m:mi>i</m:mi></m:math> is chosen to be a box such that <m:math overflow="scroll"><m:mrow><m:msubsup><m:mi>σ</m:mi><m:mo>↓</m:mo><m:mi>i</m:mi></m:msubsup><m:mo>,</m:mo><m:msubsup><m:mi>σ</m:mi><m:mo>↑</m:mo><m:mi>i</m:mi></m:msubsup><m:mo>,</m:mo><m:msubsup><m:mi>τ</m:mi><m:mo>↓</m:mo><m:mi>i</m:mi></m:msubsup></m:mrow></m:math>, and <m:math overflow="scroll"><m:msubsup><m:mi>τ</m:mi><m:mo>↑</m:mo><m:mi>i</m:mi></m:msubsup></m:math> are all valid YD's, then</para>
+        <equation id="id101797">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:mfrac>
+                <m:mrow>
+                  <m:mi>π</m:mi>
+                  <m:mo>(</m:mo>
+                  <m:msubsup>
+                    <m:mi>σ</m:mi>
+                    <m:mo>↓</m:mo>
+                    <m:mi>i</m:mi>
+                  </m:msubsup>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mrow>
+                  <m:mi>π</m:mi>
+                  <m:mo>(</m:mo>
+                  <m:msubsup>
+                    <m:mi>σ</m:mi>
+                    <m:mo>↑</m:mo>
+                    <m:mi>i</m:mi>
+                  </m:msubsup>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+              </m:mfrac>
+              <m:mo>=</m:mo>
+              <m:mfrac>
+                <m:mn>1</m:mn>
+                <m:mi>q</m:mi>
+              </m:mfrac>
+              <m:mspace width="4.pt"/>
+              <m:mtext>and</m:mtext>
+              <m:mspace width="4.pt"/>
+              <m:mfrac>
+                <m:mrow>
+                  <m:mi>π</m:mi>
+                  <m:mo>(</m:mo>
+                  <m:msubsup>
+                    <m:mi>τ</m:mi>
+                    <m:mo>↓</m:mo>
+                    <m:mi>i</m:mi>
+                  </m:msubsup>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mrow>
+                  <m:mi>π</m:mi>
+                  <m:mo>(</m:mo>
+                  <m:msubsup>
+                    <m:mi>τ</m:mi>
+                    <m:mo>↑</m:mo>
+                    <m:mi>i</m:mi>
+                  </m:msubsup>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+              </m:mfrac>
+              <m:mo>=</m:mo>
+              <m:mfrac>
+                <m:mn>1</m:mn>
+                <m:mi>q</m:mi>
+              </m:mfrac>
+              <m:mo>.</m:mo>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id101914">Thus, formula <link target-id="uid12"/> becomes <m:math overflow="scroll"><m:mrow><m:mfrac><m:mn>1</m:mn><m:mi>q</m:mi></m:mfrac><m:mo>=</m:mo><m:mfrac><m:mn>1</m:mn><m:mi>q</m:mi></m:mfrac></m:mrow></m:math>.</para>
+        <para id="id101948">4.) If <m:math overflow="scroll"><m:mi>i</m:mi></m:math> is chosen to be a box such that both <m:math overflow="scroll"><m:msubsup><m:mi>τ</m:mi><m:mo>↓</m:mo><m:mi>i</m:mi></m:msubsup></m:math> and <m:math overflow="scroll"><m:msubsup><m:mi>τ</m:mi><m:mo>↑</m:mo><m:mi>i</m:mi></m:msubsup></m:math> are YD's, but <m:math overflow="scroll"><m:msubsup><m:mi>σ</m:mi><m:mo>↓</m:mo><m:mi>i</m:mi></m:msubsup></m:math> and <m:math overflow="scroll"><m:msubsup><m:mi>σ</m:mi><m:mo>↑</m:mo><m:mi>i</m:mi></m:msubsup></m:math> not valid YD's, then</para>
+        <equation id="id102031">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:mfrac>
+                <m:mrow>
+                  <m:mi>π</m:mi>
+                  <m:mo>(</m:mo>
+                  <m:msubsup>
+                    <m:mi>σ</m:mi>
+                    <m:mo>↓</m:mo>
+                    <m:mi>i</m:mi>
+                  </m:msubsup>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mrow>
+                  <m:mi>π</m:mi>
+                  <m:mo>(</m:mo>
+                  <m:msubsup>
+                    <m:mi>σ</m:mi>
+                    <m:mo>↑</m:mo>
+                    <m:mi>i</m:mi>
+                  </m:msubsup>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+              </m:mfrac>
+              <m:mo>→</m:mo>
+              <m:mi>∞</m:mi>
+              <m:mspace width="4.pt"/>
+              <m:mtext>and</m:mtext>
+              <m:mspace width="4.pt"/>
+              <m:mfrac>
+                <m:mrow>
+                  <m:mi>π</m:mi>
+                  <m:mo>(</m:mo>
+                  <m:msubsup>
+                    <m:mi>τ</m:mi>
+                    <m:mo>↓</m:mo>
+                    <m:mi>i</m:mi>
+                  </m:msubsup>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mrow>
+                  <m:mi>π</m:mi>
+                  <m:mo>(</m:mo>
+                  <m:msubsup>
+                    <m:mi>τ</m:mi>
+                    <m:mo>↑</m:mo>
+                    <m:mi>i</m:mi>
+                  </m:msubsup>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+              </m:mfrac>
+              <m:mo>=</m:mo>
+              <m:mfrac>
+                <m:mn>1</m:mn>
+                <m:mi>q</m:mi>
+              </m:mfrac>
+              <m:mo>.</m:mo>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id102145">Formula <link target-id="uid12"/> becomes <m:math overflow="scroll"><m:mrow><m:mi>∞</m:mi><m:mo>≥</m:mo><m:mfrac><m:mn>1</m:mn><m:mi>q</m:mi></m:mfrac></m:mrow></m:math>.</para>
+        <para id="id102174">5.) If <m:math overflow="scroll"><m:mi>i</m:mi></m:math> is chosen to be a box such that <m:math overflow="scroll"><m:msubsup><m:mi>τ</m:mi><m:mo>↑</m:mo><m:mi>i</m:mi></m:msubsup></m:math> is not a valid YD, then <m:math overflow="scroll"><m:mrow><m:msubsup><m:mi>σ</m:mi><m:mo>↓</m:mo><m:mi>i</m:mi></m:msubsup><m:mo>,</m:mo><m:msubsup><m:mi>σ</m:mi><m:mo>↑</m:mo><m:mi>i</m:mi></m:msubsup></m:mrow></m:math>, and <m:math overflow="scroll"><m:msubsup><m:mi>τ</m:mi><m:mo>↓</m:mo><m:mi>i</m:mi></m:msubsup></m:math> are not valid YD's either, since <m:math overflow="scroll"><m:mrow><m:mi>σ</m:mi><m:mo>≤</m:mo><m:mi>τ</m:mi></m:mrow></m:math>. Therefore formula <link target-id="uid12"/> becomes <m:math overflow="scroll"><m:mrow><m:mn>0</m:mn><m:mo>=</m:mo><m:mn>0</m:mn></m:mrow></m:math>.</para>
+        <para id="id102289">Since formula <link target-id="uid12"/> holds in all cases, our probability distribution is monotonic. Therefore, we may define our vertex set <m:math overflow="scroll"><m:mi>V</m:mi></m:math> to be the set of all vertices <m:math overflow="scroll"><m:mi>i</m:mi></m:math> in the a<m:math overflow="scroll"><m:mo>×</m:mo></m:math>b box where each vertex <m:math overflow="scroll"><m:mi>i</m:mi></m:math> is a box. Then we may apply CFTP to a MC on spin configurations with a steady state distribution equal to the probability distribution stated in formula <link target-id="uid14"/> and couple the histories of the smallest and the largest configurations (the configuration in which all <m:math overflow="scroll"><m:mi>i</m:mi></m:math>'s spin down, which corresponds to the empty YD, and the configuration in which all <m:math overflow="scroll"><m:mi>i</m:mi></m:math>'s spin up, which corresponds to the full YD) to sample from young diagrams that fit in an a<m:math overflow="scroll"><m:mo>×</m:mo></m:math>b box according to the probability distribution stated in formula <link target-id="uid14"/>.</para>
+      </section>
+    </section>
+    <section id="cid2">
+      <title>Exact Sampling of SYD's in an a<m:math overflow="scroll"><m:mo>×</m:mo></m:math>b Box Greater Than or Equal to a Fixed YD</title>
+      <para id="id102392">Here, we attempt to formulate an algorithm for exact sampling from SYD's, <m:math overflow="scroll"><m:msub><m:mi>λ</m:mi><m:mi>s</m:mi></m:msub></m:math>, that fit in an a<m:math overflow="scroll"><m:mo>×</m:mo></m:math>b box where <m:math overflow="scroll"><m:mrow><m:msub><m:mi>λ</m:mi><m:mi>s</m:mi></m:msub><m:mo>≥</m:mo></m:mrow></m:math> a fixed YD, <m:math overflow="scroll"><m:msub><m:mi>λ</m:mi><m:mn>0</m:mn></m:msub></m:math> according to this probability distribution</para>
+      <equation id="uid16">
+        <m:math overflow="scroll" mode="display">
+          <m:mrow>
+            <m:mi>π</m:mi>
+            <m:mrow>
+              <m:mo>(</m:mo>
+              <m:msub>
+                <m:mi>λ</m:mi>
+                <m:mi>s</m:mi>
+              </m:msub>
+              <m:mo>)</m:mo>
+            </m:mrow>
+            <m:mo>∝</m:mo>
+            <m:mfenced separators="" open="{" close="">
+              <m:mtable>
+                <m:mtr>
+                  <m:mtd columnalign="left">
+                    <m:mrow>
+                      <m:msup>
+                        <m:mi>q</m:mi>
+                        <m:mrow>
+                          <m:mrow>
+                            <m:mo>|</m:mo>
+                          </m:mrow>
+                          <m:msub>
+                            <m:mi>λ</m:mi>
+                            <m:mi>s</m:mi>
+                          </m:msub>
+                          <m:mrow>
+                            <m:mo>|</m:mo>
+                          </m:mrow>
+                        </m:mrow>
+                      </m:msup>
+                      <m:mo>,</m:mo>
+                    </m:mrow>
+                  </m:mtd>
+                  <m:mtd columnalign="left">
+                    <m:mrow>
+                      <m:msub>
+                        <m:mi>λ</m:mi>
+                        <m:mi>s</m:mi>
+                      </m:msub>
+                      <m:mo>≥</m:mo>
+                      <m:msub>
+                        <m:mi>λ</m:mi>
+                        <m:mn>0</m:mn>
+                      </m:msub>
+                    </m:mrow>
+                  </m:mtd>
+                </m:mtr>
+                <m:mtr>
+                  <m:mtd columnalign="left">
+                    <m:mrow>
+                      <m:mn>0</m:mn>
+                      <m:mo>,</m:mo>
+                    </m:mrow>
+                  </m:mtd>
+                  <m:mtd columnalign="left">
+                    <m:mrow>
+                      <m:msub>
+                        <m:mi>λ</m:mi>
+                        <m:mi>s</m:mi>
+                      </m:msub>
+                      <m:mo>≱</m:mo>
+                      <m:msub>
+                        <m:mi>λ</m:mi>
+                        <m:mn>0</m:mn>
+                      </m:msub>
+                    </m:mrow>
+                  </m:mtd>
+                </m:mtr>
+              </m:mtable>
+            </m:mfenced>
+          </m:mrow>
+        </m:math>
+      </equation>
+      <para id="id102574">Clearly, there is a 1-1 correspondence between YD's <m:math overflow="scroll"><m:mrow><m:mi>λ</m:mi><m:mo>≥</m:mo><m:msub><m:mi>λ</m:mi><m:mn>0</m:mn></m:msub></m:mrow></m:math> and SYD's <m:math overflow="scroll"><m:mrow><m:msub><m:mi>λ</m:mi><m:mi>s</m:mi></m:msub><m:mo>≥</m:mo><m:msub><m:mi>λ</m:mi><m:mn>0</m:mn></m:msub></m:mrow></m:math> that all fit in an a<m:math overflow="scroll"><m:mo>×</m:mo></m:math>b box: each <m:math overflow="scroll"><m:mi>λ</m:mi></m:math> corresponds to one <m:math overflow="scroll"><m:msub><m:mi>λ</m:mi><m:mi>s</m:mi></m:msub></m:math> where <m:math overflow="scroll"><m:mrow><m:mi>λ</m:mi><m:mo>=</m:mo><m:msub><m:mi>λ</m:mi><m:mn>0</m:mn></m:msub><m:mo>+</m:mo><m:msub><m:mi>λ</m:mi><m:mi>s</m:mi></m:msub></m:mrow></m:math>. Using the 1-1 correspondence, we found that the probability distributions of the two sets are equal. Thus we state this theorem and its proof.</para>
+      <para id="id102690">
+        <emphasis effect="bold">Theorem:</emphasis>
+        <emphasis effect="italics">The probability distribution <m:math overflow="scroll"><m:mrow><m:mi>π</m:mi><m:mo>(</m:mo><m:mi>λ</m:mi><m:mo>)</m:mo></m:mrow></m:math> on YD's <m:math overflow="scroll"><m:mi>λ</m:mi></m:math> such that <m:math overflow="scroll"><m:mi>λ</m:mi></m:math> is greater than or equal to a fixed YD <m:math overflow="scroll"><m:msub><m:mi>λ</m:mi><m:mn>0</m:mn></m:msub></m:math> is equal to the probability distribution <m:math overflow="scroll"><m:mrow><m:msub><m:mi>π</m:mi><m:mi>s</m:mi></m:msub><m:mrow><m:mo>(</m:mo><m:msub><m:mi>λ</m:mi><m:mi>s</m:mi></m:msub><m:mo>)</m:mo></m:mrow></m:mrow></m:math> on the corresponding SYD's <m:math overflow="scroll"><m:msub><m:mi>λ</m:mi><m:mi>s</m:mi></m:msub></m:math> such that <m:math overflow="scroll"><m:msub><m:mi>λ</m:mi><m:mi>s</m:mi></m:msub></m:math> is greater than or equal to <m:math overflow="scroll"><m:msub><m:mi>λ</m:mi><m:mn>0</m:mn></m:msub></m:math>.</emphasis>
+      </para>
+      <para id="id102832">We first define</para>
+      <equation id="id102835">
+        <m:math overflow="scroll" mode="display">
+          <m:mrow>
+            <m:mi>π</m:mi>
+            <m:mrow>
+              <m:mo>(</m:mo>
+              <m:mi>λ</m:mi>
+              <m:mo>)</m:mo>
+            </m:mrow>
+            <m:mo>=</m:mo>
+            <m:mfrac>
+              <m:msup>
+                <m:mi>q</m:mi>
+                <m:mrow>
+                  <m:mo>|</m:mo>
+                  <m:mi>λ</m:mi>
+                  <m:mo>|</m:mo>
+                </m:mrow>
+              </m:msup>
+              <m:mi>Z</m:mi>
+            </m:mfrac>
+            <m:mspace width="4.pt"/>
+            <m:mtext>and</m:mtext>
+            <m:mspace width="4.pt"/>
+            <m:msub>
+              <m:mi>π</m:mi>
+              <m:mi>s</m:mi>
+            </m:msub>
+            <m:mrow>
+              <m:mo>(</m:mo>
+              <m:msub>
+                <m:mi>λ</m:mi>
+                <m:mi>s</m:mi>
+              </m:msub>
+              <m:mo>)</m:mo>
+            </m:mrow>
+            <m:mo>=</m:mo>
+            <m:mfrac>
+              <m:msup>
+                <m:mi>q</m:mi>
+                <m:mrow>
+                  <m:mrow>
+                    <m:mo>|</m:mo>
+                  </m:mrow>
+                  <m:msub>
+                    <m:mi>λ</m:mi>
+                    <m:mi>s</m:mi>
+                  </m:msub>
+                  <m:mrow>
+                    <m:mo>|</m:mo>
+                  </m:mrow>
+                </m:mrow>
+              </m:msup>
+              <m:msub>
+                <m:mi>Z</m:mi>
+                <m:mi>s</m:mi>
+              </m:msub>
+            </m:mfrac>
+            <m:mo>.</m:mo>
+          </m:mrow>
+        </m:math>
+      </equation>
+      <para id="id102938">Since all YD's we are sampling from are greater than or equal to <m:math overflow="scroll"><m:msub><m:mi>λ</m:mi><m:mn>0</m:mn></m:msub></m:math>, we may factor <m:math overflow="scroll"><m:msup><m:mi>q</m:mi><m:mrow><m:mrow><m:mo>|</m:mo></m:mrow><m:msub><m:mi>λ</m:mi><m:mn>0</m:mn></m:msub><m:mrow><m:mo>|</m:mo></m:mrow></m:mrow></m:msup></m:math> out of Z. Therefore Z=<m:math overflow="scroll"><m:mrow><m:msup><m:mi>q</m:mi><m:mrow><m:mrow><m:mo>|</m:mo></m:mrow><m:msub><m:mi>λ</m:mi><m:mn>0</m:mn></m:msub><m:mrow><m:mo>|</m:mo></m:mrow></m:mrow></m:msup><m:msub><m:mi>Z</m:mi><m:mi>s</m:mi></m:msub></m:mrow></m:math>. Also, we may say <m:math overflow="scroll"><m:mrow><m:mi>λ</m:mi><m:mo>=</m:mo><m:msub><m:mi>λ</m:mi><m:mn>0</m:mn></m:msub><m:mo>+</m:mo><m:msub><m:mi>λ</m:mi><m:mi>s</m:mi></m:msub></m:mrow></m:math>. Therefore,</para>
+      <equation id="uid17">
+        <m:math overflow="scroll" mode="display">
+          <m:mtable displaystyle="true">
+            <m:mtr>
+              <m:mtd columnalign="right">
+                <m:mrow>
+                  <m:mi>π</m:mi>
+                  <m:mo>(</m:mo>
+                  <m:mi>λ</m:mi>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+              </m:mtd>
+              <m:mtd columnalign="left">
+                <m:mrow>
+                  <m:mo>=</m:mo>
+                  <m:mfrac>
+                    <m:msup>
+                      <m:mi>q</m:mi>
+                      <m:mrow>
+                        <m:mrow>
+                          <m:mo>|</m:mo>
+                        </m:mrow>
+                        <m:msub>
+                          <m:mi>λ</m:mi>
+                          <m:mn>0</m:mn>
+                        </m:msub>
+                        <m:mrow>
+                          <m:mo>|</m:mo>
+                          <m:mo>+</m:mo>
+                          <m:mo>|</m:mo>
+                        </m:mrow>
+                        <m:msub>
+                          <m:mi>λ</m:mi>
+                          <m:mi>s</m:mi>
+                        </m:msub>
+                        <m:mrow>
+                          <m:mo>|</m:mo>
+                        </m:mrow>
+                      </m:mrow>
+                    </m:msup>
+                    <m:mrow>
+                      <m:msup>
+                        <m:mi>q</m:mi>
+                        <m:mrow>
+                          <m:mrow>
+                            <m:mo>|</m:mo>
+                          </m:mrow>
+                          <m:msub>
+                            <m:mi>λ</m:mi>
+                            <m:mn>0</m:mn>
+                          </m:msub>
+                          <m:mrow>
+                            <m:mo>|</m:mo>
+                          </m:mrow>
+                        </m:mrow>
+                      </m:msup>
+                      <m:msub>
+                        <m:mi>Z</m:mi>
+                        <m:mi>s</m:mi>
+                      </m:msub>
+                    </m:mrow>
+                  </m:mfrac>
+                </m:mrow>
+              </m:mtd>
+            </m:mtr>
+            <m:mtr>
+              <m:mtd/>
+              <m:mtd columnalign="left">
+                <m:mrow>
+                  <m:mo>=</m:mo>
+                  <m:mfrac>
+                    <m:msup>
+                      <m:mi>q</m:mi>
+                      <m:mrow>
+                        <m:mrow>
+                          <m:mo>|</m:mo>
+                        </m:mrow>
+                        <m:msub>
+                          <m:mi>λ</m:mi>
+                          <m:mi>s</m:mi>
+                        </m:msub>
+                        <m:mrow>
+                          <m:mo>|</m:mo>
+                        </m:mrow>
+                      </m:mrow>
+                    </m:msup>
+                    <m:msub>
+                      <m:mi>Z</m:mi>
+                      <m:mi>s</m:mi>
+                    </m:msub>
+                  </m:mfrac>
+                </m:mrow>
+              </m:mtd>
+            </m:mtr>
+            <m:mtr>
+              <m:mtd/>
+              <m:mtd columnalign="left">
+                <m:mrow>
+                  <m:mo>=</m:mo>
+                  <m:msub>
+                    <m:mi>π</m:mi>
+                    <m:mi>s</m:mi>
+                  </m:msub>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:msub>
+                      <m:mi>λ</m:mi>
+                      <m:mi>s</m:mi>
+                    </m:msub>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                  <m:mo>.</m:mo>
+                </m:mrow>
+              </m:mtd>
+            </m:mtr>
+          </m:mtable>
+        </m:math>
+      </equation>
+      <para id="id103226">Because these two probability distributions are equivalent we may sample from SYD's <m:math overflow="scroll"><m:mrow><m:msub><m:mi>λ</m:mi><m:mi>s</m:mi></m:msub><m:mo>≥</m:mo><m:msub><m:mi>λ</m:mi><m:mn>0</m:mn></m:msub></m:mrow></m:math> by sampling from YD's <m:math overflow="scroll"><m:mrow><m:mi>λ</m:mi><m:mo>≥</m:mo><m:msub><m:mi>λ</m:mi><m:mn>0</m:mn></m:msub></m:mrow></m:math>. We can couple the histories of the two YD's <m:math overflow="scroll"><m:msub><m:mi>λ</m:mi><m:mn>0</m:mn></m:msub></m:math> and <m:math overflow="scroll"><m:msub><m:mi>λ</m:mi><m:mtext>full</m:mtext></m:msub></m:math> using the heat bath algorithm (<m:math overflow="scroll"><m:msub><m:mi>λ</m:mi><m:mtext>full</m:mtext></m:msub></m:math> denotes the YD that is the full a<m:math overflow="scroll"><m:mo>×</m:mo></m:math>b box), and then delete the unit squares contained in <m:math overflow="scroll"><m:msub><m:mi>λ</m:mi><m:mn>0</m:mn></m:msub></m:math> from the outputted YD. Thus, we have sampled a SYD that is greater than or equal to a fixed YD according to the probability distribution stated in formula <link target-id="uid16"/>.</para>
+    </section>
+    <section id="cid3">
+      <title>Exact Sampling of SYD's in an a<m:math overflow="scroll"><m:mo>×</m:mo></m:math>b Box Greater Than or Equal to One of Two Fixed YD's</title>
+      <para id="id103370">Similar to our previous problem, in order to sample SYD's, <m:math overflow="scroll"><m:msub><m:mi>λ</m:mi><m:mi>s</m:mi></m:msub></m:math>, that fit in an a<m:math overflow="scroll"><m:mo>×</m:mo></m:math>b box such that <m:math overflow="scroll"><m:msub><m:mi>λ</m:mi><m:mi>s</m:mi></m:msub></m:math> is greater than or equal to one of two fixed YD's <m:math overflow="scroll"><m:msub><m:mi>λ</m:mi><m:mn>0</m:mn></m:msub></m:math> and <m:math overflow="scroll"><m:msub><m:mi>λ</m:mi><m:mn>1</m:mn></m:msub></m:math> according to this probability distribution:</para>
+      <equation id="uid18">
+        <m:math overflow="scroll" mode="display">
+          <m:mrow>
+            <m:mi>π</m:mi>
+            <m:mrow>
+              <m:mo>(</m:mo>
+              <m:msub>
+                <m:mi>λ</m:mi>
+                <m:mi>s</m:mi>
+              </m:msub>
+              <m:mo>)</m:mo>
+            </m:mrow>
+            <m:mo>∝</m:mo>
+            <m:mfenced separators="" open="{" close="">
+              <m:mtable>
+                <m:mtr>
+                  <m:mtd columnalign="left">
+                    <m:mrow>
+                      <m:msup>
+                        <m:mi>q</m:mi>
+                        <m:mrow>
+                          <m:mrow>
+                            <m:mo>|</m:mo>
+                          </m:mrow>
+                          <m:msub>
+                            <m:mi>λ</m:mi>
+                            <m:mi>s</m:mi>
+                          </m:msub>
+                          <m:mrow>
+                            <m:mo>|</m:mo>
+                          </m:mrow>
+                        </m:mrow>
+                      </m:msup>
+                      <m:mo>,</m:mo>
+                    </m:mrow>
+                  </m:mtd>
+                  <m:mtd columnalign="left">
+                    <m:mrow>
+                      <m:msub>
+                        <m:mi>λ</m:mi>
+                        <m:mi>s</m:mi>
+                      </m:msub>
+                      <m:mo>≥</m:mo>
+                      <m:mspace width="4.pt"/>
+                      <m:mtext>either</m:mtext>
+                      <m:mspace width="4.pt"/>
+                      <m:msub>
+                        <m:mi>λ</m:mi>
+                        <m:mn>0</m:mn>
+                      </m:msub>
+                      <m:mspace width="4.pt"/>
+                      <m:mtext>or</m:mtext>
+                      <m:mspace width="4.pt"/>
+                      <m:msub>
+                        <m:mi>λ</m:mi>
+                        <m:mn>1</m:mn>
+                      </m:msub>
+                    </m:mrow>
+                  </m:mtd>
+                </m:mtr>
+                <m:mtr>
+                  <m:mtd columnalign="left">
+                    <m:mrow>
+                      <m:mn>0</m:mn>
+                      <m:mo>,</m:mo>
+                    </m:mrow>
+                  </m:mtd>
+                  <m:mtd columnalign="left">
+                    <m:mtext>otherwise</m:mtext>
+                  </m:mtd>
+                </m:mtr>
+              </m:mtable>
+            </m:mfenced>
+          </m:mrow>
+        </m:math>
+      </equation>
+      <para id="id103572">we will start by sampling from YD's, <m:math overflow="scroll"><m:mi>λ</m:mi></m:math>, that fit in an a<m:math overflow="scroll"><m:mo>×</m:mo></m:math>b box where <m:math overflow="scroll"><m:mrow><m:mi>λ</m:mi><m:mo>≥</m:mo></m:mrow></m:math> at least one of <m:math overflow="scroll"><m:mrow><m:msub><m:mi>λ</m:mi><m:mn>0</m:mn></m:msub><m:mo>,</m:mo><m:msub><m:mi>λ</m:mi><m:mn>1</m:mn></m:msub></m:mrow></m:math>. Then we will sample from the fixed YD's <m:math overflow="scroll"><m:msub><m:mi>λ</m:mi><m:mn>0</m:mn></m:msub></m:math> and <m:math overflow="scroll"><m:msub><m:mi>λ</m:mi><m:mn>1</m:mn></m:msub></m:math> and the YD we select here (<m:math overflow="scroll"><m:msub><m:mi>λ</m:mi><m:mn>0</m:mn></m:msub></m:math> or <m:math overflow="scroll"><m:msub><m:mi>λ</m:mi><m:mn>1</m:mn></m:msub></m:math>) will be removed from <m:math overflow="scroll"><m:mi>λ</m:mi></m:math>. The result will be a SYD that has been sampled exactly according to the probability distribution from formula <link target-id="uid18"/>.</para>
+      <section id="uid19">
+        <title>The Probability Distribution on the YD's</title>
+        <para id="id103716">Each YD, <m:math overflow="scroll"><m:mi>λ</m:mi></m:math>, such that <m:math overflow="scroll"><m:mrow><m:mi>λ</m:mi><m:mo>≥</m:mo><m:msub><m:mi>λ</m:mi><m:mn>0</m:mn></m:msub><m:mo>∪</m:mo><m:msub><m:mi>λ</m:mi><m:mn>1</m:mn></m:msub></m:mrow></m:math> corresponds to two SYD's: <m:math overflow="scroll"><m:mrow><m:mo>(</m:mo><m:mi>λ</m:mi><m:mo>-</m:mo><m:msub><m:mi>λ</m:mi><m:mn>0</m:mn></m:msub><m:mo>)</m:mo></m:mrow></m:math> and <m:math overflow="scroll"><m:mrow><m:mo>(</m:mo><m:mi>λ</m:mi><m:mo>-</m:mo><m:msub><m:mi>λ</m:mi><m:mn>1</m:mn></m:msub><m:mo>)</m:mo></m:mrow></m:math>. These two SYD's are given <m:math overflow="scroll"><m:mrow><m:mi>π</m:mi><m:mrow><m:mo>(</m:mo><m:mi>λ</m:mi><m:mo>-</m:mo><m:msub><m:mi>λ</m:mi><m:mn>0</m:mn></m:msub><m:mo>)</m:mo></m:mrow><m:mo>∝</m:mo><m:msup><m:mi>q</m:mi><m:mrow><m:mrow><m:mo>|</m:mo><m:mi>λ</m:mi><m:mo>|</m:mo><m:mo>-</m:mo><m:mo>|</m:mo></m:mrow><m:msub><m:mi>λ</m:mi><m:mn>0</m:mn></m:msub><m:mrow><m:mo>|</m:mo></m:mrow></m:mrow></m:msup></m:mrow></m:math> and <m:math overflow="scroll"><m:mrow><m:mi>π</m:mi><m:mrow><m:mo>(</m:mo><m:mi>λ</m:mi><m:mo>-</m:mo><m:msub><m:mi>λ</m:mi><m:mn>1</m:mn></m:msub><m:mo>)</m:mo></m:mrow><m:mo>∝</m:mo><m:msup><m:mi>q</m:mi><m:mrow><m:mrow><m:mo>|</m:mo><m:mi>λ</m:mi><m:mo>|</m:mo><m:mo>-</m:mo><m:mo>|</m:mo></m:mrow><m:msub><m:mi>λ</m:mi><m:mn>1</m:mn></m:msub><m:mrow><m:mo>|</m:mo></m:mrow></m:mrow></m:msup></m:mrow></m:math>. Thus we define</para>
+        <equation id="id103926">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:mo>∀</m:mo>
+              <m:mi>λ</m:mi>
+              <m:mspace width="4.pt"/>
+              <m:mtext>such</m:mtext>
+              <m:mspace width="4.pt"/>
+              <m:mtext>that</m:mtext>
+              <m:mspace width="4.pt"/>
+              <m:mi>λ</m:mi>
+              <m:mo>≥</m:mo>
+              <m:msub>
+                <m:mi>λ</m:mi>
+                <m:mn>0</m:mn>
+              </m:msub>
+              <m:mo>∪</m:mo>
+              <m:msub>
+                <m:mi>λ</m:mi>
+                <m:mn>1</m:mn>
+              </m:msub>
+              <m:mo>,</m:mo>
+              <m:mi>π</m:mi>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>λ</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>∝</m:mo>
+              <m:msup>
+                <m:mi>q</m:mi>
+                <m:mrow>
+                  <m:mrow>
+                    <m:mo>|</m:mo>
+                    <m:mi>λ</m:mi>
+                    <m:mo>|</m:mo>
+                    <m:mo>-</m:mo>
+                    <m:mo>|</m:mo>
+                  </m:mrow>
+                  <m:msub>
+                    <m:mi>λ</m:mi>
+                    <m:mn>0</m:mn>
+                  </m:msub>
+                  <m:mrow>
+                    <m:mo>|</m:mo>
+                  </m:mrow>
+                </m:mrow>
+              </m:msup>
+              <m:mo>+</m:mo>
+              <m:msup>
+                <m:mi>q</m:mi>
+                <m:mrow>
+                  <m:mrow>
+                    <m:mo>|</m:mo>
+                    <m:mi>λ</m:mi>
+                    <m:mo>|</m:mo>
+                    <m:mo>-</m:mo>
+                    <m:mo>|</m:mo>
+                  </m:mrow>
+                  <m:msub>
+                    <m:mi>λ</m:mi>
+                    <m:mn>1</m:mn>
+                  </m:msub>
+                  <m:mrow>
+                    <m:mo>|</m:mo>
+                  </m:mrow>
+                </m:mrow>
+              </m:msup>
+              <m:mo>.</m:mo>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id104056">Each YD, <m:math overflow="scroll"><m:mi>λ</m:mi></m:math>, such that <m:math overflow="scroll"><m:mrow><m:mi>λ</m:mi><m:mo>≥</m:mo><m:msub><m:mi>λ</m:mi><m:mn>0</m:mn></m:msub></m:mrow></m:math> but <m:math overflow="scroll"><m:mrow><m:mi>λ</m:mi><m:mo>≱</m:mo><m:msub><m:mi>λ</m:mi><m:mn>1</m:mn></m:msub></m:mrow></m:math> has only one corresponding SYD: <m:math overflow="scroll"><m:mrow><m:mo>(</m:mo><m:mi>λ</m:mi><m:mo>-</m:mo><m:msub><m:mi>λ</m:mi><m:mn>0</m:mn></m:msub><m:mo>)</m:mo></m:mrow></m:math>. Thus, we define</para>
+        <equation id="id104136">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:mo>∀</m:mo>
+              <m:mi>λ</m:mi>
+              <m:mspace width="4.pt"/>
+              <m:mtext>such</m:mtext>
+              <m:mspace width="4.pt"/>
+              <m:mtext>that</m:mtext>
+              <m:mspace width="4.pt"/>
+              <m:mi>λ</m:mi>
+              <m:mo>≥</m:mo>
+              <m:msub>
+                <m:mi>λ</m:mi>
+                <m:mn>0</m:mn>
+              </m:msub>
+              <m:mo>,</m:mo>
+              <m:mi>λ</m:mi>
+              <m:mo>≱</m:mo>
+              <m:msub>
+                <m:mi>λ</m:mi>
+                <m:mn>1</m:mn>
+              </m:msub>
+              <m:mo>,</m:mo>
+              <m:mi>π</m:mi>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>λ</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>∝</m:mo>
+              <m:msup>
+                <m:mi>q</m:mi>
+                <m:mrow>
+                  <m:mrow>
+                    <m:mo>|</m:mo>
+                    <m:mi>λ</m:mi>
+                    <m:mo>|</m:mo>
+                    <m:mo>-</m:mo>
+                    <m:mo>|</m:mo>
+                  </m:mrow>
+                  <m:msub>
+                    <m:mi>λ</m:mi>
+                    <m:mn>0</m:mn>
+                  </m:msub>
+                  <m:mrow>
+                    <m:mo>|</m:mo>
+                  </m:mrow>
+                </m:mrow>
+              </m:msup>
+              <m:mo>.</m:mo>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id104238">Similarly, we define</para>
+        <equation id="id104244">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:mo>∀</m:mo>
+              <m:mi>λ</m:mi>
+              <m:mspace width="4.pt"/>
+              <m:mtext>such</m:mtext>
+              <m:mspace width="4.pt"/>
+              <m:mtext>that</m:mtext>
+              <m:mspace width="4.pt"/>
+              <m:mi>λ</m:mi>
+              <m:mo>≱</m:mo>
+              <m:msub>
+                <m:mi>λ</m:mi>
+                <m:mn>0</m:mn>
+              </m:msub>
+              <m:mo>,</m:mo>
+              <m:mi>λ</m:mi>
+              <m:mo>≥</m:mo>
+              <m:msub>
+                <m:mi>λ</m:mi>
+                <m:mn>1</m:mn>
+              </m:msub>
+              <m:mo>,</m:mo>
+              <m:mi>π</m:mi>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>λ</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>∝</m:mo>
+              <m:msup>
+                <m:mi>q</m:mi>
+                <m:mrow>
+                  <m:mrow>
+                    <m:mo>|</m:mo>
+                    <m:mi>λ</m:mi>
+                    <m:mo>|</m:mo>
+                    <m:mo>-</m:mo>
+                    <m:mo>|</m:mo>
+                  </m:mrow>
+                  <m:msub>
+                    <m:mi>λ</m:mi>
+                    <m:mn>1</m:mn>
+                  </m:msub>
+                  <m:mrow>
+                    <m:mo>|</m:mo>
+                  </m:mrow>
+                </m:mrow>
+              </m:msup>
+              <m:mo>.</m:mo>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id104347">Also,</para>
+        <equation id="id104352">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:mo>∀</m:mo>
+              <m:mi>λ</m:mi>
+              <m:mspace width="4.pt"/>
+              <m:mtext>such</m:mtext>
+              <m:mspace width="4.pt"/>
+              <m:mtext>that</m:mtext>
+              <m:mspace width="4.pt"/>
+              <m:mi>λ</m:mi>
+              <m:mo>≱</m:mo>
+              <m:msub>
+                <m:mi>λ</m:mi>
+                <m:mn>0</m:mn>
+              </m:msub>
+              <m:mo>,</m:mo>
+              <m:mi>λ</m:mi>
+              <m:mo>≱</m:mo>
+              <m:msub>
+                <m:mi>λ</m:mi>
+                <m:mn>1</m:mn>
+              </m:msub>
+              <m:mo>,</m:mo>
+              <m:mi>π</m:mi>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>λ</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>=</m:mo>
+              <m:mn>0</m:mn>
+              <m:mo>.</m:mo>
+            </m:mrow>
+          </m:math>
+        </equation>
+      </section>
+      <section id="uid20">
+        <title>Tripling From the Past</title>
+        <para id="id104438">The first method we devised for sampling SYD's according to the probability distribution in formula <link target-id="uid4"/> was simply to “triple” the young diagrams <m:math overflow="scroll"><m:mrow><m:msub><m:mi>λ</m:mi><m:mn>0</m:mn></m:msub><m:mo>,</m:mo><m:msub><m:mi>λ</m:mi><m:mn>1</m:mn></m:msub></m:mrow></m:math>, and <m:math overflow="scroll"><m:msub><m:mi>λ</m:mi><m:mtext>full</m:mtext></m:msub></m:math>, and then remove the boxes in either <m:math overflow="scroll"><m:msub><m:mi>λ</m:mi><m:mn>0</m:mn></m:msub></m:math> or <m:math overflow="scroll"><m:msub><m:mi>λ</m:mi><m:mn>1</m:mn></m:msub></m:math> based on the conditional probabilities based on <m:math overflow="scroll"><m:msup><m:mi>q</m:mi><m:mrow><m:mrow><m:mo>|</m:mo></m:mrow><m:msub><m:mi>λ</m:mi><m:mi>s</m:mi></m:msub><m:mrow><m:mo>|</m:mo></m:mrow></m:mrow></m:msup></m:math>. Unfortunately, we found a simple counterexample that proved that this method does not work because the partial ordering of YD's is not preserved due to the monotonicity of our probability distribution on YD's as stated in <link target-id="uid19">"The Probability Distribution on the YD's"</link> breaking in some places (see <link target-id="uid21"/> for the counterexample).</para>
+        <figure id="uid21">
+          <media id="uid21_media" alt="">
+            <image mime-type="image/png" src="../../media/counterexample.png" id="uid21_onlineimage" width="640"><!-- NOTE: attribute width changes image size online (pixels). original width is 640. --></image>
+            <image mime-type="application/postscript" for="pdf" src="../../media/counterexample.eps" id="uid21_printimage" print-width=".55">
+              <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+            </image>
+          </media>
+          <caption>Counterexample showing semi-monotonicity does not preserve partial ordering of YD's</caption>
+        </figure>
+      </section>
+      <section id="uid22">
+        <title>The “Black Box" Approach</title>
+        <figure id="uid23">
+          <media id="uid23_media" alt="">
+            <image mime-type="image/png" src="../../media/blackbox.png" id="uid23_onlineimage" width="736"><!-- NOTE: attribute width changes image size online (pixels). original width is 736. --></image>
+            <image mime-type="application/postscript" for="pdf" src="../../media/blackbox.eps" id="uid23_printimage" print-width="0.75">
+              <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+            </image>
+          </media>
+          <caption>The Black Box Approach</caption>
+        </figure>
+        <para id="id104594">Since the method of tripling from the past did not work, we devised another method which we call the black box approach. With this approach, we change the probability distribution by giving positive probability proportional to <m:math overflow="scroll"><m:mrow><m:mi>X</m:mi><m:mo>(</m:mo><m:mi>λ</m:mi><m:mo>)</m:mo></m:mrow></m:math> to young diagrams <m:math overflow="scroll"><m:mi>λ</m:mi></m:math> such that <m:math overflow="scroll"><m:mrow><m:mi>λ</m:mi><m:mo>≱</m:mo><m:msub><m:mi>λ</m:mi><m:mn>0</m:mn></m:msub><m:mo>,</m:mo><m:mi>λ</m:mi><m:mo>≱</m:mo><m:msub><m:mi>λ</m:mi><m:mn>1</m:mn></m:msub><m:mo>,</m:mo></m:mrow></m:math> and <m:math overflow="scroll"><m:mrow><m:mi>λ</m:mi><m:mo>≥</m:mo><m:msub><m:mi>λ</m:mi><m:mn>0</m:mn></m:msub><m:mo>∩</m:mo><m:msub><m:mi>λ</m:mi><m:mn>1</m:mn></m:msub></m:mrow></m:math>. Then we sample according to this new distribution, and if the sampled YD <m:math overflow="scroll"><m:msub><m:mi>λ</m:mi><m:mtext>temp</m:mtext></m:msub></m:math> satisfies all of the following:</para>
+        <equation id="id104709">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:msub>
+                <m:mi>λ</m:mi>
+                <m:mtext>temp</m:mtext>
+              </m:msub>
+              <m:mo>≱</m:mo>
+              <m:msub>
+                <m:mi>λ</m:mi>
+                <m:mn>0</m:mn>
+              </m:msub>
+              <m:mo>,</m:mo>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <equation id="id104738">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:msub>
+                <m:mi>λ</m:mi>
+                <m:mtext>temp</m:mtext>
+              </m:msub>
+              <m:mo>≱</m:mo>
+              <m:msub>
+                <m:mi>λ</m:mi>
+                <m:mn>1</m:mn>
+              </m:msub>
+              <m:mo>,</m:mo>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <equation id="id104768">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:msub>
+                <m:mi>λ</m:mi>
+                <m:mtext>temp</m:mtext>
+              </m:msub>
+              <m:mo>≥</m:mo>
+              <m:msub>
+                <m:mi>λ</m:mi>
+                <m:mn>0</m:mn>
+              </m:msub>
+              <m:mo>∩</m:mo>
+              <m:msub>
+                <m:mi>λ</m:mi>
+                <m:mn>1</m:mn>
+              </m:msub>
+              <m:mo>,</m:mo>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id104808">discard <m:math overflow="scroll"><m:msub><m:mi>λ</m:mi><m:mtext>temp</m:mtext></m:msub></m:math> and sample another YD according to the new distribution until the sampled YD <m:math overflow="scroll"><m:msub><m:mi>λ</m:mi><m:mtext>temp</m:mtext></m:msub></m:math> satisfies: <m:math overflow="scroll"><m:mrow><m:msub><m:mi>λ</m:mi><m:mtext>temp</m:mtext></m:msub><m:mo>≥</m:mo></m:mrow></m:math> at least one of <m:math overflow="scroll"><m:mrow><m:msub><m:mi>λ</m:mi><m:mn>0</m:mn></m:msub><m:mo>,</m:mo><m:msub><m:mi>λ</m:mi><m:mn>1</m:mn></m:msub></m:mrow></m:math>. When we sample a <m:math overflow="scroll"><m:msub><m:mi>λ</m:mi><m:mtext>temp</m:mtext></m:msub></m:math> such that <m:math overflow="scroll"><m:mrow><m:msub><m:mi>λ</m:mi><m:mtext>temp</m:mtext></m:msub><m:mo>≥</m:mo></m:mrow></m:math> at least one of <m:math overflow="scroll"><m:mrow><m:msub><m:mi>λ</m:mi><m:mn>0</m:mn></m:msub><m:mo>,</m:mo><m:msub><m:mi>λ</m:mi><m:mn>1</m:mn></m:msub></m:mrow></m:math>, then we output <m:math overflow="scroll"><m:msub><m:mi>λ</m:mi><m:mtext>temp</m:mtext></m:msub></m:math> and rename it <m:math overflow="scroll"><m:mi>λ</m:mi></m:math>. It is easily seen that the output, <m:math overflow="scroll"><m:mi>λ</m:mi></m:math>, has been sampled according to the probability distribution stated in <link target-id="uid19">"The Probability Distribution on the YD's"</link>.
+See <link target-id="uid23"/> for a schematic of the Black Box Approach.</para>
+        <para id="id104988">
+          <emphasis effect="bold">Theorem:</emphasis>
+          <emphasis effect="italics">The following values of X give a monotonic distribution for sampling:</emphasis>
+        </para>
+        <equation id="id105000">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:mi>X</m:mi>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>λ</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>=</m:mo>
+              <m:mfrac>
+                <m:msup>
+                  <m:mi>q</m:mi>
+                  <m:mrow>
+                    <m:mo>|</m:mo>
+                    <m:mi>λ</m:mi>
+                    <m:mo>|</m:mo>
+                  </m:mrow>
+                </m:msup>
+                <m:mrow>
+                  <m:msup>
+                    <m:mi>q</m:mi>
+                    <m:mrow>
+                      <m:mrow>
+                        <m:mo>|</m:mo>
+                      </m:mrow>
+                      <m:msub>
+                        <m:mi>λ</m:mi>
+                        <m:mn>0</m:mn>
+                      </m:msub>
+                      <m:mrow>
+                        <m:mo>|</m:mo>
+                      </m:mrow>
+                    </m:mrow>
+                  </m:msup>
+                  <m:mo>+</m:mo>
+                  <m:msup>
+                    <m:mi>q</m:mi>
+                    <m:mrow>
+                      <m:mrow>
+                        <m:mo>|</m:mo>
+                      </m:mrow>
+                      <m:msub>
+                        <m:mi>λ</m:mi>
+                        <m:mn>1</m:mn>
+                      </m:msub>
+                      <m:mrow>
+                        <m:mo>|</m:mo>
+                      </m:mrow>
+                    </m:mrow>
+                  </m:msup>
+                </m:mrow>
+              </m:mfrac>
+              <m:mo>.</m:mo>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id105083"/>
+        <para id="id105098">We will begin by numbering the possible categories of <m:math overflow="scroll"><m:mi>σ</m:mi></m:math> and <m:math overflow="scroll"><m:mi>τ</m:mi></m:math> as follows:</para>
+        <equation id="id105121">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:mtext>``1''</m:mtext>
+              <m:mspace width="4.pt"/>
+              <m:mtext>represents</m:mtext>
+              <m:mspace width="4.pt"/>
+              <m:mtext>young</m:mtext>
+              <m:mspace width="4.pt"/>
+              <m:mtext>diagrams</m:mtext>
+              <m:mspace width="4.pt"/>
+              <m:mi>λ</m:mi>
+              <m:mo>≥</m:mo>
+              <m:msub>
+                <m:mi>λ</m:mi>
+                <m:mn>0</m:mn>
+              </m:msub>
+              <m:mo>∩</m:mo>
+              <m:msub>
+                <m:mi>λ</m:mi>
+                <m:mn>1</m:mn>
+              </m:msub>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <equation id="id105176">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:mtext>``2''</m:mtext>
+              <m:mspace width="4.pt"/>
+              <m:mtext>represents</m:mtext>
+              <m:mspace width="4.pt"/>
+              <m:mtext>young</m:mtext>
+              <m:mspace width="4.pt"/>
+              <m:mtext>diagrams</m:mtext>
+              <m:mspace width="4.pt"/>
+              <m:mi>λ</m:mi>
+              <m:mo>≥</m:mo>
+              <m:msub>
+                <m:mi>λ</m:mi>
+                <m:mn>0</m:mn>
+              </m:msub>
+              <m:mo>,</m:mo>
+              <m:mi>λ</m:mi>
+              <m:mo>≱</m:mo>
+              <m:msub>
+                <m:mi>λ</m:mi>
+                <m:mn>1</m:mn>
+              </m:msub>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <equation id="id105236">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:mtext>``3''</m:mtext>
+              <m:mspace width="4.pt"/>
+              <m:mtext>represents</m:mtext>
+              <m:mspace width="4.pt"/>
+              <m:mtext>young</m:mtext>
+              <m:mspace width="4.pt"/>
+              <m:mtext>diagrams</m:mtext>
+              <m:mspace width="4.pt"/>
+              <m:mi>λ</m:mi>
+              <m:mo>≱</m:mo>
+              <m:msub>
+                <m:mi>λ</m:mi>
+                <m:mn>0</m:mn>
+              </m:msub>
+              <m:mo>,</m:mo>
+              <m:mi>λ</m:mi>
+              <m:mo>≥</m:mo>
+              <m:msub>
+                <m:mi>λ</m:mi>
+                <m:mn>1</m:mn>
+              </m:msub>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <equation id="id105295">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:mtext>``4''</m:mtext>
+              <m:mspace width="4.pt"/>
+              <m:mtext>represents</m:mtext>
+              <m:mspace width="4.pt"/>
+              <m:mtext>young</m:mtext>
+              <m:mspace width="4.pt"/>
+              <m:mtext>diagrams</m:mtext>
+              <m:mspace width="4.pt"/>
+              <m:mi>λ</m:mi>
+              <m:mo>≥</m:mo>
+              <m:msub>
+                <m:mi>λ</m:mi>
+                <m:mn>0</m:mn>
+              </m:msub>
+              <m:mo>∪</m:mo>
+              <m:msub>
+                <m:mi>λ</m:mi>
+                <m:mn>1</m:mn>
+              </m:msub>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id105351">We will label <m:math overflow="scroll"><m:msubsup><m:mi>σ</m:mi><m:mo>↓</m:mo><m:mi>i</m:mi></m:msubsup></m:math> first, <m:math overflow="scroll"><m:msubsup><m:mi>σ</m:mi><m:mo>↑</m:mo><m:mi>i</m:mi></m:msubsup></m:math> second, <m:math overflow="scroll"><m:msubsup><m:mi>τ</m:mi><m:mo>↓</m:mo><m:mi>i</m:mi></m:msubsup></m:math> third, and <m:math overflow="scroll"><m:msubsup><m:mi>τ</m:mi><m:mo>↑</m:mo><m:mi>i</m:mi></m:msubsup></m:math> fourth. For example, 1234 represents the situation where <m:math overflow="scroll"><m:msubsup><m:mi>σ</m:mi><m:mo>↓</m:mo><m:mi>i</m:mi></m:msubsup></m:math> belongs to category 1, <m:math overflow="scroll"><m:msubsup><m:mi>σ</m:mi><m:mo>↑</m:mo><m:mi>i</m:mi></m:msubsup></m:math> belongs to category 2, <m:math overflow="scroll"><m:msubsup><m:mi>τ</m:mi><m:mo>↓</m:mo><m:mi>i</m:mi></m:msubsup></m:math> belongs to category 3, and <m:math overflow="scroll"><m:msubsup><m:mi>τ</m:mi><m:mo>↑</m:mo><m:mi>i</m:mi></m:msubsup></m:math> belongs to category 4.</para>
+        <para id="id105498">The possible situations for <m:math overflow="scroll"><m:msubsup><m:mi>σ</m:mi><m:mo>↓</m:mo><m:mi>i</m:mi></m:msubsup></m:math> and <m:math overflow="scroll"><m:msubsup><m:mi>σ</m:mi><m:mo>↑</m:mo><m:mi>i</m:mi></m:msubsup></m:math> are the following: 11, 12, 13, 14, 22, 24, 33, 34, and 44. The values of <m:math overflow="scroll"><m:mfrac><m:mrow><m:mi>π</m:mi><m:mo>(</m:mo><m:msubsup><m:mi>σ</m:mi><m:mo>↓</m:mo><m:mi>i</m:mi></m:msubsup><m:mo>)</m:mo></m:mrow><m:mrow><m:mi>π</m:mi><m:mo>(</m:mo><m:msubsup><m:mi>σ</m:mi><m:mo>↑</m:mo><m:mi>i</m:mi></m:msubsup><m:mo>)</m:mo></m:mrow></m:mfrac></m:math> for each situation are the following:</para>
+        <para id="id105585">
+          <m:math overflow="scroll">
+            <m:mrow>
+              <m:mn>11</m:mn>
+              <m:mo>:</m:mo>
+              <m:mfrac>
+                <m:mn>1</m:mn>
+                <m:mi>q</m:mi>
+              </m:mfrac>
+            </m:mrow>
+          </m:math>
+        </para>
+        <para id="id105607">
+          <m:math overflow="scroll">
+            <m:mrow>
+              <m:mn>12</m:mn>
+              <m:mo>:</m:mo>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mfrac>
+                  <m:mn>1</m:mn>
+                  <m:mi>q</m:mi>
+                </m:mfrac>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mfrac>
+                  <m:mn>1</m:mn>
+                  <m:mrow>
+                    <m:mn>1</m:mn>
+                    <m:mo>+</m:mo>
+                    <m:msup>
+                      <m:mi>q</m:mi>
+                      <m:mrow>
+                        <m:mrow>
+                          <m:mo>|</m:mo>
+                        </m:mrow>
+                        <m:msub>
+                          <m:mi>λ</m:mi>
+                          <m:mn>1</m:mn>
+                        </m:msub>
+                        <m:mrow>
+                          <m:mo>|</m:mo>
+                          <m:mo>-</m:mo>
+                          <m:mo>|</m:mo>
+                        </m:mrow>
+                        <m:msub>
+                          <m:mi>λ</m:mi>
+                          <m:mn>0</m:mn>
+                        </m:msub>
+                        <m:mrow>
+                          <m:mo>|</m:mo>
+                        </m:mrow>
+                      </m:mrow>
+                    </m:msup>
+                  </m:mrow>
+                </m:mfrac>
+                <m:mo>)</m:mo>
+              </m:mrow>
+            </m:mrow>
+          </m:math>
+        </para>
+        <para id="id105684">
+          <m:math overflow="scroll">
+            <m:mrow>
+              <m:mn>13</m:mn>
+              <m:mo>:</m:mo>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mfrac>
+                  <m:mn>1</m:mn>
+                  <m:mi>q</m:mi>
+                </m:mfrac>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mfrac>
+                  <m:mn>1</m:mn>
+                  <m:mrow>
+                    <m:mn>1</m:mn>
+                    <m:mo>+</m:mo>
+                    <m:msup>
+                      <m:mi>q</m:mi>
+                      <m:mrow>
+                        <m:mrow>
+                          <m:mo>|</m:mo>
+                        </m:mrow>
+                        <m:msub>
+                          <m:mi>λ</m:mi>
+                          <m:mn>0</m:mn>
+                        </m:msub>
+                        <m:mrow>
+                          <m:mo>|</m:mo>
+                          <m:mo>-</m:mo>
+                          <m:mo>|</m:mo>
+                        </m:mrow>
+                        <m:msub>
+                          <m:mi>λ</m:mi>
+                          <m:mn>1</m:mn>
+                        </m:msub>
+                        <m:mrow>
+                          <m:mo>|</m:mo>
+                        </m:mrow>
+                      </m:mrow>
+                    </m:msup>
+                  </m:mrow>
+                </m:mfrac>
+                <m:mo>)</m:mo>
+              </m:mrow>
+            </m:mrow>
+          </m:math>
+        </para>
+        <para id="id105762">
+          <m:math overflow="scroll">
+            <m:mrow>
+              <m:mn>14</m:mn>
+              <m:mo>:</m:mo>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mfrac>
+                  <m:mn>1</m:mn>
+                  <m:mi>q</m:mi>
+                </m:mfrac>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:msup>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:msup>
+                    <m:mi>q</m:mi>
+                    <m:mrow>
+                      <m:mrow>
+                        <m:mo>|</m:mo>
+                      </m:mrow>
+                      <m:msub>
+                        <m:mi>λ</m:mi>
+                        <m:mn>1</m:mn>
+                      </m:msub>
+                      <m:mrow>
+                        <m:mo>|</m:mo>
+                        <m:mo>-</m:mo>
+                        <m:mo>|</m:mo>
+                      </m:mrow>
+                      <m:msub>
+                        <m:mi>λ</m:mi>
+                        <m:mn>0</m:mn>
+                      </m:msub>
+                      <m:mrow>
+                        <m:mo>|</m:mo>
+                      </m:mrow>
+                    </m:mrow>
+                  </m:msup>
+                  <m:mo>+</m:mo>
+                  <m:mn>2</m:mn>
+                  <m:mo>+</m:mo>
+                  <m:msup>
+                    <m:mi>q</m:mi>
+                    <m:mrow>
+                      <m:mrow>
+                        <m:mo>|</m:mo>
+                      </m:mrow>
+                      <m:msub>
+                        <m:mi>λ</m:mi>
+                        <m:mn>0</m:mn>
+                      </m:msub>
+                      <m:mrow>
+                        <m:mo>|</m:mo>
+                        <m:mo>-</m:mo>
+                        <m:mo>|</m:mo>
+                      </m:mrow>
+                      <m:msub>
+                        <m:mi>λ</m:mi>
+                        <m:mn>1</m:mn>
+                      </m:msub>
+                      <m:mrow>
+                        <m:mo>|</m:mo>
+                      </m:mrow>
+                    </m:mrow>
+                  </m:msup>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mrow>
+                  <m:mo>-</m:mo>
+                  <m:mn>1</m:mn>
+                </m:mrow>
+              </m:msup>
+            </m:mrow>
+          </m:math>
+        </para>
+        <para id="id105880">
+          <m:math overflow="scroll">
+            <m:mrow>
+              <m:mn>22</m:mn>
+              <m:mo>:</m:mo>
+              <m:mfrac>
+                <m:mn>1</m:mn>
+                <m:mi>q</m:mi>
+              </m:mfrac>
+            </m:mrow>
+          </m:math>
+        </para>
+        <para id="id105903">
+          <m:math overflow="scroll">
+            <m:mrow>
+              <m:mn>24</m:mn>
+              <m:mo>:</m:mo>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mfrac>
+                  <m:mn>1</m:mn>
+                  <m:mi>q</m:mi>
+                </m:mfrac>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mfrac>
+                  <m:mn>1</m:mn>
+                  <m:mrow>
+                    <m:mn>1</m:mn>
+                    <m:mo>+</m:mo>
+                    <m:msup>
+                      <m:mi>q</m:mi>
+                      <m:mrow>
+                        <m:mrow>
+                          <m:mo>|</m:mo>
+                        </m:mrow>
+                        <m:msub>
+                          <m:mi>λ</m:mi>
+                          <m:mn>0</m:mn>
+                        </m:msub>
+                        <m:mrow>
+                          <m:mo>|</m:mo>
+                          <m:mo>-</m:mo>
+                          <m:mo>|</m:mo>
+                        </m:mrow>
+                        <m:msub>
+                          <m:mi>λ</m:mi>
+                          <m:mn>1</m:mn>
+                        </m:msub>
+                        <m:mrow>
+                          <m:mo>|</m:mo>
+                        </m:mrow>
+                      </m:mrow>
+                    </m:msup>
+                  </m:mrow>
+                </m:mfrac>
+                <m:mo>)</m:mo>
+              </m:mrow>
+            </m:mrow>
+          </m:math>
+        </para>
+        <para id="id105980">
+          <m:math overflow="scroll">
+            <m:mrow>
+              <m:mn>33</m:mn>
+              <m:mo>:</m:mo>
+              <m:mfrac>
+                <m:mn>1</m:mn>
+                <m:mi>q</m:mi>
+              </m:mfrac>
+            </m:mrow>
+          </m:math>
+        </para>
+        <para id="id106002">
+          <m:math overflow="scroll">
+            <m:mrow>
+              <m:mn>34</m:mn>
+              <m:mo>:</m:mo>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mfrac>
+                  <m:mn>1</m:mn>
+                  <m:mi>q</m:mi>
+                </m:mfrac>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mfrac>
+                  <m:mn>1</m:mn>
+                  <m:mrow>
+                    <m:mn>1</m:mn>
+                    <m:mo>+</m:mo>
+                    <m:msup>
+                      <m:mi>q</m:mi>
+                      <m:mrow>
+                        <m:mrow>
+                          <m:mo>|</m:mo>
+                        </m:mrow>
+                        <m:msub>
+                          <m:mi>λ</m:mi>
+                          <m:mn>1</m:mn>
+                        </m:msub>
+                        <m:mrow>
+                          <m:mo>|</m:mo>
+                          <m:mo>-</m:mo>
+                          <m:mo>|</m:mo>
+                        </m:mrow>
+                        <m:msub>
+                          <m:mi>λ</m:mi>
+                          <m:mn>0</m:mn>
+                        </m:msub>
+                        <m:mrow>
+                          <m:mo>|</m:mo>
+                        </m:mrow>
+                      </m:mrow>
+                    </m:msup>
+                  </m:mrow>
+                </m:mfrac>
+                <m:mo>)</m:mo>
+              </m:mrow>
+            </m:mrow>
+          </m:math>
+        </para>
+        <para id="id106079">
+          <m:math overflow="scroll">
+            <m:mrow>
+              <m:mn>44</m:mn>
+              <m:mo>:</m:mo>
+              <m:mfrac>
+                <m:mn>1</m:mn>
+                <m:mi>q</m:mi>
+              </m:mfrac>
+            </m:mrow>
+          </m:math>
+        </para>
+        <para id="id106101">The possible situations for <m:math overflow="scroll"><m:msubsup><m:mi>τ</m:mi><m:mo>↓</m:mo><m:mi>i</m:mi></m:msubsup></m:math> and <m:math overflow="scroll"><m:msubsup><m:mi>τ</m:mi><m:mo>↑</m:mo><m:mi>i</m:mi></m:msubsup></m:math> are the same situations for <m:math overflow="scroll"><m:msubsup><m:mi>σ</m:mi><m:mo>↓</m:mo><m:mi>i</m:mi></m:msubsup></m:math> and <m:math overflow="scroll"><m:msubsup><m:mi>σ</m:mi><m:mo>↑</m:mo><m:mi>i</m:mi></m:msubsup></m:math>. Also, the values of <m:math overflow="scroll"><m:mfrac><m:mrow><m:mi>π</m:mi><m:mo>(</m:mo><m:msubsup><m:mi>τ</m:mi><m:mo>↓</m:mo><m:mi>i</m:mi></m:msubsup><m:mo>)</m:mo></m:mrow><m:mrow><m:mi>π</m:mi><m:mo>(</m:mo><m:msubsup><m:mi>τ</m:mi><m:mo>↑</m:mo><m:mi>i</m:mi></m:msubsup><m:mo>)</m:mo></m:mrow></m:mfrac></m:math> are the same values for <m:math overflow="scroll"><m:mfrac><m:mrow><m:mi>π</m:mi><m:mo>(</m:mo><m:msubsup><m:mi>σ</m:mi><m:mo>↓</m:mo><m:mi>i</m:mi></m:msubsup><m:mo>)</m:mo></m:mrow><m:mrow><m:mi>π</m:mi><m:mo>(</m:mo><m:msubsup><m:mi>σ</m:mi><m:mo>↑</m:mo><m:mi>i</m:mi></m:msubsup><m:mo>)</m:mo></m:mrow></m:mfrac></m:math> for each situation.</para>
+        <para id="id106270">In order to prove monotonicity, we need to show that for all possible combinations of <m:math overflow="scroll"><m:mrow><m:msubsup><m:mi>σ</m:mi><m:mo>↓</m:mo><m:mi>i</m:mi></m:msubsup><m:mo>,</m:mo><m:msubsup><m:mi>σ</m:mi><m:mo>↑</m:mo><m:mi>i</m:mi></m:msubsup><m:mo>,</m:mo><m:msubsup><m:mi>τ</m:mi><m:mo>↓</m:mo><m:mi>i</m:mi></m:msubsup></m:mrow></m:math>, and <m:math overflow="scroll"><m:msubsup><m:mi>τ</m:mi><m:mo>↑</m:mo><m:mi>i</m:mi></m:msubsup></m:math>, the inequality from formula <link target-id="uid12"/> holds. In all of the following cases, we will prove that either the inequality holds or the combinations of <m:math overflow="scroll"><m:mrow><m:msubsup><m:mi>σ</m:mi><m:mo>↓</m:mo><m:mi>i</m:mi></m:msubsup><m:mo>,</m:mo><m:msubsup><m:mi>σ</m:mi><m:mo>↑</m:mo><m:mi>i</m:mi></m:msubsup><m:mo>,</m:mo><m:msubsup><m:mi>τ</m:mi><m:mo>↓</m:mo><m:mi>i</m:mi></m:msubsup></m:mrow></m:math>, and <m:math overflow="scroll"><m:msubsup><m:mi>τ</m:mi><m:mo>↑</m:mo><m:mi>i</m:mi></m:msubsup></m:math> are impossible.</para>
+        <para id="id106407">Even though the combinations of <m:math overflow="scroll"><m:msubsup><m:mi>σ</m:mi><m:mo>↓</m:mo><m:mi>i</m:mi></m:msubsup></m:math> and <m:math overflow="scroll"><m:msubsup><m:mi>σ</m:mi><m:mo>↑</m:mo><m:mi>i</m:mi></m:msubsup></m:math> are possible and combinations of <m:math overflow="scroll"><m:msubsup><m:mi>τ</m:mi><m:mo>↓</m:mo><m:mi>i</m:mi></m:msubsup></m:math> and <m:math overflow="scroll"><m:msubsup><m:mi>τ</m:mi><m:mo>↑</m:mo><m:mi>i</m:mi></m:msubsup></m:math> are possible, the following combinations of <m:math overflow="scroll"><m:msubsup><m:mi>σ</m:mi><m:mo>↓</m:mo><m:mi>i</m:mi></m:msubsup></m:math>, <m:math overflow="scroll"><m:msubsup><m:mi>σ</m:mi><m:mo>↑</m:mo><m:mi>i</m:mi></m:msubsup></m:math>, <m:math overflow="scroll"><m:msubsup><m:mi>τ</m:mi><m:mo>↓</m:mo><m:mi>i</m:mi></m:msubsup></m:math>, and <m:math overflow="scroll"><m:msubsup><m:mi>τ</m:mi><m:mo>↑</m:mo><m:mi>i</m:mi></m:msubsup></m:math> are impossible because <m:math overflow="scroll"><m:mrow><m:mi>σ</m:mi><m:mo>≤</m:mo><m:mi>τ</m:mi></m:mrow></m:math>: 1211, 1213, 1233, 1311, 1312, 1322, 1411, 1412, 1413, 1422, 1433, 2211, 2212, 2213, 2214, 2233, 2411, 2412, 2413, 2414, 2422, 2433, 3311, 3312,3313, 3314, 3322, 3324, 3411, 3412, 3413, 3414, 3422, 3424, 3433, 4411, 4412, 4413, 4414, 4422, 4424, 4433, 4434.</para>
+        <para id="id106571">The following combinations of <m:math overflow="scroll"><m:msubsup><m:mi>σ</m:mi><m:mo>↓</m:mo><m:mi>i</m:mi></m:msubsup></m:math>, <m:math overflow="scroll"><m:msubsup><m:mi>σ</m:mi><m:mo>↑</m:mo><m:mi>i</m:mi></m:msubsup></m:math>, <m:math overflow="scroll"><m:msubsup><m:mi>τ</m:mi><m:mo>↓</m:mo><m:mi>i</m:mi></m:msubsup></m:math>, and <m:math overflow="scroll"><m:msubsup><m:mi>τ</m:mi><m:mo>↑</m:mo><m:mi>i</m:mi></m:msubsup></m:math> are possible and satisfy the inequality because <m:math overflow="scroll"><m:mfrac><m:mrow><m:mi>π</m:mi><m:mo>(</m:mo><m:msubsup><m:mi>σ</m:mi><m:mo>↓</m:mo><m:mi>i</m:mi></m:msubsup><m:mo>)</m:mo></m:mrow><m:mrow><m:mi>π</m:mi><m:mo>(</m:mo><m:msubsup><m:mi>σ</m:mi><m:mo>↑</m:mo><m:mi>i</m:mi></m:msubsup><m:mo>)</m:mo></m:mrow></m:mfrac></m:math> and <m:math overflow="scroll"><m:mfrac><m:mrow><m:mi>π</m:mi><m:mo>(</m:mo><m:msubsup><m:mi>τ</m:mi><m:mo>↓</m:mo><m:mi>i</m:mi></m:msubsup><m:mo>)</m:mo></m:mrow><m:mrow><m:mi>π</m:mi><m:mo>(</m:mo><m:msubsup><m:mi>τ</m:mi><m:mo>↑</m:mo><m:mi>i</m:mi></m:msubsup><m:mo>)</m:mo></m:mrow></m:mfrac></m:math> are equal: 1111, 1122, 1133, 1144, 1212, 1234, 1313, 1324, 1414, 2222, 2424, 3333, 3344, 3434, 4444.</para>
+        <para id="id106739">The following combinations of <m:math overflow="scroll"><m:msubsup><m:mi>σ</m:mi><m:mo>↓</m:mo><m:mi>i</m:mi></m:msubsup></m:math>, <m:math overflow="scroll"><m:msubsup><m:mi>σ</m:mi><m:mo>↑</m:mo><m:mi>i</m:mi></m:msubsup></m:math>, <m:math overflow="scroll"><m:msubsup><m:mi>τ</m:mi><m:mo>↓</m:mo><m:mi>i</m:mi></m:msubsup></m:math>, and <m:math overflow="scroll"><m:msubsup><m:mi>τ</m:mi><m:mo>↑</m:mo><m:mi>i</m:mi></m:msubsup></m:math> are possible: 1112, 1113, 1114, 1124, 1134, 2234, 3334. They satisfy the inequality because</para>
+        <equation id="id106815">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:mfrac>
+                <m:mn>1</m:mn>
+                <m:mi>q</m:mi>
+              </m:mfrac>
+              <m:mo>≥</m:mo>
+              <m:mfenced separators="" open="(" close=")">
+                <m:mfrac>
+                  <m:mn>1</m:mn>
+                  <m:mi>q</m:mi>
+                </m:mfrac>
+              </m:mfenced>
+              <m:mfenced separators="" open="(" close=")">
+                <m:mfrac>
+                  <m:mn>1</m:mn>
+                  <m:mrow>
+                    <m:mn>1</m:mn>
+                    <m:mo>+</m:mo>
+                    <m:msup>
+                      <m:mi>q</m:mi>
+                      <m:mrow>
+                        <m:mrow>
+                          <m:mo>|</m:mo>
+                        </m:mrow>
+                        <m:msub>
+                          <m:mi>λ</m:mi>
+                          <m:mn>1</m:mn>
+                        </m:msub>
+                        <m:mrow>
+                          <m:mo>|</m:mo>
+                          <m:mo>-</m:mo>
+                          <m:mo>|</m:mo>
+                        </m:mrow>
+                        <m:msub>
+                          <m:mi>λ</m:mi>
+                          <m:mn>0</m:mn>
+                        </m:msub>
+                        <m:mrow>
+                          <m:mo>|</m:mo>
+                        </m:mrow>
+                      </m:mrow>
+                    </m:msup>
+                  </m:mrow>
+                </m:mfrac>
+              </m:mfenced>
+              <m:mo>,</m:mo>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <equation id="id106901">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:mfrac>
+                <m:mn>1</m:mn>
+                <m:mi>q</m:mi>
+              </m:mfrac>
+              <m:mo>≥</m:mo>
+              <m:mfenced separators="" open="(" close=")">
+                <m:mfrac>
+                  <m:mn>1</m:mn>
+                  <m:mi>q</m:mi>
+                </m:mfrac>
+              </m:mfenced>
+              <m:mfenced separators="" open="(" close=")">
+                <m:mfrac>
+                  <m:mn>1</m:mn>
+                  <m:mrow>
+                    <m:mn>1</m:mn>
+                    <m:mo>+</m:mo>
+                    <m:msup>
+                      <m:mi>q</m:mi>
+                      <m:mrow>
+                        <m:mrow>
+                          <m:mo>|</m:mo>
+                        </m:mrow>
+                        <m:msub>
+                          <m:mi>λ</m:mi>
+                          <m:mn>0</m:mn>
+                        </m:msub>
+                        <m:mrow>
+                          <m:mo>|</m:mo>
+                          <m:mo>-</m:mo>
+                          <m:mo>|</m:mo>
+                        </m:mrow>
+                        <m:msub>
+                          <m:mi>λ</m:mi>
+                          <m:mn>1</m:mn>
+                        </m:msub>
+                        <m:mrow>
+                          <m:mo>|</m:mo>
+                        </m:mrow>
+                      </m:mrow>
+                    </m:msup>
+                  </m:mrow>
+                </m:mfrac>
+              </m:mfenced>
+              <m:mo>,</m:mo>
+              <m:mspace width="4.pt"/>
+              <m:mtext>and</m:mtext>
+              <m:mspace width="4.pt"/>
+              <m:mfrac>
+                <m:mn>1</m:mn>
+                <m:mi>q</m:mi>
+              </m:mfrac>
+              <m:mo>≥</m:mo>
+              <m:mfenced separators="" open="(" close=")">
+                <m:mfrac>
+                  <m:mn>1</m:mn>
+                  <m:mi>q</m:mi>
+                </m:mfrac>
+              </m:mfenced>
+              <m:msup>
+                <m:mfenced separators="" open="(" close=")">
+                  <m:msup>
+                    <m:mi>q</m:mi>
+                    <m:mrow>
+                      <m:mrow>
+                        <m:mo>|</m:mo>
+                      </m:mrow>
+                      <m:msub>
+                        <m:mi>λ</m:mi>
+                        <m:mn>1</m:mn>
+                      </m:msub>
+                      <m:mrow>
+                        <m:mo>|</m:mo>
+                        <m:mo>-</m:mo>
+                        <m:mo>|</m:mo>
+                      </m:mrow>
+                      <m:msub>
+                        <m:mi>λ</m:mi>
+                        <m:mn>0</m:mn>
+                      </m:msub>
+                      <m:mrow>
+                        <m:mo>|</m:mo>
+                      </m:mrow>
+                    </m:mrow>
+                  </m:msup>
+                  <m:mo>+</m:mo>
+                  <m:mn>2</m:mn>
+                  <m:mo>+</m:mo>
+                  <m:msup>
+                    <m:mi>q</m:mi>
+                    <m:mrow>
+                      <m:mrow>
+                        <m:mo>|</m:mo>
+                      </m:mrow>
+                      <m:msub>
+                        <m:mi>λ</m:mi>
+                        <m:mn>0</m:mn>
+                      </m:msub>
+                      <m:mrow>
+                        <m:mo>|</m:mo>
+                        <m:mo>-</m:mo>
+                        <m:mo>|</m:mo>
+                      </m:mrow>
+                      <m:msub>
+                        <m:mi>λ</m:mi>
+                        <m:mn>1</m:mn>
+                      </m:msub>
+                      <m:mrow>
+                        <m:mo>|</m:mo>
+                      </m:mrow>
+                    </m:mrow>
+                  </m:msup>
+                </m:mfenced>
+                <m:mrow>
+                  <m:mo>-</m:mo>
+                  <m:mn>1</m:mn>
+                </m:mrow>
+              </m:msup>
+              <m:mo>.</m:mo>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id107114">The following combinations of <m:math overflow="scroll"><m:msubsup><m:mi>σ</m:mi><m:mo>↓</m:mo><m:mi>i</m:mi></m:msubsup></m:math>, <m:math overflow="scroll"><m:msubsup><m:mi>σ</m:mi><m:mo>↑</m:mo><m:mi>i</m:mi></m:msubsup></m:math>, <m:math overflow="scroll"><m:msubsup><m:mi>τ</m:mi><m:mo>↓</m:mo><m:mi>i</m:mi></m:msubsup></m:math>, and <m:math overflow="scroll"><m:msubsup><m:mi>τ</m:mi><m:mo>↑</m:mo><m:mi>i</m:mi></m:msubsup></m:math> are impossible because the same location, i, is picked for <m:math overflow="scroll"><m:mi>σ</m:mi></m:math> and <m:math overflow="scroll"><m:mi>τ</m:mi></m:math>: 1222, 1224, 1244, 1333, 1334, 1344, 1424, 1434, 1444, 2434, 2444, 3444.</para>
+        <para id="id107209">Now the only two combinations left are 1214 and 1314. These combinations are possible and the inequality holds because</para>
+        <equation id="id107213">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:mfenced separators="" open="(" close=")">
+                <m:mfrac>
+                  <m:mn>1</m:mn>
+                  <m:mi>q</m:mi>
+                </m:mfrac>
+              </m:mfenced>
+              <m:mfenced separators="" open="(" close=")">
+                <m:mfrac>
+                  <m:mn>1</m:mn>
+                  <m:mrow>
+                    <m:mn>1</m:mn>
+                    <m:mo>+</m:mo>
+                    <m:msup>
+                      <m:mi>q</m:mi>
+                      <m:mrow>
+                        <m:mrow>
+                          <m:mo>|</m:mo>
+                        </m:mrow>
+                        <m:msub>
+                          <m:mi>λ</m:mi>
+                          <m:mn>1</m:mn>
+                        </m:msub>
+                        <m:mrow>
+                          <m:mo>|</m:mo>
+                          <m:mo>-</m:mo>
+                          <m:mo>|</m:mo>
+                        </m:mrow>
+                        <m:msub>
+                          <m:mi>λ</m:mi>
+                          <m:mn>0</m:mn>
+                        </m:msub>
+                        <m:mrow>
+                          <m:mo>|</m:mo>
+                        </m:mrow>
+                      </m:mrow>
+                    </m:msup>
+                  </m:mrow>
+                </m:mfrac>
+                <m:mrow>
+                  <m:mo>]</m:mo>
+                </m:mrow>
+              </m:mfenced>
+              <m:mo>≥</m:mo>
+              <m:mfenced separators="" open="(" close=")">
+                <m:mfrac>
+                  <m:mn>1</m:mn>
+                  <m:mi>q</m:mi>
+                </m:mfrac>
+              </m:mfenced>
+              <m:msup>
+                <m:mfenced separators="" open="(" close=")">
+                  <m:msup>
+                    <m:mi>q</m:mi>
+                    <m:mrow>
+                      <m:mrow>
+                        <m:mo>|</m:mo>
+                      </m:mrow>
+                      <m:msub>
+                        <m:mi>λ</m:mi>
+                        <m:mn>1</m:mn>
+                      </m:msub>
+                      <m:mrow>
+                        <m:mo>|</m:mo>
+                        <m:mo>-</m:mo>
+                        <m:mo>|</m:mo>
+                      </m:mrow>
+                      <m:msub>
+                        <m:mi>λ</m:mi>
+                        <m:mn>0</m:mn>
+                      </m:msub>
+                      <m:mrow>
+                        <m:mo>|</m:mo>
+                      </m:mrow>
+                    </m:mrow>
+                  </m:msup>
+                  <m:mo>+</m:mo>
+                  <m:mn>2</m:mn>
+                  <m:mo>+</m:mo>
+                  <m:msup>
+                    <m:mi>q</m:mi>
+                    <m:mrow>
+                      <m:mrow>
+                        <m:mo>|</m:mo>
+                      </m:mrow>
+                      <m:msub>
+                        <m:mi>λ</m:mi>
+                        <m:mn>0</m:mn>
+                      </m:msub>
+                      <m:mrow>
+                        <m:mo>|</m:mo>
+                        <m:mo>-</m:mo>
+                        <m:mo>|</m:mo>
+                      </m:mrow>
+                      <m:msub>
+                        <m:mi>λ</m:mi>
+                        <m:mn>1</m:mn>
+                      </m:msub>
+                      <m:mrow>
+                        <m:mo>|</m:mo>
+                      </m:mrow>
+                    </m:mrow>
+                  </m:msup>
+                </m:mfenced>
+                <m:mrow>
+                  <m:mo>-</m:mo>
+                  <m:mn>1</m:mn>
+                </m:mrow>
+              </m:msup>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id107400">and</para>
+        <equation id="id107406">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:mfenced separators="" open="(" close=")">
+                <m:mfrac>
+                  <m:mn>1</m:mn>
+                  <m:mi>q</m:mi>
+                </m:mfrac>
+              </m:mfenced>
+              <m:mfenced separators="" open="(" close=")">
+                <m:mfrac>
+                  <m:mn>1</m:mn>
+                  <m:mrow>
+                    <m:mn>1</m:mn>
+                    <m:mo>+</m:mo>
+                    <m:msup>
+                      <m:mi>q</m:mi>
+                      <m:mrow>
+                        <m:mrow>
+                          <m:mo>|</m:mo>
+                        </m:mrow>
+                        <m:msub>
+                          <m:mi>λ</m:mi>
+                          <m:mn>0</m:mn>
+                        </m:msub>
+                        <m:mrow>
+                          <m:mo>|</m:mo>
+                          <m:mo>-</m:mo>
+                          <m:mo>|</m:mo>
+                        </m:mrow>
+                        <m:msub>
+                          <m:mi>λ</m:mi>
+                          <m:mn>1</m:mn>
+                        </m:msub>
+                        <m:mrow>
+                          <m:mo>|</m:mo>
+                        </m:mrow>
+                      </m:mrow>
+                    </m:msup>
+                  </m:mrow>
+                </m:mfrac>
+              </m:mfenced>
+              <m:mo>≥</m:mo>
+              <m:mfenced separators="" open="(" close=")">
+                <m:mfrac>
+                  <m:mn>1</m:mn>
+                  <m:mi>q</m:mi>
+                </m:mfrac>
+              </m:mfenced>
+              <m:msup>
+                <m:mfenced separators="" open="(" close=")">
+                  <m:msup>
+                    <m:mi>q</m:mi>
+                    <m:mrow>
+                      <m:mrow>
+                        <m:mo>|</m:mo>
+                      </m:mrow>
+                      <m:msub>
+                        <m:mi>λ</m:mi>
+                        <m:mn>1</m:mn>
+                      </m:msub>
+                      <m:mrow>
+                        <m:mo>|</m:mo>
+                        <m:mo>-</m:mo>
+                        <m:mo>|</m:mo>
+                      </m:mrow>
+                      <m:msub>
+                        <m:mi>λ</m:mi>
+                        <m:mn>0</m:mn>
+                      </m:msub>
+                      <m:mrow>
+                        <m:mo>|</m:mo>
+                      </m:mrow>
+                    </m:mrow>
+                  </m:msup>
+                  <m:mo>+</m:mo>
+                  <m:mn>2</m:mn>
+                  <m:mo>+</m:mo>
+                  <m:msup>
+                    <m:mi>q</m:mi>
+                    <m:mrow>
+                      <m:mrow>
+                        <m:mo>|</m:mo>
+                      </m:mrow>
+                      <m:msub>
+                        <m:mi>λ</m:mi>
+                        <m:mn>0</m:mn>
+                      </m:msub>
+                      <m:mrow>
+                        <m:mo>|</m:mo>
+                        <m:mo>-</m:mo>
+                        <m:mo>|</m:mo>
+                      </m:mrow>
+                      <m:msub>
+                        <m:mi>λ</m:mi>
+                        <m:mn>1</m:mn>
+                      </m:msub>
+                      <m:mrow>
+                        <m:mo>|</m:mo>
+                      </m:mrow>
+                    </m:mrow>
+                  </m:msup>
+                </m:mfenced>
+                <m:mrow>
+                  <m:mo>-</m:mo>
+                  <m:mn>1</m:mn>
+                </m:mrow>
+              </m:msup>
+              <m:mo>.</m:mo>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id107593">All possible combinations satisfy the inequality from formula <link target-id="uid12"/>. Therefore, our distribution is monotonic.</para>
+        <para id="id107602">So to conclude, in order to sample a SYD <m:math overflow="scroll"><m:msub><m:mi>λ</m:mi><m:mi>s</m:mi></m:msub></m:math> that fits in an a<m:math overflow="scroll"><m:mo>×</m:mo></m:math>b box such that <m:math overflow="scroll"><m:mrow><m:msub><m:mi>λ</m:mi><m:mi>s</m:mi></m:msub><m:mo>≥</m:mo></m:mrow></m:math> one of two fixed YD's <m:math overflow="scroll"><m:msub><m:mi>λ</m:mi><m:mn>0</m:mn></m:msub></m:math> and <m:math overflow="scroll"><m:msub><m:mi>λ</m:mi><m:mn>1</m:mn></m:msub></m:math>, we begin with the probability distribution given in <link target-id="uid19">"The Probability Distribution on the YD's"</link>.
+Now couple the histories of YD's <m:math overflow="scroll"><m:mrow><m:msub><m:mi>λ</m:mi><m:mn>0</m:mn></m:msub><m:mo>∩</m:mo><m:msub><m:mi>λ</m:mi><m:mn>1</m:mn></m:msub></m:mrow></m:math> and <m:math overflow="scroll"><m:msub><m:mi>λ</m:mi><m:mtext>full</m:mtext></m:msub></m:math> and output the diagram they both return, <m:math overflow="scroll"><m:msub><m:mi>λ</m:mi><m:mtext>temp</m:mtext></m:msub></m:math>. If <m:math overflow="scroll"><m:mrow><m:msub><m:mi>λ</m:mi><m:mtext>temp</m:mtext></m:msub><m:mo>≱</m:mo><m:msub><m:mi>λ</m:mi><m:mn>0</m:mn></m:msub><m:mo>,</m:mo><m:msub><m:mi>λ</m:mi><m:mtext>temp</m:mtext></m:msub><m:mo>≱</m:mo><m:msub><m:mi>λ</m:mi><m:mn>1</m:mn></m:msub><m:mo>,</m:mo><m:mspace width="4.pt"/><m:mtext>and</m:mtext><m:mspace width="4.pt"/><m:msub><m:mi>λ</m:mi><m:mtext>temp</m:mtext></m:msub><m:mo>≥</m:mo><m:msub><m:mi>λ</m:mi><m:mn>0</m:mn></m:msub><m:mo>∩</m:mo><m:msub><m:mi>λ</m:mi><m:mn>1</m:mn></m:msub></m:mrow></m:math>, re-couple the histories of <m:math overflow="scroll"><m:mrow><m:msub><m:mi>λ</m:mi><m:mn>0</m:mn></m:msub><m:mo>∩</m:mo><m:msub><m:mi>λ</m:mi><m:mn>1</m:mn></m:msub></m:mrow></m:math> and <m:math overflow="scroll"><m:msub><m:mi>λ</m:mi><m:mtext>full</m:mtext></m:msub></m:math> until the YD outputted is <m:math overflow="scroll"><m:mo>≥</m:mo></m:math> at least one of <m:math overflow="scroll"><m:msub><m:mi>λ</m:mi><m:mn>0</m:mn></m:msub></m:math> or <m:math overflow="scroll"><m:msub><m:mi>λ</m:mi><m:mn>1</m:mn></m:msub></m:math>. Rename the outputed YD <m:math overflow="scroll"><m:mi>λ</m:mi></m:math>.Finally, select either <m:math overflow="scroll"><m:msub><m:mi>λ</m:mi><m:mn>0</m:mn></m:msub></m:math> or <m:math overflow="scroll"><m:msub><m:mi>λ</m:mi><m:mn>1</m:mn></m:msub></m:math> according to the conditional probabilities based on the distribution <m:math overflow="scroll"><m:mrow><m:mi>π</m:mi><m:mrow><m:mo>(</m:mo><m:msub><m:mi>λ</m:mi><m:mi>s</m:mi></m:msub><m:mo>)</m:mo></m:mrow><m:mo>∝</m:mo><m:msup><m:mi>q</m:mi><m:mrow><m:mrow><m:mo>|</m:mo></m:mrow><m:msub><m:mi>λ</m:mi><m:mi>s</m:mi></m:msub><m:mrow><m:mo>|</m:mo></m:mrow></m:mrow></m:msup></m:mrow></m:math> and remove the boxes in this diagram from <m:math overflow="scroll"><m:mi>λ</m:mi></m:math>. Sampling the fixed YD (<m:math overflow="scroll"><m:msub><m:mi>λ</m:mi><m:mn>0</m:mn></m:msub></m:math> or <m:math overflow="scroll"><m:msub><m:mi>λ</m:mi><m:mn>1</m:mn></m:msub></m:math>) to remove from the sampled YD (<m:math overflow="scroll"><m:mi>λ</m:mi></m:math>) can be represented by the following function:</para>
+        <equation id="uid24">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:mi>f</m:mi>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>λ</m:mi>
+                <m:mo>,</m:mo>
+                <m:msub>
+                  <m:mi>u</m:mi>
+                  <m:mi>t</m:mi>
+                </m:msub>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>=</m:mo>
+              <m:mfenced separators="" open="{" close="">
+                <m:mtable>
+                  <m:mtr>
+                    <m:mtd columnalign="left">
+                      <m:mrow>
+                        <m:msub>
+                          <m:mi>λ</m:mi>
+                          <m:mn>0</m:mn>
+                        </m:msub>
+                        <m:mo>,</m:mo>
+                        <m:msub>
+                          <m:mi>u</m:mi>
+                          <m:mi>t</m:mi>
+                        </m:msub>
+                        <m:mo>&lt;</m:mo>
+                        <m:mfrac>
+                          <m:mn>1</m:mn>
+                          <m:mrow>
+                            <m:mn>1</m:mn>
+                            <m:mo>+</m:mo>
+                            <m:msup>
+                              <m:mi>q</m:mi>
+                              <m:mrow>
+                                <m:mrow>
+                                  <m:mo>|</m:mo>
+                                </m:mrow>
+                                <m:msub>
+                                  <m:mi>λ</m:mi>
+                                  <m:mn>0</m:mn>
+                                </m:msub>
+                                <m:mrow>
+                                  <m:mo>|</m:mo>
+                                  <m:mo>-</m:mo>
+                                  <m:mo>|</m:mo>
+                                </m:mrow>
+                                <m:msub>
+                                  <m:mi>λ</m:mi>
+                                  <m:mn>1</m:mn>
+                                </m:msub>
+                                <m:mrow>
+                                  <m:mo>|</m:mo>
+                                </m:mrow>
+                              </m:mrow>
+                            </m:msup>
+                          </m:mrow>
+                        </m:mfrac>
+                      </m:mrow>
+                    </m:mtd>
+                  </m:mtr>
+                  <m:mtr>
+                    <m:mtd columnalign="left">
+                      <m:mrow>
+                        <m:msub>
+                          <m:mi>λ</m:mi>
+                          <m:mn>1</m:mn>
+                        </m:msub>
+                        <m:mo>,</m:mo>
+                        <m:msub>
+                          <m:mi>u</m:mi>
+                          <m:mi>t</m:mi>
+                        </m:msub>
+                        <m:mo>≥</m:mo>
+                        <m:mfrac>
+                          <m:mn>1</m:mn>
+                          <m:mrow>
+                            <m:mn>1</m:mn>
+                            <m:mo>+</m:mo>
+                            <m:msup>
+                              <m:mi>q</m:mi>
+                              <m:mrow>
+                                <m:mrow>
+                                  <m:mo>|</m:mo>
+                                </m:mrow>
+                                <m:msub>
+                                  <m:mi>λ</m:mi>
+                                  <m:mn>0</m:mn>
+                                </m:msub>
+                                <m:mrow>
+                                  <m:mo>|</m:mo>
+                                  <m:mo>-</m:mo>
+                                  <m:mo>|</m:mo>
+                                </m:mrow>
+                                <m:msub>
+                                  <m:mi>λ</m:mi>
+                                  <m:mn>1</m:mn>
+                                </m:msub>
+                                <m:mrow>
+                                  <m:mo>|</m:mo>
+                                </m:mrow>
+                              </m:mrow>
+                            </m:msup>
+                          </m:mrow>
+                        </m:mfrac>
+                      </m:mrow>
+                    </m:mtd>
+                  </m:mtr>
+                </m:mtable>
+              </m:mfenced>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id108217">where <m:math overflow="scroll"><m:msub><m:mi>u</m:mi><m:mi>t</m:mi></m:msub></m:math> is a random variable sampled according to a uniform distribution on <m:math overflow="scroll"><m:mrow><m:mo>[</m:mo><m:mn>0</m:mn><m:mo>,</m:mo><m:mn>1</m:mn><m:mo>]</m:mo></m:mrow></m:math>. Therefore the black box approach exactly samples according to the probability distribution from formula <link target-id="uid4"/>.</para>
+      </section>
+    </section>
+    <section id="cid4">
+      <title>Summary</title>
+      <para id="id108271">This module summarizes the research done by the Exact Sampling: Coupling from the Past PFUG of Rice University's VIGRE program. VIGRE is a program of Vertically Integrated Grants for Research and Education in the Mathematical Sciences under the direction of the National Science Foundation. A PFUG consists of Postdocs, Faculty, Undergraduates and Graduate students who work together on a common problem.</para>
+      <para id="id108277">We want to sample skew Young diagrams that fit in an a<m:math overflow="scroll"><m:mo>×</m:mo></m:math>b box with the probability distribution stated in formula <link target-id="uid4"/>. We have two problems. In the first problem, we want to sample skew Young diagrams that fit in an a<m:math overflow="scroll"><m:mo>×</m:mo></m:math>b box that are greater than or equal to a fixed Young diagram. In the second problem, we want to sample skew Young diagrams that fit in an a<m:math overflow="scroll"><m:mo>×</m:mo></m:math>b box that are greater than one of two fixed Young diagrams.</para>
+    </section>
+    <section id="cid5">
+      <title>Acknowledgements</title>
+      <para id="id108326">This Connexions module describes research conducted under Rice University's VIGRE program, supported by National Science Foundation grant DMS-0739420. We would like to point out that our PFUG was smaller than the typical PFUG–we did not receive assistance from graduate students or faculty. Thanks to our Postdoc mentor, Sevak Mkrtchyan, and the undergraduate members Joshua Cory and Georgene Jalbuena. The NSF grant only supported the undergraduate members of this PFUG.</para>
+    </section>
+  </content>
+  <bib:file>
+    <bib:entry id="bid0">
+      <bib:misc>
+        <!--required fields-->
+        <!--optional fields-->
+        <bib:author>Propp, James Gary and Wilson, David Bruce</bib:author>
+        <bib:title>Exact Sampling with Coupled Markov Chains and Applications to Statistical Mechanics</bib:title>
+        <bib:howpublished/>
+        <bib:month>July</bib:month>
+        <bib:year>1996</bib:year>
+        <bib:note/>
+      </bib:misc>
+    </bib:entry>
+  </bib:file>
+</document>

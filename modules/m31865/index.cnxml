@@ -1,0 +1,1450 @@
+<document xmlns="http://cnx.rice.edu/cnxml" xmlns:m="http://www.w3.org/1998/Math/MathML" xmlns:md="http://cnx.rice.edu/mdml" xmlns:bib="http://bibtexml.sf.net/">
+  <title>An Application of Model-based Clustering in Market Segmentation</title>
+  <metadata>
+  <md:content-id>m31865</md:content-id><md:title>An Application of Model-based Clustering in Market Segmentation</md:title>
+  <md:abstract>This report summarizes work done as part of a Computational Finance PFUG under Rice University's VIGRE program. VIGRE is a program of Vertically Integrated Grants for Research and Education in the Mathematical Sciences under the direction of the National Science Foundation. A PFUG is a group of Postdocs, Faculty, Undergraduates and Graduate students formed around the study of a common problem. In this module we present a model-based clustering scheme for market research. We use observation-driven Poisson regression to model purchase patterns of customers over time. Based on those models, customers are segmented into groups. We illustrate the methods on purchases of two related grocery products: bacon and eggs.</md:abstract>
+  <md:uuid>581183ba-a76d-42ff-9a1d-f616fa0f9b1a</md:uuid>
+</metadata>
+
+<content>
+    <section id="cid1">
+      <title>Introduction</title>
+      <section id="uid1">
+        <title>Time Series of Counts Data in Marketing</title>
+        <para id="id261879">Time series of counts (TSC) surface whenever countable, time-dependent observations can be made about a phenomenon. For example, daily catches of a fisherman, weekly swine flu cases admitted into a hospital, and monthly used cars sold by a salesman are all instances of TSC. Count data are abundant in the study of consumer behavior. Observations such as a consumer's product purchase patterns, online click streams, store visits, and rate of product consumption are examples of count data and can be analyzed for marketing purposes. In fact, in the creation of a company's marketing mix or marketing strategy, managers rely heavily on relevant, accurate and timely (RAT) information about the consumer behavior<link target-id="bid0"/>. In an increasingly technology and information dependent society, companies scramble to acquire RAT information in order to understand the new, emerging demands of consumers, and to gain and keep that competitive edge.</para>
+        <para id="id261895">Perhaps the most important use for consumer behavior data is market segmentation where consumers are identified and grouped based on their distinctive traits and characteristics. Market segmentation begins with the realization that there exists a heterogeneity in consumer demand of goods and services and that the heterogeneous market is made up of “a number of smaller homogeneous markets, in response to differing preferences, attributable to the desires of consumers for more precise satisfaction of their varying wants<link target-id="bid1"/>”. Market segmentation, if conducted correctly and effectively, is an extremely powerful and informative tool for managers since segmentation analysis can reveal both the size and the traits of the consumer groups, for whom appropriate group-specific marketing strategies can be devised. Correct and relevant market segmentation is critical for businesses since incorrect evaluations of consumer groups and their characteristics leads to unproductive marketing mix and waste of resources. Numerous publications and books have been written on effective methods of consumer segmentation. For a survey and review of market segmentation methods, see <link target-id="bid2"/>.</para>
+      </section>
+      <section id="uid2">
+        <title>Current Market Segmentation Methods</title>
+        <para id="id261937">Through a review of relevant literature on the subject, it is evident that the statistical process of cluster analysis lies at the core of market segmentation. Though classification of consumers into preset number of groups with already identified traits is also common in segmentation, clustering offers the advantages of flexibility and accuracy because the number of groups, their size and their characteristics are data-driven.</para>
+        <para id="id261944">Thus, there has been substantial development in marketing research related clustering models and methodology in the past 60 years. During the initial stages of market segmentation research in 1950s, the statistical models proposed depended heavily on existing Operations Research and Management Science methods. These models were either too complicated to be implemented practically or too unrealistic to accurately represent real-world situations. As researchers gained more computing power, models became more realistic and implementable<link target-id="bid3"/>. However, current methods also have some shortcomings. For example, many segmentation models have difficulties capturing the relationship between the exogenous (consumer traits) and the response variables (ex. purchase frequencies and profits) in a segment<link target-id="bid4"/>. Also, even if the model successfully relates segment traits with response, the time-dependent nature of consumer behavior is often ignored. Finally, many of the models involve only one dependent variable. Consider the purchase of printers among different groups of consumers. Such narrowly defined analysis maybe sufficient for, say a printer manufacturer, however, for an electronic store manager deciding how to stock, shelf and promote printers, it is helpful to be able to generalize the analysis to cover electronic products closely related to printers—printing paper, scanners, toners, etc.—since consumers who buy printers are likely to be interested in these products and vice versa. Thus, a multivariate segmentation approach can be more informative and useful.</para>
+      </section>
+      <section id="uid3">
+        <title>Model-Based Clustering</title>
+        <para id="id261987">A novel model-based method of clustering TSC was proposed by Thomas, Ray and Ensor<link target-id="bid5"/>, who applied the method to Houston air pollution monitoring data. In the study, air quality monitor stations, represented by time series of pollution readings were clustered to identify regions of the city with similar patterns of pollution. The results from the pollution study were promising and motivate the used of model-based clustering (MBC) in other applications. In this study, our goal is to address the shortcomings of current market segmentation methods by applying MBC to consumer purchase data.</para>
+      </section>
+      <section id="uid4">
+        <title>Outline for remainder of the discussion</title>
+        <para id="id262010">We will explain MBC in more detail in Section 2. The description of the data is given in Section 3. Ongoing work and project implications are presented in Sections 4 and 5 respectively. Finally directions for future research are laid out in Section 6.</para>
+      </section>
+    </section>
+    <section id="cid2">
+      <title>Methodology</title>
+      <para id="id262025">The name “model-based clustering” implies two components to the method: the modeling component and the clustering component. An appropriate model is fit to each time series and then a dissimilarity metric based on the likelihood of those models is used to cluster the TCS.</para>
+      <section id="uid5">
+        <title>Modeling TSC</title>
+        <para id="id262041">A classical model for count data is Poisson regression. Recently, Fokianos and Kedem<link target-id="bid6"/> proposed a model for TSC in the general linear model (GLM) framework which can be called “observation-driven” Poisson regression. In GLM, we model the response <m:math overflow="scroll"><m:mrow><m:mo>{</m:mo><m:msub><m:mi>Y</m:mi><m:mi>t</m:mi></m:msub><m:mo>,</m:mo><m:mi>t</m:mi><m:mo>=</m:mo><m:mn>1</m:mn><m:mo>,</m:mo><m:mo>⋯</m:mo><m:mo>,</m:mo><m:mi>N</m:mi><m:mo>}</m:mo></m:mrow></m:math> as a linear function of the covariates <m:math overflow="scroll"><m:mrow><m:mo>{</m:mo><m:msub><m:mi>X</m:mi><m:mi>t</m:mi></m:msub><m:mo>,</m:mo><m:mi>t</m:mi><m:mo>=</m:mo><m:mn>1</m:mn><m:mo>,</m:mo><m:mo>⋯</m:mo><m:mo>,</m:mo><m:mi>N</m:mi><m:mo>}</m:mo></m:mrow></m:math>.
+There are two components to a time series following a GLM:</para>
+        <list id="id262125" display="block" list-type="enumerated">
+          <item id="uid6"><emphasis effect="bold">Random Component:</emphasis> Distribution of <m:math overflow="scroll"><m:mrow><m:mo>{</m:mo><m:msub><m:mi>Y</m:mi><m:mi>t</m:mi></m:msub><m:mo>|</m:mo><m:msub><m:mi>Y</m:mi><m:mrow><m:mi>t</m:mi><m:mo>-</m:mo><m:mn>1</m:mn></m:mrow></m:msub><m:mo>,</m:mo><m:mo>⋯</m:mo><m:mo>}</m:mo></m:mrow></m:math> belongs to the exponential family of distributions.
+<equation id="id261372"><m:math overflow="scroll" mode="display"><m:mrow><m:mi>f</m:mi><m:mrow><m:mo>(</m:mo><m:msub><m:mi>y</m:mi><m:mi>t</m:mi></m:msub><m:mo>;</m:mo><m:msub><m:mi>θ</m:mi><m:mi>t</m:mi></m:msub><m:mo>,</m:mo><m:mi>φ</m:mi><m:mo>|</m:mo><m:mi mathvariant="script">F</m:mi><m:mo>)</m:mo></m:mrow><m:mo>=</m:mo><m:mi>e</m:mi><m:mi>x</m:mi><m:mi>p</m:mi><m:mfenced separators="" open="{" close="}"><m:mfrac><m:mrow><m:msub><m:mi>y</m:mi><m:mi>t</m:mi></m:msub><m:msub><m:mi>θ</m:mi><m:mi>t</m:mi></m:msub><m:mo>-</m:mo><m:mi>b</m:mi><m:mrow><m:mo>(</m:mo><m:msub><m:mi>θ</m:mi><m:mi>t</m:mi></m:msub><m:mo>)</m:mo></m:mrow></m:mrow><m:mrow><m:msub><m:mi>a</m:mi><m:mi>t</m:mi></m:msub><m:mrow><m:mo>(</m:mo><m:msub><m:mi>θ</m:mi><m:mi>t</m:mi></m:msub><m:mo>)</m:mo></m:mrow></m:mrow></m:mfrac><m:mo>+</m:mo><m:mi>c</m:mi><m:mrow><m:mo>(</m:mo><m:msub><m:mi>y</m:mi><m:mi>t</m:mi></m:msub><m:mo>,</m:mo><m:mi>φ</m:mi><m:mo>)</m:mo></m:mrow></m:mfenced><m:mo>,</m:mo></m:mrow></m:math></equation>
+where <emphasis effect="italics">θ<sub>t</sub></emphasis> is the parameter of the distribution and <emphasis effect="italics">φ</emphasis> is a dispersion parameter.
+In the Poisson case, we have: <m:math overflow="scroll"><m:mrow><m:msub><m:mi>a</m:mi><m:mi>t</m:mi></m:msub><m:mrow><m:mo>(</m:mo><m:mi>φ</m:mi><m:mo>)</m:mo></m:mrow><m:mo>=</m:mo><m:mn>1</m:mn></m:mrow></m:math>; <m:math overflow="scroll"><m:mrow><m:msub><m:mi>θ</m:mi><m:mi>t</m:mi></m:msub><m:mo>=</m:mo><m:mo form="prefix">log</m:mo><m:mrow><m:mo>(</m:mo><m:msub><m:mi>μ</m:mi><m:mi>t</m:mi></m:msub><m:mo>)</m:mo></m:mrow></m:mrow></m:math>; <m:math overflow="scroll"><m:mrow><m:mi>b</m:mi><m:mrow><m:mo>(</m:mo><m:msub><m:mi>θ</m:mi><m:mi>t</m:mi></m:msub><m:mo>)</m:mo></m:mrow><m:mo>=</m:mo><m:msub><m:mi>μ</m:mi><m:mi>t</m:mi></m:msub></m:mrow></m:math>; <m:math overflow="scroll"><m:mrow><m:mi>c</m:mi><m:mo>(</m:mo><m:msub><m:mi>y</m:mi><m:mi>t</m:mi></m:msub><m:mo>;</m:mo><m:mi>φ</m:mi><m:mo>)</m:mo><m:mo>=</m:mo><m:mo>-</m:mo><m:mo form="prefix">log</m:mo><m:mrow><m:mi>y</m:mi><m:mspace width="-0.166667em"/></m:mrow></m:mrow></m:math>.
+</item>
+          <item id="uid7"><emphasis effect="bold">Systematic Component:</emphasis><emphasis effect="italics">μ<sub>t</sub></emphasis>, the mean of <emphasis effect="italics">Y<sub>t</sub></emphasis>, is modeled by a monotone link function <m:math overflow="scroll"><m:mrow><m:mi>g</m:mi><m:mo>(</m:mo><m:mo>·</m:mo><m:mo>)</m:mo></m:mrow></m:math> such that
+<equation id="id262719"><m:math overflow="scroll" mode="display"><m:mrow><m:mi>g</m:mi><m:mrow><m:mo>(</m:mo><m:msub><m:mi>μ</m:mi><m:mi>t</m:mi></m:msub><m:mo>)</m:mo></m:mrow><m:mo>=</m:mo><m:msubsup><m:mi>X</m:mi><m:mrow><m:mi>t</m:mi></m:mrow><m:mi>T</m:mi></m:msubsup><m:mi>β</m:mi><m:mo>,</m:mo></m:mrow></m:math></equation>
+where <emphasis effect="italics">X</emphasis> is the set of covariates and <emphasis effect="italics">β</emphasis> is a vector of coefficients.
+In the Poisson case <m:math overflow="scroll"><m:mrow><m:mi>μ</m:mi><m:mo>=</m:mo><m:mi>λ</m:mi></m:mrow></m:math>, <m:math overflow="scroll"><m:mrow><m:mi>g</m:mi><m:mo>(</m:mo><m:mi>λ</m:mi><m:mo>)</m:mo><m:mo>=</m:mo><m:mo form="prefix">log</m:mo><m:mrow><m:mo>(</m:mo><m:mi>λ</m:mi><m:mo>)</m:mo></m:mrow></m:mrow></m:math>.
+</item>
+        </list>
+        <para id="id262825">In the case of time series data, we can augment the exogenous covariates in the model with lagged values of the response variable, i.e. the observed counts at previous time points. Thus the model is “observation-driven.” Lags of exogenous covariates can also be included. For instance let the new covariate matrix be represented by <emphasis effect="italics">Z</emphasis>, where</para>
+        <equation id="id262842">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:msubsup>
+                <m:mi>Z</m:mi>
+                <m:mrow>
+                  <m:mi>t</m:mi>
+                </m:mrow>
+                <m:mi>T</m:mi>
+              </m:msubsup>
+              <m:mo>=</m:mo>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:msub>
+                  <m:mi>X</m:mi>
+                  <m:mi>t</m:mi>
+                </m:msub>
+                <m:mo>,</m:mo>
+                <m:msub>
+                  <m:mi>X</m:mi>
+                  <m:mrow>
+                    <m:mi>t</m:mi>
+                    <m:mo>-</m:mo>
+                    <m:mn>1</m:mn>
+                  </m:mrow>
+                </m:msub>
+                <m:mo>,</m:mo>
+                <m:mo>⋯</m:mo>
+                <m:mo>,</m:mo>
+                <m:msub>
+                  <m:mi>X</m:mi>
+                  <m:mrow>
+                    <m:mi>t</m:mi>
+                    <m:mo>-</m:mo>
+                    <m:mi>p</m:mi>
+                  </m:mrow>
+                </m:msub>
+                <m:mo>,</m:mo>
+                <m:msub>
+                  <m:mi>Y</m:mi>
+                  <m:mrow>
+                    <m:mi>t</m:mi>
+                    <m:mo>-</m:mo>
+                    <m:mn>1</m:mn>
+                  </m:mrow>
+                </m:msub>
+                <m:mo>,</m:mo>
+                <m:mo>⋯</m:mo>
+                <m:mo>,</m:mo>
+                <m:msub>
+                  <m:mi>Y</m:mi>
+                  <m:mrow>
+                    <m:mi>t</m:mi>
+                    <m:mo>-</m:mo>
+                    <m:mi>n</m:mi>
+                  </m:mrow>
+                </m:msub>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>.</m:mo>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id262948">For more details see <link target-id="bid6"/>.</para>
+      </section>
+      <section id="uid8">
+        <title>Clustering of TSC models</title>
+        <para id="id262968">Armed with the GLM model for Poisson regression, we can begin clustering the TSC. In order to determine the similarity or dissimilarity between two TSC, a metric is needed to measure the “distance.” The classic Euclidean metric is not adequate for data with time dependence. We will use the empirical Kullback-Leibler (KL) likelihood metric<link target-id="bid7"/>, which calculates the distance between two TSC by evaluating the relative fit of their respective models.</para>
+        <para id="id262983">Let <emphasis effect="italics">λ<sub>j</sub></emphasis> be a given “model structure” for the data, i.e. an observation-driven Poisson model with specified covariates. The KL metric has the following expression.</para>
+        <equation id="id263002">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:msup>
+                <m:mi>D</m:mi>
+                <m:mi>K</m:mi>
+              </m:msup>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:msub>
+                  <m:mi>λ</m:mi>
+                  <m:mi>k</m:mi>
+                </m:msub>
+                <m:mo>,</m:mo>
+                <m:msub>
+                  <m:mi>λ</m:mi>
+                  <m:mi>j</m:mi>
+                </m:msub>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>=</m:mo>
+              <m:mfrac>
+                <m:mn>1</m:mn>
+                <m:mrow>
+                  <m:mrow>
+                    <m:mo>|</m:mo>
+                  </m:mrow>
+                  <m:msub>
+                    <m:mi>Y</m:mi>
+                    <m:mi>K</m:mi>
+                  </m:msub>
+                  <m:mrow>
+                    <m:mo>|</m:mo>
+                  </m:mrow>
+                </m:mrow>
+              </m:mfrac>
+              <m:munder>
+                <m:mo>∑</m:mo>
+                <m:mrow>
+                  <m:mi>y</m:mi>
+                  <m:mo>∈</m:mo>
+                  <m:msub>
+                    <m:mi>Y</m:mi>
+                    <m:mi>K</m:mi>
+                  </m:msub>
+                </m:mrow>
+              </m:munder>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mo form="prefix">log</m:mo>
+              </m:mrow>
+              <m:mrow>
+                <m:mi>p</m:mi>
+                <m:mo>(</m:mo>
+                <m:mi>y</m:mi>
+                <m:mo>|</m:mo>
+                <m:msub>
+                  <m:mi>λ</m:mi>
+                  <m:mi>k</m:mi>
+                </m:msub>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>-</m:mo>
+              <m:mo form="prefix">log</m:mo>
+              <m:mrow>
+                <m:mi>p</m:mi>
+                <m:mo>(</m:mo>
+                <m:mi>y</m:mi>
+                <m:mo>|</m:mo>
+                <m:msub>
+                  <m:mi>λ</m:mi>
+                  <m:mi>j</m:mi>
+                </m:msub>
+                <m:mo>)</m:mo>
+                <m:mo>)</m:mo>
+              </m:mrow>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id263134">where <emphasis effect="italics">Y<sub>K</sub></emphasis> is the set of data objects which belong to cluster <emphasis effect="italics">k</emphasis>. Note that <m:math overflow="scroll"><m:mrow><m:mo form="prefix">log</m:mo><m:mrow><m:mi>p</m:mi><m:mo>(</m:mo><m:mi>y</m:mi><m:mo>|</m:mo><m:msub><m:mi>λ</m:mi><m:mi>k</m:mi></m:msub><m:mo>)</m:mo></m:mrow></m:mrow></m:math> is an expression for the likelihood of the model. See <link target-id="bid6"/> for discussion on the likelihood of observation-driven Poisson models. The measure is made symmetric by,</para>
+        <equation id="id263198">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:msubsup>
+                <m:mi>D</m:mi>
+                <m:mi>S</m:mi>
+                <m:mi>K</m:mi>
+              </m:msubsup>
+              <m:mo>=</m:mo>
+              <m:mfrac>
+                <m:mrow>
+                  <m:msup>
+                    <m:mi>D</m:mi>
+                    <m:mi>K</m:mi>
+                  </m:msup>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:msub>
+                      <m:mi>λ</m:mi>
+                      <m:mi>k</m:mi>
+                    </m:msub>
+                    <m:mo>,</m:mo>
+                    <m:msub>
+                      <m:mi>λ</m:mi>
+                      <m:mi>j</m:mi>
+                    </m:msub>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                  <m:mo>+</m:mo>
+                  <m:msup>
+                    <m:mi>D</m:mi>
+                    <m:mi>K</m:mi>
+                  </m:msup>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:msub>
+                      <m:mi>λ</m:mi>
+                      <m:mi>j</m:mi>
+                    </m:msub>
+                    <m:mo>,</m:mo>
+                    <m:msub>
+                      <m:mi>λ</m:mi>
+                      <m:mi>k</m:mi>
+                    </m:msub>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                </m:mrow>
+                <m:mn>2</m:mn>
+              </m:mfrac>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id263287">With the KL metric, we apply a hierarchical bottom-up clustering algorithm. A flowchart of the algorithm is displayed in Figure 1.</para>
+        <figure id="uid9">
+          <media id="uid9_media" alt="">
+            <image mime-type="image/png" src="../../media/flowchart-252e.png" id="uid9_onlineimage" width="595"><!-- NOTE: attribute width changes image size online (pixels). original width is 595. --></image>
+            <image for="pdf" mime-type="application/postscript" src="../../media/flowchart-d0fd.eps" id="uid9_printimage" print-width="4in">
+              <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+            </image>
+          </media>
+          <caption>The MBC algorithm</caption>
+        </figure>
+        <para id="id263307">The algorithm produces a cluster tree similar to the figure below. The bottom-up clustering method is easy to visualize and break down objects into groups and eliminates the need for any stopping criterion.</para>
+        <figure id="uid10"><media id="uid10_media" alt="">
+            <image mime-type="image/png" src="../../media/tree.png" id="uid10_onlineimage" width="400"><!-- NOTE: attribute width changes image size online (pixels). original width is 595. --></image>
+            <image for="pdf" mime-type="application/postscript" src="../../media/tree.eps" id="uid10_printimage" print-width="2in">
+              <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+            </image>
+          </media>
+          
+        <caption>Sample hierarchical cluster tree</caption></figure>
+      </section>
+    </section>
+    <section id="cid3">
+      <title>Data</title>
+      <section id="uid11">
+        <title>Finding Relevant Data</title>
+        <para id="id263345">Though count data are prevalent in consumer behavior, obtaining commercial commercial data for MBC is expensive. Thus, for this project, we use results from previous studies on marketing data to creat a data set that realistically mimics consumer behavior.</para>
+      </section>
+      <section id="uid12">
+        <title>Data Simulation</title>
+        <para id="id263360">Niraj et al. <link target-id="bid8"/> proposed an economic model for consumer purchases of bacon and eggs. Based on store scanner data, the authors studied the consumer sensitivities to various variables such as personal utility, product prices, product displays, and purchase history. For the purpose of data simulation, key elements from this economic model were borrowed to create our own consumer bacon and eggs purchase data.</para>
+        <para id="id263371">We let <m:math overflow="scroll"><m:msub><m:mi>Y</m:mi><m:mrow><m:mi>b</m:mi><m:mo>,</m:mo><m:mi>t</m:mi></m:mrow></m:msub></m:math> and <m:math overflow="scroll"><m:msub><m:mi>Y</m:mi><m:mrow><m:mi>e</m:mi><m:mo>,</m:mo><m:mi>t</m:mi></m:mrow></m:msub></m:math> be a bivariate Poisson random variable which represent a consumer's purchase of bacon and eggs during time window <emphasis effect="italics">t</emphasis> respectively, then <m:math overflow="scroll"><m:msub><m:mi>Y</m:mi><m:mrow><m:mi>b</m:mi><m:mo>,</m:mo><m:mi>t</m:mi></m:mrow></m:msub></m:math> and <m:math overflow="scroll"><m:msub><m:mi>Y</m:mi><m:mrow><m:mi>e</m:mi><m:mo>,</m:mo><m:mi>t</m:mi></m:mrow></m:msub></m:math> can be modeled using a trivariate reduction<link target-id="bid9"/>:</para>
+        <equation id="uid13">
+          <m:math overflow="scroll" mode="display">
+            <m:mtable displaystyle="true">
+              <m:mtr>
+                <m:mtd columnalign="right">
+                  <m:msub>
+                    <m:mi>Y</m:mi>
+                    <m:mrow>
+                      <m:mi>b</m:mi>
+                      <m:mo>,</m:mo>
+                      <m:mi>t</m:mi>
+                    </m:mrow>
+                  </m:msub>
+                </m:mtd>
+                <m:mtd columnalign="left">
+                  <m:mrow>
+                    <m:mo>=</m:mo>
+                    <m:msub>
+                      <m:mi>U</m:mi>
+                      <m:mrow>
+                        <m:mi>b</m:mi>
+                        <m:mo>,</m:mo>
+                        <m:mi>t</m:mi>
+                      </m:mrow>
+                    </m:msub>
+                    <m:mo>+</m:mo>
+                    <m:msub>
+                      <m:mi>U</m:mi>
+                      <m:mrow>
+                        <m:mi>b</m:mi>
+                        <m:mi>e</m:mi>
+                        <m:mo>,</m:mo>
+                        <m:mi>t</m:mi>
+                      </m:mrow>
+                    </m:msub>
+                  </m:mrow>
+                </m:mtd>
+              </m:mtr>
+              <m:mtr>
+                <m:mtd columnalign="right">
+                  <m:msub>
+                    <m:mi>Y</m:mi>
+                    <m:mrow>
+                      <m:mi>e</m:mi>
+                      <m:mo>,</m:mo>
+                      <m:mi>t</m:mi>
+                    </m:mrow>
+                  </m:msub>
+                </m:mtd>
+                <m:mtd columnalign="left">
+                  <m:mrow>
+                    <m:mo>=</m:mo>
+                    <m:msub>
+                      <m:mi>U</m:mi>
+                      <m:mrow>
+                        <m:mi>e</m:mi>
+                        <m:mo>,</m:mo>
+                        <m:mi>t</m:mi>
+                      </m:mrow>
+                    </m:msub>
+                    <m:mo>+</m:mo>
+                    <m:msub>
+                      <m:mi>U</m:mi>
+                      <m:mrow>
+                        <m:mi>b</m:mi>
+                        <m:mi>e</m:mi>
+                        <m:mo>,</m:mo>
+                        <m:mi>t</m:mi>
+                      </m:mrow>
+                    </m:msub>
+                  </m:mrow>
+                </m:mtd>
+              </m:mtr>
+            </m:mtable>
+          </m:math>
+        </equation>
+        <para id="id263584">
+where <m:math overflow="scroll"><m:mrow><m:msub><m:mi>U</m:mi><m:mrow><m:mi>i</m:mi><m:mo>,</m:mo><m:mi>t</m:mi></m:mrow></m:msub><m:mo>∼</m:mo><m:mo form="prefix">Pois</m:mo><m:mrow><m:mo>(</m:mo><m:msub><m:mi>λ</m:mi><m:mrow><m:mi>i</m:mi><m:mo>,</m:mo><m:mi>t</m:mi></m:mrow></m:msub><m:mo>)</m:mo></m:mrow></m:mrow></m:math> for <m:math overflow="scroll"><m:mrow><m:mi>i</m:mi><m:mo>=</m:mo><m:mi>e</m:mi><m:mo>,</m:mo><m:mi>b</m:mi><m:mo>,</m:mo><m:mi>b</m:mi><m:mi>e</m:mi></m:mrow></m:math>. <m:math overflow="scroll"><m:msub><m:mi>U</m:mi><m:mrow><m:mi>b</m:mi><m:mo>,</m:mo><m:mi>t</m:mi></m:mrow></m:msub></m:math> and <m:math overflow="scroll"><m:msub><m:mi>U</m:mi><m:mrow><m:mi>e</m:mi><m:mo>,</m:mo><m:mi>t</m:mi></m:mrow></m:msub></m:math> represent the consumer's tendency to buy bacon or eggs independently while <m:math overflow="scroll"><m:msub><m:mi>U</m:mi><m:mrow><m:mi>b</m:mi><m:mi>e</m:mi><m:mo>,</m:mo><m:mi>t</m:mi></m:mrow></m:msub></m:math> represents consumer's tendency to buy the two products together.
+Note that <m:math overflow="scroll"><m:msub><m:mi>Y</m:mi><m:mrow><m:mi>b</m:mi><m:mo>,</m:mo><m:mi>t</m:mi></m:mrow></m:msub></m:math> and <m:math overflow="scroll"><m:msub><m:mi>Y</m:mi><m:mrow><m:mi>e</m:mi><m:mo>,</m:mo><m:mi>t</m:mi></m:mrow></m:msub></m:math> are marginally Poisson since sum of two Poisson variables is still Poisson.</para>
+        <para id="id263755">Recall the Poisson log link function for GLM: <m:math overflow="scroll"><m:mrow><m:mo form="prefix">log</m:mo><m:mi>λ</m:mi><m:mo>=</m:mo><m:msup><m:mi>Z</m:mi><m:mi>T</m:mi></m:msup><m:mi>β</m:mi></m:mrow></m:math>. In the simulation, <m:math overflow="scroll"><m:msub><m:mi>λ</m:mi><m:mrow><m:mi>b</m:mi><m:mo>,</m:mo><m:mi>t</m:mi></m:mrow></m:msub></m:math> and <m:math overflow="scroll"><m:msub><m:mi>λ</m:mi><m:mrow><m:mi>e</m:mi><m:mo>,</m:mo><m:mi>t</m:mi></m:mrow></m:msub></m:math> are modeled using exogenous covariates (utility, price and product displays) as well as one lag of response, <m:math overflow="scroll"><m:msub><m:mi>Y</m:mi><m:mrow><m:mi>t</m:mi><m:mo>-</m:mo><m:mn>1</m:mn></m:mrow></m:msub></m:math> i.e. the quantities of the product purchased last time period:</para>
+        <equation id="uid14">
+          <m:math overflow="scroll" mode="display">
+            <m:mtable displaystyle="true">
+              <m:mtr>
+                <m:mtd columnalign="right">
+                  <m:mrow>
+                    <m:mo form="prefix">log</m:mo>
+                    <m:msub>
+                      <m:mi>λ</m:mi>
+                      <m:mrow>
+                        <m:mi>b</m:mi>
+                        <m:mo>,</m:mo>
+                        <m:mi>t</m:mi>
+                      </m:mrow>
+                    </m:msub>
+                    <m:mo>=</m:mo>
+                    <m:msub>
+                      <m:mi>β</m:mi>
+                      <m:mrow>
+                        <m:mi>b</m:mi>
+                        <m:mo>,</m:mo>
+                        <m:mn>0</m:mn>
+                      </m:mrow>
+                    </m:msub>
+                    <m:mo>+</m:mo>
+                    <m:msub>
+                      <m:mi>β</m:mi>
+                      <m:mrow>
+                        <m:mi>b</m:mi>
+                        <m:mo>,</m:mo>
+                        <m:mn>1</m:mn>
+                      </m:mrow>
+                    </m:msub>
+                    <m:mi>U</m:mi>
+                    <m:mi>t</m:mi>
+                    <m:mi>i</m:mi>
+                    <m:msub>
+                      <m:mi>l</m:mi>
+                      <m:mrow>
+                        <m:mi>b</m:mi>
+                        <m:mo>,</m:mo>
+                        <m:mi>t</m:mi>
+                      </m:mrow>
+                    </m:msub>
+                    <m:mo>+</m:mo>
+                    <m:msub>
+                      <m:mi>β</m:mi>
+                      <m:mrow>
+                        <m:mi>b</m:mi>
+                        <m:mo>,</m:mo>
+                        <m:mn>2</m:mn>
+                      </m:mrow>
+                    </m:msub>
+                    <m:mi>P</m:mi>
+                    <m:mi>r</m:mi>
+                    <m:mi>i</m:mi>
+                    <m:mi>c</m:mi>
+                    <m:msub>
+                      <m:mi>e</m:mi>
+                      <m:mrow>
+                        <m:mi>b</m:mi>
+                        <m:mo>,</m:mo>
+                        <m:mi>t</m:mi>
+                      </m:mrow>
+                    </m:msub>
+                    <m:mo>+</m:mo>
+                    <m:msub>
+                      <m:mi>β</m:mi>
+                      <m:mrow>
+                        <m:mi>b</m:mi>
+                        <m:mo>,</m:mo>
+                        <m:mn>3</m:mn>
+                      </m:mrow>
+                    </m:msub>
+                    <m:mi>D</m:mi>
+                    <m:mi>i</m:mi>
+                    <m:mi>s</m:mi>
+                    <m:msub>
+                      <m:mi>p</m:mi>
+                      <m:mrow>
+                        <m:mi>b</m:mi>
+                        <m:mo>,</m:mo>
+                        <m:mi>t</m:mi>
+                      </m:mrow>
+                    </m:msub>
+                    <m:mo>+</m:mo>
+                    <m:msub>
+                      <m:mi>β</m:mi>
+                      <m:mrow>
+                        <m:mi>b</m:mi>
+                        <m:mo>,</m:mo>
+                        <m:mn>4</m:mn>
+                      </m:mrow>
+                    </m:msub>
+                    <m:mi>D</m:mi>
+                    <m:mi>i</m:mi>
+                    <m:mi>s</m:mi>
+                    <m:msub>
+                      <m:mi>p</m:mi>
+                      <m:mrow>
+                        <m:mi>e</m:mi>
+                        <m:mo>,</m:mo>
+                        <m:mi>t</m:mi>
+                      </m:mrow>
+                    </m:msub>
+                    <m:mo>+</m:mo>
+                    <m:msub>
+                      <m:mi>β</m:mi>
+                      <m:mrow>
+                        <m:mi>b</m:mi>
+                        <m:mo>,</m:mo>
+                        <m:mn>5</m:mn>
+                      </m:mrow>
+                    </m:msub>
+                    <m:msub>
+                      <m:mi>Y</m:mi>
+                      <m:mrow>
+                        <m:mi>b</m:mi>
+                        <m:mo>,</m:mo>
+                        <m:mi>t</m:mi>
+                        <m:mo>-</m:mo>
+                        <m:mn>1</m:mn>
+                      </m:mrow>
+                    </m:msub>
+                    <m:mo>+</m:mo>
+                    <m:msub>
+                      <m:mi>β</m:mi>
+                      <m:mrow>
+                        <m:mi>b</m:mi>
+                        <m:mo>,</m:mo>
+                        <m:mn>6</m:mn>
+                      </m:mrow>
+                    </m:msub>
+                    <m:msub>
+                      <m:mi>Y</m:mi>
+                      <m:mrow>
+                        <m:mi>e</m:mi>
+                        <m:mo>,</m:mo>
+                        <m:mi>t</m:mi>
+                        <m:mo>-</m:mo>
+                        <m:mn>1</m:mn>
+                      </m:mrow>
+                    </m:msub>
+                  </m:mrow>
+                </m:mtd>
+              </m:mtr>
+              <m:mtr>
+                <m:mtd columnalign="right">
+                  <m:mrow>
+                    <m:mo form="prefix">log</m:mo>
+                    <m:msub>
+                      <m:mi>λ</m:mi>
+                      <m:mrow>
+                        <m:mi>e</m:mi>
+                        <m:mo>,</m:mo>
+                        <m:mi>t</m:mi>
+                      </m:mrow>
+                    </m:msub>
+                    <m:mo>=</m:mo>
+                    <m:msub>
+                      <m:mi>β</m:mi>
+                      <m:mrow>
+                        <m:mi>e</m:mi>
+                        <m:mo>,</m:mo>
+                        <m:mn>0</m:mn>
+                      </m:mrow>
+                    </m:msub>
+                    <m:mo>+</m:mo>
+                    <m:msub>
+                      <m:mi>β</m:mi>
+                      <m:mrow>
+                        <m:mi>e</m:mi>
+                        <m:mo>,</m:mo>
+                        <m:mn>1</m:mn>
+                      </m:mrow>
+                    </m:msub>
+                    <m:mi>U</m:mi>
+                    <m:mi>t</m:mi>
+                    <m:mi>i</m:mi>
+                    <m:msub>
+                      <m:mi>l</m:mi>
+                      <m:mrow>
+                        <m:mi>e</m:mi>
+                        <m:mo>,</m:mo>
+                        <m:mi>t</m:mi>
+                      </m:mrow>
+                    </m:msub>
+                    <m:mo>+</m:mo>
+                    <m:msub>
+                      <m:mi>β</m:mi>
+                      <m:mrow>
+                        <m:mi>e</m:mi>
+                        <m:mo>,</m:mo>
+                        <m:mn>2</m:mn>
+                      </m:mrow>
+                    </m:msub>
+                    <m:mi>P</m:mi>
+                    <m:mi>r</m:mi>
+                    <m:mi>i</m:mi>
+                    <m:mi>c</m:mi>
+                    <m:msub>
+                      <m:mi>e</m:mi>
+                      <m:mrow>
+                        <m:mi>e</m:mi>
+                        <m:mo>,</m:mo>
+                        <m:mi>t</m:mi>
+                      </m:mrow>
+                    </m:msub>
+                    <m:mo>+</m:mo>
+                    <m:msub>
+                      <m:mi>β</m:mi>
+                      <m:mrow>
+                        <m:mi>e</m:mi>
+                        <m:mo>,</m:mo>
+                        <m:mn>3</m:mn>
+                      </m:mrow>
+                    </m:msub>
+                    <m:mi>D</m:mi>
+                    <m:mi>i</m:mi>
+                    <m:mi>s</m:mi>
+                    <m:msub>
+                      <m:mi>p</m:mi>
+                      <m:mrow>
+                        <m:mi>b</m:mi>
+                        <m:mo>,</m:mo>
+                        <m:mi>t</m:mi>
+                      </m:mrow>
+                    </m:msub>
+                    <m:mo>+</m:mo>
+                    <m:msub>
+                      <m:mi>β</m:mi>
+                      <m:mrow>
+                        <m:mi>e</m:mi>
+                        <m:mo>,</m:mo>
+                        <m:mn>4</m:mn>
+                      </m:mrow>
+                    </m:msub>
+                    <m:mi>D</m:mi>
+                    <m:mi>i</m:mi>
+                    <m:mi>s</m:mi>
+                    <m:msub>
+                      <m:mi>p</m:mi>
+                      <m:mrow>
+                        <m:mi>e</m:mi>
+                        <m:mo>,</m:mo>
+                        <m:mi>t</m:mi>
+                      </m:mrow>
+                    </m:msub>
+                    <m:mo>+</m:mo>
+                    <m:msub>
+                      <m:mi>β</m:mi>
+                      <m:mrow>
+                        <m:mi>e</m:mi>
+                        <m:mo>,</m:mo>
+                        <m:mn>5</m:mn>
+                      </m:mrow>
+                    </m:msub>
+                    <m:msub>
+                      <m:mi>Y</m:mi>
+                      <m:mrow>
+                        <m:mi>b</m:mi>
+                        <m:mo>,</m:mo>
+                        <m:mi>t</m:mi>
+                        <m:mo>-</m:mo>
+                        <m:mn>1</m:mn>
+                      </m:mrow>
+                    </m:msub>
+                    <m:mo>+</m:mo>
+                    <m:msub>
+                      <m:mi>β</m:mi>
+                      <m:mrow>
+                        <m:mi>e</m:mi>
+                        <m:mo>,</m:mo>
+                        <m:mn>6</m:mn>
+                      </m:mrow>
+                    </m:msub>
+                    <m:msub>
+                      <m:mi>Y</m:mi>
+                      <m:mrow>
+                        <m:mi>e</m:mi>
+                        <m:mo>,</m:mo>
+                        <m:mi>t</m:mi>
+                        <m:mo>-</m:mo>
+                        <m:mn>1</m:mn>
+                      </m:mrow>
+                    </m:msub>
+                  </m:mrow>
+                </m:mtd>
+              </m:mtr>
+            </m:mtable>
+          </m:math>
+        </equation>
+        <para id="id264338">
+for simplicity, <m:math overflow="scroll"><m:mrow><m:mi>l</m:mi><m:mi>o</m:mi><m:mi>g</m:mi><m:msub><m:mi>λ</m:mi><m:mrow><m:mi>b</m:mi><m:mi>e</m:mi><m:mo>,</m:mo><m:mi>t</m:mi></m:mrow></m:msub><m:mo>=</m:mo><m:msub><m:mi>β</m:mi><m:mrow><m:mi>b</m:mi><m:mi>e</m:mi><m:mo>,</m:mo><m:mn>0</m:mn></m:mrow></m:msub></m:mrow></m:math>.</para>
+        <para id="id264391">The consumer's utility, <m:math overflow="scroll"><m:mrow><m:mi>U</m:mi><m:mi>t</m:mi><m:mi>i</m:mi><m:mi>l</m:mi></m:mrow></m:math>, is assumed to follow a Gumbel distribution <link target-id="bid8"/> with location<m:math overflow="scroll"><m:mrow><m:mo>=</m:mo><m:mn>0</m:mn></m:mrow></m:math> and scale=0. After consulting local grocery stores, we let <m:math overflow="scroll"><m:mrow><m:mi>P</m:mi><m:mi>r</m:mi><m:mi>i</m:mi><m:mi>c</m:mi><m:msub><m:mi>e</m:mi><m:mi>b</m:mi></m:msub><m:mo>∼</m:mo><m:mo form="prefix">N</m:mo><m:mrow><m:mo>(</m:mo><m:mn>4</m:mn><m:mo>,</m:mo><m:mn>0</m:mn><m:mo>.</m:mo><m:mn>7</m:mn><m:mo>)</m:mo></m:mrow></m:mrow></m:math> and <m:math overflow="scroll"><m:mrow><m:mi>P</m:mi><m:mi>r</m:mi><m:mi>i</m:mi><m:mi>c</m:mi><m:msub><m:mi>e</m:mi><m:mi>e</m:mi></m:msub><m:mo>∼</m:mo><m:mo form="prefix">N</m:mo><m:mrow><m:mo>(</m:mo><m:mn>3</m:mn><m:mo>,</m:mo><m:mn>0</m:mn><m:mo>.</m:mo><m:mn>3</m:mn><m:mo>)</m:mo></m:mrow></m:mrow></m:math>. <m:math overflow="scroll"><m:mrow><m:mi>D</m:mi><m:mi>i</m:mi><m:mi>s</m:mi><m:mi>p</m:mi><m:mi>l</m:mi><m:mi>a</m:mi><m:mi>y</m:mi></m:mrow></m:math> indicates whether the product was advertized in store. This indicator variable is either on (1) or off (0) with probability <emphasis effect="italics">p</emphasis>.</para>
+        <figure id="uid15">
+          <media id="uid15_media" alt="">
+            <image mime-type="image/png" src="../../media/be_purchase.png" id="uid15_onlineimage" width="576"><!-- NOTE: attribute width changes image size online (pixels). original width is 576. --></image>
+            <image for="pdf" mime-type="application/postscript" src="../../media/be_purchase.eps" id="uid15_printimage" print-width="5in">
+              <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+            </image>
+          </media>
+          <caption>Simulated purchases of bacon and eggs for 100 weeks for one consumer with sensitivities: <m:math overflow="scroll"><m:mrow><m:msub><m:mi>β</m:mi><m:mi>b</m:mi></m:msub><m:mo>=</m:mo><m:mrow><m:mo>(</m:mo><m:mo>-</m:mo><m:mn>2</m:mn><m:mo>.</m:mo><m:mn>4</m:mn><m:mo>,</m:mo><m:mn>1</m:mn><m:mo>,</m:mo><m:mo>-</m:mo><m:mn>0</m:mn><m:mo>.</m:mo><m:mn>05</m:mn><m:mo>,</m:mo><m:mn>0</m:mn><m:mo>.</m:mo><m:mn>8</m:mn><m:mo>,</m:mo><m:mn>0</m:mn><m:mo>.</m:mo><m:mn>3</m:mn><m:mo>,</m:mo><m:mo>-</m:mo><m:mn>0</m:mn><m:mo>.</m:mo><m:mn>5</m:mn><m:mo>,</m:mo><m:mn>0</m:mn><m:mo>.</m:mo><m:mn>2</m:mn><m:mo>)</m:mo></m:mrow></m:mrow></m:math>, <m:math overflow="scroll"><m:mrow><m:msub><m:mi>β</m:mi><m:mi>e</m:mi></m:msub><m:mo>=</m:mo><m:mrow><m:mo>(</m:mo><m:mo>-</m:mo><m:mn>0</m:mn><m:mo>.</m:mo><m:mn>6</m:mn><m:mo>,</m:mo><m:mn>1</m:mn><m:mo>,</m:mo><m:mo>-</m:mo><m:mn>0</m:mn><m:mo>.</m:mo><m:mn>02</m:mn><m:mo>,</m:mo><m:mn>0</m:mn><m:mo>.</m:mo><m:mn>3</m:mn><m:mo>,</m:mo><m:mn>1</m:mn><m:mo>.</m:mo><m:mn>50</m:mn><m:mo>,</m:mo><m:mn>0</m:mn><m:mo>.</m:mo><m:mn>2</m:mn><m:mo>,</m:mo><m:mo>-</m:mo><m:mn>0</m:mn><m:mo>.</m:mo><m:mn>5</m:mn><m:mo>)</m:mo></m:mrow></m:mrow></m:math> and <m:math overflow="scroll"><m:mrow><m:msub><m:mi>β</m:mi><m:mrow><m:mi>b</m:mi><m:mi>e</m:mi></m:mrow></m:msub><m:mo>=</m:mo><m:mo>-</m:mo><m:mn>0</m:mn><m:mo>.</m:mo><m:mn>2</m:mn></m:mrow></m:math>.</caption>
+        </figure>
+        <para id="id264763">A realization of one consumer's purchase over time is plotted in Figure 3. We notice a few things in this plot that make it “realistic”: only small quantities are purchased; when higher quantity was purchased in a previous period, fewer units were purchase during the next period; the pruchases of the two products seem correlated as a number of peaks overlap.</para>
+      </section>
+    </section>
+    <section id="cid4">
+      <title>Ongoing Work</title>
+      <section id="uid16">
+        <title>Modeling consumer purchases</title>
+        <para id="id264791">Similar to data simulation, we model the consumer purchases of bacon and eggs using a trivariate reduction.</para>
+        <equation id="uid17">
+          <m:math overflow="scroll" mode="display">
+            <m:mtable displaystyle="true">
+              <m:mtr>
+                <m:mtd columnalign="right">
+                  <m:msub>
+                    <m:mi>Y</m:mi>
+                    <m:mrow>
+                      <m:mi>b</m:mi>
+                      <m:mo>,</m:mo>
+                      <m:mi>t</m:mi>
+                    </m:mrow>
+                  </m:msub>
+                </m:mtd>
+                <m:mtd columnalign="left">
+                  <m:mrow>
+                    <m:mo>=</m:mo>
+                    <m:msub>
+                      <m:mi>U</m:mi>
+                      <m:mrow>
+                        <m:mi>b</m:mi>
+                        <m:mo>,</m:mo>
+                        <m:mi>t</m:mi>
+                      </m:mrow>
+                    </m:msub>
+                    <m:mo>+</m:mo>
+                    <m:msub>
+                      <m:mi>U</m:mi>
+                      <m:mrow>
+                        <m:mi>b</m:mi>
+                        <m:mi>e</m:mi>
+                        <m:mo>,</m:mo>
+                        <m:mi>t</m:mi>
+                      </m:mrow>
+                    </m:msub>
+                  </m:mrow>
+                </m:mtd>
+              </m:mtr>
+              <m:mtr>
+                <m:mtd columnalign="right">
+                  <m:msub>
+                    <m:mi>Y</m:mi>
+                    <m:mrow>
+                      <m:mi>e</m:mi>
+                      <m:mo>,</m:mo>
+                      <m:mi>t</m:mi>
+                    </m:mrow>
+                  </m:msub>
+                </m:mtd>
+                <m:mtd columnalign="left">
+                  <m:mrow>
+                    <m:mo>=</m:mo>
+                    <m:msub>
+                      <m:mi>U</m:mi>
+                      <m:mrow>
+                        <m:mi>e</m:mi>
+                        <m:mo>,</m:mo>
+                        <m:mi>t</m:mi>
+                      </m:mrow>
+                    </m:msub>
+                    <m:mo>+</m:mo>
+                    <m:msub>
+                      <m:mi>U</m:mi>
+                      <m:mrow>
+                        <m:mi>b</m:mi>
+                        <m:mi>e</m:mi>
+                        <m:mo>,</m:mo>
+                        <m:mi>t</m:mi>
+                      </m:mrow>
+                    </m:msub>
+                  </m:mrow>
+                </m:mtd>
+              </m:mtr>
+            </m:mtable>
+          </m:math>
+        </equation>
+        <para id="id264918">Where <m:math overflow="scroll"><m:mrow><m:msub><m:mi>U</m:mi><m:mrow><m:mi>i</m:mi><m:mo>,</m:mo><m:mi>t</m:mi></m:mrow></m:msub><m:mo>∼</m:mo><m:mo form="prefix">Pois</m:mo><m:mrow><m:mo>(</m:mo><m:msub><m:mi>λ</m:mi><m:mrow><m:mi>i</m:mi><m:mo>,</m:mo><m:mi>t</m:mi></m:mrow></m:msub><m:mo>)</m:mo></m:mrow></m:mrow></m:math> for <m:math overflow="scroll"><m:mrow><m:mi>i</m:mi><m:mo>=</m:mo><m:mi>b</m:mi><m:mo>,</m:mo><m:mi>e</m:mi><m:mo>,</m:mo><m:mi>b</m:mi><m:mi>e</m:mi></m:mrow></m:math>.
+However, we constrain the covariates to include only observable variables: price, display and past purchase. Thus in the log link function for Poisson GLM, we model <emphasis effect="italics">λ</emphasis> like this:</para>
+        <equation id="uid18">
+          <m:math overflow="scroll" mode="display">
+            <m:mtable displaystyle="true">
+              <m:mtr>
+                <m:mtd columnalign="right">
+                  <m:mrow>
+                    <m:mo form="prefix">log</m:mo>
+                    <m:mrow>
+                      <m:mo>(</m:mo>
+                      <m:msub>
+                        <m:mi>λ</m:mi>
+                        <m:mrow>
+                          <m:mi>b</m:mi>
+                          <m:mo>,</m:mo>
+                          <m:mi>t</m:mi>
+                        </m:mrow>
+                      </m:msub>
+                      <m:mo>)</m:mo>
+                    </m:mrow>
+                  </m:mrow>
+                </m:mtd>
+                <m:mtd columnalign="left">
+                  <m:mrow>
+                    <m:mo>=</m:mo>
+                    <m:msubsup>
+                      <m:mi>β</m:mi>
+                      <m:mi>b</m:mi>
+                      <m:mn>0</m:mn>
+                    </m:msubsup>
+                    <m:mo>+</m:mo>
+                    <m:msubsup>
+                      <m:mi>β</m:mi>
+                      <m:mi>b</m:mi>
+                      <m:mn>1</m:mn>
+                    </m:msubsup>
+                    <m:mi>P</m:mi>
+                    <m:mi>r</m:mi>
+                    <m:mi>i</m:mi>
+                    <m:mi>c</m:mi>
+                    <m:msub>
+                      <m:mi>e</m:mi>
+                      <m:mrow>
+                        <m:mo>(</m:mo>
+                        <m:mi>b</m:mi>
+                        <m:mo>,</m:mo>
+                        <m:mi>t</m:mi>
+                        <m:mo>)</m:mo>
+                      </m:mrow>
+                    </m:msub>
+                    <m:mo>+</m:mo>
+                    <m:msubsup>
+                      <m:mi>β</m:mi>
+                      <m:mi>b</m:mi>
+                      <m:mn>2</m:mn>
+                    </m:msubsup>
+                    <m:mi>D</m:mi>
+                    <m:mi>i</m:mi>
+                    <m:mi>s</m:mi>
+                    <m:msub>
+                      <m:mi>p</m:mi>
+                      <m:mrow>
+                        <m:mo>(</m:mo>
+                        <m:mi>b</m:mi>
+                        <m:mo>,</m:mo>
+                        <m:mi>t</m:mi>
+                        <m:mo>)</m:mo>
+                      </m:mrow>
+                    </m:msub>
+                    <m:mo>+</m:mo>
+                    <m:msubsup>
+                      <m:mi>β</m:mi>
+                      <m:mi>b</m:mi>
+                      <m:mn>3</m:mn>
+                    </m:msubsup>
+                    <m:mi>D</m:mi>
+                    <m:mi>i</m:mi>
+                    <m:mi>s</m:mi>
+                    <m:msub>
+                      <m:mi>p</m:mi>
+                      <m:mrow>
+                        <m:mo>(</m:mo>
+                        <m:mi>e</m:mi>
+                        <m:mo>,</m:mo>
+                        <m:mi>t</m:mi>
+                        <m:mo>)</m:mo>
+                      </m:mrow>
+                    </m:msub>
+                    <m:mo>+</m:mo>
+                    <m:msubsup>
+                      <m:mi>β</m:mi>
+                      <m:mi>b</m:mi>
+                      <m:mn>4</m:mn>
+                    </m:msubsup>
+                    <m:msub>
+                      <m:mi>Y</m:mi>
+                      <m:mrow>
+                        <m:mo>(</m:mo>
+                        <m:mi>b</m:mi>
+                        <m:mo>,</m:mo>
+                        <m:mi>t</m:mi>
+                        <m:mo>-</m:mo>
+                        <m:mn>1</m:mn>
+                        <m:mo>)</m:mo>
+                      </m:mrow>
+                    </m:msub>
+                    <m:mo>+</m:mo>
+                    <m:msubsup>
+                      <m:mi>β</m:mi>
+                      <m:mi>b</m:mi>
+                      <m:mn>5</m:mn>
+                    </m:msubsup>
+                    <m:msub>
+                      <m:mi>Y</m:mi>
+                      <m:mrow>
+                        <m:mo>(</m:mo>
+                        <m:mi>e</m:mi>
+                        <m:mo>,</m:mo>
+                        <m:mi>t</m:mi>
+                        <m:mo>-</m:mo>
+                        <m:mn>1</m:mn>
+                        <m:mo>)</m:mo>
+                      </m:mrow>
+                    </m:msub>
+                  </m:mrow>
+                </m:mtd>
+              </m:mtr>
+              <m:mtr>
+                <m:mtd columnalign="right">
+                  <m:mrow>
+                    <m:mo form="prefix">log</m:mo>
+                    <m:mrow>
+                      <m:mo>(</m:mo>
+                      <m:msub>
+                        <m:mi>λ</m:mi>
+                        <m:mrow>
+                          <m:mi>e</m:mi>
+                          <m:mo>,</m:mo>
+                          <m:mi>t</m:mi>
+                        </m:mrow>
+                      </m:msub>
+                      <m:mo>)</m:mo>
+                    </m:mrow>
+                  </m:mrow>
+                </m:mtd>
+                <m:mtd columnalign="left">
+                  <m:mrow>
+                    <m:mo>=</m:mo>
+                    <m:msubsup>
+                      <m:mi>β</m:mi>
+                      <m:mi>e</m:mi>
+                      <m:mn>0</m:mn>
+                    </m:msubsup>
+                    <m:mo>+</m:mo>
+                    <m:msubsup>
+                      <m:mi>β</m:mi>
+                      <m:mi>e</m:mi>
+                      <m:mn>1</m:mn>
+                    </m:msubsup>
+                    <m:mi>P</m:mi>
+                    <m:mi>r</m:mi>
+                    <m:mi>i</m:mi>
+                    <m:mi>c</m:mi>
+                    <m:msub>
+                      <m:mi>e</m:mi>
+                      <m:mrow>
+                        <m:mo>(</m:mo>
+                        <m:mi>e</m:mi>
+                        <m:mo>,</m:mo>
+                        <m:mi>t</m:mi>
+                        <m:mo>)</m:mo>
+                      </m:mrow>
+                    </m:msub>
+                    <m:mo>+</m:mo>
+                    <m:msubsup>
+                      <m:mi>β</m:mi>
+                      <m:mi>e</m:mi>
+                      <m:mn>2</m:mn>
+                    </m:msubsup>
+                    <m:mi>D</m:mi>
+                    <m:mi>i</m:mi>
+                    <m:mi>s</m:mi>
+                    <m:msub>
+                      <m:mi>p</m:mi>
+                      <m:mrow>
+                        <m:mo>(</m:mo>
+                        <m:mi>b</m:mi>
+                        <m:mo>,</m:mo>
+                        <m:mi>t</m:mi>
+                        <m:mo>)</m:mo>
+                      </m:mrow>
+                    </m:msub>
+                    <m:mo>+</m:mo>
+                    <m:msubsup>
+                      <m:mi>β</m:mi>
+                      <m:mi>e</m:mi>
+                      <m:mn>3</m:mn>
+                    </m:msubsup>
+                    <m:mi>D</m:mi>
+                    <m:mi>i</m:mi>
+                    <m:mi>s</m:mi>
+                    <m:msub>
+                      <m:mi>p</m:mi>
+                      <m:mrow>
+                        <m:mo>(</m:mo>
+                        <m:mi>e</m:mi>
+                        <m:mo>,</m:mo>
+                        <m:mi>t</m:mi>
+                        <m:mo>)</m:mo>
+                      </m:mrow>
+                    </m:msub>
+                    <m:mo>+</m:mo>
+                    <m:msubsup>
+                      <m:mi>β</m:mi>
+                      <m:mi>e</m:mi>
+                      <m:mn>4</m:mn>
+                    </m:msubsup>
+                    <m:msub>
+                      <m:mi>Y</m:mi>
+                      <m:mrow>
+                        <m:mo>(</m:mo>
+                        <m:mi>b</m:mi>
+                        <m:mo>,</m:mo>
+                        <m:mi>t</m:mi>
+                        <m:mo>-</m:mo>
+                        <m:mn>1</m:mn>
+                        <m:mo>)</m:mo>
+                      </m:mrow>
+                    </m:msub>
+                    <m:mo>+</m:mo>
+                    <m:msubsup>
+                      <m:mi>β</m:mi>
+                      <m:mi>e</m:mi>
+                      <m:mn>5</m:mn>
+                    </m:msubsup>
+                    <m:msub>
+                      <m:mi>Y</m:mi>
+                      <m:mrow>
+                        <m:mo>(</m:mo>
+                        <m:mi>e</m:mi>
+                        <m:mo>,</m:mo>
+                        <m:mi>t</m:mi>
+                        <m:mo>-</m:mo>
+                        <m:mn>1</m:mn>
+                        <m:mo>)</m:mo>
+                      </m:mrow>
+                    </m:msub>
+                  </m:mrow>
+                </m:mtd>
+              </m:mtr>
+              <m:mtr>
+                <m:mtd columnalign="right">
+                  <m:mrow>
+                    <m:mo form="prefix">log</m:mo>
+                    <m:mrow>
+                      <m:mo>(</m:mo>
+                      <m:msub>
+                        <m:mi>λ</m:mi>
+                        <m:mrow>
+                          <m:mi>b</m:mi>
+                          <m:mi>e</m:mi>
+                          <m:mo>,</m:mo>
+                          <m:mi>t</m:mi>
+                        </m:mrow>
+                      </m:msub>
+                      <m:mo>)</m:mo>
+                    </m:mrow>
+                  </m:mrow>
+                </m:mtd>
+                <m:mtd columnalign="left">
+                  <m:mrow>
+                    <m:mo>=</m:mo>
+                    <m:msubsup>
+                      <m:mi>β</m:mi>
+                      <m:mrow>
+                        <m:mi>b</m:mi>
+                        <m:mi>e</m:mi>
+                      </m:mrow>
+                      <m:mn>0</m:mn>
+                    </m:msubsup>
+                  </m:mrow>
+                </m:mtd>
+              </m:mtr>
+            </m:mtable>
+          </m:math>
+        </equation>
+        <para id="id265525">Methods for estimating bivariate Poisson regression models are available in R package “bivpois” <link target-id="bid10"/>. We can compare the <m:math overflow="scroll"><m:mover accent="true"><m:mi>λ</m:mi><m:mo>^</m:mo></m:mover></m:math> generated by the model against the “real” <emphasis effect="italics">λ</emphasis> used in the simulation. Note that <m:math overflow="scroll"><m:mrow><m:msub><m:mover accent="true"><m:mi>λ</m:mi><m:mo>^</m:mo></m:mover><m:mrow><m:mi>i</m:mi><m:mo>,</m:mo><m:mi>t</m:mi></m:mrow></m:msub><m:mo>=</m:mo><m:mover accent="true"><m:msub><m:mi>λ</m:mi><m:mrow><m:mi>i</m:mi><m:mo>,</m:mo><m:mi>t</m:mi></m:mrow></m:msub><m:mo>^</m:mo></m:mover><m:mo>+</m:mo><m:mover accent="true"><m:msub><m:mi>λ</m:mi><m:mrow><m:mi>b</m:mi><m:mi>e</m:mi><m:mo>,</m:mo><m:mi>t</m:mi></m:mrow></m:msub><m:mo>^</m:mo></m:mover></m:mrow></m:math> for <m:math overflow="scroll"><m:mrow><m:mi>i</m:mi><m:mo>=</m:mo><m:mi>b</m:mi><m:mo>,</m:mo><m:mi>e</m:mi></m:mrow></m:math>.</para>
+        <figure id="uid19">
+          <media id="uid19_media" alt="">
+            <image mime-type="image/png" src="../../media/be_purchase_fit.png" id="uid19_onlineimage" width="576"><!-- NOTE: attribute width changes image size online (pixels). original width is 576. --></image>
+            <image for="pdf" mime-type="application/postscript" src="../../media/be_purchase_fit.eps" id="uid19_printimage" print-width="5in">
+              <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+            </image>
+          </media>
+          <caption>Comparing fitted <m:math overflow="scroll"><m:mover accent="true"><m:mi>λ</m:mi><m:mo>^</m:mo></m:mover></m:math> (in solid line) with “real” <emphasis effect="italics">λ</emphasis> (black dots) used in data simulation</caption>
+        </figure>
+        <para id="id265696">We also tested the robustness of regression model to varying strengths of <m:math overflow="scroll"><m:msub><m:mi>λ</m:mi><m:mrow><m:mi>b</m:mi><m:mi>e</m:mi><m:mo>,</m:mo><m:mi>t</m:mi></m:mrow></m:msub></m:math>, the covariance term. A summary of the simulation studies is presented in Figure 5.</para>
+        <figure id="uid20">
+          <media id="uid20_media" alt="">
+            <image mime-type="image/png" src="../../media/beta_change.png" id="uid20_onlineimage" width="595"><!-- NOTE: attribute width changes image size online (pixels). original width is 595. --></image>
+            <image for="pdf" mime-type="application/postscript" src="../../media/beta_change.eps" id="uid20_printimage" print-width="5in">
+              <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+            </image>
+          </media>
+          <caption>Median value of estimated regression coefficients compared to “real” betas used in simulation. (Top row: bacon; Bottom row: egg)</caption>
+        </figure>
+        <para id="id265740">The regression is slightly more accurate with a lower <m:math overflow="scroll"><m:msub><m:mi>λ</m:mi><m:mrow><m:mi>b</m:mi><m:mi>e</m:mi><m:mo>,</m:mo><m:mi>t</m:mi></m:mrow></m:msub></m:math></para>
+      </section>
+      <section id="uid21">
+        <title>Next Steps</title>
+        <para id="id265774">We are currently working to extend the univariate MBC method to the bivariate case. The extension process consists of developing the bivariate model for the simulated consumer TSC data, deriving the bivariate KL metric, and improving the clustering algorithm to cluster bivariate models. So far, we have developed a working bivariate Poisson regression model using the bivpois package. The clustering algorithm is still under development.</para>
+      </section>
+    </section>
+    <section id="cid5">
+      <title>Implications of MBC</title>
+      
+      <para id="id265795">Our application of MBC in market segmentation offer insights about consumers in two ways. First, the models that describe each cluster are easy to interpret since the parameters that make up the model represent directly the consumer's “sensitivities” to observable exogenous variables. There are three exogenous variables considered in our simple bivariate model fitted to the simulated data: product price, product display, and quantity purchased during previous time period. Several useful interpretations can be made from studying the parameters. For example, a negative <emphasis effect="italics">β<sub>b</sub><sup>1</sup></emphasis> reveals that price affects bacon purchase negatively, but a positive <emphasis effect="italics">β<sub>b</sub><sup>2</sup></emphasis> implies the advertisement of bacon promotes sale of bacon. We can also compare the magnitudes of <emphasis effect="italics">β</emphasis> across consumer segments to detect how differently consumers react to price, display and past purchases.</para>
+      <para id="id265853">Second, the bivariate nature of the model also contains information about the cross-product effects between products. This is useful if the two products are closely related, which is true in our case of bacon and eggs. For example, the examination of <emphasis effect="italics">β<sub>b</sub><sup>4</sup></emphasis>, which is the parameter for display of eggs, indicates how much egg advertisements influences the consumer's bacon purchase. We incorporate time series components into the model by included quantities of bacon and eggs purchased at the last time period. We might expect the products to have a negative autocorrelation but a positive cross correlation. For instance, if a customer purchased a large quantity of bacon last shopping trip, he might purchase less bacon but more eggs on the subsequent trip. In addition, the parameter for the correlation term acts an overall indicator of how bacon and egg purchases are related. This information is useful especially in deciding if a cross-product marketing strategy is appropriate in the first place.</para>
+      <para id="id265879">Finally, the hierarchical bottom-up clustering tree allows the manager to group consumers in a way that makes most sense. It is easy to visualize the size and memberships of consumer groups with this clustering algorithm.</para>
+    </section>
+    <section id="cid6">
+      <title>Directions for Future Research</title>
+      <para id="id265894">To discover the true potential for MBC in marketing research settings, we still need to apply it to actual consumer data. If studies using simulated data are promising, we would like to collaborate with marketing researchers to implement MBC on actual store scanner data and other marketing TSC data.</para>
+      <para id="id265899">One interesting type of TSC data is e-commerce data. As more business is conducted online, company must be adapt to respond optimally to consumer behavior on the web. Many market segmentation protocols are already in place for some companies. For example, Google displays “Sponsored links” or advertisements related to the user's search term. Large online stores such as Amazon.com, Buy.com and eBay.com all offer customized recommendations for users. MBC's ability to reveal consumer sensitivities can contribute to make online marketing more effective.</para>
+      <para id="id265912">With new sets of data available for MBC research, we will likely encounter TSC data that contain many extra zeroes. Zero-inflation is a common feature in count data and can cause problems for simple models that do not treat the extra zeroes properly. In the development of univariate MBC in pollution study <link target-id="bid5"/>, a technique called zero-inflated Poisson (ZIP) regression <link target-id="bid11"/> was used to accurately capture the zeroes that were prevalent in the TSC. Some consumer TSC data that might have extra zeroes include durable goods such as appliances or cars. The application of ZIP regression model in these instances may broaden the scope of applications of MBC in marketing research.</para>
+      <para id="id265931">From statistical modeling point of view, an immediate extension for the project is to generalize the model beyond the bivariate case. The model for multivariate Poisson regression becomes more complex as the dimension size increase because the number of correlation terms increases. The problem can be illustrated using the trivariate case. In the Data section, we described how the bivariate Poisson is constructed via the trivariate reduction. For the trivariate case the multivariate reduction becomes more complicated:</para>
+      
+      
+      <equation id="uid22">
+        <m:math overflow="scroll" mode="display">
+          <m:mtable displaystyle="true">
+            <m:mtr>
+              <m:mtd columnalign="right">
+                <m:msub>
+                  <m:mi>Y</m:mi>
+                  <m:mrow>
+                    <m:mi>a</m:mi>
+                    <m:mo>,</m:mo>
+                    <m:mi>t</m:mi>
+                  </m:mrow>
+                </m:msub>
+              </m:mtd>
+              <m:mtd columnalign="left">
+                <m:mrow>
+                  <m:mo>=</m:mo>
+                  <m:msub>
+                    <m:mi>U</m:mi>
+                    <m:mrow>
+                      <m:mi>a</m:mi>
+                      <m:mo>,</m:mo>
+                      <m:mi>t</m:mi>
+                    </m:mrow>
+                  </m:msub>
+                  <m:mo>+</m:mo>
+                  <m:msub>
+                    <m:mi>U</m:mi>
+                    <m:mrow>
+                      <m:mi>a</m:mi>
+                      <m:mi>b</m:mi>
+                      <m:mo>,</m:mo>
+                      <m:mi>t</m:mi>
+                    </m:mrow>
+                  </m:msub>
+                  <m:mo>+</m:mo>
+                  <m:msub>
+                    <m:mi>U</m:mi>
+                    <m:mrow>
+                      <m:mi>a</m:mi>
+                      <m:mi>c</m:mi>
+                      <m:mo>,</m:mo>
+                      <m:mi>t</m:mi>
+                    </m:mrow>
+                  </m:msub>
+                  <m:mo>+</m:mo>
+                  <m:msub>
+                    <m:mi>U</m:mi>
+                    <m:mrow>
+                      <m:mi>a</m:mi>
+                      <m:mi>b</m:mi>
+                      <m:mi>c</m:mi>
+                      <m:mo>,</m:mo>
+                      <m:mi>t</m:mi>
+                    </m:mrow>
+                  </m:msub>
+                </m:mrow>
+              </m:mtd>
+            </m:mtr>
+            <m:mtr>
+              <m:mtd columnalign="right">
+                <m:msub>
+                  <m:mi>Y</m:mi>
+                  <m:mrow>
+                    <m:mi>b</m:mi>
+                    <m:mo>,</m:mo>
+                    <m:mi>t</m:mi>
+                  </m:mrow>
+                </m:msub>
+              </m:mtd>
+              <m:mtd columnalign="left">
+                <m:mrow>
+                  <m:mo>=</m:mo>
+                  <m:msub>
+                    <m:mi>U</m:mi>
+                    <m:mrow>
+                      <m:mi>b</m:mi>
+                      <m:mo>,</m:mo>
+                      <m:mi>t</m:mi>
+                    </m:mrow>
+                  </m:msub>
+                  <m:mo>+</m:mo>
+                  <m:msub>
+                    <m:mi>U</m:mi>
+                    <m:mrow>
+                      <m:mi>a</m:mi>
+                      <m:mi>b</m:mi>
+                      <m:mo>,</m:mo>
+                      <m:mi>t</m:mi>
+                    </m:mrow>
+                  </m:msub>
+                  <m:mo>+</m:mo>
+                  <m:msub>
+                    <m:mi>U</m:mi>
+                    <m:mrow>
+                      <m:mi>b</m:mi>
+                      <m:mi>c</m:mi>
+                      <m:mo>,</m:mo>
+                      <m:mi>t</m:mi>
+                    </m:mrow>
+                  </m:msub>
+                  <m:mo>+</m:mo>
+                  <m:msub>
+                    <m:mi>U</m:mi>
+                    <m:mrow>
+                      <m:mi>a</m:mi>
+                      <m:mi>b</m:mi>
+                      <m:mi>c</m:mi>
+                      <m:mo>,</m:mo>
+                      <m:mi>t</m:mi>
+                    </m:mrow>
+                  </m:msub>
+                </m:mrow>
+              </m:mtd>
+            </m:mtr>
+            <m:mtr>
+              <m:mtd columnalign="right">
+                <m:msub>
+                  <m:mi>Y</m:mi>
+                  <m:mrow>
+                    <m:mi>c</m:mi>
+                    <m:mo>,</m:mo>
+                    <m:mi>t</m:mi>
+                  </m:mrow>
+                </m:msub>
+              </m:mtd>
+              <m:mtd columnalign="left">
+                <m:mrow>
+                  <m:mo>=</m:mo>
+                  <m:msub>
+                    <m:mi>U</m:mi>
+                    <m:mrow>
+                      <m:mi>c</m:mi>
+                      <m:mo>,</m:mo>
+                      <m:mi>t</m:mi>
+                    </m:mrow>
+                  </m:msub>
+                  <m:mo>+</m:mo>
+                  <m:msub>
+                    <m:mi>U</m:mi>
+                    <m:mrow>
+                      <m:mi>a</m:mi>
+                      <m:mi>c</m:mi>
+                      <m:mo>,</m:mo>
+                      <m:mi>t</m:mi>
+                    </m:mrow>
+                  </m:msub>
+                  <m:mo>+</m:mo>
+                  <m:msub>
+                    <m:mi>U</m:mi>
+                    <m:mrow>
+                      <m:mi>b</m:mi>
+                      <m:mi>c</m:mi>
+                      <m:mo>,</m:mo>
+                      <m:mi>t</m:mi>
+                    </m:mrow>
+                  </m:msub>
+                  <m:mo>+</m:mo>
+                  <m:msub>
+                    <m:mi>U</m:mi>
+                    <m:mrow>
+                      <m:mi>a</m:mi>
+                      <m:mi>b</m:mi>
+                      <m:mi>c</m:mi>
+                      <m:mo>,</m:mo>
+                      <m:mi>t</m:mi>
+                    </m:mrow>
+                  </m:msub>
+                </m:mrow>
+              </m:mtd>
+            </m:mtr>
+          </m:mtable>
+        </m:math>
+      </equation>
+      <para id="id266231">
+now with <m:math overflow="scroll"><m:msub><m:mi>U</m:mi><m:mrow><m:mi>a</m:mi><m:mi>b</m:mi><m:mo>,</m:mo><m:mi>t</m:mi></m:mrow></m:msub></m:math>,<m:math overflow="scroll"><m:msub><m:mi>U</m:mi><m:mrow><m:mi>a</m:mi><m:mi>c</m:mi><m:mo>,</m:mo><m:mi>t</m:mi></m:mrow></m:msub></m:math>,<m:math overflow="scroll"><m:msub><m:mi>U</m:mi><m:mrow><m:mi>b</m:mi><m:mi>c</m:mi><m:mo>,</m:mo><m:mi>t</m:mi></m:mrow></m:msub></m:math>,and <m:math overflow="scroll"><m:msub><m:mi>U</m:mi><m:mrow><m:mi>a</m:mi><m:mi>b</m:mi><m:mi>c</m:mi><m:mo>,</m:mo><m:mi>t</m:mi></m:mrow></m:msub></m:math> as correlation terms.
+In general, for the N-variate case, the total number of correlation terms is
+<m:math overflow="scroll"><m:mstyle scriptlevel="0" displaystyle="true"><m:mrow><m:munderover><m:mo>∑</m:mo><m:mrow><m:mi>i</m:mi><m:mo>=</m:mo><m:mn>2</m:mn></m:mrow><m:mi>N</m:mi></m:munderover><m:mfenced separators="" open="(" close=")"><m:mfrac linethickness="0pt"><m:mi>N</m:mi><m:mi>i</m:mi></m:mfrac></m:mfenced></m:mrow></m:mstyle></m:math>.</para>
+    </section>
+    <section id="cid7">
+      <title>Acknowledgements</title>
+      <para id="id266380">The authors would like to thank Dr. Kathy Ensor, Department of Statistics, Rice University, and Dr. Bonnie Ray, IBM J. T. Watson Research Center, for their valuable insights and guidance.</para>
+      <para id="id266384">This Connexions module describes work conducted as part of Rice University's VIGRE program, supported by National Science Foundation grant 0739420.</para>
+    </section>
+  </content>
+  <bib:file>
+    <bib:entry id="bid0">
+      <bib:book>
+        <!--required fields-->
+        <bib:author>Aaker, David A. and Kumar, V and Day, George S.</bib:author>
+        <bib:title>Marketing Research</bib:title>
+        <bib:publisher>John Wiley &amp; Sons, Inc.</bib:publisher>
+        <bib:year>2000</bib:year>
+        <!--optional fields-->
+        <bib:volume/>
+        <bib:series/>
+        <bib:address/>
+        <bib:edition>7</bib:edition>
+        <bib:month/>
+        <bib:note/>
+      </bib:book>
+    </bib:entry>
+    <bib:entry id="bid6">
+      <bib:article>
+        <!--required fields-->
+        <bib:author>Fokianos, Konstantinos and Kedem, Benjamin</bib:author>
+        <bib:title>Partial Likelihood Inference for Time Series Following Generalized Linear Models</bib:title>
+        <bib:journal>Journal of Time Series Analysis</bib:journal>
+        <bib:year>2004</bib:year>
+        <!--optional fields-->
+        <bib:volume>25</bib:volume>
+        <bib:number>2</bib:number>
+        <bib:pages>173-197</bib:pages>
+        <bib:month/>
+        <bib:note/>
+      </bib:article>
+    </bib:entry>
+    <bib:entry id="bid4">
+      <bib:article>
+        <!--required fields-->
+        <bib:author>Krieger, Abba M. and Green, Paul E.</bib:author>
+        <bib:title>Modifying Cluster-Based Segments to Enhance Agreement with an Exogenous Response Variable</bib:title>
+        <bib:journal>Journal of Marketing Research</bib:journal>
+        <bib:year>1996</bib:year>
+        <!--optional fields-->
+        <bib:volume>33</bib:volume>
+        <bib:number>3</bib:number>
+        <bib:pages>351-363</bib:pages>
+        <bib:month>August</bib:month>
+        <bib:note/>
+      </bib:article>
+    </bib:entry>
+    <bib:entry id="bid9">
+      <bib:book>
+        <!--required fields-->
+        <bib:author>Kocherlakota, Subrahmaniam and Kocherlakota, Kathleen</bib:author>
+        <bib:title>Bivariate Discrete Distributions</bib:title>
+        <bib:publisher>Marcel Dekker, Inc</bib:publisher>
+        <bib:year>1992</bib:year>
+        <!--optional fields-->
+        <bib:volume/>
+        <bib:series/>
+        <bib:address/>
+        <bib:edition/>
+        <bib:month/>
+        <bib:note/>
+      </bib:book>
+    </bib:entry>
+    <bib:entry id="bid10">
+      <bib:article>
+        <!--required fields-->
+        <bib:author>Karlis, Dimitris and Ntzoufras, Ioannis</bib:author>
+        <bib:title>Bivariate Poisson and Diagonal Inflated Bivariate Poisson Regression Models in R</bib:title>
+        <bib:journal>Journal of Statistical Software</bib:journal>
+        <bib:year>2005</bib:year>
+        <!--optional fields-->
+        <bib:volume>14</bib:volume>
+        <bib:number/>
+        <bib:pages/>
+        <bib:month>September</bib:month>
+        <bib:note/>
+      </bib:article>
+    </bib:entry>
+    <bib:entry id="bid11">
+      <bib:article>
+        <!--required fields-->
+        <bib:author>Lambert, Diane</bib:author>
+        <bib:title>Zero-Inflated Poisson Regression, with an Application to Defects in Manufacturing</bib:title>
+        <bib:journal>Technometrics</bib:journal>
+        <bib:year>1992</bib:year>
+        <!--optional fields-->
+        <bib:volume>34</bib:volume>
+        <bib:number>1</bib:number>
+        <bib:pages>1-14</bib:pages>
+        <bib:month>February</bib:month>
+        <bib:note/>
+      </bib:article>
+    </bib:entry>
+    <bib:entry id="bid3">
+      <bib:article>
+        <!--required fields-->
+        <bib:author>Leeflang, Peter S.H. and Wittink, Dick R.</bib:author>
+        <bib:title>Building Models for Marketing Decisions: Past, Present and Future</bib:title>
+        <bib:journal>International Journal of Research in Marketing</bib:journal>
+        <bib:year>2000</bib:year>
+        <!--optional fields-->
+        <bib:volume>17</bib:volume>
+        <bib:number/>
+        <bib:pages>105-126</bib:pages>
+        <bib:month/>
+        <bib:note/>
+      </bib:article>
+    </bib:entry>
+    <bib:entry id="bid8">
+      <bib:article>
+        <!--required fields-->
+        <bib:author>Niraj, Rakesh and V. Padmanabhan, P.B. Seetharaman</bib:author>
+        <bib:title>A Cross-Category Model of Households' Incidence and Quantity Decisions</bib:title>
+        <bib:journal>Marketing Science</bib:journal>
+        <bib:year>2008</bib:year>
+        <!--optional fields-->
+        <bib:volume>27</bib:volume>
+        <bib:number>2</bib:number>
+        <bib:pages>225-235</bib:pages>
+        <bib:month>March-April</bib:month>
+        <bib:note/>
+      </bib:article>
+    </bib:entry>
+    <bib:entry id="bid1">
+      <bib:article>
+        <!--required fields-->
+        <bib:author>Smith, Wendell R.</bib:author>
+        <bib:title>Product Differentiation and Market Segmentation as Alternative Marketing Strategies</bib:title>
+        <bib:journal>The Journal of Marketing</bib:journal>
+        <bib:year>1956</bib:year>
+        <!--optional fields-->
+        <bib:volume>21</bib:volume>
+        <bib:number>1</bib:number>
+        <bib:pages>3-8</bib:pages>
+        <bib:month>July</bib:month>
+        <bib:note/>
+      </bib:article>
+    </bib:entry>
+    <bib:entry id="bid5">
+      <bib:techreport>
+        <!--required fields-->
+        <bib:author>Thomas, Sarah J. and Ray, Bonnie K. and Ensor, Kathy B.</bib:author>
+        <bib:title>A Model-based Approach for Clustering Air Quality Monitoring Networks in Houston, Texas</bib:title>
+        <bib:institution>Rice University</bib:institution>
+        <bib:year>2009</bib:year>
+        <!--optional fields-->
+        <bib:type>Technical report</bib:type>
+        <bib:number/>
+        <bib:address/>
+        <bib:month/>
+        <bib:note/>
+      </bib:techreport>
+    </bib:entry>
+    <bib:entry id="bid2">
+      <bib:book>
+        <!--required fields-->
+        <bib:author>Wedel, Michel and Kamakura, Wagner A.</bib:author>
+        <bib:title>Market Segmentation: Conceptual and Methodological Foundations</bib:title>
+        <bib:publisher>Kluwer Academic Publishers</bib:publisher>
+        <bib:year>1998</bib:year>
+        <!--optional fields-->
+        <bib:volume/>
+        <bib:series/>
+        <bib:address/>
+        <bib:edition/>
+        <bib:month/>
+        <bib:note/>
+      </bib:book>
+    </bib:entry>
+    <bib:entry id="bid7">
+      <bib:article>
+        <!--required fields-->
+        <bib:author>Zhong, Shi and Ghosh, Joydeep</bib:author>
+        <bib:title>A Unified Framework for Model-based Clustering</bib:title>
+        <bib:journal>Journal of Machine Learning Research</bib:journal>
+        <bib:year>2003</bib:year>
+        <!--optional fields-->
+        <bib:volume>4</bib:volume>
+        <bib:number/>
+        <bib:pages>1001-1037</bib:pages>
+        <bib:month>11</bib:month>
+        <bib:note/>
+      </bib:article>
+    </bib:entry>
+  </bib:file>
+</document>

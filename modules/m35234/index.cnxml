@@ -1,0 +1,3839 @@
+<document xmlns="http://cnx.rice.edu/cnxml" xmlns:m="http://www.w3.org/1998/Math/MathML" xmlns:bib="http://bibtexml.sf.net/">
+  <title>There and Back Again - An Exploration of the Liouville Transformation and Its Inverse</title>
+<metadata xmlns:md="http://cnx.rice.edu/mdml">
+  <md:content-id>m35234</md:content-id>
+  <md:title>There and Back Again - An Exploration of the Liouville Transformation and Its Inverse</md:title>
+  <md:abstract>This report summarizes work done as part of the Physics of Strings PFUG under
+Rice University's VIGRE program.  VIGRE is a program of Vertically Integrated
+Grants for Research and Education in the Mathematical Sciences under the
+direction of the National Science Foundation.  A PFUG is a group of Postdocs,
+Faculty, Undergraduates and Graduate students formed around the study of a
+common problem.  This module describes a method for recovering the distribution
+of mass along a one-dimensional non-uniform string from the string's
+eigenvalues.  The eigenvalues are used to construct the string's Sturm-Liouville
+potential function, and then the mass density is obtained from this potential by
+means of inverting the Liouville transformation.</md:abstract>
+  <md:uuid>2820ce63-b201-4e92-b49f-2fd90e2f9072</md:uuid>
+</metadata>
+<featured-links>
+  <!-- WARNING! The 'featured-links' section is read only. Do not edit below.
+       Changes to the links section in the source will not be saved. -->
+    <link-group type="supplemental">
+      <link url="http://www.caam.rice.edu/~vanese/icmapmovie.mp4" strength="3">Movie of color map of recovered string length from various initial conditions</link>
+      <link url="http://www.caam.rice.edu/~vanese/rhomovie2.mp4" strength="3">Movie of mass density of unit string with ρ(0)=1 (Part 1)</link>
+      <link url="http://www.caam.rice.edu/~vanese/rhomovie374.mp4" strength="3">Movie of mass density of unit string with ρ(0)=1 (Part 2)</link>
+      <link url="http://www.caam.rice.edu/~vanese/eigfnmovie2.mp4" strength="3">Movie of first two eigenfunctions</link>
+      <link url="http://www.caam.rice.edu/~vanese/code/codelist.html" strength="3">MATLAB code used to generate results</link>
+    </link-group>
+  <!-- WARNING! The 'featured-links' section is read only. Do not edit above.
+       Changes to the links section in the source will not be saved. -->
+</featured-links>
+<content>
+    <section id="cid1">
+      <title>Introduction</title>
+      <para id="id236759">Spectral analysis – the study of the eigenvectors and eigenvalues of linear
+operators between vector spaces – is one of the most important areas of
+research in modern applied mathematics, with applications in areas as diverse
+as mechanics, signal processing, and biology. The spectral analysis of
+operators involved in partial differential equations is especially important,
+as it offers keen insight into some of the fundamental laws that make modern
+engineering possible. Of all these equations, the wave equation in a single
+dimension is perhaps the simplest and easiest to understand, yet the mathematics
+that underlie it is both rich and beautiful. In particular, it provides an
+illuminating platform from which to study spectral theory, for the eigenvalues
+of the underlying differential operator bear a straightforward physical
+interpretation as the vibrational frequencies of the string being modeled.</para>
+      <para id="id236778">Within spectral theory, there are two broad classes of problems: forward
+problems and inverse problems. In forward problems, the operator in question
+is specified, and one is asked to determine its eigenvalues and eigenvectors.
+In inverse problems, one is instead given information about an operator's
+eigenstructure and is asked to reconstruct the operator. In the context of the
+vibrating string problem, the forward problem asks one to find a string's
+frequencies of vibration given its physical characteristics, while the inverse
+problem seeks knowledge of the string's physical properties from its
+frequencies. In the case of the vibrating string, both of these problems have
+been well studied, and various techniques exist for solving them for strings
+with both continuous and discrete mass densities.</para>
+      <para id="id236788">One possible approach to the spectral analysis of a partial differential
+equation is to transform it into another form for which the spectral
+characteristics are known. In the case of the one-dimensional wave equation <link target-id="uid2"/>,
+it is possible to transform it into the Sturm-Liouville equation <link target-id="uid6"/>, whose
+spectral properties have been well-studied (see, e.g., <link target-id="bid0"/>). While such
+transformations are mathematically very convenient, the original physical
+interpretation of the problem becomes lost amid changes-of-variables. That is,
+in order to make physical sense of the solution one must ”untransform" it
+back into original problem's domain. The focus of our work and of this paper
+is on this inversion process, specifically for the transformation between the
+one-dimensional wave equation and its Sturm-Liouville counterpart.</para>
+      <para id="id237153">The remainder of this document is divided as follows. In <link target-id="cid2">"Problem Setup"</link>, we provide a short introduction to the forward and inverse
+problems under consideration. In <link target-id="cid3">"The Transformations"</link>, we analyze in
+detail the transformation used to turn the wave equation into the
+Sturm-Liouville equation and describe a method for inverting it. In <link target-id="cid4">"Numerical Results"</link>, we present the results of the main collection of numerical
+experiments we conducted, which use a particular Sturm-Liouville potential
+function from <link target-id="bid0"/>. A discussion of the errors in these results is
+presented in <link target-id="cid5">"Error Analysis: Recovering Eigenvalues"</link>. <link target-id="cid6">"Corresponding q(t) and ρ(x) Functions in Closed Form"</link> contains
+results for other functions in closed form we studied. Finally, we provide a brief description of the numerical methods
+we used in <link target-id="cid7">"Numerical Methods"</link>.</para>
+    </section>
+    <section id="cid2">
+      <title>Problem Setup</title>
+      <section id="uid1">
+        <title>The Forward Problem</title>
+        <para id="id237210">We begin by modeling the behavior of a string of length <m:math overflow="scroll"><m:mi>L</m:mi></m:math> with spatially-varying mass
+density <m:math overflow="scroll"><m:mrow><m:mi>ρ</m:mi><m:mo>(</m:mo><m:mi>x</m:mi><m:mo>)</m:mo><m:mo>&gt;</m:mo><m:mn>0</m:mn></m:mrow></m:math> for <m:math overflow="scroll"><m:mrow><m:mi>x</m:mi><m:mo>∈</m:mo><m:mo>[</m:mo><m:mn>0</m:mn><m:mo>,</m:mo><m:mi>L</m:mi><m:mo>]</m:mo></m:mrow></m:math>. For a long string experiencing small vibration, let <m:math overflow="scroll"><m:mrow><m:mi>u</m:mi><m:mo>(</m:mo><m:mi>x</m:mi><m:mo>,</m:mo><m:mi>t</m:mi><m:mo>)</m:mo></m:mrow></m:math> be the vertical displacement of the string at time <m:math overflow="scroll"><m:mrow><m:mi>t</m:mi><m:mo>≥</m:mo><m:mn>0</m:mn></m:mrow></m:math>. This <m:math overflow="scroll"><m:mrow><m:mi>u</m:mi><m:mo>(</m:mo><m:mi>x</m:mi><m:mo>,</m:mo><m:mi>t</m:mi><m:mo>)</m:mo></m:mrow></m:math> satisfies the 1-D wave equation</para>
+        <equation id="uid2">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:mi>ρ</m:mi>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>x</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:msub>
+                <m:mi>u</m:mi>
+                <m:mrow>
+                  <m:mi>t</m:mi>
+                  <m:mi>t</m:mi>
+                </m:mrow>
+              </m:msub>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>x</m:mi>
+                <m:mo>,</m:mo>
+                <m:mi>t</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>=</m:mo>
+              <m:msub>
+                <m:mi>u</m:mi>
+                <m:mrow>
+                  <m:mi>x</m:mi>
+                  <m:mi>x</m:mi>
+                </m:mrow>
+              </m:msub>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>x</m:mi>
+                <m:mo>,</m:mo>
+                <m:mi>t</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>,</m:mo>
+              <m:mspace width="2.em"/>
+              <m:mn>0</m:mn>
+              <m:mo>≤</m:mo>
+              <m:mi>x</m:mi>
+              <m:mo>≤</m:mo>
+              <m:mi>L</m:mi>
+              <m:mo>,</m:mo>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id237584">subject to the Dirichlet boundary conditions</para>
+        <equation id="uid3">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:mi>u</m:mi>
+              <m:mo>(</m:mo>
+              <m:mn>0</m:mn>
+              <m:mo>,</m:mo>
+              <m:mi>t</m:mi>
+              <m:mo>)</m:mo>
+              <m:mo>=</m:mo>
+              <m:mi>u</m:mi>
+              <m:mo>(</m:mo>
+              <m:mi>L</m:mi>
+              <m:mo>,</m:mo>
+              <m:mi>t</m:mi>
+              <m:mo>)</m:mo>
+              <m:mo>=</m:mo>
+              <m:mn>0</m:mn>
+              <m:mo>,</m:mo>
+              <m:mspace width="2.em"/>
+              <m:mi>t</m:mi>
+              <m:mo>≥</m:mo>
+              <m:mn>0</m:mn>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id237646">where <m:math overflow="scroll"><m:mrow><m:msub><m:mi>u</m:mi><m:mrow><m:mi>t</m:mi><m:mi>t</m:mi></m:mrow></m:msub><m:mrow><m:mo>(</m:mo><m:mi>x</m:mi><m:mo>,</m:mo><m:mi>t</m:mi><m:mo>)</m:mo></m:mrow><m:mo>=</m:mo><m:mfrac><m:mrow><m:msup><m:mi>∂</m:mi><m:mn>2</m:mn></m:msup><m:mi>u</m:mi></m:mrow><m:mrow><m:mi>∂</m:mi><m:msup><m:mi>t</m:mi><m:mn>2</m:mn></m:msup></m:mrow></m:mfrac></m:mrow></m:math>. Assuming the variables can be separated, we write <m:math overflow="scroll"><m:mrow><m:mi>u</m:mi><m:mo>(</m:mo><m:mi>x</m:mi><m:mo>,</m:mo><m:mi>t</m:mi><m:mo>)</m:mo><m:mo>=</m:mo><m:mi>ψ</m:mi><m:mo>(</m:mo><m:mi>t</m:mi><m:mo>)</m:mo><m:mi>y</m:mi><m:mo>(</m:mo><m:mi>x</m:mi><m:mo>)</m:mo></m:mrow></m:math> and after making the appropriate substitutions, obtain</para>
+        <equation id="id237748">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:mi>ρ</m:mi>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>x</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:msup>
+                <m:mi>ψ</m:mi>
+                <m:mrow>
+                  <m:mo>'</m:mo>
+                  <m:mo>'</m:mo>
+                </m:mrow>
+              </m:msup>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>t</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mi>y</m:mi>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>x</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>=</m:mo>
+              <m:mi>ψ</m:mi>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>t</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:msup>
+                <m:mi>y</m:mi>
+                <m:mrow>
+                  <m:mo>'</m:mo>
+                  <m:mo>'</m:mo>
+                </m:mrow>
+              </m:msup>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>x</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>,</m:mo>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id237826">hence</para>
+        <equation id="id237831">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:mfrac>
+                <m:mn>1</m:mn>
+                <m:mrow>
+                  <m:mi>ρ</m:mi>
+                  <m:mo>(</m:mo>
+                  <m:mi>x</m:mi>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+              </m:mfrac>
+              <m:mfrac>
+                <m:mrow>
+                  <m:msup>
+                    <m:mi>y</m:mi>
+                    <m:mrow>
+                      <m:mo>'</m:mo>
+                      <m:mo>'</m:mo>
+                    </m:mrow>
+                  </m:msup>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:mi>x</m:mi>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                </m:mrow>
+                <m:mrow>
+                  <m:mi>y</m:mi>
+                  <m:mo>(</m:mo>
+                  <m:mi>x</m:mi>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+              </m:mfrac>
+              <m:mo>=</m:mo>
+              <m:mfrac>
+                <m:mrow>
+                  <m:msup>
+                    <m:mi>ψ</m:mi>
+                    <m:mrow>
+                      <m:mo>'</m:mo>
+                      <m:mo>'</m:mo>
+                    </m:mrow>
+                  </m:msup>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:mi>t</m:mi>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                </m:mrow>
+                <m:mrow>
+                  <m:mi>ψ</m:mi>
+                  <m:mo>(</m:mo>
+                  <m:mi>t</m:mi>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+              </m:mfrac>
+              <m:mo>.</m:mo>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id237920">As the left side depends only on <m:math overflow="scroll"><m:mi>x</m:mi></m:math> and the right side depends only
+on <m:math overflow="scroll"><m:mi>t</m:mi></m:math>, we conclude that both sides must be equal to the same constant, which we
+denote by <m:math overflow="scroll"><m:mrow><m:mo>-</m:mo><m:mi>λ</m:mi></m:mrow></m:math>. Equating the left side with <m:math overflow="scroll"><m:mrow><m:mo>-</m:mo><m:mi>λ</m:mi></m:mrow></m:math> and
+rearranging yields</para>
+        <equation id="uid4">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:mo>-</m:mo>
+              <m:msup>
+                <m:mi>y</m:mi>
+                <m:mrow>
+                  <m:mo>'</m:mo>
+                  <m:mo>'</m:mo>
+                </m:mrow>
+              </m:msup>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>x</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>=</m:mo>
+              <m:mi>λ</m:mi>
+              <m:mi>ρ</m:mi>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>x</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mi>y</m:mi>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>x</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id238020">with boundary conditions <m:math overflow="scroll"><m:mrow><m:mi>y</m:mi><m:mo>(</m:mo><m:mn>0</m:mn><m:mo>)</m:mo><m:mo>=</m:mo><m:mi>y</m:mi><m:mo>(</m:mo><m:mi>L</m:mi><m:mo>)</m:mo><m:mo>=</m:mo><m:mn>0</m:mn></m:mrow></m:math>. The constant <m:math overflow="scroll"><m:mi>λ</m:mi></m:math> is said to be an <emphasis effect="italics">eigenvalue</emphasis> of the boundary-value
+problem <link target-id="uid2"/>-<link target-id="uid3"/>, and <m:math overflow="scroll"><m:mrow><m:mi>y</m:mi><m:mo>(</m:mo><m:mi>x</m:mi><m:mo>)</m:mo></m:mrow></m:math> is its corresponding
+<emphasis effect="italics">eigenfunction</emphasis>. Finding all <m:math overflow="scroll"><m:mi>λ</m:mi></m:math> such that <link target-id="uid4"/>
+has a solution satisfying the boundary conditions is called the <emphasis effect="italics">forward
+eigenvalue problem</emphasis>, and the collection of all such <m:math overflow="scroll"><m:mi>λ</m:mi></m:math> is called the
+problem's <emphasis effect="italics">spectrum</emphasis>. Physically, the forward problem asks one to
+determine a string's natural frequencies from a description of its physical
+composition.</para>
+        <para id="id238130">The inverse problem will do the opposite, asking for information about the string from its eigenvalues.</para>
+      </section>
+      <section id="uid5">
+        <title>The Inverse Problem</title>
+        <para id="id238143">In contrast to the forward problem, the <emphasis effect="italics">inverse eigenvalue problem</emphasis> asks
+if one can recover information about a string's physical composition from
+knowledge of its frequencies. Mathematically, this amounts to asking if we can
+determine the mass density function <m:math overflow="scroll"><m:mrow><m:mi>ρ</m:mi><m:mo>(</m:mo><m:mi>x</m:mi><m:mo>)</m:mo></m:mrow></m:math> given the spectrum of the problem
+<link target-id="uid2"/>-<link target-id="uid3"/>.</para>
+        <para id="id238177">In determining physical properties of objects, the inverse eigenvalue problem is involved in answering various questions. For a vibrating string one question is, "What is the <emphasis effect="italics">isospectral set</emphasis>, the mass density of all strings of a given length with a given set of frequencies?" The inverse eigenvalue problem could be used in designing a musical instrument that will produce a desired sound. Also, when a particular object is being designed and it is known that the object will be experiencing vibrations of certain frequencies, the inverse problem can be used to ensure the object will not resonate at these frequencies. Additionally, the inverse problem is involved in structural composition analysis. By collecting acoustic data for a structure, a bridge or building, for example, it can be determined if there are "cracks" or "faults" in the object's components. This allows for analysis of a structure without dismantling the structure.</para>
+        <para id="id237066">The inverse problem can be attacked by many means, including several numerical schemes.
+In order to apply the techniques described in <link target-id="bid0"/>, it is necessary to
+transform <link target-id="uid4"/> into the Sturm-Liouville equation</para>
+        <equation id="uid6">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:mo>-</m:mo>
+              <m:msup>
+                <m:mi>w</m:mi>
+                <m:mrow>
+                  <m:mo>'</m:mo>
+                  <m:mo>'</m:mo>
+                </m:mrow>
+              </m:msup>
+              <m:mo>+</m:mo>
+              <m:mi>q</m:mi>
+              <m:mi>w</m:mi>
+              <m:mo>=</m:mo>
+              <m:mi>λ</m:mi>
+              <m:mi>w</m:mi>
+              <m:mo>,</m:mo>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id237120">where <m:math overflow="scroll"><m:mi>q</m:mi></m:math> is called the <emphasis effect="italics">potential</emphasis>. It is the transformation between these equations that captures the focus of our research and of this paper.</para>
+      </section>
+    </section>
+    <section id="cid3">
+      <title>The Transformations</title>
+      <section id="uid7">
+        <title>Changing From Mass Density to Sturm-Liouville Potential</title>
+        <para id="id238354">To transform <link target-id="uid4"/> into the Sturm-Liouville equation <link target-id="uid6"/>, it is necessary to employ a change of variables that is
+due to Joseph Liouville <link target-id="bid1"/>.
+Liouville's transformation requires <m:math overflow="scroll"><m:mrow><m:mi>ρ</m:mi><m:mo>∈</m:mo><m:msup><m:mi mathvariant="script">C</m:mi><m:mn>2</m:mn></m:msup></m:mrow></m:math>[0, L]. If that condition is satisfied, the transformation involves a change of dependent and independent variables. The independent variable <m:math overflow="scroll"><m:mi>x</m:mi></m:math> is transformed into a new independent variable <m:math overflow="scroll"><m:mi>t</m:mi></m:math> according to</para>
+        <equation id="uid8">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:mi>t</m:mi>
+              <m:mo>=</m:mo>
+              <m:msubsup>
+                <m:mo>∫</m:mo>
+                <m:mn>0</m:mn>
+                <m:mi>x</m:mi>
+              </m:msubsup>
+              <m:msqrt>
+                <m:mrow>
+                  <m:mi>ρ</m:mi>
+                  <m:mo>(</m:mo>
+                  <m:mi>α</m:mi>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+              </m:msqrt>
+              <m:mspace width="0.222222em"/>
+              <m:mi>d</m:mi>
+              <m:mi>α</m:mi>
+              <m:mo>.</m:mo>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id238457">(NB: This <m:math overflow="scroll"><m:mi>t</m:mi></m:math> is completely unrelated to the <m:math overflow="scroll"><m:mi>t</m:mi></m:math> variable used to denote the
+dependence on time in <link target-id="uid2"/>.) The new dependent variable <m:math overflow="scroll"><m:mrow><m:mi>w</m:mi><m:mo>(</m:mo><m:mi>t</m:mi><m:mo>)</m:mo></m:mrow></m:math> is given by</para>
+        <equation id="uid9">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:mi>w</m:mi>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>t</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>=</m:mo>
+              <m:mi>y</m:mi>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>x</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:msup>
+                <m:mi>ρ</m:mi>
+                <m:mrow>
+                  <m:mn>1</m:mn>
+                  <m:mo>/</m:mo>
+                  <m:mn>4</m:mn>
+                </m:mrow>
+              </m:msup>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>x</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>,</m:mo>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id238555">where the variable <m:math overflow="scroll"><m:mi>x</m:mi></m:math> on the right-hand side of this equation is meant to be
+interpreted as a function of <m:math overflow="scroll"><m:mi>t</m:mi></m:math> whose definition is given implicitly by the
+integral <link target-id="uid8"/>.</para>
+        <para id="id238581">Taking the derivative once,</para>
+        <equation id="id238584">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:mfrac>
+                <m:mrow>
+                  <m:mi>d</m:mi>
+                  <m:mi>w</m:mi>
+                </m:mrow>
+                <m:mrow>
+                  <m:mi>d</m:mi>
+                  <m:mi>t</m:mi>
+                </m:mrow>
+              </m:mfrac>
+              <m:mfrac>
+                <m:mrow>
+                  <m:mi>d</m:mi>
+                  <m:mi>t</m:mi>
+                </m:mrow>
+                <m:mrow>
+                  <m:mi>d</m:mi>
+                  <m:mi>x</m:mi>
+                </m:mrow>
+              </m:mfrac>
+              <m:mo>=</m:mo>
+              <m:mfrac>
+                <m:mn>1</m:mn>
+                <m:mn>4</m:mn>
+              </m:mfrac>
+              <m:mi>y</m:mi>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>x</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:msup>
+                <m:mrow>
+                  <m:mo>[</m:mo>
+                  <m:mi>ρ</m:mi>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:mi>x</m:mi>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                  <m:mo>]</m:mo>
+                </m:mrow>
+                <m:mrow>
+                  <m:mo>-</m:mo>
+                  <m:mn>3</m:mn>
+                  <m:mo>/</m:mo>
+                  <m:mn>4</m:mn>
+                </m:mrow>
+              </m:msup>
+              <m:mfrac>
+                <m:mrow>
+                  <m:mi>d</m:mi>
+                  <m:mi>ρ</m:mi>
+                </m:mrow>
+                <m:mrow>
+                  <m:mi>d</m:mi>
+                  <m:mi>x</m:mi>
+                </m:mrow>
+              </m:mfrac>
+              <m:mo>+</m:mo>
+              <m:mfrac>
+                <m:mrow>
+                  <m:mi>d</m:mi>
+                  <m:mi>y</m:mi>
+                </m:mrow>
+                <m:mrow>
+                  <m:mi>d</m:mi>
+                  <m:mi>x</m:mi>
+                </m:mrow>
+              </m:mfrac>
+              <m:msup>
+                <m:mrow>
+                  <m:mo>[</m:mo>
+                  <m:mi>ρ</m:mi>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:mi>x</m:mi>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                  <m:mo>]</m:mo>
+                </m:mrow>
+                <m:mrow>
+                  <m:mn>1</m:mn>
+                  <m:mo>/</m:mo>
+                  <m:mn>4</m:mn>
+                </m:mrow>
+              </m:msup>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id238718">(suppressing the argument of x for now)</para>
+        <equation id="id238723">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:mfrac>
+                <m:mrow>
+                  <m:mi>d</m:mi>
+                  <m:mi>w</m:mi>
+                </m:mrow>
+                <m:mrow>
+                  <m:mi>d</m:mi>
+                  <m:mi>t</m:mi>
+                </m:mrow>
+              </m:mfrac>
+              <m:msup>
+                <m:mi>ρ</m:mi>
+                <m:mrow>
+                  <m:mn>1</m:mn>
+                  <m:mo>/</m:mo>
+                  <m:mn>2</m:mn>
+                </m:mrow>
+              </m:msup>
+              <m:mo>=</m:mo>
+              <m:mfrac>
+                <m:mn>1</m:mn>
+                <m:mn>4</m:mn>
+              </m:mfrac>
+              <m:mi>y</m:mi>
+              <m:msup>
+                <m:mi>ρ</m:mi>
+                <m:mrow>
+                  <m:mo>-</m:mo>
+                  <m:mn>3</m:mn>
+                  <m:mo>/</m:mo>
+                  <m:mn>4</m:mn>
+                </m:mrow>
+              </m:msup>
+              <m:msup>
+                <m:mi>ρ</m:mi>
+                <m:mo>'</m:mo>
+              </m:msup>
+              <m:mo>+</m:mo>
+              <m:msup>
+                <m:mi>y</m:mi>
+                <m:mo>'</m:mo>
+              </m:msup>
+              <m:msup>
+                <m:mi>ρ</m:mi>
+                <m:mrow>
+                  <m:mn>1</m:mn>
+                  <m:mo>/</m:mo>
+                  <m:mn>4</m:mn>
+                </m:mrow>
+              </m:msup>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id238813">Taking the derivative again,</para>
+        <equation id="id238818">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:mfrac>
+                <m:mrow>
+                  <m:msup>
+                    <m:mi>d</m:mi>
+                    <m:mn>2</m:mn>
+                  </m:msup>
+                  <m:mi>w</m:mi>
+                </m:mrow>
+                <m:mrow>
+                  <m:mi>d</m:mi>
+                  <m:msup>
+                    <m:mi>t</m:mi>
+                    <m:mn>2</m:mn>
+                  </m:msup>
+                </m:mrow>
+              </m:mfrac>
+              <m:mfrac>
+                <m:mrow>
+                  <m:mi>d</m:mi>
+                  <m:mi>t</m:mi>
+                </m:mrow>
+                <m:mrow>
+                  <m:mi>d</m:mi>
+                  <m:mi>x</m:mi>
+                </m:mrow>
+              </m:mfrac>
+              <m:msup>
+                <m:mi>ρ</m:mi>
+                <m:mrow>
+                  <m:mn>1</m:mn>
+                  <m:mo>/</m:mo>
+                  <m:mn>2</m:mn>
+                </m:mrow>
+              </m:msup>
+              <m:mo>+</m:mo>
+              <m:mfrac>
+                <m:mn>1</m:mn>
+                <m:mn>2</m:mn>
+              </m:mfrac>
+              <m:mfrac>
+                <m:mrow>
+                  <m:mi>d</m:mi>
+                  <m:mi>w</m:mi>
+                </m:mrow>
+                <m:mrow>
+                  <m:mi>d</m:mi>
+                  <m:mi>t</m:mi>
+                </m:mrow>
+              </m:mfrac>
+              <m:msup>
+                <m:mi>ρ</m:mi>
+                <m:mrow>
+                  <m:mo>-</m:mo>
+                  <m:mn>1</m:mn>
+                  <m:mo>/</m:mo>
+                  <m:mn>2</m:mn>
+                </m:mrow>
+              </m:msup>
+              <m:msup>
+                <m:mi>ρ</m:mi>
+                <m:mo>'</m:mo>
+              </m:msup>
+              <m:mo>=</m:mo>
+              <m:mfrac>
+                <m:mn>1</m:mn>
+                <m:mn>2</m:mn>
+              </m:mfrac>
+              <m:msup>
+                <m:mi>y</m:mi>
+                <m:mo>'</m:mo>
+              </m:msup>
+              <m:msup>
+                <m:mi>ρ</m:mi>
+                <m:mrow>
+                  <m:mo>-</m:mo>
+                  <m:mn>3</m:mn>
+                  <m:mo>/</m:mo>
+                  <m:mn>4</m:mn>
+                </m:mrow>
+              </m:msup>
+              <m:msup>
+                <m:mi>ρ</m:mi>
+                <m:mo>'</m:mo>
+              </m:msup>
+              <m:mo>-</m:mo>
+              <m:mfrac>
+                <m:mn>3</m:mn>
+                <m:mn>16</m:mn>
+              </m:mfrac>
+              <m:mi>y</m:mi>
+              <m:msup>
+                <m:mi>ρ</m:mi>
+                <m:mrow>
+                  <m:mo>-</m:mo>
+                  <m:mn>7</m:mn>
+                  <m:mo>/</m:mo>
+                  <m:mn>4</m:mn>
+                </m:mrow>
+              </m:msup>
+              <m:msup>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:msup>
+                    <m:mi>ρ</m:mi>
+                    <m:mo>'</m:mo>
+                  </m:msup>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mn>2</m:mn>
+              </m:msup>
+              <m:mo>+</m:mo>
+              <m:mfrac>
+                <m:mn>1</m:mn>
+                <m:mn>4</m:mn>
+              </m:mfrac>
+              <m:mi>y</m:mi>
+              <m:msup>
+                <m:mi>ρ</m:mi>
+                <m:mrow>
+                  <m:mo>-</m:mo>
+                  <m:mn>3</m:mn>
+                  <m:mo>/</m:mo>
+                  <m:mn>4</m:mn>
+                </m:mrow>
+              </m:msup>
+              <m:msup>
+                <m:mi>ρ</m:mi>
+                <m:mrow>
+                  <m:mo>'</m:mo>
+                  <m:mo>'</m:mo>
+                </m:mrow>
+              </m:msup>
+              <m:mo>+</m:mo>
+              <m:msup>
+                <m:mi>y</m:mi>
+                <m:mrow>
+                  <m:mo>'</m:mo>
+                  <m:mo>'</m:mo>
+                </m:mrow>
+              </m:msup>
+              <m:msup>
+                <m:mi>ρ</m:mi>
+                <m:mrow>
+                  <m:mn>1</m:mn>
+                  <m:mo>/</m:mo>
+                  <m:mn>4</m:mn>
+                </m:mrow>
+              </m:msup>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id239064">Substitution and simplifying terms leads to</para>
+        <equation id="id239070">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:mfrac>
+                <m:mrow>
+                  <m:msup>
+                    <m:mi>d</m:mi>
+                    <m:mn>2</m:mn>
+                  </m:msup>
+                  <m:mi>w</m:mi>
+                </m:mrow>
+                <m:mrow>
+                  <m:mi>d</m:mi>
+                  <m:msup>
+                    <m:mi>t</m:mi>
+                    <m:mn>2</m:mn>
+                  </m:msup>
+                </m:mrow>
+              </m:mfrac>
+              <m:mi>ρ</m:mi>
+              <m:mo>+</m:mo>
+              <m:mfrac>
+                <m:mn>1</m:mn>
+                <m:mn>2</m:mn>
+              </m:mfrac>
+              <m:mfrac>
+                <m:mrow>
+                  <m:mi>d</m:mi>
+                  <m:mi>w</m:mi>
+                </m:mrow>
+                <m:mrow>
+                  <m:mi>d</m:mi>
+                  <m:mi>t</m:mi>
+                </m:mrow>
+              </m:mfrac>
+              <m:msup>
+                <m:mi>ρ</m:mi>
+                <m:mrow>
+                  <m:mo>-</m:mo>
+                  <m:mn>1</m:mn>
+                  <m:mo>/</m:mo>
+                  <m:mn>2</m:mn>
+                </m:mrow>
+              </m:msup>
+              <m:msup>
+                <m:mi>ρ</m:mi>
+                <m:mo>'</m:mo>
+              </m:msup>
+              <m:mo>=</m:mo>
+              <m:mfrac>
+                <m:mn>1</m:mn>
+                <m:mn>2</m:mn>
+              </m:mfrac>
+              <m:msup>
+                <m:mi>y</m:mi>
+                <m:mo>'</m:mo>
+              </m:msup>
+              <m:msup>
+                <m:mi>ρ</m:mi>
+                <m:mrow>
+                  <m:mo>-</m:mo>
+                  <m:mn>3</m:mn>
+                  <m:mo>/</m:mo>
+                  <m:mn>4</m:mn>
+                </m:mrow>
+              </m:msup>
+              <m:msup>
+                <m:mi>ρ</m:mi>
+                <m:mo>'</m:mo>
+              </m:msup>
+              <m:mo>-</m:mo>
+              <m:mfrac>
+                <m:mn>3</m:mn>
+                <m:mn>16</m:mn>
+              </m:mfrac>
+              <m:mi>y</m:mi>
+              <m:msup>
+                <m:mi>ρ</m:mi>
+                <m:mrow>
+                  <m:mo>-</m:mo>
+                  <m:mn>7</m:mn>
+                  <m:mo>/</m:mo>
+                  <m:mn>4</m:mn>
+                </m:mrow>
+              </m:msup>
+              <m:msup>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:msup>
+                    <m:mi>ρ</m:mi>
+                    <m:mo>'</m:mo>
+                  </m:msup>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mn>2</m:mn>
+              </m:msup>
+              <m:mo>+</m:mo>
+              <m:mfrac>
+                <m:mn>1</m:mn>
+                <m:mn>4</m:mn>
+              </m:mfrac>
+              <m:mi>y</m:mi>
+              <m:msup>
+                <m:mi>ρ</m:mi>
+                <m:mrow>
+                  <m:mo>-</m:mo>
+                  <m:mn>3</m:mn>
+                  <m:mo>/</m:mo>
+                  <m:mn>4</m:mn>
+                </m:mrow>
+              </m:msup>
+              <m:msup>
+                <m:mi>ρ</m:mi>
+                <m:mrow>
+                  <m:mo>'</m:mo>
+                  <m:mo>'</m:mo>
+                </m:mrow>
+              </m:msup>
+              <m:mo>+</m:mo>
+              <m:msup>
+                <m:mi>y</m:mi>
+                <m:mrow>
+                  <m:mo>'</m:mo>
+                  <m:mo>'</m:mo>
+                </m:mrow>
+              </m:msup>
+              <m:msup>
+                <m:mi>ρ</m:mi>
+                <m:mrow>
+                  <m:mn>1</m:mn>
+                  <m:mo>/</m:mo>
+                  <m:mn>4</m:mn>
+                </m:mrow>
+              </m:msup>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <equation id="id239292">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:mfrac>
+                <m:mrow>
+                  <m:msup>
+                    <m:mi>d</m:mi>
+                    <m:mn>2</m:mn>
+                  </m:msup>
+                  <m:mi>w</m:mi>
+                </m:mrow>
+                <m:mrow>
+                  <m:mi>d</m:mi>
+                  <m:msup>
+                    <m:mi>t</m:mi>
+                    <m:mn>2</m:mn>
+                  </m:msup>
+                </m:mrow>
+              </m:mfrac>
+              <m:mi>ρ</m:mi>
+              <m:mo>+</m:mo>
+              <m:mfrac>
+                <m:msup>
+                  <m:mi>ρ</m:mi>
+                  <m:mo>'</m:mo>
+                </m:msup>
+                <m:mrow>
+                  <m:mn>2</m:mn>
+                  <m:msup>
+                    <m:mi>ρ</m:mi>
+                    <m:mrow>
+                      <m:mn>1</m:mn>
+                      <m:mo>/</m:mo>
+                      <m:mn>2</m:mn>
+                    </m:mrow>
+                  </m:msup>
+                </m:mrow>
+              </m:mfrac>
+              <m:mfenced separators="" open="(" close=")">
+                <m:mfrac>
+                  <m:mrow>
+                    <m:mi>y</m:mi>
+                    <m:msup>
+                      <m:mi>ρ</m:mi>
+                      <m:mo>'</m:mo>
+                    </m:msup>
+                  </m:mrow>
+                  <m:mrow>
+                    <m:mn>4</m:mn>
+                    <m:msup>
+                      <m:mi>ρ</m:mi>
+                      <m:mrow>
+                        <m:mn>5</m:mn>
+                        <m:mo>/</m:mo>
+                        <m:mn>4</m:mn>
+                      </m:mrow>
+                    </m:msup>
+                  </m:mrow>
+                </m:mfrac>
+                <m:mo>+</m:mo>
+                <m:mfrac>
+                  <m:msup>
+                    <m:mi>y</m:mi>
+                    <m:mo>'</m:mo>
+                  </m:msup>
+                  <m:msup>
+                    <m:mi>ρ</m:mi>
+                    <m:mrow>
+                      <m:mn>1</m:mn>
+                      <m:mo>/</m:mo>
+                      <m:mn>4</m:mn>
+                    </m:mrow>
+                  </m:msup>
+                </m:mfrac>
+              </m:mfenced>
+              <m:mo>=</m:mo>
+              <m:mfrac>
+                <m:mn>1</m:mn>
+                <m:mn>2</m:mn>
+              </m:mfrac>
+              <m:msup>
+                <m:mi>y</m:mi>
+                <m:mo>'</m:mo>
+              </m:msup>
+              <m:msup>
+                <m:mi>ρ</m:mi>
+                <m:mrow>
+                  <m:mo>-</m:mo>
+                  <m:mn>3</m:mn>
+                  <m:mo>/</m:mo>
+                  <m:mn>4</m:mn>
+                </m:mrow>
+              </m:msup>
+              <m:msup>
+                <m:mi>ρ</m:mi>
+                <m:mo>'</m:mo>
+              </m:msup>
+              <m:mo>-</m:mo>
+              <m:mfrac>
+                <m:mn>3</m:mn>
+                <m:mn>16</m:mn>
+              </m:mfrac>
+              <m:mi>y</m:mi>
+              <m:msup>
+                <m:mi>ρ</m:mi>
+                <m:mrow>
+                  <m:mo>-</m:mo>
+                  <m:mn>7</m:mn>
+                  <m:mo>/</m:mo>
+                  <m:mn>4</m:mn>
+                </m:mrow>
+              </m:msup>
+              <m:msup>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:msup>
+                    <m:mi>ρ</m:mi>
+                    <m:mo>'</m:mo>
+                  </m:msup>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mn>2</m:mn>
+              </m:msup>
+              <m:mo>+</m:mo>
+              <m:mfrac>
+                <m:mn>1</m:mn>
+                <m:mn>4</m:mn>
+              </m:mfrac>
+              <m:mi>y</m:mi>
+              <m:msup>
+                <m:mi>ρ</m:mi>
+                <m:mrow>
+                  <m:mo>-</m:mo>
+                  <m:mn>3</m:mn>
+                  <m:mo>/</m:mo>
+                  <m:mn>4</m:mn>
+                </m:mrow>
+              </m:msup>
+              <m:msup>
+                <m:mi>ρ</m:mi>
+                <m:mrow>
+                  <m:mo>'</m:mo>
+                  <m:mo>'</m:mo>
+                </m:mrow>
+              </m:msup>
+              <m:mo>+</m:mo>
+              <m:msup>
+                <m:mi>y</m:mi>
+                <m:mrow>
+                  <m:mo>'</m:mo>
+                  <m:mo>'</m:mo>
+                </m:mrow>
+              </m:msup>
+              <m:msup>
+                <m:mi>ρ</m:mi>
+                <m:mrow>
+                  <m:mn>1</m:mn>
+                  <m:mo>/</m:mo>
+                  <m:mn>4</m:mn>
+                </m:mrow>
+              </m:msup>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <equation id="id239564">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:mfrac>
+                <m:mrow>
+                  <m:msup>
+                    <m:mi>d</m:mi>
+                    <m:mn>2</m:mn>
+                  </m:msup>
+                  <m:mi>w</m:mi>
+                </m:mrow>
+                <m:mrow>
+                  <m:mi>d</m:mi>
+                  <m:msup>
+                    <m:mi>t</m:mi>
+                    <m:mn>2</m:mn>
+                  </m:msup>
+                </m:mrow>
+              </m:mfrac>
+              <m:mi>ρ</m:mi>
+              <m:mo>+</m:mo>
+              <m:mfrac>
+                <m:msup>
+                  <m:mi>ρ</m:mi>
+                  <m:mo>'</m:mo>
+                </m:msup>
+                <m:mrow>
+                  <m:mn>2</m:mn>
+                  <m:msup>
+                    <m:mi>ρ</m:mi>
+                    <m:mrow>
+                      <m:mn>1</m:mn>
+                      <m:mo>/</m:mo>
+                      <m:mn>2</m:mn>
+                    </m:mrow>
+                  </m:msup>
+                </m:mrow>
+              </m:mfrac>
+              <m:mfenced separators="" open="(" close=")">
+                <m:mfrac>
+                  <m:mrow>
+                    <m:mi>y</m:mi>
+                    <m:msup>
+                      <m:mi>ρ</m:mi>
+                      <m:mo>'</m:mo>
+                    </m:msup>
+                  </m:mrow>
+                  <m:mrow>
+                    <m:mn>4</m:mn>
+                    <m:msup>
+                      <m:mi>ρ</m:mi>
+                      <m:mrow>
+                        <m:mn>5</m:mn>
+                        <m:mo>/</m:mo>
+                        <m:mn>4</m:mn>
+                      </m:mrow>
+                    </m:msup>
+                  </m:mrow>
+                </m:mfrac>
+                <m:mo>+</m:mo>
+                <m:mfrac>
+                  <m:msup>
+                    <m:mi>y</m:mi>
+                    <m:mo>'</m:mo>
+                  </m:msup>
+                  <m:msup>
+                    <m:mi>ρ</m:mi>
+                    <m:mrow>
+                      <m:mn>1</m:mn>
+                      <m:mo>/</m:mo>
+                      <m:mn>4</m:mn>
+                    </m:mrow>
+                  </m:msup>
+                </m:mfrac>
+              </m:mfenced>
+              <m:mo>=</m:mo>
+              <m:mfrac>
+                <m:mn>1</m:mn>
+                <m:mn>2</m:mn>
+              </m:mfrac>
+              <m:msup>
+                <m:mi>y</m:mi>
+                <m:mo>'</m:mo>
+              </m:msup>
+              <m:msup>
+                <m:mi>ρ</m:mi>
+                <m:mrow>
+                  <m:mo>-</m:mo>
+                  <m:mn>3</m:mn>
+                  <m:mo>/</m:mo>
+                  <m:mn>4</m:mn>
+                </m:mrow>
+              </m:msup>
+              <m:msup>
+                <m:mi>ρ</m:mi>
+                <m:mo>'</m:mo>
+              </m:msup>
+              <m:mo>-</m:mo>
+              <m:mfrac>
+                <m:mn>3</m:mn>
+                <m:mn>16</m:mn>
+              </m:mfrac>
+              <m:mi>y</m:mi>
+              <m:msup>
+                <m:mi>ρ</m:mi>
+                <m:mrow>
+                  <m:mo>-</m:mo>
+                  <m:mn>7</m:mn>
+                  <m:mo>/</m:mo>
+                  <m:mn>4</m:mn>
+                </m:mrow>
+              </m:msup>
+              <m:msup>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:msup>
+                    <m:mi>ρ</m:mi>
+                    <m:mo>'</m:mo>
+                  </m:msup>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mn>2</m:mn>
+              </m:msup>
+              <m:mo>+</m:mo>
+              <m:mfrac>
+                <m:mn>1</m:mn>
+                <m:mn>4</m:mn>
+              </m:mfrac>
+              <m:mi>y</m:mi>
+              <m:msup>
+                <m:mi>ρ</m:mi>
+                <m:mrow>
+                  <m:mo>-</m:mo>
+                  <m:mn>3</m:mn>
+                  <m:mo>/</m:mo>
+                  <m:mn>4</m:mn>
+                </m:mrow>
+              </m:msup>
+              <m:msup>
+                <m:mi>ρ</m:mi>
+                <m:mrow>
+                  <m:mo>'</m:mo>
+                  <m:mo>'</m:mo>
+                </m:mrow>
+              </m:msup>
+              <m:mo>-</m:mo>
+              <m:mi>λ</m:mi>
+              <m:mi>y</m:mi>
+              <m:msup>
+                <m:mi>ρ</m:mi>
+                <m:mrow>
+                  <m:mn>5</m:mn>
+                  <m:mo>/</m:mo>
+                  <m:mn>4</m:mn>
+                </m:mrow>
+              </m:msup>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <equation id="id239830">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:mfrac>
+                <m:mrow>
+                  <m:msup>
+                    <m:mi>d</m:mi>
+                    <m:mn>2</m:mn>
+                  </m:msup>
+                  <m:mi>w</m:mi>
+                </m:mrow>
+                <m:mrow>
+                  <m:mi>d</m:mi>
+                  <m:msup>
+                    <m:mi>t</m:mi>
+                    <m:mn>2</m:mn>
+                  </m:msup>
+                </m:mrow>
+              </m:mfrac>
+              <m:mi>ρ</m:mi>
+              <m:mo>=</m:mo>
+              <m:mfrac>
+                <m:mrow>
+                  <m:mo>-</m:mo>
+                  <m:mn>5</m:mn>
+                </m:mrow>
+                <m:mn>16</m:mn>
+              </m:mfrac>
+              <m:mi>y</m:mi>
+              <m:msup>
+                <m:mi>ρ</m:mi>
+                <m:mrow>
+                  <m:mo>-</m:mo>
+                  <m:mn>7</m:mn>
+                  <m:mo>/</m:mo>
+                  <m:mn>4</m:mn>
+                </m:mrow>
+              </m:msup>
+              <m:msup>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:msup>
+                    <m:mi>ρ</m:mi>
+                    <m:mo>'</m:mo>
+                  </m:msup>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mn>2</m:mn>
+              </m:msup>
+              <m:mo>+</m:mo>
+              <m:mfrac>
+                <m:mn>1</m:mn>
+                <m:mn>4</m:mn>
+              </m:mfrac>
+              <m:mi>y</m:mi>
+              <m:msup>
+                <m:mi>ρ</m:mi>
+                <m:mrow>
+                  <m:mo>-</m:mo>
+                  <m:mn>3</m:mn>
+                  <m:mo>/</m:mo>
+                  <m:mn>4</m:mn>
+                </m:mrow>
+              </m:msup>
+              <m:msup>
+                <m:mi>ρ</m:mi>
+                <m:mrow>
+                  <m:mo>'</m:mo>
+                  <m:mo>'</m:mo>
+                </m:mrow>
+              </m:msup>
+              <m:mo>-</m:mo>
+              <m:mi>λ</m:mi>
+              <m:mi>y</m:mi>
+              <m:msup>
+                <m:mi>ρ</m:mi>
+                <m:mrow>
+                  <m:mn>5</m:mn>
+                  <m:mo>/</m:mo>
+                  <m:mn>4</m:mn>
+                </m:mrow>
+              </m:msup>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <equation id="id239971">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:mfrac>
+                <m:mrow>
+                  <m:msup>
+                    <m:mi>d</m:mi>
+                    <m:mn>2</m:mn>
+                  </m:msup>
+                  <m:mi>w</m:mi>
+                </m:mrow>
+                <m:mrow>
+                  <m:mi>d</m:mi>
+                  <m:msup>
+                    <m:mi>t</m:mi>
+                    <m:mn>2</m:mn>
+                  </m:msup>
+                </m:mrow>
+              </m:mfrac>
+              <m:mo>=</m:mo>
+              <m:mfrac>
+                <m:mrow>
+                  <m:mo>-</m:mo>
+                  <m:mn>5</m:mn>
+                </m:mrow>
+                <m:mn>16</m:mn>
+              </m:mfrac>
+              <m:mi>y</m:mi>
+              <m:msup>
+                <m:mi>ρ</m:mi>
+                <m:mrow>
+                  <m:mo>-</m:mo>
+                  <m:mn>11</m:mn>
+                  <m:mo>/</m:mo>
+                  <m:mn>4</m:mn>
+                </m:mrow>
+              </m:msup>
+              <m:msup>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:msup>
+                    <m:mi>ρ</m:mi>
+                    <m:mo>'</m:mo>
+                  </m:msup>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mn>2</m:mn>
+              </m:msup>
+              <m:mo>+</m:mo>
+              <m:mfrac>
+                <m:mn>1</m:mn>
+                <m:mn>4</m:mn>
+              </m:mfrac>
+              <m:mi>y</m:mi>
+              <m:msup>
+                <m:mi>ρ</m:mi>
+                <m:mrow>
+                  <m:mo>-</m:mo>
+                  <m:mn>7</m:mn>
+                  <m:mo>/</m:mo>
+                  <m:mn>4</m:mn>
+                </m:mrow>
+              </m:msup>
+              <m:msup>
+                <m:mi>ρ</m:mi>
+                <m:mrow>
+                  <m:mo>'</m:mo>
+                  <m:mo>'</m:mo>
+                </m:mrow>
+              </m:msup>
+              <m:mo>-</m:mo>
+              <m:mi>λ</m:mi>
+              <m:mi>y</m:mi>
+              <m:msup>
+                <m:mi>ρ</m:mi>
+                <m:mrow>
+                  <m:mn>1</m:mn>
+                  <m:mo>/</m:mo>
+                  <m:mn>4</m:mn>
+                </m:mrow>
+              </m:msup>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <equation id="id240109">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:mfrac>
+                <m:mrow>
+                  <m:msup>
+                    <m:mi>d</m:mi>
+                    <m:mn>2</m:mn>
+                  </m:msup>
+                  <m:mi>w</m:mi>
+                </m:mrow>
+                <m:mrow>
+                  <m:mi>d</m:mi>
+                  <m:msup>
+                    <m:mi>t</m:mi>
+                    <m:mn>2</m:mn>
+                  </m:msup>
+                </m:mrow>
+              </m:mfrac>
+              <m:mo>=</m:mo>
+              <m:mfrac>
+                <m:mrow>
+                  <m:mo>-</m:mo>
+                  <m:mn>5</m:mn>
+                </m:mrow>
+                <m:mn>16</m:mn>
+              </m:mfrac>
+              <m:mi>y</m:mi>
+              <m:msup>
+                <m:mi>ρ</m:mi>
+                <m:mrow>
+                  <m:mn>1</m:mn>
+                  <m:mo>/</m:mo>
+                  <m:mn>4</m:mn>
+                </m:mrow>
+              </m:msup>
+              <m:msup>
+                <m:mi>ρ</m:mi>
+                <m:mrow>
+                  <m:mo>-</m:mo>
+                  <m:mn>3</m:mn>
+                </m:mrow>
+              </m:msup>
+              <m:msup>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:msup>
+                    <m:mi>ρ</m:mi>
+                    <m:mo>'</m:mo>
+                  </m:msup>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mn>2</m:mn>
+              </m:msup>
+              <m:mo>+</m:mo>
+              <m:mfrac>
+                <m:mn>1</m:mn>
+                <m:mn>4</m:mn>
+              </m:mfrac>
+              <m:mi>y</m:mi>
+              <m:msup>
+                <m:mi>ρ</m:mi>
+                <m:mrow>
+                  <m:mn>1</m:mn>
+                  <m:mo>/</m:mo>
+                  <m:mn>4</m:mn>
+                </m:mrow>
+              </m:msup>
+              <m:msup>
+                <m:mi>ρ</m:mi>
+                <m:mrow>
+                  <m:mo>-</m:mo>
+                  <m:mn>2</m:mn>
+                </m:mrow>
+              </m:msup>
+              <m:msup>
+                <m:mi>ρ</m:mi>
+                <m:mrow>
+                  <m:mo>'</m:mo>
+                  <m:mo>'</m:mo>
+                </m:mrow>
+              </m:msup>
+              <m:mo>-</m:mo>
+              <m:mi>λ</m:mi>
+              <m:mi>y</m:mi>
+              <m:msup>
+                <m:mi>ρ</m:mi>
+                <m:mrow>
+                  <m:mn>1</m:mn>
+                  <m:mo>/</m:mo>
+                  <m:mn>4</m:mn>
+                </m:mrow>
+              </m:msup>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <equation id="id240264">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:mfrac>
+                <m:mrow>
+                  <m:msup>
+                    <m:mi>d</m:mi>
+                    <m:mn>2</m:mn>
+                  </m:msup>
+                  <m:mi>w</m:mi>
+                </m:mrow>
+                <m:mrow>
+                  <m:mi>d</m:mi>
+                  <m:msup>
+                    <m:mi>t</m:mi>
+                    <m:mn>2</m:mn>
+                  </m:msup>
+                </m:mrow>
+              </m:mfrac>
+              <m:mo>=</m:mo>
+              <m:mfrac>
+                <m:mrow>
+                  <m:mo>-</m:mo>
+                  <m:mn>5</m:mn>
+                </m:mrow>
+                <m:mn>16</m:mn>
+              </m:mfrac>
+              <m:mi>w</m:mi>
+              <m:msup>
+                <m:mi>ρ</m:mi>
+                <m:mrow>
+                  <m:mo>-</m:mo>
+                  <m:mn>3</m:mn>
+                </m:mrow>
+              </m:msup>
+              <m:msup>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:msup>
+                    <m:mi>ρ</m:mi>
+                    <m:mo>'</m:mo>
+                  </m:msup>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mn>2</m:mn>
+              </m:msup>
+              <m:mo>+</m:mo>
+              <m:mfrac>
+                <m:mn>1</m:mn>
+                <m:mn>4</m:mn>
+              </m:mfrac>
+              <m:mi>w</m:mi>
+              <m:msup>
+                <m:mi>ρ</m:mi>
+                <m:mrow>
+                  <m:mo>-</m:mo>
+                  <m:mn>2</m:mn>
+                </m:mrow>
+              </m:msup>
+              <m:msup>
+                <m:mi>ρ</m:mi>
+                <m:mrow>
+                  <m:mo>'</m:mo>
+                  <m:mo>'</m:mo>
+                </m:mrow>
+              </m:msup>
+              <m:mo>-</m:mo>
+              <m:mi>λ</m:mi>
+              <m:mi>w</m:mi>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <equation id="id240381">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:mo>-</m:mo>
+              <m:mfrac>
+                <m:mrow>
+                  <m:msup>
+                    <m:mi>d</m:mi>
+                    <m:mn>2</m:mn>
+                  </m:msup>
+                  <m:mi>w</m:mi>
+                </m:mrow>
+                <m:mrow>
+                  <m:mi>d</m:mi>
+                  <m:msup>
+                    <m:mi>t</m:mi>
+                    <m:mn>2</m:mn>
+                  </m:msup>
+                </m:mrow>
+              </m:mfrac>
+              <m:mo>+</m:mo>
+              <m:mfenced separators="" open="(" close=")">
+                <m:mfrac>
+                  <m:mn>1</m:mn>
+                  <m:mn>4</m:mn>
+                </m:mfrac>
+                <m:msup>
+                  <m:mi>ρ</m:mi>
+                  <m:mrow>
+                    <m:mo>-</m:mo>
+                    <m:mn>2</m:mn>
+                  </m:mrow>
+                </m:msup>
+                <m:msup>
+                  <m:mi>ρ</m:mi>
+                  <m:mrow>
+                    <m:mo>'</m:mo>
+                    <m:mo>'</m:mo>
+                  </m:mrow>
+                </m:msup>
+                <m:mo>-</m:mo>
+                <m:mfrac>
+                  <m:mn>5</m:mn>
+                  <m:mn>16</m:mn>
+                </m:mfrac>
+                <m:msup>
+                  <m:mi>ρ</m:mi>
+                  <m:mrow>
+                    <m:mo>-</m:mo>
+                    <m:mn>3</m:mn>
+                  </m:mrow>
+                </m:msup>
+                <m:msup>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:msup>
+                      <m:mi>ρ</m:mi>
+                      <m:mo>'</m:mo>
+                    </m:msup>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                  <m:mn>2</m:mn>
+                </m:msup>
+              </m:mfenced>
+              <m:mi>w</m:mi>
+              <m:mo>=</m:mo>
+              <m:mi>λ</m:mi>
+              <m:mi>w</m:mi>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id240501">This equation is now in the form of the Sturm-Liouville equation</para>
+        <equation id="id240507">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:mo>-</m:mo>
+              <m:mfrac>
+                <m:mrow>
+                  <m:msup>
+                    <m:mi>d</m:mi>
+                    <m:mn>2</m:mn>
+                  </m:msup>
+                  <m:mi>w</m:mi>
+                </m:mrow>
+                <m:mrow>
+                  <m:mi>d</m:mi>
+                  <m:msup>
+                    <m:mi>t</m:mi>
+                    <m:mn>2</m:mn>
+                  </m:msup>
+                </m:mrow>
+              </m:mfrac>
+              <m:mo>+</m:mo>
+              <m:mi>q</m:mi>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>t</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mi>w</m:mi>
+              <m:mo>=</m:mo>
+              <m:mi>λ</m:mi>
+              <m:mi>w</m:mi>
+              <m:mo>,</m:mo>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id240566">where the <emphasis effect="italics">Sturm-Liouville Dirichlet potential function</emphasis>, <m:math overflow="scroll"><m:mrow><m:mi>q</m:mi><m:mo>(</m:mo><m:mi>t</m:mi><m:mo>)</m:mo></m:mrow></m:math>, is given by</para>
+        <equation id="uid10">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:mi>q</m:mi>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>t</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>=</m:mo>
+              <m:mfrac>
+                <m:mrow>
+                  <m:msup>
+                    <m:mi>ρ</m:mi>
+                    <m:mrow>
+                      <m:mo>'</m:mo>
+                      <m:mo>'</m:mo>
+                    </m:mrow>
+                  </m:msup>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:mi>x</m:mi>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                </m:mrow>
+                <m:mrow>
+                  <m:mn>4</m:mn>
+                  <m:msup>
+                    <m:mi>ρ</m:mi>
+                    <m:mn>2</m:mn>
+                  </m:msup>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:mi>x</m:mi>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                </m:mrow>
+              </m:mfrac>
+              <m:mo>-</m:mo>
+              <m:mfrac>
+                <m:mrow>
+                  <m:mn>5</m:mn>
+                  <m:msup>
+                    <m:mfenced separators="" open="(" close=")">
+                      <m:msup>
+                        <m:mi>ρ</m:mi>
+                        <m:mo>'</m:mo>
+                      </m:msup>
+                      <m:mrow>
+                        <m:mo>(</m:mo>
+                        <m:mi>x</m:mi>
+                        <m:mo>)</m:mo>
+                      </m:mrow>
+                    </m:mfenced>
+                    <m:mn>2</m:mn>
+                  </m:msup>
+                </m:mrow>
+                <m:mrow>
+                  <m:mn>16</m:mn>
+                  <m:msup>
+                    <m:mi>ρ</m:mi>
+                    <m:mn>3</m:mn>
+                  </m:msup>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:mi>x</m:mi>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                </m:mrow>
+              </m:mfrac>
+              <m:mo>.</m:mo>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id240716">As in <link target-id="uid9"/> above, the variable <m:math overflow="scroll"><m:mi>x</m:mi></m:math> on the right side of
+this expression is to be interpreted as a function of <m:math overflow="scroll"><m:mi>t</m:mi></m:math> defined by
+<link target-id="uid8"/>.</para>
+        <para id="id240749">This section describes what is needed to change from the wave equation with a mass density, <m:math overflow="scroll"><m:mi>ρ</m:mi></m:math>, to a Sturm-Liouville equation with a potential, <m:math overflow="scroll"><m:mi>q</m:mi></m:math>. The next section describes the reverse, changing from the Sturm-Liouville equation with a potential, <m:math overflow="scroll"><m:mi>q</m:mi></m:math>, to a wave equation with a mass density, <m:math overflow="scroll"><m:mi>ρ</m:mi></m:math>.</para>
+      </section>
+      <section id="uid11">
+        <title>Changing From Potential to Density</title>
+        <para id="id240801">Converting a given Dirichlet potential function <m:math overflow="scroll"><m:mrow><m:mi>q</m:mi><m:mo>(</m:mo><m:mi>t</m:mi><m:mo>)</m:mo></m:mrow></m:math> into corresponding mass
+density <m:math overflow="scroll"><m:mrow><m:mi>ρ</m:mi><m:mo>(</m:mo><m:mi>x</m:mi><m:mo>)</m:mo></m:mrow></m:math> amounts to solving the nonlinear ordinary differential equation, or ODE, in <link target-id="uid10"/> for
+<m:math overflow="scroll"><m:mi>ρ</m:mi></m:math>; however, one must be careful. Using the integral
+<link target-id="uid8"/> and abusing notation a bit, it is tempting to write <m:math overflow="scroll"><m:mrow><m:mi>t</m:mi><m:mo>=</m:mo><m:mi>t</m:mi><m:mo>(</m:mo><m:mi>x</m:mi><m:mo>)</m:mo></m:mrow></m:math> and arrive at the ODE</para>
+        <equation id="id240878">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:mi>q</m:mi>
+              <m:mfenced separators="" open="(" close=")">
+                <m:mi>t</m:mi>
+                <m:mo>(</m:mo>
+                <m:mi>x</m:mi>
+                <m:mo>)</m:mo>
+              </m:mfenced>
+              <m:mo>=</m:mo>
+              <m:mfrac>
+                <m:mrow>
+                  <m:msup>
+                    <m:mi>ρ</m:mi>
+                    <m:mrow>
+                      <m:mo>'</m:mo>
+                      <m:mo>'</m:mo>
+                    </m:mrow>
+                  </m:msup>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:mi>x</m:mi>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                </m:mrow>
+                <m:mrow>
+                  <m:mn>4</m:mn>
+                  <m:msup>
+                    <m:mi>ρ</m:mi>
+                    <m:mn>2</m:mn>
+                  </m:msup>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:mi>x</m:mi>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                </m:mrow>
+              </m:mfrac>
+              <m:mo>-</m:mo>
+              <m:mfrac>
+                <m:mrow>
+                  <m:mn>5</m:mn>
+                  <m:msup>
+                    <m:mfenced separators="" open="(" close=")">
+                      <m:msup>
+                        <m:mi>ρ</m:mi>
+                        <m:mo>'</m:mo>
+                      </m:msup>
+                      <m:mrow>
+                        <m:mo>(</m:mo>
+                        <m:mi>x</m:mi>
+                        <m:mo>)</m:mo>
+                      </m:mrow>
+                    </m:mfenced>
+                    <m:mn>2</m:mn>
+                  </m:msup>
+                </m:mrow>
+                <m:mrow>
+                  <m:mn>16</m:mn>
+                  <m:msup>
+                    <m:mi>ρ</m:mi>
+                    <m:mn>3</m:mn>
+                  </m:msup>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:mi>x</m:mi>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                </m:mrow>
+              </m:mfrac>
+              <m:mo>,</m:mo>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id241007">which one would then attempt to solve numerically by selecting some initial
+conditions for <m:math overflow="scroll"><m:mrow><m:mi>ρ</m:mi><m:mo>(</m:mo><m:mi>x</m:mi><m:mo>)</m:mo></m:mrow></m:math>, picking a grid in the <m:math overflow="scroll"><m:mi>x</m:mi></m:math>-domain and applying one's
+ODE solver of choice, using some quadrature scheme to estimate <m:math overflow="scroll"><m:mrow><m:mi>t</m:mi><m:mo>(</m:mo><m:mi>x</m:mi><m:mo>)</m:mo></m:mrow></m:math> by
+approximating <link target-id="uid8"/>. This approach, however, suffers from a
+somewhat subtle flaw: it presumes that one already knows the domain of
+definition of <m:math overflow="scroll"><m:mrow><m:mi>ρ</m:mi><m:mo>(</m:mo><m:mi>x</m:mi><m:mo>)</m:mo></m:mrow></m:math>, i.e., that the length <m:math overflow="scroll"><m:mi>L</m:mi></m:math> of the string can be known a
+priori.</para>
+        <para id="id241088">Observe that the ODE makes sense only over the domain of definition of the <m:math overflow="scroll"><m:mi>t</m:mi></m:math>
+variable, while the function <m:math overflow="scroll"><m:mi>ρ</m:mi></m:math> makes sense only over the domain of
+definition of the <m:math overflow="scroll"><m:mi>x</m:mi></m:math> variable. Our goal was to learn about the <m:math overflow="scroll"><m:mi>q</m:mi></m:math> in Chapter 6 of <link target-id="bid0"/>, shown in <link target-id="uid14"/>. Since the function <m:math overflow="scroll"><m:mi>q</m:mi></m:math> is known, we have
+knowledge of the domain of <m:math overflow="scroll"><m:mi>t</m:mi></m:math>. In principle, we can obtain the corresponding
+domain of <m:math overflow="scroll"><m:mi>x</m:mi></m:math> by inverting the integral <link target-id="uid8"/>, but this
+requires knowledge of <m:math overflow="scroll"><m:mi>ρ</m:mi></m:math> as a function of <m:math overflow="scroll"><m:mi>x</m:mi></m:math>, which is what we are trying
+to find in the first place. We need a way to obtain this domain information
+from other quantities we can compute.</para>
+        <para id="id241190">Our answer to this problem is the following. Treating <link target-id="uid8"/> as an
+equation that defines <m:math overflow="scroll"><m:mi>x</m:mi></m:math> implicitly as a function of <m:math overflow="scroll"><m:mi>t</m:mi></m:math>, we differentiate
+both sides with respect to <m:math overflow="scroll"><m:mi>t</m:mi></m:math> to obtain</para>
+        <equation id="id241225">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:mn>1</m:mn>
+              <m:mo>=</m:mo>
+              <m:msup>
+                <m:mi>ρ</m:mi>
+                <m:mrow>
+                  <m:mn>1</m:mn>
+                  <m:mo>/</m:mo>
+                  <m:mn>2</m:mn>
+                </m:mrow>
+              </m:msup>
+              <m:mfenced separators="" open="(" close=")">
+                <m:mi>x</m:mi>
+                <m:mo>(</m:mo>
+                <m:mi>t</m:mi>
+                <m:mo>)</m:mo>
+              </m:mfenced>
+              <m:msup>
+                <m:mi>x</m:mi>
+                <m:mo>'</m:mo>
+              </m:msup>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>t</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>,</m:mo>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id241288">which can be rearranged to give</para>
+        <equation id="uid12">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:msup>
+                <m:mi>x</m:mi>
+                <m:mo>'</m:mo>
+              </m:msup>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>t</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>=</m:mo>
+              <m:msup>
+                <m:mi>ρ</m:mi>
+                <m:mrow>
+                  <m:mo>-</m:mo>
+                  <m:mn>1</m:mn>
+                  <m:mo>/</m:mo>
+                  <m:mn>2</m:mn>
+                </m:mrow>
+              </m:msup>
+              <m:mfenced separators="" open="(" close=")">
+                <m:mi>x</m:mi>
+                <m:mo>(</m:mo>
+                <m:mi>t</m:mi>
+                <m:mo>)</m:mo>
+              </m:mfenced>
+              <m:mo>.</m:mo>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id241361">Thus, we obtain a differential equation for <m:math overflow="scroll"><m:mrow><m:mi>x</m:mi><m:mo>(</m:mo><m:mi>t</m:mi><m:mo>)</m:mo></m:mrow></m:math>. Furthermore, we have an
+initial condition: <m:math overflow="scroll"><m:mrow><m:mi>x</m:mi><m:mo>(</m:mo><m:mn>0</m:mn><m:mo>)</m:mo><m:mo>=</m:mo><m:mn>0</m:mn></m:mrow></m:math>, since <m:math overflow="scroll"><m:mrow><m:mi>x</m:mi><m:mo>=</m:mo><m:mn>0</m:mn></m:mrow></m:math> and <m:math overflow="scroll"><m:mrow><m:mi>t</m:mi><m:mo>=</m:mo><m:mn>0</m:mn></m:mrow></m:math> correspond to each
+other by <link target-id="uid8"/>. We can therefore obtain the <m:math overflow="scroll"><m:mi>x</m:mi></m:math>-values that
+correspond to given <m:math overflow="scroll"><m:mi>t</m:mi></m:math>-values, provided that we can compute <m:math overflow="scroll"><m:mrow><m:msup><m:mi>ρ</m:mi><m:mrow><m:mo>-</m:mo><m:mn>1</m:mn><m:mo>/</m:mo><m:mn>2</m:mn></m:mrow></m:msup><m:mfenced separators="" open="(" close=")"><m:mi>x</m:mi><m:mo>(</m:mo><m:mi>t</m:mi><m:mo>)</m:mo></m:mfenced></m:mrow></m:math> for arbitrary <m:math overflow="scroll"><m:mi>t</m:mi></m:math>.</para>
+        <para id="id241506">We accomplish this by changing the equation <link target-id="uid10"/> into an ODE for
+<m:math overflow="scroll"><m:mrow><m:mi>σ</m:mi><m:mrow><m:mo>(</m:mo><m:mi>t</m:mi><m:mo>)</m:mo></m:mrow><m:mo>=</m:mo><m:mrow><m:mo>(</m:mo><m:mi>ρ</m:mi><m:mo>∘</m:mo><m:mi>x</m:mi><m:mo>)</m:mo></m:mrow><m:mrow><m:mo>(</m:mo><m:mi>t</m:mi><m:mo>)</m:mo></m:mrow><m:mo>=</m:mo><m:mi>ρ</m:mi><m:mfenced separators="" open="(" close=")"><m:mi>x</m:mi><m:mo>(</m:mo><m:mi>t</m:mi><m:mo>)</m:mo></m:mfenced></m:mrow></m:math>. By the chain rule,</para>
+        <equation id="id241577">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:msup>
+                <m:mi>σ</m:mi>
+                <m:mo>'</m:mo>
+              </m:msup>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>t</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>=</m:mo>
+              <m:msup>
+                <m:mi>ρ</m:mi>
+                <m:mo>'</m:mo>
+              </m:msup>
+              <m:mfenced separators="" open="(" close=")">
+                <m:mi>x</m:mi>
+                <m:mo>(</m:mo>
+                <m:mi>t</m:mi>
+                <m:mo>)</m:mo>
+              </m:mfenced>
+              <m:mo>·</m:mo>
+              <m:msup>
+                <m:mi>x</m:mi>
+                <m:mo>'</m:mo>
+              </m:msup>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>t</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>.</m:mo>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id241650">Since <m:math overflow="scroll"><m:mrow><m:msup><m:mi>x</m:mi><m:mo>'</m:mo></m:msup><m:mrow><m:mo>(</m:mo><m:mi>t</m:mi><m:mo>)</m:mo></m:mrow><m:mo>=</m:mo><m:msup><m:mi>σ</m:mi><m:mrow><m:mo>-</m:mo><m:mn>1</m:mn><m:mo>/</m:mo><m:mn>2</m:mn></m:mrow></m:msup><m:mrow><m:mo>(</m:mo><m:mi>t</m:mi><m:mo>)</m:mo></m:mrow></m:mrow></m:math>, we obtain</para>
+        <equation id="id241704">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:msup>
+                <m:mi>σ</m:mi>
+                <m:mo>'</m:mo>
+              </m:msup>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>t</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>=</m:mo>
+              <m:mfrac>
+                <m:mrow>
+                  <m:msup>
+                    <m:mi>ρ</m:mi>
+                    <m:mo>'</m:mo>
+                  </m:msup>
+                  <m:mfenced separators="" open="(" close=")">
+                    <m:mi>x</m:mi>
+                    <m:mo>(</m:mo>
+                    <m:mi>t</m:mi>
+                    <m:mo>)</m:mo>
+                  </m:mfenced>
+                </m:mrow>
+                <m:msqrt>
+                  <m:mrow>
+                    <m:mi>σ</m:mi>
+                    <m:mo>(</m:mo>
+                    <m:mi>t</m:mi>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                </m:msqrt>
+              </m:mfrac>
+              <m:mo>.</m:mo>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id241774">Applying the quotient rule
+produces</para>
+        <equation id="id241780">
+          <m:math overflow="scroll" mode="display">
+            <m:mtable displaystyle="true">
+              <m:mtr>
+                <m:mtd columnalign="right">
+                  <m:mrow>
+                    <m:msup>
+                      <m:mi>σ</m:mi>
+                      <m:mrow>
+                        <m:mo>'</m:mo>
+                        <m:mo>'</m:mo>
+                      </m:mrow>
+                    </m:msup>
+                    <m:mrow>
+                      <m:mo>(</m:mo>
+                      <m:mi>t</m:mi>
+                      <m:mo>)</m:mo>
+                    </m:mrow>
+                  </m:mrow>
+                </m:mtd>
+                <m:mtd>
+                  <m:mo>=</m:mo>
+                </m:mtd>
+                <m:mtd columnalign="left">
+                  <m:mfrac>
+                    <m:mrow>
+                      <m:msqrt>
+                        <m:mrow>
+                          <m:mi>σ</m:mi>
+                          <m:mo>(</m:mo>
+                          <m:mi>t</m:mi>
+                          <m:mo>)</m:mo>
+                        </m:mrow>
+                      </m:msqrt>
+                      <m:msup>
+                        <m:mi>ρ</m:mi>
+                        <m:mrow>
+                          <m:mo>'</m:mo>
+                          <m:mo>'</m:mo>
+                        </m:mrow>
+                      </m:msup>
+                      <m:mfenced separators="" open="(" close=")">
+                        <m:mi>x</m:mi>
+                        <m:mo>(</m:mo>
+                        <m:mi>t</m:mi>
+                        <m:mo>)</m:mo>
+                      </m:mfenced>
+                      <m:msup>
+                        <m:mi>x</m:mi>
+                        <m:mo>'</m:mo>
+                      </m:msup>
+                      <m:mrow>
+                        <m:mo>(</m:mo>
+                        <m:mi>t</m:mi>
+                        <m:mo>)</m:mo>
+                      </m:mrow>
+                      <m:mo>-</m:mo>
+                      <m:mfrac>
+                        <m:mn>1</m:mn>
+                        <m:mn>2</m:mn>
+                      </m:mfrac>
+                      <m:msup>
+                        <m:mi>ρ</m:mi>
+                        <m:mo>'</m:mo>
+                      </m:msup>
+                      <m:mfenced separators="" open="(" close=")">
+                        <m:mi>x</m:mi>
+                        <m:mo>(</m:mo>
+                        <m:mi>t</m:mi>
+                        <m:mo>)</m:mo>
+                      </m:mfenced>
+                      <m:msup>
+                        <m:mi>σ</m:mi>
+                        <m:mrow>
+                          <m:mo>-</m:mo>
+                          <m:mn>1</m:mn>
+                          <m:mo>/</m:mo>
+                          <m:mn>2</m:mn>
+                        </m:mrow>
+                      </m:msup>
+                      <m:mrow>
+                        <m:mo>(</m:mo>
+                        <m:mi>t</m:mi>
+                        <m:mo>)</m:mo>
+                      </m:mrow>
+                      <m:msup>
+                        <m:mi>σ</m:mi>
+                        <m:mo>'</m:mo>
+                      </m:msup>
+                      <m:mrow>
+                        <m:mo>(</m:mo>
+                        <m:mi>t</m:mi>
+                        <m:mo>)</m:mo>
+                      </m:mrow>
+                    </m:mrow>
+                    <m:mrow>
+                      <m:mi>σ</m:mi>
+                      <m:mo>(</m:mo>
+                      <m:mi>t</m:mi>
+                      <m:mo>)</m:mo>
+                    </m:mrow>
+                  </m:mfrac>
+                </m:mtd>
+              </m:mtr>
+              <m:mtr>
+                <m:mtd/>
+                <m:mtd>
+                  <m:mo>=</m:mo>
+                </m:mtd>
+                <m:mtd columnalign="left">
+                  <m:mfrac>
+                    <m:mrow>
+                      <m:msqrt>
+                        <m:mrow>
+                          <m:mi>σ</m:mi>
+                          <m:mo>(</m:mo>
+                          <m:mi>t</m:mi>
+                          <m:mo>)</m:mo>
+                        </m:mrow>
+                      </m:msqrt>
+                      <m:msup>
+                        <m:mi>ρ</m:mi>
+                        <m:mrow>
+                          <m:mo>'</m:mo>
+                          <m:mo>'</m:mo>
+                        </m:mrow>
+                      </m:msup>
+                      <m:mfenced separators="" open="(" close=")">
+                        <m:mi>x</m:mi>
+                        <m:mo>(</m:mo>
+                        <m:mi>t</m:mi>
+                        <m:mo>)</m:mo>
+                      </m:mfenced>
+                      <m:msup>
+                        <m:mi>σ</m:mi>
+                        <m:mrow>
+                          <m:mo>-</m:mo>
+                          <m:mn>1</m:mn>
+                          <m:mo>/</m:mo>
+                          <m:mn>2</m:mn>
+                        </m:mrow>
+                      </m:msup>
+                      <m:mrow>
+                        <m:mo>(</m:mo>
+                        <m:mi>t</m:mi>
+                        <m:mo>)</m:mo>
+                      </m:mrow>
+                      <m:mo>-</m:mo>
+                      <m:mfrac>
+                        <m:mn>1</m:mn>
+                        <m:mn>2</m:mn>
+                      </m:mfrac>
+                      <m:msup>
+                        <m:mfenced separators="" open="(" close=")">
+                          <m:msup>
+                            <m:mi>σ</m:mi>
+                            <m:mo>'</m:mo>
+                          </m:msup>
+                          <m:mrow>
+                            <m:mo>(</m:mo>
+                            <m:mi>t</m:mi>
+                            <m:mo>)</m:mo>
+                          </m:mrow>
+                        </m:mfenced>
+                        <m:mn>2</m:mn>
+                      </m:msup>
+                    </m:mrow>
+                    <m:mrow>
+                      <m:mi>σ</m:mi>
+                      <m:mo>(</m:mo>
+                      <m:mi>t</m:mi>
+                      <m:mo>)</m:mo>
+                    </m:mrow>
+                  </m:mfrac>
+                </m:mtd>
+              </m:mtr>
+              <m:mtr>
+                <m:mtd/>
+                <m:mtd>
+                  <m:mo>=</m:mo>
+                </m:mtd>
+                <m:mtd columnalign="left">
+                  <m:mrow>
+                    <m:mfrac>
+                      <m:mrow>
+                        <m:msup>
+                          <m:mi>ρ</m:mi>
+                          <m:mrow>
+                            <m:mo>'</m:mo>
+                            <m:mo>'</m:mo>
+                          </m:mrow>
+                        </m:msup>
+                        <m:mfenced separators="" open="(" close=")">
+                          <m:mi>x</m:mi>
+                          <m:mo>(</m:mo>
+                          <m:mi>t</m:mi>
+                          <m:mo>)</m:mo>
+                        </m:mfenced>
+                      </m:mrow>
+                      <m:mrow>
+                        <m:mi>σ</m:mi>
+                        <m:mo>(</m:mo>
+                        <m:mi>t</m:mi>
+                        <m:mo>)</m:mo>
+                      </m:mrow>
+                    </m:mfrac>
+                    <m:mo>-</m:mo>
+                    <m:mfrac>
+                      <m:msup>
+                        <m:mfenced separators="" open="(" close=")">
+                          <m:msup>
+                            <m:mi>σ</m:mi>
+                            <m:mo>'</m:mo>
+                          </m:msup>
+                          <m:mrow>
+                            <m:mo>(</m:mo>
+                            <m:mi>t</m:mi>
+                            <m:mo>)</m:mo>
+                          </m:mrow>
+                        </m:mfenced>
+                        <m:mn>2</m:mn>
+                      </m:msup>
+                      <m:mrow>
+                        <m:mn>2</m:mn>
+                        <m:mi>σ</m:mi>
+                        <m:mo>(</m:mo>
+                        <m:mi>t</m:mi>
+                        <m:mo>)</m:mo>
+                      </m:mrow>
+                    </m:mfrac>
+                    <m:mo>.</m:mo>
+                  </m:mrow>
+                </m:mtd>
+              </m:mtr>
+            </m:mtable>
+          </m:math>
+        </equation>
+        <para id="id242190">Hence,</para>
+        <equation id="id242195">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:msup>
+                <m:mi>ρ</m:mi>
+                <m:mrow>
+                  <m:mo>'</m:mo>
+                  <m:mo>'</m:mo>
+                </m:mrow>
+              </m:msup>
+              <m:mfenced separators="" open="(" close=")">
+                <m:mi>x</m:mi>
+                <m:mo>(</m:mo>
+                <m:mi>t</m:mi>
+                <m:mo>)</m:mo>
+              </m:mfenced>
+              <m:mo>=</m:mo>
+              <m:mi>σ</m:mi>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>t</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:msup>
+                <m:mi>σ</m:mi>
+                <m:mrow>
+                  <m:mo>'</m:mo>
+                  <m:mo>'</m:mo>
+                </m:mrow>
+              </m:msup>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>t</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>+</m:mo>
+              <m:mfrac>
+                <m:mn>1</m:mn>
+                <m:mn>2</m:mn>
+              </m:mfrac>
+              <m:msup>
+                <m:mfenced separators="" open="(" close=")">
+                  <m:msup>
+                    <m:mi>σ</m:mi>
+                    <m:mo>'</m:mo>
+                  </m:msup>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:mi>t</m:mi>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                </m:mfenced>
+                <m:mn>2</m:mn>
+              </m:msup>
+              <m:mo>.</m:mo>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id242306">We can substitute these expressions for <m:math overflow="scroll"><m:mrow><m:msup><m:mi>ρ</m:mi><m:mo>'</m:mo></m:msup><m:mfenced separators="" open="(" close=")"><m:mi>x</m:mi><m:mo>(</m:mo><m:mi>t</m:mi><m:mo>)</m:mo></m:mfenced></m:mrow></m:math> and <m:math overflow="scroll"><m:mrow><m:msup><m:mi>ρ</m:mi><m:mrow><m:mo>'</m:mo><m:mo>'</m:mo></m:mrow></m:msup><m:mfenced separators="" open="(" close=")"><m:mi>x</m:mi><m:mo>(</m:mo><m:mi>t</m:mi><m:mo>)</m:mo></m:mfenced></m:mrow></m:math> in equation <link target-id="uid10"/> to obtain</para>
+        <equation id="id242389">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:mi>q</m:mi>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>t</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>=</m:mo>
+              <m:mfrac>
+                <m:mrow>
+                  <m:mi>σ</m:mi>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:mi>t</m:mi>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                  <m:msup>
+                    <m:mi>σ</m:mi>
+                    <m:mrow>
+                      <m:mo>'</m:mo>
+                      <m:mo>'</m:mo>
+                    </m:mrow>
+                  </m:msup>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:mi>t</m:mi>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                  <m:mo>+</m:mo>
+                  <m:mfrac>
+                    <m:mn>1</m:mn>
+                    <m:mn>2</m:mn>
+                  </m:mfrac>
+                  <m:msup>
+                    <m:mfenced separators="" open="(" close=")">
+                      <m:msup>
+                        <m:mi>σ</m:mi>
+                        <m:mo>'</m:mo>
+                      </m:msup>
+                      <m:mrow>
+                        <m:mo>(</m:mo>
+                        <m:mi>t</m:mi>
+                        <m:mo>)</m:mo>
+                      </m:mrow>
+                    </m:mfenced>
+                    <m:mn>2</m:mn>
+                  </m:msup>
+                </m:mrow>
+                <m:mrow>
+                  <m:mn>4</m:mn>
+                  <m:msup>
+                    <m:mfenced separators="" open="(" close=")">
+                      <m:mi>σ</m:mi>
+                      <m:mo>(</m:mo>
+                      <m:mi>t</m:mi>
+                      <m:mo>)</m:mo>
+                    </m:mfenced>
+                    <m:mn>2</m:mn>
+                  </m:msup>
+                </m:mrow>
+              </m:mfrac>
+              <m:mo>-</m:mo>
+              <m:mfrac>
+                <m:mrow>
+                  <m:mn>5</m:mn>
+                  <m:msup>
+                    <m:mfenced separators="" open="(" close=")">
+                      <m:msup>
+                        <m:mi>σ</m:mi>
+                        <m:mo>'</m:mo>
+                      </m:msup>
+                      <m:mrow>
+                        <m:mo>(</m:mo>
+                        <m:mi>t</m:mi>
+                        <m:mo>)</m:mo>
+                      </m:mrow>
+                    </m:mfenced>
+                    <m:mn>2</m:mn>
+                  </m:msup>
+                  <m:mi>σ</m:mi>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:mi>t</m:mi>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                </m:mrow>
+                <m:mrow>
+                  <m:mn>16</m:mn>
+                  <m:msup>
+                    <m:mfenced separators="" open="(" close=")">
+                      <m:mi>σ</m:mi>
+                      <m:mo>(</m:mo>
+                      <m:mi>t</m:mi>
+                      <m:mo>)</m:mo>
+                    </m:mfenced>
+                    <m:mn>3</m:mn>
+                  </m:msup>
+                </m:mrow>
+              </m:mfrac>
+              <m:mo>,</m:mo>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id242584">which may be simplified to</para>
+        <equation id="uid13">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:mi>q</m:mi>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>t</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>=</m:mo>
+              <m:mfrac>
+                <m:mrow>
+                  <m:msup>
+                    <m:mi>σ</m:mi>
+                    <m:mrow>
+                      <m:mo>'</m:mo>
+                      <m:mo>'</m:mo>
+                    </m:mrow>
+                  </m:msup>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:mi>t</m:mi>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                </m:mrow>
+                <m:mrow>
+                  <m:mn>4</m:mn>
+                  <m:mi>σ</m:mi>
+                  <m:mo>(</m:mo>
+                  <m:mi>t</m:mi>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+              </m:mfrac>
+              <m:mo>-</m:mo>
+              <m:mfrac>
+                <m:mn>3</m:mn>
+                <m:mn>16</m:mn>
+              </m:mfrac>
+              <m:msup>
+                <m:mfenced separators="" open="(" close=")">
+                  <m:mfrac>
+                    <m:mrow>
+                      <m:msup>
+                        <m:mi>σ</m:mi>
+                        <m:mo>'</m:mo>
+                      </m:msup>
+                      <m:mrow>
+                        <m:mo>(</m:mo>
+                        <m:mi>t</m:mi>
+                        <m:mo>)</m:mo>
+                      </m:mrow>
+                    </m:mrow>
+                    <m:mrow>
+                      <m:mi>σ</m:mi>
+                      <m:mo>(</m:mo>
+                      <m:mi>t</m:mi>
+                      <m:mo>)</m:mo>
+                    </m:mrow>
+                  </m:mfrac>
+                </m:mfenced>
+                <m:mn>2</m:mn>
+              </m:msup>
+              <m:mo>.</m:mo>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id242701">This is a differential equation that we may solve for <m:math overflow="scroll"><m:mrow><m:mi>σ</m:mi><m:mo>(</m:mo><m:mi>t</m:mi><m:mo>)</m:mo></m:mrow></m:math> over a
+grid that coincides with the domain of <m:math overflow="scroll"><m:mi>q</m:mi></m:math>. We can then use the ODE for <m:math overflow="scroll"><m:mrow><m:msup><m:mi>x</m:mi><m:mo>'</m:mo></m:msup><m:mrow><m:mo>(</m:mo><m:mi>t</m:mi><m:mo>)</m:mo></m:mrow></m:mrow></m:math>, <link target-id="uid12"/>, to obtain the values of <m:math overflow="scroll"><m:mi>x</m:mi></m:math> at which <m:math overflow="scroll"><m:mi>ρ</m:mi></m:math> takes on
+the values of <m:math overflow="scroll"><m:mrow><m:mi>σ</m:mi><m:mo>(</m:mo><m:mi>t</m:mi><m:mo>)</m:mo></m:mrow></m:math>.</para>
+        <para id="id242795">We have shown that it is possible to convert a mass density function, <m:math overflow="scroll"><m:mrow><m:mi>ρ</m:mi><m:mo>(</m:mo><m:mi>x</m:mi><m:mo>)</m:mo></m:mrow></m:math>, <m:math overflow="scroll"><m:mrow><m:mi>x</m:mi><m:mo>∈</m:mo><m:mo>[</m:mo><m:mn>0</m:mn><m:mo>,</m:mo><m:mi>L</m:mi><m:mo>]</m:mo></m:mrow></m:math>, in the wave equation to a
+potential function, <m:math overflow="scroll"><m:mrow><m:mi>q</m:mi><m:mo>(</m:mo><m:mi>t</m:mi><m:mo>)</m:mo></m:mrow></m:math>, <m:math overflow="scroll"><m:mrow><m:mi>t</m:mi><m:mo>∈</m:mo><m:mo>[</m:mo><m:mn>0</m:mn><m:mo>,</m:mo><m:mn>1</m:mn><m:mo>]</m:mo></m:mrow></m:math>, in the Sturm-Liouville equation and discussed our method to numerically convert from <m:math overflow="scroll"><m:mi>q</m:mi></m:math> to <m:math overflow="scroll"><m:mi>ρ</m:mi></m:math>. In the next section, the results from numerically reverting this change of variables, arriving at a mass density function for a string of unit length from a specific Sturm-Liouville potential, are described.</para>
+      </section>
+    </section>
+    <section id="cid4">
+      <title>Numerical Results</title>
+      <para id="id242907">The simplest vibrating string problem is when the string has uniform mass density, <m:math overflow="scroll"><m:mrow><m:mi>ρ</m:mi><m:mo>(</m:mo><m:mi>x</m:mi><m:mo>)</m:mo><m:mo>=</m:mo><m:mn>1</m:mn></m:mrow></m:math>. The wave equation with uniform mass density corresponds to the Sturm-Liouville equation with potential function <m:math overflow="scroll"><m:mrow><m:mi>q</m:mi><m:mo>(</m:mo><m:mi>t</m:mi><m:mo>)</m:mo><m:mo>=</m:mo><m:mn>0</m:mn></m:mrow></m:math>. For the resulting eigenvalue problem, the eigenvalues are <m:math overflow="scroll"><m:mrow><m:mi>λ</m:mi><m:mo>=</m:mo><m:mo>{</m:mo><m:msup><m:mi>π</m:mi><m:mn>2</m:mn></m:msup><m:mo>,</m:mo><m:mn>4</m:mn><m:msup><m:mi>π</m:mi><m:mn>2</m:mn></m:msup><m:mo>,</m:mo><m:mn>9</m:mn><m:msup><m:mi>π</m:mi><m:mn>2</m:mn></m:msup><m:mo>,</m:mo><m:mn>16</m:mn><m:msup><m:mi>π</m:mi><m:mn>2</m:mn></m:msup><m:mo>,</m:mo><m:mo>.</m:mo><m:mo>.</m:mo><m:mo>.</m:mo><m:mo>}</m:mo></m:mrow></m:math>. What if just one eigenvalue is changed? In chapter 6 of <link target-id="bid0"/> it is shown for <m:math overflow="scroll"><m:mrow><m:msub><m:mi>μ</m:mi><m:mn>1</m:mn></m:msub><m:mo>&lt;</m:mo><m:mn>4</m:mn><m:msup><m:mi>π</m:mi><m:mn>2</m:mn></m:msup></m:mrow></m:math> the Dirichlet spectra with variable first eigenvalue <m:math overflow="scroll"><m:mrow><m:mi>λ</m:mi><m:mrow><m:mo>(</m:mo><m:mi>q</m:mi><m:mo>)</m:mo></m:mrow><m:mo>=</m:mo><m:mrow><m:mo>{</m:mo><m:msub><m:mi>μ</m:mi><m:mn>1</m:mn></m:msub><m:mo>,</m:mo><m:mn>4</m:mn><m:msup><m:mi>π</m:mi><m:mn>2</m:mn></m:msup><m:mo>,</m:mo><m:mn>9</m:mn><m:msup><m:mi>π</m:mi><m:mn>2</m:mn></m:msup><m:mo>,</m:mo><m:mn>16</m:mn><m:msup><m:mi>π</m:mi><m:mn>2</m:mn></m:msup><m:mo>,</m:mo><m:mo>.</m:mo><m:mo>.</m:mo><m:mo>.</m:mo><m:mo>}</m:mo></m:mrow></m:mrow></m:math> specify unique, even <m:math overflow="scroll"><m:mrow><m:mi>q</m:mi><m:mo>(</m:mo><m:mi>t</m:mi><m:mo>)</m:mo></m:mrow></m:math>'s given by</para>
+      <equation id="uid14">
+        <m:math overflow="scroll" mode="display">
+          <m:mrow>
+            <m:mi>q</m:mi>
+            <m:mrow>
+              <m:mo>(</m:mo>
+              <m:mi>t</m:mi>
+              <m:mo>)</m:mo>
+            </m:mrow>
+            <m:mo>=</m:mo>
+            <m:mo>-</m:mo>
+            <m:mn>2</m:mn>
+            <m:mfrac>
+              <m:msup>
+                <m:mi>d</m:mi>
+                <m:mn>2</m:mn>
+              </m:msup>
+              <m:mrow>
+                <m:mi>d</m:mi>
+                <m:msup>
+                  <m:mi>t</m:mi>
+                  <m:mn>2</m:mn>
+                </m:msup>
+              </m:mrow>
+            </m:mfrac>
+            <m:mi> log </m:mi>
+            <m:mfenced separators="" open="[" close="]">
+              <m:mfrac>
+                <m:mrow>
+                  <m:mi> sin </m:mi>
+                  <m:msqrt>
+                    <m:msub>
+                      <m:mi>μ</m:mi>
+                      <m:mn>1</m:mn>
+                    </m:msub>
+                  </m:msqrt>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:mn>1</m:mn>
+                    <m:mo>-</m:mo>
+                    <m:mi>t</m:mi>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                  <m:mo>-</m:mo>
+                  <m:mi> sin </m:mi>
+                  <m:msqrt>
+                    <m:msub>
+                      <m:mi>μ</m:mi>
+                      <m:mn>1</m:mn>
+                    </m:msub>
+                  </m:msqrt>
+                  <m:mi>t</m:mi>
+                </m:mrow>
+                <m:mrow>
+                  <m:mi> sin </m:mi>
+                  <m:msqrt>
+                    <m:msub>
+                      <m:mi>μ</m:mi>
+                      <m:mn>1</m:mn>
+                    </m:msub>
+                  </m:msqrt>
+                </m:mrow>
+              </m:mfrac>
+              <m:mo>,</m:mo>
+              <m:mi> sin </m:mi>
+              <m:mi>π</m:mi>
+              <m:mi>t</m:mi>
+            </m:mfenced>
+          </m:mrow>
+        </m:math>
+      </equation>
+      <para id="id243274">where <m:math overflow="scroll"><m:mrow><m:mrow><m:mo>[</m:mo><m:mi>f</m:mi><m:mo>,</m:mo><m:mi>g</m:mi><m:mo>]</m:mo></m:mrow><m:mo>=</m:mo><m:mi>f</m:mi><m:msup><m:mi>g</m:mi><m:mo>'</m:mo></m:msup><m:mo>-</m:mo><m:msup><m:mi>f</m:mi><m:mo>'</m:mo></m:msup><m:mi>g</m:mi></m:mrow></m:math>, the Wronskian. In <link target-id="bid0"/>, a function <m:math overflow="scroll"><m:mi>q</m:mi></m:math> is <emphasis effect="italics">even</emphasis> if <m:math overflow="scroll"><m:mrow><m:mi>q</m:mi><m:mo>(</m:mo><m:mn>1</m:mn><m:mo>-</m:mo><m:mi>t</m:mi><m:mo>)</m:mo><m:mo>=</m:mo><m:mi>q</m:mi><m:mo>(</m:mo><m:mi>t</m:mi><m:mo>)</m:mo></m:mrow></m:math> for <m:math overflow="scroll"><m:mrow><m:mi>t</m:mi><m:mo>∈</m:mo><m:mo>[</m:mo><m:mn>0</m:mn><m:mo>,</m:mo><m:mn>1</m:mn><m:mo>]</m:mo></m:mrow></m:math>.</para>
+      <para id="id243398">To illustrate our results in this section, we have set this first eigenvalue, <m:math overflow="scroll"><m:msub><m:mi>μ</m:mi><m:mn>1</m:mn></m:msub></m:math>, to 1, 9, and 15. <link target-id="uid15"/> displays the Sturm-Liouville potentials which correspond to these three values of <m:math overflow="scroll"><m:msub><m:mi>μ</m:mi><m:mn>1</m:mn></m:msub></m:math> being substituted into <link target-id="uid14"/>.</para>
+      <figure id="uid15" orient="vertical">
+        <subfigure id="id243452">
+          <media id="id243452_media" alt="">
+            <image mime-type="image/png" src="../../media/qplot1.png" id="id243452_onlineimage" width="600"><!-- NOTE: attribute width changes image size online (pixels). original width is 600. --></image>
+            <image mime-type="application/postscript" for="pdf" src="../../media/qplot1.eps" id="id243452_printimage" print-width="6cm">
+              <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+            </image>
+          </media>
+        </subfigure>
+        <subfigure id="id243461">
+          <media id="id243461_media" alt="">
+            <image mime-type="image/png" src="../../media/qplot9.png" id="id243461_onlineimage" width="600"><!-- NOTE: attribute width changes image size online (pixels). original width is 600. --></image>
+            <image mime-type="application/postscript" for="pdf" src="../../media/qplot9.eps" id="id243461_printimage" print-width="6cm">
+              <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+            </image>
+          </media>
+        </subfigure>
+        <subfigure id="id243470">
+          <media id="id243470_media" alt="">
+            <image mime-type="image/png" src="../../media/qplot15.png" id="id243470_onlineimage" width="600"><!-- NOTE: attribute width changes image size online (pixels). original width is 600. --></image>
+            <image mime-type="application/postscript" for="pdf" src="../../media/qplot15.eps" id="id243470_printimage" print-width="6cm">
+              <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+            </image>
+          </media>
+        </subfigure>
+        <caption>Sturm-Liouville potentials.</caption>
+      </figure>
+      <para id="id243479">In solving the initial-value problem described in <link target-id="uid11">"Changing From Potential to Density"</link>, uniqueness concerns pose the question,"Does a single Sturm-Liouville potential give rise to a single mass density?" As it turns out, no. We see that a single Sturm-Liouville potential can give rise to a set of mass densities, dependent upon the initial conditions <m:math overflow="scroll"><m:mrow><m:mi>ρ</m:mi><m:mo>(</m:mo><m:mn>0</m:mn><m:mo>)</m:mo></m:mrow></m:math> and <m:math overflow="scroll"><m:mrow><m:msup><m:mi>ρ</m:mi><m:mo>'</m:mo></m:msup><m:mrow><m:mo>(</m:mo><m:mn>0</m:mn><m:mo>)</m:mo></m:mrow></m:mrow></m:math> and the length of the recovered string, <m:math overflow="scroll"><m:mi>L</m:mi></m:math>.
+<link target-id="uid16"/> shows a color mapping of recovered string length against various initial conditions. The length of the string cannot be known before the initial-value problem is solved; therefore, in order to obtain these color maps, we fix the initial conditions and obtain the length of the string at the end of the change of variables computation. All string lengths <m:math overflow="scroll"><m:mrow><m:mi>L</m:mi><m:mo>≥</m:mo><m:mn>1</m:mn><m:mo>.</m:mo><m:mn>25</m:mn></m:mrow></m:math> are indicated on the map as 1.25. We show this result for the transformation of three potential functions, those defined by the aforementioned spectra with <m:math overflow="scroll"><m:mrow><m:msub><m:mi>μ</m:mi><m:mn>1</m:mn></m:msub><m:mo>=</m:mo><m:mn>1</m:mn><m:mo>,</m:mo><m:mn>9</m:mn><m:mo>,</m:mo><m:mn>15</m:mn></m:mrow></m:math>.
+In our case, we desire strings of length one.
+The curve shown in black on the color maps indicates the set of initial conditions <m:math overflow="scroll"><m:mrow><m:mi>ρ</m:mi><m:mo>(</m:mo><m:mn>0</m:mn><m:mo>)</m:mo></m:mrow></m:math> and <m:math overflow="scroll"><m:mrow><m:msup><m:mi>ρ</m:mi><m:mo>'</m:mo></m:msup><m:mrow><m:mo>(</m:mo><m:mn>0</m:mn><m:mo>)</m:mo></m:mrow></m:mrow></m:math> that yield a string of unit length. Alongside this module, in the featured links, we have posted a movie of this color map with <m:math overflow="scroll"><m:msub><m:mi>μ</m:mi><m:mn>1</m:mn></m:msub></m:math> changing from 1 to 15 by 0.1007.</para>
+      <figure id="uid16" orient="vertical">
+        <subfigure id="id243664">
+          <media id="id243664_media" alt="">
+            <image mime-type="image/png" src="../../media/icmap1.png" id="id243664_onlineimage" width="600"><!-- NOTE: attribute width changes image size online (pixels). original width is 600. --></image>
+            <image mime-type="application/postscript" for="pdf" src="../../media/icmap1.eps" id="id243664_printimage" print-width="6cm">
+              <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+            </image>
+          </media>
+        </subfigure>
+        <subfigure id="id243672">
+          <media id="id243672_media" alt="">
+            <image mime-type="image/png" src="../../media/icmap9.png" id="id243672_onlineimage" width="600"><!-- NOTE: attribute width changes image size online (pixels). original width is 600. --></image>
+            <image mime-type="application/postscript" for="pdf" src="../../media/icmap9.eps" id="id243672_printimage" print-width="6cm">
+              <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+            </image>
+          </media>
+        </subfigure>
+        <subfigure id="id243681">
+          <media id="id243681_media" alt="">
+            <image mime-type="image/png" src="../../media/icmap15.png" id="id243681_onlineimage" width="600"><!-- NOTE: attribute width changes image size online (pixels). original width is 600. --></image>
+            <image mime-type="application/postscript" for="pdf" src="../../media/icmap15.eps" id="id243681_printimage" print-width="6cm">
+              <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+            </image>
+          </media>
+        </subfigure>
+        <caption>Color map of string lengths recovered from various initial conditions.</caption>
+      </figure>
+      <para id="id243691">We can determine, from the curve in the color plot, a <m:math overflow="scroll"><m:mrow><m:msup><m:mi>ρ</m:mi><m:mo>'</m:mo></m:msup><m:mrow><m:mo>(</m:mo><m:mn>0</m:mn><m:mo>)</m:mo></m:mrow></m:mrow></m:math> corresponding to any <m:math overflow="scroll"><m:mrow><m:mi>ρ</m:mi><m:mo>(</m:mo><m:mn>0</m:mn><m:mo>)</m:mo></m:mrow></m:math> that will yield a string with <m:math overflow="scroll"><m:mrow><m:mi>L</m:mi><m:mo>=</m:mo><m:mn>1</m:mn></m:mrow></m:math> for a given <m:math overflow="scroll"><m:msub><m:mi>μ</m:mi><m:mn>1</m:mn></m:msub></m:math>. However, we do not use this means. Instead, we choose <m:math overflow="scroll"><m:mrow><m:mi>ρ</m:mi><m:mo>(</m:mo><m:mn>0</m:mn><m:mo>)</m:mo></m:mrow></m:math> and use a bisection algorithm, solving the ODE at each iteration, to find <m:math overflow="scroll"><m:mrow><m:msup><m:mi>ρ</m:mi><m:mo>'</m:mo></m:msup><m:mrow><m:mo>(</m:mo><m:mn>0</m:mn><m:mo>)</m:mo></m:mrow></m:mrow></m:math> such that <m:math overflow="scroll"><m:mrow><m:mi>L</m:mi><m:mo>=</m:mo><m:mn>1</m:mn></m:mrow></m:math>. The bisection algorithm is consistently called with error tolerance <m:math overflow="scroll"><m:mrow><m:mi>τ</m:mi><m:mo>=</m:mo><m:msup><m:mn>10</m:mn><m:mrow><m:mo>-</m:mo><m:mn>10</m:mn></m:mrow></m:msup></m:mrow></m:math>. In the results below, we set <m:math overflow="scroll"><m:mrow><m:mi>ρ</m:mi><m:mo>(</m:mo><m:mn>0</m:mn><m:mo>)</m:mo><m:mo>=</m:mo><m:mn>1</m:mn></m:mrow></m:math> for each <m:math overflow="scroll"><m:msub><m:mi>μ</m:mi><m:mn>1</m:mn></m:msub></m:math>-determined potential. <link target-id="uid17"/> shows the mass density functions found in this way, which correspond to the Sturm-Liouville potentials of <link target-id="uid15"/>.
+We have also included a movie in the featured links that shows the mass density with <m:math overflow="scroll"><m:mrow><m:mi>ρ</m:mi><m:mo>(</m:mo><m:mn>0</m:mn><m:mo>)</m:mo><m:mo>=</m:mo><m:mn>1</m:mn></m:mrow></m:math> and <m:math overflow="scroll"><m:mrow><m:mi>L</m:mi><m:mo>=</m:mo><m:mn>1</m:mn></m:mrow></m:math> from potentials determined by <m:math overflow="scroll"><m:msub><m:mi>μ</m:mi><m:mn>1</m:mn></m:msub></m:math> changing from 1 to 37.4 by tenths. (The second eigenvalue in the Dirichlet spectrum for <link target-id="uid14"/> is <m:math overflow="scroll"><m:mrow><m:mn>4</m:mn><m:msup><m:mi>π</m:mi><m:mn>2</m:mn></m:msup><m:mo>≈</m:mo><m:mn>39</m:mn><m:mo>.</m:mo><m:mn>5</m:mn></m:mrow></m:math>. The closer we make <m:math overflow="scroll"><m:msub><m:mi>μ</m:mi><m:mn>1</m:mn></m:msub></m:math> to the second eigenvalue, the harder it is to numerically compute the transformations. Making <m:math overflow="scroll"><m:mrow><m:msub><m:mi>μ</m:mi><m:mn>1</m:mn></m:msub><m:mo>=</m:mo><m:mn>37</m:mn><m:mo>.</m:mo><m:mn>4</m:mn></m:mrow></m:math> was as close to <m:math overflow="scroll"><m:mrow><m:mn>4</m:mn><m:msup><m:mi>π</m:mi><m:mn>2</m:mn></m:msup></m:mrow></m:math> as we were able to compute the transformations.)</para>
+      <figure id="uid17" orient="vertical">
+        <subfigure id="id244089">
+          <media id="id244089_media" alt="">
+            <image mime-type="image/png" src="../../media/L1rho1.png" id="id244089_onlineimage" width="600"><!-- NOTE: attribute width changes image size online (pixels). original width is 600. --></image>
+            <image mime-type="application/postscript" for="pdf" src="../../media/L1rho1.eps" id="id244089_printimage" print-width="6cm">
+              <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+            </image>
+          </media>
+        </subfigure>
+        <subfigure id="id244097">
+          <media id="id244097_media" alt="">
+            <image mime-type="image/png" src="../../media/L1rho9.png" id="id244097_onlineimage" width="600"><!-- NOTE: attribute width changes image size online (pixels). original width is 600. --></image>
+            <image mime-type="application/postscript" for="pdf" src="../../media/L1rho9.eps" id="id244097_printimage" print-width="6cm">
+              <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+            </image>
+          </media>
+        </subfigure>
+        <subfigure id="id244106">
+          <media id="id244106_media" alt="">
+            <image mime-type="image/png" src="../../media/L1rho15.png" id="id244106_onlineimage" width="600"><!-- NOTE: attribute width changes image size online (pixels). original width is 600. --></image>
+            <image mime-type="application/postscript" for="pdf" src="../../media/L1rho15.eps" id="id244106_printimage" print-width="6cm">
+              <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+            </image>
+          </media>
+        </subfigure>
+        <caption><m:math overflow="scroll"><m:mrow><m:mi>ρ</m:mi><m:mo>(</m:mo><m:mi>x</m:mi><m:mo>)</m:mo></m:mrow></m:math> when <m:math overflow="scroll"><m:mrow><m:mi>L</m:mi><m:mo>=</m:mo><m:mn>1</m:mn></m:mrow></m:math> and <m:math overflow="scroll"><m:mrow><m:mi>ρ</m:mi><m:mo>(</m:mo><m:mn>0</m:mn><m:mo>)</m:mo><m:mo>=</m:mo><m:mn>1</m:mn></m:mrow></m:math>.</caption>
+      </figure>
+      <para id="id244116">It is also interesting to view a sampling of the isospectral set of mass densities corresponding to a given <m:math overflow="scroll"><m:mrow><m:mi>q</m:mi><m:mo>(</m:mo><m:mi>t</m:mi><m:mo>)</m:mo></m:mrow></m:math>. Figures  <link target-id="uid18"/> and  <link target-id="uid19"/> contain four isospectral mass densities, each corresponding to the Sturm-Liouville potential in <link target-id="uid14"/> with <m:math overflow="scroll"><m:msub><m:mi>μ</m:mi><m:mn>1</m:mn></m:msub></m:math> specified as in the other figures and varying values of <m:math overflow="scroll"><m:mrow><m:mi>ρ</m:mi><m:mo>(</m:mo><m:mn>0</m:mn><m:mo>)</m:mo></m:mrow></m:math>.</para>
+      <figure id="uid18" orient="vertical">
+        <subfigure id="id244214">
+          <media id="id244214_media" alt="">
+            <image mime-type="image/png" src="../../media/isosp1.png" id="id244214_onlineimage" width="600"><!-- NOTE: attribute width changes image size online (pixels). original width is 600. --></image>
+            <image mime-type="application/postscript" for="pdf" src="../../media/isosp1.eps" id="id244214_printimage" print-width="6cm">
+              <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+            </image>
+          </media>
+        </subfigure>
+        <subfigure id="id244222">
+          <media id="id244222_media" alt="">
+            <image mime-type="image/png" src="../../media/isosp1zoom.png" id="id244222_onlineimage" width="600"><!-- NOTE: attribute width changes image size online (pixels). original width is 600. --></image>
+            <image mime-type="application/postscript" for="pdf" src="../../media/isosp1zoom.eps" id="id244222_printimage" print-width="6cm">
+              <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+            </image>
+          </media>
+        </subfigure>
+        <caption>Isospectral mass density, <m:math overflow="scroll"><m:mrow><m:msub><m:mi>μ</m:mi><m:mn>1</m:mn></m:msub><m:mo>=</m:mo><m:mn>1</m:mn></m:mrow></m:math>.</caption>
+      </figure>
+      <figure id="uid19" orient="vertical">
+        <subfigure id="id244244">
+          <media id="id244244_media" alt="">
+            <image mime-type="image/png" src="../../media/isosp9.png" id="id244244_onlineimage" width="600"><!-- NOTE: attribute width changes image size online (pixels). original width is 600. --></image>
+            <image mime-type="application/postscript" for="pdf" src="../../media/isosp9.eps" id="id244244_printimage" print-width="6cm">
+              <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+            </image>
+          </media>
+        </subfigure>
+        <subfigure id="id244253">
+          <media id="id244253_media" alt="">
+            <image mime-type="image/png" src="../../media/isosp15.png" id="id244253_onlineimage" width="600"><!-- NOTE: attribute width changes image size online (pixels). original width is 600. --></image>
+            <image mime-type="application/postscript" for="pdf" src="../../media/isosp15.eps" id="id244253_printimage" print-width="6cm">
+              <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+            </image>
+          </media>
+        </subfigure>
+        <caption>Isospectral mass density functions.</caption>
+      </figure>
+      <para id="id244263">We have made the claim that the eigenvalues of the Sturm-Liouville operator specified by <m:math overflow="scroll"><m:mrow><m:mi>q</m:mi><m:mo>(</m:mo><m:mi>t</m:mi><m:mo>)</m:mo></m:mrow></m:math> are the same as those of the wave equation specified by the corresponding <m:math overflow="scroll"><m:mrow><m:mi>ρ</m:mi><m:mo>(</m:mo><m:mi>x</m:mi><m:mo>)</m:mo></m:mrow></m:math>. To demonstrate this, we consider the eigenvalue problem in  <link target-id="uid4"/>.
+The eigenpairs can be numerically obtained via spectral methods. We build a differential matrix, <m:math overflow="scroll"><m:mi>D</m:mi></m:math>, over a Chebyshev discretization of the interval and in MATLAB solve the linear system:</para>
+      <equation id="id244317">
+        <m:math overflow="scroll" mode="display">
+          <m:mrow>
+            <m:mo>-</m:mo>
+            <m:msup>
+              <m:mi>D</m:mi>
+              <m:mn>2</m:mn>
+            </m:msup>
+            <m:mi>y</m:mi>
+            <m:mrow>
+              <m:mo>(</m:mo>
+              <m:mi>x</m:mi>
+              <m:mo>)</m:mo>
+            </m:mrow>
+            <m:mo>=</m:mo>
+            <m:mi>λ</m:mi>
+            <m:mi>ρ</m:mi>
+            <m:mrow>
+              <m:mo>(</m:mo>
+              <m:mi>x</m:mi>
+              <m:mo>)</m:mo>
+            </m:mrow>
+            <m:mi>y</m:mi>
+            <m:mrow>
+              <m:mo>(</m:mo>
+              <m:mi>x</m:mi>
+              <m:mo>)</m:mo>
+            </m:mrow>
+            <m:mo>.</m:mo>
+          </m:mrow>
+        </m:math>
+      </equation>
+      <para id="id244372">A short description of spectral discretization is in <link target-id="cid7">"Numerical Methods"</link>.</para>
+      <para id="id244382">For the specific <m:math overflow="scroll"><m:mi>q</m:mi></m:math> in <link target-id="uid14"/>, we know what the eigenvalues are supposed to be, so we can calculate them and analyze the error. Before doing so, it is interesting to consider the eigenfunctions for several <m:math overflow="scroll"><m:mrow><m:mi>ρ</m:mi><m:mo>(</m:mo><m:mi>x</m:mi><m:mo>)</m:mo></m:mrow></m:math> obtained from different <m:math overflow="scroll"><m:msub><m:mi>μ</m:mi><m:mn>1</m:mn></m:msub></m:math> values. <link target-id="uid20"/> shows the first two eigenfunctions obtained from the numerically calculated mass density functions. When <m:math overflow="scroll"><m:mrow><m:msub><m:mi>μ</m:mi><m:mn>1</m:mn></m:msub><m:mo>=</m:mo><m:mn>9</m:mn></m:mrow></m:math>, we see that the first two eigenfunctions resemble <m:math overflow="scroll"><m:mrow><m:msub><m:mi>φ</m:mi><m:mn>1</m:mn></m:msub><m:mrow><m:mo>(</m:mo><m:mi>x</m:mi><m:mo>)</m:mo></m:mrow><m:mo>=</m:mo><m:mo form="prefix">sin</m:mo><m:mrow><m:mo>(</m:mo><m:mi>π</m:mi><m:mi>x</m:mi><m:mo>)</m:mo></m:mrow></m:mrow></m:math> and <m:math overflow="scroll"><m:mrow><m:msub><m:mi>φ</m:mi><m:mn>2</m:mn></m:msub><m:mrow><m:mo>(</m:mo><m:mi>x</m:mi><m:mo>)</m:mo></m:mrow><m:mo>=</m:mo><m:mo form="prefix">sin</m:mo><m:mrow><m:mo>(</m:mo><m:mn>2</m:mn><m:mi>π</m:mi><m:mi>x</m:mi><m:mo>)</m:mo></m:mrow></m:mrow></m:math>. This is to be expected because <m:math overflow="scroll"><m:mrow><m:msub><m:mi>μ</m:mi><m:mn>1</m:mn></m:msub><m:mo>=</m:mo><m:mn>9</m:mn></m:mrow></m:math> is fairly close to <m:math overflow="scroll"><m:mrow><m:msup><m:mi>π</m:mi><m:mn>2</m:mn></m:msup><m:mo>≈</m:mo><m:mn>9</m:mn><m:mo>.</m:mo><m:mn>9</m:mn></m:mrow></m:math>. (When <m:math overflow="scroll"><m:mrow><m:msub><m:mi>μ</m:mi><m:mn>1</m:mn></m:msub><m:mo>=</m:mo><m:msup><m:mi>π</m:mi><m:mn>2</m:mn></m:msup></m:mrow></m:math>, we obtain <m:math overflow="scroll"><m:mrow><m:mi>q</m:mi><m:mo>(</m:mo><m:mi>t</m:mi><m:mo>)</m:mo><m:mo>=</m:mo><m:mn>0</m:mn></m:mrow></m:math> from  <link target-id="uid14"/> and therefore a string of uniform mass density, which has as its first two eigenfunctions <m:math overflow="scroll"><m:mrow><m:mo form="prefix">sin</m:mo><m:mo>(</m:mo><m:mi>π</m:mi><m:mi>x</m:mi><m:mo>)</m:mo></m:mrow></m:math> and <m:math overflow="scroll"><m:mrow><m:mo form="prefix">sin</m:mo><m:mo>(</m:mo><m:mn>2</m:mn><m:mi>π</m:mi><m:mi>x</m:mi><m:mo>)</m:mo></m:mrow></m:math>.) Equivalently, potentials with <m:math overflow="scroll"><m:msub><m:mi>μ</m:mi><m:mn>1</m:mn></m:msub></m:math> farthest from <m:math overflow="scroll"><m:msup><m:mi>π</m:mi><m:mn>2</m:mn></m:msup></m:math> show eigenfunction behavior most deviant from <m:math overflow="scroll"><m:mrow><m:mo form="prefix">sin</m:mo><m:mo>(</m:mo><m:mi>π</m:mi><m:mi>x</m:mi><m:mo>)</m:mo></m:mrow></m:math> and <m:math overflow="scroll"><m:mrow><m:mo form="prefix">sin</m:mo><m:mo>(</m:mo><m:mn>2</m:mn><m:mi>π</m:mi><m:mi>x</m:mi><m:mo>)</m:mo></m:mrow></m:math>. Interested readers can view a movie of the eigenfunctions changing as <m:math overflow="scroll"><m:msub><m:mi>μ</m:mi><m:mn>1</m:mn></m:msub></m:math> changes from 1 to 37.4 by tenths. The behavior of the eigenfunctions as <m:math overflow="scroll"><m:msub><m:mi>μ</m:mi><m:mn>1</m:mn></m:msub></m:math> increases changes drastically when <m:math overflow="scroll"><m:mrow><m:msub><m:mi>μ</m:mi><m:mn>1</m:mn></m:msub><m:mo>≥</m:mo><m:mn>35</m:mn></m:mrow></m:math> due to the first and second eigenvalues becoming close. In the following section, we discuss the error in numerically calculating the eigenvalues.</para>
+      <figure id="uid20">
+        <media id="uid20_media" alt="">
+          <image mime-type="image/png" src="../../media/eigfn1915.png" id="uid20_onlineimage" width="600"><!-- NOTE: attribute width changes image size online (pixels). original width is 600. --></image>
+          <image mime-type="application/postscript" for="pdf" src="../../media/eigfn1915.eps" id="uid20_printimage" print-width="11cm">
+            <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+          </image>
+        </media>
+        <caption>The first two eigenfunctions recovered from the mass densities shown in <link target-id="uid17"/>. The first eigenfunction is shown in blue, the second in red.</caption>
+      </figure>
+    </section>
+    <section id="cid5">
+      <title>Error Analysis: Recovering Eigenvalues</title>
+      <para id="id244833">The sources of error in our numerical scheme arise in part because of the highly constrained nature of the ODEs. Unless otherwise specified, the integration was completed with step size <m:math overflow="scroll"><m:msup><m:mn>10</m:mn><m:mrow><m:mo>-</m:mo><m:mn>4</m:mn></m:mrow></m:msup></m:math>. In addition to this error, we are required to interpolate between nodes to obtain the values of <m:math overflow="scroll"><m:mrow><m:mi>ρ</m:mi><m:mo>(</m:mo><m:mi>x</m:mi><m:mo>)</m:mo></m:mrow></m:math> at the points in the Chebyshev grid. (Unless otherwise specified, all computations were executed on a Chebyshev grid of size <m:math overflow="scroll"><m:mrow><m:mi>N</m:mi><m:mo>=</m:mo><m:mn>256</m:mn></m:mrow></m:math>.) However, it should be noted that in all runs, we have a minimum of <m:math overflow="scroll"><m:msup><m:mn>10</m:mn><m:mn>4</m:mn></m:msup></m:math> nodes between 0 and 1. With a grid so fine, even linear interpolation to the Chebyshev points yields results with tolerable error. Because, in our case, the potential function <m:math overflow="scroll"><m:mrow><m:mi>q</m:mi><m:mo>(</m:mo><m:mi>t</m:mi><m:mo>)</m:mo></m:mrow></m:math> was originally specified by its Dirichlet spectrum, we know the exact eigenvalues that the numerical solver should return. <link target-id="uid21"/> shows the first five expected eigenvalues alongside those we recovered numerically. The error is visibly small, but indistinguishable from case to case. <link target-id="uid22"/> shows the error in the first eigenvalue recovered from transformations of potential functions specified by various <m:math overflow="scroll"><m:msub><m:mi>μ</m:mi><m:mn>1</m:mn></m:msub></m:math>. The error is smallest near <m:math overflow="scroll"><m:mrow><m:msub><m:mi>μ</m:mi><m:mn>1</m:mn></m:msub><m:mo>=</m:mo><m:msup><m:mi>π</m:mi><m:mn>2</m:mn></m:msup></m:mrow></m:math>, which is to be expected because this is the simplest case. As <m:math overflow="scroll"><m:msub><m:mi>μ</m:mi><m:mn>1</m:mn></m:msub></m:math> gets further away from <m:math overflow="scroll"><m:msup><m:mi>π</m:mi><m:mn>2</m:mn></m:msup></m:math>, the error increases. We also see that decreasing the time step in the ODE solver by a single order of magnitude reduces the error by a single order of magnitude. In this way, we have verified first-order convergence, which is consistent with the expected results of the forward Euler scheme used.</para>
+      <figure id="uid21">
+        <media id="uid21_media" alt="">
+          <image mime-type="image/png" src="../../media/eigerrdot.png" id="uid21_onlineimage" width="600"><!-- NOTE: attribute width changes image size online (pixels). original width is 600. --></image>
+          <image mime-type="application/postscript" for="pdf" src="../../media/eigerrdot.eps" id="uid21_printimage" print-width="11cm">
+            <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+          </image>
+        </media>
+        <caption>The first five eigenvalues of <m:math overflow="scroll"><m:mrow><m:mi>q</m:mi><m:mo>(</m:mo><m:mi>t</m:mi><m:mo>)</m:mo></m:mrow></m:math> (blue circles) and those numerically recovered from the transformed equivalent, <m:math overflow="scroll"><m:mrow><m:mi>ρ</m:mi><m:mo>(</m:mo><m:mi>x</m:mi><m:mo>)</m:mo><m:mo>,</m:mo><m:mi>x</m:mi><m:mo>∈</m:mo><m:mo>[</m:mo><m:mn>0</m:mn><m:mo>,</m:mo><m:mn>1</m:mn><m:mo>]</m:mo></m:mrow></m:math> (green 'x').</caption>
+      </figure>
+      <figure id="uid22">
+        <media id="uid22_media" alt="">
+          <image mime-type="image/png" src="../../media/eigerrln.png" id="uid22_onlineimage" width="600"><!-- NOTE: attribute width changes image size online (pixels). original width is 600. --></image>
+          <image mime-type="application/postscript" for="pdf" src="../../media/eigerrln.eps" id="uid22_printimage" print-width="10cm">
+            <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+          </image>
+        </media>
+        <caption>The error in the first eigenvalue recovered from the transformation of <m:math overflow="scroll"><m:mrow><m:mi>q</m:mi><m:mo>(</m:mo><m:mi>t</m:mi><m:mo>)</m:mo></m:mrow></m:math> with <m:math overflow="scroll"><m:mrow><m:mi>λ</m:mi><m:mrow><m:mo>(</m:mo><m:mi>q</m:mi><m:mo>)</m:mo></m:mrow><m:mo>=</m:mo><m:mrow><m:mo>{</m:mo><m:msub><m:mi>μ</m:mi><m:mn>1</m:mn></m:msub><m:mo>,</m:mo><m:mn>4</m:mn><m:msup><m:mi>π</m:mi><m:mn>2</m:mn></m:msup><m:mo>,</m:mo><m:mn>9</m:mn><m:msup><m:mi>π</m:mi><m:mn>2</m:mn></m:msup><m:mo>,</m:mo><m:mn>16</m:mn><m:msup><m:mi>π</m:mi><m:mn>2</m:mn></m:msup><m:mo>,</m:mo><m:mo>.</m:mo><m:mo>.</m:mo><m:mo>.</m:mo><m:mo>}</m:mo></m:mrow></m:mrow></m:math> to <m:math overflow="scroll"><m:mrow><m:mi>ρ</m:mi><m:mo>(</m:mo><m:mi>x</m:mi><m:mo>)</m:mo><m:mo>,</m:mo><m:mi>x</m:mi><m:mo>∈</m:mo><m:mo>[</m:mo><m:mn>0</m:mn><m:mo>,</m:mo><m:mn>1</m:mn><m:mo>]</m:mo></m:mrow></m:math> with varying step size.</caption>
+      </figure>
+      <para id="id245215">The following tables display the error in the first 10 recovered eigenvalues. Listed are the eigenvalues numerically recovered from <m:math overflow="scroll"><m:mrow><m:mi>q</m:mi><m:mo>(</m:mo><m:mi>t</m:mi><m:mo>)</m:mo></m:mrow></m:math> and those recovered from its transformed counterpart, <m:math overflow="scroll"><m:mrow><m:mi>ρ</m:mi><m:mo>(</m:mo><m:mi>x</m:mi><m:mo>)</m:mo></m:mrow></m:math>. As expected, those recovered from <m:math overflow="scroll"><m:mrow><m:mi>q</m:mi><m:mo>(</m:mo><m:mi>t</m:mi><m:mo>)</m:mo></m:mrow></m:math> are accurate to over ten decimal digits. This is a consequence of the accuracy of the spectral method with sufficient Chebyshev points. The error in the eigenvalues recovered from <m:math overflow="scroll"><m:mrow><m:mi>ρ</m:mi><m:mo>(</m:mo><m:mi>x</m:mi><m:mo>)</m:mo></m:mrow></m:math> reflects the numerical error in our ODE solver. However, the error is tolerable. In addition, we see that the error in the transformation of the <m:math overflow="scroll"><m:mrow><m:mi>q</m:mi><m:mo>(</m:mo><m:mi>t</m:mi><m:mo>)</m:mo></m:mrow></m:math> defined by <m:math overflow="scroll"><m:mrow><m:msub><m:mi>μ</m:mi><m:mn>1</m:mn></m:msub><m:mo>=</m:mo><m:mn>9</m:mn></m:mrow></m:math> is less than for the other choices of <m:math overflow="scroll"><m:msub><m:mi>μ</m:mi><m:mn>1</m:mn></m:msub></m:math> listed in the tables.</para>
+      <!--empty paragraphs get left behind.-->
+      <table id="id245342" summary="">
+        <tgroup cols="5">
+          <colspec colnum="1" colname="c1"/>
+          <colspec colnum="2" colname="c2"/>
+          <colspec colnum="3" colname="c3"/>
+          <colspec colnum="4" colname="c4"/>
+          <colspec colnum="5" colname="c5"/>
+          <tbody>
+            <row>
+              <entry namest="c1" nameend="c5">
+                <m:math overflow="scroll">
+                  <m:mrow>
+                    <m:msub>
+                      <m:mi>μ</m:mi>
+                      <m:mn>1</m:mn>
+                    </m:msub>
+                    <m:mo>=</m:mo>
+                    <m:mn>1</m:mn>
+                  </m:mrow>
+                </m:math>
+              </entry>
+            </row>
+            <row>
+              <entry>True <m:math overflow="scroll"><m:mi>λ</m:mi></m:math></entry>
+              <entry>Recovered <m:math overflow="scroll"><m:mrow><m:mi>λ</m:mi><m:mo>(</m:mo><m:mi>q</m:mi><m:mo>(</m:mo><m:mi>t</m:mi><m:mo>)</m:mo><m:mo>)</m:mo></m:mrow></m:math></entry>
+              <entry>Error from <m:math overflow="scroll"><m:mrow><m:mi>q</m:mi><m:mo>(</m:mo><m:mi>t</m:mi><m:mo>)</m:mo></m:mrow></m:math></entry>
+              <entry>Recovered <m:math overflow="scroll"><m:mrow><m:mi>λ</m:mi><m:mo>(</m:mo><m:mi>ρ</m:mi><m:mo>(</m:mo><m:mi>x</m:mi><m:mo>)</m:mo><m:mo>)</m:mo></m:mrow></m:math></entry>
+              <entry>Error from <m:math overflow="scroll"><m:mrow><m:mi>ρ</m:mi><m:mo>(</m:mo><m:mi>x</m:mi><m:mo>)</m:mo></m:mrow></m:math></entry>
+            </row>
+            <row>
+              <entry>  1.0000000</entry>
+              <entry>  1.0000000</entry>
+              <entry>2.5930147e-011</entry>
+              <entry>  1.0054709</entry>
+              <entry>5.4708902e-003</entry>
+            </row>
+            <row>
+              <entry> 39.4784176</entry>
+              <entry> 39.4784176</entry>
+              <entry>1.0608403e-011</entry>
+              <entry> 39.5200555</entry>
+              <entry>4.1637860e-002</entry>
+            </row>
+            <row>
+              <entry> 88.8264396</entry>
+              <entry> 88.8264396</entry>
+              <entry>1.5930368e-011</entry>
+              <entry> 88.9392066</entry>
+              <entry>1.1276694e-001</entry>
+            </row>
+            <row>
+              <entry>157.9136704</entry>
+              <entry>157.9136704</entry>
+              <entry>1.4694024e-011</entry>
+              <entry>157.9977790</entry>
+              <entry>8.4108586e-002</entry>
+            </row>
+            <row>
+              <entry>246.7401100</entry>
+              <entry>246.7401100</entry>
+              <entry>2.2168933e-012</entry>
+              <entry>247.2588167</entry>
+              <entry>5.1870663e-001</entry>
+            </row>
+            <row>
+              <entry>355.3057584</entry>
+              <entry>355.3057584</entry>
+              <entry>1.6484591e-011</entry>
+              <entry>354.0659603</entry>
+              <entry>1.2397981e+000</entry>
+            </row>
+            <row>
+              <entry>483.6106157</entry>
+              <entry>483.6106157</entry>
+              <entry>8.5265128e-013</entry>
+              <entry>486.5704124</entry>
+              <entry>2.9597967e+000</entry>
+            </row>
+            <row>
+              <entry>631.6546817</entry>
+              <entry>631.6546817</entry>
+              <entry>5.1159077e-012</entry>
+              <entry>620.2338813</entry>
+              <entry>1.1420800e+001</entry>
+            </row>
+            <row>
+              <entry>799.4379565</entry>
+              <entry>799.4379565</entry>
+              <entry>9.7770680e-012</entry>
+              <entry>816.7159848</entry>
+              <entry>1.7278028e+001</entry>
+            </row>
+            <row>
+              <entry>986.9604401</entry>
+              <entry>986.9604401</entry>
+              <entry>2.6602720e-011</entry>
+              <entry>973.9089831</entry>
+              <entry>1.3051457e+001</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+      <table id="id245964" summary="">
+        <tgroup cols="5">
+          <colspec colnum="1" colname="c1"/>
+          <colspec colnum="2" colname="c2"/>
+          <colspec colnum="3" colname="c3"/>
+          <colspec colnum="4" colname="c4"/>
+          <colspec colnum="5" colname="c5"/>
+          <tbody>
+            <row>
+              <entry namest="c1" nameend="c5">
+                <m:math overflow="scroll">
+                  <m:mrow>
+                    <m:msub>
+                      <m:mi>μ</m:mi>
+                      <m:mn>1</m:mn>
+                    </m:msub>
+                    <m:mo>=</m:mo>
+                    <m:mn>9</m:mn>
+                  </m:mrow>
+                </m:math>
+              </entry>
+            </row>
+            <row>
+              <entry>True <m:math overflow="scroll"><m:mi>λ</m:mi></m:math></entry>
+              <entry>Recovered <m:math overflow="scroll"><m:mrow><m:mi>λ</m:mi><m:mo>(</m:mo><m:mi>q</m:mi><m:mo>(</m:mo><m:mi>t</m:mi><m:mo>)</m:mo><m:mo>)</m:mo></m:mrow></m:math></entry>
+              <entry>Error from <m:math overflow="scroll"><m:mrow><m:mi>q</m:mi><m:mo>(</m:mo><m:mi>t</m:mi><m:mo>)</m:mo></m:mrow></m:math></entry>
+              <entry>Recovered <m:math overflow="scroll"><m:mrow><m:mi>λ</m:mi><m:mo>(</m:mo><m:mi>ρ</m:mi><m:mo>(</m:mo><m:mi>x</m:mi><m:mo>)</m:mo><m:mo>)</m:mo></m:mrow></m:math></entry>
+              <entry>Error from <m:math overflow="scroll"><m:mrow><m:mi>ρ</m:mi><m:mo>(</m:mo><m:mi>x</m:mi><m:mo>)</m:mo></m:mrow></m:math></entry>
+            </row>
+            <row>
+              <entry>  9.0000000</entry>
+              <entry>  9.0000000</entry>
+              <entry>2.3881341e-011</entry>
+              <entry>  9.0000369</entry>
+              <entry>3.6905319e-005</entry>
+            </row>
+            <row>
+              <entry> 39.4784176</entry>
+              <entry> 39.4784176</entry>
+              <entry>2.0996538e-011</entry>
+              <entry> 39.4791540</entry>
+              <entry>7.3639246e-004</entry>
+            </row>
+            <row>
+              <entry> 88.8264396</entry>
+              <entry> 88.8264396</entry>
+              <entry>2.1927349e-011</entry>
+              <entry> 88.8280954</entry>
+              <entry>1.6558273e-003</entry>
+            </row>
+            <row>
+              <entry>157.9136704</entry>
+              <entry>157.9136704</entry>
+              <entry>1.7990942e-011</entry>
+              <entry>157.9166007</entry>
+              <entry>2.9303014e-003</entry>
+            </row>
+            <row>
+              <entry>246.7401100</entry>
+              <entry>246.7401100</entry>
+              <entry>4.2064130e-012</entry>
+              <entry>246.7446791</entry>
+              <entry>4.5690754e-003</entry>
+            </row>
+            <row>
+              <entry>355.3057584</entry>
+              <entry>355.3057584</entry>
+              <entry>2.1827873e-011</entry>
+              <entry>355.3123306</entry>
+              <entry>6.5721222e-003</entry>
+            </row>
+            <row>
+              <entry>483.6106157</entry>
+              <entry>483.6106157</entry>
+              <entry>2.1032065e-011</entry>
+              <entry>483.6195551</entry>
+              <entry>8.9394021e-003</entry>
+            </row>
+            <row>
+              <entry>631.6546817</entry>
+              <entry>631.6546817</entry>
+              <entry>3.3082870e-011</entry>
+              <entry>631.6663524</entry>
+              <entry>1.1670772e-002</entry>
+            </row>
+            <row>
+              <entry>799.4379565</entry>
+              <entry>799.4379565</entry>
+              <entry>1.3528734e-011</entry>
+              <entry>799.4527229</entry>
+              <entry>1.4766388e-002</entry>
+            </row>
+            <row>
+              <entry>986.9604401</entry>
+              <entry>986.9604401</entry>
+              <entry>3.4106051e-013</entry>
+              <entry>986.9786662</entry>
+              <entry>1.8226098e-002</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+      <table id="id246587" summary="">
+        <tgroup cols="5">
+          <colspec colnum="1" colname="c1"/>
+          <colspec colnum="2" colname="c2"/>
+          <colspec colnum="3" colname="c3"/>
+          <colspec colnum="4" colname="c4"/>
+          <colspec colnum="5" colname="c5"/>
+          <tbody>
+            <row>
+              <entry namest="c1" nameend="c5">
+                <m:math overflow="scroll">
+                  <m:mrow>
+                    <m:msub>
+                      <m:mi>μ</m:mi>
+                      <m:mn>1</m:mn>
+                    </m:msub>
+                    <m:mo>=</m:mo>
+                    <m:mn>15</m:mn>
+                  </m:mrow>
+                </m:math>
+              </entry>
+            </row>
+            <row>
+              <entry>True <m:math overflow="scroll"><m:mi>λ</m:mi></m:math></entry>
+              <entry>Recovered <m:math overflow="scroll"><m:mrow><m:mi>λ</m:mi><m:mo>(</m:mo><m:mi>q</m:mi><m:mo>(</m:mo><m:mi>t</m:mi><m:mo>)</m:mo><m:mo>)</m:mo></m:mrow></m:math></entry>
+              <entry>Error from <m:math overflow="scroll"><m:mrow><m:mi>q</m:mi><m:mo>(</m:mo><m:mi>t</m:mi><m:mo>)</m:mo></m:mrow></m:math></entry>
+              <entry>Recovered <m:math overflow="scroll"><m:mrow><m:mi>λ</m:mi><m:mo>(</m:mo><m:mi>ρ</m:mi><m:mo>(</m:mo><m:mi>x</m:mi><m:mo>)</m:mo><m:mo>)</m:mo></m:mrow></m:math></entry>
+              <entry>Error from <m:math overflow="scroll"><m:mrow><m:mi>ρ</m:mi><m:mo>(</m:mo><m:mi>x</m:mi><m:mo>)</m:mo></m:mrow></m:math></entry>
+            </row>
+            <row>
+              <entry> 15.0000000</entry>
+              <entry> 15.0000000</entry>
+              <entry>8.2795992e-012</entry>
+              <entry> 14.9930764</entry>
+              <entry>6.9236370e-003</entry>
+            </row>
+            <row>
+              <entry> 39.4784176</entry>
+              <entry> 39.4784176</entry>
+              <entry>1.5845103e-012</entry>
+              <entry> 39.4741052</entry>
+              <entry>4.3124162e-003</entry>
+            </row>
+            <row>
+              <entry> 88.8264396</entry>
+              <entry> 88.8264396</entry>
+              <entry>6.0538241e-012</entry>
+              <entry> 88.8165421</entry>
+              <entry>9.8974784e-003</entry>
+            </row>
+            <row>
+              <entry>157.9136704</entry>
+              <entry>157.9136704</entry>
+              <entry>8.0433438e-012</entry>
+              <entry>157.8982531</entry>
+              <entry>1.5417339e-002</entry>
+            </row>
+            <row>
+              <entry>246.7401100</entry>
+              <entry>246.7401100</entry>
+              <entry>2.8421709e-014</entry>
+              <entry>246.7173201</entry>
+              <entry>2.2789901e-002</entry>
+            </row>
+            <row>
+              <entry>355.3057584</entry>
+              <entry>355.3057584</entry>
+              <entry>1.1766588e-011</entry>
+              <entry>355.2739142</entry>
+              <entry>3.1844196e-002</entry>
+            </row>
+            <row>
+              <entry>483.6106157</entry>
+              <entry>483.6106157</entry>
+              <entry>2.8762770e-011</entry>
+              <entry>483.5680542</entry>
+              <entry>4.2561441e-002</entry>
+            </row>
+            <row>
+              <entry>631.6546817</entry>
+              <entry>631.6546817</entry>
+              <entry>8.7538865e-012</entry>
+              <entry>631.5997459</entry>
+              <entry>5.4935770e-002</entry>
+            </row>
+            <row>
+              <entry>799.4379565</entry>
+              <entry>799.4379565</entry>
+              <entry>3.4106051e-011</entry>
+              <entry>799.3689927</entry>
+              <entry>6.8963814e-002</entry>
+            </row>
+            <row>
+              <entry>986.9604401</entry>
+              <entry>986.9604401</entry>
+              <entry>2.3192115e-011</entry>
+              <entry>986.8757937</entry>
+              <entry>8.4646413e-002</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+      <para id="id247209">
+For the majority of our research, the focus was on the potential function <link target-id="uid14"/>
+from chapter 6 of <link target-id="bid0"/>. In the next section, some results will be discussed for other <m:math overflow="scroll"><m:mrow><m:mi>q</m:mi><m:mo>(</m:mo><m:mi>t</m:mi><m:mo>)</m:mo></m:mrow></m:math> or <m:math overflow="scroll"><m:mrow><m:mi>ρ</m:mi><m:mo>(</m:mo><m:mi>x</m:mi><m:mo>)</m:mo></m:mrow></m:math> in closed form.</para>
+    </section>
+    <section id="cid6">
+      <title>Corresponding <m:math overflow="scroll"><m:mrow><m:mi>q</m:mi><m:mo>(</m:mo><m:mi>t</m:mi><m:mo>)</m:mo></m:mrow></m:math> and <m:math overflow="scroll"><m:mrow><m:mi>ρ</m:mi><m:mo>(</m:mo><m:mi>x</m:mi><m:mo>)</m:mo></m:mrow></m:math> Functions in Closed Form</title>
+      <para id="id247302">The potential function <m:math overflow="scroll"><m:mrow><m:mi>q</m:mi><m:mo>(</m:mo><m:mi>t</m:mi><m:mo>)</m:mo></m:mrow></m:math> given by <link target-id="uid14"/> from chapter 6 of <link target-id="bid0"/>, after taking the second derivative of the Wronskian, becomes</para>
+      <equation id="id247332">
+        <m:math overflow="scroll" mode="display">
+          <m:mtable displaystyle="true">
+            <m:mtr>
+              <m:mtd columnalign="right">
+                <m:mrow>
+                  <m:mi>q</m:mi>
+                  <m:mo>(</m:mo>
+                  <m:mi>t</m:mi>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+              </m:mtd>
+              <m:mtd columnalign="left">
+                <m:mrow>
+                  <m:mo>=</m:mo>
+                  <m:mo>-</m:mo>
+                  <m:mn>2</m:mn>
+                  <m:mfenced separators="" open="(" close="">
+                    <m:mfrac>
+                      <m:mrow>
+                        <m:mo>-</m:mo>
+                        <m:msup>
+                          <m:mi>π</m:mi>
+                          <m:mn>3</m:mn>
+                        </m:msup>
+                        <m:mi> cos </m:mi>
+                        <m:mrow>
+                          <m:mo>(</m:mo>
+                          <m:mi>π</m:mi>
+                          <m:mi>t</m:mi>
+                          <m:mo>)</m:mo>
+                        </m:mrow>
+                        <m:mi>f</m:mi>
+                        <m:mrow>
+                          <m:mo>(</m:mo>
+                          <m:mi>t</m:mi>
+                          <m:mo>)</m:mo>
+                        </m:mrow>
+                        <m:mo>-</m:mo>
+                        <m:msup>
+                          <m:mi>π</m:mi>
+                          <m:mn>2</m:mn>
+                        </m:msup>
+                        <m:mi> sin </m:mi>
+                        <m:mrow>
+                          <m:mo>(</m:mo>
+                          <m:mi>π</m:mi>
+                          <m:mi>t</m:mi>
+                          <m:mo>)</m:mo>
+                        </m:mrow>
+                        <m:msup>
+                          <m:mi>f</m:mi>
+                          <m:mo>'</m:mo>
+                        </m:msup>
+                        <m:mrow>
+                          <m:mo>(</m:mo>
+                          <m:mi>t</m:mi>
+                          <m:mo>)</m:mo>
+                        </m:mrow>
+                        <m:mo>+</m:mo>
+                        <m:mi>π</m:mi>
+                        <m:msub>
+                          <m:mi>μ</m:mi>
+                          <m:mn>1</m:mn>
+                        </m:msub>
+                        <m:mi> cos </m:mi>
+                        <m:mrow>
+                          <m:mo>(</m:mo>
+                          <m:mi>π</m:mi>
+                          <m:mi>t</m:mi>
+                          <m:mo>)</m:mo>
+                        </m:mrow>
+                        <m:mi>f</m:mi>
+                        <m:mrow>
+                          <m:mo>(</m:mo>
+                          <m:mi>t</m:mi>
+                          <m:mo>)</m:mo>
+                        </m:mrow>
+                        <m:mo>+</m:mo>
+                        <m:msub>
+                          <m:mi>μ</m:mi>
+                          <m:mn>1</m:mn>
+                        </m:msub>
+                        <m:mi> sin </m:mi>
+                        <m:mrow>
+                          <m:mo>(</m:mo>
+                          <m:mi>π</m:mi>
+                          <m:mi>t</m:mi>
+                          <m:mo>)</m:mo>
+                        </m:mrow>
+                        <m:msup>
+                          <m:mi>f</m:mi>
+                          <m:mo>'</m:mo>
+                        </m:msup>
+                        <m:mrow>
+                          <m:mo>(</m:mo>
+                          <m:mi>t</m:mi>
+                          <m:mo>)</m:mo>
+                        </m:mrow>
+                      </m:mrow>
+                      <m:mrow>
+                        <m:mi>π</m:mi>
+                        <m:mi> cos </m:mi>
+                        <m:mrow>
+                          <m:mo>(</m:mo>
+                          <m:mi>π</m:mi>
+                          <m:mi>t</m:mi>
+                          <m:mo>)</m:mo>
+                        </m:mrow>
+                        <m:mi>f</m:mi>
+                        <m:mrow>
+                          <m:mo>(</m:mo>
+                          <m:mi>t</m:mi>
+                          <m:mo>)</m:mo>
+                        </m:mrow>
+                        <m:mo>-</m:mo>
+                        <m:mi> sin </m:mi>
+                        <m:mrow>
+                          <m:mo>(</m:mo>
+                          <m:mi>π</m:mi>
+                          <m:mi>t</m:mi>
+                          <m:mo>)</m:mo>
+                        </m:mrow>
+                        <m:msup>
+                          <m:mi>f</m:mi>
+                          <m:mo>'</m:mo>
+                        </m:msup>
+                        <m:mrow>
+                          <m:mo>(</m:mo>
+                          <m:mi>t</m:mi>
+                          <m:mo>)</m:mo>
+                        </m:mrow>
+                      </m:mrow>
+                    </m:mfrac>
+                  </m:mfenced>
+                </m:mrow>
+              </m:mtd>
+            </m:mtr>
+            <m:mtr>
+              <m:mtd/>
+              <m:mtd columnalign="left">
+                <m:mrow>
+                  <m:mphantom>
+                    <m:mo>=</m:mo>
+                  </m:mphantom>
+                  <m:mfenced separators="" open="" close=")">
+                    <m:mspace width="2.em"/>
+                    <m:mo>-</m:mo>
+                    <m:mfrac>
+                      <m:msup>
+                        <m:mfenced separators="" open="(" close=")">
+                          <m:mo>-</m:mo>
+                          <m:msup>
+                            <m:mi>π</m:mi>
+                            <m:mn>2</m:mn>
+                          </m:msup>
+                          <m:mi> sin </m:mi>
+                          <m:mrow>
+                            <m:mo>(</m:mo>
+                            <m:mi>π</m:mi>
+                            <m:mi>t</m:mi>
+                            <m:mo>)</m:mo>
+                          </m:mrow>
+                          <m:mi>f</m:mi>
+                          <m:mrow>
+                            <m:mo>(</m:mo>
+                            <m:mi>t</m:mi>
+                            <m:mo>)</m:mo>
+                          </m:mrow>
+                          <m:mo>+</m:mo>
+                          <m:msub>
+                            <m:mi>μ</m:mi>
+                            <m:mn>1</m:mn>
+                          </m:msub>
+                          <m:mi> sin </m:mi>
+                          <m:mrow>
+                            <m:mo>(</m:mo>
+                            <m:mi>π</m:mi>
+                            <m:mi>t</m:mi>
+                            <m:mo>)</m:mo>
+                          </m:mrow>
+                          <m:mi>f</m:mi>
+                          <m:mrow>
+                            <m:mo>(</m:mo>
+                            <m:mi>t</m:mi>
+                            <m:mo>)</m:mo>
+                          </m:mrow>
+                        </m:mfenced>
+                        <m:mn>2</m:mn>
+                      </m:msup>
+                      <m:msup>
+                        <m:mfenced separators="" open="(" close=")">
+                          <m:mo>-</m:mo>
+                          <m:mi>π</m:mi>
+                          <m:mi> cos </m:mi>
+                          <m:mrow>
+                            <m:mo>(</m:mo>
+                            <m:mi>π</m:mi>
+                            <m:mi>t</m:mi>
+                            <m:mo>)</m:mo>
+                          </m:mrow>
+                          <m:mi>f</m:mi>
+                          <m:mrow>
+                            <m:mo>(</m:mo>
+                            <m:mi>t</m:mi>
+                            <m:mo>)</m:mo>
+                          </m:mrow>
+                          <m:mo>-</m:mo>
+                          <m:mi> sin </m:mi>
+                          <m:mrow>
+                            <m:mo>(</m:mo>
+                            <m:mi>π</m:mi>
+                            <m:mi>t</m:mi>
+                            <m:mo>)</m:mo>
+                          </m:mrow>
+                          <m:msup>
+                            <m:mi>f</m:mi>
+                            <m:mo>'</m:mo>
+                          </m:msup>
+                          <m:mrow>
+                            <m:mo>(</m:mo>
+                            <m:mi>t</m:mi>
+                            <m:mo>)</m:mo>
+                          </m:mrow>
+                        </m:mfenced>
+                        <m:mn>2</m:mn>
+                      </m:msup>
+                    </m:mfrac>
+                  </m:mfenced>
+                </m:mrow>
+              </m:mtd>
+            </m:mtr>
+          </m:mtable>
+        </m:math>
+      </equation>
+      <para id="id247743">where <m:math overflow="scroll"><m:mrow><m:mi>f</m:mi><m:mrow><m:mo>(</m:mo><m:mi>t</m:mi><m:mo>)</m:mo></m:mrow><m:mo>=</m:mo><m:mfrac><m:mrow><m:mi> sin </m:mi><m:msqrt><m:msub><m:mi>μ</m:mi><m:mn>1</m:mn></m:msub></m:msqrt><m:mrow><m:mo>(</m:mo><m:mn>1</m:mn><m:mo>-</m:mo><m:mi>t</m:mi><m:mo>)</m:mo></m:mrow><m:mo>-</m:mo><m:mi> sin </m:mi><m:msqrt><m:msub><m:mi>μ</m:mi><m:mn>1</m:mn></m:msub></m:msqrt><m:mi>t</m:mi></m:mrow><m:mrow><m:mi> sin </m:mi><m:msqrt><m:msub><m:mi>μ</m:mi><m:mn>1</m:mn></m:msub></m:msqrt></m:mrow></m:mfrac></m:mrow></m:math> and <m:math overflow="scroll"><m:mrow><m:msup><m:mi>f</m:mi><m:mo>'</m:mo></m:msup><m:mrow><m:mo>(</m:mo><m:mi>t</m:mi><m:mo>)</m:mo></m:mrow><m:mo>=</m:mo><m:mfrac><m:mrow><m:mo>-</m:mo><m:msqrt><m:msub><m:mi>μ</m:mi><m:mn>1</m:mn></m:msub></m:msqrt><m:mfenced separators="" open="(" close=")"><m:mi> cos </m:mi><m:msqrt><m:msub><m:mi>μ</m:mi><m:mn>1</m:mn></m:msub></m:msqrt><m:mrow><m:mo>(</m:mo><m:mn>1</m:mn><m:mo>-</m:mo><m:mi>t</m:mi><m:mo>)</m:mo></m:mrow><m:mo>+</m:mo><m:mi> cos </m:mi><m:msqrt><m:msub><m:mi>μ</m:mi><m:mn>1</m:mn></m:msub></m:msqrt><m:mi>t</m:mi></m:mfenced></m:mrow><m:mrow><m:mi> sin </m:mi><m:msqrt><m:msub><m:mi>μ</m:mi><m:mn>1</m:mn></m:msub></m:msqrt></m:mrow></m:mfrac></m:mrow></m:math>. To compare, in the rest of this section, some results will be discussed for other <m:math overflow="scroll"><m:mrow><m:mi>q</m:mi><m:mo>(</m:mo><m:mi>t</m:mi><m:mo>)</m:mo></m:mrow></m:math> or <m:math overflow="scroll"><m:mrow><m:mi>ρ</m:mi><m:mo>(</m:mo><m:mi>x</m:mi><m:mo>)</m:mo></m:mrow></m:math> which can be written much more simply.</para>
+      <section id="uid23">
+        <title>
+          <emphasis effect="bold"><m:math overflow="scroll"><m:mi>q</m:mi></m:math> and <m:math overflow="scroll"><m:mi>ρ</m:mi></m:math> that satisfy the Liouville Transformation</emphasis>
+        </title>
+        <para id="id247983">The potential function and the corresponding mass density function</para>
+        <equation id="uid24">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:mi>q</m:mi>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>t</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>=</m:mo>
+              <m:mfrac>
+                <m:mrow>
+                  <m:mo>-</m:mo>
+                  <m:mn>3</m:mn>
+                </m:mrow>
+                <m:msup>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:mn>1</m:mn>
+                    <m:mo>+</m:mo>
+                    <m:mn>4</m:mn>
+                    <m:mi>t</m:mi>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                  <m:mn>2</m:mn>
+                </m:msup>
+              </m:mfrac>
+              <m:mspace width="2.em"/>
+              <m:mtext>and</m:mtext>
+              <m:mspace width="2.em"/>
+              <m:mi>ρ</m:mi>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>x</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>=</m:mo>
+              <m:msup>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mn>2</m:mn>
+                  <m:mi>x</m:mi>
+                  <m:mo>+</m:mo>
+                  <m:mn>1</m:mn>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mn>2</m:mn>
+              </m:msup>
+              <m:mo>,</m:mo>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id248080">respectively, satisfy <link target-id="uid10"/>, the Liouville transformation. The graphs of <m:math overflow="scroll"><m:mrow><m:mi>q</m:mi><m:mo>(</m:mo><m:mi>t</m:mi><m:mo>)</m:mo></m:mrow></m:math> and <m:math overflow="scroll"><m:mrow><m:mi>ρ</m:mi><m:mo>(</m:mo><m:mi>x</m:mi><m:mo>)</m:mo></m:mrow></m:math> are given in <link target-id="uid25"/> and <link target-id="uid26"/>, respectively. In comparing these graphs with the results from the potential function <link target-id="uid14"/>, one difference to note is that the <m:math overflow="scroll"><m:mi>q</m:mi></m:math> in <link target-id="uid24"/> has a domain of <m:math overflow="scroll"><m:mrow><m:mi>t</m:mi><m:mo>∈</m:mo><m:mo>[</m:mo><m:mn>0</m:mn><m:mo>,</m:mo><m:mn>2</m:mn><m:mo>]</m:mo></m:mrow></m:math>. This potential is not <emphasis effect="italics">even</emphasis>, over any interval of positive <m:math overflow="scroll"><m:mi>t</m:mi></m:math> values, which is another difference from the potential from <link target-id="bid0"/>. As a result of these differences, it is not surprising that the <m:math overflow="scroll"><m:mi>ρ</m:mi></m:math> in <link target-id="uid24"/> has a different graph from all the computed <m:math overflow="scroll"><m:mi>ρ</m:mi></m:math> from <link target-id="uid14"/> for the various values of <m:math overflow="scroll"><m:msub><m:mi>μ</m:mi><m:mn>1</m:mn></m:msub></m:math>, but there are some similarities. This <m:math overflow="scroll"><m:mi>ρ</m:mi></m:math> in closed form, has <m:math overflow="scroll"><m:mrow><m:mi>ρ</m:mi><m:mo>(</m:mo><m:mn>0</m:mn><m:mo>)</m:mo><m:mo>=</m:mo><m:mn>1</m:mn></m:mrow></m:math> as we required for our results in <link target-id="cid4">"Numerical Results"</link>. The graph of this <m:math overflow="scroll"><m:mi>ρ</m:mi></m:math> in <link target-id="uid26"/> has another similarity to the computed <m:math overflow="scroll"><m:mi>ρ</m:mi></m:math> when <m:math overflow="scroll"><m:mrow><m:msub><m:mi>μ</m:mi><m:mn>1</m:mn></m:msub><m:mo>=</m:mo><m:mn>17</m:mn><m:mo>.</m:mo><m:mn>1</m:mn></m:mrow></m:math> because that graph also shows <m:math overflow="scroll"><m:mrow><m:mi>ρ</m:mi><m:mo>(</m:mo><m:mn>1</m:mn><m:mo>)</m:mo><m:mo>=</m:mo><m:mn>9</m:mn></m:mrow></m:math>, however, the shape of the graphs between those two endpoints is quite different.</para>
+        <figure id="uid25">
+          <media id="uid25_media" alt="">
+            <image mime-type="image/png" src="../../media/scratchq.png" id="uid25_onlineimage" width="600"><!-- NOTE: attribute width changes image size online (pixels). original width is 600. --></image>
+            <image mime-type="application/postscript" for="pdf" src="../../media/scratchq.eps" id="uid25_printimage" print-width="6cm">
+              <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+            </image>
+          </media>
+          <caption>Potential function <m:math overflow="scroll"><m:mrow><m:mi>q</m:mi><m:mo>(</m:mo><m:mi>t</m:mi><m:mo>)</m:mo></m:mrow></m:math> from <link target-id="uid24"/>.</caption>
+        </figure>
+        <figure id="uid26">
+          <media id="uid26_media" alt="">
+            <image mime-type="image/png" src="../../media/scratchr.png" id="uid26_onlineimage" width="600"><!-- NOTE: attribute width changes image size online (pixels). original width is 600. --></image>
+            <image mime-type="application/postscript" for="pdf" src="../../media/scratchr.eps" id="uid26_printimage" print-width="6cm">
+              <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+            </image>
+          </media>
+          <caption>Mass density function <m:math overflow="scroll"><m:mrow><m:mi>ρ</m:mi><m:mo>(</m:mo><m:mi>x</m:mi><m:mo>)</m:mo></m:mrow></m:math> from <link target-id="uid24"/>.</caption>
+        </figure>
+        <para id="id248413">The spacing of the eigenvalues produced by <link target-id="uid24"/>, calculated by spectral discretization, can be seen in <link target-id="uid27"/>.
+For comparison, in addition to the computed eigenvalues from these equations, the eigenvalues for the string of uniform density are graphed as small black dots in <link target-id="uid28"/>. The expected eigenvalues from <link target-id="uid14"/> are the same as the eigenvalues for the string of uniform density, except for the first one. The eigenvalues from <link target-id="uid24"/> show the same quadratic behavior as is seen in <link target-id="uid21"/>, but these eigenvalues increase very slowly compared to the eigenvalues for the uniform mass density.</para>
+        <figure id="uid27">
+          <media id="uid27_media" alt="">
+            <image mime-type="image/png" src="../../media/sc256ev.png" id="uid27_onlineimage" width="600"><!-- NOTE: attribute width changes image size online (pixels). original width is 600. --></image>
+            <image mime-type="application/postscript" for="pdf" src="../../media/sc256ev.eps" id="uid27_printimage" print-width="6cm">
+              <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+            </image>
+          </media>
+          <caption>Computed eigenvalues of <m:math overflow="scroll"><m:mi>q</m:mi></m:math> and <m:math overflow="scroll"><m:mi>ρ</m:mi></m:math> from <link target-id="uid24"/>.</caption>
+        </figure>
+        <figure id="uid28">
+          <media id="uid28_media" alt="">
+            <image mime-type="image/png" src="../../media/sc256ev_com.png" id="uid28_onlineimage" width="600"><!-- NOTE: attribute width changes image size online (pixels). original width is 600. --></image>
+            <image mime-type="application/postscript" for="pdf" src="../../media/sc256ev_com.eps" id="uid28_printimage" print-width="6cm">
+              <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+            </image>
+          </media>
+          <caption>Computed eigenvalues of <m:math overflow="scroll"><m:mi>q</m:mi></m:math> and <m:math overflow="scroll"><m:mi>ρ</m:mi></m:math> from <link target-id="uid24"/>.</caption>
+        </figure>
+        <para id="id248524">Next is an example of a density function in closed form from Euler.</para>
+      </section>
+      <section id="uid29">
+        <title>
+          <emphasis effect="bold">Example from Euler</emphasis>
+        </title>
+        <para id="id248541">Leonhard Euler found the wave equation has a general solution of</para>
+        <equation id="id248545">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:mi>y</m:mi>
+              <m:mo>=</m:mo>
+              <m:mfenced separators="" open="(" close=")">
+                <m:mn>1</m:mn>
+                <m:mo>+</m:mo>
+                <m:mfrac>
+                  <m:mi>x</m:mi>
+                  <m:mi>α</m:mi>
+                </m:mfrac>
+              </m:mfenced>
+              <m:mfenced separators="" open="[" close="]">
+                <m:mi>Φ</m:mi>
+                <m:mfenced separators="" open="(" close=")">
+                  <m:mfrac>
+                    <m:mi>x</m:mi>
+                    <m:mrow>
+                      <m:mi>x</m:mi>
+                      <m:mo>+</m:mo>
+                      <m:mfrac>
+                        <m:mi>x</m:mi>
+                        <m:mi>α</m:mi>
+                      </m:mfrac>
+                    </m:mrow>
+                  </m:mfrac>
+                  <m:mo>+</m:mo>
+                  <m:msub>
+                    <m:mi>c</m:mi>
+                    <m:mn>0</m:mn>
+                  </m:msub>
+                  <m:mi>t</m:mi>
+                </m:mfenced>
+                <m:mo>+</m:mo>
+                <m:mi>Ψ</m:mi>
+                <m:mfenced separators="" open="(" close=")">
+                  <m:mfrac>
+                    <m:mi>x</m:mi>
+                    <m:mrow>
+                      <m:mn>1</m:mn>
+                      <m:mo>+</m:mo>
+                      <m:mfrac>
+                        <m:mi>x</m:mi>
+                        <m:mi>α</m:mi>
+                      </m:mfrac>
+                    </m:mrow>
+                  </m:mfrac>
+                  <m:mo>-</m:mo>
+                  <m:msub>
+                    <m:mi>c</m:mi>
+                    <m:mn>0</m:mn>
+                  </m:msub>
+                  <m:mi>t</m:mi>
+                </m:mfenced>
+              </m:mfenced>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id248661">where <m:math overflow="scroll"><m:mrow><m:msub><m:mi>c</m:mi><m:mn>0</m:mn></m:msub><m:mo>≡</m:mo><m:msqrt><m:mfrac><m:mi>T</m:mi><m:msub><m:mi>σ</m:mi><m:mn>0</m:mn></m:msub></m:mfrac></m:msqrt></m:mrow></m:math> when
+the "line density" is
+given by <m:math overflow="scroll"><m:mrow><m:mi>σ</m:mi><m:mrow><m:mo>(</m:mo><m:mi>x</m:mi><m:mo>)</m:mo></m:mrow><m:mo>=</m:mo><m:mfrac><m:msub><m:mi>σ</m:mi><m:mn>0</m:mn></m:msub><m:msup><m:mfenced separators="" open="(" close=")"><m:mn>1</m:mn><m:mo>+</m:mo><m:mfrac><m:mi>x</m:mi><m:mi>α</m:mi></m:mfrac></m:mfenced><m:mn>4</m:mn></m:msup></m:mfrac></m:mrow></m:math><link target-id="bid2"/>. Euler's analysis showed the frequencies of this string would be <m:math overflow="scroll"><m:mrow><m:msub><m:mi>v</m:mi><m:mi>k</m:mi></m:msub><m:mo>=</m:mo><m:mfrac><m:mi>k</m:mi><m:mrow><m:mn>2</m:mn><m:mi>L</m:mi></m:mrow></m:mfrac><m:mfenced separators="" open="(" close=")"><m:mn>1</m:mn><m:mo>+</m:mo><m:mfrac><m:mi>L</m:mi><m:mi>α</m:mi></m:mfrac></m:mfenced><m:msqrt><m:mfrac><m:mi>T</m:mi><m:msub><m:mi>σ</m:mi><m:mn>0</m:mn></m:msub></m:mfrac></m:msqrt></m:mrow></m:math>.
+In order to produce figures which would compare easily to the results from the previous section, the following constants were chosen: <m:math overflow="scroll"><m:mrow><m:msub><m:mi>σ</m:mi><m:mn>0</m:mn></m:msub><m:mo>=</m:mo><m:mn>3</m:mn></m:mrow></m:math> and <m:math overflow="scroll"><m:mrow><m:mi>α</m:mi><m:mo>=</m:mo><m:mfrac><m:mn>1</m:mn><m:mn>2</m:mn></m:mfrac></m:mrow></m:math>. The resultant graph of <m:math overflow="scroll"><m:mrow><m:mi>σ</m:mi><m:mo>(</m:mo><m:mi>x</m:mi><m:mo>)</m:mo></m:mrow></m:math>, which is very different from the other mass density graphs in this paper, can be seen in <link target-id="uid30"/>, and the first 256 frequencies are graphed in <link target-id="uid31"/>.</para>
+        <figure id="uid30">
+          <media id="uid30_media" alt="">
+            <image mime-type="image/png" src="../../media/eulers_den.png" id="uid30_onlineimage" width="600"><!-- NOTE: attribute width changes image size online (pixels). original width is 600. --></image>
+            <image mime-type="application/postscript" for="pdf" src="../../media/eulers_den.eps" id="uid30_printimage" print-width="6cm">
+              <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+            </image>
+          </media>
+          <caption>Euler's "line density" function, <m:math overflow="scroll"><m:mi>σ</m:mi></m:math>.</caption>
+        </figure>
+        <figure id="uid31">
+          <media id="uid31_media" alt="">
+            <image mime-type="image/png" src="../../media/eul_freq.png" id="uid31_onlineimage" width="600"><!-- NOTE: attribute width changes image size online (pixels). original width is 600. --></image>
+            <image mime-type="application/postscript" for="pdf" src="../../media/eul_freq.eps" id="uid31_printimage" print-width="6cm">
+              <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+            </image>
+          </media>
+          <caption>Euler's frequencies (from formula).</caption>
+        </figure>
+        <para id="id248921">The relationship between eigenvalues, <m:math overflow="scroll"><m:msub><m:mi>λ</m:mi><m:mi>k</m:mi></m:msub></m:math>, and frequencies, <m:math overflow="scroll"><m:msub><m:mi>v</m:mi><m:mi>k</m:mi></m:msub></m:math>, is given by <m:math overflow="scroll"><m:mrow><m:msub><m:mi>λ</m:mi><m:mi>k</m:mi></m:msub><m:mo>=</m:mo><m:msup><m:mfenced separators="" open="(" close=")"><m:mn>2</m:mn><m:mi>π</m:mi><m:msub><m:mi>v</m:mi><m:mi>k</m:mi></m:msub></m:mfenced><m:mn>2</m:mn></m:msup></m:mrow></m:math>. Using this relationship, in <link target-id="uid32"/>, the exact eigenvalues for <m:math overflow="scroll"><m:mrow><m:mi>k</m:mi><m:mo>=</m:mo><m:mn>1</m:mn></m:mrow></m:math> to 256 have been graphed as blue circles. To compare the results from this set of equations to the others in this module, the eigenvalues were computed for this <m:math overflow="scroll"><m:mrow><m:mi>σ</m:mi><m:mo>(</m:mo><m:mi>x</m:mi><m:mo>)</m:mo></m:mrow></m:math> using spectral discretization with <m:math overflow="scroll"><m:mrow><m:mi>N</m:mi><m:mo>=</m:mo><m:mn>256</m:mn></m:mrow></m:math>. These computed eigenvalues are also graphed in <link target-id="uid32"/>, each marked with a green 'x'. The error between the eigenvalues from the frequency function and the computed eigenvalues is graphed in <link target-id="uid33"/>, which shows the first 100 eigenvalues are computed with reasonable accuracy. For comparison, in addition to the exact and computed eigenvalues from Euler's equations, the eigenvalues for the string of uniform density are graphed as black dots in <link target-id="uid34"/>. The eigenvalues from Euler's equations still show the same quadratic behavior as the other examples we have seen, but these eigenvalues increase very rapidly compared to the eigenvalues for the uniform mass density.</para>
+        <figure id="uid32">
+          <media id="uid32_media" alt="">
+            <image mime-type="image/png" src="../../media/eul_ev.png" id="uid32_onlineimage" width="600"><!-- NOTE: attribute width changes image size online (pixels). original width is 600. --></image>
+            <image mime-type="application/postscript" for="pdf" src="../../media/eul_ev.eps" id="uid32_printimage" print-width="6cm">
+              <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+            </image>
+          </media>
+          <caption>Eigenvalues from Euler's equations.</caption>
+        </figure>
+        <figure id="uid33">
+          <media id="uid33_media" alt="">
+            <image mime-type="image/png" src="../../media/eul_everr.png" id="uid33_onlineimage" width="600"><!-- NOTE: attribute width changes image size online (pixels). original width is 600. --></image>
+            <image mime-type="application/postscript" for="pdf" src="../../media/eul_everr.eps" id="uid33_printimage" print-width="6cm">
+              <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+            </image>
+          </media>
+          <caption>Semi-log plot of error in computing eigenvalues from Euler's equation.</caption>
+        </figure>
+        <figure id="uid34">
+          <media id="uid34_media" alt="">
+            <image mime-type="image/png" src="../../media/eul_evcom.png" id="uid34_onlineimage" width="600"><!-- NOTE: attribute width changes image size online (pixels). original width is 600. --></image>
+            <image mime-type="application/postscript" for="pdf" src="../../media/eul_evcom.eps" id="uid34_printimage" print-width="6cm">
+              <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+            </image>
+          </media>
+          <caption>Comparison of eigenvalues from Euler's density and uniform density.</caption>
+        </figure>
+        <para id="id249112">In computing the results which are reported starting in <link target-id="cid4">"Numerical Results"</link>, various techniques were used. Some techniques were successful and other techniques failed to give the desired or expected results, which led to alternate techniques being tried. A short description of our methods, including a description of spectral discretization, is given in the next section.</para>
+      </section>
+    </section>
+    <section id="cid7">
+      <title>Numerical Methods</title>
+      <para id="id249134">When we began gathering the data included here in our results, we started by programming the <m:math overflow="scroll"><m:mrow><m:mi>q</m:mi><m:mo>(</m:mo><m:mi>t</m:mi><m:mo>)</m:mo></m:mrow></m:math> in <link target-id="uid14"/> from <link target-id="bid0"/> into MATLAB.
+Our next goal was to find the <m:math overflow="scroll"><m:mrow><m:mi>ρ</m:mi><m:mo>(</m:mo><m:mi>x</m:mi><m:mo>)</m:mo></m:mrow></m:math> from these potential functions. We started by assuming <m:math overflow="scroll"><m:mrow><m:mi>x</m:mi><m:mo>∈</m:mo><m:mo>[</m:mo><m:mn>0</m:mn><m:mo>,</m:mo><m:mn>1</m:mn><m:mo>]</m:mo></m:mrow></m:math> and used a uniform grid to solve the ODE from the Liouville transformation <link target-id="uid10"/> with forward Euler and the change of variables for <m:math overflow="scroll"><m:mi>t</m:mi></m:math> <link target-id="uid8"/> with composite trapezoid quadrature.
+Briefly, forward Euler gives a numerical approximation to the solution of the initial value problem</para>
+      <equation id="uid35">
+        <m:math overflow="scroll" mode="display">
+          <m:mrow>
+            <m:msup>
+              <m:mi>a</m:mi>
+              <m:mo>'</m:mo>
+            </m:msup>
+            <m:mo>=</m:mo>
+            <m:mi>f</m:mi>
+            <m:mrow>
+              <m:mo>(</m:mo>
+              <m:mi>a</m:mi>
+              <m:mo>,</m:mo>
+              <m:mi>b</m:mi>
+              <m:mo>)</m:mo>
+            </m:mrow>
+            <m:mo>,</m:mo>
+            <m:mspace width="2.em"/>
+            <m:mi>a</m:mi>
+            <m:mrow>
+              <m:mo>(</m:mo>
+              <m:msub>
+                <m:mi>b</m:mi>
+                <m:mn>0</m:mn>
+              </m:msub>
+              <m:mo>)</m:mo>
+            </m:mrow>
+            <m:mo>=</m:mo>
+            <m:msub>
+              <m:mi>a</m:mi>
+              <m:mn>0</m:mn>
+            </m:msub>
+          </m:mrow>
+        </m:math>
+      </equation>
+      <para id="id249292">through the formula</para>
+      <equation id="id249298">
+        <m:math overflow="scroll" mode="display">
+          <m:mrow>
+            <m:msub>
+              <m:mi>a</m:mi>
+              <m:mrow>
+                <m:mi>n</m:mi>
+                <m:mo>+</m:mo>
+                <m:mn>1</m:mn>
+              </m:mrow>
+            </m:msub>
+            <m:mo>=</m:mo>
+            <m:msub>
+              <m:mi>a</m:mi>
+              <m:mi>n</m:mi>
+            </m:msub>
+            <m:mo>+</m:mo>
+            <m:mi>h</m:mi>
+            <m:mi>f</m:mi>
+            <m:mrow>
+              <m:mo>(</m:mo>
+              <m:msub>
+                <m:mi>a</m:mi>
+                <m:mi>n</m:mi>
+              </m:msub>
+              <m:mo>,</m:mo>
+              <m:msub>
+                <m:mi>b</m:mi>
+                <m:mi>n</m:mi>
+              </m:msub>
+              <m:mo>)</m:mo>
+            </m:mrow>
+          </m:mrow>
+        </m:math>
+      </equation>
+      <para id="id249360">where <m:math overflow="scroll"><m:mrow><m:mi>h</m:mi><m:mo>=</m:mo><m:msub><m:mi>b</m:mi><m:mrow><m:mi>n</m:mi><m:mo>+</m:mo><m:mn>1</m:mn></m:mrow></m:msub><m:mo>-</m:mo><m:msub><m:mi>b</m:mi><m:mi>n</m:mi></m:msub></m:mrow></m:math><link target-id="bid3"/>.
+In order to facilitate finding the eigenvalues, we attempted to incorporate a Chebyshev grid for <m:math overflow="scroll"><m:mi>x</m:mi></m:math> into the uniform grid. This is when we became aware something was not working properly. In an attempt to find the problem, we output the value of <m:math overflow="scroll"><m:mi>t</m:mi></m:math> at each step, and we realized for some choices of <m:math overflow="scroll"><m:msub><m:mi>μ</m:mi><m:mn>1</m:mn></m:msub></m:math> and initial conditions, when <m:math overflow="scroll"><m:mi>x</m:mi></m:math> reached 1, <m:math overflow="scroll"><m:mi>t</m:mi></m:math> might be much less than 1 or even greater than 1. We had two choices at this point, we could choose values of <m:math overflow="scroll"><m:msub><m:mi>μ</m:mi><m:mn>1</m:mn></m:msub></m:math> and initial conditions and find the necessary value of <m:math overflow="scroll"><m:mi>x</m:mi></m:math> which would result in <m:math overflow="scroll"><m:mi>t</m:mi></m:math> being within some tolerance of 1 or we could solve the ODE in <m:math overflow="scroll"><m:mi>t</m:mi></m:math> instead of <m:math overflow="scroll"><m:mi>x</m:mi></m:math>. This second method is how we chose to continue our exploration.</para>
+      <para id="id249509">With a uniform grid over <m:math overflow="scroll"><m:mrow><m:mi>t</m:mi><m:mo>∈</m:mo><m:mo>[</m:mo><m:mn>0</m:mn><m:mo>,</m:mo><m:mn>1</m:mn><m:mo>]</m:mo></m:mrow></m:math> and given <m:math overflow="scroll"><m:msub><m:mi>μ</m:mi><m:mn>1</m:mn></m:msub></m:math>, <m:math overflow="scroll"><m:mrow><m:mi>ρ</m:mi><m:mo>(</m:mo><m:mn>0</m:mn><m:mo>)</m:mo></m:mrow></m:math>, and <m:math overflow="scroll"><m:mrow><m:msup><m:mi>ρ</m:mi><m:mo>'</m:mo></m:msup><m:mrow><m:mo>(</m:mo><m:mn>0</m:mn><m:mo>)</m:mo></m:mrow></m:mrow></m:math> we used forward Euler to solve the ODE <link target-id="uid13"/> and then implemented the change of variables. This resulted in strings of various lengths depending on the choice of <m:math overflow="scroll"><m:msub><m:mi>μ</m:mi><m:mn>1</m:mn></m:msub></m:math>, <m:math overflow="scroll"><m:mrow><m:mi>ρ</m:mi><m:mo>(</m:mo><m:mn>0</m:mn><m:mo>)</m:mo></m:mrow></m:math>, and <m:math overflow="scroll"><m:mrow><m:msup><m:mi>ρ</m:mi><m:mo>'</m:mo></m:msup><m:mrow><m:mo>(</m:mo><m:mn>0</m:mn><m:mo>)</m:mo></m:mrow></m:mrow></m:math>. These are illustrated in <link target-id="uid16"/>.</para>
+      <para id="id249653">We made the choice to restrict to strings of unit length and <m:math overflow="scroll"><m:mrow><m:mi>ρ</m:mi><m:mo>(</m:mo><m:mn>0</m:mn><m:mo>)</m:mo><m:mo>=</m:mo><m:mn>1</m:mn></m:mrow></m:math>. To facilitate this choice, we included a bisection solver to find the necessary value of <m:math overflow="scroll"><m:mrow><m:msup><m:mi>ρ</m:mi><m:mo>'</m:mo></m:msup><m:mrow><m:mo>(</m:mo><m:mn>0</m:mn><m:mo>)</m:mo></m:mrow></m:mrow></m:math> for a given <m:math overflow="scroll"><m:msub><m:mi>μ</m:mi><m:mn>1</m:mn></m:msub></m:math> that results in a string of length 1. After this determination is made, the resulting graphs are illustrated in <link target-id="uid17"/>.</para>
+      <para id="id249723">For a given <m:math overflow="scroll"><m:msub><m:mi>μ</m:mi><m:mn>1</m:mn></m:msub></m:math> by changing the choice of <m:math overflow="scroll"><m:mrow><m:mi>ρ</m:mi><m:mo>(</m:mo><m:mn>0</m:mn><m:mo>)</m:mo></m:mrow></m:math>, with the necessary value of <m:math overflow="scroll"><m:mrow><m:msup><m:mi>ρ</m:mi><m:mo>'</m:mo></m:msup><m:mrow><m:mo>(</m:mo><m:mn>0</m:mn><m:mo>)</m:mo></m:mrow></m:mrow></m:math> being determined to result in a unit string, the isospectral graphs, graphs with the same Dirichlet spectrum, are produced (seen in <link target-id="uid18"/>).</para>
+      <para id="id249787">To compute the eigenvalues and eigenfunctions, we wanted to use spectral discretization, but because our method solves the ODE in <m:math overflow="scroll"><m:mi>t</m:mi></m:math>, we could not choose at which <m:math overflow="scroll"><m:mi>x</m:mi></m:math> values we would have values for <m:math overflow="scroll"><m:mrow><m:mi>ρ</m:mi><m:mo>(</m:mo><m:mi>x</m:mi><m:mo>)</m:mo></m:mrow></m:math>. To overcome this, we used the MATLAB function "interp1" and used a cubic spline interpolation to find <m:math overflow="scroll"><m:mi>ρ</m:mi></m:math> at the Chebyshev grid x values from the values we did have from solving the ODE in <m:math overflow="scroll"><m:mi>t</m:mi></m:math>. Then, after adjusting the differential operator matrix, <m:math overflow="scroll"><m:mi>D</m:mi></m:math>, and <m:math overflow="scroll"><m:mi>ρ</m:mi></m:math> matrix, <m:math overflow="scroll"><m:mi>B</m:mi></m:math>, for the Dirichlet boundary conditions, we used the MATLAB function "eig" to solve for <m:math overflow="scroll"><m:mi>M</m:mi></m:math>, the diagonal matrix of generalized eigenvalues, and <m:math overflow="scroll"><m:mi>V</m:mi></m:math>, a full matrix of corresponding eigenvectors, in the generalized eigenvalue problem, <m:math overflow="scroll"><m:mrow><m:msup><m:mi>D</m:mi><m:mn>2</m:mn></m:msup><m:mo>*</m:mo><m:mi>V</m:mi><m:mo>=</m:mo><m:mi>M</m:mi><m:mo>*</m:mo><m:mi>B</m:mi><m:mo>*</m:mo><m:mi>V</m:mi></m:mrow></m:math> (from <m:math overflow="scroll"><m:mrow><m:mo>-</m:mo><m:msup><m:mi>y</m:mi><m:mrow><m:mo>'</m:mo><m:mo>'</m:mo></m:mrow></m:msup><m:mrow><m:mo>(</m:mo><m:mi>x</m:mi><m:mo>)</m:mo></m:mrow><m:mo>=</m:mo><m:mi>λ</m:mi><m:mi>ρ</m:mi><m:mrow><m:mo>(</m:mo><m:mi>x</m:mi><m:mo>)</m:mo></m:mrow><m:mi>y</m:mi><m:mrow><m:mo>(</m:mo><m:mi>x</m:mi><m:mo>)</m:mo></m:mrow></m:mrow></m:math>). The eigenvalues were sorted, and the eigenvectors were sorted correspondingly, to produce the figures in this paper.</para>
+      <para id="id249978">In an effort to improve accuracy, Heun's method was implemented instead of forward Euler.
+In Heun's method, the formula for the numerical approximation to the solution of <link target-id="uid35"/> is</para>
+      <equation id="id249987">
+        <m:math overflow="scroll" mode="display">
+          <m:mrow>
+            <m:msub>
+              <m:mi>a</m:mi>
+              <m:mrow>
+                <m:mi>n</m:mi>
+                <m:mo>+</m:mo>
+                <m:mn>1</m:mn>
+              </m:mrow>
+            </m:msub>
+            <m:mo>=</m:mo>
+            <m:msub>
+              <m:mi>a</m:mi>
+              <m:mi>n</m:mi>
+            </m:msub>
+            <m:mo>+</m:mo>
+            <m:mfrac>
+              <m:mi>h</m:mi>
+              <m:mn>2</m:mn>
+            </m:mfrac>
+            <m:mfenced separators="" open="(" close=")">
+              <m:mi>f</m:mi>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:msub>
+                  <m:mi>a</m:mi>
+                  <m:mi>n</m:mi>
+                </m:msub>
+                <m:mo>,</m:mo>
+                <m:msub>
+                  <m:mi>b</m:mi>
+                  <m:mi>n</m:mi>
+                </m:msub>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>+</m:mo>
+              <m:mi>f</m:mi>
+              <m:mfenced separators="" open="(" close=")">
+                <m:msub>
+                  <m:mi>a</m:mi>
+                  <m:mi>n</m:mi>
+                </m:msub>
+                <m:mo>+</m:mo>
+                <m:mi>h</m:mi>
+                <m:mi>f</m:mi>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:msub>
+                    <m:mi>a</m:mi>
+                    <m:mi>n</m:mi>
+                  </m:msub>
+                  <m:mo>,</m:mo>
+                  <m:msub>
+                    <m:mi>b</m:mi>
+                    <m:mi>n</m:mi>
+                  </m:msub>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mo>,</m:mo>
+                <m:msub>
+                  <m:mi>b</m:mi>
+                  <m:mrow>
+                    <m:mi>n</m:mi>
+                    <m:mo>+</m:mo>
+                    <m:mn>1</m:mn>
+                  </m:mrow>
+                </m:msub>
+              </m:mfenced>
+            </m:mfenced>
+            <m:mo>.</m:mo>
+          </m:mrow>
+        </m:math>
+      </equation>
+      <para id="id250136">where <m:math overflow="scroll"><m:mrow><m:mi>h</m:mi><m:mo>=</m:mo><m:msub><m:mi>b</m:mi><m:mrow><m:mi>n</m:mi><m:mo>+</m:mo><m:mn>1</m:mn></m:mrow></m:msub><m:mo>-</m:mo><m:msub><m:mi>b</m:mi><m:mi>n</m:mi></m:msub></m:mrow></m:math><link target-id="bid3"/>.
+Additionally, RK4, the fourth order Runge-Kutta method, was implemented through "ode45" in MATLAB.
+However, these methods did not produce results that were much better than the simpler method of forward Euler (and in some cases, took much more time), so we left forward Euler in our code and reported those results in this paper.</para>
+      <section id="id250184">
+        <title>Spectral Discretization</title>
+        <para id="id250190">To numerically compute the eigenvalues for the various operators resulting from the various <m:math overflow="scroll"><m:mi>q</m:mi></m:math> and <m:math overflow="scroll"><m:mi>ρ</m:mi></m:math> functions discussed in this paper, there are several techniques. One technique to approximate a second derivative is to use a uniform grid, <m:math overflow="scroll"><m:mrow><m:mn>0</m:mn><m:mo>=</m:mo><m:msub><m:mi>x</m:mi><m:mn>0</m:mn></m:msub><m:mo>&lt;</m:mo><m:msub><m:mi>x</m:mi><m:mn>1</m:mn></m:msub><m:mo>&lt;</m:mo><m:mo>.</m:mo><m:mo>.</m:mo><m:mo>.</m:mo><m:mo>&lt;</m:mo><m:msub><m:mi>x</m:mi><m:mi>n</m:mi></m:msub><m:mo>=</m:mo><m:mn>1</m:mn></m:mrow></m:math> with <m:math overflow="scroll"><m:mrow><m:msub><m:mi>x</m:mi><m:mrow><m:mi>j</m:mi><m:mo>+</m:mo><m:mn>1</m:mn></m:mrow></m:msub><m:mo>-</m:mo><m:msub><m:mi>x</m:mi><m:mi>j</m:mi></m:msub><m:mo>=</m:mo><m:mi>h</m:mi></m:mrow></m:math> for <m:math overflow="scroll"><m:mrow><m:mi>j</m:mi><m:mo>=</m:mo><m:mn>0</m:mn><m:mo>,</m:mo><m:mn>1</m:mn><m:mo>,</m:mo><m:mo>.</m:mo><m:mo>.</m:mo><m:mo>.</m:mo><m:mo>,</m:mo><m:mi>n</m:mi><m:mo>-</m:mo><m:mn>1</m:mn></m:mrow></m:math>, and a finite difference which leads to</para>
+        <equation id="id250337">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:msup>
+                <m:mi>u</m:mi>
+                <m:mrow>
+                  <m:mo>'</m:mo>
+                  <m:mo>'</m:mo>
+                </m:mrow>
+              </m:msup>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:msub>
+                  <m:mi>x</m:mi>
+                  <m:mi>j</m:mi>
+                </m:msub>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>≈</m:mo>
+              <m:mfrac>
+                <m:mrow>
+                  <m:mi>u</m:mi>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:msub>
+                      <m:mi>x</m:mi>
+                      <m:mrow>
+                        <m:mi>j</m:mi>
+                        <m:mo>+</m:mo>
+                        <m:mn>1</m:mn>
+                      </m:mrow>
+                    </m:msub>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                  <m:mo>-</m:mo>
+                  <m:mn>2</m:mn>
+                  <m:mi>u</m:mi>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:msub>
+                      <m:mi>x</m:mi>
+                      <m:mi>j</m:mi>
+                    </m:msub>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                  <m:mo>+</m:mo>
+                  <m:mi>u</m:mi>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:msub>
+                      <m:mi>x</m:mi>
+                      <m:mrow>
+                        <m:mi>j</m:mi>
+                        <m:mo>-</m:mo>
+                        <m:mn>1</m:mn>
+                      </m:mrow>
+                    </m:msub>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                </m:mrow>
+                <m:msup>
+                  <m:mi>h</m:mi>
+                  <m:mn>2</m:mn>
+                </m:msup>
+              </m:mfrac>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id250444">for <m:math overflow="scroll"><m:mrow><m:mi>j</m:mi><m:mo>=</m:mo><m:mn>1</m:mn><m:mo>,</m:mo><m:mo>.</m:mo><m:mo>.</m:mo><m:mo>.</m:mo><m:mo>,</m:mo><m:mi>n</m:mi><m:mo>-</m:mo><m:mn>1</m:mn></m:mrow></m:math> which is <m:math overflow="scroll"><m:mrow><m:mi mathvariant="script">O</m:mi><m:mo>(</m:mo><m:msup><m:mi>h</m:mi><m:mn>2</m:mn></m:msup><m:mo>)</m:mo></m:mrow></m:math> accurate. Another technique is spectral discretization. In this technique, instead of a uniform grid, Chebyshev points are used, which are given by</para>
+        <equation id="id250507">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:msub>
+                <m:mi>x</m:mi>
+                <m:mi>j</m:mi>
+              </m:msub>
+              <m:mo>=</m:mo>
+              <m:mfrac>
+                <m:mn>1</m:mn>
+                <m:mn>2</m:mn>
+              </m:mfrac>
+              <m:mfenced separators="" open="(" close=")">
+                <m:mn>1</m:mn>
+                <m:mo>-</m:mo>
+                <m:mi> cos </m:mi>
+                <m:mfenced separators="" open="(" close=")">
+                  <m:mfrac>
+                    <m:mrow>
+                      <m:mi>j</m:mi>
+                      <m:mi>π</m:mi>
+                    </m:mrow>
+                    <m:mi>n</m:mi>
+                  </m:mfrac>
+                </m:mfenced>
+              </m:mfenced>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id250563">for <m:math overflow="scroll"><m:mrow><m:mi>j</m:mi><m:mo>=</m:mo><m:mn>0</m:mn><m:mo>,</m:mo><m:mn>1</m:mn><m:mo>,</m:mo><m:mo>.</m:mo><m:mo>.</m:mo><m:mo>.</m:mo><m:mo>,</m:mo><m:mi>n</m:mi></m:mrow></m:math>. These points are clustered near the endpoints of the interval. These Chebyshev points are used to form a polynomial, <m:math overflow="scroll"><m:mrow><m:msub><m:mi>p</m:mi><m:mi>n</m:mi></m:msub><m:mrow><m:mo>(</m:mo><m:mi>x</m:mi><m:mo>)</m:mo></m:mrow></m:mrow></m:math>, which is an interpolant of <m:math overflow="scroll"><m:mrow><m:mi>u</m:mi><m:mo>(</m:mo><m:mi>x</m:mi><m:mo>)</m:mo></m:mrow></m:math> so that
+<m:math overflow="scroll"><m:mi>u</m:mi></m:math>”<m:math overflow="scroll"><m:mrow><m:mrow><m:mo>(</m:mo><m:msub><m:mi>x</m:mi><m:mi>j</m:mi></m:msub><m:mo>)</m:mo></m:mrow><m:mo>≈</m:mo><m:msubsup><m:mi>p</m:mi><m:mi>n</m:mi><m:mrow><m:mo>'</m:mo><m:mo>'</m:mo></m:mrow></m:msubsup><m:mrow><m:mo>(</m:mo><m:msub><m:mi>x</m:mi><m:mi>j</m:mi></m:msub><m:mo>)</m:mo></m:mrow></m:mrow></m:math>.
+The MATLAB program we used to create the matrix that approximates the differential operator and the Chebyshev grid for <m:math overflow="scroll"><m:mi>x</m:mi></m:math> is based on "cheb.m" in <link target-id="bid4"/>.</para>
+        <para id="id250715">The advantage of spectral discretization over the finite difference technique is that with the same number of points in the grid, spectral discretization produces results that are much more accurate. Or, it is possible to achieve the same accuracy as finite difference with fewer points using spectral discretization. In <link target-id="uid32"/>, spectral discretization was used with <m:math overflow="scroll"><m:mrow><m:mi>N</m:mi><m:mo>=</m:mo><m:mn>256</m:mn></m:mrow></m:math>. Even though there are infinitely many eigenvalues, this technique's results only approximate the first <m:math overflow="scroll"><m:mi>N</m:mi></m:math> eigenvalues. Since for this problem, it is known exactly what the eigenvalues should be, the error was plotted in <link target-id="uid33"/>, and about the first 100 eigenvalues are accurate to <m:math overflow="scroll"><m:msup><m:mn>10</m:mn><m:mrow><m:mo>-</m:mo><m:mn>7</m:mn></m:mrow></m:msup></m:math> or better. To compare, using finite difference with <m:math overflow="scroll"><m:mrow><m:mi>N</m:mi><m:mo>=</m:mo><m:mn>256</m:mn></m:mrow></m:math> and a uniform grid, <m:math overflow="scroll"><m:mrow><m:mi>h</m:mi><m:mo>=</m:mo><m:mn>1</m:mn><m:mo>/</m:mo><m:mn>256</m:mn></m:mrow></m:math> and <m:math overflow="scroll"><m:mrow><m:mi mathvariant="script">O</m:mi><m:mo>(</m:mo><m:msup><m:mi>h</m:mi><m:mn>2</m:mn></m:msup><m:mo>)</m:mo></m:mrow></m:math> accuracy means <m:math overflow="scroll"><m:mrow><m:msup><m:mi>h</m:mi><m:mn>2</m:mn></m:msup><m:mo>≈</m:mo><m:mn>1</m:mn><m:mo>.</m:mo><m:mn>5</m:mn><m:mo>×</m:mo><m:msup><m:mn>10</m:mn><m:mrow><m:mo>-</m:mo><m:mn>5</m:mn></m:mrow></m:msup></m:mrow></m:math>. Spectral discretization produces more digits of accuracy than finite difference with the same number of grid points.</para>
+      </section>
+    </section>
+    <section id="cid8">
+      <title>Summary</title>
+      <para id="id250880">In this paper, we started by describing Liouville's transformation to change the mass density of the wave equation to the potential of the Sturm-Liouville equation <link target-id="bid1"/>. However, our intention was to study a specific <m:math overflow="scroll"><m:mi>q</m:mi></m:math> from <link target-id="bid0"/>, so it was necessary to reverse that transformation in order to arrive at the corresponding mass density, <m:math overflow="scroll"><m:mi>ρ</m:mi></m:math>. In this paper we described our numerical methods to perform this reverse transform, and results are described for the specific <m:math overflow="scroll"><m:mi>q</m:mi></m:math> from <link target-id="bid0"/> including the computed <m:math overflow="scroll"><m:mi>ρ</m:mi></m:math>, eigenvalues, and eigenfunctions for certain values of <m:math overflow="scroll"><m:msub><m:mi>μ</m:mi><m:mn>1</m:mn></m:msub></m:math> and chosen initial conditions. Since we know what the eigenvalues are supposed to be for this <m:math overflow="scroll"><m:mi>q</m:mi></m:math>, an analysis of the error in computing the eigenvalues is included. For comparison, similar calculations were done for other <m:math overflow="scroll"><m:mi>q</m:mi></m:math> or <m:math overflow="scroll"><m:mi>ρ</m:mi></m:math> in closed form.</para>
+    </section>
+    <section id="cid9">
+      <title>Acknowledgments</title>
+      <para id="id250993">We would like to acknowledge the patience and guidance of Dr. Mark Embree and Dr. Steven Cox of Rice University. Many thanks are owed to Jeffrey Hokanson and our predecessors in the Physics of Strings PFUG, whose work made ours possible. This paper and the research herein conducted were made possible by grant funding from the National Science Foundation through Rice University's VIGRE program.</para>
+    </section>
+    <section id="cid10">
+      <title>Appendix</title>
+      <para id="id251009">The codes used in this project are accessible through the featured link.</para>
+    </section>
+  </content>
+  <bib:file>
+    <bib:entry id="bid3">
+      <bib:book>
+        <!--required fields-->
+        <bib:author>Diacu, F.</bib:author>
+        <bib:title>An Introduction to Differential Equations, Order and Chaos</bib:title>
+        <bib:publisher>W.H. Freeman and Company</bib:publisher>
+        <bib:year>2000</bib:year>
+        <!--optional fields-->
+        <bib:volume/>
+        <bib:series/>
+        <bib:address/>
+        <bib:edition/>
+        <bib:month/>
+        <bib:note/>
+      </bib:book>
+    </bib:entry>
+    <bib:entry id="bid1">
+      <bib:book>
+        <!--required fields-->
+        <bib:author>Hille, E.</bib:author>
+        <bib:title>Lectures on Ordinary Differential Equations</bib:title>
+        <bib:publisher>Addison-Wesley Publishing Co.</bib:publisher>
+        <bib:year>1969</bib:year>
+        <!--optional fields-->
+        <bib:volume/>
+        <bib:series/>
+        <bib:address/>
+        <bib:edition/>
+        <bib:month/>
+        <bib:note/>
+      </bib:book>
+    </bib:entry>
+    <bib:entry id="bid0">
+      <bib:book>
+        <!--required fields-->
+        <bib:author>Pöschel, J. and Trubowitz, E.</bib:author>
+        <bib:title>Inverse Spectral Theory</bib:title>
+        <bib:publisher>Academic Press, Inc.</bib:publisher>
+        <bib:year>1986</bib:year>
+        <!--optional fields-->
+        <bib:volume/>
+        <bib:series/>
+        <bib:address/>
+        <bib:edition/>
+        <bib:month/>
+        <bib:note/>
+      </bib:book>
+    </bib:entry>
+    <bib:entry id="bid4">
+      <bib:book>
+        <!--required fields-->
+        <bib:author>Trefethen, L.</bib:author>
+        <bib:title>Spectral Methods in MATLAB</bib:title>
+        <bib:publisher>Society for Industrial and Applied Mathematics</bib:publisher>
+        <bib:year>2000</bib:year>
+        <!--optional fields-->
+        <bib:volume/>
+        <bib:series/>
+        <bib:address/>
+        <bib:edition/>
+        <bib:month/>
+        <bib:note/>
+      </bib:book>
+    </bib:entry>
+    <bib:entry id="bid2">
+      <bib:book>
+        <!--required fields-->
+        <bib:author>Truesdell, C.</bib:author>
+        <bib:title>The Rational Mechanics of Flexible or Elastic Bodies</bib:title>
+        <bib:publisher>Introduction to Leonhardi Euleri Opera Omnia, Ser. II, Vol. X and XI. Leonhardi Euleri, Opera Omnia, Ser. II, Vol. XI (second part). Orell Füssli</bib:publisher>
+        <bib:year>1960</bib:year>
+        <!--optional fields-->
+        <bib:volume/>
+        <bib:series/>
+        <bib:address/>
+        <bib:edition/>
+        <bib:month/>
+        <bib:note/>
+      </bib:book>
+    </bib:entry>
+  </bib:file>
+</document>

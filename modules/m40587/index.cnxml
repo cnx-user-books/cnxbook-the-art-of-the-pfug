@@ -1,0 +1,1700 @@
+<document xmlns="http://cnx.rice.edu/cnxml" xmlns:m="http://www.w3.org/1998/Math/MathML" xmlns:bib="http://bibtexml.sf.net/">
+  <title>Mathematical Modeling of Hippocampal Spatial Memory with Place Cells</title>
+<metadata xmlns:md="http://cnx.rice.edu/mdml">
+  <md:content-id>m40587</md:content-id>
+  <md:title>Mathematical Modeling of Hippocampal Spatial Memory with Place Cells</md:title>
+  <md:abstract>This report summarizes work done as part of the Modeling Spatial Memory with Place Cells PFUG under Rice University's VIGRE program. VIGRE is a program of Vertically Integrated Grants for Research and Education in the Mathematical Sciences under the direction of the National Science Foundation. A PFUG is a group of Postdocs, Faculty, Undergraduates and Graduate students formed round the study of a common problem. This work was studied in the Rice University VIGRE program in the Summer of 2011. In this module, we mathematically model  Kneirim's Double Rotation Experiment with a model given by Cox and Gabbiani and analytically discuss the relation between overlapping place fields and synaptic input weights.</md:abstract>
+  <md:uuid>a9f02d57-cec5-4243-8ad4-b57cea247d66</md:uuid>
+</metadata>
+<featured-links>
+  <!-- WARNING! The 'featured-links' section is read only. Do not edit below.
+       Changes to the links section in the source will not be saved. -->
+    <link-group type="supplemental">
+      <link url="http://cnx.org/content/m40978/1.1/" strength="3">Mathematical Models of Hippocampal Spatial Memory</link>
+    </link-group>
+  <!-- WARNING! The 'featured-links' section is read only. Do not edit above.
+       Changes to the links section in the source will not be saved. -->
+</featured-links>
+<content>
+    <section id="cid1">
+      <title>Background: Place Cells in the Hippocampus</title>
+      <section id="uid1">
+        <title>Biology</title>
+        <para id="id62175">Spatial memory is what allows us to keep track of our location in space by making mental maps of each environment. Let's consider what happens in the brain during the process of forming these internal maps.</para>
+        <para id="id62180">Connections, called synapses, between certain neurons strengthen or weaken–a process known as synaptic plasticity. The strength, or weight, of a synapse controls how much one neuron can affect another. Synaptic plasticity is necessary for memory formation <link target-id="bid0"/>.</para>
+        <para id="id62193">While many neurons are involved with spatial memory, our focus is upon neurons in the hippocampus called place cells <link target-id="bid0"/>. Place cells have a unique firing pattern. When an environment becomes familiar, each place cell becomes associated with one area of the environment. In other words, after repeated exposure to one environment, a place cell will come to spike in only one area of the environment, which is called that cell's place field <link target-id="bid0"/>. See <link target-id="uid2"/>.</para>
+        <figure id="uid2"><media id="uid2_media" alt="">
+            <image mime-type="image/png" src="../../media/Moser-Placefield.png" id="uid2_onlineimage" width="223"><!-- NOTE: attribute width changes image size online (pixels). original width is 123. --></image>
+            <image mime-type="application/postscript" for="pdf" src="../../media/Moser-Placefield.eps" id="uid2_printimage" print-width="6cm">
+              <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+            </image>
+          </media>
+          
+        <caption>The place field of one place cell. As a rat explored the square environment, experimenters monitored the activity of one place cell.ÊThe black line is the rat's trajectory, and each red dot represents a location that the place cell has become active. The place field of the particular place cell that was monitored is the area of the environment marked densely by red dots <link target-id="bid0"/>.</caption></figure>
+        <para id="id62578">Due to place cells' characteristic firing pattern where a cell has a single place field in each environment, it is easy to test if a rat recognizes the environment they have been placed in by examining place cell activity.</para>
+      </section>
+      <section id="uid3">
+        <title>Motivation: Double Rotation Experiment</title>
+        <para id="id62593">Our research on place cells is based off of the Double Rotation Experiment (DRE) conducted by our collaborator Dr. Knierim <link target-id="bid1"/>.</para>
+        <figure id="uid4"><media id="uid4_media" alt="">
+            <image mime-type="image/png" src="../../media/doublerotationReal.png" id="uid4_onlineimage" width="585"><!-- NOTE: attribute width changes image size online (pixels). original width is 673. --></image>
+            <image mime-type="application/postscript" for="pdf" src="../../media/doublerotationReal.eps" id="uid4_printimage" print-width="8cm">
+              <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+            </image>
+          </media>
+          
+        <caption>The Double Rotation Experiment (DRE). Rats were trained to walk clockwise around the track, and the place fields corresponding to specific locations on the track were monitored. During the learning phase, the place fields experienced a backward shift. During double rotation runs of the experiment, the local cues were rotated backward (counterclockwise), and the place fields shifted backward as well. Thus the place fields seemed to favor following the local cues. Perhaps the natural backward shift seen in the learning phase predisposes the place fields to wanting to follow cues that move backwards <link target-id="bid1"/>.</caption></figure>
+        <para id="id62626">His team set up a track that a rat traversed and monitored the place fields that corresponded to specific locations on the track. Dr. Knierim and his team set up local cues on a circular path and distal cues on surrounding curtains and trained rats to walk along the path in a clockwise direction. The place fields corresponding to specific locations on the track were monitored. See <link target-id="uid4"/>.</para>
+        <para id="id62637">During the learning phase, as the rat completed laps and became more familiar with the layout, the place fields shifted backward along the path opposite the rat's movement.
+In standard runs of the experiment, the rat ran clockwise around the path with the layout that it learned. In double rotation runs of the experiment, the local cues were rotated counterclockwise (backward) and distal cues were rotated in clockwise–hence the “double rotation".
+During the standard and the double rotation runs, the spatial inputs and place fields did not always match. In the double rotation runs, the spatial inputs tended to follow the distal cues, whereas the place fields tended to follow local cues.</para>
+        <para id="id62652">One thing that might explain this is the backward shift seen in the learning phase. The natural backward shift of place fields that happens when a rat has become familiar with its environment appears to bias the place fields to follow the cues that shift backwards. The backward shift of place fields has been observed in other experiments as well when rats became familiar with a path <link target-id="bid2"/>. It may be that the backward shift is a part of the learning process. Thus, we want to understand more about the backward shift and aim our research in this direction.</para>
+        <para id="id62665">The backward shift may be dependent upon the weights of synapses, yet the dependence is not well understood. We focus on how the dynamic weights due to synaptic plasticity affect the backward shift of place fields.</para>
+        <para id="id62670">We implemented a far simplified model of the DRE to try to understand this relationship better.</para>
+      </section>
+    </section>
+    <section id="cid2">
+      <title>Modeling</title>
+      <para id="id62683">Here we will describe the models used throughout the summer. A circuit model allows us to understand the mechanics of one neuron, while a 120-cell ring models the Double Rotation Experiment <link target-id="bid1"/>, and a single-cell model was used for the analysis of weights and backward shift. Refer to <link target-id="uid5"/> for the parameters used throughout the models and their values.</para>
+      <table id="uid5" summary="">
+        <tgroup cols="3">
+          <tbody>
+            <row>
+              <entry>Parameter</entry>
+              <entry>Value</entry>
+              <entry>Description</entry>
+            </row>
+            <row>
+              <entry>
+                <m:math overflow="scroll">
+                  <m:msub>
+                    <m:mi>w</m:mi>
+                    <m:mrow>
+                      <m:mi>i</m:mi>
+                      <m:mi>n</m:mi>
+                      <m:mi>p</m:mi>
+                    </m:mrow>
+                  </m:msub>
+                </m:math>
+              </entry>
+              <entry><m:math overflow="scroll"><m:mrow><m:mn>2</m:mn><m:mo>≤</m:mo><m:msub><m:mi>w</m:mi><m:mrow><m:mi>i</m:mi><m:mi>n</m:mi><m:mi>p</m:mi></m:mrow></m:msub><m:mo>≤</m:mo><m:mn>20</m:mn></m:mrow></m:math> mV</entry>
+              <entry>Input weight</entry>
+            </row>
+            <row>
+              <entry>
+                <m:math overflow="scroll">
+                  <m:mi>I</m:mi>
+                </m:math>
+              </entry>
+              <entry><m:math overflow="scroll"><m:mrow><m:mn>2</m:mn><m:mo>≤</m:mo><m:mi>I</m:mi><m:mo>≤</m:mo><m:mn>30</m:mn></m:mrow></m:math> ms</entry>
+              <entry>Interspike interval of external inputs</entry>
+            </row>
+            <row>
+              <entry>
+                <m:math overflow="scroll">
+                  <m:mi>τ</m:mi>
+                </m:math>
+              </entry>
+              <entry>20 ms</entry>
+              <entry>Decay time</entry>
+            </row>
+            <row>
+              <entry>
+                <m:math overflow="scroll">
+                  <m:mrow>
+                    <m:mi>d</m:mi>
+                    <m:mi>t</m:mi>
+                  </m:mrow>
+                </m:math>
+              </entry>
+              <entry>1 ms</entry>
+              <entry>Time step</entry>
+            </row>
+            <row>
+              <entry>
+                <m:math overflow="scroll">
+                  <m:msub>
+                    <m:mi>v</m:mi>
+                    <m:mi>r</m:mi>
+                  </m:msub>
+                </m:math>
+              </entry>
+              <entry>-70 mV</entry>
+              <entry>Resting voltage</entry>
+            </row>
+            <row>
+              <entry>
+                <m:math overflow="scroll">
+                  <m:msub>
+                    <m:mi>v</m:mi>
+                    <m:mrow>
+                      <m:mi>t</m:mi>
+                      <m:mi>h</m:mi>
+                    </m:mrow>
+                  </m:msub>
+                </m:math>
+              </entry>
+              <entry>-54 mV</entry>
+              <entry>Threshold voltage</entry>
+            </row>
+          </tbody>
+        </tgroup>
+        <caption>Parameters for models. These values are used unless otherwise specified.</caption>
+      </table>
+      <section id="uid6">
+        <title>Neuron as a Circuit: Integrate and Fire</title>
+        <para id="id63006">We model a single place cell with the Integrate and Fire (IAF) model so that we can accurately calculate the subthreshold voltage and approximate spike times of a cell at little computational expense <link target-id="bid3"/>.</para>
+        <figure id="uid7"><media id="uid7_media" alt="">
+            <image mime-type="image/png" src="../../media/Circuit.png" id="uid7_onlineimage" width="355"><!-- NOTE: attribute width changes image size online (pixels). original width is 855. --></image>
+            <image mime-type="application/postscript" for="pdf" src="../../media/Circuit.eps" id="uid7_printimage" print-width="8cm">
+              <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+            </image>
+          </media>
+          
+        <caption>Circuit model of a cell. The cell can be modeled as a circuit with three currents. The difference between potentials <m:math overflow="scroll"><m:msub><m:mi>φ</m:mi><m:mrow><m:mi>i</m:mi><m:mi>n</m:mi></m:mrow></m:msub></m:math> and <m:math overflow="scroll"><m:msub><m:mi>φ</m:mi><m:mrow><m:mi>o</m:mi><m:mi>u</m:mi><m:mi>t</m:mi></m:mrow></m:msub></m:math> gives the reversal potential <m:math overflow="scroll"><m:msub><m:mi>v</m:mi><m:mrow><m:mi>C</m:mi><m:mi>l</m:mi></m:mrow></m:msub></m:math>, which we refer to as <m:math overflow="scroll"><m:mi>v</m:mi></m:math> in the text. <m:math overflow="scroll"><m:msub><m:mi>g</m:mi><m:mrow><m:mi>C</m:mi><m:mi>l</m:mi></m:mrow></m:msub></m:math> and <m:math overflow="scroll"><m:msub><m:mi>g</m:mi><m:mrow><m:mi>s</m:mi><m:mi>y</m:mi><m:mi>n</m:mi></m:mrow></m:msub></m:math> denote the conductances of the chloride channels and the synapse, respectively. <m:math overflow="scroll"><m:msub><m:mi>C</m:mi><m:mi>m</m:mi></m:msub></m:math> is the membrane capacitance. <m:math overflow="scroll"><m:msub><m:mi>v</m:mi><m:mrow><m:mi>s</m:mi><m:mi>y</m:mi><m:mi>n</m:mi></m:mrow></m:msub></m:math> depends upon the equilibrium concentrations of the ion of the associated channel. By Kirchoff's current law, <m:math overflow="scroll"><m:mrow><m:msub><m:mi>I</m:mi><m:mrow><m:mi>C</m:mi><m:mi>l</m:mi></m:mrow></m:msub><m:mo>+</m:mo><m:msub><m:mi>I</m:mi><m:mi>C</m:mi></m:msub><m:mo>+</m:mo><m:msub><m:mi>I</m:mi><m:mrow><m:mi>s</m:mi><m:mi>y</m:mi><m:mi>n</m:mi></m:mrow></m:msub><m:mo>=</m:mo><m:mn>0</m:mn></m:mrow></m:math>, <link target-id="bid4"/>.</caption></figure>
+        <para id="id63389">The cell can be modeled as a leaky capacitor that separates charge by controlling the flow of ions across the cell membrane, making a difference between potentials <m:math overflow="scroll"><m:msub><m:mi>φ</m:mi><m:mrow><m:mi>i</m:mi><m:mi>n</m:mi></m:mrow></m:msub></m:math> and <m:math overflow="scroll"><m:msub><m:mi>φ</m:mi><m:mrow><m:mi>o</m:mi><m:mi>u</m:mi><m:mi>t</m:mi></m:mrow></m:msub></m:math> across the membrane (<m:math overflow="scroll"><m:mrow><m:mi>v</m:mi><m:mo>=</m:mo><m:msub><m:mi>φ</m:mi><m:mrow><m:mi>i</m:mi><m:mi>n</m:mi></m:mrow></m:msub><m:mo>-</m:mo><m:msub><m:mi>φ</m:mi><m:mrow><m:mi>o</m:mi><m:mi>u</m:mi><m:mi>t</m:mi></m:mrow></m:msub></m:mrow></m:math>). This model approximates the subthreshold voltage (<m:math overflow="scroll"><m:mi>v</m:mi></m:math> before it reaches the threshold voltage <m:math overflow="scroll"><m:msub><m:mi>v</m:mi><m:mrow><m:mi>t</m:mi><m:mi>h</m:mi></m:mrow></m:msub></m:math>) and the time that <m:math overflow="scroll"><m:mi>v</m:mi></m:math> does reach threshold <m:math overflow="scroll"><m:msub><m:mi>v</m:mi><m:mrow><m:mi>t</m:mi><m:mi>h</m:mi></m:mrow></m:msub></m:math>. When <m:math overflow="scroll"><m:mi>v</m:mi></m:math> reaches the threshold voltage, <m:math overflow="scroll"><m:mi>v</m:mi></m:math> experiences a sharp increase then decrease and the cell is said to have “spiked" or “fired".</para>
+        <para id="id63532">Let <m:math overflow="scroll"><m:msub><m:mi>C</m:mi><m:mi>m</m:mi></m:msub></m:math> denote the membrane capacitance, <m:math overflow="scroll"><m:msub><m:mi>g</m:mi><m:mrow><m:mi>C</m:mi><m:mi>l</m:mi></m:mrow></m:msub></m:math> and <m:math overflow="scroll"><m:msub><m:mi>g</m:mi><m:mrow><m:mi>s</m:mi><m:mi>y</m:mi><m:mi>n</m:mi></m:mrow></m:msub></m:math> denote the conductances of the chloride channels and the synapse, respectively, and <m:math overflow="scroll"><m:msub><m:mi>v</m:mi><m:mrow><m:mi>C</m:mi><m:mi>l</m:mi></m:mrow></m:msub></m:math> denote the reversal potential (the voltage at which no net flow of chloride ions occurs). <m:math overflow="scroll"><m:msub><m:mi>v</m:mi><m:mrow><m:mi>s</m:mi><m:mi>y</m:mi><m:mi>n</m:mi></m:mrow></m:msub></m:math> is determined by the equilibrium concentrations of the ion of the associated channel, <link target-id="bid4"/>. Input from other cells adds excitatory synaptic current. This input allows for the cell to depolarize and eventually reach <m:math overflow="scroll"><m:msub><m:mi>v</m:mi><m:mrow><m:mi>t</m:mi><m:mi>h</m:mi></m:mrow></m:msub></m:math> and fire, which sends an electric signal to neighboring cells. The electric signal from a neighboring cell allows for voltage-gated channels to open, which affects the synaptic conductance <m:math overflow="scroll"><m:msub><m:mi>g</m:mi><m:mrow><m:mi>s</m:mi><m:mi>y</m:mi><m:mi>n</m:mi></m:mrow></m:msub></m:math>. We set the reversal potential above a threshold voltage so that as <m:math overflow="scroll"><m:msub><m:mi>g</m:mi><m:mrow><m:mi>s</m:mi><m:mi>y</m:mi><m:mi>n</m:mi></m:mrow></m:msub></m:math> increases and the channels open, the cell's voltage <m:math overflow="scroll"><m:mi>v</m:mi></m:math> approaches the threshold <m:math overflow="scroll"><m:msub><m:mi>v</m:mi><m:mrow><m:mi>t</m:mi><m:mi>h</m:mi></m:mrow></m:msub></m:math>. When <m:math overflow="scroll"><m:mrow><m:mi>v</m:mi><m:mo>≥</m:mo><m:msub><m:mi>v</m:mi><m:mrow><m:mi>t</m:mi><m:mi>h</m:mi></m:mrow></m:msub></m:mrow></m:math>, the cell fires <link target-id="bid4"/>. See <link target-id="uid7"/> for a model of a cell as a circuit <link target-id="bid4"/>.
+The synaptic conductance is governed by the ODE</para>
+        <equation id="uid8">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:mi>τ</m:mi>
+              <m:msubsup>
+                <m:mi>g</m:mi>
+                <m:mrow>
+                  <m:mi>s</m:mi>
+                  <m:mi>y</m:mi>
+                  <m:mi>n</m:mi>
+                </m:mrow>
+                <m:mo>'</m:mo>
+              </m:msubsup>
+              <m:mo>=</m:mo>
+              <m:mo>-</m:mo>
+              <m:msub>
+                <m:mi>g</m:mi>
+                <m:mrow>
+                  <m:mi>s</m:mi>
+                  <m:mi>y</m:mi>
+                  <m:mi>n</m:mi>
+                </m:mrow>
+              </m:msub>
+              <m:mo>+</m:mo>
+              <m:munder>
+                <m:mo>∑</m:mo>
+                <m:mi>i</m:mi>
+              </m:munder>
+              <m:msubsup>
+                <m:mi>w</m:mi>
+                <m:mi>i</m:mi>
+                <m:mrow>
+                  <m:mi>i</m:mi>
+                  <m:mi>n</m:mi>
+                  <m:mi>p</m:mi>
+                </m:mrow>
+              </m:msubsup>
+              <m:munder>
+                <m:mo>∑</m:mo>
+                <m:mi>n</m:mi>
+              </m:munder>
+              <m:mi>δ</m:mi>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>t</m:mi>
+                <m:mo>-</m:mo>
+                <m:msub>
+                  <m:mi>T</m:mi>
+                  <m:mi>n</m:mi>
+                </m:msub>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>,</m:mo>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id63848">where <m:math overflow="scroll"><m:mi>τ</m:mi></m:math> is the decay constant, <m:math overflow="scroll"><m:msubsup><m:mi>w</m:mi><m:mi>i</m:mi><m:mrow><m:mi>i</m:mi><m:mi>n</m:mi><m:mi>p</m:mi></m:mrow></m:msubsup></m:math> is the weight of synaptic input from the <m:math overflow="scroll"><m:mi>i</m:mi></m:math>th synapse, <m:math overflow="scroll"><m:msub><m:mi>T</m:mi><m:mi>n</m:mi></m:msub></m:math> is the set of input spike times for the presynaptic cell <m:math overflow="scroll"><m:mi>i</m:mi></m:math>, and <m:math overflow="scroll"><m:mi>δ</m:mi></m:math> is the Dirac delta function. From Dr. Cox's book <link target-id="bid4"/>, we see that applying Kirchoff's current law results in</para>
+        <equation id="uid9">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:msub>
+                <m:mi>C</m:mi>
+                <m:mi>m</m:mi>
+              </m:msub>
+              <m:mfrac>
+                <m:mrow>
+                  <m:mi>d</m:mi>
+                  <m:mi>v</m:mi>
+                </m:mrow>
+                <m:mrow>
+                  <m:mi>d</m:mi>
+                  <m:mi>t</m:mi>
+                </m:mrow>
+              </m:mfrac>
+              <m:mo>+</m:mo>
+              <m:msub>
+                <m:mi>g</m:mi>
+                <m:mrow>
+                  <m:mi>C</m:mi>
+                  <m:mi>l</m:mi>
+                </m:mrow>
+              </m:msub>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>v</m:mi>
+                <m:mo>-</m:mo>
+                <m:msub>
+                  <m:mi>v</m:mi>
+                  <m:mrow>
+                    <m:mi>C</m:mi>
+                    <m:mi>l</m:mi>
+                  </m:mrow>
+                </m:msub>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>+</m:mo>
+              <m:msub>
+                <m:mi>g</m:mi>
+                <m:mrow>
+                  <m:mi>s</m:mi>
+                  <m:mi>y</m:mi>
+                  <m:mi>n</m:mi>
+                </m:mrow>
+              </m:msub>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>v</m:mi>
+                <m:mo>-</m:mo>
+                <m:msub>
+                  <m:mi>v</m:mi>
+                  <m:mrow>
+                    <m:mi>s</m:mi>
+                    <m:mi>y</m:mi>
+                    <m:mi>n</m:mi>
+                  </m:mrow>
+                </m:msub>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>=</m:mo>
+              <m:mn>0</m:mn>
+              <m:mo>.</m:mo>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <figure id="uid10"><media id="uid10_media" alt="">
+            <image mime-type="image/png" src="../../media/model2cell.png" id="uid10_onlineimage" width="496"><!-- NOTE: attribute width changes image size online (pixels). original width is 1096. --></image>
+            <image mime-type="application/postscript" for="pdf" src="../../media/model2cell.eps" id="uid10_printimage" print-width="8cm">
+              <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+            </image>
+          </media>
+          
+        <caption>Simple 2-cell network. Cell 1 receives input from an external source, and Cell 2 receives input from Cell 1. The conductances and voltages of the two cells are calculated by equations <link target-id="uid8"/> and <link target-id="uid9"/>, respectively <link target-id="bid4"/>.</caption></figure>
+      </section>
+      <section id="uid11">
+        <title>Model of DRE: 120-cell Ring</title>
+        <figure id="uid12"><media id="uid12_media" alt="">
+            <image mime-type="image/png" src="../../media/ring120cell.png" id="uid12_onlineimage" width="598"><!-- NOTE: attribute width changes image size online (pixels). original width is 1298. --></image>
+            <image mime-type="application/postscript" for="pdf" src="../../media/ring120cell.eps" id="uid12_printimage" print-width="8cm">
+              <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+            </image>
+          </media>
+          
+        <caption>120-cell ring. We put 120 cells, represented by circles, in a ring architecture with bidirectional interactions between cells, as well as synapses to sources of external input.ÊLike the DRE, each place cell has a corresponding place field on a circular path that a simulated rat traverses clockwise. The bidirectional interaction between two neighboring cells is modeled through two synapses with one synapse for each direction <link target-id="bid4"/>. The weights of the synapses changes over time according to the STDP model described in <link target-id="uid14">"STDP"</link><link target-id="bid5"/>.</caption></figure>
+        <para id="id64111">We use the IAF model for single cells, and we connect these cells into a ring of 120 place cells to simulate the DRE <link target-id="bid4"/>.
+The 120-cell ring is depicted in <link target-id="uid12"/>. Each cell receives external spatial input as well as input from neighboring cells. The conductances and voltages of Cells 1 and 2 are depicted in <link target-id="uid13"/> as calculated by equations <link target-id="uid8"/> and <link target-id="uid9"/>. We monitor the weights of the connections between neighboring cells over time, where there is an arbitrary maximum weight bound so that the weights do not approach infinity and a minimum weight bound of 0 so the weights do not become negative. We also monitor how the changes of the weights affect the position of the place fields. See <link target-id="uid13"/> for a depiction of the IAF model.</para>
+        <figure id="uid13"><media id="uid13_media" alt="">
+            <image mime-type="image/png" src="../../media/IAF2cells.pdf" id="uid13_onlineimage" width="697"><!-- NOTE: attribute width changes image size online (pixels). original width is 497. --></image>
+            <image mime-type="application/postscript" for="pdf" src="IAF2cells.eps" id="uid13_printimage" print-width="10cm">
+              <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+            </image>
+          </media>
+          
+        <caption>Depiction of the IAF model for Cell 1 and Cell 2 from <link target-id="uid12"/>. We calculate the conductances and voltages for Cells 1 and 2 by <link target-id="uid8"/> and <link target-id="uid9"/>, respectively. <m:math overflow="scroll"><m:mrow><m:msub><m:mi>v</m:mi><m:mrow><m:mi>t</m:mi><m:mi>h</m:mi></m:mrow></m:msub><m:mo>=</m:mo><m:mo>-</m:mo><m:mn>54</m:mn><m:mspace width="4pt"/><m:mi>m</m:mi><m:mi>V</m:mi></m:mrow></m:math>, and <m:math overflow="scroll"><m:mrow><m:msub><m:mi>w</m:mi><m:mrow><m:mi>e</m:mi><m:mi>x</m:mi><m:mi>t</m:mi></m:mrow></m:msub><m:mo>=</m:mo><m:msub><m:mi>w</m:mi><m:mn>12</m:mn></m:msub><m:mo>=</m:mo><m:mn>2</m:mn><m:mspace width="4pt"/><m:mi>S</m:mi></m:mrow></m:math> are the weights of the synapses from the external source and Cell 1, respectively. It can be seen that in Place Field 1 (<m:math overflow="scroll"><m:mrow><m:mn>0</m:mn><m:mo>&lt;</m:mo><m:mi>t</m:mi><m:mo>&lt;</m:mo><m:mn>100</m:mn></m:mrow></m:math>), Cell 1 receives external input every 20 ms (in the form of conductance spikes), and in Place Field 2 (<m:math overflow="scroll"><m:mrow><m:mn>100</m:mn><m:mo>≤</m:mo><m:mi>t</m:mi><m:mo>&lt;</m:mo><m:mn>200</m:mn></m:mrow></m:math>), Cell 2 receives the external input. At each external input spike, the corresponding cell fires (its voltage spikes) and gives a small amount of input to its neighboring cells. (<link resource="IAF2cellsweight.m">IAF2cellsweight.m</link>)</caption></figure>
+        <section id="uid14">
+          <title>STDP</title>
+          <para id="id64300">To determine how the weights of the synapses change, we use an STDP model <link target-id="bid5"/>.
+The spikes times of the pre- and post-synaptic cells are compared, and the smaller the time difference, the more the weight is adjusted. See <link target-id="uid16"/>. The percentage of weight change is determined by</para>
+          <equation id="uid15">
+            <m:math overflow="scroll" mode="display">
+              <m:mrow>
+                <m:mi>F</m:mi>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mi>Δ</m:mi>
+                  <m:mi>t</m:mi>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mo>=</m:mo>
+                <m:mfenced separators="" open="{" close="">
+                  <m:mtable>
+                    <m:mtr>
+                      <m:mtd columnalign="left">
+                        <m:mrow>
+                          <m:msub>
+                            <m:mi>A</m:mi>
+                            <m:mo>+</m:mo>
+                          </m:msub>
+                          <m:msup>
+                            <m:mi>e</m:mi>
+                            <m:mrow>
+                              <m:mi>Δ</m:mi>
+                              <m:mi>t</m:mi>
+                              <m:mo>/</m:mo>
+                              <m:msub>
+                                <m:mi>τ</m:mi>
+                                <m:mo>+</m:mo>
+                              </m:msub>
+                            </m:mrow>
+                          </m:msup>
+                          <m:mo>,</m:mo>
+                        </m:mrow>
+                      </m:mtd>
+                      <m:mtd columnalign="left">
+                        <m:mrow>
+                          <m:mi>Δ</m:mi>
+                          <m:mi>t</m:mi>
+                          <m:mo>&lt;</m:mo>
+                          <m:mn>0</m:mn>
+                        </m:mrow>
+                      </m:mtd>
+                    </m:mtr>
+                    <m:mtr>
+                      <m:mtd columnalign="left">
+                        <m:mrow>
+                          <m:mo>-</m:mo>
+                          <m:msub>
+                            <m:mi>A</m:mi>
+                            <m:mo>-</m:mo>
+                          </m:msub>
+                          <m:msup>
+                            <m:mi>e</m:mi>
+                            <m:mrow>
+                              <m:mo>-</m:mo>
+                              <m:mi>Δ</m:mi>
+                              <m:mi>t</m:mi>
+                              <m:mo>/</m:mo>
+                              <m:msub>
+                                <m:mi>τ</m:mi>
+                                <m:mo>-</m:mo>
+                              </m:msub>
+                            </m:mrow>
+                          </m:msup>
+                          <m:mo>,</m:mo>
+                        </m:mrow>
+                      </m:mtd>
+                      <m:mtd columnalign="left">
+                        <m:mrow>
+                          <m:mi>Δ</m:mi>
+                          <m:mi>t</m:mi>
+                          <m:mo>≥</m:mo>
+                          <m:mn>0</m:mn>
+                          <m:mo>,</m:mo>
+                        </m:mrow>
+                      </m:mtd>
+                    </m:mtr>
+                  </m:mtable>
+                </m:mfenced>
+              </m:mrow>
+            </m:math>
+          </equation>
+          <para id="id64458">where <m:math overflow="scroll"><m:mrow><m:mi>Δ</m:mi><m:mi>t</m:mi><m:mo>=</m:mo><m:msub><m:mi>t</m:mi><m:mrow><m:mi>p</m:mi><m:mi>r</m:mi><m:mi>e</m:mi></m:mrow></m:msub><m:mo>-</m:mo><m:msub><m:mi>t</m:mi><m:mrow><m:mi>p</m:mi><m:mi>o</m:mi><m:mi>s</m:mi><m:mi>t</m:mi></m:mrow></m:msub></m:mrow></m:math> and <m:math overflow="scroll"><m:msub><m:mi>A</m:mi><m:mo>+</m:mo></m:msub></m:math> and <m:math overflow="scroll"><m:msub><m:mi>A</m:mi><m:mo>-</m:mo></m:msub></m:math> scale the maximal amount of change allowed when <m:math overflow="scroll"><m:mrow><m:mi>Δ</m:mi><m:mi>t</m:mi></m:mrow></m:math> is close to 0 <link target-id="bid5"/>. <m:math overflow="scroll"><m:mrow><m:mi>F</m:mi><m:mo>(</m:mo><m:mi>Δ</m:mi><m:mi>t</m:mi><m:mo>)</m:mo></m:mrow></m:math> is depicted in <link target-id="uid16"/>.</para>
+          <figure id="uid16"><media id="uid16_media" alt="">
+              <image mime-type="image/png" src="../../media/STDPweightchange.png" id="uid16_onlineimage" width="200"><!-- NOTE: attribute width changes image size online (pixels). original width is 155. --></image>
+              <image mime-type="application/postscript" for="pdf" src="../../media/STDPweightchange.eps" id="uid16_printimage" print-width="6cm">
+                <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+              </image>
+            </media>
+            
+          <caption>Percentage of weight change due to STDP. This graph shows that as <m:math overflow="scroll"><m:mrow><m:mi>Δ</m:mi><m:mi>t</m:mi><m:mo>=</m:mo><m:msub><m:mi>t</m:mi><m:mrow><m:mi>p</m:mi><m:mi>r</m:mi><m:mi>e</m:mi></m:mrow></m:msub><m:mo>-</m:mo><m:msub><m:mi>t</m:mi><m:mrow><m:mi>p</m:mi><m:mi>o</m:mi><m:mi>s</m:mi><m:mi>t</m:mi></m:mrow></m:msub></m:mrow></m:math> approaches 0, the percentage of change in the weight of the synapse increases <link target-id="bid5"/>. <m:math overflow="scroll"><m:mrow><m:mi>F</m:mi><m:mo>(</m:mo><m:mi>Δ</m:mi><m:mi>t</m:mi><m:mo>)</m:mo></m:mrow></m:math> is calculated by Equation <link target-id="uid15"/>.</caption></figure>
+          <para id="id64666">In our 120-cell model, we set a lower bound for the weights at <m:math overflow="scroll"><m:mrow><m:mn>0</m:mn><m:mspace width="4pt"/><m:mi>m</m:mi><m:mi>V</m:mi></m:mrow></m:math> and an upper bound at <m:math overflow="scroll"><m:mrow><m:mn>5</m:mn><m:mspace width="4pt"/><m:mi>m</m:mi><m:mi>V</m:mi></m:mrow></m:math>. The necessity for an upper weight bound is one of the weaknesses of the STDP model, so Andrew Wu, another member of this PFUG, has done work with other plasticity models. See the link "Mathematical Models of Hippocampal Spatial Memory".</para>
+          <para id="id64706">The work with the 120-cell model is all computational. Our results show that each lap, the weight of the synapse from Cell 1 to Cell 2 (<m:math overflow="scroll"><m:msub><m:mi>w</m:mi><m:mn>12</m:mn></m:msub></m:math>) increases toward a set weight bound and the weight of the synapse from Cell 2 to Cell 1 (<m:math overflow="scroll"><m:msub><m:mi>w</m:mi><m:mn>21</m:mn></m:msub></m:math>) decreases to 0 as in <link target-id="uid17"/>. We also see that after 4 laps around the path, the place fields start to shift backward. <link target-id="uid18"/> shows that the spike time of Cell 2 decreases each lap, which is indicative of a backward shift of Cell 2's place field. See <link resource="IAF120cells1stspks.m">IAF120cells1stspks.m</link><emphasis effect="bold"/>.</para>
+          <figure id="uid17"><media id="uid17_media" alt="">
+              <image mime-type="image/png" src="../../media/STDPweights.pdf" id="uid17_onlineimage" width="585"><!-- NOTE: attribute width changes image size online (pixels). original width is 485. --></image>
+              <image mime-type="application/postscript" for="pdf" src="../../media/STDPweights.eps" id="uid17_printimage" print-width="10cm">
+                <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+              </image>
+            </media>
+            
+          <caption>Weights of synapses over time. The weight of the synapse from Cell 1 to Cell 2 (<m:math overflow="scroll"><m:msub><m:mi>w</m:mi><m:mn>12</m:mn></m:msub></m:math>) increases each lap (1 lap = 12,000 ms) as the weight of the synapse from Cell 2 to Cell 1 (<m:math overflow="scroll"><m:msub><m:mi>w</m:mi><m:mn>21</m:mn></m:msub></m:math>) decreases each lap to 0. (<link resource="IAF120cellsSTDP.m">IAF120cellsSTDP.m</link>)</caption></figure>
+          <figure id="uid18"><media id="uid18_media" alt="">
+              <image mime-type="image/png" src="../../media/IAF120cells1stspks.pdf" id="uid18_onlineimage" width="685"><!-- NOTE: attribute width changes image size online (pixels). original width is 397. --></image>
+              <image mime-type="application/postscript" for="pdf" src="../../media/IAF120cells1stspks.eps" id="uid18_printimage" print-width="10cm">
+                <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+              </image>
+            </media>
+            
+          <caption>Backward shift of place field of Cell 2 in <m:math overflow="scroll"><m:mrow><m:mi>m</m:mi><m:mi>s</m:mi></m:mrow></m:math>. The rat spends <m:math overflow="scroll"><m:mrow><m:mn>100</m:mn><m:mspace width="4pt"/><m:mi>m</m:mi><m:mi>s</m:mi></m:mrow></m:math> in each place field. It can be seen here that after as few as 4 laps around the track, place cell 2 starts to fire earlier and its place field shifts backwards. (<link resource="IAF120cells1stspks.m">IAF120cells1stspks.m</link><emphasis effect="bold"/>)</caption></figure>
+        </section>
+      </section>
+      <section id="uid19">
+        <title>Model for Analysis</title>
+        <figure id="uid20"><media id="uid20_media" alt="">
+            <image mime-type="image/png" src="../../media/model1cell.png" id="uid20_onlineimage" width="253"><!-- NOTE: attribute width changes image size online (pixels). original width is 353. --></image>
+            <image mime-type="application/postscript" for="pdf" src="../../media/model1cell.eps" id="uid20_printimage" print-width="4cm">
+              <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+            </image>
+          </media>
+          
+        <caption>Simple 1-cell system. Cell 1 receives input of weight <m:math overflow="scroll"><m:msub><m:mi>w</m:mi><m:mrow><m:mi>i</m:mi><m:mi>n</m:mi><m:mi>p</m:mi></m:mrow></m:msub></m:math> at an interspike interval <m:math overflow="scroll"><m:mi>I</m:mi></m:math>.</caption></figure>
+        <para id="id64910">We begin by considering only one place cell which receives input from one external source with constant weight <m:math overflow="scroll"><m:msub><m:mi>w</m:mi><m:mrow><m:mi>i</m:mi><m:mi>n</m:mi><m:mi>p</m:mi></m:mrow></m:msub></m:math> at a set interspike interval, <m:math overflow="scroll"><m:mi>I</m:mi></m:math>, as depicted in <link target-id="uid20"/>. The following equation gives the voltage <m:math overflow="scroll"><m:mi>v</m:mi></m:math> in <m:math overflow="scroll"><m:mrow><m:mi>m</m:mi><m:mi>V</m:mi></m:mrow></m:math> of the cell at time <m:math overflow="scroll"><m:mi>t</m:mi></m:math> with <m:math overflow="scroll"><m:mi>n</m:mi></m:math> total input spikes:</para>
+        <equation id="uid21">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:mi>τ</m:mi>
+              <m:msup>
+                <m:mi>v</m:mi>
+                <m:mo>'</m:mo>
+              </m:msup>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>t</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>=</m:mo>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:msub>
+                  <m:mi>v</m:mi>
+                  <m:mi>r</m:mi>
+                </m:msub>
+                <m:mo>-</m:mo>
+                <m:mi>v</m:mi>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mi>t</m:mi>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>+</m:mo>
+              <m:msub>
+                <m:mi>w</m:mi>
+                <m:mrow>
+                  <m:mi>i</m:mi>
+                  <m:mi>n</m:mi>
+                  <m:mi>p</m:mi>
+                </m:mrow>
+              </m:msub>
+              <m:munderover>
+                <m:mo>∑</m:mo>
+                <m:mrow>
+                  <m:mi>i</m:mi>
+                  <m:mo>=</m:mo>
+                  <m:mn>1</m:mn>
+                </m:mrow>
+                <m:mi>n</m:mi>
+              </m:munderover>
+              <m:mi>δ</m:mi>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>t</m:mi>
+                <m:mo>-</m:mo>
+                <m:msub>
+                  <m:mi>T</m:mi>
+                  <m:mi>i</m:mi>
+                </m:msub>
+                <m:mo>)</m:mo>
+              </m:mrow>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id65094">where <m:math overflow="scroll"><m:mrow><m:mi>τ</m:mi><m:mo>=</m:mo><m:mn>20</m:mn></m:mrow></m:math><m:math overflow="scroll"><m:mrow><m:mi>m</m:mi><m:mi>s</m:mi></m:mrow></m:math> is the membrane time constant, <m:math overflow="scroll"><m:mrow><m:msub><m:mi>v</m:mi><m:mi>r</m:mi></m:msub><m:mo>=</m:mo><m:mo>-</m:mo><m:mn>70</m:mn></m:mrow></m:math><m:math overflow="scroll"><m:mrow><m:mi>m</m:mi><m:mi>V</m:mi></m:mrow></m:math> is the resting potential, <m:math overflow="scroll"><m:mi>T</m:mi></m:math> is the set of input spike times, and <m:math overflow="scroll"><m:mrow><m:mi>δ</m:mi><m:mo>(</m:mo><m:mi>t</m:mi><m:mo>-</m:mo><m:msub><m:mi>T</m:mi><m:mi>i</m:mi></m:msub><m:mo>)</m:mo></m:mrow></m:math> is the Dirac delta function. This is a simplification of equation <link target-id="uid9"/>.</para>
+        <section id="uid22">
+          <title>Computational Method</title>
+          <para id="id65209">To solve for <m:math overflow="scroll"><m:mrow><m:mi>v</m:mi><m:mo>(</m:mo><m:mi>t</m:mi><m:mo>)</m:mo></m:mrow></m:math> computationally, we first look at the times with no input spikes (<m:math overflow="scroll"><m:mrow><m:mi>k</m:mi><m:mi>I</m:mi><m:mo>&lt;</m:mo><m:mi>t</m:mi><m:mo>&lt;</m:mo><m:mo>(</m:mo><m:mi>k</m:mi><m:mo>+</m:mo><m:mn>1</m:mn><m:mo>)</m:mo><m:mi>I</m:mi></m:mrow></m:math>).
+Integrating both sides of equation <link target-id="uid21"/> from <m:math overflow="scroll"><m:mrow><m:mi>t</m:mi><m:mo>-</m:mo><m:mi>d</m:mi><m:mi>t</m:mi></m:mrow></m:math> to <m:math overflow="scroll"><m:mi>t</m:mi></m:math> and using the trapezoid rule, we find</para>
+          <equation id="uid23">
+            <m:math overflow="scroll" mode="display">
+              <m:mtable displaystyle="true">
+                <m:mtr>
+                  <m:mtd columnalign="right">
+                    <m:mrow>
+                      <m:mi>τ</m:mi>
+                      <m:mo>(</m:mo>
+                      <m:mi>v</m:mi>
+                      <m:mo>(</m:mo>
+                      <m:mi>t</m:mi>
+                      <m:mo>)</m:mo>
+                      <m:mo>-</m:mo>
+                      <m:mi>v</m:mi>
+                      <m:mo>(</m:mo>
+                      <m:mi>t</m:mi>
+                      <m:mo>-</m:mo>
+                      <m:mi>d</m:mi>
+                      <m:mi>t</m:mi>
+                      <m:mo>)</m:mo>
+                      <m:mo>)</m:mo>
+                    </m:mrow>
+                  </m:mtd>
+                  <m:mtd columnalign="left">
+                    <m:mrow>
+                      <m:mo>=</m:mo>
+                      <m:msub>
+                        <m:mi>v</m:mi>
+                        <m:mi>r</m:mi>
+                      </m:msub>
+                      <m:mi>d</m:mi>
+                      <m:mi>t</m:mi>
+                      <m:mo>-</m:mo>
+                      <m:mfrac>
+                        <m:mrow>
+                          <m:mi>v</m:mi>
+                          <m:mo>(</m:mo>
+                          <m:mi>t</m:mi>
+                          <m:mo>)</m:mo>
+                          <m:mo>+</m:mo>
+                          <m:mi>v</m:mi>
+                          <m:mo>(</m:mo>
+                          <m:mi>t</m:mi>
+                          <m:mo>-</m:mo>
+                          <m:mi>d</m:mi>
+                          <m:mi>t</m:mi>
+                          <m:mo>)</m:mo>
+                        </m:mrow>
+                        <m:mn>2</m:mn>
+                      </m:mfrac>
+                      <m:mo>,</m:mo>
+                      <m:mspace width="1.em"/>
+                      <m:mtext>which</m:mtext>
+                      <m:mspace width="4.pt"/>
+                      <m:mtext>can</m:mtext>
+                      <m:mspace width="4.pt"/>
+                      <m:mtext>be</m:mtext>
+                      <m:mspace width="4.pt"/>
+                      <m:mtext>rearranged</m:mtext>
+                      <m:mspace width="4.pt"/>
+                      <m:mtext>as</m:mtext>
+                    </m:mrow>
+                  </m:mtd>
+                </m:mtr>
+                <m:mtr>
+                  <m:mtd columnalign="right">
+                    <m:mrow>
+                      <m:mi>v</m:mi>
+                      <m:mo>(</m:mo>
+                      <m:mi>t</m:mi>
+                      <m:mo>)</m:mo>
+                    </m:mrow>
+                  </m:mtd>
+                  <m:mtd columnalign="left">
+                    <m:mrow>
+                      <m:mo>=</m:mo>
+                      <m:mfrac>
+                        <m:mrow>
+                          <m:mn>2</m:mn>
+                          <m:mi>d</m:mi>
+                          <m:mi>t</m:mi>
+                        </m:mrow>
+                        <m:mrow>
+                          <m:mn>2</m:mn>
+                          <m:mi>τ</m:mi>
+                          <m:mo>+</m:mo>
+                          <m:mn>1</m:mn>
+                        </m:mrow>
+                      </m:mfrac>
+                      <m:mo>·</m:mo>
+                      <m:msub>
+                        <m:mi>v</m:mi>
+                        <m:mi>r</m:mi>
+                      </m:msub>
+                      <m:mo>+</m:mo>
+                      <m:mfrac>
+                        <m:mrow>
+                          <m:mn>2</m:mn>
+                          <m:mi>τ</m:mi>
+                          <m:mo>-</m:mo>
+                          <m:mn>1</m:mn>
+                        </m:mrow>
+                        <m:mrow>
+                          <m:mn>2</m:mn>
+                          <m:mi>τ</m:mi>
+                          <m:mo>+</m:mo>
+                          <m:mn>1</m:mn>
+                        </m:mrow>
+                      </m:mfrac>
+                      <m:mo>·</m:mo>
+                      <m:mi>v</m:mi>
+                      <m:mrow>
+                        <m:mo>(</m:mo>
+                        <m:mi>t</m:mi>
+                        <m:mo>-</m:mo>
+                        <m:mi>d</m:mi>
+                        <m:mi>t</m:mi>
+                        <m:mo>)</m:mo>
+                      </m:mrow>
+                      <m:mo>.</m:mo>
+                    </m:mrow>
+                  </m:mtd>
+                </m:mtr>
+              </m:mtable>
+            </m:math>
+          </equation>
+          <para id="id65521">When there is an input spike, we add <m:math overflow="scroll"><m:msub><m:mi>w</m:mi><m:mrow><m:mi>i</m:mi><m:mi>n</m:mi><m:mi>p</m:mi></m:mrow></m:msub></m:math> to <m:math overflow="scroll"><m:mrow><m:mi>v</m:mi><m:mo>(</m:mo><m:mi>t</m:mi><m:mo>)</m:mo></m:mrow></m:math>, which is shown in</para>
+          <equation id="uid24">
+            <m:math overflow="scroll" mode="display">
+              <m:mrow>
+                <m:msub>
+                  <m:mi>v</m:mi>
+                  <m:mrow>
+                    <m:mi>i</m:mi>
+                    <m:mi>n</m:mi>
+                    <m:mi>p</m:mi>
+                  </m:mrow>
+                </m:msub>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mi>t</m:mi>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mo>=</m:mo>
+                <m:mi>v</m:mi>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mi>t</m:mi>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mo>+</m:mo>
+                <m:msub>
+                  <m:mi>w</m:mi>
+                  <m:mrow>
+                    <m:mi>i</m:mi>
+                    <m:mi>n</m:mi>
+                    <m:mi>p</m:mi>
+                  </m:mrow>
+                </m:msub>
+                <m:mo>.</m:mo>
+              </m:mrow>
+            </m:math>
+          </equation>
+        </section>
+        <section id="uid25">
+          <title>Analytic Method</title>
+          <para id="id65634">To solve for <m:math overflow="scroll"><m:mrow><m:mi>v</m:mi><m:mo>(</m:mo><m:mi>t</m:mi><m:mo>)</m:mo></m:mrow></m:math> analytically, we first look at <m:math overflow="scroll"><m:mrow><m:mi>v</m:mi><m:mo>(</m:mo><m:mi>t</m:mi><m:mo>)</m:mo></m:mrow></m:math> between input spikes. From equation <link target-id="uid21"/>, we get</para>
+          <equation id="id65675">
+            <m:math overflow="scroll" mode="display">
+              <m:mrow>
+                <m:mi>τ</m:mi>
+                <m:msup>
+                  <m:mi>v</m:mi>
+                  <m:mo>'</m:mo>
+                </m:msup>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mi>t</m:mi>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mo>=</m:mo>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:msub>
+                    <m:mi>v</m:mi>
+                    <m:mi>r</m:mi>
+                  </m:msub>
+                  <m:mo>-</m:mo>
+                  <m:mi>v</m:mi>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:mi>t</m:mi>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mo>.</m:mo>
+              </m:mrow>
+            </m:math>
+          </equation>
+          <para id="id65731">Solving this ordinary differential equation gives us</para>
+          <equation id="id65737">
+            <m:math overflow="scroll" mode="display">
+              <m:mrow>
+                <m:mi>v</m:mi>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mi>t</m:mi>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mo>=</m:mo>
+                <m:msub>
+                  <m:mi>v</m:mi>
+                  <m:mi>r</m:mi>
+                </m:msub>
+                <m:mo>+</m:mo>
+                <m:mi>c</m:mi>
+                <m:msup>
+                  <m:mi>e</m:mi>
+                  <m:mrow>
+                    <m:mo>-</m:mo>
+                    <m:mi>t</m:mi>
+                    <m:mo>/</m:mo>
+                    <m:mi>τ</m:mi>
+                  </m:mrow>
+                </m:msup>
+                <m:mo>,</m:mo>
+              </m:mrow>
+            </m:math>
+          </equation>
+          <para id="id65788">where <m:math overflow="scroll"><m:mi>c</m:mi></m:math> is the constant of integration. We know we want <m:math overflow="scroll"><m:mrow><m:mi>v</m:mi><m:mrow><m:mo>(</m:mo><m:mn>0</m:mn><m:mo>)</m:mo></m:mrow><m:mo>=</m:mo><m:msub><m:mi>v</m:mi><m:mi>r</m:mi></m:msub><m:mo>+</m:mo><m:msub><m:mi>w</m:mi><m:mrow><m:mi>i</m:mi><m:mi>n</m:mi><m:mi>p</m:mi></m:mrow></m:msub></m:mrow></m:math>, so <m:math overflow="scroll"><m:mi>c</m:mi></m:math> must equal <m:math overflow="scroll"><m:msub><m:mi>w</m:mi><m:mrow><m:mi>i</m:mi><m:mi>n</m:mi><m:mi>p</m:mi></m:mrow></m:msub></m:math>. Thus, we have</para>
+          <equation id="id65873">
+            <m:math overflow="scroll" mode="display">
+              <m:mrow>
+                <m:mi>v</m:mi>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mi>t</m:mi>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mo>=</m:mo>
+                <m:msub>
+                  <m:mi>v</m:mi>
+                  <m:mi>r</m:mi>
+                </m:msub>
+                <m:mo>+</m:mo>
+                <m:msub>
+                  <m:mi>w</m:mi>
+                  <m:mrow>
+                    <m:mi>i</m:mi>
+                    <m:mi>n</m:mi>
+                    <m:mi>p</m:mi>
+                  </m:mrow>
+                </m:msub>
+                <m:msup>
+                  <m:mi>e</m:mi>
+                  <m:mrow>
+                    <m:mo>-</m:mo>
+                    <m:mi>t</m:mi>
+                    <m:mo>/</m:mo>
+                    <m:mi>τ</m:mi>
+                  </m:mrow>
+                </m:msup>
+                <m:mo>,</m:mo>
+                <m:mspace width="4pt"/>
+                <m:mtext>where</m:mtext>
+                <m:mspace width="4pt"/>
+                <m:mn>0</m:mn>
+                <m:mo>≤</m:mo>
+                <m:mi>t</m:mi>
+                <m:mo>&lt;</m:mo>
+                <m:mi>I</m:mi>
+                <m:mo>,</m:mo>
+              </m:mrow>
+            </m:math>
+          </equation>
+          <para id="id65956">which simply tells us that after one input spike at <m:math overflow="scroll"><m:mrow><m:mi>t</m:mi><m:mo>=</m:mo><m:mn>0</m:mn></m:mrow></m:math>, <m:math overflow="scroll"><m:msub><m:mi>w</m:mi><m:mrow><m:mi>i</m:mi><m:mi>n</m:mi><m:mi>p</m:mi></m:mrow></m:msub></m:math> decays so that <m:math overflow="scroll"><m:mrow><m:mi>v</m:mi><m:mo>(</m:mo><m:mi>t</m:mi><m:mo>)</m:mo></m:mrow></m:math> approaches <m:math overflow="scroll"><m:msub><m:mi>v</m:mi><m:mi>r</m:mi></m:msub></m:math>. Consider the following calculations of <m:math overflow="scroll"><m:mrow><m:mi>v</m:mi><m:mo>(</m:mo><m:mi>t</m:mi><m:mo>)</m:mo></m:mrow></m:math> for up to three input spikes.</para>
+          <para id="id66043">At <m:math overflow="scroll"><m:mrow><m:mi>t</m:mi><m:mo>=</m:mo><m:mi>I</m:mi></m:mrow></m:math>, we have a second input spike, and at <m:math overflow="scroll"><m:mrow><m:mi>I</m:mi><m:mo>&lt;</m:mo><m:mi>t</m:mi><m:mo>&lt;</m:mo><m:mn>2</m:mn><m:mi>I</m:mi></m:mrow></m:math>, we decay the input to find</para>
+          <equation id="uid26">
+            <m:math overflow="scroll" mode="display">
+              <m:mtable displaystyle="true">
+                <m:mtr>
+                  <m:mtd columnalign="right">
+                    <m:mrow>
+                      <m:mi>v</m:mi>
+                      <m:mo>(</m:mo>
+                      <m:mi>I</m:mi>
+                      <m:mo>≤</m:mo>
+                      <m:mi>t</m:mi>
+                      <m:mo>&lt;</m:mo>
+                      <m:mn>2</m:mn>
+                      <m:mi>I</m:mi>
+                      <m:mo>)</m:mo>
+                    </m:mrow>
+                  </m:mtd>
+                  <m:mtd columnalign="left">
+                    <m:mrow>
+                      <m:mo>=</m:mo>
+                      <m:msub>
+                        <m:mi>v</m:mi>
+                        <m:mi>r</m:mi>
+                      </m:msub>
+                      <m:mo>+</m:mo>
+                      <m:msub>
+                        <m:mi>w</m:mi>
+                        <m:mrow>
+                          <m:mi>i</m:mi>
+                          <m:mi>n</m:mi>
+                          <m:mi>p</m:mi>
+                        </m:mrow>
+                      </m:msub>
+                      <m:msup>
+                        <m:mi>e</m:mi>
+                        <m:mrow>
+                          <m:mo>-</m:mo>
+                          <m:mi>t</m:mi>
+                          <m:mo>/</m:mo>
+                          <m:mi>τ</m:mi>
+                        </m:mrow>
+                      </m:msup>
+                      <m:mo>+</m:mo>
+                      <m:msub>
+                        <m:mi>w</m:mi>
+                        <m:mrow>
+                          <m:mi>i</m:mi>
+                          <m:mi>n</m:mi>
+                          <m:mi>p</m:mi>
+                        </m:mrow>
+                      </m:msub>
+                      <m:msup>
+                        <m:mi>e</m:mi>
+                        <m:mrow>
+                          <m:mo>-</m:mo>
+                          <m:mo>(</m:mo>
+                          <m:mi>t</m:mi>
+                          <m:mo>-</m:mo>
+                          <m:mi>I</m:mi>
+                          <m:mo>)</m:mo>
+                          <m:mo>/</m:mo>
+                          <m:mi>τ</m:mi>
+                        </m:mrow>
+                      </m:msup>
+                      <m:mo>.</m:mo>
+                    </m:mrow>
+                  </m:mtd>
+                </m:mtr>
+              </m:mtable>
+            </m:math>
+          </equation>
+          <para id="id66207">
+Finally, at <m:math overflow="scroll"><m:mrow><m:mi>t</m:mi><m:mo>=</m:mo><m:mn>2</m:mn><m:mi>I</m:mi></m:mrow></m:math>, we have a third input spike and see</para>
+          <equation id="id66231">
+            <m:math overflow="scroll" mode="display">
+              <m:mrow>
+                <m:mi>v</m:mi>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mn>2</m:mn>
+                  <m:mi>I</m:mi>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mo>=</m:mo>
+                <m:msub>
+                  <m:mi>v</m:mi>
+                  <m:mi>r</m:mi>
+                </m:msub>
+                <m:mo>+</m:mo>
+                <m:msub>
+                  <m:mi>w</m:mi>
+                  <m:mrow>
+                    <m:mi>i</m:mi>
+                    <m:mi>n</m:mi>
+                    <m:mi>p</m:mi>
+                  </m:mrow>
+                </m:msub>
+                <m:msup>
+                  <m:mi>e</m:mi>
+                  <m:mrow>
+                    <m:mo>-</m:mo>
+                    <m:mn>2</m:mn>
+                    <m:mi>I</m:mi>
+                    <m:mo>/</m:mo>
+                    <m:mi>τ</m:mi>
+                  </m:mrow>
+                </m:msup>
+                <m:mo>+</m:mo>
+                <m:msub>
+                  <m:mi>w</m:mi>
+                  <m:mrow>
+                    <m:mi>i</m:mi>
+                    <m:mi>n</m:mi>
+                    <m:mi>p</m:mi>
+                  </m:mrow>
+                </m:msub>
+                <m:msup>
+                  <m:mi>e</m:mi>
+                  <m:mrow>
+                    <m:mo>-</m:mo>
+                    <m:mi>I</m:mi>
+                    <m:mo>/</m:mo>
+                    <m:mi>τ</m:mi>
+                  </m:mrow>
+                </m:msup>
+                <m:mo>+</m:mo>
+                <m:msub>
+                  <m:mi>w</m:mi>
+                  <m:mrow>
+                    <m:mi>i</m:mi>
+                    <m:mi>n</m:mi>
+                    <m:mi>p</m:mi>
+                  </m:mrow>
+                </m:msub>
+                <m:mo>.</m:mo>
+              </m:mrow>
+            </m:math>
+          </equation>
+          <para id="id66340">To determine when the voltage reaches threshold and the cell spikes, we need only examine the peak values of <m:math overflow="scroll"><m:mi>v</m:mi></m:math>, which are when <m:math overflow="scroll"><m:mrow><m:mi>t</m:mi><m:mo>=</m:mo><m:mi>k</m:mi><m:mi>I</m:mi><m:mo>,</m:mo><m:mspace width="4pt"/><m:mn>0</m:mn><m:mo>≤</m:mo><m:mi>k</m:mi><m:mo>≤</m:mo><m:mi>n</m:mi><m:mo>-</m:mo><m:mn>1</m:mn></m:mrow></m:math>. Thus, we use the following generalized formula to calculate <m:math overflow="scroll"><m:mrow><m:mi>v</m:mi><m:mo>(</m:mo><m:mo>(</m:mo><m:mi>n</m:mi><m:mo>-</m:mo><m:mn>1</m:mn><m:mo>)</m:mo><m:mi>I</m:mi><m:mo>)</m:mo></m:mrow></m:math> when there are <m:math overflow="scroll"><m:mi>n</m:mi></m:math> total input spikes:</para>
+          <equation id="uid27">
+            <m:math overflow="scroll" mode="display">
+              <m:mrow>
+                <m:mo>∀</m:mo>
+                <m:mi>n</m:mi>
+                <m:mo>,</m:mo>
+                <m:mspace width="1.em"/>
+                <m:mi>v</m:mi>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:mi>n</m:mi>
+                    <m:mo>-</m:mo>
+                    <m:mn>1</m:mn>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                  <m:mi>I</m:mi>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mo>=</m:mo>
+                <m:msub>
+                  <m:mi>v</m:mi>
+                  <m:mi>r</m:mi>
+                </m:msub>
+                <m:mo>+</m:mo>
+                <m:msub>
+                  <m:mi>w</m:mi>
+                  <m:mrow>
+                    <m:mi>i</m:mi>
+                    <m:mi>n</m:mi>
+                    <m:mi>p</m:mi>
+                  </m:mrow>
+                </m:msub>
+                <m:munderover>
+                  <m:mo>∑</m:mo>
+                  <m:mrow>
+                    <m:mi>k</m:mi>
+                    <m:mo>=</m:mo>
+                    <m:mn>0</m:mn>
+                  </m:mrow>
+                  <m:mrow>
+                    <m:mi>n</m:mi>
+                    <m:mo>-</m:mo>
+                    <m:mn>1</m:mn>
+                  </m:mrow>
+                </m:munderover>
+                <m:msup>
+                  <m:mfenced separators="" open="(" close=")">
+                    <m:msup>
+                      <m:mi>e</m:mi>
+                      <m:mrow>
+                        <m:mo>-</m:mo>
+                        <m:mi>I</m:mi>
+                        <m:mo>/</m:mo>
+                        <m:mi>τ</m:mi>
+                      </m:mrow>
+                    </m:msup>
+                  </m:mfenced>
+                  <m:mi>k</m:mi>
+                </m:msup>
+                <m:mo>.</m:mo>
+              </m:mrow>
+            </m:math>
+          </equation>
+          <para id="id66547"><link target-id="uid29"/> shows that in the absence of spikes, the peak voltages approach an asymptote. This asymptote can be calculated by</para>
+          <equation id="uid28">
+            <m:math overflow="scroll" mode="display">
+              <m:mtable displaystyle="true">
+                <m:mtr>
+                  <m:mtd columnalign="right">
+                    <m:mrow>
+                      <m:msub>
+                        <m:mi>v</m:mi>
+                        <m:mi>∞</m:mi>
+                      </m:msub>
+                      <m:mo>=</m:mo>
+                      <m:munder>
+                        <m:mo movablelimits="true" form="prefix">lim</m:mo>
+                        <m:mrow>
+                          <m:mi>n</m:mi>
+                          <m:mo>→</m:mo>
+                          <m:mi>∞</m:mi>
+                        </m:mrow>
+                      </m:munder>
+                      <m:mi>v</m:mi>
+                      <m:mrow>
+                        <m:mo>(</m:mo>
+                        <m:mrow>
+                          <m:mo>(</m:mo>
+                          <m:mi>n</m:mi>
+                          <m:mo>-</m:mo>
+                          <m:mn>1</m:mn>
+                          <m:mo>)</m:mo>
+                        </m:mrow>
+                        <m:mi>I</m:mi>
+                        <m:mo>)</m:mo>
+                      </m:mrow>
+                    </m:mrow>
+                  </m:mtd>
+                  <m:mtd columnalign="left">
+                    <m:mrow>
+                      <m:mo>=</m:mo>
+                      <m:msub>
+                        <m:mi>v</m:mi>
+                        <m:mi>r</m:mi>
+                      </m:msub>
+                      <m:mo>+</m:mo>
+                      <m:msub>
+                        <m:mi>w</m:mi>
+                        <m:mrow>
+                          <m:mi>i</m:mi>
+                          <m:mi>n</m:mi>
+                          <m:mi>p</m:mi>
+                        </m:mrow>
+                      </m:msub>
+                      <m:munderover>
+                        <m:mo>∑</m:mo>
+                        <m:mrow>
+                          <m:mi>k</m:mi>
+                          <m:mo>=</m:mo>
+                          <m:mn>0</m:mn>
+                        </m:mrow>
+                        <m:mi>∞</m:mi>
+                      </m:munderover>
+                      <m:msup>
+                        <m:mfenced separators="" open="(" close=")">
+                          <m:msup>
+                            <m:mi>e</m:mi>
+                            <m:mrow>
+                              <m:mo>-</m:mo>
+                              <m:mi>I</m:mi>
+                              <m:mo>/</m:mo>
+                              <m:mi>τ</m:mi>
+                            </m:mrow>
+                          </m:msup>
+                        </m:mfenced>
+                        <m:mi>k</m:mi>
+                      </m:msup>
+                    </m:mrow>
+                  </m:mtd>
+                </m:mtr>
+                <m:mtr>
+                  <m:mtd/>
+                  <m:mtd columnalign="left">
+                    <m:mrow>
+                      <m:mo>=</m:mo>
+                      <m:msub>
+                        <m:mi>v</m:mi>
+                        <m:mi>r</m:mi>
+                      </m:msub>
+                      <m:mo>+</m:mo>
+                      <m:msub>
+                        <m:mi>w</m:mi>
+                        <m:mrow>
+                          <m:mi>i</m:mi>
+                          <m:mi>n</m:mi>
+                          <m:mi>p</m:mi>
+                        </m:mrow>
+                      </m:msub>
+                      <m:mfenced separators="" open="(" close=")">
+                        <m:mfrac>
+                          <m:mn>1</m:mn>
+                          <m:mrow>
+                            <m:mn>1</m:mn>
+                            <m:mo>-</m:mo>
+                            <m:msup>
+                              <m:mi>e</m:mi>
+                              <m:mrow>
+                                <m:mo>-</m:mo>
+                                <m:mi>I</m:mi>
+                                <m:mo>/</m:mo>
+                                <m:mi>τ</m:mi>
+                              </m:mrow>
+                            </m:msup>
+                          </m:mrow>
+                        </m:mfrac>
+                      </m:mfenced>
+                      <m:mo>.</m:mo>
+                    </m:mrow>
+                  </m:mtd>
+                </m:mtr>
+              </m:mtable>
+            </m:math>
+          </equation>
+          <para id="id66768">
+If <m:math overflow="scroll"><m:mrow><m:msub><m:mi>v</m:mi><m:mi>∞</m:mi></m:msub><m:mo>&lt;</m:mo><m:msub><m:mi>v</m:mi><m:mrow><m:mi>t</m:mi><m:mi>h</m:mi></m:mrow></m:msub></m:mrow></m:math>, then the cell will never spike.</para>
+          <figure id="uid29"><media id="uid29_media" alt="">
+              <image mime-type="image/png" src="../../media/AnpeakV.pdf" id="uid29_onlineimage" width="685"><!-- NOTE: attribute width changes image size online (pixels). original width is 391. --></image>
+              <image mime-type="application/postscript" for="pdf" src="../../media/AnpeakV.eps" id="uid29_printimage" print-width="10cm">
+                <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+              </image>
+            </media>
+            
+          <caption>Voltage as a function of time as calculated by equation <link target-id="uid27"/>. The peak voltages are denoted by asterisks. Here we set <m:math overflow="scroll"><m:mrow><m:msub><m:mi>v</m:mi><m:mrow><m:mi>t</m:mi><m:mi>h</m:mi></m:mrow></m:msub><m:mo>=</m:mo><m:mo>-</m:mo><m:mn>52</m:mn><m:mspace width="4pt"/><m:mi>m</m:mi><m:mi>V</m:mi></m:mrow></m:math>. (<link resource="AnpeakV.m">AnpeakV.m</link><emphasis effect="bold"/>)</caption></figure>
+        </section>
+      </section>
+    </section>
+    <section id="cid3">
+      <title>Problems and Results</title>
+      <section id="uid30">
+        <title>Minimum input weight for activity</title>
+        <section id="uid31">
+          <title>Computational vs. Analytic Method</title>
+          <para id="id66888">We found the minimum input weight <m:math overflow="scroll"><m:msub><m:mi>w</m:mi><m:mrow><m:mi>i</m:mi><m:mi>n</m:mi><m:mi>p</m:mi></m:mrow></m:msub></m:math> necessary for the cell to spike at least once as a function of the input time interval <m:math overflow="scroll"><m:mi>I</m:mi></m:math> when given a sufficiently long simulation.</para>
+          <para id="id66922">Let the interspike interval <m:math overflow="scroll"><m:mi>I</m:mi></m:math> and input weights <m:math overflow="scroll"><m:msub><m:mi>w</m:mi><m:mrow><m:mi>i</m:mi><m:mi>n</m:mi><m:mi>p</m:mi></m:mrow></m:msub></m:math> satisfy <m:math overflow="scroll"><m:mrow><m:mn>2</m:mn><m:mo>≤</m:mo><m:mi>I</m:mi><m:mo>≤</m:mo><m:mn>30</m:mn></m:mrow></m:math> and <m:math overflow="scroll"><m:mrow><m:mn>2</m:mn><m:mo>≤</m:mo><m:msub><m:mi>w</m:mi><m:mrow><m:mi>i</m:mi><m:mi>n</m:mi><m:mi>p</m:mi></m:mrow></m:msub><m:mo>≤</m:mo><m:mn>20</m:mn></m:mrow></m:math>.</para>
+          <para id="id67001">In the computational method, the Matlab program <link resource="compW.m">compW.m</link> calculates <m:math overflow="scroll"><m:mrow><m:mi>v</m:mi><m:mo>(</m:mo><m:mi>t</m:mi><m:mo>)</m:mo></m:mrow></m:math> according to equations <link target-id="uid23"/> and <link target-id="uid24"/>. In <link resource="AnalysisW.m">AnalysisW.m</link>, the minimum <m:math overflow="scroll"><m:msub><m:mi>w</m:mi><m:mrow><m:mi>i</m:mi><m:mi>n</m:mi><m:mi>p</m:mi></m:mrow></m:msub></m:math> is calculated by</para>
+          <equation id="uid32">
+            <m:math overflow="scroll" mode="display">
+              <m:mrow>
+                <m:msub>
+                  <m:mi>w</m:mi>
+                  <m:mrow>
+                    <m:mi>i</m:mi>
+                    <m:mi>n</m:mi>
+                    <m:mi>p</m:mi>
+                  </m:mrow>
+                </m:msub>
+                <m:mo>=</m:mo>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:msub>
+                    <m:mi>v</m:mi>
+                    <m:mrow>
+                      <m:mi>t</m:mi>
+                      <m:mi>h</m:mi>
+                    </m:mrow>
+                  </m:msub>
+                  <m:mo>-</m:mo>
+                  <m:msub>
+                    <m:mi>v</m:mi>
+                    <m:mi>r</m:mi>
+                  </m:msub>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mn>1</m:mn>
+                  <m:mo>-</m:mo>
+                  <m:msup>
+                    <m:mi>e</m:mi>
+                    <m:mrow>
+                      <m:mo>-</m:mo>
+                      <m:mi>I</m:mi>
+                      <m:mo>/</m:mo>
+                      <m:mi>τ</m:mi>
+                    </m:mrow>
+                  </m:msup>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mo>,</m:mo>
+              </m:mrow>
+            </m:math>
+          </equation>
+          <para id="id67144">which was obtained by setting <m:math overflow="scroll"><m:msub><m:mi>v</m:mi><m:mi>∞</m:mi></m:msub></m:math> of equation <link target-id="uid28"/> to <m:math overflow="scroll"><m:mrow><m:msub><m:mi>v</m:mi><m:mi>∞</m:mi></m:msub><m:mo>≥</m:mo><m:msub><m:mi>v</m:mi><m:mrow><m:mi>t</m:mi><m:mi>h</m:mi></m:mrow></m:msub></m:mrow></m:math> where</para>
+          <equation id="id67197">
+            <m:math overflow="scroll" mode="display">
+              <m:mrow>
+                <m:msub>
+                  <m:mi>v</m:mi>
+                  <m:mrow>
+                    <m:mi>t</m:mi>
+                    <m:mi>h</m:mi>
+                  </m:mrow>
+                </m:msub>
+                <m:mo>≤</m:mo>
+                <m:msub>
+                  <m:mi>v</m:mi>
+                  <m:mi>r</m:mi>
+                </m:msub>
+                <m:mo>+</m:mo>
+                <m:msub>
+                  <m:mi>w</m:mi>
+                  <m:mrow>
+                    <m:mi>i</m:mi>
+                    <m:mi>n</m:mi>
+                    <m:mi>p</m:mi>
+                  </m:mrow>
+                </m:msub>
+                <m:mfenced separators="" open="(" close=")">
+                  <m:mfrac>
+                    <m:mn>1</m:mn>
+                    <m:mrow>
+                      <m:mn>1</m:mn>
+                      <m:mo>-</m:mo>
+                      <m:msup>
+                        <m:mi>e</m:mi>
+                        <m:mrow>
+                          <m:mo>-</m:mo>
+                          <m:mi>I</m:mi>
+                          <m:mo>/</m:mo>
+                          <m:mi>τ</m:mi>
+                        </m:mrow>
+                      </m:msup>
+                    </m:mrow>
+                  </m:mfrac>
+                </m:mfenced>
+                <m:mo>.</m:mo>
+              </m:mrow>
+            </m:math>
+          </equation>
+          <para id="id67276"><link target-id="uid33"/> shows that as the input time interval increases, greater input weight is necessary for the cell to spike at least once (<link resource="AnalysisW.m">AnalysisW.m</link>). We note on the graph the value of <m:math overflow="scroll"><m:mrow><m:msub><m:mi>w</m:mi><m:mrow><m:mi>i</m:mi><m:mi>n</m:mi><m:mi>p</m:mi></m:mrow></m:msub><m:mo>=</m:mo><m:mn>10</m:mn><m:mo>.</m:mo><m:mn>11</m:mn></m:mrow></m:math> at <m:math overflow="scroll"><m:mrow><m:mi>I</m:mi><m:mo>=</m:mo><m:mn>20</m:mn></m:mrow></m:math> because these two values will be put to use in the next section.</para>
+          <figure id="uid33"><media id="uid33_media" alt="">
+              <image mime-type="image/png" src="../../media/BothWinpsxI.pdf" id="uid33_onlineimage" width="685"><!-- NOTE: attribute width changes image size online (pixels). original width is 367. --></image>
+              <image mime-type="application/postscript" for="pdf" src="../../media/BothWinpsxI.eps" id="uid33_printimage" print-width="10cm">
+                <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+              </image>
+            </media>
+            
+          <caption>Comparison of <m:math overflow="scroll"><m:msub><m:mi>w</m:mi><m:mrow><m:mi>i</m:mi><m:mi>n</m:mi><m:mi>p</m:mi></m:mrow></m:msub></m:math> from computation and analysis as a function of <m:math overflow="scroll"><m:mi>I</m:mi></m:math>. <m:math overflow="scroll"><m:mrow><m:mi>v</m:mi><m:mo>(</m:mo><m:mi>t</m:mi><m:mo>)</m:mo></m:mrow></m:math> is calculated by equations <link target-id="uid23"/> and <link target-id="uid24"/> in <link resource="compW.m">compW.m</link>. <m:math overflow="scroll"><m:msub><m:mi>w</m:mi><m:mrow><m:mi>i</m:mi><m:mi>n</m:mi><m:mi>p</m:mi></m:mrow></m:msub></m:math> is calculated by equation <link target-id="uid32"/> in <link resource="AnalysisW.m">AnalysisW.m</link>. (Plotted in <link resource="AnalysisW.m">AnalysisW.m</link><emphasis effect="bold"/>)</caption></figure>
+        </section>
+      </section>
+      <section id="uid34">
+        <title>Number of input spikes versus input weight</title>
+        <section id="uid35">
+          <title>Computational vs. Analytic Method</title>
+          <para id="id67464">We determine the minimum number of input spikes necessary for the cell to spike as a function of input weight.</para>
+          <para id="id67469">We use <m:math overflow="scroll"><m:mrow><m:mi>I</m:mi><m:mo>=</m:mo><m:mn>20</m:mn></m:mrow></m:math> and consider only the weights that produce at least one spike with sufficient simulation, starting with <m:math overflow="scroll"><m:mrow><m:msub><m:mi>w</m:mi><m:mrow><m:mi>i</m:mi><m:mi>n</m:mi><m:mi>p</m:mi></m:mrow></m:msub><m:mo>=</m:mo><m:mn>10</m:mn><m:mo>.</m:mo><m:mn>2</m:mn></m:mrow></m:math> as shown in <link target-id="uid33"/>. Let <m:math overflow="scroll"><m:msub><m:mi>n</m:mi><m:mn>1</m:mn></m:msub></m:math> denote the minimum number of input spikes of weight <m:math overflow="scroll"><m:msub><m:mi>w</m:mi><m:mrow><m:mi>i</m:mi><m:mi>n</m:mi><m:mi>p</m:mi></m:mrow></m:msub></m:math> necessary for <m:math overflow="scroll"><m:mrow><m:mi>v</m:mi><m:mo>(</m:mo><m:mi>t</m:mi><m:mo>)</m:mo></m:mrow></m:math> to reach <m:math overflow="scroll"><m:msub><m:mi>v</m:mi><m:mrow><m:mi>t</m:mi><m:mi>h</m:mi></m:mrow></m:msub></m:math>. We see that</para>
+          <equation id="uid36">
+            <m:math overflow="scroll" mode="display">
+              <m:mrow>
+                <m:msub>
+                  <m:mi>n</m:mi>
+                  <m:mn>1</m:mn>
+                </m:msub>
+                <m:mo>≥</m:mo>
+                <m:mo>-</m:mo>
+                <m:mfrac>
+                  <m:mi>τ</m:mi>
+                  <m:mi>I</m:mi>
+                </m:mfrac>
+                <m:mo>·</m:mo>
+                <m:mo form="prefix">ln</m:mo>
+                <m:mfenced separators="" open="(" close=")">
+                  <m:mn>1</m:mn>
+                  <m:mo>-</m:mo>
+                  <m:mfrac>
+                    <m:mrow>
+                      <m:msub>
+                        <m:mi>v</m:mi>
+                        <m:mrow>
+                          <m:mi>t</m:mi>
+                          <m:mi>h</m:mi>
+                        </m:mrow>
+                      </m:msub>
+                      <m:mo>-</m:mo>
+                      <m:msub>
+                        <m:mi>v</m:mi>
+                        <m:mi>r</m:mi>
+                      </m:msub>
+                    </m:mrow>
+                    <m:msub>
+                      <m:mi>w</m:mi>
+                      <m:mrow>
+                        <m:mi>i</m:mi>
+                        <m:mi>n</m:mi>
+                        <m:mi>p</m:mi>
+                      </m:mrow>
+                    </m:msub>
+                  </m:mfrac>
+                  <m:mo>·</m:mo>
+                  <m:mfenced separators="" open="(" close=")">
+                    <m:mn>1</m:mn>
+                    <m:mo>-</m:mo>
+                    <m:msup>
+                      <m:mi>e</m:mi>
+                      <m:mrow>
+                        <m:mo>-</m:mo>
+                        <m:mi>I</m:mi>
+                        <m:mo>/</m:mo>
+                        <m:mi>τ</m:mi>
+                      </m:mrow>
+                    </m:msup>
+                  </m:mfenced>
+                </m:mfenced>
+                <m:mo>.</m:mo>
+              </m:mrow>
+            </m:math>
+          </equation>
+          <para id="id67706">In the computational method, the Matlab program <link resource="compT.m">compT.m</link> calculates <m:math overflow="scroll"><m:msub><m:mi>n</m:mi><m:mn>1</m:mn></m:msub></m:math> by updating <m:math overflow="scroll"><m:mrow><m:mi>v</m:mi><m:mo>(</m:mo><m:mi>t</m:mi><m:mo>)</m:mo></m:mrow></m:math> with equations <link target-id="uid23"/> and <link target-id="uid24"/>. In the analytic method, <link resource="AnalysisT.m">AnalysisT.m</link> calculates <m:math overflow="scroll"><m:msub><m:mi>n</m:mi><m:mn>1</m:mn></m:msub></m:math> with equation <link target-id="uid36"/>.</para>
+          <para id="id67783"><link target-id="uid37"/> shows that <m:math overflow="scroll"><m:msub><m:mi>n</m:mi><m:mn>1</m:mn></m:msub></m:math> is clearly a step-wise function where higher input weights allow the cell to spike after fewer input spikes.</para>
+          <figure id="uid37"><media id="uid37_media" alt="">
+              <image mime-type="image/png" src="../../media/BothNinpxWinp.pdf" id="uid37_onlineimage" width="685"><!-- NOTE: attribute width changes image size online (pixels). original width is 392. --></image>
+              <image mime-type="application/postscript" for="pdf" src="../../media/BothNinpxWinp.eps" id="uid37_printimage" print-width="10cm">
+                <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+              </image>
+            </media>
+            
+          <caption>Comparison of minimum number of input spikes necessary for activity from computation and analysis as a function of <m:math overflow="scroll"><m:msub><m:mi>w</m:mi><m:mrow><m:mi>i</m:mi><m:mi>n</m:mi><m:mi>p</m:mi></m:mrow></m:msub></m:math>. <m:math overflow="scroll"><m:mrow><m:mi>v</m:mi><m:mo>(</m:mo><m:mi>t</m:mi><m:mo>)</m:mo></m:mrow></m:math> is calculated by equations <link target-id="uid23"/> and <link target-id="uid24"/> in <link resource="compT.m">compT.m</link> and by equation <link target-id="uid27"/> in <link resource="AnalysisT.m">AnalysisT.m</link>. (Plotted in <link resource="AnalysisT.m">AnalysisT.m</link>)</caption></figure>
+        </section>
+      </section>
+    </section>
+    <section id="cid4">
+      <title>Application of findings</title>
+      <figure id="uid38"><media id="uid38_media" alt="">
+          <image mime-type="image/png" src="../../media/PF1-2cells.png" id="uid38_onlineimage" width="326"><!-- NOTE: attribute width changes image size online (pixels). original width is 526. --></image>
+          <image mime-type="application/postscript" for="pdf" src="../../media/PF1-2cells.eps" id="uid38_printimage" print-width="6cm">
+            <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+          </image>
+        </media>
+        
+      <caption>Simple 2-cell network with synapses active in Place Field 1. While the rat is in the place field of Cell 1, Cell 1 receives input with weight <m:math overflow="scroll"><m:msub><m:mi>w</m:mi><m:mrow><m:mi>e</m:mi><m:mi>x</m:mi><m:mi>t</m:mi></m:mrow></m:msub></m:math> from an external source, and when Cell 1 spikes, it gives input with weight <m:math overflow="scroll"><m:msub><m:mi>w</m:mi><m:mn>12</m:mn></m:msub></m:math> to Cell 2.</caption></figure>
+      <para id="id67948">We apply the results from the two previous sections to solve a couple simple questions. Consider the situation depicted in <link target-id="uid38"/>: the rat is in Place Field 1, Cell 1 receives input with weight <m:math overflow="scroll"><m:msub><m:mi>w</m:mi><m:mrow><m:mi>e</m:mi><m:mi>x</m:mi><m:mi>t</m:mi></m:mrow></m:msub></m:math> from an external source, and, when Cell 1 spikes, it gives internal input to Cell 2 with weight <m:math overflow="scroll"><m:msub><m:mi>w</m:mi><m:mn>12</m:mn></m:msub></m:math>. We can find the minimum weight of <m:math overflow="scroll"><m:msub><m:mi>w</m:mi><m:mn>12</m:mn></m:msub></m:math> necessary for Cell 2 to spike in Place Field 1, or where Place Field 1 and Place Field 2 overlap.</para>
+      <para id="id68007">For a fixed interspike interval <m:math overflow="scroll"><m:mi>I</m:mi></m:math> of external input of fixed weight <m:math overflow="scroll"><m:msub><m:mi>w</m:mi><m:mrow><m:mi>e</m:mi><m:mi>x</m:mi><m:mi>t</m:mi></m:mrow></m:msub></m:math>, we calculate <m:math overflow="scroll"><m:msub><m:mi>n</m:mi><m:mn>1</m:mn></m:msub></m:math> using equation <link target-id="uid36"/> as a function of <m:math overflow="scroll"><m:mi>I</m:mi></m:math> and <m:math overflow="scroll"><m:msub><m:mi>w</m:mi><m:mrow><m:mi>e</m:mi><m:mi>x</m:mi><m:mi>t</m:mi></m:mrow></m:msub></m:math>. Thus <m:math overflow="scroll"><m:msub><m:mi>n</m:mi><m:mn>1</m:mn></m:msub></m:math> denotes the minimum number of external input spikes of weight <m:math overflow="scroll"><m:msub><m:mi>w</m:mi><m:mrow><m:mi>e</m:mi><m:mi>x</m:mi><m:mi>t</m:mi></m:mrow></m:msub></m:math> necessary for Cell 1 to fire. Let us denote the time of Cell 1's first spike as</para>
+      <equation id="id68121">
+        <m:math overflow="scroll" mode="display">
+          <m:mrow>
+            <m:msub>
+              <m:mi>t</m:mi>
+              <m:mn>1</m:mn>
+            </m:msub>
+            <m:mo>=</m:mo>
+            <m:mrow>
+              <m:mo>(</m:mo>
+              <m:msub>
+                <m:mi>n</m:mi>
+                <m:mn>1</m:mn>
+              </m:msub>
+              <m:mo>-</m:mo>
+              <m:mn>1</m:mn>
+              <m:mo>)</m:mo>
+            </m:mrow>
+            <m:mi>I</m:mi>
+            <m:mo>.</m:mo>
+          </m:mrow>
+        </m:math>
+      </equation>
+      <para id="id68161">While the rat is in Place Field 1, Cell 2 only receives input from Cell 1. To find the interspike interval of Cell 1's spikes, or equivalently the interspike interval that Cell 2 receives input in Place Field 1, consider <link target-id="uid39"/>. We know that Cell 1's first spike is at <m:math overflow="scroll"><m:mrow><m:mi>t</m:mi><m:mo>=</m:mo><m:msub><m:mi>t</m:mi><m:mn>1</m:mn></m:msub></m:mrow></m:math>. After it spikes, the voltage decays until the next input spike at <m:math overflow="scroll"><m:mrow><m:msub><m:mi>n</m:mi><m:mn>1</m:mn></m:msub><m:mi>I</m:mi></m:mrow></m:math>. Then it takes another <m:math overflow="scroll"><m:mrow><m:mo>(</m:mo><m:msub><m:mi>n</m:mi><m:mn>1</m:mn></m:msub><m:mo>-</m:mo><m:mn>1</m:mn><m:mo>)</m:mo><m:mi>I</m:mi><m:mspace width="4pt"/><m:mi>m</m:mi><m:mi>s</m:mi></m:mrow></m:math> for Cell 1 to spike at <m:math overflow="scroll"><m:mrow><m:mi>t</m:mi><m:mo>=</m:mo><m:msub><m:mi>n</m:mi><m:mn>1</m:mn></m:msub><m:mi>I</m:mi><m:mo>+</m:mo><m:mrow><m:mo>(</m:mo><m:msub><m:mi>n</m:mi><m:mn>1</m:mn></m:msub><m:mo>-</m:mo><m:mn>1</m:mn><m:mo>)</m:mo></m:mrow><m:mi>I</m:mi></m:mrow></m:math>. Thus we subtract the first spike time from the second spike time</para>
+      <equation id="id68286">
+        <m:math overflow="scroll" mode="display">
+          <m:mrow>
+            <m:msub>
+              <m:mi>n</m:mi>
+              <m:mn>1</m:mn>
+            </m:msub>
+            <m:mi>I</m:mi>
+            <m:mo>+</m:mo>
+            <m:mrow>
+              <m:mo>(</m:mo>
+              <m:msub>
+                <m:mi>n</m:mi>
+                <m:mn>1</m:mn>
+              </m:msub>
+              <m:mo>-</m:mo>
+              <m:mn>1</m:mn>
+              <m:mo>)</m:mo>
+            </m:mrow>
+            <m:mi>I</m:mi>
+            <m:mo>-</m:mo>
+            <m:mrow>
+              <m:mo>(</m:mo>
+              <m:msub>
+                <m:mi>n</m:mi>
+                <m:mn>1</m:mn>
+              </m:msub>
+              <m:mo>-</m:mo>
+              <m:mn>1</m:mn>
+              <m:mo>)</m:mo>
+            </m:mrow>
+            <m:mi>I</m:mi>
+            <m:mo>=</m:mo>
+            <m:msub>
+              <m:mi>n</m:mi>
+              <m:mn>1</m:mn>
+            </m:msub>
+            <m:mi>I</m:mi>
+            <m:mo>,</m:mo>
+          </m:mrow>
+        </m:math>
+      </equation>
+      <para id="id68361">and we see that after the first spike time at <m:math overflow="scroll"><m:mrow><m:msub><m:mi>t</m:mi><m:mn>1</m:mn></m:msub><m:mo>=</m:mo><m:mrow><m:mo>(</m:mo><m:msub><m:mi>n</m:mi><m:mn>1</m:mn></m:msub><m:mo>-</m:mo><m:mn>1</m:mn><m:mo>)</m:mo></m:mrow><m:mi>I</m:mi><m:mspace width="4pt"/><m:mi>m</m:mi><m:mi>s</m:mi></m:mrow></m:math>, Cell 1 fires every <m:math overflow="scroll"><m:mrow><m:msub><m:mi>n</m:mi><m:mn>1</m:mn></m:msub><m:mi>I</m:mi><m:mspace width="4pt"/><m:mi>m</m:mi><m:mi>s</m:mi></m:mrow></m:math>.</para>
+      <figure id="uid39"><media id="uid39_media" alt="">
+          <image mime-type="image/png" src="../../media/cell1spkfreq.png" id="uid39_onlineimage" width="632"><!-- NOTE: attribute width changes image size online (pixels). original width is 1432. --></image>
+          <image mime-type="application/postscript" for="pdf" src="../../media/cell1spkfreq.eps" id="uid39_printimage" print-width="10cm">
+            <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+          </image>
+        </media>
+        
+      <caption>Interspike interval of Cell 1 from external input alone, <m:math overflow="scroll"><m:msub><m:mi>I</m:mi><m:mn>1</m:mn></m:msub></m:math>. Cell 1's first spike occurs at <m:math overflow="scroll"><m:mrow><m:mi>t</m:mi><m:mo>=</m:mo><m:msub><m:mi>t</m:mi><m:mn>1</m:mn></m:msub><m:mo>=</m:mo><m:mrow><m:mo>(</m:mo><m:msub><m:mi>n</m:mi><m:mn>1</m:mn></m:msub><m:mo>-</m:mo><m:mn>1</m:mn><m:mo>)</m:mo></m:mrow><m:mi>I</m:mi></m:mrow></m:math>. Then the voltage of Cell 1 decays until the next input spike at <m:math overflow="scroll"><m:mrow><m:mi>t</m:mi><m:mo>=</m:mo><m:msub><m:mi>n</m:mi><m:mn>1</m:mn></m:msub><m:mi>I</m:mi></m:mrow></m:math>. It then takes another <m:math overflow="scroll"><m:mrow><m:mo>(</m:mo><m:msub><m:mi>n</m:mi><m:mn>1</m:mn></m:msub><m:mo>-</m:mo><m:mn>1</m:mn><m:mo>)</m:mo><m:mi>I</m:mi><m:mspace width="4pt"/><m:mi>m</m:mi><m:mi>s</m:mi></m:mrow></m:math> for Cell 1 to spike at <m:math overflow="scroll"><m:mrow><m:mi>t</m:mi><m:mo>=</m:mo><m:msub><m:mi>n</m:mi><m:mn>1</m:mn></m:msub><m:mi>I</m:mi><m:mo>+</m:mo><m:mrow><m:mo>(</m:mo><m:msub><m:mi>n</m:mi><m:mn>1</m:mn></m:msub><m:mo>-</m:mo><m:mn>1</m:mn><m:mo>)</m:mo></m:mrow><m:mi>I</m:mi></m:mrow></m:math>. Thus, it can be seen that except for the first spike at <m:math overflow="scroll"><m:mrow><m:mi>t</m:mi><m:mo>=</m:mo><m:mo>(</m:mo><m:msub><m:mi>n</m:mi><m:mn>1</m:mn></m:msub><m:mo>-</m:mo><m:mn>1</m:mn><m:mo>)</m:mo><m:mi>I</m:mi></m:mrow></m:math>, Cell 1 fires every <m:math overflow="scroll"><m:mrow><m:msub><m:mi>n</m:mi><m:mn>1</m:mn></m:msub><m:mi>I</m:mi><m:mspace width="4pt"/><m:mi>m</m:mi><m:mi>s</m:mi></m:mrow></m:math>.</caption></figure>
+      <para id="id68659">Thus, we know that Cell 1 gives input to Cell 2 with weight <m:math overflow="scroll"><m:msub><m:mi>w</m:mi><m:mn>12</m:mn></m:msub></m:math> every <m:math overflow="scroll"><m:mrow><m:msub><m:mi>n</m:mi><m:mn>1</m:mn></m:msub><m:mi>I</m:mi><m:mspace width="4pt"/><m:mi>m</m:mi><m:mi>s</m:mi></m:mrow></m:math>.
+To find the minimum weight of <m:math overflow="scroll"><m:msub><m:mi>w</m:mi><m:mn>12</m:mn></m:msub></m:math> that would allow for Cell 2 to fire in Place Field 1, we consider two cases where the first is simpler: Place Field 1 is infinitely long or finitely long.</para>
+      <para id="id68716">Equation <link target-id="uid32"/> tells us that if</para>
+      <equation id="uid40">
+        <m:math overflow="scroll" mode="display">
+          <m:mrow>
+            <m:msub>
+              <m:mi>w</m:mi>
+              <m:mn>12</m:mn>
+            </m:msub>
+            <m:mo>≥</m:mo>
+            <m:mrow>
+              <m:mo>(</m:mo>
+              <m:msub>
+                <m:mi>v</m:mi>
+                <m:mrow>
+                  <m:mi>t</m:mi>
+                  <m:mi>h</m:mi>
+                </m:mrow>
+              </m:msub>
+              <m:mo>-</m:mo>
+              <m:msub>
+                <m:mi>v</m:mi>
+                <m:mi>r</m:mi>
+              </m:msub>
+              <m:mo>)</m:mo>
+            </m:mrow>
+            <m:mrow>
+              <m:mo>(</m:mo>
+              <m:mn>1</m:mn>
+              <m:mo>-</m:mo>
+              <m:msup>
+                <m:mi>e</m:mi>
+                <m:mrow>
+                  <m:mo>-</m:mo>
+                  <m:msub>
+                    <m:mi>n</m:mi>
+                    <m:mn>1</m:mn>
+                  </m:msub>
+                  <m:mi>I</m:mi>
+                  <m:mo>/</m:mo>
+                  <m:mi>τ</m:mi>
+                </m:mrow>
+              </m:msup>
+              <m:mo>)</m:mo>
+            </m:mrow>
+            <m:mo>,</m:mo>
+          </m:mrow>
+        </m:math>
+      </equation>
+      <para id="id68808">then Cell 2 would fire given a sufficiently long Place Field 1. Thus, if Place Field 1 is infinitely long, we simply require that equation <link target-id="uid40"/> be true, then Cell 2 fires in Place Field 1. As we do in <link target-id="uid34">"Number of input spikes versus input weight"</link>, we choose an interspike interval: let <m:math overflow="scroll"><m:mrow><m:msub><m:mi>n</m:mi><m:mn>1</m:mn></m:msub><m:mi>I</m:mi><m:mo>=</m:mo><m:mn>40</m:mn><m:mspace width="4pt"/><m:mi>m</m:mi><m:mi>s</m:mi></m:mrow></m:math>. For this value of <m:math overflow="scroll"><m:mrow><m:msub><m:mi>n</m:mi><m:mn>1</m:mn></m:msub><m:mi>I</m:mi></m:mrow></m:math>, <link resource="App.m">App.m</link> calculates the minimum of equation <link target-id="uid40"/> to be <m:math overflow="scroll"><m:mrow><m:mn>13</m:mn><m:mo>.</m:mo><m:mn>83</m:mn><m:mspace width="4pt"/><m:mi>m</m:mi><m:mi>V</m:mi></m:mrow></m:math>, as marked in <link target-id="uid41"/>.</para>
+      <figure id="uid41"><media id="uid41_media" alt="">
+          <image mime-type="image/png" src="../../media/w12xn1I.pdf" id="uid41_onlineimage" width="585"><!-- NOTE: attribute width changes image size online (pixels). original width is 489. --></image>
+          <image mime-type="application/postscript" for="pdf" src="../../media/w12xn1I.eps" id="uid41_printimage" print-width="10cm">
+            <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+          </image>
+        </media>
+        
+      <caption>Minimum <m:math overflow="scroll"><m:msub><m:mi>w</m:mi><m:mn>12</m:mn></m:msub></m:math> necessary for Cell 2 to fire as a function of <m:math overflow="scroll"><m:mrow><m:msub><m:mi>n</m:mi><m:mn>1</m:mn></m:msub><m:mi>I</m:mi></m:mrow></m:math>. It is clear that the larger the interspike interval, the more weight is required for activity. We note the value of <m:math overflow="scroll"><m:msub><m:mi>w</m:mi><m:mn>12</m:mn></m:msub></m:math> at <m:math overflow="scroll"><m:mrow><m:msub><m:mi>n</m:mi><m:mn>1</m:mn></m:msub><m:mi>I</m:mi><m:mo>=</m:mo><m:mn>40</m:mn></m:mrow></m:math> because these values are used in the case where Place Field 1 is finite. (<link resource="App.m">App.m</link>)</caption></figure>
+      <para id="id68997">Now assume Place Field 1 is finitely long.
+We apply equation <link target-id="uid36"/> to find <m:math overflow="scroll"><m:msub><m:mi>n</m:mi><m:mn>2</m:mn></m:msub></m:math>, where <m:math overflow="scroll"><m:msub><m:mi>n</m:mi><m:mn>2</m:mn></m:msub></m:math> is the minimum number of input spikes of weight <m:math overflow="scroll"><m:msub><m:mi>w</m:mi><m:mn>12</m:mn></m:msub></m:math> necessary for Cell 2 to fire. We let <m:math overflow="scroll"><m:mrow><m:msub><m:mi>n</m:mi><m:mn>1</m:mn></m:msub><m:mi>I</m:mi><m:mo>=</m:mo><m:mn>40</m:mn><m:mspace width="4pt"/><m:mi>m</m:mi><m:mi>s</m:mi></m:mrow></m:math> and consider only the values of <m:math overflow="scroll"><m:mrow><m:msub><m:mi>w</m:mi><m:mn>12</m:mn></m:msub><m:mo>≥</m:mo><m:mn>13</m:mn><m:mo>.</m:mo><m:mn>83</m:mn><m:mspace width="4pt"/><m:mi>m</m:mi><m:mi>V</m:mi></m:mrow></m:math> as calculated for <m:math overflow="scroll"><m:mrow><m:msub><m:mi>n</m:mi><m:mn>1</m:mn></m:msub><m:mi>I</m:mi><m:mo>=</m:mo><m:mn>40</m:mn><m:mspace width="4pt"/><m:mi>m</m:mi><m:mi>V</m:mi></m:mrow></m:math> in equation <link target-id="uid40"/>. <link target-id="uid42"/> shows <m:math overflow="scroll"><m:msub><m:mi>n</m:mi><m:mn>2</m:mn></m:msub></m:math> as a function of these values of <m:math overflow="scroll"><m:msub><m:mi>w</m:mi><m:mn>12</m:mn></m:msub></m:math>. As in <link target-id="uid34">"Number of input spikes versus input weight"</link>, <m:math overflow="scroll"><m:msub><m:mi>n</m:mi><m:mn>2</m:mn></m:msub></m:math> is step-wise like <m:math overflow="scroll"><m:msub><m:mi>n</m:mi><m:mn>1</m:mn></m:msub></m:math>.</para>
+      <figure id="uid42"><media id="uid42_media" alt="">
+          <image mime-type="image/png" src="../../media/n2xw12.pdf" id="uid42_onlineimage" width="585"><!-- NOTE: attribute width changes image size online (pixels). original width is 489. --></image>
+          <image mime-type="application/postscript" for="pdf" src="../../media/n2xw12.eps" id="uid42_printimage" print-width="10cm">
+            <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+          </image>
+        </media>
+        
+      <caption>Minimum number of input spikes necessary for Cell 2 to fire, denoted as <m:math overflow="scroll"><m:msub><m:mi>n</m:mi><m:mn>2</m:mn></m:msub></m:math>, as a function of input weight <m:math overflow="scroll"><m:msub><m:mi>w</m:mi><m:mn>12</m:mn></m:msub></m:math>. We choose <m:math overflow="scroll"><m:mrow><m:msub><m:mi>n</m:mi><m:mn>1</m:mn></m:msub><m:mi>I</m:mi><m:mo>=</m:mo><m:mn>40</m:mn><m:mspace width="4pt"/><m:mi>m</m:mi><m:mi>s</m:mi></m:mrow></m:math> and consider only the values of <m:math overflow="scroll"><m:mrow><m:msub><m:mi>w</m:mi><m:mn>12</m:mn></m:msub><m:mo>≥</m:mo><m:mn>13</m:mn><m:mo>.</m:mo><m:mn>83</m:mn><m:mspace width="4pt"/><m:mi>m</m:mi><m:mi>V</m:mi></m:mrow></m:math> (the minimum <m:math overflow="scroll"><m:msub><m:mi>w</m:mi><m:mn>12</m:mn></m:msub></m:math> necessary for Cell 1 to fire from equation <link target-id="uid40"/>). Like <m:math overflow="scroll"><m:msub><m:mi>n</m:mi><m:mn>1</m:mn></m:msub></m:math> from <link target-id="uid34">"Number of input spikes versus input weight"</link>, <m:math overflow="scroll"><m:msub><m:mi>n</m:mi><m:mn>2</m:mn></m:msub></m:math> is step-wise. We note the minimum weight necessary for Cell 2 to fire in Place Field 1, <m:math overflow="scroll"><m:mrow><m:msub><m:mi>w</m:mi><m:mn>12</m:mn></m:msub><m:mo>=</m:mo><m:mn>16</m:mn><m:mo>.</m:mo><m:mn>01</m:mn><m:mspace width="4pt"/><m:mi>m</m:mi><m:mi>V</m:mi></m:mrow></m:math>. (<link resource="App.m">App.m</link>)</caption></figure>
+      <para id="id69401">The first spike of Cell 2 occurs at time <m:math overflow="scroll"><m:mrow><m:msub><m:mi>t</m:mi><m:mn>2</m:mn></m:msub><m:mo>=</m:mo><m:mrow><m:mo>(</m:mo><m:msub><m:mi>n</m:mi><m:mn>2</m:mn></m:msub><m:mo>)</m:mo></m:mrow><m:mrow><m:mo>(</m:mo><m:msub><m:mi>n</m:mi><m:mn>1</m:mn></m:msub><m:mi>I</m:mi><m:mo>)</m:mo></m:mrow><m:mo>-</m:mo><m:mi>I</m:mi></m:mrow></m:math>. We find the value of <m:math overflow="scroll"><m:msub><m:mi>w</m:mi><m:mn>12</m:mn></m:msub></m:math> necessary for <m:math overflow="scroll"><m:mrow><m:msub><m:mi>t</m:mi><m:mn>2</m:mn></m:msub><m:mo>≤</m:mo></m:mrow></m:math> the time spent in Place Field 1. Suppose the time spent in Place Field 1 is <m:math overflow="scroll"><m:mrow><m:mn>50</m:mn><m:mspace width="4pt"/><m:mi>m</m:mi><m:mi>s</m:mi></m:mrow></m:math>. We see from <link target-id="uid42"/> that</para>
+      <equation id="id69508">
+        <m:math overflow="scroll" mode="display">
+          <m:mrow>
+            <m:msub>
+              <m:mi>n</m:mi>
+              <m:mn>2</m:mn>
+            </m:msub>
+            <m:mo>=</m:mo>
+            <m:mfenced separators="" open="{" close="">
+              <m:mtable>
+                <m:mtr>
+                  <m:mtd columnalign="left">
+                    <m:mn>2</m:mn>
+                  </m:mtd>
+                  <m:mtd columnalign="left">
+                    <m:mrow>
+                      <m:mspace width="4.pt"/>
+                      <m:mtext>if</m:mtext>
+                      <m:mspace width="4.pt"/>
+                      <m:mn>13</m:mn>
+                      <m:mo>.</m:mo>
+                      <m:mn>83</m:mn>
+                      <m:mo>≤</m:mo>
+                      <m:msub>
+                        <m:mi>w</m:mi>
+                        <m:mn>12</m:mn>
+                      </m:msub>
+                      <m:mo>≤</m:mo>
+                      <m:mn>15</m:mn>
+                      <m:mo>.</m:mo>
+                      <m:mn>95</m:mn>
+                    </m:mrow>
+                  </m:mtd>
+                </m:mtr>
+                <m:mtr>
+                  <m:mtd columnalign="left">
+                    <m:mn>1</m:mn>
+                  </m:mtd>
+                  <m:mtd columnalign="left">
+                    <m:mrow>
+                      <m:mspace width="4.pt"/>
+                      <m:mtext>if</m:mtext>
+                      <m:mspace width="4.pt"/>
+                      <m:mn>15</m:mn>
+                      <m:mo>.</m:mo>
+                      <m:mn>95</m:mn>
+                      <m:mo>&lt;</m:mo>
+                      <m:msub>
+                        <m:mi>w</m:mi>
+                        <m:mn>12</m:mn>
+                      </m:msub>
+                      <m:mo>≤</m:mo>
+                      <m:mn>20</m:mn>
+                      <m:mo>.</m:mo>
+                      <m:mn>00</m:mn>
+                    </m:mrow>
+                  </m:mtd>
+                </m:mtr>
+              </m:mtable>
+            </m:mfenced>
+          </m:mrow>
+        </m:math>
+      </equation>
+      <para id="id69625">and calculate that</para>
+      <equation id="id69631">
+        <m:math overflow="scroll" mode="display">
+          <m:mrow>
+            <m:msub>
+              <m:mi>t</m:mi>
+              <m:mn>2</m:mn>
+            </m:msub>
+            <m:mo>=</m:mo>
+            <m:mfenced separators="" open="{" close="">
+              <m:mtable>
+                <m:mtr>
+                  <m:mtd columnalign="left">
+                    <m:mn>60</m:mn>
+                  </m:mtd>
+                  <m:mtd columnalign="left">
+                    <m:mrow>
+                      <m:mspace width="4.pt"/>
+                      <m:mtext>if</m:mtext>
+                      <m:mspace width="4.pt"/>
+                      <m:mn>13</m:mn>
+                      <m:mo>.</m:mo>
+                      <m:mn>83</m:mn>
+                      <m:mo>≤</m:mo>
+                      <m:msub>
+                        <m:mi>w</m:mi>
+                        <m:mn>12</m:mn>
+                      </m:msub>
+                      <m:mo>≤</m:mo>
+                      <m:mn>15</m:mn>
+                      <m:mo>.</m:mo>
+                      <m:mn>95</m:mn>
+                    </m:mrow>
+                  </m:mtd>
+                </m:mtr>
+                <m:mtr>
+                  <m:mtd columnalign="left">
+                    <m:mn>20</m:mn>
+                  </m:mtd>
+                  <m:mtd columnalign="left">
+                    <m:mrow>
+                      <m:mspace width="4.pt"/>
+                      <m:mtext>if</m:mtext>
+                      <m:mspace width="4.pt"/>
+                      <m:mn>15</m:mn>
+                      <m:mo>.</m:mo>
+                      <m:mn>95</m:mn>
+                      <m:mo>&lt;</m:mo>
+                      <m:msub>
+                        <m:mi>w</m:mi>
+                        <m:mn>12</m:mn>
+                      </m:msub>
+                      <m:mo>≤</m:mo>
+                      <m:mn>20</m:mn>
+                      <m:mo>.</m:mo>
+                      <m:mn>00</m:mn>
+                    </m:mrow>
+                  </m:mtd>
+                </m:mtr>
+              </m:mtable>
+            </m:mfenced>
+          </m:mrow>
+        </m:math>
+      </equation>
+      <para id="id69748">Thus, for <m:math overflow="scroll"><m:mrow><m:mn>13</m:mn><m:mo>.</m:mo><m:mn>83</m:mn><m:mo>≤</m:mo><m:msub><m:mi>w</m:mi><m:mn>12</m:mn></m:msub><m:mo>≤</m:mo><m:mn>15</m:mn><m:mo>.</m:mo><m:mn>95</m:mn><m:mspace width="4pt"/><m:mi>m</m:mi><m:mi>V</m:mi></m:mrow></m:math>, <m:math overflow="scroll"><m:mrow><m:msub><m:mi>t</m:mi><m:mn>2</m:mn></m:msub><m:mo>=</m:mo><m:mn>60</m:mn><m:mspace width="4pt"/><m:mi>m</m:mi><m:mi>s</m:mi></m:mrow></m:math> and Cell 2 will not fire in Place Field 1, but for <m:math overflow="scroll"><m:mrow><m:mn>16</m:mn><m:mo>.</m:mo><m:mn>01</m:mn><m:mo>≤</m:mo><m:msub><m:mi>w</m:mi><m:mn>12</m:mn></m:msub><m:mo>≤</m:mo><m:mn>20</m:mn><m:mo>.</m:mo><m:mn>00</m:mn><m:mspace width="4pt"/><m:mi>m</m:mi><m:mi>V</m:mi></m:mrow></m:math>, <m:math overflow="scroll"><m:mrow><m:msub><m:mi>t</m:mi><m:mn>2</m:mn></m:msub><m:mo>=</m:mo><m:mn>20</m:mn><m:mspace width="4pt"/><m:mi>m</m:mi><m:mi>s</m:mi></m:mrow></m:math> and Cell 2 will fire in Place Field 1.
+The minimum value of <m:math overflow="scroll"><m:msub><m:mi>w</m:mi><m:mn>12</m:mn></m:msub></m:math> for <m:math overflow="scroll"><m:mrow><m:msub><m:mi>t</m:mi><m:mn>2</m:mn></m:msub><m:mo>≤</m:mo><m:mn>50</m:mn><m:mspace width="4pt"/><m:mi>m</m:mi><m:mi>s</m:mi></m:mrow></m:math> is marked on <link target-id="uid42"/> (<link resource="App.m">App.m</link>).</para>
+    </section>
+    <section id="cid5">
+      <title>Future work</title>
+      <para id="id69949">Our goal is to better understand the relation between input weights and backward shift of place fields. We modeled the Double Rotation Experiment using a simple 120-cell ring and calculated the backward shift of the place fields as a function of input weights of that model <link target-id="bid1"/>, <link target-id="bid4"/>.
+We have computationally and analytically found the minimum input weight necessary for activity as a function of the interspike interval as well as the minimum number of input spikes necessary for activity as a function of input weight.
+We applied our findings analytically to find the minimum internal input weight necessary for place fields to overlap in a simple 2-cell model.</para>
+      <para id="id69969">Future work may include constructing a code to compare our analytical results from <link target-id="cid4">"Application of findings"</link> for the infinite and finite place field cases that could give us the minimum internal input weight necessary for place fields to overlap. We could also couple the equations regarding input weight changes by spike timing-dependent plasticity with the equation that gives us the minimum number of input spikes necessary for activity that is dependent upon input weights. Since the time of the first spike of a cell can be given in terms of the minimum number of input spikes necessary for activity as a function of input weight, we may be able to find a value that the time approaches. Ultimately, given a set maximum for the input weight, we would like to be able to predict the amount of backward shift of a place field using spike timing-dependent plasticity.</para>
+    </section>
+  </content>
+  <bib:file>
+    <bib:entry id="bid4">
+      <bib:book>
+        <!--required fields-->
+        <bib:author>Gabbiani, F. and Cox, S. J.</bib:author>
+        <bib:title>Mathematics for Neuroscientists</bib:title>
+        <bib:publisher>Elsevier Academic Press</bib:publisher>
+        <bib:year>2010</bib:year>
+        <!--optional fields-->
+        <bib:volume/>
+        <bib:series/>
+        <bib:address/>
+        <bib:edition/>
+        <bib:month/>
+        <bib:note/>
+      </bib:book>
+    </bib:entry>
+    <bib:entry id="bid1">
+      <bib:article>
+        <!--required fields-->
+        <bib:author>Lee, I. and Yoganarasimha, D. and Rao, G. and Knierim, J. J.</bib:author>
+        <bib:title>Comparison of population coherence of place cells in hippocampal subfields CA1 and CA3</bib:title>
+        <bib:journal>Nature</bib:journal>
+        <bib:year>2004</bib:year>
+        <!--optional fields-->
+        <bib:volume>430</bib:volume>
+        <bib:number/>
+        <bib:pages>456-459</bib:pages>
+        <bib:month>July</bib:month>
+        <bib:note/>
+      </bib:article>
+    </bib:entry>
+    <bib:entry id="bid2">
+      <bib:article>
+        <!--required fields-->
+        <bib:author>Mehta, M. R. and Barnes, C. A. and McNaughton, B. L.</bib:author>
+        <bib:title>Experience-Dependent, Asymmetric Expansion of Hippocampal Place Fields</bib:title>
+        <bib:journal>Proceedings of the National Academy of Sciences of the United States of America</bib:journal>
+        <bib:year>1997</bib:year>
+        <!--optional fields-->
+        <bib:volume>94</bib:volume>
+        <bib:number>16</bib:number>
+        <bib:pages>8918-8921</bib:pages>
+        <bib:month>August</bib:month>
+        <bib:note/>
+      </bib:article>
+    </bib:entry>
+    <bib:entry id="bid0">
+      <bib:article>
+        <!--required fields-->
+        <bib:author>Moser, E. I. and Kropff, E. and Moser, M. B.</bib:author>
+        <bib:title>Place Cells, Grid Cells, and the Brain's Spatial Representation System</bib:title>
+        <bib:journal>Annual Review of Neuroscience</bib:journal>
+        <bib:year>2008</bib:year>
+        <!--optional fields-->
+        <bib:volume>31</bib:volume>
+        <bib:number/>
+        <bib:pages>69-89</bib:pages>
+        <bib:month>February</bib:month>
+        <bib:note/>
+      </bib:article>
+    </bib:entry>
+    <bib:entry id="bid3">
+      <bib:mastersthesis>
+        <!--required fields-->
+        <bib:author>Ward, Kathryn Ruth</bib:author>
+        <bib:title>The Effect of Synaptic Plasticity on Spatial Representation and Navigation</bib:title>
+        <bib:school>Rice University</bib:school>
+        <bib:year>2009</bib:year>
+        <!--optional fields-->
+        <bib:type>Masters thesis</bib:type>
+        <bib:address/>
+        <bib:month>April</bib:month>
+        <bib:note/>
+      </bib:mastersthesis>
+    </bib:entry>
+    <bib:entry id="bid5">
+      <bib:article>
+        <!--required fields-->
+        <bib:author>Yu, X. and Knierim, J. J. and Lee, I. and Shouval, H. Z.</bib:author>
+        <bib:title>Simulating place field dynamics using spike timing-dependent plasticity</bib:title>
+        <bib:journal>Neurocomputing</bib:journal>
+        <bib:year>2006</bib:year>
+        <!--optional fields-->
+        <bib:volume>69</bib:volume>
+        <bib:number/>
+        <bib:pages>1253-1259</bib:pages>
+        <bib:month>February</bib:month>
+        <bib:note/>
+      </bib:article>
+    </bib:entry>
+  </bib:file>
+</document>

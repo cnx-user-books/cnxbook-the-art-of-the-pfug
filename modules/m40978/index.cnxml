@@ -1,0 +1,2245 @@
+<document xmlns="http://cnx.rice.edu/cnxml" xmlns:m="http://www.w3.org/1998/Math/MathML" xmlns:bib="http://bibtexml.sf.net/">
+  <title>Mathematical Models of Hippocampal Spatial Memory</title>
+<metadata xmlns:md="http://cnx.rice.edu/mdml">
+  <md:content-id>m40978</md:content-id>
+  <md:title>Mathematical Models of Hippocampal Spatial Memory</md:title>
+  <md:abstract>Here we present a comparison of Spike-time Dependent Plasticity (STDP) and Calcium Dependent Plasticity (CaDP) in modeling spatial memory of a simplified place cell network in the hippocampus. This research was supported by Rice University's Department of Computational and Applied Mathematics as part of a Vertically Integration of Research and Education in the Mathematical Sciences (VIGRE) grant from the National Science Foundation. In VIGRE, teams of Postdocs, Faculty, Undergraduate and Graduate students collaborate in groups known as PFUGs to work on problems within a field of the mathematical sciences. This report is a compilation of research done as part of a PFUG on Hippocampal Spatial Memory.</md:abstract>
+  <md:uuid>c3828d93-150c-46a5-9237-1fd2fec7e097</md:uuid>
+</metadata>
+<featured-links>
+  <!-- WARNING! The 'featured-links' section is read only. Do not edit below.
+       Changes to the links section in the source will not be saved. -->
+    <link-group type="supplemental">
+      <link url="http://cnx.org/content/m40587/latest/" strength="3">Analysis of Spike-Time Dependent Plasticity</link>
+    </link-group>
+  <!-- WARNING! The 'featured-links' section is read only. Do not edit above.
+       Changes to the links section in the source will not be saved. -->
+</featured-links>
+<content>
+    
+    
+    <para id="id174134">
+      <emphasis effect="bold">Mathematical Models of Hippocampal Spatial Memory</emphasis>
+    </para>
+    
+    <para id="id174499">
+      <emphasis effect="bold">2011 Summer VIGRE PFUG</emphasis>
+    </para>
+    <para id="id174511">
+      <emphasis effect="bold">Andrew Wu</emphasis>
+    </para>
+    
+    <para id="id174539">
+      <emphasis effect="italics">Mentors:</emphasis>
+    </para>
+    <para id="id174557">
+      <emphasis effect="italics">Katie Ward</emphasis>
+    </para>
+    <para id="id174568">
+      <emphasis effect="italics">Dr. Steven Cox</emphasis>
+    </para>
+    <para id="id174586"><emphasis effect="italics">Rice University</emphasis></para>
+    <para id="id174603">
+      <emphasis effect="italics">Department of Computational and Applied Mathematics</emphasis>
+    </para>
+    
+    <section id="cid1">
+      <title>Introduction</title>
+      <para id="id174639">The hippocampus is a structure within the brain that is believed to be involved with memory, spatial representation, learning, and navigation. We are particularly interested in the concept of spatial memory, or the ability of an animal (with a hippocampus) to internally represent its own surroundings and orient itself within it. Spatial memory has been theorized to be facilitated by a group of cells in the hippocampus known as place cells <link target-id="bid0"/>, which only spike when the animal is in a specific location within its environment. Our project aim is to continue the development of a computational model of these place cells to match experimental data gathered by collaborators and analyze the network interactions/dynamics and its equilibrium properties in order to gain a better understanding of the underlying mechanisms behind the function of place cells in the hippocampus and their greater role in spatial memory and other functions.</para>
+      <para id="id174657">Biological experiments have been conducted to investigate how the hippocampal place cells are involved in learning about an animal's environment/location. One common experiment is to monitor rat hippocampal place cells as the rat moves around a track collecting food, as was conducted by Mehta et al. <link target-id="bid1"/>. As the rat became more accustomed to the path and its environment, there were two noticeable phenomena among the place cells: increased place field size, or the increase in the area of the track in which a place cell fires (as a result of increased firing rates); and backward shift, or the tendency for place cells to fire in an upstream position compared to the original firing position (opposite to the direction of movement). After a few laps around the track, the place fields stabilize and stop their backward shift, indicating that they have finished "learning" the track.</para>
+      <para id="id174675">The experiment from which we will be analyzing data from is known as the Double Rotation experiment. In this specific experiment, the subject is initially "calibrated" by running a track similar to the one given in the Mehta experiment. Once this is done, the subject then runs the same track with the local landmarks/cues rotated counterclockwise and the distal cues rotated clockwise <link target-id="bid2"/>. The firing of the place cells is then monitored to observe the effect of disorienting the rat. In this experiment they were able to differentiate between two different sets of hippocampal cells: CA3 cells, which featured more recurrent connections and were stable; and CA1 cells, which were less stable and had fewer interconnected cells. Despite the rotation of local and distal cues, the hippocampal cells still show the same backward shift and final place cell stability, leading us to believe that these two phenomena are strongly associated with the development of spatial memory. As such, we want to understand the mechanisms behind these phenomena.</para>
+      <para id="id174695">My mentor, Katie Ward, has developed a model to monitor the interactions between the hippocampal cells as well as a number of other types of cells (Grid Cells, Head-direction cells) involved in spatial memory during the Double Rotation experiment. Through collaboration with Dr. James Knierim at Johns Hopkins University, we plan to analyze the interaction of the recurrent connections between CA3 cells in the hippocampus and their influence on the final stability and weight distribution of place fields in order to better understand how these interactions are involved in developing spatial memory.</para>
+    </section>
+    <section id="cid2">
+      <title>Modeling Hippocampal Place Cells</title>
+      <para id="id174714">In order to model spatial memory in the hippocampus, we focus upon the CA3 place cells of the hippocampus. As they have more recurrent connections and show more stability than CA1 cells, they are the most likely candidate for the development of spatial memory.</para>
+      <para id="id174722">We begin with the experimental setup used by Mehta, where a rat moves clockwise around a circular track. This simplified simulation setup and the parameters given within this chapter were taken from Gabbiani and Cox's book <emphasis effect="italics">Mathematics for Neuroscientists</emphasis><link target-id="bid3"/>. In our simplified interpretation of place cell input, each part of the track provides a single place cell with excitatory input of uniform firing rate. We represent the rat's place cell network as a ring of 120 place cells with bidirectional connections between adjacent cells, as depicted in <link target-id="uid1"/> below. As such, each place cell has a three degree window in which it receives external stimulus. If we refer to the figure below and define degree zero as the one at which cell 1 begins to receive stimulus, cell 1 will receive input at degrees 0-3, cell 2 will receive input at degrees 3-6, etc. We denote the cell's place field as the regions on the track during which a cell receives enough stimulus to send signals to neighboring cells. Initially, the cell's place field is synonymous with its three degree window of external stimulus, as it receives enough external input to cause it to stimulate other cells. However, when we introduce synaptic plasticity to our model, we expect the cell's place field to change. We will discuss this in more detail along with synaptic plasticity.</para>
+      <figure id="uid1"><media id="uid1_media" alt="">
+          <image mime-type="image/png" src="../../media/120cellring2.png" id="uid1_onlineimage" width="540"><!-- NOTE: attribute width changes image size online (pixels). original width is 540. --></image>
+          <image mime-type="application/postscript" for="pdf" src="../../media/120cellring.eps" id="uid1_printimage" print-width="12.0cm">
+            <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+          </image>
+        </media>
+        
+      <caption>A portion of the 120 Cell Ring. Architecture consists of 120 integrate-and-fire place cells with excitatory plastic bidirectional connections and nonplastic external inputs of uniform firing rate. Figure from <emphasis effect="italics">Mathematics for Neuroscientists</emphasis>.</caption></figure>
+      <section id="uid2">
+        <title>Conductance-based Integrate and Fire Model</title>
+        <para id="id174784">Place cells communicate with each other by transmitting and receiving electrical signals through synapses, just like other neurons. Whether or not the cell sends a signal will depend primarily on its voltage: if it exceeds a specified firing threshold, <m:math overflow="scroll"><m:msub><m:mi>V</m:mi><m:mrow><m:mi>t</m:mi><m:mi>h</m:mi></m:mrow></m:msub></m:math>, the cell will depolarize (reach a positive voltage), send an action potential to neighboring postsynaptic cells, and undergo an obligatory refractory period during which the cell is set to a reset voltage, <m:math overflow="scroll"><m:msub><m:mi>V</m:mi><m:mrow><m:mi>r</m:mi><m:mi>e</m:mi><m:mi>s</m:mi><m:mi>e</m:mi><m:mi>t</m:mi></m:mrow></m:msub></m:math>, and cannot fire again. If the cell voltage does not exceed the threshold, it will remain silent. For our model, we set the threshold <m:math overflow="scroll"><m:msub><m:mi>V</m:mi><m:mrow><m:mi>t</m:mi><m:mi>h</m:mi></m:mrow></m:msub></m:math> to -54 mV and the reset voltage <m:math overflow="scroll"><m:msub><m:mi>V</m:mi><m:mrow><m:mi>r</m:mi><m:mi>e</m:mi><m:mi>s</m:mi><m:mi>e</m:mi><m:mi>t</m:mi></m:mrow></m:msub></m:math> to -60 mV in our simulation. We also use a refractory period <m:math overflow="scroll"><m:msub><m:mi>t</m:mi><m:mrow><m:mi>r</m:mi><m:mi>e</m:mi><m:mi>f</m:mi></m:mrow></m:msub></m:math> = 5 ms.</para>
+        <figure id="uid3"><media id="uid3_media" alt="">
+            <image mime-type="image/png" src="../../media/circuit2.png" id="uid3_onlineimage" width="440"><!-- NOTE: attribute width changes image size online (pixels). original width is 540. --></image>
+            <image mime-type="application/postscript" for="pdf" src="../../media/circuit.eps" id="uid3_printimage" print-width="7.5cm">
+              <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+            </image>
+          </media>
+          
+        <caption>Integrate and Fire cell Circuit Diagram. Consists of leak current, capacitive current, and excitatory postsynaptic current. In our simulation, all synapses are excitatory. Figure from <emphasis effect="italics">Mathematics for Neuroscientists</emphasis>.</caption></figure>
+        <para id="id174083">We model the place cell's voltage using the Conductance-based Integrate and Fire model, as pictured by the circuit diagram above. Cell voltage, or the voltage difference across the cell membrane, which we define as <m:math overflow="scroll"><m:msub><m:mi>V</m:mi><m:mi>m</m:mi></m:msub></m:math>, is modified via the flow of charged ions across the cell membrane. In our integrate and fire model, we implement three parallel components through which cell voltage is adjusted. The first parallel component represents our leak current resulting from the flow of chloride ions through leaky channels. The chloride ions will travel across the membrane to reach their resting potential, which we denote as <m:math overflow="scroll"><m:msub><m:mi>V</m:mi><m:mrow><m:mi>C</m:mi><m:mi>l</m:mi></m:mrow></m:msub></m:math> or <m:math overflow="scroll"><m:msub><m:mi>V</m:mi><m:mrow><m:mi>r</m:mi><m:mi>e</m:mi><m:mi>s</m:mi><m:mi>t</m:mi></m:mrow></m:msub></m:math> (used later in the text), of -70 mV. The flow of ions is limited by a conductance <m:math overflow="scroll"><m:msub><m:mi>g</m:mi><m:mrow><m:mi>C</m:mi><m:mi>l</m:mi></m:mrow></m:msub></m:math>, which remains fixed at a value of 1 mS/cm<m:math overflow="scroll"><m:msup><m:mrow/><m:mn>2</m:mn></m:msup></m:math>. S represents Siemens, the reciprocal of the unit of resistance <m:math overflow="scroll"><m:mi>Ω</m:mi></m:math>. When we put these terms together using Ohm's law and solve for chloride current, we get:</para>
+        <equation id="uid4">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:msub>
+                <m:mi>I</m:mi>
+                <m:mrow>
+                  <m:mi>C</m:mi>
+                  <m:mi>l</m:mi>
+                </m:mrow>
+              </m:msub>
+              <m:mo>=</m:mo>
+              <m:msub>
+                <m:mi>g</m:mi>
+                <m:mrow>
+                  <m:mi>C</m:mi>
+                  <m:mi>l</m:mi>
+                </m:mrow>
+              </m:msub>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:msub>
+                  <m:mi>V</m:mi>
+                  <m:mi>m</m:mi>
+                </m:msub>
+                <m:mo>-</m:mo>
+                <m:msub>
+                  <m:mi>V</m:mi>
+                  <m:mrow>
+                    <m:mi>C</m:mi>
+                    <m:mi>l</m:mi>
+                  </m:mrow>
+                </m:msub>
+                <m:mo>)</m:mo>
+              </m:mrow>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id175256">The second parallel component of the integrate and fire model consists of a capacitor, indicative of the cell membrane's ability to separate electrical charge (in the form of ions). For this component, the capacitive current, <m:math overflow="scroll"><m:msub><m:mi>I</m:mi><m:mi>C</m:mi></m:msub></m:math> represents the current due to the change in transmembrane voltage. This current takes the following form:</para>
+        <equation id="uid5">
+          <m:math overflow="scroll" mode="display">
+            <m:mstyle scriptlevel="0" displaystyle="true">
+              <m:mrow>
+                <m:msub>
+                  <m:mi>I</m:mi>
+                  <m:mi>C</m:mi>
+                </m:msub>
+                <m:mo>=</m:mo>
+                <m:msub>
+                  <m:mi>C</m:mi>
+                  <m:mi>m</m:mi>
+                </m:msub>
+                <m:mfrac>
+                  <m:mrow>
+                    <m:mi>d</m:mi>
+                    <m:msub>
+                      <m:mi>V</m:mi>
+                      <m:mi>m</m:mi>
+                    </m:msub>
+                  </m:mrow>
+                  <m:mrow>
+                    <m:mi>d</m:mi>
+                    <m:mi>t</m:mi>
+                  </m:mrow>
+                </m:mfrac>
+              </m:mrow>
+            </m:mstyle>
+          </m:math>
+        </equation>
+        <para id="id175332">Here, <m:math overflow="scroll"><m:msub><m:mi>C</m:mi><m:mi>m</m:mi></m:msub></m:math> denotes the membrane's capacitance, or ability to store charge. We use the value of <m:math overflow="scroll"><m:msub><m:mi>C</m:mi><m:mi>m</m:mi></m:msub></m:math> = 20 <m:math overflow="scroll"><m:mi>μ</m:mi></m:math>F/cm<m:math overflow="scroll"><m:msup><m:mrow/><m:mn>2</m:mn></m:msup></m:math>.</para>
+        <para id="id175384">The third parallel component of our circuit involves current from synaptic inputs. This input will act as the driving force for depolarization (in this setup we do not use any inhibitory synapses). As such, we use a excitatory reversal potential of <m:math overflow="scroll"><m:msub><m:mi>V</m:mi><m:mrow><m:mi>s</m:mi><m:mi>y</m:mi><m:mi>n</m:mi></m:mrow></m:msub></m:math> = 0 mV, which will help raise the cell voltage toward the firing threshold in the presence of input. The magnitude of the input current is limited by synaptic conductance, which we denote <m:math overflow="scroll"><m:msub><m:mi>g</m:mi><m:mrow><m:mi>s</m:mi><m:mi>y</m:mi><m:mi>n</m:mi></m:mrow></m:msub></m:math> in the circuit diagram (also referred to as <m:math overflow="scroll"><m:msub><m:mi>g</m:mi><m:mi>E</m:mi></m:msub></m:math>). The synaptic conductance, unlike the leak conductance of the chloride channels, is a variable conductance (denoted by the arrow through the resistor) whose magnitude is discussed in the next section. The synaptic input current is represented by the following:</para>
+        <equation id="uid6">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:msub>
+                <m:mi>I</m:mi>
+                <m:mrow>
+                  <m:mi>s</m:mi>
+                  <m:mi>y</m:mi>
+                  <m:mi>n</m:mi>
+                </m:mrow>
+              </m:msub>
+              <m:mo>=</m:mo>
+              <m:msub>
+                <m:mi>g</m:mi>
+                <m:mrow>
+                  <m:mi>s</m:mi>
+                  <m:mi>y</m:mi>
+                  <m:mi>n</m:mi>
+                </m:mrow>
+              </m:msub>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:msub>
+                  <m:mi>V</m:mi>
+                  <m:mi>m</m:mi>
+                </m:msub>
+                <m:mo>-</m:mo>
+                <m:msub>
+                  <m:mi>V</m:mi>
+                  <m:mrow>
+                    <m:mi>s</m:mi>
+                    <m:mi>y</m:mi>
+                    <m:mi>n</m:mi>
+                  </m:mrow>
+                </m:msub>
+                <m:mo>)</m:mo>
+              </m:mrow>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id175514">Since these three currents are in parallel, we can use Kirchhoff's current law, which states that:</para>
+        <equation id="uid7">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:msub>
+                <m:mi>I</m:mi>
+                <m:mrow>
+                  <m:mi>C</m:mi>
+                  <m:mi>l</m:mi>
+                </m:mrow>
+              </m:msub>
+              <m:mo>+</m:mo>
+              <m:msub>
+                <m:mi>I</m:mi>
+                <m:mi>C</m:mi>
+              </m:msub>
+              <m:mo>+</m:mo>
+              <m:msub>
+                <m:mi>I</m:mi>
+                <m:mrow>
+                  <m:mi>s</m:mi>
+                  <m:mi>y</m:mi>
+                  <m:mi>n</m:mi>
+                </m:mrow>
+              </m:msub>
+              <m:mo>=</m:mo>
+              <m:mn>0</m:mn>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id175573">Substituting values in for the currents yields the following:</para>
+        <equation id="uid8">
+          <m:math overflow="scroll" mode="display">
+            <m:mstyle scriptlevel="0" displaystyle="true">
+              <m:mrow>
+                <m:msub>
+                  <m:mi>C</m:mi>
+                  <m:mi>m</m:mi>
+                </m:msub>
+                <m:mfrac>
+                  <m:mrow>
+                    <m:mi>d</m:mi>
+                    <m:mi>V</m:mi>
+                  </m:mrow>
+                  <m:mrow>
+                    <m:mi>d</m:mi>
+                    <m:mi>t</m:mi>
+                  </m:mrow>
+                </m:mfrac>
+                <m:mo>+</m:mo>
+                <m:msub>
+                  <m:mi>g</m:mi>
+                  <m:mrow>
+                    <m:mi>C</m:mi>
+                    <m:mi>l</m:mi>
+                  </m:mrow>
+                </m:msub>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mi>V</m:mi>
+                  <m:mo>-</m:mo>
+                  <m:msub>
+                    <m:mi>V</m:mi>
+                    <m:mrow>
+                      <m:mi>C</m:mi>
+                      <m:mi>l</m:mi>
+                    </m:mrow>
+                  </m:msub>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mo>+</m:mo>
+                <m:msub>
+                  <m:mi>g</m:mi>
+                  <m:mrow>
+                    <m:mi>s</m:mi>
+                    <m:mi>y</m:mi>
+                    <m:mi>n</m:mi>
+                  </m:mrow>
+                </m:msub>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mi>V</m:mi>
+                  <m:mo>-</m:mo>
+                  <m:msub>
+                    <m:mi>V</m:mi>
+                    <m:mrow>
+                      <m:mi>s</m:mi>
+                      <m:mi>y</m:mi>
+                      <m:mi>n</m:mi>
+                    </m:mrow>
+                  </m:msub>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mo>=</m:mo>
+                <m:mn>0</m:mn>
+              </m:mrow>
+            </m:mstyle>
+          </m:math>
+        </equation>
+        <para id="id175691">Note that this differential equation only applies as long as the membrane voltage remains subthreshold. Having explained the voltage dynamics of the Integrate and Fire model, we now discuss how our variable synaptic conductance is adjusted.</para>
+      </section>
+      <section id="uid9">
+        <title>Synaptic Conductance</title>
+        <para id="id175708">In our model, we will represent input from external stimuli or neighboring place cells as an increase in synaptic conductance.
+We define our synaptic weight as the degree of increase in conductance of the postsynaptic cell due to presynaptic cell firing.
+As such, the excitatory synaptic conductance (<m:math overflow="scroll"><m:msub><m:mi>g</m:mi><m:mi>E</m:mi></m:msub></m:math>) of each cell takes the following form:</para>
+        <equation id="uid10">
+          <m:math overflow="scroll" mode="display">
+            <m:mstyle scriptlevel="0" displaystyle="true">
+              <m:mrow>
+                <m:msub>
+                  <m:mi>τ</m:mi>
+                  <m:mi>E</m:mi>
+                </m:msub>
+                <m:mfrac>
+                  <m:mrow>
+                    <m:mi>d</m:mi>
+                    <m:msub>
+                      <m:mi>g</m:mi>
+                      <m:mi>E</m:mi>
+                    </m:msub>
+                  </m:mrow>
+                  <m:mrow>
+                    <m:mi>d</m:mi>
+                    <m:mi>t</m:mi>
+                  </m:mrow>
+                </m:mfrac>
+                <m:mo>=</m:mo>
+                <m:mo>-</m:mo>
+                <m:msub>
+                  <m:mi>g</m:mi>
+                  <m:mi>E</m:mi>
+                </m:msub>
+                <m:mo>+</m:mo>
+                <m:munder>
+                  <m:mo>∑</m:mo>
+                  <m:mi>i</m:mi>
+                </m:munder>
+                <m:msubsup>
+                  <m:mi>w</m:mi>
+                  <m:mi>i</m:mi>
+                  <m:mrow>
+                    <m:mi>i</m:mi>
+                    <m:mi>n</m:mi>
+                    <m:mi>p</m:mi>
+                  </m:mrow>
+                </m:msubsup>
+                <m:munder>
+                  <m:mo>∑</m:mo>
+                  <m:mi>n</m:mi>
+                </m:munder>
+                <m:mi>δ</m:mi>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mi>t</m:mi>
+                  <m:mo>-</m:mo>
+                  <m:msubsup>
+                    <m:mi>T</m:mi>
+                    <m:mi>n</m:mi>
+                    <m:mrow>
+                      <m:mi>i</m:mi>
+                      <m:mi>n</m:mi>
+                      <m:mi>p</m:mi>
+                    </m:mrow>
+                  </m:msubsup>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+              </m:mrow>
+            </m:mstyle>
+          </m:math>
+        </equation>
+        <para id="id175846"><m:math overflow="scroll"><m:msub><m:mi>τ</m:mi><m:mi>E</m:mi></m:msub></m:math> represents the decay time constant for <m:math overflow="scroll"><m:msub><m:mi>g</m:mi><m:mi>E</m:mi></m:msub></m:math>, which we set at 5 ms. <m:math overflow="scroll"><m:msubsup><m:mi>w</m:mi><m:mi>i</m:mi><m:mrow><m:mi>i</m:mi><m:mi>n</m:mi><m:mi>p</m:mi></m:mrow></m:msubsup></m:math> represents the synaptic weight from the presynaptic cell i. <m:math overflow="scroll"><m:msubsup><m:mi>T</m:mi><m:mi>n</m:mi><m:mrow><m:mi>i</m:mi><m:mi>n</m:mi><m:mi>p</m:mi></m:mrow></m:msubsup></m:math> holds all of the presynaptic spike times for a single cell. We use <m:math overflow="scroll"><m:mi>δ</m:mi></m:math> to denote the Dirac delta function (the unit impulse function). As such, cell conductance will decay exponentially without input and increase by the degree of the synaptic weight upon external stimulus or the firing of neighboring cells. Note that if there are multiple inputs, their effect on conductance is additive, resulting in faster cell depolarization.</para>
+        <figure id="uid11"><media id="uid11_media" alt="">
+            <image mime-type="image/png" src="../../media/gV2.png" id="uid11_onlineimage" width="440"><!-- NOTE: attribute width changes image size online (pixels). original width is 540. --></image>
+            <image mime-type="application/postscript" for="pdf" src="../../media/gV.eps" id="uid11_printimage" print-width="10.0cm">
+              <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+            </image>
+          </media>
+          
+        <caption>Integrate and Fire dynamics. Cell 1 receives external stimulus and has a feedforward connection to Cell 2. Depolarization occurs following increases in conductance (which are a result of presynaptic input). Figure adapted from <emphasis effect="italics">Mathematics for Neuroscientists</emphasis>.</caption></figure>
+        <para id="id175953">Having established the means by which we model our hippocampal place cells, we now turn to the question of how we modify our synaptic weights, which we answer in the next chapter.</para>
+        <table id="uid12" summary="">
+          <tgroup cols="3">
+            <tbody>
+              <row>
+                <entry>Parameter</entry>
+                <entry>Value</entry>
+                <entry>Description</entry>
+              </row>
+              <row>
+                <entry>
+                  <m:math overflow="scroll">
+                    <m:mrow>
+                      <m:msub>
+                        <m:mi>V</m:mi>
+                        <m:mrow>
+                          <m:mi>r</m:mi>
+                          <m:mi>e</m:mi>
+                          <m:mi>s</m:mi>
+                          <m:mi>t</m:mi>
+                        </m:mrow>
+                      </m:msub>
+                      <m:mo>,</m:mo>
+                      <m:msub>
+                        <m:mi>V</m:mi>
+                        <m:mrow>
+                          <m:mi>C</m:mi>
+                          <m:mi>l</m:mi>
+                        </m:mrow>
+                      </m:msub>
+                    </m:mrow>
+                  </m:math>
+                </entry>
+                <entry>-70 mV</entry>
+                <entry>Resting Membrane Potential</entry>
+              </row>
+              <row>
+                <entry>
+                  <m:math overflow="scroll">
+                    <m:msub>
+                      <m:mi>V</m:mi>
+                      <m:mrow>
+                        <m:mi>r</m:mi>
+                        <m:mi>e</m:mi>
+                        <m:mi>s</m:mi>
+                        <m:mi>e</m:mi>
+                        <m:mi>t</m:mi>
+                      </m:mrow>
+                    </m:msub>
+                  </m:math>
+                </entry>
+                <entry>-60 mV</entry>
+                <entry>Membrane Reset Potential</entry>
+              </row>
+              <row>
+                <entry>
+                  <m:math overflow="scroll">
+                    <m:msub>
+                      <m:mi>V</m:mi>
+                      <m:mrow>
+                        <m:mi>t</m:mi>
+                        <m:mi>h</m:mi>
+                      </m:mrow>
+                    </m:msub>
+                  </m:math>
+                </entry>
+                <entry>-54 mV</entry>
+                <entry>Firing Threshold</entry>
+              </row>
+              <row>
+                <entry>
+                  <m:math overflow="scroll">
+                    <m:msub>
+                      <m:mi>t</m:mi>
+                      <m:mrow>
+                        <m:mi>r</m:mi>
+                        <m:mi>e</m:mi>
+                        <m:mi>f</m:mi>
+                      </m:mrow>
+                    </m:msub>
+                  </m:math>
+                </entry>
+                <entry>5 ms</entry>
+                <entry>Refractory Period</entry>
+              </row>
+              <row>
+                <entry>
+                  <m:math overflow="scroll">
+                    <m:msub>
+                      <m:mi>g</m:mi>
+                      <m:mrow>
+                        <m:mi>C</m:mi>
+                        <m:mi>l</m:mi>
+                      </m:mrow>
+                    </m:msub>
+                  </m:math>
+                </entry>
+                <entry>1 mS/cm<m:math overflow="scroll"><m:msup><m:mrow/><m:mn>2</m:mn></m:msup></m:math></entry>
+                <entry>Chloride (Leak) Conductance</entry>
+              </row>
+              <row>
+                <entry>
+                  <m:math overflow="scroll">
+                    <m:msub>
+                      <m:mi>C</m:mi>
+                      <m:mi>m</m:mi>
+                    </m:msub>
+                  </m:math>
+                </entry>
+                <entry>20 <m:math overflow="scroll"><m:mi>μ</m:mi></m:math>F/cm<m:math overflow="scroll"><m:msup><m:mrow/><m:mn>2</m:mn></m:msup></m:math></entry>
+                <entry>Membrane Capacitance</entry>
+              </row>
+              <row>
+                <entry>
+                  <m:math overflow="scroll">
+                    <m:msub>
+                      <m:mi>V</m:mi>
+                      <m:mrow>
+                        <m:mi>s</m:mi>
+                        <m:mi>y</m:mi>
+                        <m:mi>n</m:mi>
+                      </m:mrow>
+                    </m:msub>
+                  </m:math>
+                </entry>
+                <entry>0 mV</entry>
+                <entry>Excitatory Synaptic Reversal Potential</entry>
+              </row>
+              <row>
+                <entry>
+                  <m:math overflow="scroll">
+                    <m:msub>
+                      <m:mi>τ</m:mi>
+                      <m:mi>E</m:mi>
+                    </m:msub>
+                  </m:math>
+                </entry>
+                <entry>5 ms</entry>
+                <entry>Synaptic Conductance Time Constant</entry>
+              </row>
+            </tbody>
+          </tgroup>
+          <caption>Integrate and Fire Ring Parameters</caption>
+        </table>
+      </section>
+    </section>
+    <section id="cid3">
+      <title>Synaptic Plasticity</title>
+      <para id="id176397">Synaptic plasticity is the ability of neurons to change the strength of their connections in response to certain stimuli or lack thereof. It is believed to play a major role in learning and the development of memories.</para>
+      <para id="id176404">There exist several theories on how place cells in the hippocampus are involved in spatial memory. Most are based upon the fundamental concepts of synaptic plasticity: Hebbian learning and long term potentiation (LTP). They dictate that the synaptic weight, or the strength of the connection between two neurons, will increase (LTP) under certain conditions; such as an increased rate of firing or synchronized firing times; and decrease when the opposite occurs (which is known as long term depression, or LTD) <link target-id="bid4"/>. The biological mechanisms of synaptic plasticity have not been fully elucidated, but it is believed to be dependent on the binding of glutamate receptors and signaling cascades dependent on calcium levels <link target-id="bid5"/>.</para>
+      <para id="id174444">In our discussion of synaptic plasticity, we aim to explain two distinct phenomena that we observe in Hippocampal Place Cells: (1): the backward shift in the firing of place fields (the region of the track in which the cell fires) and (2): the final stabilization of place fields. While there are other notable experimental phenomena in the experiments, such as expansion of place fields and increases in place cell firing rates, we will not discuss these in depth. We compare two different plasticity models: Spike-time Dependent Plasticity (STDP) and Calcium Dependent Plasticity (CaDP).</para>
+      <section id="uid13">
+        <title>Spike-time Dependent Plasticity</title>
+        <para id="id174463">One of the most prominent plasticity theories is Spike Time-Dependent Plasticity (STDP), which dictates that an increase or decrease in synaptic weight between two cells is based upon the time between the firing of the cells and the order of the firing <link target-id="bid6"/>. The magnitude of the synaptic weight change, <m:math overflow="scroll"><m:mrow><m:mi>d</m:mi><m:mi>W</m:mi><m:mo>=</m:mo><m:mi>f</m:mi><m:mo>(</m:mo><m:mi>Δ</m:mi><m:mi>t</m:mi><m:mo>)</m:mo></m:mrow></m:math> (<m:math overflow="scroll"><m:mrow><m:mi>Δ</m:mi><m:mi>t</m:mi><m:mo>=</m:mo><m:msub><m:mi>t</m:mi><m:mrow><m:mi>p</m:mi><m:mi>o</m:mi><m:mi>s</m:mi><m:mi>t</m:mi></m:mrow></m:msub><m:mo>-</m:mo><m:msub><m:mi>t</m:mi><m:mrow><m:mi>p</m:mi><m:mi>r</m:mi><m:mi>e</m:mi></m:mrow></m:msub></m:mrow></m:math>), is dictated by the following rule:</para>
+        <equation id="uid14">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:mi>f</m:mi>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>Δ</m:mi>
+                <m:mi>t</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>=</m:mo>
+              <m:mfenced separators="" open="{" close="">
+                <m:mtable>
+                  <m:mtr>
+                    <m:mtd columnalign="left">
+                      <m:mrow>
+                        <m:msub>
+                          <m:mi>A</m:mi>
+                          <m:mo>+</m:mo>
+                        </m:msub>
+                        <m:msup>
+                          <m:mi>e</m:mi>
+                          <m:mrow>
+                            <m:mo>-</m:mo>
+                            <m:mi>Δ</m:mi>
+                            <m:mi>t</m:mi>
+                            <m:mo>/</m:mo>
+                            <m:msub>
+                              <m:mi>τ</m:mi>
+                              <m:mo>+</m:mo>
+                            </m:msub>
+                          </m:mrow>
+                        </m:msup>
+                      </m:mrow>
+                    </m:mtd>
+                    <m:mtd columnalign="right">
+                      <m:mrow>
+                        <m:mo>:</m:mo>
+                        <m:mi>Δ</m:mi>
+                        <m:mi>t</m:mi>
+                        <m:mo>&gt;</m:mo>
+                        <m:mn>0</m:mn>
+                      </m:mrow>
+                    </m:mtd>
+                  </m:mtr>
+                  <m:mtr>
+                    <m:mtd columnalign="left">
+                      <m:mrow>
+                        <m:mo>-</m:mo>
+                        <m:msub>
+                          <m:mi>A</m:mi>
+                          <m:mo>-</m:mo>
+                        </m:msub>
+                        <m:msup>
+                          <m:mi>e</m:mi>
+                          <m:mrow>
+                            <m:mi>Δ</m:mi>
+                            <m:mi>t</m:mi>
+                            <m:mo>/</m:mo>
+                            <m:msub>
+                              <m:mi>τ</m:mi>
+                              <m:mo>-</m:mo>
+                            </m:msub>
+                          </m:mrow>
+                        </m:msup>
+                      </m:mrow>
+                    </m:mtd>
+                    <m:mtd columnalign="right">
+                      <m:mrow>
+                        <m:mo>:</m:mo>
+                        <m:mi>Δ</m:mi>
+                        <m:mi>t</m:mi>
+                        <m:mo>≤</m:mo>
+                        <m:mn>0</m:mn>
+                      </m:mrow>
+                    </m:mtd>
+                  </m:mtr>
+                </m:mtable>
+              </m:mfenced>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id176738"><m:math overflow="scroll"><m:msub><m:mi>A</m:mi><m:mo>+</m:mo></m:msub></m:math> and <m:math overflow="scroll"><m:msub><m:mi>A</m:mi><m:mo>-</m:mo></m:msub></m:math> represent coefficients for the maximum values of potentiation and depression per spike pair, respectively. We set <m:math overflow="scroll"><m:msub><m:mi>A</m:mi><m:mo>+</m:mo></m:msub></m:math> = .4 and <m:math overflow="scroll"><m:msub><m:mi>A</m:mi><m:mo>-</m:mo></m:msub></m:math> = .42. <m:math overflow="scroll"><m:msub><m:mi>τ</m:mi><m:mo>+</m:mo></m:msub></m:math> and <m:math overflow="scroll"><m:msub><m:mi>τ</m:mi><m:mo>-</m:mo></m:msub></m:math> are the time constants for LTP and LTD, both of which are set to 20 ms. We depict a plot of weight changes versus spike times below.</para>
+        <figure id="uid15"><media id="uid15_media" alt="">
+            <image mime-type="image/png" src="../../media/STDP.png" id="uid15_onlineimage" width="432"><!-- NOTE: attribute width changes image size online (pixels). original width is 432. --></image>
+            <image mime-type="application/postscript" for="pdf" src="../../media/STDP.eps" id="uid15_printimage" print-width="12.0cm">
+              <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+            </image>
+          </media>
+          
+        <caption>STDP Weight Plot vs. Spike Times</caption></figure>
+        <para id="id176844">The rule is fairly intuitive: if the presynaptic cell fires before the postsynaptic cell, the weight increases. If the postsynaptic cell fires before the presynaptic cell, the weight decreases. The closer the spike times are, the greater the magnitude of the weight change. As this weight change model is only dependent on spike times, more spike pairs will result in more weight changes. As such, the weights would be able to increase without bound. To prevent excessive weight increases, we impose a maximum weight, which we denote <m:math overflow="scroll"><m:msub><m:mi>W</m:mi><m:mrow><m:mi>m</m:mi><m:mi>a</m:mi><m:mi>x</m:mi></m:mrow></m:msub></m:math>, of 5 in our simulations involving STDP. We also set a lower weight limit at zero, ensuring no negative synaptic weights. A more detailed analysis of STDP dynamics can be found in Georgene Jalbuena's report of Spike-time Dependent Plasticity.</para>
+        <para id="id176877">There exist a number of variations on this plasticity rule. Some adjust synaptic weights based on the spike times of the most recent spike pair, whereas others account for all of the pre-postsynaptic spike pairs. We will not discuss this in-depth: we find that the weight changes associated with accounting for all spike pairs are slightly increased, but with very little difference besides this. Since we scale the degree of weight change with <m:math overflow="scroll"><m:msub><m:mi>A</m:mi><m:mo>+</m:mo></m:msub></m:math> and <m:math overflow="scroll"><m:msub><m:mi>A</m:mi><m:mo>-</m:mo></m:msub></m:math>, we will base our analysis of STDP off of results with weight changes involving only the most recent spike pair.</para>
+        <para id="id176915">A variant of STDP that we do consider, known as Multiplicative STDP, proposes a more feasible means of synaptic weight changes by incorporating the current weight into the weight change equation (see <link target-id="bid7"/>). We describe this weight modification scheme as <m:math overflow="scroll"><m:mrow><m:mi>d</m:mi><m:mi>W</m:mi><m:mo>=</m:mo><m:mi>g</m:mi><m:mo>(</m:mo><m:mi>Δ</m:mi><m:mi>t</m:mi><m:mo>)</m:mo></m:mrow></m:math>, where:</para>
+        <equation id="uid16">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:mi>g</m:mi>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>Δ</m:mi>
+                <m:mi>t</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>=</m:mo>
+              <m:mfenced separators="" open="{" close="">
+                <m:mtable>
+                  <m:mtr>
+                    <m:mtd columnalign="left">
+                      <m:mrow>
+                        <m:mi>f</m:mi>
+                        <m:mrow>
+                          <m:mo>(</m:mo>
+                          <m:mi>Δ</m:mi>
+                          <m:mi>t</m:mi>
+                          <m:mo>)</m:mo>
+                        </m:mrow>
+                        <m:mrow>
+                          <m:mo>(</m:mo>
+                          <m:msub>
+                            <m:mi>W</m:mi>
+                            <m:mrow>
+                              <m:mi>m</m:mi>
+                              <m:mi>a</m:mi>
+                              <m:mi>x</m:mi>
+                            </m:mrow>
+                          </m:msub>
+                          <m:mo>-</m:mo>
+                          <m:mi>W</m:mi>
+                          <m:mo>)</m:mo>
+                        </m:mrow>
+                      </m:mrow>
+                    </m:mtd>
+                    <m:mtd columnalign="right">
+                      <m:mrow>
+                        <m:mo>:</m:mo>
+                        <m:mi>Δ</m:mi>
+                        <m:mi>t</m:mi>
+                        <m:mo>&gt;</m:mo>
+                        <m:mn>0</m:mn>
+                      </m:mrow>
+                    </m:mtd>
+                  </m:mtr>
+                  <m:mtr>
+                    <m:mtd columnalign="left">
+                      <m:mrow>
+                        <m:mi>f</m:mi>
+                        <m:mo>(</m:mo>
+                        <m:mi>Δ</m:mi>
+                        <m:mi>t</m:mi>
+                        <m:mo>)</m:mo>
+                        <m:mi>W</m:mi>
+                      </m:mrow>
+                    </m:mtd>
+                    <m:mtd columnalign="right">
+                      <m:mrow>
+                        <m:mo>:</m:mo>
+                        <m:mi>Δ</m:mi>
+                        <m:mi>t</m:mi>
+                        <m:mo>≤</m:mo>
+                        <m:mn>0</m:mn>
+                      </m:mrow>
+                    </m:mtd>
+                  </m:mtr>
+                </m:mtable>
+              </m:mfenced>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id177079">This version of STDP allows for a more asymptotic approach to the weight bounds. Additionally, it produces a behavior more similar to the experimental results, which showed that more marked changes in synaptic weights occur in the first few laps and become lessened in later laps.</para>
+        <para id="id177087">The STDP model is currently implemented in the Double Rotation experiment model. It reproduces the backward shift and results in final place field stability, as found in the results of the experiment. While it has been successful in reproducing experimental results, the model itself is still flawed, as it requires an arbitrary upper limit to be set on the maximum synaptic weight in order to achieve place field stability. As such, STDP may not appear to be the most biologically realistic model for modeling synaptic plasticity. We explore a newer alternative to STDP, coined as Calcium Dependent Plasticity, in the next chapter.</para>
+        <table id="uid17" summary="">
+          <tgroup cols="3">
+            <tbody>
+              <row>
+                <entry>Parameter</entry>
+                <entry>Value</entry>
+                <entry>Description</entry>
+              </row>
+              <row>
+                <entry>
+                  <m:math overflow="scroll">
+                    <m:msub>
+                      <m:mi>A</m:mi>
+                      <m:mo>+</m:mo>
+                    </m:msub>
+                  </m:math>
+                </entry>
+                <entry>-70 mV</entry>
+                <entry>Weight increase coefficient</entry>
+              </row>
+              <row>
+                <entry>
+                  <m:math overflow="scroll">
+                    <m:msub>
+                      <m:mi>A</m:mi>
+                      <m:mo>-</m:mo>
+                    </m:msub>
+                  </m:math>
+                </entry>
+                <entry>-60 mV</entry>
+                <entry>Weight decrease coefficient</entry>
+              </row>
+              <row>
+                <entry>
+                  <m:math overflow="scroll">
+                    <m:msub>
+                      <m:mi>τ</m:mi>
+                      <m:mo>+</m:mo>
+                    </m:msub>
+                  </m:math>
+                </entry>
+                <entry>-54 mV</entry>
+                <entry>Weight increase decay constant</entry>
+              </row>
+              <row>
+                <entry>
+                  <m:math overflow="scroll">
+                    <m:msub>
+                      <m:mi>τ</m:mi>
+                      <m:mo>-</m:mo>
+                    </m:msub>
+                  </m:math>
+                </entry>
+                <entry>5 ms</entry>
+                <entry>Weight decrease decay constant</entry>
+              </row>
+              <row>
+                <entry>
+                  <m:math overflow="scroll">
+                    <m:msub>
+                      <m:mi>W</m:mi>
+                      <m:mrow>
+                        <m:mi>m</m:mi>
+                        <m:mi>a</m:mi>
+                        <m:mi>x</m:mi>
+                      </m:mrow>
+                    </m:msub>
+                  </m:math>
+                </entry>
+                <entry>1 mS/cm<m:math overflow="scroll"><m:msup><m:mrow/><m:mn>2</m:mn></m:msup></m:math></entry>
+                <entry>Maximum synaptic weight</entry>
+              </row>
+            </tbody>
+          </tgroup>
+          <caption>STDP Parameters</caption>
+        </table>
+      </section>
+    </section>
+    <section id="cid4">
+      <title>Calcium Dependent Plasticity: A better model?</title>
+      <para id="id177376">We introduce Calcium Dependent Plasticity (CaDP) as a more biologically realistic model for synaptic plasticity in comparison to STDP. The model was developed by Dr. Harel Shouval of the University of Texas Medical School and colleagues at Brown University (see <link target-id="bid8"/>, <link target-id="bid9"/>). All of the equations and parameter values introduced in this chapter have been taken or adapted from his 2008 publication <link target-id="bid10"/>. While weight changes in the STDP model were based entirely on the order of firing and the duration of the spike interval, the synaptic weights in the CaDP model incorporate spike-timing as well as a form of rate-dependent plasticity. While STDP sets arbitrary upper bounds to achieve place field stability, CaDP can be accompanied with metaplasticity to obtain a stabilized backward shift <link target-id="bid10"/>. Additionally, CaDP explicitly accounts for the interactions of biological parameters known to be involved with plasticity, including calcium, magnesium, and glutamate receptors.</para>
+      <section id="uid18">
+        <title>Plasticity Equations</title>
+        <para id="id177420">The CaDP rule is based upon a scheme where calcium levels directly affect the synaptic weights. At low calcium levels, there is no change in weight. At moderate calcium levels, we observe a depression of weights. At high calcium levels, we observe the potentiation of weights. To achieve this effect, we define a function, <m:math overflow="scroll"><m:mi>Ω</m:mi></m:math>, to have the above properties:</para>
+        <equation id="uid19">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:mi>Ω</m:mi>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mrow>
+                  <m:mo>[</m:mo>
+                  <m:mi>C</m:mi>
+                  <m:msup>
+                    <m:mi>a</m:mi>
+                    <m:mrow>
+                      <m:mn>2</m:mn>
+                      <m:mo>+</m:mo>
+                    </m:mrow>
+                  </m:msup>
+                  <m:mo>]</m:mo>
+                </m:mrow>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>=</m:mo>
+              <m:mi>σ</m:mi>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mrow>
+                  <m:mo>[</m:mo>
+                  <m:mi>C</m:mi>
+                  <m:msup>
+                    <m:mi>a</m:mi>
+                    <m:mrow>
+                      <m:mn>2</m:mn>
+                      <m:mo>+</m:mo>
+                    </m:mrow>
+                  </m:msup>
+                  <m:mo>]</m:mo>
+                </m:mrow>
+                <m:mo>,</m:mo>
+                <m:msub>
+                  <m:mi>α</m:mi>
+                  <m:mn>2</m:mn>
+                </m:msub>
+                <m:mo>,</m:mo>
+                <m:msub>
+                  <m:mi>β</m:mi>
+                  <m:mn>2</m:mn>
+                </m:msub>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>-</m:mo>
+              <m:mn>0</m:mn>
+              <m:mo>.</m:mo>
+              <m:mn>5</m:mn>
+              <m:mo>×</m:mo>
+              <m:mi>σ</m:mi>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mrow>
+                  <m:mo>[</m:mo>
+                  <m:mi>C</m:mi>
+                  <m:msup>
+                    <m:mi>a</m:mi>
+                    <m:mrow>
+                      <m:mn>2</m:mn>
+                      <m:mo>+</m:mo>
+                    </m:mrow>
+                  </m:msup>
+                  <m:mo>]</m:mo>
+                </m:mrow>
+                <m:mo>,</m:mo>
+                <m:msub>
+                  <m:mi>α</m:mi>
+                  <m:mn>1</m:mn>
+                </m:msub>
+                <m:mo>,</m:mo>
+                <m:msub>
+                  <m:mi>β</m:mi>
+                  <m:mn>1</m:mn>
+                </m:msub>
+                <m:mo>)</m:mo>
+              </m:mrow>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id177580">where <m:math overflow="scroll"><m:mi>σ</m:mi></m:math> represents a sigmoid function, which we define as:</para>
+        <equation id="uid20">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:mi>σ</m:mi>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>x</m:mi>
+                <m:mo>,</m:mo>
+                <m:mi>a</m:mi>
+                <m:mo>,</m:mo>
+                <m:mi>b</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>=</m:mo>
+              <m:mfrac>
+                <m:msup>
+                  <m:mi>e</m:mi>
+                  <m:mrow>
+                    <m:mi>b</m:mi>
+                    <m:mo>(</m:mo>
+                    <m:mi>x</m:mi>
+                    <m:mo>-</m:mo>
+                    <m:mi>a</m:mi>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                </m:msup>
+                <m:mrow>
+                  <m:mn>1</m:mn>
+                  <m:mo>+</m:mo>
+                  <m:msup>
+                    <m:mi>e</m:mi>
+                    <m:mrow>
+                      <m:mi>b</m:mi>
+                      <m:mo>(</m:mo>
+                      <m:mi>x</m:mi>
+                      <m:mo>-</m:mo>
+                      <m:mi>a</m:mi>
+                      <m:mo>)</m:mo>
+                    </m:mrow>
+                  </m:msup>
+                </m:mrow>
+              </m:mfrac>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id177677">We set parameters <m:math overflow="scroll"><m:msub><m:mi>α</m:mi><m:mn>1</m:mn></m:msub></m:math>, <m:math overflow="scroll"><m:msub><m:mi>α</m:mi><m:mn>2</m:mn></m:msub></m:math>, to control the lower and upper calcium bounds of the LTD region, respectively. <m:math overflow="scroll"><m:msub><m:mi>β</m:mi><m:mn>1</m:mn></m:msub></m:math> and <m:math overflow="scroll"><m:msub><m:mi>β</m:mi><m:mn>2</m:mn></m:msub></m:math> adjust the concavity of the sigmoid function, where <m:math overflow="scroll"><m:mi>σ</m:mi></m:math> approaches the Heaviside function as <m:math overflow="scroll"><m:mrow><m:mi>β</m:mi><m:mo>→</m:mo><m:mi>∞</m:mi></m:mrow></m:math>. In our analysis of CaDP, we use the parameters <m:math overflow="scroll"><m:mrow><m:mrow><m:mo>(</m:mo><m:msub><m:mi>α</m:mi><m:mn>1</m:mn></m:msub><m:mo>,</m:mo><m:msub><m:mi>α</m:mi><m:mn>2</m:mn></m:msub><m:mo>,</m:mo><m:msub><m:mi>β</m:mi><m:mn>1</m:mn></m:msub><m:mo>,</m:mo><m:msub><m:mi>β</m:mi><m:mn>2</m:mn></m:msub><m:mo>)</m:mo></m:mrow><m:mo>=</m:mo><m:mrow><m:mo>(</m:mo><m:mn>0</m:mn><m:mo>.</m:mo><m:mn>3</m:mn><m:mo>,</m:mo><m:mn>0</m:mn><m:mo>.</m:mo><m:mn>5</m:mn><m:mo>,</m:mo><m:mn>40</m:mn><m:mo>,</m:mo><m:mn>40</m:mn><m:mo>)</m:mo></m:mrow></m:mrow></m:math>.</para>
+        <para id="id177845">While we might be inclined to base our entire weight change regime on this omega function, we must also realize that fluctuations in synaptic calcium levels would cause any increase in weight caused by high calcium levels to be nullified when calcium decreases into the LTD calcium concentrations. As such, we must also implement a rate function, <m:math overflow="scroll"><m:mi>η</m:mi></m:math>, such that potentiation due to high calcium levels would outweigh the depression caused when calcium decreases through moderate concentrations and returns to equilibrium levels. Our equation for <m:math overflow="scroll"><m:mi>η</m:mi></m:math> takes the form:</para>
+        <equation id="uid21">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:mi>η</m:mi>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mrow>
+                  <m:mo>[</m:mo>
+                  <m:mi>C</m:mi>
+                  <m:msup>
+                    <m:mi>a</m:mi>
+                    <m:mrow>
+                      <m:mn>2</m:mn>
+                      <m:mo>+</m:mo>
+                    </m:mrow>
+                  </m:msup>
+                  <m:mo>]</m:mo>
+                </m:mrow>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>=</m:mo>
+              <m:msub>
+                <m:mi>p</m:mi>
+                <m:mn>1</m:mn>
+              </m:msub>
+              <m:mfrac>
+                <m:msup>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:mrow>
+                      <m:mo>[</m:mo>
+                      <m:mi>C</m:mi>
+                      <m:msup>
+                        <m:mi>a</m:mi>
+                        <m:mrow>
+                          <m:mn>2</m:mn>
+                          <m:mo>+</m:mo>
+                        </m:mrow>
+                      </m:msup>
+                      <m:mo>]</m:mo>
+                    </m:mrow>
+                    <m:mo>+</m:mo>
+                    <m:msub>
+                      <m:mi>p</m:mi>
+                      <m:mn>4</m:mn>
+                    </m:msub>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                  <m:msub>
+                    <m:mi>p</m:mi>
+                    <m:mn>3</m:mn>
+                  </m:msub>
+                </m:msup>
+                <m:mrow>
+                  <m:msup>
+                    <m:mrow>
+                      <m:mo>(</m:mo>
+                      <m:mrow>
+                        <m:mo>[</m:mo>
+                        <m:mi>C</m:mi>
+                        <m:msup>
+                          <m:mi>a</m:mi>
+                          <m:mrow>
+                            <m:mn>2</m:mn>
+                            <m:mo>+</m:mo>
+                          </m:mrow>
+                        </m:msup>
+                        <m:mo>]</m:mo>
+                      </m:mrow>
+                      <m:mo>+</m:mo>
+                      <m:msub>
+                        <m:mi>p</m:mi>
+                        <m:mn>4</m:mn>
+                      </m:msub>
+                      <m:mo>)</m:mo>
+                    </m:mrow>
+                    <m:msub>
+                      <m:mi>p</m:mi>
+                      <m:mn>3</m:mn>
+                    </m:msub>
+                  </m:msup>
+                  <m:mo>+</m:mo>
+                  <m:msup>
+                    <m:mrow>
+                      <m:mo>(</m:mo>
+                      <m:msub>
+                        <m:mi>p</m:mi>
+                        <m:mn>2</m:mn>
+                      </m:msub>
+                      <m:mo>)</m:mo>
+                    </m:mrow>
+                    <m:msub>
+                      <m:mi>p</m:mi>
+                      <m:mn>3</m:mn>
+                    </m:msub>
+                  </m:msup>
+                </m:mrow>
+              </m:mfrac>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id178040">We set the parameters <m:math overflow="scroll"><m:mrow><m:mo>(</m:mo><m:msub><m:mi>p</m:mi><m:mn>1</m:mn></m:msub><m:mo>,</m:mo><m:msub><m:mi>p</m:mi><m:mn>2</m:mn></m:msub><m:mo>,</m:mo><m:msub><m:mi>p</m:mi><m:mn>3</m:mn></m:msub><m:mo>,</m:mo><m:msub><m:mi>p</m:mi><m:mn>4</m:mn></m:msub><m:mo>)</m:mo></m:mrow></m:math> to <m:math overflow="scroll"><m:mrow><m:mo>(</m:mo><m:mn>2</m:mn><m:mo>,</m:mo><m:mn>0</m:mn><m:mo>.</m:mo><m:mn>5</m:mn><m:mo>,</m:mo><m:mn>3</m:mn><m:mo>,</m:mo><m:mn>0</m:mn><m:mo>.</m:mo><m:mn>00001</m:mn><m:mo>)</m:mo></m:mrow></m:math> in our simulations of CaDP.
+As the behavior of this equation is not intuitive, we depict <m:math overflow="scroll"><m:mi>η</m:mi></m:math> along with <m:math overflow="scroll"><m:mi>Ω</m:mi></m:math>, both as functions of calcium concentrations in figures <link target-id="uid22"/>A and <link target-id="uid22"/>B.</para>
+        <figure id="uid22"><media id="uid22_media" alt="">
+            <image mime-type="image/png" src="../../media/CaDPr2.png" id="uid22_onlineimage" width="540"><!-- NOTE: attribute width changes image size online (pixels). original width is 540. --></image>
+            <image mime-type="application/postscript" for="pdf" src="../../media/CaDPr.eps" id="uid22_printimage" print-width="15.0cm">
+              <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+            </image>
+          </media>
+          
+        <caption>Plasticity Equations. (A): <m:math overflow="scroll"><m:mi>η</m:mi></m:math> as a function of Calcium concentration. Notice that <m:math overflow="scroll"><m:mi>η</m:mi></m:math> monotonically increases with calcium concentrations. (B): <m:math overflow="scroll"><m:mi>Ω</m:mi></m:math> as a function of Calcium. Note that LTD occurs when 0.2 &lt; <m:math overflow="scroll"><m:mrow><m:mo>[</m:mo><m:mi>C</m:mi><m:msup><m:mi>a</m:mi><m:mrow><m:mn>2</m:mn><m:mo>+</m:mo></m:mrow></m:msup><m:mo>]</m:mo></m:mrow></m:math> &lt; 0.5 and LTP occurs when <m:math overflow="scroll"><m:mrow><m:mo>[</m:mo><m:mi>C</m:mi><m:msup><m:mi>a</m:mi><m:mrow><m:mn>2</m:mn><m:mo>+</m:mo></m:mrow></m:msup><m:mo>]</m:mo></m:mrow></m:math> &gt; 0.5. (C): Weight change as a function of Calcium level.</caption></figure>
+        <para id="id178253">With our two calcium dependent functions, <m:math overflow="scroll"><m:mi>Ω</m:mi></m:math> and <m:math overflow="scroll"><m:mi>η</m:mi></m:math>, we define our synaptic weight change function, depicted in <link target-id="uid22"/>C as follows:</para>
+        <equation id="uid23">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:mfrac>
+                <m:mrow>
+                  <m:mi>d</m:mi>
+                  <m:msub>
+                    <m:mi>w</m:mi>
+                    <m:mi>i</m:mi>
+                  </m:msub>
+                </m:mrow>
+                <m:mrow>
+                  <m:mi>d</m:mi>
+                  <m:mi>t</m:mi>
+                </m:mrow>
+              </m:mfrac>
+              <m:mo>=</m:mo>
+              <m:mi>k</m:mi>
+              <m:mrow>
+                <m:mo>[</m:mo>
+                <m:mi>Ω</m:mi>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:msub>
+                    <m:mrow>
+                      <m:mo>[</m:mo>
+                      <m:mi>C</m:mi>
+                      <m:msup>
+                        <m:mi>a</m:mi>
+                        <m:mrow>
+                          <m:mn>2</m:mn>
+                          <m:mo>+</m:mo>
+                        </m:mrow>
+                      </m:msup>
+                      <m:mo>]</m:mo>
+                    </m:mrow>
+                    <m:mi>i</m:mi>
+                  </m:msub>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mo>×</m:mo>
+                <m:mi>η</m:mi>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:msub>
+                    <m:mrow>
+                      <m:mo>[</m:mo>
+                      <m:mi>C</m:mi>
+                      <m:msup>
+                        <m:mi>a</m:mi>
+                        <m:mrow>
+                          <m:mn>2</m:mn>
+                          <m:mo>+</m:mo>
+                        </m:mrow>
+                      </m:msup>
+                      <m:mo>]</m:mo>
+                    </m:mrow>
+                    <m:mi>i</m:mi>
+                  </m:msub>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mo>]</m:mo>
+              </m:mrow>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id178388">where <m:math overflow="scroll"><m:msub><m:mi>w</m:mi><m:mi>i</m:mi></m:msub></m:math> denotes the synaptic weight at synapse <m:math overflow="scroll"><m:mi>i</m:mi></m:math>. Note that <m:math overflow="scroll"><m:msub><m:mrow><m:mo>[</m:mo><m:mi>C</m:mi><m:msup><m:mi>a</m:mi><m:mrow><m:mn>2</m:mn><m:mo>+</m:mo></m:mrow></m:msup><m:mo>]</m:mo></m:mrow><m:mi>i</m:mi></m:msub></m:math> indicates the postsynaptic Calcium concentration at synapse <m:math overflow="scroll"><m:mi>i</m:mi></m:math>. <m:math overflow="scroll"><m:mi>k</m:mi></m:math> denotes a scaling factor introduced in order to generate the appropriate weight changes. In our comparison of CaDP with STDP in the next chapter, we use a value of <m:math overflow="scroll"><m:mi>k</m:mi></m:math> = <m:math overflow="scroll"><m:mfrac><m:mn>1</m:mn><m:mn>200</m:mn></m:mfrac></m:math>. It should be noted that while STDP weight updates occur following postsynaptic spikes, the CaDP regime constantly updates synaptic weights over time.</para>
+        <table id="uid24" summary="">
+          <tgroup cols="3">
+            <tbody>
+              <row>
+                <entry>Parameter</entry>
+                <entry>Value</entry>
+                <entry>Description</entry>
+              </row>
+              <row>
+                <entry>
+                  <m:math overflow="scroll">
+                    <m:msub>
+                      <m:mi>p</m:mi>
+                      <m:mn>1</m:mn>
+                    </m:msub>
+                  </m:math>
+                </entry>
+                <entry>2</entry>
+                <entry>Coefficient of Rate Function (<m:math overflow="scroll"><m:mi>η</m:mi></m:math>)</entry>
+              </row>
+              <row>
+                <entry>
+                  <m:math overflow="scroll">
+                    <m:msub>
+                      <m:mi>p</m:mi>
+                      <m:mn>2</m:mn>
+                    </m:msub>
+                  </m:math>
+                </entry>
+                <entry>0.5</entry>
+                <entry>Rate Function Constant</entry>
+              </row>
+              <row>
+                <entry>
+                  <m:math overflow="scroll">
+                    <m:msub>
+                      <m:mi>p</m:mi>
+                      <m:mn>3</m:mn>
+                    </m:msub>
+                  </m:math>
+                </entry>
+                <entry>3</entry>
+                <entry>Rate Function Constant</entry>
+              </row>
+              <row>
+                <entry>
+                  <m:math overflow="scroll">
+                    <m:msub>
+                      <m:mi>p</m:mi>
+                      <m:mn>4</m:mn>
+                    </m:msub>
+                  </m:math>
+                </entry>
+                <entry>1 <m:math overflow="scroll"><m:mo>×</m:mo></m:math> 10<m:math overflow="scroll"><m:msup><m:mrow/><m:mrow><m:mo>-</m:mo><m:mn>5</m:mn></m:mrow></m:msup></m:math></entry>
+                <entry>Rate Function Constant</entry>
+              </row>
+              <row>
+                <entry>
+                  <m:math overflow="scroll">
+                    <m:msub>
+                      <m:mi>α</m:mi>
+                      <m:mn>1</m:mn>
+                    </m:msub>
+                  </m:math>
+                </entry>
+                <entry>0.3</entry>
+                <entry>Lower Bound of Calcium for LTD</entry>
+              </row>
+              <row>
+                <entry>
+                  <m:math overflow="scroll">
+                    <m:msub>
+                      <m:mi>α</m:mi>
+                      <m:mn>2</m:mn>
+                    </m:msub>
+                  </m:math>
+                </entry>
+                <entry>0.5</entry>
+                <entry>Upper Bound of Calcium for LTD</entry>
+              </row>
+              <row>
+                <entry>
+                  <m:math overflow="scroll">
+                    <m:msub>
+                      <m:mi>β</m:mi>
+                      <m:mn>1</m:mn>
+                    </m:msub>
+                  </m:math>
+                </entry>
+                <entry>40</entry>
+                <entry>Rate of Transition to LTD</entry>
+              </row>
+              <row>
+                <entry>
+                  <m:math overflow="scroll">
+                    <m:msub>
+                      <m:mi>β</m:mi>
+                      <m:mn>2</m:mn>
+                    </m:msub>
+                  </m:math>
+                </entry>
+                <entry>40</entry>
+                <entry>Rate of Transition to LTP</entry>
+              </row>
+              <row>
+                <entry>
+                  <m:math overflow="scroll">
+                    <m:mi>k</m:mi>
+                  </m:math>
+                </entry>
+                <entry>
+                  <m:math overflow="scroll">
+                    <m:mfrac>
+                      <m:mn>1</m:mn>
+                      <m:mn>200</m:mn>
+                    </m:mfrac>
+                  </m:math>
+                </entry>
+                <entry>Weight Change Coefficient</entry>
+              </row>
+            </tbody>
+          </tgroup>
+          <caption>CaDP Learning Rule Parameters</caption>
+        </table>
+      </section>
+      <section id="uid25">
+        <title>Calcium equations</title>
+        <para id="id178951">As the weight changes caused by this model are dependent on Calcium, we also implement a number of equations to regulate the postsynaptic Calcium levels. Calcium level is regulated by the differential equation below:</para>
+        <equation id="uid26">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:mfrac>
+                <m:mrow>
+                  <m:mi>d</m:mi>
+                  <m:mo>[</m:mo>
+                  <m:mi>C</m:mi>
+                  <m:msup>
+                    <m:mi>a</m:mi>
+                    <m:mrow>
+                      <m:mn>2</m:mn>
+                      <m:mo>+</m:mo>
+                    </m:mrow>
+                  </m:msup>
+                  <m:mo>]</m:mo>
+                </m:mrow>
+                <m:mrow>
+                  <m:mi>d</m:mi>
+                  <m:mi>t</m:mi>
+                </m:mrow>
+              </m:mfrac>
+              <m:mo>=</m:mo>
+              <m:mi>I</m:mi>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>t</m:mi>
+                <m:mo>,</m:mo>
+                <m:msub>
+                  <m:mi>t</m:mi>
+                  <m:mrow>
+                    <m:mi>p</m:mi>
+                    <m:mi>r</m:mi>
+                    <m:mi>e</m:mi>
+                  </m:mrow>
+                </m:msub>
+                <m:mo>,</m:mo>
+                <m:mi>V</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>-</m:mo>
+              <m:mfrac>
+                <m:mrow>
+                  <m:mo>[</m:mo>
+                  <m:mi>C</m:mi>
+                  <m:msup>
+                    <m:mi>a</m:mi>
+                    <m:mrow>
+                      <m:mn>2</m:mn>
+                      <m:mo>+</m:mo>
+                    </m:mrow>
+                  </m:msup>
+                  <m:mo>]</m:mo>
+                </m:mrow>
+                <m:msub>
+                  <m:mi>τ</m:mi>
+                  <m:mrow>
+                    <m:mi>C</m:mi>
+                    <m:mi>a</m:mi>
+                  </m:mrow>
+                </m:msub>
+              </m:mfrac>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id179065">Where <m:math overflow="scroll"><m:msub><m:mi>τ</m:mi><m:mrow><m:mi>C</m:mi><m:mi>a</m:mi></m:mrow></m:msub></m:math> represents the decay time constant of calcium, which we set to 50 ms. <m:math overflow="scroll"><m:mi>I</m:mi></m:math> represents the Calcium influx of the synapse, which we model with the following equation:</para>
+        <equation id="uid27">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:mi>I</m:mi>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>t</m:mi>
+                <m:mo>,</m:mo>
+                <m:msub>
+                  <m:mi>t</m:mi>
+                  <m:mrow>
+                    <m:mi>p</m:mi>
+                    <m:mi>r</m:mi>
+                    <m:mi>e</m:mi>
+                  </m:mrow>
+                </m:msub>
+                <m:mo>,</m:mo>
+                <m:mi>V</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>=</m:mo>
+              <m:msub>
+                <m:mi>g</m:mi>
+                <m:mi>N</m:mi>
+              </m:msub>
+              <m:mi>f</m:mi>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>t</m:mi>
+                <m:mo>,</m:mo>
+                <m:msub>
+                  <m:mi>t</m:mi>
+                  <m:mrow>
+                    <m:mi>p</m:mi>
+                    <m:mi>r</m:mi>
+                    <m:mi>e</m:mi>
+                  </m:mrow>
+                </m:msub>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mi>H</m:mi>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>V</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id179185">Note that this Calcium influx value should not be associated with the synaptic input current, <m:math overflow="scroll"><m:msub><m:mi>I</m:mi><m:mrow><m:mi>s</m:mi><m:mi>y</m:mi><m:mi>n</m:mi></m:mrow></m:msub></m:math>. <m:math overflow="scroll"><m:msub><m:mi>g</m:mi><m:mi>N</m:mi></m:msub></m:math> represents the conductance of the available N-Methyl D-Aspartate receptors (NMDARs) at the synapse (not to be confused with the excitatory conductance from our Integrate and Fire model). This can be either kept at a constant value or regulated by Metaplasticity (see <link target-id="uid33">"Metaplasticity"</link>). When not using metaplasticity, we use a value of <m:math overflow="scroll"><m:mrow><m:msub><m:mi>g</m:mi><m:mi>N</m:mi></m:msub><m:mo>=</m:mo><m:mo>-</m:mo><m:mn>1</m:mn><m:mo>×</m:mo><m:msup><m:mn>10</m:mn><m:mrow><m:mo>-</m:mo><m:mn>3</m:mn></m:mrow></m:msup></m:mrow></m:math>. <m:math overflow="scroll"><m:mrow><m:mi>f</m:mi><m:mo>(</m:mo><m:mi>t</m:mi><m:mo>,</m:mo><m:msub><m:mi>t</m:mi><m:mrow><m:mi>p</m:mi><m:mi>r</m:mi><m:mi>e</m:mi></m:mrow></m:msub><m:mo>)</m:mo></m:mrow></m:math> is the spike-timing dependent portion of input current, which we define as:</para>
+        <equation id="uid28">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:mi>f</m:mi>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>t</m:mi>
+                <m:mo>,</m:mo>
+                <m:msub>
+                  <m:mi>t</m:mi>
+                  <m:mrow>
+                    <m:mi>p</m:mi>
+                    <m:mi>r</m:mi>
+                    <m:mi>e</m:mi>
+                  </m:mrow>
+                </m:msub>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>=</m:mo>
+              <m:msubsup>
+                <m:mi>I</m:mi>
+                <m:mi>f</m:mi>
+                <m:mi>f</m:mi>
+              </m:msubsup>
+              <m:mi>Θ</m:mi>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>t</m:mi>
+                <m:mo>-</m:mo>
+                <m:msub>
+                  <m:mi>t</m:mi>
+                  <m:mrow>
+                    <m:mi>p</m:mi>
+                    <m:mi>r</m:mi>
+                    <m:mi>e</m:mi>
+                  </m:mrow>
+                </m:msub>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:msup>
+                <m:mi>e</m:mi>
+                <m:mrow>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:msub>
+                      <m:mi>t</m:mi>
+                      <m:mrow>
+                        <m:mi>p</m:mi>
+                        <m:mi>r</m:mi>
+                        <m:mi>e</m:mi>
+                      </m:mrow>
+                    </m:msub>
+                    <m:mo>-</m:mo>
+                    <m:mi>t</m:mi>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                  <m:mo>/</m:mo>
+                  <m:msubsup>
+                    <m:mrow>
+                      <m:mi>τ</m:mi>
+                    </m:mrow>
+                    <m:mi>f</m:mi>
+                    <m:mi>f</m:mi>
+                  </m:msubsup>
+                </m:mrow>
+              </m:msup>
+              <m:mo>+</m:mo>
+              <m:msubsup>
+                <m:mi>I</m:mi>
+                <m:mi>s</m:mi>
+                <m:mi>f</m:mi>
+              </m:msubsup>
+              <m:mi>Θ</m:mi>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>t</m:mi>
+                <m:mo>-</m:mo>
+                <m:msub>
+                  <m:mi>t</m:mi>
+                  <m:mrow>
+                    <m:mi>p</m:mi>
+                    <m:mi>r</m:mi>
+                    <m:mi>e</m:mi>
+                  </m:mrow>
+                </m:msub>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:msup>
+                <m:mi>e</m:mi>
+                <m:mrow>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:msub>
+                      <m:mi>t</m:mi>
+                      <m:mrow>
+                        <m:mi>p</m:mi>
+                        <m:mi>r</m:mi>
+                        <m:mi>e</m:mi>
+                      </m:mrow>
+                    </m:msub>
+                    <m:mo>-</m:mo>
+                    <m:mi>t</m:mi>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                  <m:mo>/</m:mo>
+                  <m:msubsup>
+                    <m:mrow>
+                      <m:mi>τ</m:mi>
+                    </m:mrow>
+                    <m:mi>s</m:mi>
+                    <m:mi>f</m:mi>
+                  </m:msubsup>
+                </m:mrow>
+              </m:msup>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id179500">This spike-time regime consists of two components: a fast component, with a time constant of <m:math overflow="scroll"><m:msubsup><m:mi>τ</m:mi><m:mi>f</m:mi><m:mi>f</m:mi></m:msubsup></m:math> = 50 ms; as well as a slow component, with a time constant of <m:math overflow="scroll"><m:msubsup><m:mi>τ</m:mi><m:mi>s</m:mi><m:mi>f</m:mi></m:msubsup></m:math> = 200 ms. <m:math overflow="scroll"><m:mi>Θ</m:mi></m:math> represents the Heaviside function. Constants <m:math overflow="scroll"><m:msubsup><m:mi>I</m:mi><m:mi>f</m:mi><m:mi>f</m:mi></m:msubsup></m:math> and <m:math overflow="scroll"><m:msubsup><m:mi>I</m:mi><m:mi>s</m:mi><m:mi>f</m:mi></m:msubsup></m:math> are regulated such that <m:math overflow="scroll"><m:mrow><m:msubsup><m:mi>I</m:mi><m:mi>f</m:mi><m:mi>f</m:mi></m:msubsup><m:mo>+</m:mo><m:msubsup><m:mi>I</m:mi><m:mi>s</m:mi><m:mi>f</m:mi></m:msubsup><m:mo>=</m:mo><m:mn>1</m:mn></m:mrow></m:math>. In our model, we use <m:math overflow="scroll"><m:msubsup><m:mi>I</m:mi><m:mi>f</m:mi><m:mi>f</m:mi></m:msubsup></m:math> = .7 and <m:math overflow="scroll"><m:msubsup><m:mi>I</m:mi><m:mi>s</m:mi><m:mi>f</m:mi></m:msubsup></m:math> = .3. Note that in this equation, the spiking is only explicitly dependent on the presynaptic firing time and not the postsynaptic firing time. Furthermore, note that unlike the STDP rule, the input presynaptic spikes are not added linearly: this spike-time equation only accounts for the most recent presynaptic spike.</para>
+        <para id="id179660"><m:math overflow="scroll"><m:mrow><m:mi>H</m:mi><m:mo>(</m:mo><m:mi>V</m:mi><m:mo>)</m:mo></m:mrow></m:math> represents the voltage dependence of the NMDARs, which we model as:</para>
+        <equation id="uid29">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:mi>H</m:mi>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>V</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>=</m:mo>
+              <m:mfrac>
+                <m:mrow>
+                  <m:mi>V</m:mi>
+                  <m:mo>-</m:mo>
+                  <m:msub>
+                    <m:mi>V</m:mi>
+                    <m:mrow>
+                      <m:mi>C</m:mi>
+                      <m:mi>a</m:mi>
+                    </m:mrow>
+                  </m:msub>
+                </m:mrow>
+                <m:mrow>
+                  <m:mn>1</m:mn>
+                  <m:mo>+</m:mo>
+                  <m:msup>
+                    <m:mi>e</m:mi>
+                    <m:mrow>
+                      <m:mo>-</m:mo>
+                      <m:mn>0</m:mn>
+                      <m:mo>.</m:mo>
+                      <m:mn>062</m:mn>
+                      <m:mi>V</m:mi>
+                    </m:mrow>
+                  </m:msup>
+                  <m:mo>/</m:mo>
+                  <m:mn>3</m:mn>
+                  <m:mo>.</m:mo>
+                  <m:mn>57</m:mn>
+                </m:mrow>
+              </m:mfrac>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id179755"><m:math overflow="scroll"><m:mi>V</m:mi></m:math> represents the postsynaptic voltage. Note that this <m:math overflow="scroll"><m:mi>V</m:mi></m:math> differs from our membrane voltage, <m:math overflow="scroll"><m:msub><m:mi>V</m:mi><m:mi>m</m:mi></m:msub></m:math>, in the respect that <m:math overflow="scroll"><m:mi>V</m:mi></m:math> is specific to each pre/postsynaptic pair, whereas <m:math overflow="scroll"><m:msub><m:mi>V</m:mi><m:mi>m</m:mi></m:msub></m:math> is only specific to an individual place cell. We define the postsynaptic voltage as <m:math overflow="scroll"><m:mrow><m:mi>V</m:mi><m:mo>=</m:mo><m:msub><m:mi>V</m:mi><m:mrow><m:mi>r</m:mi><m:mi>e</m:mi><m:mi>s</m:mi><m:mi>t</m:mi></m:mrow></m:msub><m:mo>+</m:mo><m:mi>B</m:mi><m:mi>P</m:mi><m:mi>A</m:mi><m:mi>P</m:mi></m:mrow></m:math>, where <m:math overflow="scroll"><m:msub><m:mi>V</m:mi><m:mrow><m:mi>r</m:mi><m:mi>e</m:mi><m:mi>s</m:mi><m:mi>t</m:mi></m:mrow></m:msub></m:math> is the resting potential and BPAP is the Back-propagating Action Potential, which is described later in the text. <m:math overflow="scroll"><m:msub><m:mi>V</m:mi><m:mrow><m:mi>C</m:mi><m:mi>a</m:mi></m:mrow></m:msub></m:math> is the reversal potential for Calcium, which we set at 130 mV. The term <m:math overflow="scroll"><m:mrow><m:mi>V</m:mi><m:mo>-</m:mo><m:msub><m:mi>V</m:mi><m:mrow><m:mi>C</m:mi><m:mi>a</m:mi></m:mrow></m:msub></m:mrow></m:math> is a simplified approximation of the driving force for Calcium influx. The term in the denominator is the voltage-dependance of Magnesium block on the NMDA receptor <link target-id="bid11"/>. A depolarized voltage will result in the displacement of Magnesium ions from blocking NMDA receptors, allowing for more Calcium influx. We plot <m:math overflow="scroll"><m:mrow><m:mi>f</m:mi><m:mo>(</m:mo><m:mi>t</m:mi><m:mo>,</m:mo><m:msub><m:mi>t</m:mi><m:mrow><m:mi>p</m:mi><m:mi>r</m:mi><m:mi>e</m:mi></m:mrow></m:msub><m:mo>)</m:mo></m:mrow></m:math> and <m:math overflow="scroll"><m:mrow><m:mi>H</m:mi><m:mo>(</m:mo><m:mi>V</m:mi><m:mo>)</m:mo></m:mrow></m:math> in <link target-id="uid30"/>.</para>
+        <figure id="uid30"><media id="uid30_media" alt="">
+            <image mime-type="image/png" src="../../media/fH2.png" id="uid30_onlineimage" width="540"><!-- NOTE: attribute width changes image size online (pixels). original width is 540. --></image>
+            <image mime-type="application/postscript" for="pdf" src="../../media/fH.eps" id="uid30_printimage" print-width="15.0cm">
+              <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+            </image>
+          </media>
+          
+        <caption>Control of Calcium Influx. (A): <m:math overflow="scroll"><m:mi>f</m:mi></m:math> as a function of time after presynaptic spiking. Presynaptic input is required for <m:math overflow="scroll"><m:mi>f</m:mi></m:math> to be nonzero. (B): <m:math overflow="scroll"><m:mi>H</m:mi></m:math> as a function of synaptic voltage. The magnitude of <m:math overflow="scroll"><m:mi>H</m:mi></m:math> increases with depolarized voltages, peaking around 10 mV.</caption></figure>
+        <para id="id180027">To regulate postsynaptic voltage, we use a Back-propagating Action Potential (BPAP), which increases whenever the postsynaptic cell fires. The BPAP represents the postsynaptic cell's feedback, indicative of how recently the postsynaptic cell has spiked. The magnitude of the BPAP is dependent on the following equation:</para>
+        <equation id="uid31">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:mi>B</m:mi>
+              <m:mi>P</m:mi>
+              <m:mi>A</m:mi>
+              <m:mi>P</m:mi>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>t</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>=</m:mo>
+              <m:mn>100</m:mn>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:msubsup>
+                  <m:mi>I</m:mi>
+                  <m:mi>f</m:mi>
+                  <m:mi>b</m:mi>
+                </m:msubsup>
+                <m:msup>
+                  <m:mi>e</m:mi>
+                  <m:mrow>
+                    <m:mo>-</m:mo>
+                    <m:mi>t</m:mi>
+                    <m:mo>/</m:mo>
+                    <m:msubsup>
+                      <m:mi>τ</m:mi>
+                      <m:mi>f</m:mi>
+                      <m:mi>b</m:mi>
+                    </m:msubsup>
+                  </m:mrow>
+                </m:msup>
+                <m:mo>+</m:mo>
+                <m:msubsup>
+                  <m:mi>I</m:mi>
+                  <m:mi>s</m:mi>
+                  <m:mi>b</m:mi>
+                </m:msubsup>
+                <m:msup>
+                  <m:mi>e</m:mi>
+                  <m:mrow>
+                    <m:mo>-</m:mo>
+                    <m:mi>t</m:mi>
+                    <m:mo>/</m:mo>
+                    <m:msubsup>
+                      <m:mi>τ</m:mi>
+                      <m:mi>s</m:mi>
+                      <m:mi>b</m:mi>
+                    </m:msubsup>
+                  </m:mrow>
+                </m:msup>
+                <m:mo>)</m:mo>
+              </m:mrow>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id180146">Similar to <m:math overflow="scroll"><m:mi>f</m:mi></m:math>, the decay of the BPAP is regulated by a fast and a slow component. Upon a postsynaptic spike the BPAP causes the voltage to reach a maximum of 100 mV above the resting potential. We allow a delay of 2 ms between postsynaptic firing and the delivery of the BPAP to the dendrites. The fast component has time constant <m:math overflow="scroll"><m:msubsup><m:mi>τ</m:mi><m:mi>f</m:mi><m:mi>b</m:mi></m:msubsup></m:math> = 3 ms and the slow component has time constant <m:math overflow="scroll"><m:msubsup><m:mi>τ</m:mi><m:mi>s</m:mi><m:mi>b</m:mi></m:msubsup></m:math> = 25 ms. <m:math overflow="scroll"><m:msubsup><m:mi>I</m:mi><m:mi>f</m:mi><m:mi>b</m:mi></m:msubsup></m:math> and <m:math overflow="scroll"><m:msubsup><m:mi>I</m:mi><m:mi>s</m:mi><m:mi>b</m:mi></m:msubsup></m:math> are also chosen such that they add up to one: here, we use <m:math overflow="scroll"><m:msubsup><m:mi>I</m:mi><m:mi>f</m:mi><m:mi>b</m:mi></m:msubsup></m:math> = 0.75 and <m:math overflow="scroll"><m:msubsup><m:mi>I</m:mi><m:mi>s</m:mi><m:mi>b</m:mi></m:msubsup></m:math> = 0.25. Note that whenever a cell fires, the BPAP is sent through all dendrites, increasing the voltage at all of its presynaptic connections. In this plasticity model, the BPAP provides postsynaptic feedback and drives calcium influx, which allows for the potentiation of synaptic weights. Along with the function <m:math overflow="scroll"><m:mi>f</m:mi></m:math>, the BPAP ensures Calcium dependence on both pre and postsynaptic spike times.</para>
+        <table id="uid32" summary="">
+          <tgroup cols="3">
+            <tbody>
+              <row>
+                <entry>Parameter</entry>
+                <entry>Value</entry>
+                <entry>Description</entry>
+              </row>
+              <row>
+                <entry>
+                  <m:math overflow="scroll">
+                    <m:msub>
+                      <m:mi>τ</m:mi>
+                      <m:mrow>
+                        <m:mi>C</m:mi>
+                        <m:mi>a</m:mi>
+                      </m:mrow>
+                    </m:msub>
+                  </m:math>
+                </entry>
+                <entry>50 ms</entry>
+                <entry>Calcium influx decay constant</entry>
+              </row>
+              <row>
+                <entry>
+                  <m:math overflow="scroll">
+                    <m:msub>
+                      <m:mi>g</m:mi>
+                      <m:mi>N</m:mi>
+                    </m:msub>
+                  </m:math>
+                </entry>
+                <entry><m:math overflow="scroll"><m:mrow><m:mo>-</m:mo><m:mn>1</m:mn><m:mo>×</m:mo><m:msup><m:mn>10</m:mn><m:mrow><m:mo>-</m:mo><m:mn>3</m:mn></m:mrow></m:msup><m:mi>μ</m:mi></m:mrow></m:math>M/(ms mV)</entry>
+                <entry>NMDAR conductance</entry>
+              </row>
+              <row>
+                <entry>
+                  <m:math overflow="scroll">
+                    <m:msubsup>
+                      <m:mi>I</m:mi>
+                      <m:mi>f</m:mi>
+                      <m:mi>f</m:mi>
+                    </m:msubsup>
+                  </m:math>
+                </entry>
+                <entry>0.7</entry>
+                <entry>Proportion of fast decay of <m:math overflow="scroll"><m:mi>f</m:mi></m:math></entry>
+              </row>
+              <row>
+                <entry>
+                  <m:math overflow="scroll">
+                    <m:msubsup>
+                      <m:mi>I</m:mi>
+                      <m:mi>s</m:mi>
+                      <m:mi>f</m:mi>
+                    </m:msubsup>
+                  </m:math>
+                </entry>
+                <entry>0.3</entry>
+                <entry>Proportion of slow decay of <m:math overflow="scroll"><m:mi>f</m:mi></m:math></entry>
+              </row>
+              <row>
+                <entry>
+                  <m:math overflow="scroll">
+                    <m:msubsup>
+                      <m:mi>τ</m:mi>
+                      <m:mi>f</m:mi>
+                      <m:mi>f</m:mi>
+                    </m:msubsup>
+                  </m:math>
+                </entry>
+                <entry>50 ms</entry>
+                <entry><m:math overflow="scroll"><m:mi>f</m:mi></m:math> fast decay time constant</entry>
+              </row>
+              <row>
+                <entry>
+                  <m:math overflow="scroll">
+                    <m:msubsup>
+                      <m:mi>τ</m:mi>
+                      <m:mi>s</m:mi>
+                      <m:mi>f</m:mi>
+                    </m:msubsup>
+                  </m:math>
+                </entry>
+                <entry>200 ms</entry>
+                <entry><m:math overflow="scroll"><m:mi>f</m:mi></m:math> slow decay time constant</entry>
+              </row>
+              <row>
+                <entry>
+                  <m:math overflow="scroll">
+                    <m:msub>
+                      <m:mi>V</m:mi>
+                      <m:mrow>
+                        <m:mi>C</m:mi>
+                        <m:mi>a</m:mi>
+                      </m:mrow>
+                    </m:msub>
+                  </m:math>
+                </entry>
+                <entry>130 mV</entry>
+                <entry>Calcium Reversal Potential</entry>
+              </row>
+              <row>
+                <entry>
+                  <m:math overflow="scroll">
+                    <m:msubsup>
+                      <m:mi>I</m:mi>
+                      <m:mi>f</m:mi>
+                      <m:mi>b</m:mi>
+                    </m:msubsup>
+                  </m:math>
+                </entry>
+                <entry>0.75</entry>
+                <entry>Proportion of fast BPAP decay</entry>
+              </row>
+              <row>
+                <entry>
+                  <m:math overflow="scroll">
+                    <m:msubsup>
+                      <m:mi>I</m:mi>
+                      <m:mi>s</m:mi>
+                      <m:mi>b</m:mi>
+                    </m:msubsup>
+                  </m:math>
+                </entry>
+                <entry>0.25</entry>
+                <entry>Proportion of slow BPAP decay</entry>
+              </row>
+              <row>
+                <entry>
+                  <m:math overflow="scroll">
+                    <m:msubsup>
+                      <m:mi>τ</m:mi>
+                      <m:mi>f</m:mi>
+                      <m:mi>b</m:mi>
+                    </m:msubsup>
+                  </m:math>
+                </entry>
+                <entry>3 ms</entry>
+                <entry>Fast BPAP decay time constant</entry>
+              </row>
+              <row>
+                <entry>
+                  <m:math overflow="scroll">
+                    <m:msubsup>
+                      <m:mi>τ</m:mi>
+                      <m:mi>s</m:mi>
+                      <m:mi>b</m:mi>
+                    </m:msubsup>
+                  </m:math>
+                </entry>
+                <entry>25 ms</entry>
+                <entry>Slow BPAP decay time constant</entry>
+              </row>
+            </tbody>
+          </tgroup>
+          <caption>Calcium Influx Parameters</caption>
+        </table>
+      </section>
+      <section id="uid33">
+        <title>Metaplasticity</title>
+        <para id="id180876">To ensure the stabilization of synaptic weights after several laps around the track, we use metaplasticity to limit NMDAR conductance (<m:math overflow="scroll"><m:msub><m:mi>g</m:mi><m:mi>N</m:mi></m:msub></m:math>) after repeated high-frequency postsynaptic stimulation. Metaplasticity follows a voltage-dependent kinetic model of NMDAR insertion and removal from the synapse as prescribed by the equation below:</para>
+        <equation id="uid34">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:mfrac>
+                <m:mrow>
+                  <m:mi>d</m:mi>
+                  <m:msub>
+                    <m:mi>g</m:mi>
+                    <m:mi>N</m:mi>
+                  </m:msub>
+                </m:mrow>
+                <m:mrow>
+                  <m:mi>d</m:mi>
+                  <m:mi>t</m:mi>
+                </m:mrow>
+              </m:mfrac>
+              <m:mo>=</m:mo>
+              <m:mi>a</m:mi>
+              <m:mrow>
+                <m:mo>[</m:mo>
+                <m:msub>
+                  <m:mi>k</m:mi>
+                  <m:mo>+</m:mo>
+                </m:msub>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:msub>
+                    <m:mi>g</m:mi>
+                    <m:mi>t</m:mi>
+                  </m:msub>
+                  <m:mo>-</m:mo>
+                  <m:msub>
+                    <m:mi>g</m:mi>
+                    <m:mi>N</m:mi>
+                  </m:msub>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mo>-</m:mo>
+                <m:msub>
+                  <m:mi>k</m:mi>
+                  <m:mo>-</m:mo>
+                </m:msub>
+                <m:msup>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:mi>V</m:mi>
+                    <m:mo>-</m:mo>
+                    <m:msub>
+                      <m:mi>V</m:mi>
+                      <m:mrow>
+                        <m:mi>r</m:mi>
+                        <m:mi>e</m:mi>
+                        <m:mi>s</m:mi>
+                        <m:mi>t</m:mi>
+                      </m:mrow>
+                    </m:msub>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                  <m:mi>n</m:mi>
+                </m:msup>
+                <m:msub>
+                  <m:mi>g</m:mi>
+                  <m:mi>N</m:mi>
+                </m:msub>
+                <m:mo>]</m:mo>
+              </m:mrow>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id181017"><m:math overflow="scroll"><m:mi>a</m:mi></m:math> is a scaling factor used to control the rate of change in NMDAR conductance. <m:math overflow="scroll"><m:msub><m:mi>k</m:mi><m:mo>+</m:mo></m:msub></m:math> is the insertion rate of unused NMDA receptors into the synapse, which we set at <m:math overflow="scroll"><m:mrow><m:mn>8</m:mn><m:mo>×</m:mo><m:msup><m:mn>10</m:mn><m:mrow><m:mo>-</m:mo><m:mn>5</m:mn></m:mrow></m:msup></m:mrow></m:math>. <m:math overflow="scroll"><m:mrow><m:msub><m:mi>k</m:mi><m:mo>-</m:mo></m:msub><m:msup><m:mrow><m:mo>(</m:mo><m:mi>V</m:mi><m:mo>-</m:mo><m:msub><m:mi>V</m:mi><m:mrow><m:mi>r</m:mi><m:mi>e</m:mi><m:mi>s</m:mi><m:mi>t</m:mi></m:mrow></m:msub><m:mo>)</m:mo></m:mrow><m:mi>n</m:mi></m:msup></m:mrow></m:math> is the removal rate of NMDA receptors from the synapse: we use <m:math overflow="scroll"><m:msub><m:mi>k</m:mi><m:mo>-</m:mo></m:msub></m:math> = <m:math overflow="scroll"><m:mrow><m:mn>8</m:mn><m:mo>×</m:mo><m:msup><m:mn>10</m:mn><m:mrow><m:mo>-</m:mo><m:mn>7</m:mn></m:mrow></m:msup></m:mrow></m:math>, <m:math overflow="scroll"><m:mi>n</m:mi></m:math> = 2, and <m:math overflow="scroll"><m:msub><m:mi>V</m:mi><m:mrow><m:mi>r</m:mi><m:mi>e</m:mi><m:mi>s</m:mi><m:mi>t</m:mi></m:mrow></m:msub></m:math> as the cell resting potential. Like our voltage-dependent H-function, <m:math overflow="scroll"><m:mi>V</m:mi></m:math> in the NMDAR conductance equation represents the postsynaptic voltage (as opposed to the membrane voltage). <m:math overflow="scroll"><m:msub><m:mi>g</m:mi><m:mi>t</m:mi></m:msub></m:math> is the maximum value for NMDAR conductance, which we set at <m:math overflow="scroll"><m:mrow><m:mo>-</m:mo><m:mn>1</m:mn><m:mo>×</m:mo><m:msup><m:mn>10</m:mn><m:mrow><m:mo>-</m:mo><m:mn>3</m:mn></m:mrow></m:msup></m:mrow></m:math>. Note that all NMDAR conductance values are negative. We depict equilibrium NMDAR conductances as a function of voltage in <link target-id="uid35"/> below.</para>
+        <figure id="uid35">
+          <media id="uid35_media" alt="">
+            <image mime-type="image/png" src="../../media/g.png" id="uid35_onlineimage" width="432"><!-- NOTE: attribute width changes image size online (pixels). original width is 432. --></image>
+            <image mime-type="application/postscript" for="pdf" src="../../media/g.eps" id="uid35_printimage" print-width="12.0cm">
+              <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+            </image>
+          </media>
+          <caption>Voltage-Dependence of Metaplasticity. Plot of equilibrium conductance values at fixed voltages. Depolarized voltages result in lower conductance values.</caption>
+        </figure>
+        <para id="id181252">The behavior of metaplasticity is aimed to depress the amount of available NMDA receptors when the cell voltage is at consistently high levels. That is, upon increased firing rates, less NMDA receptors would be available for calcium influx, resulting in less synaptic weight change to the point where the synaptic weights stabilize. As such, we expect that the implementation of metaplasticity should allow us to limit the increase in synaptic weights without having to implement a fixed upper weight bound. Note that metaplasticity does not modify the characteristics of LTD under normal firing rates, meaning that we must still implement a fixed lower weight bound in our plasticity model.</para>
+        <table id="uid36" summary="">
+          <tgroup cols="3">
+            <tbody>
+              <row>
+                <entry>Parameter</entry>
+                <entry>Value</entry>
+                <entry>Description</entry>
+              </row>
+              <row>
+                <entry>
+                  <m:math overflow="scroll">
+                    <m:mi>a</m:mi>
+                  </m:math>
+                </entry>
+                <entry>1</entry>
+                <entry>Metaplasticity rate coefficient</entry>
+              </row>
+              <row>
+                <entry>
+                  <m:math overflow="scroll">
+                    <m:msub>
+                      <m:mi>k</m:mi>
+                      <m:mo>+</m:mo>
+                    </m:msub>
+                  </m:math>
+                </entry>
+                <entry>8 <m:math overflow="scroll"><m:mo>×</m:mo></m:math> 10<m:math overflow="scroll"><m:msup><m:mrow/><m:mrow><m:mo>-</m:mo><m:mn>5</m:mn></m:mrow></m:msup></m:math></entry>
+                <entry>Rate of NMDAR insertion</entry>
+              </row>
+              <row>
+                <entry>
+                  <m:math overflow="scroll">
+                    <m:msub>
+                      <m:mi>k</m:mi>
+                      <m:mo>-</m:mo>
+                    </m:msub>
+                  </m:math>
+                </entry>
+                <entry>8 <m:math overflow="scroll"><m:mo>×</m:mo></m:math> 10<m:math overflow="scroll"><m:msup><m:mrow/><m:mrow><m:mo>-</m:mo><m:mn>7</m:mn></m:mrow></m:msup></m:math></entry>
+                <entry>NMDAR removal rate coefficient</entry>
+              </row>
+              <row>
+                <entry>
+                  <m:math overflow="scroll">
+                    <m:msub>
+                      <m:mi>g</m:mi>
+                      <m:mi>t</m:mi>
+                    </m:msub>
+                  </m:math>
+                </entry>
+                <entry><m:math overflow="scroll"><m:mrow><m:mo>-</m:mo><m:mn>1</m:mn><m:mo>×</m:mo><m:msup><m:mn>10</m:mn><m:mrow><m:mo>-</m:mo><m:mn>3</m:mn></m:mrow></m:msup><m:mi>μ</m:mi></m:mrow></m:math>M/(ms mV)</entry>
+                <entry>Maximum NMDAR conductance</entry>
+              </row>
+              <row>
+                <entry>
+                  <m:math overflow="scroll">
+                    <m:mi>n</m:mi>
+                  </m:math>
+                </entry>
+                <entry>2</entry>
+                <entry>Exponential voltage-dependence</entry>
+              </row>
+              <row>
+                <entry/>
+                <entry/>
+                <entry>of NMDAR removal</entry>
+              </row>
+            </tbody>
+          </tgroup>
+          <caption>Metaplasticity Parameters</caption>
+        </table>
+      </section>
+      <section id="uid37">
+        <title>Spike-Time Dependence of CaDP</title>
+        <para id="id181610">In order to analyze the spike-time dependence of the CaDP model, we implement a regime of paired stimulation in which we induce cell firing at prespecified times and monitor the synaptic weights. We use 50 pre-post spike pairs stimulated at a constant rate of 1 Hz.</para>
+        <para id="id181618">When plotting synaptic weight against the difference in spike times, we find that the CaDP curve emulates the STDP curve: we observe LTP when presynaptic firing precedes postsynaptic firing (<m:math overflow="scroll"><m:mrow><m:mi>Δ</m:mi><m:mi>t</m:mi><m:mo>&gt;</m:mo><m:mn>0</m:mn></m:mrow></m:math>, where <m:math overflow="scroll"><m:mrow><m:mi>Δ</m:mi><m:mi>t</m:mi><m:mo>=</m:mo><m:msub><m:mi>t</m:mi><m:mrow><m:mi>p</m:mi><m:mi>o</m:mi><m:mi>s</m:mi><m:mi>t</m:mi></m:mrow></m:msub><m:mo>-</m:mo><m:msub><m:mi>t</m:mi><m:mrow><m:mi>p</m:mi><m:mi>r</m:mi><m:mi>e</m:mi></m:mrow></m:msub></m:mrow></m:math>) and LTD when postsynaptic firing precedes presynaptic firing (<m:math overflow="scroll"><m:mrow><m:mi>Δ</m:mi><m:mi>t</m:mi><m:mo>≤</m:mo><m:mn>0</m:mn></m:mrow></m:math>). However, with the CaDP model, we also get a second region of LTD when the spike interval becomes too large (see <link target-id="uid38"/>). The existence of a second depression window has been highly debated and supported by some recent research <link target-id="bid12"/>, <link target-id="bid13"/>.</para>
+        <figure id="uid38">
+          <media id="uid38_media" alt="">
+            <image mime-type="image/png" src="../../media/bestCaDPscaled.png" id="uid38_onlineimage" width="414"><!-- NOTE: attribute width changes image size online (pixels). original width is 414. --></image>
+            <image mime-type="application/postscript" for="pdf" src="../../media/bestCaDPscaled.eps" id="uid38_printimage" print-width="12.0cm">
+              <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+            </image>
+          </media>
+          <caption>Spike-time dependence of CaDP. Plot depicts the final weights between pre/postsynaptic cells after 50 spike pairs. For this plot, we use <m:math overflow="scroll"><m:mi>k</m:mi></m:math> = <m:math overflow="scroll"><m:mfrac><m:mn>1</m:mn><m:mn>1500</m:mn></m:mfrac></m:math>.</caption>
+        </figure>
+        <para id="id181759">Calcium dependent plasticity involves a higher order of complexity in its dynamics and synaptic weight modifications in comparison to STDP. When implementing CaDP alongside the Integrate and Fire model, there appear to be redundancies: even though they may be related, we separate synaptic voltage from membrane voltage, NMDAR conductance from synaptic conductance, etc. It still incorporates presynaptic and postsynaptic spike times via the use of the <m:math overflow="scroll"><m:mi>f</m:mi></m:math> function and BPAP, respectively. While we do not discuss it in depth, it also incorporates some aspects of rate-dependent plasticity: higher spiking frequencies result in more potentiation of weights, whereas in STDP, the frequency of spike-pairs is disregarded. We will discuss more of the similarities and differences between the two plasticity models in the next chapter.</para>
+      </section>
+    </section>
+    <section id="cid5">
+      <title>Comparison: STDP vs. CaDP</title>
+      <para id="id181790">Having introduced both Spike-time Dependent Plasticity and Calcium Dependent Plasticity, we now compare the two models in their ability to explain the phenomena associated with spatial memory. We focus on two of these phenomena: (1) the backward shift of Hippocampal place fields and (2) the final stabilization of place fields.</para>
+      <section id="uid39">
+        <title>Experimental Setup Revisited</title>
+        <para id="id181807">We must first revisit the experimental setup and simulation methods that we use to compare the two plasticity models. We have a rat run clockwise around a circular track. In our models, we vary the number of simulated laps from 20-30. Each of the 120 place cells used to model the ring have been evenly spaced along the track, numbered in a clockwise fashion, each with three degrees of external input. We set the duration of external stimulus for each place cell at 100 ms per lap. When the rat is within a cell's place field, the cell receives external input at a uniform rate of 50 Hz throughout (it receives synaptic input every 20 ms). The magnitude of external input, which we denote <m:math overflow="scroll"><m:msub><m:mi>w</m:mi><m:mrow><m:mi>i</m:mi><m:mi>n</m:mi><m:mi>p</m:mi></m:mrow></m:msub></m:math>, has a set, nonplastic value of 10. This synaptic weight is large enough to ensure cell firing whenever external input is available. Within the 120 cell ring contains bidirectional connections to neighboring cells, as previously depicted in <link target-id="uid1"/> in Chapter 2. Each of these connections is plastic. We set each of these connections to an initial weight <m:math overflow="scroll"><m:msub><m:mi>w</m:mi><m:mrow><m:mi>i</m:mi><m:mi>n</m:mi><m:mi>i</m:mi><m:mi>t</m:mi></m:mrow></m:msub></m:math> = 0.5.</para>
+      </section>
+      <section id="uid40">
+        <title>STDP Dynamics</title>
+        <para id="id181879">Using the parameters we defined in the previous chapters, we run the simulation and track the synaptic weights between cells 1 and 2 on the ring over each lap. A plot of this data is given in <link target-id="uid41"/>.</para>
+        <figure id="uid41">
+          <media id="uid41_media" alt="">
+            <image mime-type="image/png" src="../../media/Sw.png" id="uid41_onlineimage" width="432"><!-- NOTE: attribute width changes image size online (pixels). original width is 432. --></image>
+            <image mime-type="application/postscript" for="pdf" src="../../media/Sw.eps" id="uid41_printimage" print-width="12.0cm">
+              <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+            </image>
+          </media>
+          <caption>STDP Synaptic Weight Changes</caption>
+        </figure>
+        <para id="id181907">We note that the connection from cell 1 to 2 increases in weight each lap and the reverse connection decreases each lap. This occurs because of the clockwise connection's reinforcement by the order of external input: since the rat travels through cell 1's firing field right before cell 2's, the STDP rule favors the strengthening the connection from 1 to 2 and the weakening of the connection from 2 to 1. The weights appear to change in an approximately uniform stepwise fashion each lap until they reach their extrema set by the imposed weight bounds.</para>
+        <para id="id181917">As the backward shift of hippocampal place fields is of primary importance to us, we track the firing locations of the place cells during the simulation. We denote the rat's location by its angular position along the track, setting zero degrees to the position where cell 1 first receives external stimulus. We monitor the degree on the track at which the cell first fires during each lap, which we call its firing degree, over the course of the simulation. We plot cell 2's firing degree in <link target-id="uid42"/> below.</para>
+        <figure id="uid42">
+          <media id="uid42_media" alt="">
+            <image mime-type="image/png" src="../../media/Sbshift.png" id="uid42_onlineimage" width="432"><!-- NOTE: attribute width changes image size online (pixels). original width is 432. --></image>
+            <image mime-type="application/postscript" for="pdf" src="../../media/Sbshift.eps" id="uid42_printimage" print-width="12.0cm">
+              <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+            </image>
+          </media>
+          <caption>STDP Backward Shift</caption>
+        </figure>
+        <para id="id181950">The decrease in the firing degree of the cell is a result of earlier firing positions along the track and indicative of the backward shift of hippocampal place fields. The earlier firing positions are a result of the strengthening of synaptic weights: stronger weights allow for a greater increase in conductance upon presynaptic firing, allowing for faster depolarization of the postsynaptic cell and earlier firing, resulting in the backward shift.</para>
+        <para id="id181960">The second point of interest in the simulation lies in the stabilization of the place fields. We notice a stabilization of place fields which coincides with the synaptic weights reaching their upper bounds. This implies that we do not achieve place field stability without applying an upper weight bound when using STDP, detracting from the feasibility of STDP as a standalone mechanism of synaptic plasticity.</para>
+        <para id="id181969">We also analyze multiplicative STDP as an improved variation of STDP. We display the forward and backward synaptic weights as a function of lap in <link target-id="uid43"/>.</para>
+        <figure id="uid43">
+          <media id="uid43_media" alt="">
+            <image mime-type="image/png" src="../../media/mSw.png" id="uid43_onlineimage" width="432"><!-- NOTE: attribute width changes image size online (pixels). original width is 432. --></image>
+            <image mime-type="application/postscript" for="pdf" src="../../media/mSw.eps" id="uid43_printimage" print-width="12.0cm">
+              <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+            </image>
+          </media>
+          <caption>Multiplicative STDP Weight Changes</caption>
+        </figure>
+        <para id="id181995">We observe an asymptotic trend of the weight changes in this regime as opposed to the stepwise form of weight changes in regular, additive STDP. We also depict the place field backward shift in <link target-id="uid44"/>.</para>
+        <figure id="uid44">
+          <media id="uid44_media" alt="">
+            <image mime-type="image/png" src="../../media/mSbshift.png" id="uid44_onlineimage" width="432"><!-- NOTE: attribute width changes image size online (pixels). original width is 432. --></image>
+            <image mime-type="application/postscript" for="pdf" src="../../media/mSbshift.eps" id="uid44_printimage" print-width="12.0cm">
+              <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+            </image>
+          </media>
+          <caption>Multiplicative STDP Backward Shift</caption>
+        </figure>
+        <para id="id182023">When using multiplicative STDP, we see a faster backward shift in earlier laps due to the faster initial increase in synaptic weight.
+This shift also slows down significantly in later laps due to the slowed increase in weights, leading to final place field stabilization. This trend appears to agree with the nature of the backward shift in experimental results <link target-id="bid7"/>. While this is a slightly improved fit to experimental data as opposed to STDP, the weight bounds are directly incorporated into the weight modification equations, making it a better approximation of results than an explanation of the mechanisms behind synaptic plasticity.</para>
+      </section>
+      <section id="uid45">
+        <title>CaDP Dynamics</title>
+        <para id="id182050">Having explained the advantages and disadvantages of STDP, we now look at CaDP and compare its simulation results with STDP. First, we will depict the changes in calcium concentrations in different synapses to better illustrate the mechanisms behind CaDP.</para>
+        <figure id="uid46">
+          <media id="uid46_media" alt="">
+            <image mime-type="image/png" src="../../media/cal1.png" id="uid46_onlineimage" width="419"><!-- NOTE: attribute width changes image size online (pixels). original width is 419. --></image>
+            <image mime-type="application/postscript" for="pdf" src="../../media/cal1.eps" id="uid46_printimage" print-width="12.0cm">
+              <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+            </image>
+          </media>
+          <caption>Calcium Dynamics. Dashed lines at 0.2 and 0.5 indicate the LTD and LTP cutoff calcium levels.</caption>
+        </figure>
+        <para id="id182072">The plot above shows calcium changes in the forward connection from cell 1 to cell 2 and the two counterclockwise connections associated with cell 1. We observe that the clockwise synapse reaches a calcium level above the LTP threshold due to effective pre-post firing. We also notice that presynaptic firing without postsynaptic response results in LTD calcium levels. Also notice that the initial increase in calcium concentration from baseline levels results from the peak in the <m:math overflow="scroll"><m:mi>f</m:mi></m:math> function as a result from presynaptic spiking, and the subsequent increases of calcium into the LTP region are a result from postsynaptic feedback from the back-propagating action potential. Furthermore, persistent postsynaptic cell firing following presynaptic stimulus causes a sustained LTP calcium concentration and allows for increased potentiation of synaptic weights.</para>
+        <para id="id182095">The changes in calcium levels yield the following weight changes and backward shift over the simulation as depicted below in <link target-id="uid47"/>.</para>
+        <figure id="uid47"><media id="uid47_media" alt="">
+            <image mime-type="image/png" src="../../media/CaDPring2.png" id="uid47_onlineimage" width="540"><!-- NOTE: attribute width changes image size online (pixels). original width is 540. --></image>
+            <image mime-type="application/postscript" for="pdf" src="../../media/CaDPring.eps" id="uid47_printimage" print-width="15.0cm">
+              <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+            </image>
+          </media>
+          
+        <caption>Modeling Spatial Memory using CaDP. (A) Synaptic Weights over the course of the simulation. (B) Cell 2 Firing Degree during each lap.</caption></figure>
+        <para id="id182121">These plots show that CaDP is able to reproduce the same weight changes and backward shift found in STDP. However, there are a couple of slight differences. The weight changes in STDP result only following the occurence of a postsynaptic spike. However, in CaDP, weights are constantly being changed as a function of calcium levels. Furthermore, we note that the depression of the backward connections occurs in an almost entirely different manner than in STDP: in STDP, LTD was an inherent part of the learning rule whenever a postsynaptic spike preceded a presynaptic spike. In CaDP, LTD results from the absence of or extended time between the postsynaptic spike following presynaptic stimulation. As such, the second LTD window is an essential consequence of the CaDP model in the depression of synaptic weights.</para>
+        <para id="id182134">In these plots, we impose the same upper weight bound that we use for STDP, leading to a similar stabilization of place field firing. The removal of this limit will allow for the unbounded increase in synaptic weight, as depicted in <link target-id="uid48"/>. The problem of unbounded weight changes still remains when implementing CaDP alone. However, CaDP provides a more sophisticated, biologically accurate method by which the synaptic weight changes can occur. Additionally, we can attempt to curb the backward shift by using more realistic mechanisms, such as metaplasticity, which we explore below.</para>
+        <figure id="uid48">
+          <media id="uid48_media" alt="">
+            <image mime-type="image/png" src="../../media/unboundedW.png" id="uid48_onlineimage" width="432"><!-- NOTE: attribute width changes image size online (pixels). original width is 432. --></image>
+            <image mime-type="application/postscript" for="pdf" src="../../media/unboundedW.eps" id="uid48_printimage" print-width="12.0cm">
+              <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+            </image>
+          </media>
+          <caption>Unbounded CaDP. Without imposing any methods to curb potentiation, synaptic weights will continue to increase without limit.</caption>
+        </figure>
+      </section>
+      <section id="uid49">
+        <title>Applying Metaplasticity to CaDP</title>
+        <para id="id182176">Now that we have demonstrated the ability of CaDP to replicate the results produced by STDP, we remove the weight bound and attempt to use metaplasticity to stabilize the final synaptic weights and place field distributions. Here we show the effect of metaplasticity on the synaptic weights over the course of the simulation.</para>
+        <figure id="uid50"><media id="uid50_media" alt="">
+            <image mime-type="image/png" src="../../media/metaW2.png" id="uid50_onlineimage" width="540"><!-- NOTE: attribute width changes image size online (pixels). original width is 540. --></image>
+            <image mime-type="application/postscript" for="pdf" src="../../media/metaW.eps" id="uid50_printimage" print-width="15.0cm">
+              <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+            </image>
+          </media>
+          
+        <caption>Metaplasticity with CaDP stabilizes synaptic weights. Here we depict the stabilization of synaptic weights with the scaling of <m:math overflow="scroll"><m:mi>a</m:mi></m:math> = 1 (left) and <m:math overflow="scroll"><m:mi>a</m:mi></m:math> = 4 (right).</caption></figure>
+        <para id="id182218">We see that the weights stabilize at a magnitude of around 8-9, showing that metaplasticity can stabilize the final synaptic weights without implementing an upper weight bound. As depicted in <link target-id="uid50"/>, an increased rate of metaplasticity causes slower potentiation/depression of weights. Note that metaplasticity only limits potentiation of weights: for depressed weights, a lower bound of zero must still be applied to avoid negative weights. The weights reach equilibrium values once the firing rate has reached a level where any increase in weight would cause an increase in firing rate that would cause the removal of NMDA receptors to outpace the insertion rate, decreasing the available NMDARs and halting any additional calcium influx and synaptic weight change. These fluctuations in NMDA receptor availability are depicted in the NMDAR conductance plot in <link target-id="uid51"/>.</para>
+        <figure id="uid51">
+          <media id="uid51_media" alt="">
+            <image mime-type="image/png" src="../../media/mCaDPg.png" id="uid51_onlineimage" width="419"><!-- NOTE: attribute width changes image size online (pixels). original width is 419. --></image>
+            <image mime-type="application/postscript" for="pdf" src="../../media/mCaDPg.eps" id="uid51_printimage" print-width="12.0cm">
+              <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+            </image>
+          </media>
+          <caption>NMDAR conductance in Metaplasticity. Metaplasticity involves slow insertion and removal of NMDAR receptors. Increased firing causes removal of NMDAR receptors in lap 20, reaching a new equilibrium conductance.</caption>
+        </figure>
+        <para id="id182262">Note that the NMDAR conductance decreases during the periods of input to the postsynaptic cell. The decrease in NMDAR conductance slightly decreases the amount of calcium influx, limiting the potentiation/depression of weights. We witness a sharper decline in conductance upon the overlap of place fields and the increased firing rates. Once the cells fire at a rate fast enough to equal or outpace the reinsertion of NMDARs, the conductance stabilizes, allowing for a stabilization of synaptic weights.</para>
+        <figure id="uid52">
+          <media id="uid52_media" alt="">
+            <image mime-type="image/png" src="../../media/spikeplot.png" id="uid52_onlineimage" width="419"><!-- NOTE: attribute width changes image size online (pixels). original width is 419. --></image>
+            <image mime-type="application/postscript" for="pdf" src="../../media/spikeplot.eps" id="uid52_printimage" print-width="12.0cm">
+              <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+            </image>
+          </media>
+          <caption>Unbounded Backward Shift. Plot depicts the number of spikes for cell 60 on each degree of the track during each lap. Note consistent firing within place field until lap 20, when place field expands to cover the entire track.</caption>
+        </figure>
+        <para id="id182288">While metaplasticity suffices in providing a means of final weight stability, with our current set of parameters we are unable to achieve place field stability. As displayed by the matrix of firing degrees for cell 60 (shown above in <link target-id="uid52"/>), after continued potentiation of weights, the cell's place field will rapidly expand to span the entire track. This is a result of the high firing rate at which metaplasticity takes effect: the upper bound on firing rate is reached only once the synaptic weights have become strong enough to independently stimulate each other, resulting in continuous firing regardless of external input/position and place fields spread across the track. More tuning of metaplasticity will be needed in order to obtain the desired final place field stability. This will most likely be achieved by increasing the rate of NMDAR removal or decreasing the rate of NMDAR insertion, which should decrease the maximum firing rate and halt backward shift to effectively achieve place field stability.</para>
+        <para id="id182309">After evaluating additive and multiplicative STDP alongside CaDP in explaining the phenomena associated with spatial memory in hippocampal place cells, we find that CaDP provides the most reasonable explanation for the mechanisms of synaptic plasticity. In CaDP, the mechanisms of potentiation and depression of weights are based upon biologically-supported pathways, whereas STDP does not explicitly draw connections between its weight changes and the biological mechanisms involved. In particular, the stabilization of synaptic weights is reasonably explained by coupling metaplasticity with CaDP, where STDP requires the use of an unrealistic upper weight limit to stabilize its place fields. The additional parameters involved with the model allow for more variations in the behavior of the system under different calcium LTD/LTP bounds, conductances, etc. One downside from a computational standpoint, especially when modeling a large network, lies in the additional parameters that are required to model the plasticity compared to STDP, which requires fewer parameters and yields similar results. However, if more biological accuracy and a wider range of tunability is desired, CaDP is the model of choice for synaptic plasticity.</para>
+      </section>
+    </section>
+    <section id="cid6">
+      <title>Conclusions/Future Work</title>
+      <para id="id182345">In this report we discussed the modeling of hippocampal place cells using two different plasticity models: Spike-time Dependent Plasticity and Calcium Dependent Plasticity. We have described the equations behind the plasticity models and their specific effects on the cell network interactions. We have discussed some of the differences between the two models, which include CaDP's rate-dependent plasticity as well as its inclusion of a second LTD window. We demonstrated that both models account for the backward shift of place fields observed experimentally. We also find that by coupling metaplasticity with CaDP, we can achieve final stability of synaptic weights; whereas STDP relies on weight bounds to achieve this effect.</para>
+      <para id="id182357">While implementing metaplasticity successfully stabilizes synaptic weights, our simplified model does not exhibit final place field stability. Further work will be needed to tune the parameters involved with metaplasticity in order to obtain final place field stability. Once we are able to achieve the desired effects with metaplasticity, a possible area of interest would be to develop a means of coupling metaplasticity with STDP and comparing the results to that of CaDP with metaplasticity.</para>
+      <para id="id182367">Other areas of interest include augmenting the 120-cell ring model to contain overlapping place fields at the beginning of the simulation and observing how this may affect the final weight distribution. Another modification to this model would be to implement a Gaussian distribution of place cell input firing rates instead of a uniform distribution with constant input rate. The original synaptic weight distribution could also be modified such that the 120 cell network contained connections to all other cells instead of using the simplified ring architecture. It can also be set to have randomized initial weights as well to make the initial state of the place cells more realistic. Once these modifications have been well studied, it could then be incorporated into a larger model of the hippocampal neural network, involving inhibitory connections as well as grid cell and head-direction cell inputs.</para>
+      <para id="id182380">The backward shift and the stabilization of place fields have been closely associated with the development of spatial memory. Modeling and understanding the biochemical and biophysical processes behind synaptic plasticity and how they explain experimental results will aid us in better comprehending the mechanisms behind spatial memory. Further progress in this field may provide us with the knowledge to better understand not only how we develop a memory of our environment but also how plasticity mechanisms in the hippocampus are involved in diseases such as Alzheimer's or Epilepsy.</para>
+      <para id="id182390">
+        <emphasis effect="bold">Acknowledgements</emphasis>
+      </para>
+      <para id="id182409">First and foremost, I would like to thank my mentor, Katie Ward, for all the help and guidance that she has given me this summer. I would also like to thank Dr. Cox for his support and encouragement. My thanks also goes out to Georgene Jalbuena for assisting me in learning LaTeX. Finally, I would like to thank Rice University's VIGRE program for sponsoring this research.</para>
+      
+      <!--empty paragraphs get left behind.-->
+      
+      
+      
+    </section>
+  </content>
+  <bib:file>
+    <bib:entry id="bid5">
+      <bib:book>
+        <!--required fields-->
+        <bib:author>Bear, M.F. and Connors, B.W. and Paradiso, M.A.</bib:author>
+        <bib:title>Neuroscience: Exploring the brain</bib:title>
+        <bib:publisher>Lippincott Williams &amp; Wilkins</bib:publisher>
+        <bib:year>2007</bib:year>
+        <!--optional fields-->
+        <bib:volume/>
+        <bib:series/>
+        <bib:address/>
+        <bib:edition>third</bib:edition>
+        <bib:month/>
+        <bib:note/>
+      </bib:book>
+    </bib:entry>
+    <bib:entry id="bid3">
+      <bib:book>
+        <!--required fields-->
+        <bib:author>Gabbiani, F. and Cox, S.J.</bib:author>
+        <bib:title>Mathematics for Neuroscientists</bib:title>
+        <bib:publisher>Elsevier Academic Press</bib:publisher>
+        <bib:year>2010</bib:year>
+        <!--optional fields-->
+        <bib:volume/>
+        <bib:series/>
+        <bib:address/>
+        <bib:edition/>
+        <bib:month/>
+        <bib:note/>
+      </bib:book>
+    </bib:entry>
+    <bib:entry id="bid4">
+      <bib:misc>
+        <!--required fields-->
+        <!--optional fields-->
+        <bib:author>Hebb, D.O.</bib:author>
+        <bib:title>The Organization of Behavior; A Neuropsychological Theory</bib:title>
+        <bib:howpublished/>
+        <bib:month/>
+        <bib:year>1949</bib:year>
+        <bib:note/>
+      </bib:misc>
+    </bib:entry>
+    <bib:entry id="bid11">
+      <bib:article>
+        <!--required fields-->
+        <bib:author>Jahr, C.E. and Stevens, C.F.</bib:author>
+        <bib:title>Voltage dependence of NMDA-activated macroscopic conductances predicted by single-channel kinetics</bib:title>
+        <bib:journal>The Journal of Neuroscience</bib:journal>
+        <bib:year>1990</bib:year>
+        <!--optional fields-->
+        <bib:volume>10</bib:volume>
+        <bib:number>9</bib:number>
+        <bib:pages>3178</bib:pages>
+        <bib:month/>
+        <bib:note/>
+      </bib:article>
+    </bib:entry>
+    <bib:entry id="bid2">
+      <bib:article>
+        <!--required fields-->
+        <bib:author>Lee, I. and Yoganarasimha, D. and Rao, G. and Knierim, J.J.</bib:author>
+        <bib:title>Comparison of population coherence of place cells in hippocampal subfields CA1 and CA3</bib:title>
+        <bib:journal>Nature</bib:journal>
+        <bib:year>2004</bib:year>
+        <!--optional fields-->
+        <bib:volume>430</bib:volume>
+        <bib:number>6998</bib:number>
+        <bib:pages>456–459</bib:pages>
+        <bib:month/>
+        <bib:note/>
+      </bib:article>
+    </bib:entry>
+    <bib:entry id="bid1">
+      <bib:article>
+        <!--required fields-->
+        <bib:author>Mehta, M.R. and Barnes, C.A. and McNaughton, B.L.</bib:author>
+        <bib:title>Experience-dependent, asymmetric expansion of hippocampal place fields</bib:title>
+        <bib:journal>Proceedings of the National Academy of Sciences</bib:journal>
+        <bib:year>1997</bib:year>
+        <!--optional fields-->
+        <bib:volume>94</bib:volume>
+        <bib:number>16</bib:number>
+        <bib:pages>8918</bib:pages>
+        <bib:month/>
+        <bib:note/>
+      </bib:article>
+    </bib:entry>
+    <bib:entry id="bid12">
+      <bib:article>
+        <!--required fields-->
+        <bib:author>Nishiyama, M. and Hong, K. and Mikoshiba, K. and Poo, M. and Kato, K.</bib:author>
+        <bib:title>Calcium stores regulate the polarity and input specificity of synaptic modification</bib:title>
+        <bib:journal>Nature</bib:journal>
+        <bib:year>2000</bib:year>
+        <!--optional fields-->
+        <bib:volume>408</bib:volume>
+        <bib:number>6812</bib:number>
+        <bib:pages>584–588</bib:pages>
+        <bib:month/>
+        <bib:note/>
+      </bib:article>
+    </bib:entry>
+    <bib:entry id="bid0">
+      <bib:book>
+        <!--required fields-->
+        <bib:author>O'Keefe, J. and Nadel, L.</bib:author>
+        <bib:title>The hippocampus as a cognitive map.(Clarendon, Oxford)</bib:title>
+        <bib:publisher>Clarendon</bib:publisher>
+        <bib:year>1978</bib:year>
+        <!--optional fields-->
+        <bib:volume/>
+        <bib:series/>
+        <bib:address>Oxford</bib:address>
+        <bib:edition/>
+        <bib:month/>
+        <bib:note/>
+      </bib:book>
+    </bib:entry>
+    <bib:entry id="bid7">
+      <bib:article>
+        <!--required fields-->
+        <bib:author>Rubin, J. and Lee, D.D. and Sompolinsky, H.</bib:author>
+        <bib:title>Equilibrium properties of temporally asymmetric Hebbian plasticity</bib:title>
+        <bib:journal>Physical Review Letters</bib:journal>
+        <bib:year>2001</bib:year>
+        <!--optional fields-->
+        <bib:volume>86</bib:volume>
+        <bib:number>2</bib:number>
+        <bib:pages>364–367</bib:pages>
+        <bib:month/>
+        <bib:note/>
+      </bib:article>
+    </bib:entry>
+    <bib:entry id="bid8">
+      <bib:article>
+        <!--required fields-->
+        <bib:author>Shouval, H.Z. and Bear, M.F. and Cooper, L.N.</bib:author>
+        <bib:title>A unified model of NMDA receptor-dependent bidirectional synaptic plasticity</bib:title>
+        <bib:journal>Proceedings of the National Academy of Sciences</bib:journal>
+        <bib:year>2002</bib:year>
+        <!--optional fields-->
+        <bib:volume>99</bib:volume>
+        <bib:number>16</bib:number>
+        <bib:pages>10831</bib:pages>
+        <bib:month/>
+        <bib:note/>
+      </bib:article>
+    </bib:entry>
+    <bib:entry id="bid6">
+      <bib:article>
+        <!--required fields-->
+        <bib:author>Song, S. and Miller, K.D. and Abbott, L.F.</bib:author>
+        <bib:title>Competitive Hebbian learning through spike-timing-dependent synaptic plasticity</bib:title>
+        <bib:journal>nature neuroscience</bib:journal>
+        <bib:year>2000</bib:year>
+        <!--optional fields-->
+        <bib:volume>3</bib:volume>
+        <bib:number/>
+        <bib:pages>919–926</bib:pages>
+        <bib:month/>
+        <bib:note/>
+      </bib:article>
+    </bib:entry>
+    <bib:entry id="bid13">
+      <bib:article>
+        <!--required fields-->
+        <bib:author>Wittenberg, G.M. and Wang, S.S.H.</bib:author>
+        <bib:title>Malleability of spike-timing-dependent plasticity at the CA3–CA1 synapse</bib:title>
+        <bib:journal>The Journal of neuroscience</bib:journal>
+        <bib:year>2006</bib:year>
+        <!--optional fields-->
+        <bib:volume>26</bib:volume>
+        <bib:number>24</bib:number>
+        <bib:pages>6610</bib:pages>
+        <bib:month/>
+        <bib:note/>
+      </bib:article>
+    </bib:entry>
+    <bib:entry id="bid9">
+      <bib:article>
+        <!--required fields-->
+        <bib:author>Yeung, L.C. and Shouval, H.Z. and Blais, B.S. and Cooper, L.N.</bib:author>
+        <bib:title>Synaptic homeostasis and input selectivity follow from a calcium-dependent plasticity model</bib:title>
+        <bib:journal>Proceedings of the National Academy of Sciences of the United States of America</bib:journal>
+        <bib:year>2004</bib:year>
+        <!--optional fields-->
+        <bib:volume>101</bib:volume>
+        <bib:number>41</bib:number>
+        <bib:pages>14943</bib:pages>
+        <bib:month/>
+        <bib:note/>
+      </bib:article>
+    </bib:entry>
+    <bib:entry id="bid10">
+      <bib:article>
+        <!--required fields-->
+        <bib:author>Yu, X. and Shouval, H.Z. and Knierim, J.J.</bib:author>
+        <bib:title>A biophysical model of synaptic plasticity and metaplasticity can account for the dynamics of the backward shift of hippocampal place fields</bib:title>
+        <bib:journal>Journal of neurophysiology</bib:journal>
+        <bib:year>2008</bib:year>
+        <!--optional fields-->
+        <bib:volume>100</bib:volume>
+        <bib:number>2</bib:number>
+        <bib:pages>983</bib:pages>
+        <bib:month/>
+        <bib:note/>
+      </bib:article>
+    </bib:entry>
+  </bib:file>
+</document>

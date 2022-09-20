@@ -1,0 +1,1345 @@
+<document xmlns="http://cnx.rice.edu/cnxml" xmlns:m="http://www.w3.org/1998/Math/MathML" xmlns:bib="http://bibtexml.sf.net/">
+  <title>Vizing's Conjecture and Related Graph Properties</title>
+<metadata xmlns:md="http://cnx.rice.edu/mdml">
+  <md:content-id>m34835</md:content-id>
+  <md:title>Vizing's Conjecture and Related Graph Properties</md:title>
+  <md:abstract>Vizing's Conjecture is a lower bound for the domination number of the Cartesian Product of two graphs in terms of the domination number of the separate graphs.  This module addresses observations about certain graph properties that can be assumed for Vizing's Conjecture and a related conjecture on independent domination numbers.</md:abstract>
+  <md:uuid>704aca01-c234-4277-b5b2-c8c61c035dcc</md:uuid>
+</metadata>
+
+<content>
+    <section id="id252281">
+      <title>Introduction</title>
+      <section id="id252288">
+        <title>Preliminary Definitions</title>
+        <section id="id252294">
+          <title>Graph</title>
+          <para id="id252300">A <emphasis effect="bold">graph</emphasis> is a set <m:math overflow="scroll"><m:mrow><m:mi>G</m:mi><m:mo>(</m:mo><m:mi>V</m:mi><m:mo>,</m:mo><m:mi>E</m:mi><m:mo>)</m:mo></m:mrow></m:math> with <m:math overflow="scroll"><m:mi>V</m:mi></m:math> a set of vertices and <m:math overflow="scroll"><m:mi>E</m:mi></m:math> a set of edges or vertex pairs. Two vertices <m:math overflow="scroll"><m:mrow><m:msub><m:mi>v</m:mi><m:mn>1</m:mn></m:msub><m:mo>,</m:mo><m:msub><m:mi>v</m:mi><m:mn>2</m:mn></m:msub><m:mo>∈</m:mo><m:mi>V</m:mi></m:mrow></m:math> are adjacent if the vertex pair <m:math overflow="scroll"><m:mrow><m:mo>(</m:mo><m:msub><m:mi>v</m:mi><m:mn>1</m:mn></m:msub><m:mo>,</m:mo><m:msub><m:mi>v</m:mi><m:mn>2</m:mn></m:msub><m:mo>)</m:mo></m:mrow></m:math> are in <m:math overflow="scroll"><m:mi>E</m:mi></m:math>. Graphs are a common model for networks.</para>
+          <para id="id252748">
+            <figure id="id252751"><media id="id252751_media" alt="">
+                <image mime-type="image/png" src="../../media/graph.png" id="id252751_onlineimage" width="200"><!-- NOTE: attribute width changes image size online (pixels). original width is 484. --></image>
+                <image mime-type="application/postscript" for="pdf" src="../../media/graph.eps" id="id252751_printimage" print-width="100 pt">
+                  <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+                </image>
+              </media>
+            <caption>A graph</caption></figure>
+          </para>
+          <!--empty paragraphs get left behind.-->
+        </section>
+        <section id="id252764">
+          <title>Complete Graph</title>
+          <para id="id252771">A graph G on <m:math overflow="scroll"><m:mi>n</m:mi></m:math> vertices is a complete graph if for each pair <m:math overflow="scroll"><m:mrow><m:msub><m:mi>v</m:mi><m:mn>1</m:mn></m:msub><m:mo>,</m:mo><m:msub><m:mi>v</m:mi><m:mn>2</m:mn></m:msub><m:mo>∈</m:mo><m:mi>V</m:mi><m:mo>⇒</m:mo><m:mrow><m:mo>(</m:mo><m:msub><m:mi>v</m:mi><m:mn>1</m:mn></m:msub><m:mo>,</m:mo><m:msub><m:mi>v</m:mi><m:mn>2</m:mn></m:msub><m:mo>)</m:mo></m:mrow><m:mo>∈</m:mo><m:mi>E</m:mi></m:mrow></m:math>. Call <m:math overflow="scroll"><m:msub><m:mi>K</m:mi><m:mi>n</m:mi></m:msub></m:math> the complete graph on <m:math overflow="scroll"><m:mi>n</m:mi></m:math> vertices.</para>
+          <para id="id252861">
+            <figure id="id252864"><media id="id252864_media" alt="">
+                <image mime-type="image/png" src="../../media/K_4.png" id="id252864_onlineimage" width="200"><!-- NOTE: attribute width changes image size online (pixels). original width is 458. --></image>
+                <image mime-type="application/postscript" for="pdf" src="../../media/K_4.eps" id="id252864_printimage" print-width="100 pt">
+                  <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+                </image>
+              </media>
+            <caption>Complete graph on 4 vertices</caption></figure>
+          </para>
+        </section>
+        <section id="id252873">
+          <title>Cartesian Product Graph</title>
+          <para id="id252880">Given graphs <m:math overflow="scroll"><m:mi>G</m:mi></m:math> and <m:math overflow="scroll"><m:mi>H</m:mi></m:math> the <emphasis effect="bold">Cartesian Product Graph</emphasis> is defined to be <m:math overflow="scroll"><m:mrow><m:mi>G</m:mi><m:mo>□</m:mo><m:mi>H</m:mi></m:mrow></m:math> with</para>
+          <equation id="id252917">
+            <m:math overflow="scroll" mode="display">
+              <m:mtable displaystyle="true">
+                <m:mtr>
+                  <m:mtd columnalign="right">
+                    <m:mrow>
+                      <m:mi>V</m:mi>
+                      <m:mo>(</m:mo>
+                      <m:mi>G</m:mi>
+                      <m:mo>□</m:mo>
+                      <m:mi>H</m:mi>
+                      <m:mo>)</m:mo>
+                    </m:mrow>
+                  </m:mtd>
+                  <m:mtd>
+                    <m:mo>=</m:mo>
+                  </m:mtd>
+                  <m:mtd columnalign="left">
+                    <m:mrow>
+                      <m:mo>{</m:mo>
+                      <m:mo>(</m:mo>
+                      <m:mi>v</m:mi>
+                      <m:mo>,</m:mo>
+                      <m:mi>w</m:mi>
+                      <m:mo>)</m:mo>
+                      <m:mo>:</m:mo>
+                      <m:mi>v</m:mi>
+                      <m:mo>∈</m:mo>
+                      <m:mi>G</m:mi>
+                      <m:mo>,</m:mo>
+                      <m:mi>w</m:mi>
+                      <m:mo>∈</m:mo>
+                      <m:mi>H</m:mi>
+                      <m:mo>}</m:mo>
+                    </m:mrow>
+                  </m:mtd>
+                </m:mtr>
+                <m:mtr>
+                  <m:mtd columnalign="right">
+                    <m:mrow>
+                      <m:mi>E</m:mi>
+                      <m:mo>(</m:mo>
+                      <m:mi>G</m:mi>
+                      <m:mo>□</m:mo>
+                      <m:mi>H</m:mi>
+                      <m:mo>)</m:mo>
+                    </m:mrow>
+                  </m:mtd>
+                  <m:mtd>
+                    <m:mo>=</m:mo>
+                  </m:mtd>
+                  <m:mtd columnalign="left">
+                    <m:mrow>
+                      <m:mo>{</m:mo>
+                      <m:mrow>
+                        <m:mo>(</m:mo>
+                        <m:mrow>
+                          <m:mo>(</m:mo>
+                          <m:msub>
+                            <m:mi>v</m:mi>
+                            <m:mn>1</m:mn>
+                          </m:msub>
+                          <m:mo>,</m:mo>
+                          <m:msub>
+                            <m:mi>w</m:mi>
+                            <m:mn>1</m:mn>
+                          </m:msub>
+                          <m:mo>)</m:mo>
+                        </m:mrow>
+                        <m:mo>,</m:mo>
+                        <m:mrow>
+                          <m:mo>(</m:mo>
+                          <m:msub>
+                            <m:mi>v</m:mi>
+                            <m:mn>2</m:mn>
+                          </m:msub>
+                          <m:mo>,</m:mo>
+                          <m:msub>
+                            <m:mi>w</m:mi>
+                            <m:mn>2</m:mn>
+                          </m:msub>
+                          <m:mo>)</m:mo>
+                        </m:mrow>
+                        <m:mo>)</m:mo>
+                      </m:mrow>
+                      <m:mo>:</m:mo>
+                      <m:msub>
+                        <m:mi>v</m:mi>
+                        <m:mn>1</m:mn>
+                      </m:msub>
+                      <m:mo>=</m:mo>
+                      <m:msub>
+                        <m:mi>v</m:mi>
+                        <m:mn>2</m:mn>
+                      </m:msub>
+                      <m:mspace width="4.pt"/>
+                      <m:mtext>and</m:mtext>
+                      <m:mspace width="4.pt"/>
+                      <m:mrow>
+                        <m:mo>(</m:mo>
+                        <m:msub>
+                          <m:mi>w</m:mi>
+                          <m:mn>1</m:mn>
+                        </m:msub>
+                        <m:mo>,</m:mo>
+                        <m:msub>
+                          <m:mi>w</m:mi>
+                          <m:mn>2</m:mn>
+                        </m:msub>
+                        <m:mo>)</m:mo>
+                      </m:mrow>
+                      <m:mo>∈</m:mo>
+                      <m:mrow>
+                        <m:mi>E</m:mi>
+                        <m:mo>(</m:mo>
+                        <m:mi>H</m:mi>
+                        <m:mo>)</m:mo>
+                      </m:mrow>
+                    </m:mrow>
+                  </m:mtd>
+                </m:mtr>
+                <m:mtr>
+                  <m:mtd/>
+                  <m:mtd/>
+                  <m:mtd columnalign="left">
+                    <m:mrow>
+                      <m:mspace width="4.pt"/>
+                      <m:mtext>or</m:mtext>
+                      <m:mspace width="4.pt"/>
+                      <m:msub>
+                        <m:mi>w</m:mi>
+                        <m:mn>1</m:mn>
+                      </m:msub>
+                      <m:mo>=</m:mo>
+                      <m:msub>
+                        <m:mi>w</m:mi>
+                        <m:mn>2</m:mn>
+                      </m:msub>
+                      <m:mspace width="4.pt"/>
+                      <m:mtext>and</m:mtext>
+                      <m:mspace width="4.pt"/>
+                      <m:mrow>
+                        <m:mo>(</m:mo>
+                        <m:msub>
+                          <m:mi>v</m:mi>
+                          <m:mn>1</m:mn>
+                        </m:msub>
+                        <m:mo>,</m:mo>
+                        <m:msub>
+                          <m:mi>v</m:mi>
+                          <m:mn>2</m:mn>
+                        </m:msub>
+                        <m:mo>)</m:mo>
+                      </m:mrow>
+                      <m:mrow>
+                        <m:mo>∈</m:mo>
+                        <m:mrow>
+                          <m:mi>E</m:mi>
+                          <m:mo>(</m:mo>
+                          <m:mi>G</m:mi>
+                          <m:mo>)</m:mo>
+                        </m:mrow>
+                        <m:mo>}</m:mo>
+                      </m:mrow>
+                    </m:mrow>
+                  </m:mtd>
+                </m:mtr>
+              </m:mtable>
+            </m:math>
+          </equation>
+          <para id="id253384">
+            <figure id="id253387"><media id="id253387_media" alt="">
+                <image mime-type="image/png" src="../../media/GboxH.png" id="id253387_onlineimage" width="240"><!-- NOTE: attribute width changes image size online (pixels). original width is 1280. --></image>
+                <image mime-type="application/postscript" for="pdf" src="../../media/GboxH.eps" id="id253387_printimage" print-width="100 pt">
+                  <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+                </image>
+              </media>
+            <caption>The cartesian product of 2 complete graphs makes a "cheese block"</caption></figure>
+          </para>
+          <!--empty paragraphs get left behind.-->
+        </section>
+        <section id="id253401">
+          <title>Neighbors</title>
+          <para id="id253407">Given a graph <m:math overflow="scroll"><m:mrow><m:mi>G</m:mi><m:mo>(</m:mo><m:mi>V</m:mi><m:mo>,</m:mo><m:mi>E</m:mi><m:mo>)</m:mo></m:mrow></m:math> and a set <m:math overflow="scroll"><m:mrow><m:mi>S</m:mi><m:mo>⊆</m:mo><m:mi>V</m:mi></m:mrow></m:math> then we define the <emphasis effect="bold">neighbors</emphasis> of <m:math overflow="scroll"><m:mi>S</m:mi></m:math> to be the set</para>
+          <equation id="id253456">
+            <m:math overflow="scroll" mode="display">
+              <m:mrow>
+                <m:mi>N</m:mi>
+                <m:mo>(</m:mo>
+                <m:mi>S</m:mi>
+                <m:mo>)</m:mo>
+                <m:mo>=</m:mo>
+                <m:mo>{</m:mo>
+                <m:mi>v</m:mi>
+                <m:mo>:</m:mo>
+                <m:mi>v</m:mi>
+                <m:mo>∈</m:mo>
+                <m:mi>V</m:mi>
+                <m:mspace width="4.pt"/>
+                <m:mtext>and</m:mtext>
+                <m:mspace width="4.pt"/>
+                <m:mo>(</m:mo>
+                <m:mi>v</m:mi>
+                <m:mo>,</m:mo>
+                <m:mi>s</m:mi>
+                <m:mo>)</m:mo>
+                <m:mo>∈</m:mo>
+                <m:mi>E</m:mi>
+                <m:mspace width="4.pt"/>
+                <m:mtext>for</m:mtext>
+                <m:mspace width="4.pt"/>
+                <m:mtext>some</m:mtext>
+                <m:mspace width="4.pt"/>
+                <m:mi>s</m:mi>
+                <m:mo>∈</m:mo>
+                <m:mi>S</m:mi>
+                <m:mo>}</m:mo>
+                <m:mo>∖</m:mo>
+                <m:mi>S</m:mi>
+              </m:mrow>
+            </m:math>
+          </equation>
+          <para id="id253538">and similarly the closed neighborhood is the set</para>
+          <equation id="id253543">
+            <m:math overflow="scroll" mode="display">
+              <m:mrow>
+                <m:mi>N</m:mi>
+                <m:mo>[</m:mo>
+                <m:mi>S</m:mi>
+                <m:mo>]</m:mo>
+                <m:mo>=</m:mo>
+                <m:mo>{</m:mo>
+                <m:mi>v</m:mi>
+                <m:mo>:</m:mo>
+                <m:mi>v</m:mi>
+                <m:mo>∈</m:mo>
+                <m:mi>V</m:mi>
+                <m:mspace width="4.pt"/>
+                <m:mtext>and</m:mtext>
+                <m:mspace width="4.pt"/>
+                <m:mo>(</m:mo>
+                <m:mi>v</m:mi>
+                <m:mo>,</m:mo>
+                <m:mi>s</m:mi>
+                <m:mo>)</m:mo>
+                <m:mo>∈</m:mo>
+                <m:mi>E</m:mi>
+                <m:mspace width="4.pt"/>
+                <m:mtext>for</m:mtext>
+                <m:mspace width="4.pt"/>
+                <m:mtext>some</m:mtext>
+                <m:mspace width="4.pt"/>
+                <m:mi>s</m:mi>
+                <m:mo>∈</m:mo>
+                <m:mi>S</m:mi>
+                <m:mo>}</m:mo>
+                <m:mo>∪</m:mo>
+                <m:mi>S</m:mi>
+              </m:mrow>
+            </m:math>
+          </equation>
+        </section>
+        <section id="id253626">
+          <title>Dominating Set</title>
+          <para id="id253632">Given a graph <m:math overflow="scroll"><m:mrow><m:mi>G</m:mi><m:mo>(</m:mo><m:mi>V</m:mi><m:mo>,</m:mo><m:mi>E</m:mi><m:mo>)</m:mo></m:mrow></m:math>, a set <m:math overflow="scroll"><m:mrow><m:mi>D</m:mi><m:mo>⊆</m:mo><m:mi>V</m:mi></m:mrow></m:math> is a <emphasis effect="bold">dominating set</emphasis> if <m:math overflow="scroll"><m:mrow><m:mi>N</m:mi><m:mo>[</m:mo><m:mi>D</m:mi><m:mo>]</m:mo><m:mo>=</m:mo><m:mi>V</m:mi></m:mrow></m:math>.</para>
+          <para id="id253693">
+            <figure id="id253696"><media id="id253696_media" alt="">
+                <image mime-type="image/png" src="../../media/DominatingSet.png" id="id253696_onlineimage" width="200"><!-- NOTE: attribute width changes image size online (pixels). original width is 483. --></image>
+                <image mime-type="application/postscript" for="pdf" src="../../media/DominatingSet.eps" id="id253696_printimage" print-width="100 pt">
+                  <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+                </image>
+              </media>
+            <caption>A star graph showing 2 dominating sets (red and cyan)</caption></figure>
+          </para>
+          <!--empty paragraphs get left behind.-->
+        </section>
+        <section id="id253710">
+          <title>Domination Number</title>
+          <para id="id253716">Given a graph <m:math overflow="scroll"><m:mrow><m:mi>G</m:mi><m:mo>(</m:mo><m:mi>V</m:mi><m:mo>,</m:mo><m:mi>E</m:mi><m:mo>)</m:mo></m:mrow></m:math>, the <emphasis effect="bold">domination number</emphasis> of <m:math overflow="scroll"><m:mi>G</m:mi></m:math> is</para>
+          <equation id="id253752">
+            <m:math overflow="scroll" mode="display">
+              <m:mrow>
+                <m:mi>γ</m:mi>
+                <m:mo>(</m:mo>
+                <m:mi>G</m:mi>
+                <m:mo>)</m:mo>
+                <m:mo>=</m:mo>
+                <m:mo movablelimits="true" form="prefix">min</m:mo>
+                <m:mrow>
+                  <m:mo>{</m:mo>
+                  <m:mo>|</m:mo>
+                  <m:mi>D</m:mi>
+                  <m:mo>|</m:mo>
+                  <m:mo>:</m:mo>
+                  <m:mi>N</m:mi>
+                  <m:mo>[</m:mo>
+                  <m:mi>D</m:mi>
+                  <m:mo>]</m:mo>
+                  <m:mo>=</m:mo>
+                  <m:mi>V</m:mi>
+                  <m:mo>}</m:mo>
+                </m:mrow>
+              </m:mrow>
+            </m:math>
+          </equation>
+        </section>
+        <section id="id253805">
+          <title>k-critical Graph</title>
+          <para id="id253811">A graph <m:math overflow="scroll"><m:mrow><m:mi>G</m:mi><m:mo>(</m:mo><m:mi>V</m:mi><m:mo>,</m:mo><m:mi>E</m:mi><m:mo>)</m:mo></m:mrow></m:math>, is called <emphasis effect="bold">k-edge-critical</emphasis> (or <emphasis effect="bold">k-critical</emphasis>, for short) if <m:math overflow="scroll"><m:mrow><m:mi>γ</m:mi><m:mo>(</m:mo><m:mi>G</m:mi><m:mo>)</m:mo><m:mo>=</m:mo><m:mi>k</m:mi></m:mrow></m:math>, and, <m:math overflow="scroll"><m:mo>∀</m:mo></m:math><m:math overflow="scroll"><m:mrow><m:mi>u</m:mi><m:mo>,</m:mo><m:mi>v</m:mi><m:mo>∈</m:mo><m:mi>V</m:mi><m:mo>(</m:mo><m:mi>G</m:mi><m:mo>)</m:mo></m:mrow></m:math> such that <m:math overflow="scroll"><m:mi>u</m:mi></m:math> and <m:math overflow="scroll"><m:mi>v</m:mi></m:math> are not adjacent, <m:math overflow="scroll"><m:mrow><m:mi>γ</m:mi><m:mo>(</m:mo><m:mi>G</m:mi><m:mo>+</m:mo><m:mi>u</m:mi><m:mi>v</m:mi><m:mo>)</m:mo><m:mo>&lt;</m:mo><m:mi>k</m:mi></m:mrow></m:math>.</para>
+        </section>
+        <section id="id253939">
+          <title>Independent Set</title>
+          <para id="id253945">Given a graph <m:math overflow="scroll"><m:mrow><m:mi>G</m:mi><m:mo>(</m:mo><m:mi>V</m:mi><m:mo>,</m:mo><m:mi>E</m:mi><m:mo>)</m:mo></m:mrow></m:math>, a set <m:math overflow="scroll"><m:mrow><m:mi>I</m:mi><m:mo>⊆</m:mo><m:mi>V</m:mi></m:mrow></m:math> is <emphasis effect="bold">independent</emphasis> if for all <m:math overflow="scroll"><m:mrow><m:mi>v</m:mi><m:mo>,</m:mo><m:mi>w</m:mi><m:mo>∈</m:mo><m:mi>I</m:mi><m:mo>⇒</m:mo><m:mo>(</m:mo><m:mi>v</m:mi><m:mo>,</m:mo><m:mi>w</m:mi><m:mo>)</m:mo><m:mo>∉</m:mo><m:mi>E</m:mi></m:mrow></m:math>. An independent set is <emphasis effect="bold">maximal</emphasis> if it is not a subset of any other independent set.</para>
+          <para id="id254026">
+            <figure id="id254030"><media id="id254030_media" alt="">
+                <image mime-type="image/png" src="../../media/Independent.png" id="id254030_onlineimage" width="200"><!-- NOTE: attribute width changes image size online (pixels). original width is 323. --></image>
+                <image mime-type="application/postscript" for="pdf" src="../../media/Independent.eps" id="id254030_printimage" print-width="100 pt">
+                  <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+                </image>
+              </media>
+            <caption>A maximal independent set (cyan)</caption></figure>
+          </para>
+          <!--empty paragraphs get left behind.-->
+        </section>
+        <section id="id254043">
+          <title>Independence Number</title>
+          <para id="id254049">Given a graph <m:math overflow="scroll"><m:mrow><m:mi>G</m:mi><m:mo>(</m:mo><m:mi>V</m:mi><m:mo>,</m:mo><m:mi>E</m:mi><m:mo>)</m:mo></m:mrow></m:math>, the <emphasis effect="bold">independence number</emphasis> denoted <m:math overflow="scroll"><m:mrow><m:mi>i</m:mi><m:mo>(</m:mo><m:mi>G</m:mi><m:mo>)</m:mo></m:mrow></m:math> is defined by</para>
+          <equation id="id254092">
+            <m:math overflow="scroll" mode="display">
+              <m:mrow>
+                <m:mi>i</m:mi>
+                <m:mo>(</m:mo>
+                <m:mi>G</m:mi>
+                <m:mo>)</m:mo>
+                <m:mo>=</m:mo>
+                <m:mi>m</m:mi>
+                <m:mi>i</m:mi>
+                <m:mi>n</m:mi>
+                <m:mo>(</m:mo>
+                <m:mo>{</m:mo>
+                <m:mo>|</m:mo>
+                <m:mi>I</m:mi>
+                <m:mo>|</m:mo>
+                <m:mo>:</m:mo>
+                <m:mi>I</m:mi>
+                <m:mspace width="4.pt"/>
+                <m:mtext>is</m:mtext>
+                <m:mspace width="4.pt"/>
+                <m:mtext>a</m:mtext>
+                <m:mspace width="4.pt"/>
+                <m:mtext>maximal</m:mtext>
+                <m:mspace width="4.pt"/>
+                <m:mtext>independent</m:mtext>
+                <m:mspace width="4.pt"/>
+                <m:mtext>set</m:mtext>
+                <m:mo>}</m:mo>
+                <m:mo>)</m:mo>
+              </m:mrow>
+            </m:math>
+          </equation>
+        </section>
+      </section>
+    </section>
+    <section id="id254165">
+      <title>Domination Theory</title>
+      <para id="id254171">Domination Theory is an emerging field in Graph Theory addressing how to find dominating sets for certain graphs and important models in the theory.</para>
+      <section id="id254175">
+        <title>Applications</title>
+        <para id="id254182">Domination Theory is a very interesting subfield of graph theory because it has many real-world applications. Finding a minimum set whose closed neighborhood encompasses a network has obvious implications for minimum-cost ways of altering a network, or cheaply distributing goods throughout a network. For example, dominating set theory can help cell phone companies place a minimum number of towers to insure coverage for all of its clients. Similarly, dominating set theory can be useful for social marketing, in order to succesfully spread news about a product by using a minimal number of advertisements. In a less business-minded view, domination theory can help modeling the squares which are connected by the moves of a chess piece (such as the queen). This can be useful for solving problems like the maximum-placement problem, for an arbitary chess board, or for pieces with different movements. Lastly, domination theory can also have applications in facility location problems, such as finding the minimum distance to travel to one out of a set of locations (such as a police station).<link target-id="bid0"/></para>
+      </section>
+    </section>
+    <section id="id254208">
+      <title>Vizing's Conjecture</title>
+      <para id="id254215">Creating bounds for domination numbers is common practice since calculating a graphs domination number was proven NP-Complete by Garey and Johnson<link target-id="bid1"/> in 1976. Arguably, the biggest open problem in Domination Theory is Vizing's Conjecture. It states that the product of the domination number of any two simple graphs <m:math overflow="scroll"><m:mi>G</m:mi></m:math> and <m:math overflow="scroll"><m:mi>H</m:mi></m:math> is no larger than the domination number of their cartesian product graph.</para>
+      <equation id="id254242">
+        <m:math overflow="scroll" mode="display">
+          <m:mrow>
+            <m:mi>γ</m:mi>
+            <m:mo>(</m:mo>
+            <m:mi>G</m:mi>
+            <m:mo>)</m:mo>
+            <m:mi>γ</m:mi>
+            <m:mo>(</m:mo>
+            <m:mi>H</m:mi>
+            <m:mo>)</m:mo>
+            <m:mo>≤</m:mo>
+            <m:mi>γ</m:mi>
+            <m:mo>(</m:mo>
+            <m:mi>G</m:mi>
+            <m:mo>□</m:mo>
+            <m:mi>H</m:mi>
+            <m:mo>)</m:mo>
+          </m:mrow>
+        </m:math>
+      </equation>
+      <section id="id254284">
+        <title>Clark and Suen's Proof</title>
+        <para id="id254291">In 2000, Clark and Suen<link target-id="bid2"/>
+proved that for any simple graphs G and H,</para>
+        <equation id="id254300">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:mi>γ</m:mi>
+              <m:mo>(</m:mo>
+              <m:mi>G</m:mi>
+              <m:mo>)</m:mo>
+              <m:mi>γ</m:mi>
+              <m:mo>(</m:mo>
+              <m:mi>H</m:mi>
+              <m:mo>)</m:mo>
+              <m:mo>≤</m:mo>
+              <m:mn>2</m:mn>
+              <m:mi>γ</m:mi>
+              <m:mo>(</m:mo>
+              <m:mi>G</m:mi>
+              <m:mo>□</m:mo>
+              <m:mi>H</m:mi>
+              <m:mo>)</m:mo>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id254346">Their proof finds an upper and lower bound for the number of dominatiors in a Cartesian product, and combines the inqualities to put a bound on <m:math overflow="scroll"><m:mrow><m:mi>γ</m:mi><m:mo>(</m:mo><m:mi>G</m:mi><m:mo>□</m:mo><m:mi>H</m:mi><m:mo>)</m:mo></m:mrow></m:math>. The proof is shown here:</para>
+        <para id="id254374">Say that D is a dominating set of <m:math overflow="scroll"><m:mrow><m:mi>G</m:mi><m:mo>□</m:mo><m:mi>H</m:mi></m:mrow></m:math>. Let <m:math overflow="scroll"><m:mrow><m:mo>{</m:mo><m:msub><m:mi>u</m:mi><m:mn>1</m:mn></m:msub><m:mo>,</m:mo><m:mo>.</m:mo><m:mo>.</m:mo><m:mo>.</m:mo><m:mo>,</m:mo><m:msub><m:mi>u</m:mi><m:mrow><m:mi>γ</m:mi><m:mo>(</m:mo><m:mi>G</m:mi><m:mo>)</m:mo></m:mrow></m:msub><m:mo>}</m:mo></m:mrow></m:math> be a dominating set of <m:math overflow="scroll"><m:mi>G</m:mi></m:math>. We can create partitions <m:math overflow="scroll"><m:mrow><m:mo>{</m:mo><m:msub><m:mi>Π</m:mi><m:mn>1</m:mn></m:msub><m:mo>,</m:mo><m:mo>.</m:mo><m:mo>.</m:mo><m:mo>.</m:mo><m:mo>,</m:mo><m:msub><m:mi>Π</m:mi><m:mrow><m:mi>γ</m:mi><m:mo>(</m:mo><m:mi>G</m:mi><m:mo>)</m:mo></m:mrow></m:msub><m:mo>}</m:mo></m:mrow></m:math> such that if <m:math overflow="scroll"><m:mrow><m:mi>u</m:mi><m:mo>∈</m:mo><m:msub><m:mi>Π</m:mi><m:mi>i</m:mi></m:msub></m:mrow></m:math>, then <m:math overflow="scroll"><m:mrow><m:mi>u</m:mi><m:mo>=</m:mo><m:msub><m:mi>u</m:mi><m:mi>i</m:mi></m:msub></m:mrow></m:math> or <m:math overflow="scroll"><m:mrow><m:mi>u</m:mi><m:mo>∈</m:mo><m:mi>N</m:mi><m:mo>(</m:mo><m:msub><m:mi>u</m:mi><m:mi>i</m:mi></m:msub><m:mo>)</m:mo></m:mrow></m:math>. Now we can create a partition of dominators <m:math overflow="scroll"><m:mrow><m:mo>{</m:mo><m:msub><m:mi>D</m:mi><m:mn>1</m:mn></m:msub><m:mo>,</m:mo><m:mo>.</m:mo><m:mo>.</m:mo><m:mo>.</m:mo><m:mo>,</m:mo><m:msub><m:mi>D</m:mi><m:mrow><m:mi>γ</m:mi><m:mo>(</m:mo><m:mi>G</m:mi><m:mo>)</m:mo></m:mrow></m:msub><m:mo>}</m:mo></m:mrow></m:math>, where</para>
+        <equation id="id254607">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:msub>
+                <m:mi>D</m:mi>
+                <m:mi>i</m:mi>
+              </m:msub>
+              <m:mo>=</m:mo>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:msub>
+                  <m:mi>Π</m:mi>
+                  <m:mi>i</m:mi>
+                </m:msub>
+                <m:mo>×</m:mo>
+                <m:mi>V</m:mi>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mi>H</m:mi>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>∩</m:mo>
+              <m:mi>D</m:mi>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id254656">Let</para>
+        <equation id="id254661">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:msub>
+                <m:mi>P</m:mi>
+                <m:mi>i</m:mi>
+              </m:msub>
+              <m:mo>=</m:mo>
+              <m:mrow>
+                <m:mo>{</m:mo>
+                <m:mi>v</m:mi>
+                <m:mo>:</m:mo>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mi>u</m:mi>
+                  <m:mo>,</m:mo>
+                  <m:mi>v</m:mi>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mo>∈</m:mo>
+                <m:msub>
+                  <m:mi>D</m:mi>
+                  <m:mi>i</m:mi>
+                </m:msub>
+                <m:mo>,</m:mo>
+                <m:mi>u</m:mi>
+                <m:mo>∈</m:mo>
+                <m:msub>
+                  <m:mi>Π</m:mi>
+                  <m:mi>i</m:mi>
+                </m:msub>
+                <m:mo>}</m:mo>
+              </m:mrow>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id254727">Since <m:math overflow="scroll"><m:mrow><m:msub><m:mi>P</m:mi><m:mi>i</m:mi></m:msub><m:mo>∪</m:mo><m:mrow><m:mo>(</m:mo><m:mi>V</m:mi><m:mrow><m:mo>(</m:mo><m:mi>H</m:mi><m:mo>)</m:mo></m:mrow><m:mo>-</m:mo><m:msub><m:mi>N</m:mi><m:mi>H</m:mi></m:msub><m:mrow><m:mo>[</m:mo><m:msub><m:mi>P</m:mi><m:mi>i</m:mi></m:msub><m:mo>]</m:mo></m:mrow><m:mo>)</m:mo></m:mrow></m:mrow></m:math> is a dominating set of <m:math overflow="scroll"><m:mi>H</m:mi></m:math> for any <m:math overflow="scroll"><m:mi>i</m:mi></m:math>, the number of vertices in <m:math overflow="scroll"><m:mrow><m:mi>V</m:mi><m:mo>(</m:mo><m:mi>H</m:mi><m:mo>)</m:mo></m:mrow></m:math> not dominated by <m:math overflow="scroll"><m:msub><m:mi>P</m:mi><m:mi>i</m:mi></m:msub></m:math> satisfies</para>
+        <equation id="id254837">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:mrow>
+                <m:mo>|</m:mo>
+                <m:mi>V</m:mi>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mi>H</m:mi>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mo>-</m:mo>
+              </m:mrow>
+              <m:msub>
+                <m:mi>N</m:mi>
+                <m:mi>H</m:mi>
+              </m:msub>
+              <m:mrow>
+                <m:mo>[</m:mo>
+                <m:msub>
+                  <m:mi>P</m:mi>
+                  <m:mi>i</m:mi>
+                </m:msub>
+                <m:mo>]</m:mo>
+              </m:mrow>
+              <m:mrow>
+                <m:mo>|</m:mo>
+                <m:mo>+</m:mo>
+                <m:mo>|</m:mo>
+              </m:mrow>
+              <m:msub>
+                <m:mi>P</m:mi>
+                <m:mi>i</m:mi>
+              </m:msub>
+              <m:mrow>
+                <m:mo>|</m:mo>
+                <m:mo>≥</m:mo>
+                <m:mi>γ</m:mi>
+              </m:mrow>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>H</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id254912">For <m:math overflow="scroll"><m:mrow><m:mi>v</m:mi><m:mo>∈</m:mo><m:mi>V</m:mi><m:mo>(</m:mo><m:mi>H</m:mi><m:mo>)</m:mo></m:mrow></m:math>, let</para>
+        <equation id="id254939">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:msub>
+                <m:mi>Q</m:mi>
+                <m:mi>v</m:mi>
+              </m:msub>
+              <m:mo>=</m:mo>
+              <m:mi>D</m:mi>
+              <m:mo>∩</m:mo>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>V</m:mi>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mi>G</m:mi>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mo>×</m:mo>
+                <m:mrow>
+                  <m:mo>{</m:mo>
+                  <m:mi>v</m:mi>
+                  <m:mo>}</m:mo>
+                </m:mrow>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>=</m:mo>
+              <m:mrow>
+                <m:mo>{</m:mo>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mi>u</m:mi>
+                  <m:mo>,</m:mo>
+                  <m:mi>v</m:mi>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mo>∈</m:mo>
+                <m:mi>D</m:mi>
+                <m:mo>:</m:mo>
+                <m:mi>u</m:mi>
+                <m:mo>∈</m:mo>
+                <m:mi>V</m:mi>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mi>G</m:mi>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mo>}</m:mo>
+              </m:mrow>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id255028">Also, let</para>
+        <equation id="id255034">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:mi>C</m:mi>
+              <m:mo>=</m:mo>
+              <m:mo>{</m:mo>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>i</m:mi>
+                <m:mo>,</m:mo>
+                <m:mi>v</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>:</m:mo>
+              <m:msub>
+                <m:mi>Π</m:mi>
+                <m:mi>i</m:mi>
+              </m:msub>
+              <m:mo>×</m:mo>
+              <m:mrow>
+                <m:mo>{</m:mo>
+                <m:mi>v</m:mi>
+                <m:mo>}</m:mo>
+              </m:mrow>
+              <m:mo>⊆</m:mo>
+              <m:msub>
+                <m:mi>N</m:mi>
+                <m:mrow>
+                  <m:mi>G</m:mi>
+                  <m:mo>□</m:mo>
+                  <m:mi>H</m:mi>
+                </m:mrow>
+              </m:msub>
+              <m:mrow>
+                <m:mo>[</m:mo>
+                <m:msub>
+                  <m:mi>Q</m:mi>
+                  <m:mi>v</m:mi>
+                </m:msub>
+                <m:mo>]</m:mo>
+              </m:mrow>
+              <m:mo>}</m:mo>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id255113">Now, we want to find upper and lower bounds for <m:math overflow="scroll"><m:mrow><m:mo>|</m:mo><m:mi>C</m:mi><m:mo>|</m:mo></m:mrow></m:math>.
+Let</para>
+        <equation id="id255134">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:msub>
+                <m:mi>L</m:mi>
+                <m:mi>i</m:mi>
+              </m:msub>
+              <m:mo>=</m:mo>
+              <m:mrow>
+                <m:mo>{</m:mo>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mi>i</m:mi>
+                  <m:mo>,</m:mo>
+                  <m:mi>v</m:mi>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mo>∈</m:mo>
+                <m:mi>C</m:mi>
+                <m:mo>:</m:mo>
+                <m:mi>v</m:mi>
+                <m:mo>∈</m:mo>
+                <m:mi>V</m:mi>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mi>H</m:mi>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mo>}</m:mo>
+              </m:mrow>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <equation id="id255191">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:msub>
+                <m:mi>R</m:mi>
+                <m:mi>v</m:mi>
+              </m:msub>
+              <m:mo>=</m:mo>
+              <m:mrow>
+                <m:mo>{</m:mo>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mi>i</m:mi>
+                  <m:mo>,</m:mo>
+                  <m:mi>v</m:mi>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mo>∈</m:mo>
+                <m:mi>C</m:mi>
+                <m:mo>:</m:mo>
+                <m:mn>1</m:mn>
+                <m:mo>≤</m:mo>
+                <m:mi>i</m:mi>
+                <m:mo>≤</m:mo>
+                <m:mi>γ</m:mi>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mi>G</m:mi>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mo>}</m:mo>
+              </m:mrow>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id255254">We then see that:</para>
+        <equation id="id255260">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:mrow>
+                <m:mo>|</m:mo>
+                <m:mi>C</m:mi>
+                <m:mo>|</m:mo>
+              </m:mrow>
+              <m:mo>=</m:mo>
+              <m:munderover>
+                <m:mo>∑</m:mo>
+                <m:mrow>
+                  <m:mi>i</m:mi>
+                  <m:mo>=</m:mo>
+                  <m:mn>1</m:mn>
+                </m:mrow>
+                <m:mrow>
+                  <m:mi>γ</m:mi>
+                  <m:mo>(</m:mo>
+                  <m:mi>G</m:mi>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+              </m:munderover>
+              <m:mrow>
+                <m:mo>|</m:mo>
+              </m:mrow>
+              <m:msub>
+                <m:mi>L</m:mi>
+                <m:mi>i</m:mi>
+              </m:msub>
+              <m:mrow>
+                <m:mo>|</m:mo>
+                <m:mo>=</m:mo>
+              </m:mrow>
+              <m:munderover>
+                <m:mo>∑</m:mo>
+                <m:mrow>
+                  <m:mi>v</m:mi>
+                  <m:mo>∈</m:mo>
+                  <m:mi>V</m:mi>
+                  <m:mo>(</m:mo>
+                  <m:mi>H</m:mi>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mrow/>
+              </m:munderover>
+              <m:mrow>
+                <m:mo>|</m:mo>
+                <m:msub>
+                  <m:mi>R</m:mi>
+                  <m:mi>v</m:mi>
+                </m:msub>
+                <m:mo>|</m:mo>
+              </m:mrow>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id255354">Note that if <m:math overflow="scroll"><m:mrow><m:mi>v</m:mi><m:mo>∈</m:mo><m:mi>V</m:mi><m:mrow><m:mo>(</m:mo><m:mi>H</m:mi><m:mo>)</m:mo></m:mrow><m:mo>-</m:mo><m:msub><m:mi>N</m:mi><m:mi>H</m:mi></m:msub><m:mrow><m:mo>[</m:mo><m:msub><m:mi>P</m:mi><m:mi>i</m:mi></m:msub><m:mo>]</m:mo></m:mrow></m:mrow></m:math>, then the vertices in <m:math overflow="scroll"><m:mrow><m:msub><m:mi>Π</m:mi><m:mi>i</m:mi></m:msub><m:mo>×</m:mo><m:mrow><m:mo>{</m:mo><m:mi>v</m:mi><m:mo>}</m:mo></m:mrow></m:mrow></m:math> must be dominated by vertices in <m:math overflow="scroll"><m:msub><m:mi>Q</m:mi><m:mi>v</m:mi></m:msub></m:math>, so <m:math overflow="scroll"><m:mrow><m:mrow><m:mo>(</m:mo><m:mi>i</m:mi><m:mo>,</m:mo><m:mi>v</m:mi><m:mo>)</m:mo></m:mrow><m:mo>∈</m:mo><m:msub><m:mi>L</m:mi><m:mi>i</m:mi></m:msub></m:mrow></m:math>. This implies that</para>
+        <equation id="id255474">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:msub>
+                <m:mi>L</m:mi>
+                <m:mi>i</m:mi>
+              </m:msub>
+              <m:mo>≥</m:mo>
+              <m:mrow>
+                <m:mo>|</m:mo>
+                <m:mi>V</m:mi>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mi>H</m:mi>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mo>-</m:mo>
+                <m:msub>
+                  <m:mi>N</m:mi>
+                  <m:mi>H</m:mi>
+                </m:msub>
+                <m:mrow>
+                  <m:mo>[</m:mo>
+                  <m:msub>
+                    <m:mi>P</m:mi>
+                    <m:mi>I</m:mi>
+                  </m:msub>
+                  <m:mo>]</m:mo>
+                </m:mrow>
+                <m:mo>|</m:mo>
+              </m:mrow>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id255530">So,</para>
+        <equation id="id255536">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:mrow>
+                <m:mo>|</m:mo>
+                <m:mi>C</m:mi>
+                <m:mo>|</m:mo>
+              </m:mrow>
+              <m:mo>≥</m:mo>
+              <m:munderover>
+                <m:mo>∑</m:mo>
+                <m:mrow>
+                  <m:mi>i</m:mi>
+                  <m:mo>=</m:mo>
+                  <m:mn>1</m:mn>
+                </m:mrow>
+                <m:mrow>
+                  <m:mi>γ</m:mi>
+                  <m:mo>(</m:mo>
+                  <m:mi>G</m:mi>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+              </m:munderover>
+              <m:mrow>
+                <m:mo>|</m:mo>
+                <m:mi>V</m:mi>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mi>H</m:mi>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mo>-</m:mo>
+              </m:mrow>
+              <m:msub>
+                <m:mi>N</m:mi>
+                <m:mi>H</m:mi>
+              </m:msub>
+              <m:mrow>
+                <m:mo>[</m:mo>
+                <m:msub>
+                  <m:mi>P</m:mi>
+                  <m:mi>i</m:mi>
+                </m:msub>
+                <m:mo>]</m:mo>
+              </m:mrow>
+              <m:mrow>
+                <m:mo>|</m:mo>
+                <m:mo>≥</m:mo>
+                <m:mi>γ</m:mi>
+              </m:mrow>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>G</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mi>γ</m:mi>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>H</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>-</m:mo>
+              <m:munderover>
+                <m:mo>∑</m:mo>
+                <m:mrow>
+                  <m:mi>i</m:mi>
+                  <m:mo>=</m:mo>
+                  <m:mn>1</m:mn>
+                </m:mrow>
+                <m:mrow>
+                  <m:mi>γ</m:mi>
+                  <m:mo>(</m:mo>
+                  <m:mi>G</m:mi>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+              </m:munderover>
+              <m:mrow>
+                <m:mo>|</m:mo>
+              </m:mrow>
+              <m:msub>
+                <m:mi>P</m:mi>
+                <m:mi>i</m:mi>
+              </m:msub>
+              <m:mrow>
+                <m:mo>|</m:mo>
+                <m:mo>≥</m:mo>
+                <m:mi>γ</m:mi>
+              </m:mrow>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>G</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mi>γ</m:mi>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>H</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>-</m:mo>
+              <m:munderover>
+                <m:mo>∑</m:mo>
+                <m:mrow>
+                  <m:mi>i</m:mi>
+                  <m:mo>=</m:mo>
+                  <m:mn>1</m:mn>
+                </m:mrow>
+                <m:mrow>
+                  <m:mi>γ</m:mi>
+                  <m:mo>(</m:mo>
+                  <m:mi>G</m:mi>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+              </m:munderover>
+              <m:mrow>
+                <m:mo>|</m:mo>
+                <m:msub>
+                  <m:mi>D</m:mi>
+                  <m:mi>i</m:mi>
+                </m:msub>
+                <m:mo>|</m:mo>
+              </m:mrow>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id255741">For each <m:math overflow="scroll"><m:mrow><m:mrow><m:mi>v</m:mi><m:mo>∈</m:mo><m:mi>V</m:mi><m:mrow><m:mo>(</m:mo><m:mi>H</m:mi><m:mo>)</m:mo></m:mrow><m:mo>,</m:mo><m:mo>|</m:mo></m:mrow><m:msub><m:mi>R</m:mi><m:mi>v</m:mi></m:msub><m:mrow><m:mo>|</m:mo><m:mo>≤</m:mo><m:mo>|</m:mo></m:mrow><m:msub><m:mi>Q</m:mi><m:mi>v</m:mi></m:msub><m:mrow><m:mo>|</m:mo></m:mrow></m:mrow></m:math>. If not, <m:math overflow="scroll"><m:mrow><m:mrow><m:mo>{</m:mo><m:mi>u</m:mi><m:mo>:</m:mo><m:mrow><m:mo>(</m:mo><m:mi>u</m:mi><m:mo>,</m:mo><m:mi>v</m:mi><m:mo>)</m:mo></m:mrow><m:mo>∈</m:mo><m:msub><m:mi>Q</m:mi><m:mi>v</m:mi></m:msub><m:mo>}</m:mo></m:mrow><m:mo>∪</m:mo><m:mrow><m:mo>{</m:mo><m:msub><m:mi>u</m:mi><m:mi>j</m:mi></m:msub><m:mo>:</m:mo><m:mrow><m:mo>(</m:mo><m:mi>j</m:mi><m:mo>,</m:mo><m:mi>v</m:mi><m:mo>)</m:mo></m:mrow><m:mo>∉</m:mo><m:msub><m:mi>R</m:mi><m:mi>v</m:mi></m:msub><m:mo>}</m:mo></m:mrow></m:mrow></m:math> is a dominating set in G with cardinality</para>
+        <equation id="id255879">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:mrow>
+                <m:mo>|</m:mo>
+              </m:mrow>
+              <m:msub>
+                <m:mi>Q</m:mi>
+                <m:mi>v</m:mi>
+              </m:msub>
+              <m:mrow>
+                <m:mo>|</m:mo>
+                <m:mo>+</m:mo>
+                <m:mo>(</m:mo>
+                <m:mi>γ</m:mi>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:mi>G</m:mi>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mo>-</m:mo>
+                <m:mo>|</m:mo>
+              </m:mrow>
+              <m:msub>
+                <m:mi>R</m:mi>
+                <m:mi>v</m:mi>
+              </m:msub>
+              <m:mrow>
+                <m:mo>|</m:mo>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>=</m:mo>
+              <m:mi>γ</m:mi>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>G</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>-</m:mo>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mo>|</m:mo>
+              </m:mrow>
+              <m:msub>
+                <m:mi>R</m:mi>
+                <m:mi>v</m:mi>
+              </m:msub>
+              <m:mrow>
+                <m:mo>|</m:mo>
+                <m:mo>-</m:mo>
+                <m:mo>|</m:mo>
+              </m:mrow>
+              <m:msub>
+                <m:mi>Q</m:mi>
+                <m:mi>v</m:mi>
+              </m:msub>
+              <m:mrow>
+                <m:mo>|</m:mo>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>&lt;</m:mo>
+              <m:mi>γ</m:mi>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>G</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id255993">which is a contradiction. Then</para>
+        <equation id="id255999">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:mrow>
+                <m:mo>|</m:mo>
+                <m:mi>C</m:mi>
+                <m:mo>|</m:mo>
+              </m:mrow>
+              <m:mo>=</m:mo>
+              <m:munderover>
+                <m:mo>∑</m:mo>
+                <m:mrow>
+                  <m:mi>v</m:mi>
+                  <m:mo>∈</m:mo>
+                  <m:mi>V</m:mi>
+                  <m:mo>(</m:mo>
+                  <m:mi>H</m:mi>
+                  <m:mo>)</m:mo>
+                  <m:mo>|</m:mo>
+                </m:mrow>
+                <m:mrow/>
+              </m:munderover>
+              <m:mrow>
+                <m:mo>|</m:mo>
+              </m:mrow>
+              <m:msub>
+                <m:mi>R</m:mi>
+                <m:mi>v</m:mi>
+              </m:msub>
+              <m:mrow>
+                <m:mo>|</m:mo>
+                <m:mo>≤</m:mo>
+              </m:mrow>
+              <m:munderover>
+                <m:mo>∑</m:mo>
+                <m:mrow>
+                  <m:mi>v</m:mi>
+                  <m:mo>∈</m:mo>
+                  <m:mi>V</m:mi>
+                  <m:mo>(</m:mo>
+                  <m:mi>H</m:mi>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mrow/>
+              </m:munderover>
+              <m:mrow>
+                <m:mo>|</m:mo>
+              </m:mrow>
+              <m:msub>
+                <m:mi>Q</m:mi>
+                <m:mi>v</m:mi>
+              </m:msub>
+              <m:mrow>
+                <m:mo>|</m:mo>
+                <m:mo>=</m:mo>
+                <m:mo>|</m:mo>
+                <m:mi>D</m:mi>
+                <m:mo>|</m:mo>
+              </m:mrow>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id256103">It then follows that <m:math overflow="scroll"><m:mrow><m:mi>γ</m:mi><m:mo>(</m:mo><m:mi>G</m:mi><m:mo>)</m:mo><m:mi>γ</m:mi><m:mo>(</m:mo><m:mi>H</m:mi><m:mo>)</m:mo><m:mo>-</m:mo><m:mo>|</m:mo><m:mi>D</m:mi><m:mo>|</m:mo><m:mo>≤</m:mo><m:mo>|</m:mo><m:mi>C</m:mi><m:mo>|</m:mo><m:mo>≤</m:mo><m:mo>|</m:mo><m:mi>D</m:mi><m:mo>|</m:mo></m:mrow></m:math>, which concludes the theorem.<m:math overflow="scroll"><m:mo>□</m:mo></m:math></para>
+      </section>
+      <section id="id256170">
+        <title>Proofs for Specific Cases of <m:math overflow="scroll"><m:mrow><m:mi>γ</m:mi><m:mo>(</m:mo><m:mi>G</m:mi><m:mo>)</m:mo></m:mrow></m:math></title>
+        <para id="id256192">Additionally, the proofs that Vizing's conjecture holds for <m:math overflow="scroll"><m:mrow><m:mi>γ</m:mi><m:mo>(</m:mo><m:mi>G</m:mi><m:mo>)</m:mo><m:mo>=</m:mo><m:mn>1</m:mn></m:mrow></m:math> and <m:math overflow="scroll"><m:mrow><m:mi>γ</m:mi><m:mo>(</m:mo><m:mi>G</m:mi><m:mo>)</m:mo><m:mo>=</m:mo><m:mn>2</m:mn></m:mrow></m:math> are trivial. In 2004, Sun<link target-id="bid3"/> proved that Vizing's conjecture holds for <m:math overflow="scroll"><m:mrow><m:mi>γ</m:mi><m:mo>(</m:mo><m:mi>G</m:mi><m:mo>)</m:mo><m:mo>=</m:mo><m:mn>3</m:mn></m:mrow></m:math>. We will briefly step through the main ideas behind the proof here.</para>
+        <para id="id256265">The idea behind the proof is that we can count three disjoint sets of dominators in <m:math overflow="scroll"><m:mrow><m:mi>G</m:mi><m:mo>□</m:mo><m:mi>H</m:mi></m:mrow></m:math>, such that each of these sets has cardinality of at least <m:math overflow="scroll"><m:mrow><m:mi>γ</m:mi><m:mo>(</m:mo><m:mi>H</m:mi><m:mo>)</m:mo></m:mrow></m:math>. Since the sets are disjoint, the number of dominators in <m:math overflow="scroll"><m:mrow><m:mi>G</m:mi><m:mo>□</m:mo><m:mi>H</m:mi></m:mrow></m:math> must be at least the sum of the cardinalities of these sets, namely <m:math overflow="scroll"><m:mrow><m:mn>3</m:mn><m:mi>γ</m:mi><m:mo>(</m:mo><m:mi>H</m:mi><m:mo>)</m:mo><m:mo>=</m:mo><m:mi>γ</m:mi><m:mo>(</m:mo><m:mi>G</m:mi><m:mo>)</m:mo><m:mi>γ</m:mi><m:mo>(</m:mo><m:mi>H</m:mi><m:mo>)</m:mo></m:mrow></m:math>. First, we assume that <m:math overflow="scroll"><m:mi>G</m:mi></m:math> is 3-critical. This generalizes for all graphs with <m:math overflow="scroll"><m:mrow><m:mi>γ</m:mi><m:mo>(</m:mo><m:mi>G</m:mi><m:mo>)</m:mo><m:mo>=</m:mo><m:mn>3</m:mn></m:mrow></m:math>, by a bit of reasoning we will go through next. Without loss of generality, we can call the dominators of <m:math overflow="scroll"><m:mrow><m:mi>G</m:mi><m:mo>{</m:mo><m:mn>1</m:mn><m:mo>,</m:mo><m:mi>p</m:mi><m:mo>,</m:mo><m:mi>q</m:mi><m:mo>}</m:mo></m:mrow></m:math>, with <m:math overflow="scroll"><m:mrow><m:mn>1</m:mn><m:mo>=</m:mo><m:mi>V</m:mi><m:mo>(</m:mo><m:mi>G</m:mi><m:mo>)</m:mo><m:mo>-</m:mo><m:mi>N</m:mi><m:mo>[</m:mo><m:mi>p</m:mi><m:mo>]</m:mo><m:mo>∪</m:mo><m:mrow><m:mi>N</m:mi><m:mo>[</m:mo><m:mi>q</m:mi><m:mo>]</m:mo></m:mrow></m:mrow></m:math>. A set with this property always exists in a 3-critical graph. Obviously 1 is adjacent to neither <m:math overflow="scroll"><m:mi>p</m:mi></m:math> nor <m:math overflow="scroll"><m:mi>q</m:mi></m:math>, but the proof must check the cases in which <m:math overflow="scroll"><m:mi>p</m:mi></m:math> and <m:math overflow="scroll"><m:mi>q</m:mi></m:math> are adjacent to each other and the case in which they are not. It uses these cases to build the appropriate subcases, and some of the math can be cumbersome and difficult to follow.</para>
+      </section>
+      <section id="id256495">
+        <title>The Step to K-Critical</title>
+        <para id="id256501">This assumption is key to Sun's proof, but how does she justify this assumption? The k-critical assumption comes from a familiar trick that has been used in proofs for many simple inequalities including the AM-GM inequality. We start by generating an algorithm to raise or lower one side of the inequality while leaving the other unchanged. In the K-critical assumption we want to keep both <m:math overflow="scroll"><m:mrow><m:mi>γ</m:mi><m:mo>(</m:mo><m:mi>G</m:mi><m:mo>)</m:mo></m:mrow></m:math> and <m:math overflow="scroll"><m:mrow><m:mi>γ</m:mi><m:mo>(</m:mo><m:mi>H</m:mi><m:mo>)</m:mo></m:mrow></m:math> unchanged while lowering <m:math overflow="scroll"><m:mrow><m:mi>γ</m:mi><m:mo>(</m:mo><m:mi>G</m:mi><m:mo>□</m:mo><m:mi>H</m:mi><m:mo>)</m:mo></m:mrow></m:math>. So the algorithm works as follows:</para>
+        <list id="id256562" display="block" list-type="enumerated">
+          <item id="uid1">In the graph G choose two non-adjacent vertices <m:math overflow="scroll"><m:mi>u</m:mi></m:math> and <m:math overflow="scroll"><m:mi>v</m:mi></m:math> which have not yet been examined. If all pairs <m:math overflow="scroll"><m:mrow><m:mo>(</m:mo><m:mi>u</m:mi><m:mo>,</m:mo><m:mi>v</m:mi><m:mo>)</m:mo></m:mrow></m:math> have been looked at then stop.
+</item>
+          <item id="uid2">Create the graph <m:math overflow="scroll"><m:msup><m:mi>G</m:mi><m:mo>'</m:mo></m:msup></m:math> by adding the edge <m:math overflow="scroll"><m:mrow><m:mo>(</m:mo><m:mi>u</m:mi><m:mo>,</m:mo><m:mi>v</m:mi><m:mo>)</m:mo></m:mrow></m:math></item>
+          <item id="uid3">If <m:math overflow="scroll"><m:mrow><m:mi>γ</m:mi><m:mrow><m:mo>(</m:mo><m:msup><m:mi>G</m:mi><m:mo>'</m:mo></m:msup><m:mo>)</m:mo></m:mrow><m:mo>=</m:mo><m:mi>γ</m:mi><m:mrow><m:mo>(</m:mo><m:mi>G</m:mi><m:mo>)</m:mo></m:mrow></m:mrow></m:math> then <m:math overflow="scroll"><m:mrow><m:mi>G</m:mi><m:mo>←</m:mo><m:msup><m:mi>G</m:mi><m:mo>'</m:mo></m:msup></m:mrow></m:math>, otherwise return to 1 and pick another pair.
+</item>
+        </list>
+        <para id="id256726">It is obvious that after completing the algorithm the graph <m:math overflow="scroll"><m:msup><m:mi>G</m:mi><m:mo>'</m:mo></m:msup></m:math> will have the same domination number as <m:math overflow="scroll"><m:mi>G</m:mi></m:math>. Next it should be apparent that for any graph <m:math overflow="scroll"><m:mi>H</m:mi></m:math> if <m:math overflow="scroll"><m:mi>D</m:mi></m:math> dominates <m:math overflow="scroll"><m:mrow><m:mi>G</m:mi><m:mo>□</m:mo><m:mi>H</m:mi></m:mrow></m:math> then <m:math overflow="scroll"><m:mi>D</m:mi></m:math> dominates <m:math overflow="scroll"><m:mrow><m:msup><m:mi>G</m:mi><m:mo>'</m:mo></m:msup><m:mo>□</m:mo><m:mi>H</m:mi></m:mrow></m:math> since <m:math overflow="scroll"><m:mrow><m:msup><m:mi>G</m:mi><m:mo>'</m:mo></m:msup><m:mo>□</m:mo><m:mi>H</m:mi></m:mrow></m:math> is just <m:math overflow="scroll"><m:mrow><m:mi>G</m:mi><m:mo>□</m:mo><m:mi>H</m:mi></m:mrow></m:math> with extra edges, i.e. <m:math overflow="scroll"><m:mrow><m:mi>γ</m:mi><m:mrow><m:mo>(</m:mo><m:msup><m:mi>G</m:mi><m:mo>'</m:mo></m:msup><m:mo>□</m:mo><m:mi>H</m:mi><m:mo>)</m:mo></m:mrow><m:mo>≤</m:mo><m:mi>γ</m:mi><m:mrow><m:mo>(</m:mo><m:mi>G</m:mi><m:mo>□</m:mo><m:mi>H</m:mi><m:mo>)</m:mo></m:mrow></m:mrow></m:math>. So if Vizing's Conjecture holds for the special case of k-critical then it holds for all graphs, and contrastingly, if there is a counterexample the smallest will be k-critical.</para>
+      </section>
+    </section>
+    <section id="id256896">
+      <title>Our contribution</title>
+      <para id="id256902">Sun's proof is cumbersome and broken into many cases, but there is potential to eliminate the case of <m:math overflow="scroll"><m:mi>p</m:mi></m:math> and <m:math overflow="scroll"><m:mi>q</m:mi></m:math> being adjacent if a certain conjecture from Sumner and Blitch<link target-id="bid4"/> is true. Specifically Sumner and Blitch conjectured that in every k-critical graph <m:math overflow="scroll"><m:mrow><m:mi>i</m:mi><m:mo>(</m:mo><m:mi>G</m:mi><m:mo>)</m:mo><m:mo>=</m:mo><m:mi>γ</m:mi><m:mo>(</m:mo><m:mi>G</m:mi><m:mo>)</m:mo></m:mrow></m:math> where <m:math overflow="scroll"><m:mrow><m:mi>i</m:mi><m:mo>(</m:mo><m:mi>G</m:mi><m:mo>)</m:mo></m:mrow></m:math> is the Independence Number. The conjecture has been disproven for <m:math overflow="scroll"><m:mrow><m:mi>k</m:mi><m:mo>≥</m:mo><m:mn>4</m:mn></m:mrow></m:math> but remains open in the case <m:math overflow="scroll"><m:mrow><m:mi>k</m:mi><m:mo>=</m:mo><m:mn>3</m:mn></m:mrow></m:math><link target-id="bid5"/>. We've put work into developing a counterexample or showing that none exist, in hopes of shortening Sun's proof. This is equivalent to saying in if <m:math overflow="scroll"><m:mi>G</m:mi></m:math> is 3-critical, then the complement of <m:math overflow="scroll"><m:mi>G</m:mi></m:math> must have a <m:math overflow="scroll"><m:msub><m:mi>K</m:mi><m:mn>3</m:mn></m:msub></m:math> subgraph which is not contained in a <m:math overflow="scroll"><m:msub><m:mi>K</m:mi><m:mn>4</m:mn></m:msub></m:math> subgraph.</para>
+      <para id="id257056">
+        <figure id="id257059"><media id="id257059_media" alt="">
+            <image mime-type="image/png" src="../../media/IndependentSet.png" id="id257059_onlineimage" width="794"><!-- NOTE: attribute width changes image size online (pixels). original width is 794. --></image>
+            <image mime-type="application/postscript" for="pdf" src="../../media/IndependentSet.eps" id="id257059_printimage" print-width="300 pt">
+              <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+            </image>
+          </media>
+        <caption>Ao's counterexample for the case k=4</caption></figure>
+      </para>
+      <section id="id257067">
+        <title>3-covers</title>
+        <para id="id257074">We call a graph <m:math overflow="scroll"><m:mi>G</m:mi></m:math> a <emphasis effect="bold">k-cover</emphasis> if for every k-1-tuple of vertices <m:math overflow="scroll"><m:mrow><m:mo>(</m:mo><m:msub><m:mi>v</m:mi><m:mn>1</m:mn></m:msub><m:mo>,</m:mo><m:mo>.</m:mo><m:mo>.</m:mo><m:mo>.</m:mo><m:mo>,</m:mo><m:msub><m:mi>v</m:mi><m:mrow><m:mi>k</m:mi><m:mo>-</m:mo><m:mn>1</m:mn></m:mrow></m:msub><m:mo>)</m:mo></m:mrow></m:math> there exists a vertex <m:math overflow="scroll"><m:mi>w</m:mi></m:math> such that <m:math overflow="scroll"><m:mstyle scriptlevel="0" displaystyle="true"><m:mrow><m:mi>w</m:mi><m:mo>∈</m:mo><m:munderover><m:mo>⋂</m:mo><m:mrow><m:mi>i</m:mi><m:mo>=</m:mo><m:mn>1</m:mn></m:mrow><m:mrow><m:mi>k</m:mi><m:mo>-</m:mo><m:mn>1</m:mn></m:mrow></m:munderover><m:mi>N</m:mi><m:mrow><m:mo>(</m:mo><m:msub><m:mi>v</m:mi><m:mi>i</m:mi></m:msub><m:mo>)</m:mo></m:mrow></m:mrow></m:mstyle></m:math>. K-covers are complements to graphs with domination number k, and specifically we're interested in 3-covers. So to add in the idea of the complement of a k-critical graph, we have come up with the idea of a <emphasis effect="bold">minimal</emphasis> 3-cover. We call a 3-cover minimal if for every edge <m:math overflow="scroll"><m:mrow><m:mo>(</m:mo><m:mi>u</m:mi><m:mo>,</m:mo><m:mi>v</m:mi><m:mo>)</m:mo><m:mo>∈</m:mo><m:mi>E</m:mi></m:mrow></m:math> there exists <m:math overflow="scroll"><m:mrow><m:mi>w</m:mi><m:mo>∈</m:mo><m:mi>V</m:mi></m:mrow></m:math> and a choice of labels <m:math overflow="scroll"><m:mrow><m:mi>a</m:mi><m:mo>,</m:mo><m:mi>b</m:mi><m:mo>∈</m:mo><m:mrow><m:mo>(</m:mo><m:mi>u</m:mi><m:mo>,</m:mo><m:mi>v</m:mi><m:mo>)</m:mo></m:mrow></m:mrow></m:math> s.t. <m:math overflow="scroll"><m:mrow><m:mi>N</m:mi><m:mo>(</m:mo><m:mi>a</m:mi><m:mo>)</m:mo><m:mo>∩</m:mo><m:mrow><m:mi>N</m:mi><m:mo>(</m:mo><m:mi>w</m:mi><m:mo>)</m:mo></m:mrow><m:mo>=</m:mo><m:mi>b</m:mi></m:mrow></m:math>. The relation between a domination 3 graphs and the minimality of their complement is that a graph <m:math overflow="scroll"><m:mi>G</m:mi></m:math> is a 3-edge-critical graph if and only if <m:math overflow="scroll"><m:mover accent="true"><m:mi>G</m:mi><m:mo>¯</m:mo></m:mover></m:math> is a minimal 3-cover.</para>
+      </section>
+      <section id="id257331">
+        <title>Reformulation of the Conjecture</title>
+        <para id="id257338">We can reformulate the original conjecture in a more constructuve form using 3-covers. An equivalent form is that there is no minimal 3-cover in which every <m:math overflow="scroll"><m:msub><m:mi>K</m:mi><m:mn>3</m:mn></m:msub></m:math> is contained in a <m:math overflow="scroll"><m:msub><m:mi>K</m:mi><m:mn>4</m:mn></m:msub></m:math>.</para>
+      </section>
+      <section id="id257373">
+        <title>Work towards a proof of the conjecture</title>
+        <para id="id257380">Starting by describing the set of counterexamples to the conjecture, we will want to show either that the set is empty, or produce an element from the set to disprove the conjecture. Consider graphs <m:math overflow="scroll"><m:mrow><m:mi>G</m:mi><m:mo>(</m:mo><m:mi>V</m:mi><m:mo>,</m:mo><m:mi>E</m:mi><m:mo>)</m:mo></m:mrow></m:math> from the set</para>
+        <equation id="id257405">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:mi>S</m:mi>
+              <m:mo>=</m:mo>
+              <m:mo>{</m:mo>
+              <m:mi>G</m:mi>
+              <m:mo>:</m:mo>
+              <m:mi>G</m:mi>
+              <m:mspace width="4.pt"/>
+              <m:mtext>is</m:mtext>
+              <m:mspace width="4.pt"/>
+              <m:mtext>a</m:mtext>
+              <m:mspace width="4.pt"/>
+              <m:mtext>minimal</m:mtext>
+              <m:mspace width="4.pt"/>
+              <m:mn>3</m:mn>
+              <m:mtext>-cover</m:mtext>
+              <m:mspace width="4.pt"/>
+              <m:mtext>with</m:mtext>
+              <m:mspace width="4.pt"/>
+              <m:mtext>every</m:mtext>
+              <m:mspace width="4.pt"/>
+              <m:msub>
+                <m:mi>K</m:mi>
+                <m:mn>3</m:mn>
+              </m:msub>
+              <m:mo>⊂</m:mo>
+              <m:msub>
+                <m:mi>K</m:mi>
+                <m:mn>4</m:mn>
+              </m:msub>
+              <m:mo>}</m:mo>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <section id="id257486">
+          <title>Proposition 1:</title>
+          <para id="id257493"><m:math overflow="scroll"><m:mrow><m:mi>δ</m:mi><m:mo>(</m:mo><m:mi>G</m:mi><m:mo>)</m:mo><m:mo>≥</m:mo><m:mn>3</m:mn></m:mrow></m:math>.</para>
+          <para id="id257516">
+            <quote id="id257516_quote" display="block"><emphasis effect="bold">Proof:</emphasis>
+Since <m:math overflow="scroll"><m:mi>G</m:mi></m:math> has the property of being a minimal 3-cover if follows that <m:math overflow="scroll"><m:mi>G</m:mi></m:math> is connected, and so each vertex <m:math overflow="scroll"><m:mi>v</m:mi></m:math> has <m:math overflow="scroll"><m:mrow><m:mi>d</m:mi><m:mi>e</m:mi><m:mi>g</m:mi><m:mo>(</m:mo><m:mi>v</m:mi><m:mo>)</m:mo><m:mo>≥</m:mo><m:mn>1</m:mn></m:mrow></m:math>. Since <m:math overflow="scroll"><m:mi>G</m:mi></m:math> is a 3-cover, each edge is contained in a triangle, otherwise there would be a pair which has no common neighbors (the endpoints of any edge not in a triangle). This means any vertex containing an edge also belongs to a triple inducing a <m:math overflow="scroll"><m:msub><m:mi>K</m:mi><m:mn>3</m:mn></m:msub></m:math>. By the last property of <m:math overflow="scroll"><m:mi>G</m:mi></m:math> we have that each of these triples can be extended to a 4-tuple which induces a <m:math overflow="scroll"><m:msub><m:mi>K</m:mi><m:mn>4</m:mn></m:msub></m:math>. Since each vertex is inside of such a 4-tuple, it follows that each vertex has degree at least 3.</quote>
+          </para>
+        </section>
+        <section id="id257629">
+          <title>Proposition 2:</title>
+          <para id="id257636"><m:math overflow="scroll"><m:mrow><m:mo>|</m:mo><m:mi>G</m:mi><m:mo>|</m:mo><m:mo>≤</m:mo><m:mrow><m:mi>δ</m:mi><m:mo>(</m:mo><m:mi>G</m:mi><m:mo>)</m:mo><m:mi>Δ</m:mi><m:mo>(</m:mo><m:mi>G</m:mi><m:mo>)</m:mo></m:mrow></m:mrow></m:math>.</para>
+          <para id="id257673">
+            <quote id="id257673_quote" display="block"><emphasis effect="bold">Proof:</emphasis>
+We start by looking at the vertex with the smallest degree, <m:math overflow="scroll"><m:msub><m:mi>v</m:mi><m:mi>s</m:mi></m:msub></m:math>. Since for any vertex <m:math overflow="scroll"><m:mi>v</m:mi></m:math>, <m:math overflow="scroll"><m:mrow><m:mi>N</m:mi><m:mrow><m:mo>(</m:mo><m:mi>v</m:mi><m:mo>)</m:mo></m:mrow><m:mo>∩</m:mo><m:mrow><m:mi>N</m:mi><m:mo>(</m:mo><m:msub><m:mi>v</m:mi><m:mi>s</m:mi></m:msub><m:mo>)</m:mo></m:mrow><m:mo>≠</m:mo><m:mi>∅</m:mi></m:mrow></m:math> we can say that every vertex is connected to either <m:math overflow="scroll"><m:msub><m:mi>v</m:mi><m:mi>s</m:mi></m:msub></m:math> or a vertex in <m:math overflow="scroll"><m:mrow><m:mi>N</m:mi><m:mo>(</m:mo><m:msub><m:mi>v</m:mi><m:mi>s</m:mi></m:msub><m:mo>)</m:mo></m:mrow></m:math>. There are <m:math overflow="scroll"><m:mrow><m:mi>δ</m:mi><m:mo>(</m:mo><m:mi>G</m:mi><m:mo>)</m:mo></m:mrow></m:math> such vertices, having a maximum degree of <m:math overflow="scroll"><m:mrow><m:mi>Δ</m:mi><m:mo>(</m:mo><m:mi>G</m:mi><m:mo>)</m:mo></m:mrow></m:math>, implying that there are at most <m:math overflow="scroll"><m:mrow><m:mi>δ</m:mi><m:mfenced open="(" close=")"><m:mi>G</m:mi></m:mfenced><m:mi>Δ</m:mi><m:mrow><m:mo>(</m:mo><m:mi>G</m:mi><m:mo>)</m:mo></m:mrow></m:mrow></m:math> vertices in the graph.</quote>
+          </para>
+        </section>
+        <section id="id257844">
+          <title>Proposition 3 (the lonely neighbor property):</title>
+          <para id="id257851">For each edge <m:math overflow="scroll"><m:mrow><m:mo>(</m:mo><m:mi>u</m:mi><m:mo>,</m:mo><m:mi>v</m:mi><m:mo>)</m:mo></m:mrow></m:math> there exists a vertex <m:math overflow="scroll"><m:mi>w</m:mi></m:math> such that exactly one of <m:math overflow="scroll"><m:mrow><m:mo>(</m:mo><m:mi>w</m:mi><m:mo>,</m:mo><m:mi>v</m:mi><m:mo>)</m:mo></m:mrow></m:math> or <m:math overflow="scroll"><m:mrow><m:mo>(</m:mo><m:mi>w</m:mi><m:mo>,</m:mo><m:mi>u</m:mi><m:mo>)</m:mo></m:mrow></m:math> is in <m:math overflow="scroll"><m:mrow><m:mi>E</m:mi><m:mo>(</m:mo><m:mi>G</m:mi><m:mo>)</m:mo></m:mrow></m:math>. Assuming <m:math overflow="scroll"><m:mrow><m:mo>(</m:mo><m:mi>w</m:mi><m:mo>,</m:mo><m:mi>v</m:mi><m:mo>)</m:mo></m:mrow></m:math> is in <m:math overflow="scroll"><m:mrow><m:mi>E</m:mi><m:mo>(</m:mo><m:mi>G</m:mi><m:mo>)</m:mo></m:mrow></m:math> then for each vertex <m:math overflow="scroll"><m:mi>y</m:mi></m:math> exactly one of <m:math overflow="scroll"><m:mrow><m:mo>(</m:mo><m:mi>y</m:mi><m:mo>,</m:mo><m:mi>w</m:mi><m:mo>)</m:mo></m:mrow></m:math> or <m:math overflow="scroll"><m:mrow><m:mo>(</m:mo><m:mi>y</m:mi><m:mo>,</m:mo><m:mi>u</m:mi><m:mo>)</m:mo></m:mrow></m:math> is in <m:math overflow="scroll"><m:mrow><m:mi>E</m:mi><m:mo>(</m:mo><m:mi>G</m:mi><m:mo>)</m:mo></m:mrow></m:math>.</para>
+          <para id="id258032">
+            <quote id="id258032_quote" display="block"><emphasis effect="bold">Proof:</emphasis>
+Let an edge <m:math overflow="scroll"><m:mrow><m:mo>(</m:mo><m:mi>u</m:mi><m:mo>,</m:mo><m:mi>v</m:mi><m:mo>)</m:mo></m:mrow></m:math> be given. Because our graph is minimal, there exists a vertex <m:math overflow="scroll"><m:mi>w</m:mi></m:math> such that <m:math overflow="scroll"><m:mrow><m:mi>N</m:mi><m:mo>(</m:mo><m:mi>a</m:mi><m:mo>)</m:mo><m:mo>∩</m:mo><m:mrow><m:mi>N</m:mi><m:mo>(</m:mo><m:mi>w</m:mi><m:mo>)</m:mo></m:mrow><m:mo>=</m:mo><m:mi>b</m:mi></m:mrow></m:math> for some labels <m:math overflow="scroll"><m:mrow><m:mi>a</m:mi><m:mo>,</m:mo><m:mi>b</m:mi><m:mo>∈</m:mo><m:mo>{</m:mo><m:mi>u</m:mi><m:mo>,</m:mo><m:mi>v</m:mi><m:mo>}</m:mo></m:mrow></m:math>. Without loss of generality assign <m:math overflow="scroll"><m:mi>a</m:mi></m:math> to <m:math overflow="scroll"><m:mi>u</m:mi></m:math> and <m:math overflow="scroll"><m:mi>b</m:mi></m:math> to <m:math overflow="scroll"><m:mi>v</m:mi></m:math>. Now suppose for the sake of contradiction that <m:math overflow="scroll"><m:mrow><m:mo>(</m:mo><m:mi>w</m:mi><m:mo>,</m:mo><m:mi>u</m:mi><m:mo>)</m:mo></m:mrow></m:math> is in <m:math overflow="scroll"><m:mrow><m:mi>E</m:mi><m:mo>(</m:mo><m:mi>G</m:mi><m:mo>)</m:mo></m:mrow></m:math>. Then <m:math overflow="scroll"><m:mrow><m:mo>{</m:mo><m:mi>u</m:mi><m:mo>,</m:mo><m:mi>v</m:mi><m:mo>,</m:mo><m:mi>w</m:mi><m:mo>}</m:mo></m:mrow></m:math> induces a <m:math overflow="scroll"><m:msub><m:mi>K</m:mi><m:mn>3</m:mn></m:msub></m:math> and so there exists <m:math overflow="scroll"><m:mrow><m:mi>x</m:mi><m:mo>∈</m:mo><m:mrow><m:mi>V</m:mi><m:mo>(</m:mo><m:mi>G</m:mi><m:mo>)</m:mo></m:mrow><m:mo>∖</m:mo><m:mo>{</m:mo><m:mi>u</m:mi><m:mo>,</m:mo><m:mi>v</m:mi><m:mo>,</m:mo><m:mi>w</m:mi><m:mo>}</m:mo></m:mrow></m:math> such that <m:math overflow="scroll"><m:mrow><m:mo>{</m:mo><m:mi>u</m:mi><m:mo>,</m:mo><m:mi>v</m:mi><m:mo>,</m:mo><m:mi>w</m:mi><m:mo>,</m:mo><m:mi>x</m:mi><m:mo>}</m:mo></m:mrow></m:math> induces a <m:math overflow="scroll"><m:msub><m:mi>K</m:mi><m:mn>4</m:mn></m:msub></m:math>, but then <m:math overflow="scroll"><m:mrow><m:mi>x</m:mi><m:mo>∈</m:mo><m:mrow><m:mi>N</m:mi><m:mo>(</m:mo><m:mi>u</m:mi><m:mo>)</m:mo><m:mo>∩</m:mo><m:mrow><m:mi>N</m:mi><m:mo>(</m:mo><m:mi>w</m:mi><m:mo>)</m:mo></m:mrow></m:mrow><m:mo>=</m:mo><m:mi>v</m:mi></m:mrow></m:math> a contradiction. Now let a vertex <m:math overflow="scroll"><m:mrow><m:mi>y</m:mi><m:mo>∈</m:mo><m:mrow><m:mi>V</m:mi><m:mo>(</m:mo><m:mi>G</m:mi><m:mo>)</m:mo></m:mrow><m:mo>∖</m:mo><m:mo>{</m:mo><m:mi>u</m:mi><m:mo>,</m:mo><m:mi>v</m:mi><m:mo>,</m:mo><m:mi>w</m:mi><m:mo>}</m:mo></m:mrow></m:math> be given. Suppose both <m:math overflow="scroll"><m:mrow><m:mo>(</m:mo><m:mi>y</m:mi><m:mo>,</m:mo><m:mi>w</m:mi><m:mo>)</m:mo></m:mrow></m:math> and <m:math overflow="scroll"><m:mrow><m:mo>(</m:mo><m:mi>y</m:mi><m:mo>,</m:mo><m:mi>u</m:mi><m:mo>)</m:mo></m:mrow></m:math> are in <m:math overflow="scroll"><m:mrow><m:mi>E</m:mi><m:mo>(</m:mo><m:mi>G</m:mi><m:mo>)</m:mo></m:mrow></m:math> then <m:math overflow="scroll"><m:mrow><m:mi>y</m:mi><m:mo>∈</m:mo><m:mrow><m:mi>N</m:mi><m:mo>(</m:mo><m:mi>u</m:mi><m:mo>)</m:mo><m:mo>∩</m:mo><m:mrow><m:mi>N</m:mi><m:mo>(</m:mo><m:mi>w</m:mi><m:mo>)</m:mo></m:mrow></m:mrow><m:mo>=</m:mo><m:mi>v</m:mi></m:mrow></m:math> which is again a contradiction.</quote>
+          </para>
+        </section>
+        <section id="id258489">
+          <title>Proposition 4:</title>
+          <para id="id258496">For any edge <m:math overflow="scroll"><m:mrow><m:mo>(</m:mo><m:mi>u</m:mi><m:mo>,</m:mo><m:mi>v</m:mi><m:mo>)</m:mo><m:mo>∈</m:mo><m:mi>G</m:mi></m:mrow></m:math>, at least one of <m:math overflow="scroll"><m:mrow><m:mi>u</m:mi><m:mo>,</m:mo><m:mi>v</m:mi></m:mrow></m:math> has degree of at least 4.</para>
+          <para id="id258537">
+            <quote id="id258537_quote" display="block"><emphasis effect="bold">Proof:</emphasis>
+Suppose that neither of <m:math overflow="scroll"><m:mi>u</m:mi></m:math> nor <m:math overflow="scroll"><m:mi>v</m:mi></m:math> have degree of at least 4. It follows from Proposition 1 that <m:math overflow="scroll"><m:mrow><m:mi>d</m:mi><m:mi>e</m:mi><m:mi>g</m:mi><m:mo>(</m:mo><m:mi>u</m:mi><m:mo>)</m:mo><m:mo>=</m:mo><m:mi>d</m:mi><m:mi>e</m:mi><m:mi>g</m:mi><m:mo>(</m:mo><m:mi>v</m:mi><m:mo>)</m:mo><m:mo>=</m:mo><m:mn>3</m:mn></m:mrow></m:math>. <m:math overflow="scroll"><m:mi>u</m:mi></m:math> and <m:math overflow="scroll"><m:mi>v</m:mi></m:math> must both be contained in a <m:math overflow="scroll"><m:msub><m:mi>K</m:mi><m:mn>4</m:mn></m:msub></m:math> subgraph. By the lonely neighbor property, there must exist a vertex <m:math overflow="scroll"><m:mi>w</m:mi></m:math> such that either <m:math overflow="scroll"><m:mrow><m:mo>(</m:mo><m:mi>u</m:mi><m:mo>,</m:mo><m:mi>w</m:mi><m:mo>)</m:mo><m:mo>∈</m:mo><m:mi>G</m:mi></m:mrow></m:math> or <m:math overflow="scroll"><m:mrow><m:mo>(</m:mo><m:mi>v</m:mi><m:mo>,</m:mo><m:mi>w</m:mi><m:mo>)</m:mo><m:mo>∈</m:mo><m:mi>G</m:mi></m:mrow></m:math>. This is a contradiction, as desired.</quote>
+          </para>
+        </section>
+        <section id="id258693">
+          <title>Proposition 5:</title>
+          <para id="id258700">For any induced <m:math overflow="scroll"><m:msub><m:mi>K</m:mi><m:mn>4</m:mn></m:msub></m:math> subgraph, at most one vertex has degree 3.</para>
+          <para id="id258718">
+            <quote id="id258718_quote" display="block"><emphasis effect="bold">Proof:</emphasis>
+This follows directly from Proposition 4.</quote>
+          </para>
+        </section>
+        <section id="id258729">
+          <title>Proposition 5:</title>
+          <para id="id258736">If <m:math overflow="scroll"><m:mrow><m:mi>G</m:mi><m:mo>(</m:mo><m:mi>V</m:mi><m:mo>,</m:mo><m:mi>E</m:mi><m:mo>)</m:mo></m:mrow></m:math> is a graph in <m:math overflow="scroll"><m:mi>S</m:mi></m:math> then there are atleast <m:math overflow="scroll"><m:mfrac><m:mrow><m:mo>|</m:mo><m:mi>E</m:mi><m:mo>|</m:mo></m:mrow><m:mn>6</m:mn></m:mfrac></m:math> choices of 4-tuples which induce a <m:math overflow="scroll"><m:msub><m:mi>K</m:mi><m:mn>4</m:mn></m:msub></m:math>.</para>
+          <para id="id258802">
+            <quote id="id258802_quote" display="block"><emphasis effect="bold">Proof:</emphasis>
+Each edge is in a <m:math overflow="scroll"><m:msub><m:mi>K</m:mi><m:mn>4</m:mn></m:msub></m:math> and so it must make up at least <m:math overflow="scroll"><m:mfrac><m:mn>1</m:mn><m:mn>6</m:mn></m:mfrac></m:math> of a <m:math overflow="scroll"><m:msub><m:mi>K</m:mi><m:mn>4</m:mn></m:msub></m:math>.</quote>
+          </para>
+        </section>
+        <section id="id258855">
+          <title>Proposition 6:</title>
+          <para id="id258861">For any <m:math overflow="scroll"><m:mrow><m:mi>v</m:mi><m:mo>∈</m:mo><m:mi>V</m:mi><m:mo>(</m:mo><m:mi>G</m:mi><m:mo>)</m:mo></m:mrow></m:math>, <m:math overflow="scroll"><m:mi>v</m:mi></m:math> is contained in at least <m:math overflow="scroll"><m:mrow><m:mo>⌈</m:mo><m:mfrac><m:mrow><m:mtext>deg(</m:mtext><m:mi>v</m:mi><m:mtext>)</m:mtext></m:mrow><m:mn>3</m:mn></m:mfrac><m:mo>⌉</m:mo></m:mrow></m:math><m:math overflow="scroll"><m:msub><m:mi>K</m:mi><m:mn>4</m:mn></m:msub></m:math> subgraphs.</para>
+          <para id="id258933">
+            <quote id="id258933_quote" display="block"><emphasis effect="bold">Proof:</emphasis>
+Since any <m:math overflow="scroll"><m:msub><m:mi>K</m:mi><m:mn>4</m:mn></m:msub></m:math> subgraph that contains <m:math overflow="scroll"><m:mi>v</m:mi></m:math> must contain three other vertices, and <m:math overflow="scroll"><m:mi>v</m:mi></m:math> must be adjacent to all of these vertices, there must be <m:math overflow="scroll"><m:mfrac><m:mrow><m:mtext>deg(</m:mtext><m:mi>v</m:mi><m:mtext>)</m:mtext></m:mrow><m:mn>3</m:mn></m:mfrac></m:math> induced <m:math overflow="scroll"><m:msub><m:mi>K</m:mi><m:mn>4</m:mn></m:msub></m:math> subgraphs. Since this implies that there may be some uncounted incident edges to <m:math overflow="scroll"><m:mi>v</m:mi></m:math>, and that all edges are contained in a <m:math overflow="scroll"><m:msub><m:mi>K</m:mi><m:mn>4</m:mn></m:msub></m:math> subgraph, it follows that <m:math overflow="scroll"><m:mi>v</m:mi></m:math> is contained in at least <m:math overflow="scroll"><m:mrow><m:mo>⌈</m:mo><m:mfrac><m:mrow><m:mtext>deg(</m:mtext><m:mi>v</m:mi><m:mtext>)</m:mtext></m:mrow><m:mn>3</m:mn></m:mfrac><m:mo>⌉</m:mo></m:mrow></m:math><m:math overflow="scroll"><m:msub><m:mi>K</m:mi><m:mn>4</m:mn></m:msub></m:math> subgraphs.</quote>
+          </para>
+        </section>
+        <section id="id259081">
+          <title>Proposition 7:</title>
+          <para id="id259087">In any induced <m:math overflow="scroll"><m:msub><m:mi>K</m:mi><m:mn>4</m:mn></m:msub></m:math> subgraph, at least one vertex must have a minimum degree of 5.</para>
+          <para id="id259106">
+            <quote id="id259106_quote" display="block"><emphasis effect="bold">Proof:</emphasis>
+Let <m:math overflow="scroll"><m:mrow><m:mo>{</m:mo><m:msub><m:mi>v</m:mi><m:mn>1</m:mn></m:msub><m:mo>,</m:mo><m:msub><m:mi>v</m:mi><m:mn>2</m:mn></m:msub><m:mo>,</m:mo><m:msub><m:mi>v</m:mi><m:mn>3</m:mn></m:msub><m:mo>,</m:mo><m:msub><m:mi>v</m:mi><m:mn>4</m:mn></m:msub><m:mo>}</m:mo><m:mo>∈</m:mo><m:mi>G</m:mi></m:mrow></m:math> induce a <m:math overflow="scroll"><m:msub><m:mi>K</m:mi><m:mn>4</m:mn></m:msub></m:math> subgraph. Suppose for the sake of contradiction that <m:math overflow="scroll"><m:mrow><m:mi>d</m:mi><m:mi>e</m:mi><m:mi>g</m:mi><m:mo>(</m:mo><m:msub><m:mi>v</m:mi><m:mi>i</m:mi></m:msub><m:mo>)</m:mo><m:mo>≤</m:mo><m:mn>4</m:mn></m:mrow></m:math>, for <m:math overflow="scroll"><m:mrow><m:mi>i</m:mi><m:mo>∈</m:mo><m:mo>{</m:mo><m:mn>1</m:mn><m:mo>,</m:mo><m:mn>2</m:mn><m:mo>,</m:mo><m:mn>3</m:mn><m:mo>,</m:mo><m:mn>4</m:mn><m:mo>}</m:mo></m:mrow></m:math>. <m:math overflow="scroll"><m:msub><m:mi>K</m:mi><m:mn>4</m:mn></m:msub></m:math> is not a minimal 3-cover, so without loss of generality, let <m:math overflow="scroll"><m:msub><m:mi>v</m:mi><m:mn>1</m:mn></m:msub></m:math> have degree 4. Since all edges are contained in a <m:math overflow="scroll"><m:msub><m:mi>K</m:mi><m:mn>4</m:mn></m:msub></m:math> subgraph, it follows that two more vertices in our original <m:math overflow="scroll"><m:msub><m:mi>K</m:mi><m:mn>4</m:mn></m:msub></m:math> subgraph (<m:math overflow="scroll"><m:mrow><m:mo>{</m:mo><m:msub><m:mi>v</m:mi><m:mn>2</m:mn></m:msub><m:mo>,</m:mo><m:msub><m:mi>v</m:mi><m:mn>3</m:mn></m:msub><m:mo>}</m:mo></m:mrow></m:math>) must be part of another <m:math overflow="scroll"><m:msub><m:mi>K</m:mi><m:mn>4</m:mn></m:msub></m:math> subgraph, along with <m:math overflow="scroll"><m:msub><m:mi>v</m:mi><m:mn>1</m:mn></m:msub></m:math>, and a fifth vertex, called <m:math overflow="scroll"><m:msub><m:mi>v</m:mi><m:mn>5</m:mn></m:msub></m:math>. <m:math overflow="scroll"><m:msub><m:mi>v</m:mi><m:mn>4</m:mn></m:msub></m:math> cannot have degree of 4, since this would imply that at least one of <m:math overflow="scroll"><m:mrow><m:mo>{</m:mo><m:msub><m:mi>v</m:mi><m:mn>1</m:mn></m:msub><m:mo>,</m:mo><m:msub><m:mi>v</m:mi><m:mn>2</m:mn></m:msub><m:mo>,</m:mo><m:msub><m:mi>v</m:mi><m:mn>3</m:mn></m:msub><m:mo>}</m:mo></m:mrow></m:math> would have degree more than 5, so it must have degree 3. However, the graph induced by <m:math overflow="scroll"><m:mrow><m:mo>{</m:mo><m:msub><m:mi>v</m:mi><m:mn>1</m:mn></m:msub><m:mo>,</m:mo><m:msub><m:mi>v</m:mi><m:mn>2</m:mn></m:msub><m:mo>,</m:mo><m:msub><m:mi>v</m:mi><m:mn>3</m:mn></m:msub><m:mo>,</m:mo><m:msub><m:mi>v</m:mi><m:mn>4</m:mn></m:msub><m:mo>,</m:mo><m:msub><m:mi>v</m:mi><m:mn>5</m:mn></m:msub><m:mo>}</m:mo></m:mrow></m:math> is not a minimal 3-cover, so at least one incident edge must be added to <m:math overflow="scroll"><m:msub><m:mi>v</m:mi><m:mn>5</m:mn></m:msub></m:math>. Call the corresponding adjacent vertex <m:math overflow="scroll"><m:msub><m:mi>v</m:mi><m:mn>6</m:mn></m:msub></m:math>. Since <m:math overflow="scroll"><m:mi>G</m:mi></m:math> is a 3-cover, there must be a vertex that is adjacent to both <m:math overflow="scroll"><m:msub><m:mi>v</m:mi><m:mn>3</m:mn></m:msub></m:math> and <m:math overflow="scroll"><m:msub><m:mi>v</m:mi><m:mn>6</m:mn></m:msub></m:math>, which implies that we must add an incident edge to at least one of the vertices in <m:math overflow="scroll"><m:mrow><m:mo>{</m:mo><m:msub><m:mi>v</m:mi><m:mn>1</m:mn></m:msub><m:mo>,</m:mo><m:msub><m:mi>v</m:mi><m:mn>2</m:mn></m:msub><m:mo>,</m:mo><m:msub><m:mi>v</m:mi><m:mn>3</m:mn></m:msub><m:mo>,</m:mo><m:msub><m:mi>v</m:mi><m:mn>4</m:mn></m:msub><m:mo>}</m:mo></m:mrow></m:math>, which leads to a contradiction, as desired.</quote>
+          </para>
+        </section>
+      </section>
+    </section>
+    <section id="id259605">
+      <title>Conclusion</title>
+      <para id="id259612">Future work on this topic could either find a counterexample to the conjecture, or show that there is no counterexample by using bounds to arrive at a contradiction.</para>
+    </section>
+  </content>
+  <bib:file>
+    <bib:entry id="bid5">
+      <bib:article>
+        <!--required fields-->
+        <bib:author>Ao, S. and Cockayne, E. J. and MacGillivray, G. and Mynhardt, C. M.</bib:author>
+        <bib:title>Domination Critical Graphs with Higher Independent Domination Numbers</bib:title>
+        <bib:journal>J. Graph Theory</bib:journal>
+        <bib:year>1996</bib:year>
+        <!--optional fields-->
+        <bib:volume>22</bib:volume>
+        <bib:number>1</bib:number>
+        <bib:pages>9–14</bib:pages>
+        <bib:month/>
+        <bib:note/>
+      </bib:article>
+    </bib:entry>
+    <bib:entry id="bid2">
+      <bib:article>
+        <!--required fields-->
+        <bib:author>Clark, W. Edwin and Suen, Stephen</bib:author>
+        <bib:title>An Inequality Related to Vizing's Conjecture</bib:title>
+        <bib:journal>Electronic Journal of Combinatorics</bib:journal>
+        <bib:year>2000</bib:year>
+        <!--optional fields-->
+        <bib:volume>7</bib:volume>
+        <bib:number/>
+        <bib:pages/>
+        <bib:month/>
+        <bib:note/>
+      </bib:article>
+    </bib:entry>
+    <bib:entry id="bid0">
+      <bib:techreport>
+        <!--required fields-->
+        <bib:author>Dreyer, Andrew and Director, Dissertation and Roberts, Fred S. and Roberts, Fred S.</bib:author>
+        <bib:title>Applications and Variations of Domination in Graphs</bib:title>
+        <bib:institution/>
+        <bib:year>2000</bib:year>
+        <!--optional fields-->
+        <bib:type>Technical report</bib:type>
+        <bib:number/>
+        <bib:address/>
+        <bib:month/>
+        <bib:note/>
+      </bib:techreport>
+    </bib:entry>
+    <bib:entry id="bid1">
+      <bib:article>
+        <!--required fields-->
+        <bib:author>Garey, M. R. and Johnson, D. S. and Stockmeyer, L.</bib:author>
+        <bib:title>Some simplified NP-complete graph problems</bib:title>
+        <bib:journal>Theoretical Computer Science</bib:journal>
+        <bib:year>1976</bib:year>
+        <!--optional fields-->
+        <bib:volume>1</bib:volume>
+        <bib:number>3</bib:number>
+        <bib:pages>237 - 267</bib:pages>
+        <bib:month/>
+        <bib:note/>
+      </bib:article>
+    </bib:entry>
+    <bib:entry id="bid4">
+      <bib:article>
+        <!--required fields-->
+        <bib:author>Sumner, David P. and Blitch, Pattie</bib:author>
+        <bib:title>Domination Critical Graphs</bib:title>
+        <bib:journal>Journal of Combinatorial Theory, Series B</bib:journal>
+        <bib:year>1983</bib:year>
+        <!--optional fields-->
+        <bib:volume>34</bib:volume>
+        <bib:number>1</bib:number>
+        <bib:pages>65 - 76</bib:pages>
+        <bib:month/>
+        <bib:note/>
+      </bib:article>
+    </bib:entry>
+    <bib:entry id="bid3">
+      <bib:article>
+        <!--required fields-->
+        <bib:author>Sun, Liang</bib:author>
+        <bib:title>A Result on Vizing's Conjecture</bib:title>
+        <bib:journal>Discrete Mathematics</bib:journal>
+        <bib:year>2004</bib:year>
+        <!--optional fields-->
+        <bib:volume>275</bib:volume>
+        <bib:number>1-3</bib:number>
+        <bib:pages>363 - 366</bib:pages>
+        <bib:month/>
+        <bib:note/>
+      </bib:article>
+    </bib:entry>
+  </bib:file>
+</document>

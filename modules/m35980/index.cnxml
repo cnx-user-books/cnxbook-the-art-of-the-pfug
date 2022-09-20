@@ -1,0 +1,257 @@
+<document xmlns="http://cnx.rice.edu/cnxml">
+  <title>An Exploratory Data Analysis of the US Housing Crisis</title>
+<metadata xmlns:md="http://cnx.rice.edu/mdml">
+  <md:content-id>m35980</md:content-id>
+  <md:title>An Exploratory Data Analysis of the US Housing Crisis</md:title>
+  <md:abstract>This report summarizes work done as part of the Visualizing Large Data Sets PFUG under Rice University's VIGRE program.  VIGRE is a program of Vertically Integrated Grants for Research and Education in the Mathematical Sciences under the direction of the National Science Foundation.  A PFUG is a group of Postdocs, Faculty, Undergraduates and Graduate students formed round the study of a common problem.  This module will do exploratory analysis on large data sets, specifically data related to the housing crisis.</md:abstract>
+  <md:uuid>05abcfc4-b2aa-427a-bd67-19d6b52dcd57</md:uuid>
+</metadata>
+
+<content>
+    <para id="id2281056">Introduction</para>
+    <para id="id1164478727885">The US housing crisis has undermined the world 
+economy in wide reaching and poorly understood ways. Although there is a lot of 
+speculation over the causes and the effects of the housing crisis, most of these 
+ideas come from opinionated blogs or news articles that do not list their 
+sources. This lack of data becomes perilous as the US government invests 
+trillions of dollars based on untested hypotheses concerning the crisis. Our 
+PFUG's focus is to compile, clean, and analyze data pertaining to the housing 
+crisis to get a clearer picture of what is actually going on. </para>
+    <para id="id1164457787807">Overview and Motivation</para>
+    <para id="id1164454096467"><emphasis effect="bold">Real Estate 
+Bubble</emphasis>: Around 2006, house prices rose much higher than their true 
+value. Eventually, housing prices became so high, it was difficult for current 
+owners to afford their house. As foreclosure rates increased, house prices began 
+to plummet. This has largely affected the global economy. </para>
+    <para id="id1164455942107"><emphasis effect="bold">Little Public Organized 
+Data</emphasis>: There is a lot of speculation over the causes and the effects 
+of the housing crisis. Unfortunately, most of these ideas come from opinionated 
+blogs or news articles that don’t list their sources. Therefore, it is difficult 
+to collect reliable information.</para>
+    <para id="id1164454256745"><emphasis effect="bold">Government 
+Expenditures</emphasis>: The government has already exhausted millions of 
+dollars in order to aid those affected by housing crisis. With such little 
+public data about the crisis, we are left wondering what data the government is 
+using. </para>
+    <para id="id1164463326225"><emphasis effect="bold">Still 
+Unfolding</emphasis>: It is important to realize that the housing crisis in 
+ongoing. This allows us to track its progression and hopefully make predictions 
+for the upcoming years. </para>
+    <para id="id1164454164262"><emphasis effect="bold">Large Data 
+Sets</emphasis>: The housing crisis serves as a perfect model for visualizing 
+large data sets. Most data sets we collect usually cover multiple years, 
+counties and variables. </para>
+    <para id="id1164454763932">Problems with Large Data</para>
+    <para id="id1164453789901"><emphasis effect="bold">Hard To Find</emphasis>: 
+All of the data we have collected come from multiple sources. Currently, there 
+is no central repository where data can be found. </para>
+    <para id="id1164451898628"><emphasis effect="bold">Licenses and 
+Fees</emphasis>: Some of the data sets have licenses that do not allow us to 
+reproduce or publish any of our findings. Also many of the data sets cost large 
+amounts of money to purchase. </para>
+    <para id="id1164450975571"><emphasis effect="bold">Size</emphasis>: Some 
+data sets were as large as 10 GB. In order to work around this problem, we were 
+able to extract certain parts of the data sets without having to completely 
+download them. </para>
+    <para id="id1164447781145"><emphasis effect="bold">Dirty</emphasis>: Most of 
+the data sets we find are what we call “dirty.” They are usually unorganized and 
+practically unreadable. </para>
+    <para id="id1164469971219">Data Sets</para>
+    <para id="id1164473155070">To view our most current data sets and work, 
+please visit our PFUG's website: <link url="http://github.com/hadley/data- housing-crisis"><emphasis effect="underline">http://github.com/hadley/data-
+housing-crisis</emphasis></link>. Some of our major data sets include...</para>
+    <list id="id1164466024387" list-type="bulleted">
+      <item>American Community Survey</item>
+      <item>Case-Shiller House Price Index (HPI)</item>
+      <item>Census 2007</item>
+      <item>Construction of Housing Units</item>
+      <item>Market Value of 1 month rent in a Room</item>
+      <item>Vacancies </item>
+      <item>Mortgage Rates</item>
+      <item>Federal Housing Finance Agency HPI</item>
+    </list>
+    <para id="id1164462691472">Cleaning and Analysis</para>
+    <para id="id1164461995753">To facilitate sharing data, we have conducted 
+both data cleaning and analysis with the open source statistical software R, 
+which is available free of charge at <link url="http://www.r-project.org/">
+<emphasis effect="underline">http://www.r-project.org</emphasis></link>. We use 
+the program R to clean our data sets. R is considered a statistical standard 
+among statisticians. There are several advantages to using R. We are able to 
+manipulate extremely large data sets (&gt;2GB) on a normal desktop. It also 
+allows us to produce impressive graphics with minimal coding.</para>
+    <para id="id2346849">Clean Data is...</para>
+    <list id="id1164479067512" list-type="bulleted">
+      <item><emphasis effect="bold">Consistent</emphasis>: In a few data sets 
+county names change over the course of a few years. This affects how we compare 
+yearly data.</item>
+      <item><emphasis effect="bold">Concise</emphasis>: Some data sets contained 
+only parts of information we needed. For example, the American Community Survey 
+contains over 200 questions. We were only interested in the answer to one of 
+those questions. </item>
+      <item><emphasis effect="bold">Complete</emphasis>: One of the data sets 
+that was collected was missing around 80\% of the data. </item>
+      <item><emphasis effect="bold">Correct</emphasis>: We must assume that the 
+data we collect is not corrupt and was recorded properly. Some smaller data sets 
+contained unusual observations. We used our own discretion when deciding what 
+data sets were correct. </item>
+    </list>
+    <para id="id1164453832257">Cleaning Process</para>
+    <para id="id6600244">1. First we start with ``dirty'' data. (Fig.1)</para>
+    <figure id="id1164463168788">
+      <media id="id1164463168788_media" alt="">
+        <image mime-type="image/png" src="../../media/graphics1-2790.png" id="id1164463168788__onlineimage" height="336" width="646"/>
+      </media>
+    </figure>
+    <para id="id1164474126527">2. Next we must download the data. A section of 
+download code is shown below. (Fig. 2)</para>
+    <para id="id5155486">
+      <figure id="id1164460629567">
+        <media id="id1164460629567_media" alt="">
+          <image mime-type="image/png" src="../../media/graphics2-c82c.png" id="id1164460629567__onlineimage" height="295" width="646"/>
+        </media>
+      </figure>
+    </para>
+    <para id="id1164487322123">3. Once we have the data, we clean the data as 
+best we can according to the rules describing clean data above. A section of 
+cleaning code is shown below. (Fig. 3)</para>
+    <figure id="id1164461727591">
+      <media id="id1164461727591_media" alt="">
+        <image mime-type="image/png" src="../../media/graphics3-de4f.png" id="id1164461727591__onlineimage" height="258" width="624"/>
+      </media>
+    </figure>
+    <para id="id1164483101708">4. Now that the data has been cleaned, it may 
+look like the top part of the data below. (Fig. 4)</para>
+    <para id="id7978346">
+      <figure id="id1164464822261">
+        <media id="id1164464822261_media" alt="">
+          <image mime-type="image/png" src="../../media/graphics4-6522.png" id="id1164464822261__onlineimage" height="381" width="646"/>
+        </media>
+      </figure>
+    </para>
+    <para id="id1164456244050">5. With clean data, we are able to explore it. 
+The code below (Fig. 5) is the command used to produce the plot in figure Fig. 
+6.</para>
+    <figure id="id6826223">
+      <media id="id6826223_media" alt="">
+        <image mime-type="image/png" src="../../media/graphics5-69a7.png" id="id6826223__onlineimage" height="88" width="561"/>
+      </media>
+    </figure>
+    <para id="id1164463381426">6. With R code we are able to produce complex 
+plots with minimal amount of code. (Fig. 6)</para>
+    <para id="id1164450535565">
+      <figure id="id1164476126127">
+        <media id="id1164476126127_media" alt="">
+          <image mime-type="image/png" src="../../media/graphics6.png" id="id1164476126127__onlineimage" height="482" width="643"/>
+        </media>
+      </figure>
+    </para>
+    <para id="id2141446">Interesting Findings</para>
+    <para id="id1164462799925">Location, Location, Location...</para>
+    <para id="id1164462052390">The data graphed (Fig. 7 &amp; Fig. 8) is from 
+the Federal Housing Finance Agency (FHFA) house price index (HPI). Both of these 
+graphs analyze what time the HPI peaked for each metropolitan statistical area 
+(MSA). </para>
+    <para id="id1164480511565">Looking at both graphs we believe that timing 
+seems to be very significant. If a state peaked earlier than 2006 or later than 
+2007, their HPI was not as greatly affected. This also supports the claim that 
+California and Florida were impacted the greatest.</para>
+    <para id="id1164460484563">In Figure 7, you can see that both California and 
+Florida peaked around the same time. The graph shows in what year each MSA area 
+reached its maximum housing price.</para>
+    <para id="id1164454155867">
+      <figure id="id1164471440555">
+        <media id="id1164471440555_media" alt="">
+          <image mime-type="image/png" src="../../media/graphics7.png" id="id1164471440555__onlineimage" height="426" width="650"/>
+        </media>
+      </figure>
+    </para>
+    <para id="id1164470104268">In Figure 8, every point is a MSA and labeled by 
+state. It graphs the peak HPI time versus the percent change in HPI between then 
+maximum HPI to 2009, quarter 1 HPI. This graph shows that if HPI peaked between 
+2006 and 2007, then that state typically experienced a much larger percent 
+change in HPI. </para>
+    <para id="id1164459225981">
+      <figure id="id1164451104006">
+        <media id="id1164451104006_media" alt="">
+          <image mime-type="image/png" src="../../media/graphics8.png" id="id1164451104006__onlineimage" height="488" width="650"/>
+        </media>
+      </figure>
+    </para>
+    <para id="id1164457418539">Merced, CA</para>
+    <para id="id1164454115102">The city with the greatest percent change in the 
+FHFA HPI was Merced, CA. This observation is very unusual of small cities. 
+Further research into Merced showed that University California of Merced has 
+finished construction in late 2005. Using both Figures 9 and 10, we hypothesize 
+that the construction increased due to the necessity of housing for UC Merced 
+students and employees. </para>
+    <para id="id1164457412133">
+      <figure id="id1164469446960">
+        <media id="id1164469446960_media" alt="">
+          <image mime-type="image/png" src="../../media/graphics9.png" id="id1164469446960__onlineimage" height="488" width="650"/>
+        </media>
+      </figure>
+    </para>
+    <para id="id1164481640092">
+      <figure id="id4634174">
+        <media id="id4634174_media" alt="">
+          <image mime-type="image/png" src="../../media/graphics10.png" id="id4634174__onlineimage" height="488" width="650"/>
+        </media>
+      </figure>
+    </para>
+    <para id="id1164481447176">Myth Busters</para>
+    <para id="id8491303">After discovering Merced, CA we decided to look more 
+closely at college towns. Contrary to belief, college towns were not greatly 
+impacted by the housing crisis. They were affected more by the location that 
+they were in, rather than being a ``college town''. (Fig. 11)</para>
+    <para id="id1164484389608">
+      <figure id="id1164483321053">
+        <media id="id1164483321053_media" alt="">
+          <image mime-type="image/png" src="../../media/graphics11.png" id="id1164483321053__onlineimage" height="488" width="650"/>
+        </media>
+      </figure>
+    </para>
+    <para id="id1164459333241">Other Explorations</para>
+    <list id="id1164451492076" list-type="bulleted">
+      <item><emphasis effect="bold">Vacation Spots</emphasis>: Are areas where 
+people own a second home more affected?</item>
+    </list>
+    <list id="id1164469368450" list-type="bulleted">
+      <item><emphasis effect="bold">Renting vs. Owning</emphasis>: Is is better 
+to rent or own a house?</item>
+    </list>
+    <list id="id1164452710730" list-type="bulleted">
+      <item><emphasis effect="bold">Migration</emphasis>:Are cities that 
+experienced massive population change affected?</item>
+    </list>
+    <list id="id1164451797894" list-type="bulleted">
+      <item><emphasis effect="bold">Gross Domestic Product</emphasis>: Can we 
+categorize a certain city by industry? Is there a relationship between cities 
+that were hit by the housing crisis?</item>
+    </list>
+    <para id="id1164447546984">Communication and Future Work</para>
+    <para id="id1164471367461">It is extremely important that all of our data 
+cleaning and findings are reproducible. We've made both the data and programming 
+code available to the public through our PFUG's website on <link url="http://github.com/hadley/data-housing-crisis"><emphasis effect="underline">http://github.com/hadley/data-housing-crisis</emphasis>
+</link>. Github is a very advance website that is able to track changes made to 
+data and code from multiple individuals. </para>
+    <para id="id2265445">Github is advantageous to both our research group and 
+to the general public. Firstly, we are able to freely store large amounts of 
+data. Also it allows us to work on the same data without having to e-mail 
+changes back and forth. In addition, others can view and download our data for 
+free. We hope that by keeping the code transparent and self-replicating, others 
+are able to easily build off our work. </para>
+    <para id="id1164454114921">We would like to develop a website that will 
+allow users to easily access the data they are interested in, which would 
+otherwise be a daunting task for those who wish to use a data set of this size. 
+Because our analysis and findings also involve large amounts of information, 
+(such as construction price time series for each US metropolitan area) we are 
+exploring interactive graphical methods for displaying this information. Our 
+future research will involve using the internet application Many Eyes, <link url="http://manyeyes.alphaworks.ibm.com/"><emphasis effect="underline">http://manyeyes.alphaworks.ibm.com</emphasis></link>, and 
+then eventually the program Protovis,<link url="http://vis.stanford.edu/protovis"><emphasis effect="underline">http://vis.stanford.edu/protovis</emphasis></link>, to create 
+this website. </para>
+    <para id="id1164451808464">Acknowledgements</para>
+    <para id="id1164452639540">This Connexions module describes work conducted 
+as part of Rice University's VIGRE program, supported by National Science 
+Foundation grant DMS--0739420.</para>
+  </content>
+</document>

@@ -1,0 +1,228 @@
+<document xmlns="http://cnx.rice.edu/cnxml">
+  <title>A theoretical model for the data analysis process based on cognitive science</title>
+<metadata xmlns:md="http://cnx.rice.edu/mdml">
+  <md:content-id>m35970</md:content-id>
+  <md:title>A theoretical model for the data analysis process based on cognitive science</md:title>
+  <md:abstract>Many people perform data analysis, but few have offered a theoretical model for the process. The descriptions that have been offered disagree with each other and appear to be based on personal intuition. This module examines the accuracy of conceptualizing data analysis as a sense making process, as described in cognitive science literature. A review of 11 articles that feature data analysis tasks suggests that a sense making model for data analysis would be accurate. Future work will examine if and how statistical data analysis safeguards itself against the sources of bias contained in the sense making process.</md:abstract>
+  <md:uuid>05821a8d-2071-4829-a63a-fdfad2941409</md:uuid>
+</metadata>
+
+<content>
+    <para id="id1168496913585">MOTIVATION</para>
+    <para id="id1168493276243">Data analysis is the process by which we glean 
+understanding from data. While the origins of data analysis extend at least as 
+far back as Francis Bacon and certainly further, the term “Data Analysis” was 
+first introduced as a field of academic study in 1962 by John Tukey. </para>
+    <para id="id1168491029379">Improvements in technology have increased both 
+the amount of data that we can store and the speed with which we can analyze it 
+(Friedman 1997). With each improvement, data analysis becomes more relevant. 
+Modern commentators now claim we live in the midst of a “data deluge,” where we 
+no longer have the cognitive power to understand all of the data available (Hey 
+2003). Further advances in data collection technology will require further 
+advances in data analysis methods.</para>
+    <para id="id1168488067574">The fields of Machine Learning, Data Mining, 
+InfoVis, and Visual Analytics are all attempts to improve upon Data Analysis to 
+better meet our analytical needs. But even with the research already done in 
+these areas, scientists claim that there is very little Data Analysis theory to 
+build upon, and that the theory that is available is hard to access (Unwin 2001, 
+Mallows 2006, Cox 2007). This lack of theoretical understanding stymies 
+improvement in the field. Many academic disciplines create innovations by 
+extending existing theory in new ways. Data analysis appears to proceed through 
+a trial and error process. </para>
+    <para id="id7059337">Researchers have offered multiple suggestions to remedy 
+this. Cox and Mallows propose reviewing data analysis case studies to induce a 
+general pattern of analysis. Unwin suggests creating a pattern language of Data 
+Analysis similar to the pattern language first proposed by architects Alexander, 
+Ishikawa, and Silverstein (1977), and used successfully in the field of software 
+engineering (Coplien 1996). While we are intrigued by Unwin’s proposition, we do 
+not presently have the resources to define a complete pattern language. However, 
+we begin our examination of data analysis by reviewing the data analysis case 
+studies that exist in the literature of statistical consulting, as suggested by 
+Cox and Mallows.</para>
+    <para id="id1168492302470">RESEARCH QUESTION</para>
+    <para id="id1168488671482">Can the sensemaking model of cognitive science 
+provide a theoretical model for data analysis?</para>
+    <para id="id1168492402433">PREVIOUS MODELS OF DATA ANALYSIS</para>
+    <para id="id1168494778703">Past efforts to describe data analysis reveal a 
+lack of consensus about the process. Below are three illustrations of the 
+process provided by Box (1976), Box, Hunter, and Hunter (1978), and Wild and 
+Pfannkuch (1999).</para>
+    <para id="id1168498501224">
+      <figure id="id8573839">
+        <media id="id8573839_media" alt="">
+          <image mime-type="image/png" src="../../media/graphics1-0700.png" id="id8573839__onlineimage" height="449" width="522"/>
+        </media>
+      </figure>
+      <figure id="id1168492247168">
+        <media id="id1168492247168_media" alt="">
+          <image mime-type="image/png" src="../../media/graphics2-7410.png" id="id1168492247168__onlineimage" height="201" width="517"/>
+        </media>
+      </figure>
+      <figure id="id2386167">
+        <media id="id2386167_media" alt="">
+          <image mime-type="image/png" src="../../media/graphics3-889a.png" id="id2386167__onlineimage" height="222" width="524"/>
+        </media>
+      </figure>
+    </para>
+    <para id="id1168483940662">While different, the three diagrams suggest some 
+salient aspects of the data analysis process:</para>
+    <list id="id1168495979194" list-type="bulleted">
+      <item>It is an iterative process</item>
+    </list>
+    <list id="id1168487279939" list-type="bulleted">
+      <item>It uses observable data to adjust a mental model</item>
+    </list>
+    <list id="id1168487261530" list-type="bulleted">
+      <item>It alternates between an inductive phase and a deductive 
+phase</item>
+    </list>
+    <list id="id1168484531825" list-type="bulleted">
+      <item>The aim of data analysis is to create understanding</item>
+    </list>
+    <para id="id1168492502626">Data analysis shares these features with a 
+process that has been well studied by cognitive scientists: sense making. 
+</para>
+    <para id="id1168492518855">SENSE-MAKING</para>
+    <para id="id1168488454590">Sensemaking is an area of cognitive science that 
+examines how the human brain creates understanding from its surroundings.  It 
+began in the 1970’s as an extension of communication theory, but was then 
+adopted by experimental and theoretical psychologists. According to sensemaking 
+research, the human brain continuously scans its environment for data and builds 
+this data into a mental model that explains its surroundings. A couple of 
+sensemaking models exist to explain how this occurs (e.g, the cost structure 
+model, the data-frame model), but each has the same basic components. </para>
+    <figure id="id1168492319492">
+      <media id="id1168492319492_media" alt="">
+        <image mime-type="image/png" src="../../media/graphics4-9b56.png" id="id1168492319492__onlineimage" height="171" width="650"/>
+      </media>
+    </figure>
+    <para id="id1168492160835">The brain begins with a tentative theory, which 
+is also called a model, a schema, or a frame. This theory suggests to the brain 
+what is and what is not relevant data. The brain then constructs this data from 
+the external stimuli it receives through the sense organs. An important facet of 
+sensemaking is that the mind does not automatically accept all present stimuli 
+as data. It instead decides which stimuli would be relevant, searches for them, 
+and then synthesizes them into a piece of data.</para>
+    <para id="id1168496036862">The brain compares its currently held theory to 
+the data it has collected. It confirms the theory if the theory accurately fits 
+the data. Otherwise, it will modify the theory to better fit the data or 
+completely reject the theory in favor of a new one. The process occurs 
+continuously; the brain constantly refines existing theories against new data.
+</para>
+    <para id="id1168485674458">A theory provides understanding by describing the 
+relationships between data. These relationships assign meaning to the data 
+points and also allow predictions of unobserved data from observed data. A 
+theory also allows the mind to encode data more efficiently than just storing 
+the raw bits. In this way, sensemaking resembles parametric modeling. The brain 
+retains the theory instead of the raw data, but retains the information 
+contained in the data in the parameters of the theory. Different types of 
+theories can describe different types of relationships among data. Mental maps 
+describe spatial relationships, stories describe temporal and causal 
+relationships, scripts describe roles, plans describe an intended sequence of 
+events, etc. (Klein et al. 2003)</para>
+    <para id="id1168501974299">WHY SENSE-MAKING?</para>
+    <para id="id1168494761943">Sensemaking shares all of the salient features of 
+data analysis noted above, but there are other reasons to suspect that cognitive 
+science may offer a theoretical foundation for data analysis. </para>
+    <para id="id1168492422253">Almost all data analysis is conducted by humans 
+in order to improve their understanding of the world. Hence, data analysis 
+extends the sensemaking process. Moreover, data analysts may use their internal 
+reasoning processes as a model for their data analysis.</para>
+    <para id="id1168492383504">As Velleman (1997) points out, data analysis is a 
+revival of Francis Bacon’s scientific method and could be considered the modern 
+incarnation of that method. The history of this method resembles a movement from 
+an internal sensemaking process, which can often be subjective, to an external 
+sensemaking process that tries to be objective. If so, we should expect data 
+analysis to display a foundation based on sensemaking with added safeguards 
+against the biases that sensemaking is vulnerable to. </para>
+    <para id="id1168495945416">PRELIMINARY RESULTS</para>
+    <para id="id1168487946996">I followed Cox and Mallows suggestions and 
+compared data analysis case studies and suggestions available in the statistical 
+literature to the sensemaking model. In all cases most of the data analysis 
+prescriptions fell into one of the four sensemaking steps. The remaining 
+prescriptions were all “meta-steps” which dealt with the data analysis process 
+itself (e.g, plan, understand the problem). These meta-techniques may be 
+evidence that data analysis has incorporated safeguards against the 
+vulnerabilities of the internal sensemaking process. A visual description of the 
+compliance of 11 papers:</para>
+    <para id="id1168505997449">
+      <figure id="id1168492071242">
+        <media id="id1168492071242_media" alt="">
+          <image mime-type="image/png" src="../../media/graphics5-70ec.png" id="id1168492071242__onlineimage" height="729" width="650"/>
+        </media>
+      </figure>
+    </para>
+    <para id="id1168484642206">LOOKING FORWARD</para>
+    <para id="id1168491938746">This preliminary analysis supports the hypothesis 
+that sensemaking may provide a theoretical model for data analysis. Further 
+study must address the question, “How can we provide a rigorous demonstration 
+that data analysis follows a sensemaking model?” As Cox points out, only a small 
+number of data analysis case studies are available in the statistical 
+literature. Future research may employ more direct methods such as observing 
+actual data analyses or scouring computer code used to perform data analyses.
+</para>
+    <para id="id1168502589792">if a cognitive basis is demonstrated, cognitive 
+science may provide opportunities to improve the activity of data analysis. Do 
+current data analysis methods provide adequate safeguards to the well documented 
+list of sensemaking biases? </para>
+    <para id="id1168492295856">Finally, a firmly established model for data 
+analysis can be used to expand the academic understanding of the sub-field. The 
+author originally embarked on this study to address the lack of well defined 
+objectives for data visualization techniques. A better definition of the purpose 
+of data analysis methods may provide new opportunities to optimize data analysis 
+techniques.</para>
+    <para id="id1168497801813">ACKNOWLEDGEMENTS</para>
+    <list id="id1168484822051" list-type="bulleted">
+      <item>The National Science Foundation</item>
+      <item>Dr. Hadley Wickham</item>
+    </list>
+    <para id="id1168489017911">REFERENCES</para>
+    <para id="id1168488395402">Alexander, et al. (1977). A pattern language: 
+towns, buildings, construction. Oxford University Press, USA.</para>
+    <para id="id1168496529329">Bailyn (1977). ‘Research as a cognitive process: 
+Implications for data analysis’. Quality and Quantity <emphasis effect="bold">11</emphasis>(2):97–117.</para>
+    <para id="id1168489573822">Becker, et al. (1987). ‘Dynamic Graphics for Data 
+Analysis’. <emphasis effect="italics">Statistical Science</emphasis><emphasis effect="bold">2</emphasis>(4):355–383.</para>
+    <para id="id1168488334959">Box (1976). ‘Science and Statistics’. Journal of 
+the American Statistical Association <emphasis effect="bold">71</emphasis>
+(356):791–799.</para>
+    <para id="id1168492304015">Box, et al. (1978). Statistics for Experimenters: 
+An Introduction to Design, Data Analysis, and Model Building. John Wiley &amp; 
+Sons.</para>
+    <para id="id1168488075354">Cabrera &amp; McDougall (2002). <emphasis effect="italics">Statistical consulting</emphasis>. Springer Verlag.</para>
+    <para id="id1168494382061">Chatfield (1995). Problem solving: a 
+statistician’s guide. Chapman &amp; Hall/CRC.</para>
+    <para id="id1168484474534">Coplien (1996). <emphasis effect="italics">Software patterns</emphasis>. Citeseer.</para>
+    <para id="id1168490459084">Cox (2007). ‘Applied statistics: A review’. 
+<emphasis effect="italics">Annals of Applied Statistics</emphasis><emphasis effect="bold">1</emphasis>(1):1–16.</para>
+    <para id="id1168494779562">Friedman (1997). ‘Data mining and statistics: 
+what’s the connection? ’Computing Science and Statistics: Proceedings of the 
+29th Symposium on the interface.</para>
+    <para id="id1168494219575">Hey &amp; Trefethen (2003). ‘The Data Deluge: An 
+e-Science Perspective’ pp. 809–824.</para>
+    <para id="id1168492370335">Klein, et al. (2003). ‘A Data/Frame Theory of 
+Sense Making"’. In Expertise out of context: proceedings of the sixth 
+International Conference on Naturalistic Decision Making, pp. 113–155.</para>
+    <para id="id1168487280743">Mallows (2006). ‘Tukey’s Paper after 40 years 
+(with discussion)’. <emphasis effect="italics">Technometrics</emphasis><emphasis effect="bold">48</emphasis>(3):319–325.</para>
+    <para id="id1168487955653">Pirolli &amp; Card (2005). ‘The Sensemaking 
+Process and Leverage Points for Analyst Technology as Identified Through 
+Cognitive Task Analysis’. Proceedings of International Conference on 
+Intelligence.</para>
+    <para id="id1168504789311">Ribarsky, et al. (2009). ‘Science of analytical 
+reasoning’. <emphasis effect="italics">Information Visualization</emphasis>
+<emphasis effect="bold">8</emphasis>(4):254–262.</para>
+    <para id="id1168488492179">Tukey &amp; Wilk (1966). ‘Data analysis and 
+statistics: an expository overview’. In <emphasis effect="italics">Proceedings 
+of the November 7-10, 1966, fall joint computer conference</emphasis>, pp. 695–
+709. ACM.</para>
+    <para id="id1168492313629">Tukey (1962). ‘The Future of Data Analysis’. 
+<emphasis effect="italics">The Annals of Mathematical Statistics</emphasis>
+<emphasis effect="bold">33</emphasis>(1):1–67.</para>
+    <para id="id1168494461120">Wild &amp; Pfannkuch (1999). ‘Statistical 
+thinking in empirical enquiry’. <emphasis effect="italics">International 
+Statistical Review/Revue Internationale de Statistique</emphasis><emphasis effect="bold">67</emphasis>(3):223–248.</para>
+    <para id="id1168492122666">Velleman (1997). The Philosophical Past and the 
+Digital Future of Data Analysis. Princeton University Press.</para>
+  </content>
+</document>

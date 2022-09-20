@@ -1,0 +1,1766 @@
+<document xmlns="http://cnx.rice.edu/cnxml" xmlns:m="http://www.w3.org/1998/Math/MathML" xmlns:md="http://cnx.rice.edu/mdml">
+  <title>Modeling time series of return-based rankings of currencies</title>
+  <metadata>
+  <md:content-id>m32528</md:content-id><md:title>Modeling time series of return-based rankings of currencies</md:title>
+  <md:abstract>This report summarizes work done as part of the Computational Finance: Ordinal Time Series PFUG under Rice University's VIGRE program.  VIGRE is a program of Vertically Integrated Grants for Research and Education in the Mathematical Sciences under the direction of the National Science Foundation.  A PFUG is a group of Postdocs, Faculty, Undergraduates and Graduate students formed round the study of a common problem.  In this module the author presents an ordinal time series model for return based weekly rankings of a set of currency instruments. A logistic proportional odds model is used to model periodic and non periodic transition probability functions for each currency. The models are evaluated by examining one step predictions based on estimated probabilities.</md:abstract>
+  <md:uuid>6eb47284-149b-4ef1-a583-dd0b4e8bd7dd</md:uuid>
+</metadata>
+
+<content>
+    <section id="cid1">
+      <title>Introduction</title>
+      <para id="id2258269">      A multivariate ordinal time series is a process <m:math overflow="scroll"><m:mrow><m:msub><m:mi mathvariant="bold">Y</m:mi><m:mi mathvariant="bold">t</m:mi></m:msub><m:mo>=</m:mo><m:mrow><m:mo>{</m:mo><m:msub><m:mi>Y</m:mi><m:mrow><m:mi>k</m:mi><m:mo>,</m:mo><m:mi>t</m:mi></m:mrow></m:msub><m:mo>}</m:mo></m:mrow></m:mrow></m:math><m:math overflow="scroll"><m:mrow><m:mi>t</m:mi><m:mo>=</m:mo><m:mn>1</m:mn><m:mo>,</m:mo><m:mo>.</m:mo><m:mo>.</m:mo><m:mo>.</m:mo><m:mo>,</m:mo><m:mi>T</m:mi></m:mrow></m:math>, <m:math overflow="scroll"><m:mrow><m:mi>k</m:mi><m:mo>=</m:mo><m:mn>1</m:mn><m:mo>,</m:mo><m:mo>.</m:mo><m:mo>.</m:mo><m:mo>.</m:mo><m:mo>,</m:mo><m:mi>p</m:mi></m:mrow></m:math>, where <m:math overflow="scroll"><m:msub><m:mi>Y</m:mi><m:mrow><m:mi>k</m:mi><m:mo>,</m:mo><m:mi>t</m:mi></m:mrow></m:msub></m:math> takes a value in the set of ordered categories, <m:math overflow="scroll"><m:mrow><m:mi mathvariant="double-struck">S</m:mi><m:mo>=</m:mo><m:mo>{</m:mo><m:msub><m:mi>r</m:mi><m:mn>1</m:mn></m:msub><m:mo>,</m:mo><m:msub><m:mi>r</m:mi><m:mn>2</m:mn></m:msub><m:mo>,</m:mo><m:mo>.</m:mo><m:mo>.</m:mo><m:mo>.</m:mo><m:mo>,</m:mo><m:msub><m:mi>r</m:mi><m:mi>J</m:mi></m:msub><m:mo>}</m:mo></m:mrow></m:math>. We are interested in identifying the underlying structure of the process: such as serial dependence, trends, and useful explanatory/exogenous variables.</para>
+      <section id="id2259086">
+        <title>Data</title>
+        <para id="id2259092">      The data is weekly rankings of the following 10 globally traded currency exchange rates.</para>
+        <list id="id2259098" display="block" list-type="bulleted">
+          <item id="uid1">AUD: Australian Dollar (AUD/USD)
+</item>
+          <item id="uid2">CAD: Canadian Dollar(USD/CAD)
+</item>
+          <item id="uid3">CHF: Swiss Franc (USD/CHF)
+</item>
+          <item id="uid4">DKK: Danish Krone (USD/DKK)
+</item>
+          <item id="uid5">EUR: Euro (EUR/USD)
+</item>
+          <item id="uid6">GBP: British Pound (GPB/USD)
+</item>
+          <item id="uid7">NOK: Norwegian Krone (USD/NOK)
+</item>
+          <item id="uid8">NZD: New Zealand Dollar (NZD/USD)
+</item>
+          <item id="uid9">JPY: Japanese Yen (USD/JPY)
+</item>
+          <item id="uid10">SEK: Swedish Krona (USD/SEK)
+</item>
+        </list>
+        <para id="id2258223">The period is from Jan 3, 2000 to June 30, 2009. The rankings, <m:math overflow="scroll"><m:mrow><m:mi mathvariant="double-struck">S</m:mi><m:mo>=</m:mo><m:mo>{</m:mo><m:mn>1</m:mn><m:mo>,</m:mo><m:mn>2</m:mn><m:mo>,</m:mo><m:mo>...</m:mo><m:mo>,</m:mo><m:mn>10</m:mn><m:mo>}</m:mo></m:mrow></m:math>, are based on spot returns <footnote id="uid11">Rankings can also be based on other measures such as a volatility</footnote> on a position of fixed lot size. Let <m:math overflow="scroll"><m:msub><m:mi>Y</m:mi><m:mrow><m:mi>k</m:mi><m:mo>,</m:mo><m:mi>t</m:mi></m:mrow></m:msub></m:math> denote the week<emphasis effect="italics">t</emphasis> ranking of exchange rate <emphasis effect="italics">k</emphasis>. Along with the rankings, the underlying weekly return <m:math overflow="scroll"><m:mrow><m:mo>{</m:mo><m:msub><m:mi>r</m:mi><m:mrow><m:mi>k</m:mi><m:mo>,</m:mo><m:mi>t</m:mi></m:mrow></m:msub><m:mo>}</m:mo></m:mrow></m:math> and and weekly historic volatility <m:math overflow="scroll"><m:mrow><m:mo>{</m:mo><m:msub><m:mi>x</m:mi><m:mrow><m:mi>k</m:mi><m:mo>,</m:mo><m:mi>t</m:mi></m:mrow></m:msub><m:mo>}</m:mo></m:mrow></m:math> are included. The data is obtained from Bloomberg.</para>
+      </section>
+      <section id="id2259602">
+        <title>Objectives</title>
+        <para id="id2259608">      We are interested in the following:</para>
+        <list id="id2259612" display="block" list-type="bulleted">
+          <item id="uid12">the stability of a ranking <emphasis effect="italics">Y<sub>k</sub></emphasis> over time. The stability of <emphasis effect="italics">Y<sub>k</sub></emphasis> will be measured by determining the expected duration <emphasis effect="italics">Y<sub>k</sub></emphasis> remains in each of the <emphasis effect="italics">J</emphasis> ordinal categories.
+</item>
+          <item id="uid13">the lagged dependence of <m:math overflow="scroll"><m:msub><m:mi>Y</m:mi><m:mrow><m:mi>k</m:mi><m:mo>,</m:mo><m:mi>t</m:mi></m:mrow></m:msub></m:math> on <m:math overflow="scroll"><m:msub><m:mi>Y</m:mi><m:mrow><m:mi>k</m:mi><m:mo>,</m:mo><m:mi>t</m:mi><m:mo>-</m:mo><m:mi>h</m:mi></m:mrow></m:msub></m:math> and expected ranking of <m:math overflow="scroll"><m:msub><m:mi>Y</m:mi><m:mrow><m:mi>k</m:mi><m:mo>,</m:mo><m:mi>t</m:mi><m:mo>+</m:mo><m:mi>h</m:mi></m:mrow></m:msub></m:math> given <m:math overflow="scroll"><m:msub><m:mi>Y</m:mi><m:mrow><m:mi>k</m:mi><m:mo>,</m:mo><m:mi>t</m:mi></m:mrow></m:msub></m:math></item>
+        </list>
+      </section>
+    </section>
+    <section id="cid2">
+      <title>Model</title>
+      <para id="id2259790">For each <m:math overflow="scroll"><m:msub><m:mi>Y</m:mi><m:mrow><m:mi>k</m:mi><m:mo>,</m:mo><m:mi>t</m:mi></m:mrow></m:msub></m:math>, the historic volatility of all <emphasis effect="italics">k</emphasis> exchange rates , <m:math overflow="scroll"><m:mrow><m:mi>X</m:mi><m:mo>=</m:mo><m:mo>(</m:mo><m:msub><m:mi>x</m:mi><m:mn>1</m:mn></m:msub><m:mo>,</m:mo><m:msub><m:mi>x</m:mi><m:mn>2</m:mn></m:msub><m:mo>,</m:mo><m:mo>.</m:mo><m:mo>.</m:mo><m:mo>.</m:mo><m:msub><m:mi>x</m:mi><m:mi>k</m:mi></m:msub><m:mo>)</m:mo></m:mrow></m:math>, are used as exogenous variables.
+      When analyzing ordinal series, one can not rely on the standard techniques for analyzing real-valued time series. For example, consider the following <m:math overflow="scroll"><m:mrow><m:mi>A</m:mi><m:mi>R</m:mi><m:mo>(</m:mo><m:mn>2</m:mn><m:mo>)</m:mo></m:mrow></m:math> model for <emphasis effect="italics">Y<sub>t</sub></emphasis> taking one of three values 0, 1, or 2.</para>
+      <equation id="id2259910">
+        <m:math overflow="scroll" mode="display">
+          <m:mrow>
+            <m:msub>
+              <m:mi>Y</m:mi>
+              <m:mi>t</m:mi>
+            </m:msub>
+            <m:mo>=</m:mo>
+            <m:msub>
+              <m:mi>φ</m:mi>
+              <m:mn>0</m:mn>
+            </m:msub>
+            <m:mo>+</m:mo>
+            <m:msub>
+              <m:mi>φ</m:mi>
+              <m:mn>1</m:mn>
+            </m:msub>
+            <m:msub>
+              <m:mi>Y</m:mi>
+              <m:mrow>
+                <m:mi>t</m:mi>
+                <m:mo>-</m:mo>
+                <m:mn>1</m:mn>
+              </m:mrow>
+            </m:msub>
+            <m:mo>+</m:mo>
+            <m:msub>
+              <m:mi>φ</m:mi>
+              <m:mn>2</m:mn>
+            </m:msub>
+            <m:msub>
+              <m:mi>Y</m:mi>
+              <m:mrow>
+                <m:mi>t</m:mi>
+                <m:mo>-</m:mo>
+                <m:mn>2</m:mn>
+              </m:mrow>
+            </m:msub>
+            <m:mo>+</m:mo>
+            <m:msub>
+              <m:mi>ϵ</m:mi>
+              <m:mi>t</m:mi>
+            </m:msub>
+          </m:mrow>
+        </m:math>
+      </equation>
+      <para id="id2259990">If we estimate <emphasis effect="italics">φ<sub>0</sub></emphasis>, <emphasis effect="italics">φ<sub>1</sub></emphasis>, and <emphasis effect="italics">φ<sub>2</sub></emphasis> from observed data and predict <m:math overflow="scroll"><m:msub><m:mi>Y</m:mi><m:mrow><m:mi>t</m:mi><m:mo>+</m:mo><m:mn>1</m:mn></m:mrow></m:msub></m:math> by</para>
+      <equation id="id2260057">
+        <m:math overflow="scroll" mode="display">
+          <m:mrow>
+            <m:msub>
+              <m:mover accent="true">
+                <m:mi>y</m:mi>
+                <m:mo>^</m:mo>
+              </m:mover>
+              <m:mrow>
+                <m:mi>t</m:mi>
+                <m:mo>+</m:mo>
+                <m:mn>1</m:mn>
+              </m:mrow>
+            </m:msub>
+            <m:mo>=</m:mo>
+            <m:mi>E</m:mi>
+            <m:mrow>
+              <m:mo>(</m:mo>
+              <m:msub>
+                <m:mi>Y</m:mi>
+                <m:mrow>
+                  <m:mi>t</m:mi>
+                  <m:mo>+</m:mo>
+                  <m:mn>1</m:mn>
+                </m:mrow>
+              </m:msub>
+              <m:mo>∣</m:mo>
+              <m:msub>
+                <m:mi mathvariant="script">F</m:mi>
+                <m:mi>t</m:mi>
+              </m:msub>
+              <m:mo>)</m:mo>
+            </m:mrow>
+            <m:mo>=</m:mo>
+            <m:msub>
+              <m:mi>φ</m:mi>
+              <m:mn>0</m:mn>
+            </m:msub>
+            <m:mo>+</m:mo>
+            <m:msub>
+              <m:mi>φ</m:mi>
+              <m:mn>1</m:mn>
+            </m:msub>
+            <m:msub>
+              <m:mi>y</m:mi>
+              <m:mi>t</m:mi>
+            </m:msub>
+            <m:mo>+</m:mo>
+            <m:msub>
+              <m:mi>φ</m:mi>
+              <m:mn>2</m:mn>
+            </m:msub>
+            <m:msub>
+              <m:mi>y</m:mi>
+              <m:mrow>
+                <m:mi>t</m:mi>
+                <m:mo>-</m:mo>
+                <m:mn>1</m:mn>
+              </m:mrow>
+            </m:msub>
+          </m:mrow>
+        </m:math>
+      </equation>
+      <equation id="id2260169">
+        <m:math overflow="scroll" mode="display">
+          <m:mrow>
+            <m:msub>
+              <m:mover accent="true">
+                <m:mi>ϵ</m:mi>
+                <m:mo>^</m:mo>
+              </m:mover>
+              <m:mrow>
+                <m:mi>t</m:mi>
+                <m:mo>+</m:mo>
+                <m:mn>1</m:mn>
+              </m:mrow>
+            </m:msub>
+            <m:mo>=</m:mo>
+            <m:msub>
+              <m:mi>y</m:mi>
+              <m:mrow>
+                <m:mi>t</m:mi>
+                <m:mo>+</m:mo>
+                <m:mn>1</m:mn>
+              </m:mrow>
+            </m:msub>
+            <m:mo>-</m:mo>
+            <m:msub>
+              <m:mover accent="true">
+                <m:mi>y</m:mi>
+                <m:mo>^</m:mo>
+              </m:mover>
+              <m:mrow>
+                <m:mi>t</m:mi>
+                <m:mo>+</m:mo>
+                <m:mn>1</m:mn>
+              </m:mrow>
+            </m:msub>
+          </m:mrow>
+        </m:math>
+      </equation>
+      <para id="id2260233">Thereś no restriction on <m:math overflow="scroll"><m:msub><m:mover accent="true"><m:mi>y</m:mi><m:mo>^</m:mo></m:mover><m:mrow><m:mi>t</m:mi><m:mo>+</m:mo><m:mn>1</m:mn></m:mrow></m:msub></m:math> from taking a value outside the set <m:math overflow="scroll"><m:mrow><m:mo>{</m:mo><m:mn>0</m:mn><m:mo>,</m:mo><m:mn>1</m:mn><m:mo>,</m:mo><m:mn>2</m:mn><m:mo>}</m:mo></m:mrow></m:math>. Further <m:math overflow="scroll"><m:msub><m:mover accent="true"><m:mi>ϵ</m:mi><m:mo>^</m:mo></m:mover><m:mrow><m:mi>t</m:mi><m:mo>+</m:mo><m:mn>1</m:mn></m:mrow></m:msub></m:math> can only take one of three values: <m:math overflow="scroll"><m:mrow><m:mo>-</m:mo><m:msub><m:mi>y</m:mi><m:mrow><m:mi>t</m:mi><m:mo>+</m:mo><m:mn>1</m:mn></m:mrow></m:msub><m:mo>-</m:mo><m:msub><m:mover accent="true"><m:mi>y</m:mi><m:mo>^</m:mo></m:mover><m:mrow><m:mi>t</m:mi><m:mo>+</m:mo><m:mn>1</m:mn></m:mrow></m:msub></m:mrow></m:math>, <m:math overflow="scroll"><m:mrow><m:mn>1</m:mn><m:mo>-</m:mo><m:msub><m:mi>y</m:mi><m:mrow><m:mi>t</m:mi><m:mo>+</m:mo><m:mn>1</m:mn></m:mrow></m:msub><m:mo>-</m:mo><m:msub><m:mover accent="true"><m:mi>y</m:mi><m:mo>^</m:mo></m:mover><m:mrow><m:mi>t</m:mi><m:mo>+</m:mo><m:mn>1</m:mn></m:mrow></m:msub></m:mrow></m:math>, or <m:math overflow="scroll"><m:mrow><m:mn>2</m:mn><m:mo>-</m:mo><m:msub><m:mi>y</m:mi><m:mrow><m:mi>t</m:mi><m:mo>+</m:mo><m:mn>1</m:mn></m:mrow></m:msub><m:mo>-</m:mo><m:msub><m:mover accent="true"><m:mi>y</m:mi><m:mo>^</m:mo></m:mover><m:mrow><m:mi>t</m:mi><m:mo>+</m:mo><m:mn>1</m:mn></m:mrow></m:msub></m:mrow></m:math>; it can be shown that the <m:math overflow="scroll"><m:msub><m:mover accent="true"><m:mi>σ</m:mi><m:mo>^</m:mo></m:mover><m:mi>ϵ</m:mi></m:msub></m:math> is not constant over time, violating the AR model assumptions.</para>
+      <para id="id2260471">One common approach ([1], Chapter 13 of [2], [3],[5] and [5]) to time domain analysis of an ordinal valued time series, <emphasis effect="italics">Y<sub>t</sub></emphasis> is based on latent state variable models. Assume the existence of underlying state variable <emphasis effect="italics">ξ<sub>t</sub></emphasis> and cut points <emphasis effect="italics">a<sub>1</sub></emphasis>, <emphasis effect="italics">a<sub>2</sub></emphasis>, . . ., <m:math overflow="scroll"><m:msub><m:mi>a</m:mi><m:mrow><m:mi>J</m:mi><m:mo>-</m:mo><m:mn>1</m:mn></m:mrow></m:msub></m:math> such that probability <m:math overflow="scroll"><m:msub><m:mi>Y</m:mi><m:mrow><m:mi>k</m:mi><m:mo>,</m:mo><m:mi>t</m:mi></m:mrow></m:msub></m:math> takes a certain category is determined by <m:math overflow="scroll"><m:msub><m:mi>ξ</m:mi><m:mrow><m:mi>k</m:mi><m:mo>,</m:mo><m:mi>t</m:mi></m:mrow></m:msub></m:math>. In some cases, [3] and [5] for example, Markov assumptions are made on the distribution of <m:math overflow="scroll"><m:msub><m:mi>ξ</m:mi><m:mrow><m:mi>k</m:mi><m:mo>,</m:mo><m:mi>t</m:mi></m:mrow></m:msub></m:math>. The distribution of <m:math overflow="scroll"><m:msub><m:mi>ξ</m:mi><m:mrow><m:mi>k</m:mi><m:mo>,</m:mo><m:mi>t</m:mi></m:mrow></m:msub></m:math> is estimated by a generalized linear model and model parameters are estimated by maximum likelihood.</para>
+      <para id="id2260637">To investigate the stability of a ranking and the expected ranking, one approach is to first estimate the the state transition probabilities of <m:math overflow="scroll"><m:msub><m:mi>Y</m:mi><m:mrow><m:mi>k</m:mi><m:mo>,</m:mo><m:mi>t</m:mi></m:mrow></m:msub></m:math>, <m:math overflow="scroll"><m:mrow><m:mi>t</m:mi><m:mo>=</m:mo><m:mn>1</m:mn><m:mo>,</m:mo><m:mo>⋯</m:mo><m:mo>,</m:mo><m:mi>T</m:mi></m:mrow></m:math>. For example if <emphasis effect="italics">T</emphasis> is a stopping time such that</para>
+      <equation id="id2260694">
+        <m:math overflow="scroll" mode="display">
+          <m:mrow>
+            <m:msub>
+              <m:mi>T</m:mi>
+              <m:mi>j</m:mi>
+            </m:msub>
+            <m:mo>=</m:mo>
+            <m:mi>m</m:mi>
+            <m:mi>i</m:mi>
+            <m:mi>n</m:mi>
+            <m:mrow>
+              <m:mo>{</m:mo>
+              <m:mi>n</m:mi>
+              <m:mo>≥</m:mo>
+              <m:mn>1</m:mn>
+              <m:mo>:</m:mo>
+              <m:msub>
+                <m:mi>Y</m:mi>
+                <m:mi>n</m:mi>
+              </m:msub>
+              <m:mo>≠</m:mo>
+              <m:mi>j</m:mi>
+              <m:mo>}</m:mo>
+            </m:mrow>
+          </m:mrow>
+        </m:math>
+      </equation>
+      <para id="id2260746">and <emphasis effect="italics">P</emphasis> is a time homogeneous transition probability function for <m:math overflow="scroll"><m:msub><m:mi>Y</m:mi><m:mrow><m:mi>k</m:mi><m:mo>,</m:mo><m:mi>t</m:mi></m:mrow></m:msub></m:math> then the expected duration of state <emphasis effect="italics">j</emphasis> can be determined as follows [7]:</para>
+      <equation id="id2260791">
+        <m:math overflow="scroll" mode="display">
+          <m:mtable displaystyle="true">
+            <m:mtr>
+              <m:mtd columnalign="right">
+                <m:mrow>
+                  <m:msub>
+                    <m:mi>E</m:mi>
+                    <m:mi>j</m:mi>
+                  </m:msub>
+                  <m:msub>
+                    <m:mi>T</m:mi>
+                    <m:mi>j</m:mi>
+                  </m:msub>
+                </m:mrow>
+              </m:mtd>
+              <m:mtd>
+                <m:mo>=</m:mo>
+              </m:mtd>
+              <m:mtd columnalign="left">
+                <m:mrow>
+                  <m:mi>E</m:mi>
+                  <m:mo>(</m:mo>
+                  <m:msub>
+                    <m:mi>T</m:mi>
+                    <m:mi>j</m:mi>
+                  </m:msub>
+                  <m:mo>∣</m:mo>
+                  <m:msub>
+                    <m:mi>Y</m:mi>
+                    <m:mn>0</m:mn>
+                  </m:msub>
+                  <m:mo>=</m:mo>
+                  <m:mi>j</m:mi>
+                  <m:mo>)</m:mo>
+                  <m:mo>,</m:mo>
+                  <m:mspace width="4.pt"/>
+                  <m:mtext>then</m:mtext>
+                  <m:mspace width="4.pt"/>
+                  <m:mtext>for</m:mtext>
+                  <m:mspace width="4.pt"/>
+                  <m:mi>l</m:mi>
+                  <m:mo>=</m:mo>
+                  <m:mn>1</m:mn>
+                  <m:mspace width="4.pt"/>
+                  <m:mtext>and</m:mtext>
+                  <m:mspace width="4.pt"/>
+                  <m:mi>P</m:mi>
+                  <m:mspace width="4.pt"/>
+                  <m:mtext>homogeneous,</m:mtext>
+                  <m:mspace width="4.pt"/>
+                </m:mrow>
+              </m:mtd>
+            </m:mtr>
+            <m:mtr>
+              <m:mtd/>
+              <m:mtd>
+                <m:mo>=</m:mo>
+              </m:mtd>
+              <m:mtd columnalign="left">
+                <m:mrow>
+                  <m:munderover>
+                    <m:mo>∑</m:mo>
+                    <m:mrow>
+                      <m:mi>n</m:mi>
+                      <m:mo>=</m:mo>
+                      <m:mn>1</m:mn>
+                    </m:mrow>
+                    <m:mi>∞</m:mi>
+                  </m:munderover>
+                  <m:mi>n</m:mi>
+                  <m:mi>P</m:mi>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:msub>
+                      <m:mi>T</m:mi>
+                      <m:mi>j</m:mi>
+                    </m:msub>
+                    <m:mo>=</m:mo>
+                    <m:mi>n</m:mi>
+                    <m:mo>∣</m:mo>
+                    <m:msub>
+                      <m:mi>Y</m:mi>
+                      <m:mn>0</m:mn>
+                    </m:msub>
+                    <m:mo>=</m:mo>
+                    <m:mi>j</m:mi>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                </m:mrow>
+              </m:mtd>
+            </m:mtr>
+            <m:mtr>
+              <m:mtd/>
+              <m:mtd>
+                <m:mo>=</m:mo>
+              </m:mtd>
+              <m:mtd columnalign="left">
+                <m:mrow>
+                  <m:munderover>
+                    <m:mo>∑</m:mo>
+                    <m:mrow>
+                      <m:mi>n</m:mi>
+                      <m:mo>=</m:mo>
+                      <m:mn>1</m:mn>
+                    </m:mrow>
+                    <m:mi>∞</m:mi>
+                  </m:munderover>
+                  <m:munder>
+                    <m:mo>∑</m:mo>
+                    <m:mrow>
+                      <m:mi>k</m:mi>
+                      <m:mo>≠</m:mo>
+                      <m:mi>j</m:mi>
+                    </m:mrow>
+                  </m:munder>
+                  <m:msup>
+                    <m:mi>p</m:mi>
+                    <m:mrow>
+                      <m:mi>n</m:mi>
+                      <m:mo>-</m:mo>
+                      <m:mn>1</m:mn>
+                    </m:mrow>
+                  </m:msup>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:mi>j</m:mi>
+                    <m:mo>,</m:mo>
+                    <m:mi>j</m:mi>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                  <m:mi>p</m:mi>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:mi>j</m:mi>
+                    <m:mo>,</m:mo>
+                    <m:mi>k</m:mi>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                </m:mrow>
+              </m:mtd>
+            </m:mtr>
+          </m:mtable>
+        </m:math>
+      </equation>
+      <para id="id2261036">On any week however, the ranking of a given currency, <emphasis effect="italics">k</emphasis>, in our set is directly dependent on return/ranking of the the rest of the set. We should consider the process <m:math overflow="scroll"><m:mrow><m:msub><m:mi mathvariant="bold">Y</m:mi><m:mi>t</m:mi></m:msub><m:mo>=</m:mo><m:mrow><m:mo>(</m:mo><m:msub><m:mi>Y</m:mi><m:mrow><m:mn>1</m:mn><m:mo>,</m:mo><m:mi>t</m:mi></m:mrow></m:msub><m:mo>,</m:mo><m:mo>.</m:mo><m:mo>.</m:mo><m:mo>.</m:mo><m:mo>,</m:mo><m:msub><m:mi>Y</m:mi><m:mrow><m:mi>k</m:mi><m:mo>,</m:mo><m:mi>t</m:mi></m:mrow></m:msub><m:mo>)</m:mo></m:mrow></m:mrow></m:math> that is a permutation of <emphasis effect="italics">S</emphasis> at time <emphasis effect="italics">t</emphasis>. There's little information in literature for modeling <emphasis effect="italics">Y<sub>t</sub></emphasis> directly. Its more common to assume that conditional on some underlying process <m:math overflow="scroll"><m:msub><m:mi>Y</m:mi><m:mrow><m:mi>k</m:mi><m:mo>,</m:mo><m:mi>t</m:mi></m:mrow></m:msub></m:math> independent of <m:math overflow="scroll"><m:msub><m:mi>Y</m:mi><m:mrow><m:mi>j</m:mi><m:mo>,</m:mo><m:mi>t</m:mi></m:mrow></m:msub></m:math>, an assumption though convenient may, in the case of return based permutation rankings, engender ranking estimates with ties, an event with low probability of occurrence (two currencies having the same weekly return). Following this approach, I make the simplifying assumption that conditional on <emphasis effect="bold">X</emphasis>the weekly historic volatility of all currencies in our set, <m:math overflow="scroll"><m:msub><m:mi>Y</m:mi><m:mrow><m:msub><m:mi>k</m:mi><m:mn>1</m:mn></m:msub><m:mo>,</m:mo><m:mi>t</m:mi></m:mrow></m:msub></m:math> is independent of <m:math overflow="scroll"><m:msub><m:mi>Y</m:mi><m:mrow><m:msub><m:mi>k</m:mi><m:mn>2</m:mn></m:msub><m:mo>,</m:mo><m:mi>t</m:mi></m:mrow></m:msub></m:math> for any pair of currencies <emphasis effect="italics">k<sub>1</sub></emphasis> and <emphasis effect="italics">k<sub>2</sub></emphasis>. The state space model:</para>
+      <equation id="uid14">
+        <m:math overflow="scroll" mode="display">
+          <m:mtable displaystyle="true">
+            <m:mtr>
+              <m:mtd columnalign="right">
+                <m:msub>
+                  <m:mi>ξ</m:mi>
+                  <m:mrow>
+                    <m:mi>k</m:mi>
+                    <m:mo>,</m:mo>
+                    <m:mi>t</m:mi>
+                  </m:mrow>
+                </m:msub>
+              </m:mtd>
+              <m:mtd>
+                <m:mo>=</m:mo>
+              </m:mtd>
+              <m:mtd columnalign="left">
+                <m:mrow>
+                  <m:msubsup>
+                    <m:mi>β</m:mi>
+                    <m:mrow>
+                      <m:mi>k</m:mi>
+                      <m:mo>,</m:mo>
+                      <m:mi>t</m:mi>
+                    </m:mrow>
+                    <m:mi>T</m:mi>
+                  </m:msubsup>
+                  <m:msub>
+                    <m:mi mathvariant="bold">y</m:mi>
+                    <m:mrow>
+                      <m:mi>k</m:mi>
+                      <m:mo>,</m:mo>
+                      <m:mi>t</m:mi>
+                      <m:mo>-</m:mo>
+                      <m:mn>1</m:mn>
+                      <m:mo>,</m:mo>
+                      <m:msub>
+                        <m:mi>l</m:mi>
+                        <m:mi>k</m:mi>
+                      </m:msub>
+                    </m:mrow>
+                  </m:msub>
+                  <m:mo>+</m:mo>
+                  <m:msubsup>
+                    <m:mi>γ</m:mi>
+                    <m:mrow>
+                      <m:mi>k</m:mi>
+                      <m:mo>,</m:mo>
+                      <m:mi>t</m:mi>
+                    </m:mrow>
+                    <m:mi>T</m:mi>
+                  </m:msubsup>
+                  <m:msub>
+                    <m:mi mathvariant="bold">X</m:mi>
+                    <m:mrow>
+                      <m:mi>t</m:mi>
+                      <m:mo>-</m:mo>
+                      <m:mn>1</m:mn>
+                      <m:mo>,</m:mo>
+                      <m:msub>
+                        <m:mi>l</m:mi>
+                        <m:mi>k</m:mi>
+                      </m:msub>
+                    </m:mrow>
+                  </m:msub>
+                </m:mrow>
+              </m:mtd>
+            </m:mtr>
+            <m:mtr>
+              <m:mtd columnalign="right">
+                <m:mrow>
+                  <m:msub>
+                    <m:mi>Y</m:mi>
+                    <m:mrow>
+                      <m:mi>k</m:mi>
+                      <m:mo>,</m:mo>
+                      <m:mi>t</m:mi>
+                    </m:mrow>
+                  </m:msub>
+                  <m:mo>=</m:mo>
+                  <m:mi>j</m:mi>
+                </m:mrow>
+              </m:mtd>
+              <m:mtd>
+                <m:mo>⟺</m:mo>
+              </m:mtd>
+              <m:mtd columnalign="left">
+                <m:mrow>
+                  <m:msub>
+                    <m:mi>Y</m:mi>
+                    <m:mrow>
+                      <m:mi>k</m:mi>
+                      <m:mo>,</m:mo>
+                      <m:mi>t</m:mi>
+                      <m:mo>,</m:mo>
+                      <m:mi>j</m:mi>
+                    </m:mrow>
+                  </m:msub>
+                  <m:mo>=</m:mo>
+                  <m:mn>1</m:mn>
+                  <m:mo>⟺</m:mo>
+                  <m:msub>
+                    <m:mi>α</m:mi>
+                    <m:mrow>
+                      <m:mi>j</m:mi>
+                      <m:mo>-</m:mo>
+                      <m:mn>1</m:mn>
+                    </m:mrow>
+                  </m:msub>
+                  <m:mo>≤</m:mo>
+                  <m:msub>
+                    <m:mi>ξ</m:mi>
+                    <m:mrow>
+                      <m:mi>k</m:mi>
+                      <m:mo>,</m:mo>
+                      <m:mi>t</m:mi>
+                    </m:mrow>
+                  </m:msub>
+                  <m:mo>&lt;</m:mo>
+                  <m:msub>
+                    <m:mi>α</m:mi>
+                    <m:mi>j</m:mi>
+                  </m:msub>
+                </m:mrow>
+              </m:mtd>
+            </m:mtr>
+          </m:mtable>
+        </m:math>
+      </equation>
+      <list id="id2261504" display="block" list-type="bulleted">
+        <item id="uid15"><m:math overflow="scroll"><m:msub><m:mi>ξ</m:mi><m:mrow><m:mi>k</m:mi><m:mo>,</m:mo><m:mi>t</m:mi></m:mrow></m:msub></m:math>
+The underlying continuous variable. In a practical implementation, <m:math overflow="scroll"><m:msub><m:mi>ξ</m:mi><m:mrow><m:mi>k</m:mi><m:mo>,</m:mo><m:mi>t</m:mi></m:mrow></m:msub></m:math> should be <m:math overflow="scroll"><m:msub><m:mi>r</m:mi><m:mrow><m:mi>k</m:mi><m:mo>,</m:mo><m:mi>t</m:mi></m:mrow></m:msub></m:math> the corresponding return series, in which case the model would be:
+<equation id="id2261581"><m:math overflow="scroll" mode="display"><m:mrow><m:msub><m:mi>r</m:mi><m:mrow><m:mi>k</m:mi><m:mo>,</m:mo><m:mi>t</m:mi></m:mrow></m:msub><m:mo>=</m:mo><m:msubsup><m:mi>β</m:mi><m:mrow><m:mi>k</m:mi><m:mo>,</m:mo><m:mi>t</m:mi></m:mrow><m:mi>T</m:mi></m:msubsup><m:msub><m:mi mathvariant="bold">R</m:mi><m:mrow><m:mi>t</m:mi><m:mo>-</m:mo><m:mn>1</m:mn><m:mo>,</m:mo><m:msub><m:mi>l</m:mi><m:mi>k</m:mi></m:msub></m:mrow></m:msub><m:mo>+</m:mo><m:msub><m:mi>γ</m:mi><m:mrow><m:mi>k</m:mi><m:mo>,</m:mo><m:mi>t</m:mi></m:mrow></m:msub><m:msub><m:mi mathvariant="bold">X</m:mi><m:mrow><m:mi>t</m:mi><m:mo>-</m:mo><m:mn>1</m:mn><m:mo>,</m:mo><m:msub><m:mi>l</m:mi><m:mi>k</m:mi></m:msub></m:mrow></m:msub></m:mrow></m:math></equation>
+where <emphasis effect="bold">R</emphasis> with <m:math overflow="scroll"><m:mrow><m:msub><m:mi>R</m:mi><m:mrow><m:mi>i</m:mi><m:mo>,</m:mo><m:mi>k</m:mi></m:mrow></m:msub><m:mo>=</m:mo><m:msub><m:mi>r</m:mi><m:mrow><m:mi>k</m:mi><m:mo>,</m:mo><m:mi>t</m:mi><m:mo>-</m:mo><m:mi>i</m:mi></m:mrow></m:msub></m:mrow></m:math>, <m:math overflow="scroll"><m:mrow><m:mi>i</m:mi><m:mo>≤</m:mo><m:mi>i</m:mi><m:mo>≤</m:mo><m:msub><m:mi>l</m:mi><m:mi>k</m:mi></m:msub></m:mrow></m:math>, <m:math overflow="scroll"><m:mrow><m:mn>1</m:mn><m:mo>≤</m:mo><m:mi>k</m:mi><m:mo>≤</m:mo><m:mn>10</m:mn></m:mrow></m:math><equation id="id2261781"><m:math overflow="scroll" mode="display"><m:mrow><m:msub><m:mi>Y</m:mi><m:mrow><m:mi>k</m:mi><m:mo>,</m:mo><m:mi>t</m:mi></m:mrow></m:msub><m:mo>=</m:mo><m:mi>j</m:mi><m:mo>⟺</m:mo><m:msub><m:mi>α</m:mi><m:mrow><m:mi>j</m:mi><m:mo>-</m:mo><m:mn>1</m:mn></m:mrow></m:msub><m:mo>≤</m:mo><m:msub><m:mi>ξ</m:mi><m:mrow><m:mi>k</m:mi><m:mo>,</m:mo><m:mi>t</m:mi></m:mrow></m:msub><m:mo>&lt;</m:mo><m:msub><m:mi>α</m:mi><m:mi>j</m:mi></m:msub></m:mrow></m:math></equation>
+But in work done up to this point we assume the more general case (often encountered in non financial settings) that the underlying continuous variable is not observed.
+</item>
+        <item id="uid16"><m:math overflow="scroll"><m:msub><m:mi mathvariant="bold">y</m:mi><m:mrow><m:mi>k</m:mi><m:mo>,</m:mo><m:mi>t</m:mi><m:mo>-</m:mo><m:mn>1</m:mn><m:mo>,</m:mo><m:msub><m:mi>l</m:mi><m:mi>k</m:mi></m:msub></m:mrow></m:msub></m:math>
+Observed past weekly rankings from time <m:math overflow="scroll"><m:mrow><m:mi>t</m:mi><m:mo>-</m:mo><m:mn>1</m:mn></m:mrow></m:math> to <emphasis effect="italics">l<sub>k</sub></emphasis> of currency <emphasis effect="italics">k</emphasis>. Including past rankings of other currencies as predictors for <m:math overflow="scroll"><m:mrow><m:mi>x</m:mi><m:msub><m:mi>i</m:mi><m:mrow><m:mi>k</m:mi><m:mo>,</m:mo><m:mi>t</m:mi></m:mrow></m:msub></m:mrow></m:math> yields a matrix of predictors that is non-invertable (<m:math overflow="scroll"><m:msub><m:mi mathvariant="bold">y</m:mi><m:mrow><m:mi>k</m:mi><m:mo>,</m:mo><m:mi>t</m:mi><m:mo>-</m:mo><m:mn>1</m:mn><m:mo>,</m:mo><m:msub><m:mi>l</m:mi><m:mi>k</m:mi></m:msub></m:mrow></m:msub></m:math> is implemented as a binary matrix with <m:math overflow="scroll"><m:msub><m:mi>Y</m:mi><m:mrow><m:mi>k</m:mi><m:mo>,</m:mo><m:mi>t</m:mi><m:mo>,</m:mo><m:mi>j</m:mi></m:mrow></m:msub></m:math> as entries.
+</item>
+        <item id="uid17"><m:math overflow="scroll"><m:msub><m:mi mathvariant="bold">X</m:mi><m:mrow><m:mi>t</m:mi><m:mo>-</m:mo><m:mn>1</m:mn><m:mo>,</m:mo><m:msub><m:mi>l</m:mi><m:mi>k</m:mi></m:msub></m:mrow></m:msub></m:math>
+Matrix of weekly historic volatilities of all <emphasis effect="italics">J</emphasis> instruments <m:math overflow="scroll"><m:mrow><m:msub><m:mi mathvariant="bold">X</m:mi><m:mrow><m:mi>i</m:mi><m:mo>,</m:mo><m:mi>k</m:mi></m:mrow></m:msub><m:mo>=</m:mo><m:msub><m:mi>σ</m:mi><m:mrow><m:mi>k</m:mi><m:mo>,</m:mo><m:mi>t</m:mi><m:mo>-</m:mo><m:mi>i</m:mi></m:mrow></m:msub></m:mrow></m:math></item>
+        <item id="uid18"><m:math overflow="scroll"><m:mrow><m:msub><m:mi>ϵ</m:mi><m:mrow><m:mi>k</m:mi><m:mo>,</m:mo><m:mi>t</m:mi></m:mrow></m:msub><m:mo>∼</m:mo><m:mi>L</m:mi><m:mi>o</m:mi><m:mi>g</m:mi><m:mi>i</m:mi><m:mi>s</m:mi><m:mi>t</m:mi><m:mi>i</m:mi><m:mi>c</m:mi><m:mrow><m:mo>(</m:mo><m:mn>0</m:mn><m:mo>,</m:mo><m:mn>1</m:mn><m:mo>)</m:mo></m:mrow></m:mrow></m:math> The <m:math overflow="scroll"><m:mrow><m:mi>L</m:mi><m:mi>o</m:mi><m:mi>g</m:mi><m:mi>i</m:mi><m:mi>s</m:mi><m:mi>t</m:mi><m:mi>i</m:mi><m:mi>c</m:mi><m:mo>(</m:mo><m:mn>0</m:mn><m:mo>,</m:mo><m:mn>1</m:mn><m:mo>)</m:mo></m:mrow></m:math> has thicker tails than the <m:math overflow="scroll"><m:mrow><m:mi>N</m:mi><m:mi>o</m:mi><m:mi>r</m:mi><m:mi>m</m:mi><m:mi>a</m:mi><m:mi>l</m:mi><m:mo>(</m:mo><m:mn>0</m:mn><m:mo>,</m:mo><m:mn>1</m:mn><m:mo>)</m:mo></m:mrow></m:math> distribution; thus the logistic is more appropriate for capturing the probability of extreme rankings 1 and 10, in our case.
+</item>
+        <item id="uid19"><m:math overflow="scroll"><m:msub><m:mi>α</m:mi><m:mrow><m:mi>k</m:mi><m:mo>,</m:mo><m:mi>t</m:mi></m:mrow></m:msub></m:math>, <m:math overflow="scroll"><m:msub><m:mi>β</m:mi><m:mrow><m:mi>k</m:mi><m:mo>,</m:mo><m:mi>t</m:mi></m:mrow></m:msub></m:math>, <m:math overflow="scroll"><m:msub><m:mi>γ</m:mi><m:mrow><m:mi>k</m:mi><m:mo>,</m:mo><m:mi>t</m:mi></m:mrow></m:msub></m:math> Parameters to be estimated.
+</item>
+      </list>
+      <para id="id2262332">In the study I considered three approaches to modeling the state probabilities, <m:math overflow="scroll"><m:mrow><m:mi>P</m:mi><m:mo>(</m:mo><m:msub><m:mi>Y</m:mi><m:mrow><m:mi>k</m:mi><m:mo>,</m:mo><m:mi>t</m:mi></m:mrow></m:msub><m:mo>∣</m:mo><m:msub><m:mi mathvariant="script">F</m:mi><m:mrow><m:mi>t</m:mi><m:mo>-</m:mo><m:mn>1</m:mn></m:mrow></m:msub><m:mo>)</m:mo></m:mrow></m:math>.</para>
+      <list id="id2262381" display="block" list-type="enumerated">
+        <item id="uid20">Periodic Markov model
+Model <m:math overflow="scroll"><m:mrow><m:mi>P</m:mi><m:mo>(</m:mo><m:msub><m:mi>Y</m:mi><m:mrow><m:mi>k</m:mi><m:mo>,</m:mo><m:mi>t</m:mi></m:mrow></m:msub><m:mo>∣</m:mo><m:msub><m:mi mathvariant="script">F</m:mi><m:mrow><m:mi>t</m:mi><m:mo>-</m:mo><m:mn>1</m:mn></m:mrow></m:msub><m:mo>)</m:mo></m:mrow></m:math> as a time-heterogeneous Markov chain of order <emphasis effect="italics">l<sub>k</sub></emphasis>, i.e, the transition probability of <m:math overflow="scroll"><m:msub><m:mi>Y</m:mi><m:mrow><m:mi>k</m:mi><m:mo>,</m:mo><m:mi>t</m:mi></m:mrow></m:msub></m:math> conditional on the past, depends only on the <emphasis effect="italics">l<sub>k</sub></emphasis> previous states of <emphasis effect="italics">Y<sub>k</sub></emphasis>. Though heterogeneous, <m:math overflow="scroll"><m:mrow><m:mi>P</m:mi><m:mo>(</m:mo><m:msub><m:mi>Y</m:mi><m:mrow><m:mi>k</m:mi><m:mo>,</m:mo><m:mi>t</m:mi></m:mrow></m:msub><m:mo>∣</m:mo><m:msub><m:mi mathvariant="script">F</m:mi><m:mrow><m:mi>t</m:mi><m:mo>-</m:mo><m:mn>1</m:mn></m:mrow></m:msub><m:mo>)</m:mo></m:mrow></m:math> is modeled as a periodic function of time with period <emphasis effect="italics">h<sub>k</sub></emphasis>. This is approach was adopted by Menard et. al [3]. If it can be shown <m:math overflow="scroll"><m:mrow><m:mi>P</m:mi><m:mo>(</m:mo><m:msub><m:mi>Y</m:mi><m:mrow><m:mi>k</m:mi><m:mo>,</m:mo><m:mi>t</m:mi></m:mrow></m:msub><m:mo>∣</m:mo><m:msub><m:mi mathvariant="script">F</m:mi><m:mrow><m:mi>t</m:mi><m:mo>-</m:mo><m:mn>1</m:mn></m:mrow></m:msub><m:mo>)</m:mo></m:mrow></m:math> has period <emphasis effect="italics">h<sub>k</sub></emphasis> and if we observed the data over <emphasis effect="italics">N</emphasis> consecutive periods with <m:math overflow="scroll"><m:mrow><m:mi>T</m:mi><m:mo>=</m:mo><m:msub><m:mi>h</m:mi><m:mi>k</m:mi></m:msub><m:mi>N</m:mi></m:mrow></m:math> being total number of observations, then
+<equation id="id2262664"><m:math overflow="scroll" mode="display"><m:mrow><m:mi>P</m:mi><m:mrow><m:mo>(</m:mo><m:msub><m:mi>Y</m:mi><m:mrow><m:mi>k</m:mi><m:mo>,</m:mo><m:mi>t</m:mi></m:mrow></m:msub><m:mo>=</m:mo><m:mi>j</m:mi><m:mo>∣</m:mo><m:msub><m:mi>Y</m:mi><m:mrow><m:mi>k</m:mi><m:mo>,</m:mo><m:mi>t</m:mi><m:mo>-</m:mo><m:mn>1</m:mn></m:mrow></m:msub><m:mo>=</m:mo><m:msub><m:mi>i</m:mi><m:mrow><m:mi>t</m:mi><m:mo>-</m:mo><m:mn>1</m:mn></m:mrow></m:msub><m:mo>,</m:mo><m:mo>...</m:mo><m:mo>,</m:mo><m:msub><m:mi>Y</m:mi><m:mrow><m:mi>k</m:mi><m:mo>,</m:mo><m:mn>1</m:mn></m:mrow></m:msub><m:mo>=</m:mo><m:msub><m:mi>i</m:mi><m:mn>1</m:mn></m:msub><m:mo>)</m:mo></m:mrow><m:mo>=</m:mo><m:mi>f</m:mi><m:mrow><m:mo>(</m:mo><m:mi>t</m:mi><m:mo>;</m:mo><m:msub><m:mi mathvariant="bold">y</m:mi><m:mrow><m:mi>k</m:mi><m:mo>,</m:mo><m:mi>t</m:mi><m:mo>-</m:mo><m:mn>1</m:mn><m:mo>,</m:mo><m:msub><m:mi>l</m:mi><m:mi>k</m:mi></m:msub></m:mrow></m:msub><m:mo>;</m:mo><m:msub><m:mi>θ</m:mi><m:mi>k</m:mi></m:msub><m:mo>)</m:mo></m:mrow></m:mrow></m:math></equation>
+such that,
+<equation id="id2262821"><m:math overflow="scroll" mode="display"><m:mrow><m:mi>f</m:mi><m:mrow><m:mo>(</m:mo><m:mi>t</m:mi><m:mo>+</m:mo><m:msub><m:mi>h</m:mi><m:mi>k</m:mi></m:msub><m:mo>;</m:mo><m:mi>j</m:mi><m:mo>,</m:mo><m:msub><m:mi mathvariant="bold">y</m:mi><m:mrow><m:mi>k</m:mi><m:mo>,</m:mo><m:mi>t</m:mi><m:mo>-</m:mo><m:mn>1</m:mn><m:mo>,</m:mo><m:msub><m:mi>l</m:mi><m:mi>k</m:mi></m:msub></m:mrow></m:msub><m:mo>;</m:mo><m:mi>θ</m:mi><m:mo>)</m:mo></m:mrow><m:mo>=</m:mo><m:mi>f</m:mi><m:mrow><m:mo>(</m:mo><m:mi>t</m:mi><m:mo>;</m:mo><m:mi>j</m:mi><m:mo>,</m:mo><m:msub><m:mi mathvariant="bold">y</m:mi><m:mrow><m:mi>k</m:mi><m:mo>,</m:mo><m:mi>t</m:mi><m:mo>-</m:mo><m:mn>1</m:mn><m:mo>,</m:mo><m:msub><m:mi>l</m:mi><m:mi>k</m:mi></m:msub></m:mrow></m:msub><m:mo>;</m:mo><m:msub><m:mi>θ</m:mi><m:mi>k</m:mi></m:msub><m:mo>)</m:mo></m:mrow></m:mrow></m:math></equation>
+Given <m:math overflow="scroll"><m:mrow><m:mi>t</m:mi><m:mo>=</m:mo><m:mi>s</m:mi><m:mo>+</m:mo><m:msub><m:mi>h</m:mi><m:mi>k</m:mi></m:msub><m:mi>n</m:mi></m:mrow></m:math>, and letting <m:math overflow="scroll"><m:mrow><m:msub><m:mi>Y</m:mi><m:mrow><m:mi>k</m:mi><m:mo>,</m:mo><m:mi>t</m:mi></m:mrow></m:msub><m:mo>=</m:mo><m:msub><m:mi>Y</m:mi><m:mrow><m:mi>k</m:mi><m:mo>,</m:mo><m:mi>s</m:mi><m:mo>,</m:mo><m:mi>n</m:mi></m:mrow></m:msub><m:mo>=</m:mo><m:msub><m:mi>Y</m:mi><m:mrow><m:mi>k</m:mi><m:mo>,</m:mo><m:mi>s</m:mi><m:mo>+</m:mo><m:msub><m:mi>h</m:mi><m:mi>k</m:mi></m:msub><m:mi>n</m:mi></m:mrow></m:msub></m:mrow></m:math> (<m:math overflow="scroll"><m:mrow><m:mn>1</m:mn><m:mo>≤</m:mo><m:mi>s</m:mi><m:mo>≤</m:mo><m:msub><m:mi>h</m:mi><m:mi>k</m:mi></m:msub></m:mrow></m:math>; <m:math overflow="scroll"><m:mrow><m:mn>0</m:mn><m:mo>≤</m:mo><m:mi>n</m:mi><m:mo>≤</m:mo><m:mi>N</m:mi></m:mrow></m:math>) be response on week <emphasis effect="italics">s</emphasis> of period <emphasis effect="italics">n</emphasis>, then process <m:math overflow="scroll"><m:mrow><m:msubsup><m:mi mathvariant="bold">Y</m:mi><m:mrow><m:mi>k</m:mi><m:mo>,</m:mo><m:mi>n</m:mi></m:mrow><m:mo>*</m:mo></m:msubsup><m:mo>=</m:mo><m:mrow><m:mo>(</m:mo><m:msub><m:mi>Y</m:mi><m:mrow><m:mi>k</m:mi><m:mo>,</m:mo><m:mn>1</m:mn><m:mo>,</m:mo><m:mi>n</m:mi></m:mrow></m:msub><m:mo>,</m:mo><m:mo>...</m:mo><m:mo>,</m:mo><m:msub><m:mi>Y</m:mi><m:mrow><m:mi>k</m:mi><m:mo>,</m:mo><m:msub><m:mi>h</m:mi><m:mi>k</m:mi></m:msub><m:mo>,</m:mo><m:mi>n</m:mi></m:mrow></m:msub><m:mo>)</m:mo></m:mrow></m:mrow></m:math> is a time homogeneous Markov chain and under condition that <m:math overflow="scroll"><m:mrow><m:mi>f</m:mi><m:mo>(</m:mo><m:mi>s</m:mi><m:mo>;</m:mo><m:mi>j</m:mi><m:mo>,</m:mo><m:msub><m:mi mathvariant="bold">y</m:mi><m:mrow><m:mi>k</m:mi><m:mo>,</m:mo><m:mi>t</m:mi><m:mo>-</m:mo><m:mn>1</m:mn><m:mo>,</m:mo><m:msub><m:mi>l</m:mi><m:mi>k</m:mi></m:msub></m:mrow></m:msub><m:mo>;</m:mo><m:msub><m:mi>θ</m:mi><m:mi>k</m:mi></m:msub><m:mo>)</m:mo><m:mo>&gt;</m:mo><m:mn>0</m:mn></m:mrow></m:math> for all <m:math overflow="scroll"><m:mrow><m:mi>s</m:mi><m:mo>=</m:mo><m:mn>1</m:mn><m:mo>,</m:mo><m:mo>...</m:mo><m:mo>,</m:mo><m:msub><m:mi>h</m:mi><m:mi>k</m:mi></m:msub></m:mrow></m:math>, <m:math overflow="scroll"><m:mrow><m:mi>j</m:mi><m:mo>∈</m:mo><m:msub><m:mi mathvariant="double-struck">S</m:mi><m:mi>t</m:mi></m:msub></m:mrow></m:math> and <m:math overflow="scroll"><m:mrow><m:msub><m:mi mathvariant="bold">y</m:mi><m:mrow><m:mi>k</m:mi><m:mo>,</m:mo><m:mi>t</m:mi><m:mo>-</m:mo><m:mn>1</m:mn><m:mo>,</m:mo><m:msub><m:mi>l</m:mi><m:mi>k</m:mi></m:msub></m:mrow></m:msub><m:mo>∈</m:mo><m:msub><m:mi mathvariant="double-struck">S</m:mi><m:mrow><m:mi>t</m:mi><m:mo>-</m:mo><m:mn>1</m:mn></m:mrow></m:msub><m:mo>×</m:mo><m:mo>⋯</m:mo><m:mo>×</m:mo><m:msub><m:mi mathvariant="double-struck">S</m:mi><m:mrow><m:mi>t</m:mi><m:mo>-</m:mo><m:msub><m:mi>l</m:mi><m:mi>k</m:mi></m:msub></m:mrow></m:msub></m:mrow></m:math>, <m:math overflow="scroll"><m:msubsup><m:mi mathvariant="bold">Y</m:mi><m:mi>k</m:mi><m:mo>*</m:mo></m:msubsup></m:math> is ergodic. A time homogeneous, recurrent, and ergodic process has a limiting distribution. It follows that the MLEs are consistent and asymptotically normal and the likelihood ratio tests also have the desired asymptotic distribution see [3], [6].
+</item>
+        <item id="uid21">Non periodic proportional odds model
+Model <m:math overflow="scroll"><m:mrow><m:mi>P</m:mi><m:mo>(</m:mo><m:msub><m:mi>Y</m:mi><m:mrow><m:mi>k</m:mi><m:mo>,</m:mo><m:mi>t</m:mi></m:mrow></m:msub><m:mo>∣</m:mo><m:msub><m:mi mathvariant="script">F</m:mi><m:mrow><m:mi>t</m:mi><m:mo>-</m:mo><m:mn>1</m:mn></m:mrow></m:msub><m:mo>)</m:mo></m:mrow></m:math> as a time heterogeneous Markov chain of order <emphasis effect="italics">l<sub>k</sub></emphasis> with no periodicity, ergodicity, or recurrence assumptions.
+<equation id="uid22"><m:math overflow="scroll" mode="display"><m:mtable displaystyle="true"><m:mtr><m:mtd columnalign="right"><m:mrow><m:mi>P</m:mi><m:mo>(</m:mo><m:msub><m:mi>Y</m:mi><m:mrow><m:mi>k</m:mi><m:mo>,</m:mo><m:mi>t</m:mi></m:mrow></m:msub><m:mo>=</m:mo><m:mi>j</m:mi><m:mo>∣</m:mo><m:msub><m:mi mathvariant="script">F</m:mi><m:mrow><m:mi>t</m:mi><m:mo>-</m:mo><m:mn>1</m:mn></m:mrow></m:msub><m:mo>)</m:mo></m:mrow></m:mtd><m:mtd><m:mo>=</m:mo></m:mtd><m:mtd columnalign="left"><m:mrow><m:mi>P</m:mi><m:mo>(</m:mo><m:msub><m:mi>α</m:mi><m:mrow><m:mi>j</m:mi><m:mo>-</m:mo><m:mn>1</m:mn></m:mrow></m:msub><m:mo>≤</m:mo><m:msub><m:mi>ξ</m:mi><m:mrow><m:mi>k</m:mi><m:mo>,</m:mo><m:mi>t</m:mi></m:mrow></m:msub><m:mo>≤</m:mo><m:msub><m:mi>α</m:mi><m:mi>j</m:mi></m:msub><m:mo>)</m:mo></m:mrow></m:mtd></m:mtr><m:mtr><m:mtd/><m:mtd><m:mo>=</m:mo></m:mtd><m:mtd columnalign="left"><m:mrow><m:mi>F</m:mi><m:mo>(</m:mo><m:msub><m:mi>α</m:mi><m:mi>j</m:mi></m:msub><m:mo>-</m:mo><m:mrow><m:mo>(</m:mo><m:msubsup><m:mi>β</m:mi><m:mrow><m:mi>k</m:mi><m:mo>,</m:mo><m:mi>t</m:mi></m:mrow><m:mi>T</m:mi></m:msubsup><m:msub><m:mi mathvariant="bold">y</m:mi><m:mrow><m:mi>k</m:mi><m:mo>,</m:mo><m:mi>t</m:mi><m:mo>-</m:mo><m:mn>1</m:mn><m:mo>,</m:mo><m:msub><m:mi>l</m:mi><m:mi>k</m:mi></m:msub></m:mrow></m:msub><m:mo>+</m:mo><m:msub><m:mi>γ</m:mi><m:mi>k</m:mi></m:msub><m:msub><m:mi mathvariant="bold">X</m:mi><m:mrow><m:mi>t</m:mi><m:mo>-</m:mo><m:mn>1</m:mn><m:mo>,</m:mo><m:msub><m:mi>l</m:mi><m:mi>k</m:mi></m:msub></m:mrow></m:msub><m:mo>)</m:mo></m:mrow><m:mo>)</m:mo></m:mrow></m:mtd></m:mtr><m:mtr><m:mtd/><m:mtd/><m:mtd columnalign="left"><m:mrow><m:mo>-</m:mo><m:mi>F</m:mi><m:mo>(</m:mo><m:msub><m:mi>α</m:mi><m:mrow><m:mi>j</m:mi><m:mo>-</m:mo><m:mn>1</m:mn></m:mrow></m:msub><m:mo>-</m:mo><m:mrow><m:mo>(</m:mo><m:msubsup><m:mi>β</m:mi><m:mrow><m:mi>k</m:mi><m:mo>,</m:mo><m:mi>t</m:mi></m:mrow><m:mi>T</m:mi></m:msubsup><m:msub><m:mi mathvariant="bold">y</m:mi><m:mrow><m:mi>k</m:mi><m:mo>,</m:mo><m:mi>t</m:mi><m:mo>-</m:mo><m:mn>1</m:mn><m:mo>,</m:mo><m:msub><m:mi>l</m:mi><m:mi>k</m:mi></m:msub></m:mrow></m:msub><m:mo>+</m:mo><m:msub><m:mi>γ</m:mi><m:mi>k</m:mi></m:msub><m:msub><m:mi mathvariant="bold">X</m:mi><m:mrow><m:mi>t</m:mi><m:mo>-</m:mo><m:mn>1</m:mn><m:mo>,</m:mo><m:msub><m:mi>l</m:mi><m:mi>k</m:mi></m:msub></m:mrow></m:msub><m:mo>)</m:mo></m:mrow><m:mo>)</m:mo></m:mrow></m:mtd></m:mtr></m:mtable></m:math></equation>
+In this case, inference on the parameters <emphasis effect="italics">α</emphasis>, <emphasis effect="italics">β</emphasis>, <emphasis effect="italics">γ</emphasis>, is justified since the maximum partial likelihood estimators of the parameters are consistent and asymptotically normal under reasonable assumptions (see section 3.3.3 of [8]).
+</item>
+      </list>
+    </section>
+    <section id="cid3">
+      <title>Parameter Estimation</title>
+      <para id="id2263880">For each currency, <emphasis effect="italics">k</emphasis> and week <emphasis effect="italics">t</emphasis>, <m:math overflow="scroll"><m:mrow><m:msub><m:mi>θ</m:mi><m:mrow><m:mi>k</m:mi><m:mo>,</m:mo><m:mi>t</m:mi></m:mrow></m:msub><m:mrow><m:mo>=</m:mo><m:mo>(</m:mo></m:mrow><m:msub><m:mi>α</m:mi><m:mrow><m:mi>k</m:mi><m:mo>,</m:mo><m:mi>t</m:mi></m:mrow></m:msub></m:mrow></m:math>, <m:math overflow="scroll"><m:msub><m:mi>β</m:mi><m:mrow><m:mi>k</m:mi><m:mo>,</m:mo><m:mi>t</m:mi></m:mrow></m:msub></m:math>, <m:math overflow="scroll"><m:mrow><m:msub><m:mi>γ</m:mi><m:mrow><m:mi>k</m:mi><m:mo>,</m:mo><m:mi>t</m:mi></m:mrow></m:msub><m:mrow><m:mo>)</m:mo></m:mrow></m:mrow></m:math>. Estimates <m:math overflow="scroll"><m:msub><m:mover accent="true"><m:mi>θ</m:mi><m:mo>^</m:mo></m:mover><m:mrow><m:mi>k</m:mi><m:mo>,</m:mo><m:mi>t</m:mi></m:mrow></m:msub></m:math> were based on a moving 26 week window of data. For example, <m:math overflow="scroll"><m:mrow><m:msub><m:mi>α</m:mi><m:mrow><m:mi>k</m:mi><m:mo>,</m:mo><m:mi>t</m:mi></m:mrow></m:msub><m:mo>=</m:mo><m:mrow><m:mo>(</m:mo><m:msub><m:mi>α</m:mi><m:mrow><m:mi>k</m:mi><m:mo>,</m:mo><m:mi>t</m:mi><m:mo>,</m:mo><m:mn>1</m:mn></m:mrow></m:msub><m:mo>,</m:mo><m:mo>⋯</m:mo><m:mo>,</m:mo><m:msub><m:mi>α</m:mi><m:mrow><m:mi>k</m:mi><m:mo>,</m:mo><m:mi>t</m:mi><m:mo>,</m:mo><m:mn>9</m:mn></m:mrow></m:msub><m:mo>)</m:mo></m:mrow></m:mrow></m:math> were estimated from <m:math overflow="scroll"><m:mrow><m:msub><m:mi mathvariant="bold">Y</m:mi><m:mrow><m:mi>t</m:mi><m:mo>-</m:mo><m:mn>1</m:mn></m:mrow></m:msub><m:mo>⋯</m:mo><m:msub><m:mi mathvariant="bold">Y</m:mi><m:mrow><m:mi>t</m:mi><m:mo>-</m:mo><m:mn>26</m:mn></m:mrow></m:msub></m:mrow></m:math> and <m:math overflow="scroll"><m:mrow><m:msub><m:mi mathvariant="bold">X</m:mi><m:mrow><m:mi>t</m:mi><m:mo>-</m:mo><m:mn>1</m:mn></m:mrow></m:msub><m:mo>⋯</m:mo><m:msub><m:mi mathvariant="bold">X</m:mi><m:mrow><m:mi>t</m:mi><m:mo>-</m:mo><m:mn>26</m:mn></m:mrow></m:msub></m:mrow></m:math> (when volatility covariates were included). The partial log-likelihood function is</para>
+      <equation id="id2264165">
+        <m:math overflow="scroll" mode="display">
+          <m:mtable displaystyle="true">
+            <m:mtr>
+              <m:mtd columnalign="right">
+                <m:mrow>
+                  <m:mi>l</m:mi>
+                  <m:mo>(</m:mo>
+                  <m:msub>
+                    <m:mi>α</m:mi>
+                    <m:mrow>
+                      <m:mi>k</m:mi>
+                      <m:mo>,</m:mo>
+                      <m:mi>T</m:mi>
+                    </m:mrow>
+                  </m:msub>
+                  <m:mo>,</m:mo>
+                  <m:msub>
+                    <m:mi>β</m:mi>
+                    <m:mrow>
+                      <m:mi>k</m:mi>
+                      <m:mo>,</m:mo>
+                      <m:mi>T</m:mi>
+                    </m:mrow>
+                  </m:msub>
+                  <m:mo>,</m:mo>
+                  <m:msub>
+                    <m:mi>γ</m:mi>
+                    <m:mrow>
+                      <m:mi>k</m:mi>
+                      <m:mo>,</m:mo>
+                      <m:mi>T</m:mi>
+                    </m:mrow>
+                  </m:msub>
+                  <m:mo>∣</m:mo>
+                  <m:msub>
+                    <m:mi mathvariant="bold">Y</m:mi>
+                    <m:mi>k</m:mi>
+                  </m:msub>
+                  <m:mo>,</m:mo>
+                  <m:msub>
+                    <m:mi mathvariant="bold">X</m:mi>
+                    <m:mi>k</m:mi>
+                  </m:msub>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+              </m:mtd>
+              <m:mtd>
+                <m:mo>=</m:mo>
+              </m:mtd>
+              <m:mtd columnalign="left">
+                <m:mrow>
+                  <m:munderover>
+                    <m:mo>∑</m:mo>
+                    <m:mrow>
+                      <m:mi>t</m:mi>
+                      <m:mo>=</m:mo>
+                      <m:mi>T</m:mi>
+                      <m:mo>-</m:mo>
+                      <m:mn>26</m:mn>
+                    </m:mrow>
+                    <m:mi>T</m:mi>
+                  </m:munderover>
+                  <m:munderover>
+                    <m:mo>∑</m:mo>
+                    <m:mrow>
+                      <m:mi>j</m:mi>
+                      <m:mo>=</m:mo>
+                      <m:mn>1</m:mn>
+                    </m:mrow>
+                    <m:mi>J</m:mi>
+                  </m:munderover>
+                  <m:msub>
+                    <m:mi>y</m:mi>
+                    <m:mrow>
+                      <m:mi>k</m:mi>
+                      <m:mi>t</m:mi>
+                      <m:mi>j</m:mi>
+                    </m:mrow>
+                  </m:msub>
+                  <m:mi>l</m:mi>
+                  <m:mi>o</m:mi>
+                  <m:mi>g</m:mi>
+                  <m:mi>P</m:mi>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:msub>
+                      <m:mi>Y</m:mi>
+                      <m:mrow>
+                        <m:mi>k</m:mi>
+                        <m:mo>,</m:mo>
+                        <m:mi>t</m:mi>
+                      </m:mrow>
+                    </m:msub>
+                    <m:mo>=</m:mo>
+                    <m:mi>j</m:mi>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                </m:mrow>
+              </m:mtd>
+            </m:mtr>
+            <m:mtr>
+              <m:mtd/>
+              <m:mtd>
+                <m:mo>=</m:mo>
+              </m:mtd>
+              <m:mtd columnalign="left">
+                <m:mrow>
+                  <m:munderover>
+                    <m:mo>∑</m:mo>
+                    <m:mrow>
+                      <m:mi>t</m:mi>
+                      <m:mo>=</m:mo>
+                      <m:mn>1</m:mn>
+                    </m:mrow>
+                    <m:mi>T</m:mi>
+                  </m:munderover>
+                  <m:munderover>
+                    <m:mo>∑</m:mo>
+                    <m:mrow>
+                      <m:mi>j</m:mi>
+                      <m:mo>=</m:mo>
+                      <m:mn>1</m:mn>
+                    </m:mrow>
+                    <m:mi>J</m:mi>
+                  </m:munderover>
+                  <m:msub>
+                    <m:mi>y</m:mi>
+                    <m:mrow>
+                      <m:mi>k</m:mi>
+                      <m:mi>t</m:mi>
+                      <m:mi>j</m:mi>
+                    </m:mrow>
+                  </m:msub>
+                  <m:mrow>
+                    <m:mo>[</m:mo>
+                    <m:mi>F</m:mi>
+                  </m:mrow>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:msub>
+                      <m:mi>α</m:mi>
+                      <m:mrow>
+                        <m:mi>k</m:mi>
+                        <m:mi>t</m:mi>
+                        <m:mi>j</m:mi>
+                      </m:mrow>
+                    </m:msub>
+                    <m:mo>-</m:mo>
+                    <m:mrow>
+                      <m:mo>(</m:mo>
+                      <m:msubsup>
+                        <m:mi>β</m:mi>
+                        <m:mrow>
+                          <m:mi>k</m:mi>
+                          <m:mi>t</m:mi>
+                          <m:mi>j</m:mi>
+                        </m:mrow>
+                        <m:mi>T</m:mi>
+                      </m:msubsup>
+                      <m:msub>
+                        <m:mi mathvariant="bold">Y</m:mi>
+                        <m:mrow>
+                          <m:mi>k</m:mi>
+                          <m:mo>,</m:mo>
+                          <m:mi>t</m:mi>
+                          <m:mo>-</m:mo>
+                          <m:mn>1</m:mn>
+                          <m:mo>,</m:mo>
+                          <m:msub>
+                            <m:mi>l</m:mi>
+                            <m:mi>k</m:mi>
+                          </m:msub>
+                        </m:mrow>
+                      </m:msub>
+                      <m:mo>+</m:mo>
+                      <m:msubsup>
+                        <m:mi>γ</m:mi>
+                        <m:mrow>
+                          <m:mi>k</m:mi>
+                          <m:mo>,</m:mo>
+                          <m:mi>t</m:mi>
+                        </m:mrow>
+                        <m:mi>T</m:mi>
+                      </m:msubsup>
+                      <m:msub>
+                        <m:mi mathvariant="bold">X</m:mi>
+                        <m:mrow>
+                          <m:mi>k</m:mi>
+                          <m:mo>,</m:mo>
+                          <m:mi>t</m:mi>
+                          <m:mo>-</m:mo>
+                          <m:mn>1</m:mn>
+                          <m:mo>,</m:mo>
+                          <m:msub>
+                            <m:mi>l</m:mi>
+                            <m:mi>k</m:mi>
+                          </m:msub>
+                        </m:mrow>
+                      </m:msub>
+                      <m:mo>)</m:mo>
+                    </m:mrow>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                </m:mrow>
+              </m:mtd>
+            </m:mtr>
+            <m:mtr>
+              <m:mtd/>
+              <m:mtd/>
+              <m:mtd columnalign="left">
+                <m:mrow>
+                  <m:mo>-</m:mo>
+                  <m:mi>F</m:mi>
+                  <m:mo>(</m:mo>
+                  <m:msub>
+                    <m:mi>α</m:mi>
+                    <m:mrow>
+                      <m:mi>k</m:mi>
+                      <m:mi>t</m:mi>
+                      <m:mo>,</m:mo>
+                      <m:mi>j</m:mi>
+                      <m:mo>-</m:mo>
+                      <m:mn>1</m:mn>
+                    </m:mrow>
+                  </m:msub>
+                  <m:mo>-</m:mo>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:msubsup>
+                      <m:mi>β</m:mi>
+                      <m:mrow>
+                        <m:mi>k</m:mi>
+                        <m:mi>t</m:mi>
+                        <m:mi>j</m:mi>
+                      </m:mrow>
+                      <m:mi>T</m:mi>
+                    </m:msubsup>
+                    <m:msub>
+                      <m:mi mathvariant="bold">Y</m:mi>
+                      <m:mrow>
+                        <m:mi>k</m:mi>
+                        <m:mo>,</m:mo>
+                        <m:mi>t</m:mi>
+                        <m:mo>-</m:mo>
+                        <m:mn>1</m:mn>
+                        <m:mo>,</m:mo>
+                        <m:msub>
+                          <m:mi>l</m:mi>
+                          <m:mi>k</m:mi>
+                        </m:msub>
+                      </m:mrow>
+                    </m:msub>
+                    <m:mo>+</m:mo>
+                    <m:msubsup>
+                      <m:mi>γ</m:mi>
+                      <m:mrow>
+                        <m:mi>k</m:mi>
+                        <m:mo>,</m:mo>
+                        <m:mi>t</m:mi>
+                      </m:mrow>
+                      <m:mi>T</m:mi>
+                    </m:msubsup>
+                    <m:msub>
+                      <m:mi mathvariant="bold">X</m:mi>
+                      <m:mrow>
+                        <m:mi>k</m:mi>
+                        <m:mo>,</m:mo>
+                        <m:mi>t</m:mi>
+                        <m:mo>-</m:mo>
+                        <m:mn>1</m:mn>
+                        <m:mo>,</m:mo>
+                        <m:msub>
+                          <m:mi>l</m:mi>
+                          <m:mi>k</m:mi>
+                        </m:msub>
+                      </m:mrow>
+                    </m:msub>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                  <m:mo>)</m:mo>
+                  <m:mo>]</m:mo>
+                </m:mrow>
+              </m:mtd>
+            </m:mtr>
+          </m:mtable>
+        </m:math>
+      </equation>
+      <para id="id2264661">Parameters, <m:math overflow="scroll"><m:mrow><m:msub><m:mover accent="true"><m:mi>θ</m:mi><m:mo>^</m:mo></m:mover><m:mrow><m:mi>k</m:mi><m:mo>,</m:mo><m:mi>t</m:mi></m:mrow></m:msub><m:mo>=</m:mo><m:mrow><m:mo>(</m:mo><m:msub><m:mi>α</m:mi><m:mrow><m:mi>k</m:mi><m:mo>,</m:mo><m:mi>t</m:mi></m:mrow></m:msub><m:mo>,</m:mo><m:msub><m:mi>β</m:mi><m:mrow><m:mi>k</m:mi><m:mo>,</m:mo><m:mi>t</m:mi></m:mrow></m:msub><m:mo>,</m:mo><m:msub><m:mi>γ</m:mi><m:mrow><m:mi>k</m:mi><m:mo>,</m:mo><m:mi>t</m:mi></m:mrow></m:msub><m:mo>)</m:mo></m:mrow></m:mrow></m:math> were estimated using a version of the Nelder and Mead algorithm on the penalized problem:</para>
+      <equation id="id2264748">
+        <m:math overflow="scroll" mode="display">
+          <m:mrow>
+            <m:msub>
+              <m:mover accent="true">
+                <m:mi>θ</m:mi>
+                <m:mo>^</m:mo>
+              </m:mover>
+              <m:mrow>
+                <m:mi>k</m:mi>
+                <m:mo>,</m:mo>
+                <m:mi>t</m:mi>
+              </m:mrow>
+            </m:msub>
+            <m:mo>=</m:mo>
+            <m:munder>
+              <m:mo form="prefix">argmax</m:mo>
+              <m:mrow>
+                <m:msub>
+                  <m:mi>α</m:mi>
+                  <m:mrow>
+                    <m:mi>k</m:mi>
+                    <m:mo>,</m:mo>
+                    <m:mi>t</m:mi>
+                  </m:mrow>
+                </m:msub>
+                <m:mo>,</m:mo>
+                <m:msub>
+                  <m:mi>β</m:mi>
+                  <m:mrow>
+                    <m:mi>k</m:mi>
+                    <m:mo>,</m:mo>
+                    <m:mi>t</m:mi>
+                  </m:mrow>
+                </m:msub>
+                <m:mo>,</m:mo>
+                <m:msub>
+                  <m:mi>γ</m:mi>
+                  <m:mrow>
+                    <m:mi>k</m:mi>
+                    <m:mo>,</m:mo>
+                    <m:mi>t</m:mi>
+                  </m:mrow>
+                </m:msub>
+              </m:mrow>
+            </m:munder>
+            <m:mspace width="0.277778em"/>
+            <m:mfenced separators="" open="(" close=")">
+              <m:mi>l</m:mi>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:msub>
+                  <m:mi>α</m:mi>
+                  <m:mrow>
+                    <m:mi>k</m:mi>
+                    <m:mo>,</m:mo>
+                    <m:mi>t</m:mi>
+                  </m:mrow>
+                </m:msub>
+                <m:mo>,</m:mo>
+                <m:msub>
+                  <m:mi>β</m:mi>
+                  <m:mrow>
+                    <m:mi>k</m:mi>
+                    <m:mo>,</m:mo>
+                    <m:mi>t</m:mi>
+                  </m:mrow>
+                </m:msub>
+                <m:mo>,</m:mo>
+                <m:msub>
+                  <m:mi>γ</m:mi>
+                  <m:mrow>
+                    <m:mi>k</m:mi>
+                    <m:mo>,</m:mo>
+                    <m:mi>t</m:mi>
+                  </m:mrow>
+                </m:msub>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>+</m:mo>
+              <m:mi>λ</m:mi>
+              <m:munderover>
+                <m:mo>∑</m:mo>
+                <m:mrow>
+                  <m:mi>j</m:mi>
+                  <m:mo>=</m:mo>
+                  <m:mn>2</m:mn>
+                </m:mrow>
+                <m:mrow>
+                  <m:mi>J</m:mi>
+                  <m:mo>-</m:mo>
+                  <m:mn>1</m:mn>
+                </m:mrow>
+              </m:munderover>
+              <m:mo form="prefix">arctan</m:mo>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:msub>
+                  <m:mi>α</m:mi>
+                  <m:mrow>
+                    <m:mi>k</m:mi>
+                    <m:mo>,</m:mo>
+                    <m:mi>t</m:mi>
+                    <m:mo>,</m:mo>
+                    <m:mi>j</m:mi>
+                  </m:mrow>
+                </m:msub>
+                <m:mo>-</m:mo>
+                <m:msub>
+                  <m:mi>α</m:mi>
+                  <m:mrow>
+                    <m:mi>k</m:mi>
+                    <m:mo>,</m:mo>
+                    <m:mi>t</m:mi>
+                    <m:mo>,</m:mo>
+                    <m:mi>j</m:mi>
+                    <m:mo>-</m:mo>
+                    <m:mn>1</m:mn>
+                  </m:mrow>
+                </m:msub>
+                <m:mo>)</m:mo>
+              </m:mrow>
+            </m:mfenced>
+          </m:mrow>
+        </m:math>
+      </equation>
+      <para id="id2264970">The penalization <m:math overflow="scroll"><m:mrow><m:mi>λ</m:mi><m:msubsup><m:mo>∑</m:mo><m:mrow><m:mi>j</m:mi><m:mo>=</m:mo><m:mn>2</m:mn></m:mrow><m:mrow><m:mi>J</m:mi><m:mo>-</m:mo><m:mn>1</m:mn></m:mrow></m:msubsup><m:mo form="prefix">arctan</m:mo><m:mrow><m:mo>(</m:mo><m:msub><m:mi>α</m:mi><m:mrow><m:mi>k</m:mi><m:mo>,</m:mo><m:mi>t</m:mi><m:mo>,</m:mo><m:mi>j</m:mi></m:mrow></m:msub><m:mo>-</m:mo><m:msub><m:mi>α</m:mi><m:mrow><m:mi>k</m:mi><m:mo>,</m:mo><m:mi>t</m:mi><m:mo>,</m:mo><m:mi>j</m:mi><m:mo>-</m:mo><m:mn>1</m:mn></m:mrow></m:msub><m:mo>)</m:mo></m:mrow></m:mrow></m:math> ensures the constraint <m:math overflow="scroll"><m:mrow><m:msub><m:mi>α</m:mi><m:mrow><m:mi>k</m:mi><m:mo>,</m:mo><m:mi>t</m:mi><m:mo>,</m:mo><m:mi>j</m:mi></m:mrow></m:msub><m:mo>&gt;</m:mo><m:msub><m:mi>α</m:mi><m:mrow><m:mi>k</m:mi><m:mo>,</m:mo><m:mi>t</m:mi><m:mo>,</m:mo><m:mi>j</m:mi><m:mo>-</m:mo><m:mn>1</m:mn></m:mrow></m:msub></m:mrow></m:math> is maintained in the solution.</para>
+      <para id="id2265107">The <emphasis effect="italics">α</emphasis>s where initialized with the quantiles of the <m:math overflow="scroll"><m:mrow><m:mi>L</m:mi><m:mi>o</m:mi><m:mi>g</m:mi><m:mi>i</m:mi><m:mi>s</m:mi><m:mi>t</m:mi><m:mi>i</m:mi><m:mi>c</m:mi><m:mo>(</m:mo><m:mn>0</m:mn><m:mo>,</m:mo><m:mn>1</m:mn><m:mo>)</m:mo></m:mrow></m:math> distribution <footnote id="uid23">I could not use a data based initialization such as the method of moments to initialize the optimization since <emphasis effect="italics">ξ</emphasis>s are not observed.</footnote>. Table 1 lists initial and estimated value of <m:math overflow="scroll"><m:msub><m:mi>α</m:mi><m:mrow><m:mi>k</m:mi><m:mo>,</m:mo><m:mn>27</m:mn></m:mrow></m:msub></m:math> for each <emphasis effect="italics">k</emphasis>.</para>
+<!--Table that contain tables are not converted.-->
+      <section id="uid25">
+        <title>Lag Estimation</title>
+        <para id="id2266402">For each 26 week window, the lag order <emphasis effect="italics">l<sub>k</sub></emphasis> of each currency <emphasis effect="italics">k</emphasis> was determined by building nested models <m:math overflow="scroll"><m:mrow><m:mn>0</m:mn><m:mo>≤</m:mo><m:msub><m:mi>l</m:mi><m:mi>k</m:mi></m:msub><m:mo>≤</m:mo><m:mn>7</m:mn></m:mrow></m:math> and comparing adjacent models using the partial likelihood ratio test.
+</para>
+        <equation id="id2266460">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:msub>
+                <m:mi>λ</m:mi>
+                <m:mi>N</m:mi>
+              </m:msub>
+              <m:mo>=</m:mo>
+              <m:mo>-</m:mo>
+              <m:mn>2</m:mn>
+              <m:mfenced separators="" open="(" close=")">
+                <m:mi>l</m:mi>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:msub>
+                    <m:mover accent="true">
+                      <m:mi>θ</m:mi>
+                      <m:mo>^</m:mo>
+                    </m:mover>
+                    <m:mn>1</m:mn>
+                  </m:msub>
+                  <m:mo>,</m:mo>
+                  <m:mi>N</m:mi>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mo>-</m:mo>
+                <m:mi>l</m:mi>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:msub>
+                    <m:mover accent="true">
+                      <m:mi>θ</m:mi>
+                      <m:mo>^</m:mo>
+                    </m:mover>
+                    <m:mn>2</m:mn>
+                  </m:msub>
+                  <m:mo>,</m:mo>
+                  <m:mi>N</m:mi>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+              </m:mfenced>
+              <m:mo>,</m:mo>
+              <m:mspace width="14.22636pt"/>
+              <m:msub>
+                <m:mover accent="true">
+                  <m:mi>θ</m:mi>
+                  <m:mo>^</m:mo>
+                </m:mover>
+                <m:mn>1</m:mn>
+              </m:msub>
+              <m:mo>∈</m:mo>
+              <m:msub>
+                <m:mi>Θ</m:mi>
+                <m:mn>1</m:mn>
+              </m:msub>
+              <m:mo>,</m:mo>
+              <m:mspace width="5.69054pt"/>
+              <m:msub>
+                <m:mover accent="true">
+                  <m:mi>θ</m:mi>
+                  <m:mo>^</m:mo>
+                </m:mover>
+                <m:mn>2</m:mn>
+              </m:msub>
+              <m:mo>∈</m:mo>
+              <m:msub>
+                <m:mi>Θ</m:mi>
+                <m:mn>2</m:mn>
+              </m:msub>
+              <m:mo>,</m:mo>
+              <m:mspace width="5.69054pt"/>
+              <m:msub>
+                <m:mi>Θ</m:mi>
+                <m:mn>1</m:mn>
+              </m:msub>
+              <m:mo>⊂</m:mo>
+              <m:msub>
+                <m:mi>Θ</m:mi>
+                <m:mn>2</m:mn>
+              </m:msub>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id2266630">For example, at <m:math overflow="scroll"><m:mrow><m:mi>t</m:mi><m:mo>=</m:mo><m:mn>26</m:mn></m:mrow></m:math>, we wish to estimate the lag for <m:math overflow="scroll"><m:mrow><m:mi>P</m:mi><m:mo>(</m:mo><m:msub><m:mi>Y</m:mi><m:mrow><m:mi>k</m:mi><m:mo>,</m:mo><m:mn>27</m:mn></m:mrow></m:msub><m:mo>=</m:mo><m:mn>1</m:mn><m:mo>|</m:mo><m:msub><m:mi mathvariant="script">F</m:mi><m:mrow><m:mi>t</m:mi><m:mo>-</m:mo><m:mn>1</m:mn></m:mrow></m:msub><m:mo>)</m:mo></m:mrow></m:math>. Models to be tested are,
+</para>
+        <list id="id2266701" display="block" list-type="enumerated">
+          <item id="uid26"><m:math overflow="scroll"><m:msub><m:mi>M</m:mi><m:mrow><m:mi>k</m:mi><m:mo>,</m:mo><m:mn>0</m:mn></m:mrow></m:msub></m:math><m:math overflow="scroll"><m:mrow><m:mspace width="14.22636pt"/><m:msub><m:mi>ξ</m:mi><m:mrow><m:mi>k</m:mi><m:mo>,</m:mo><m:mn>27</m:mn></m:mrow></m:msub><m:mo>=</m:mo><m:msub><m:mi>ϵ</m:mi><m:mn>27</m:mn></m:msub></m:mrow></m:math>.
+
+</item>
+          <item id="uid27">
+            <m:math overflow="scroll">
+              <m:msub>
+                <m:mi>M</m:mi>
+                <m:mrow>
+                  <m:mi>k</m:mi>
+                  <m:mo>,</m:mo>
+                  <m:mn>1</m:mn>
+                </m:mrow>
+              </m:msub>
+            </m:math>
+            <m:math overflow="scroll">
+              <m:mrow>
+                <m:mspace width="14.22636pt"/>
+                <m:msub>
+                  <m:mi>ξ</m:mi>
+                  <m:mrow>
+                    <m:mi>k</m:mi>
+                    <m:mo>,</m:mo>
+                    <m:mn>27</m:mn>
+                  </m:mrow>
+                </m:msub>
+                <m:mo>=</m:mo>
+                <m:msubsup>
+                  <m:mi>β</m:mi>
+                  <m:mrow>
+                    <m:mi>k</m:mi>
+                    <m:mo>,</m:mo>
+                    <m:mn>26</m:mn>
+                  </m:mrow>
+                  <m:mi>T</m:mi>
+                </m:msubsup>
+                <m:msub>
+                  <m:mi mathvariant="bold">y</m:mi>
+                  <m:mrow>
+                    <m:mi>k</m:mi>
+                    <m:mo>,</m:mo>
+                    <m:mn>26</m:mn>
+                  </m:mrow>
+                </m:msub>
+                <m:mo>+</m:mo>
+                <m:msubsup>
+                  <m:mi>γ</m:mi>
+                  <m:mrow>
+                    <m:mi>k</m:mi>
+                    <m:mo>,</m:mo>
+                    <m:mn>26</m:mn>
+                  </m:mrow>
+                  <m:mi>T</m:mi>
+                </m:msubsup>
+                <m:msub>
+                  <m:mi mathvariant="bold">x</m:mi>
+                  <m:mn>26</m:mn>
+                </m:msub>
+                <m:mo>+</m:mo>
+                <m:msub>
+                  <m:mi>ϵ</m:mi>
+                  <m:mn>27</m:mn>
+                </m:msub>
+              </m:mrow>
+            </m:math>
+          </item>
+          <item id="uid28">
+            <m:math overflow="scroll">
+              <m:msub>
+                <m:mi>M</m:mi>
+                <m:mrow>
+                  <m:mi>k</m:mi>
+                  <m:mo>,</m:mo>
+                  <m:mn>2</m:mn>
+                </m:mrow>
+              </m:msub>
+            </m:math>
+            <m:math overflow="scroll">
+              <m:mrow>
+                <m:mspace width="14.22636pt"/>
+                <m:msub>
+                  <m:mi>ξ</m:mi>
+                  <m:mrow>
+                    <m:mi>k</m:mi>
+                    <m:mo>,</m:mo>
+                    <m:mn>27</m:mn>
+                  </m:mrow>
+                </m:msub>
+                <m:mo>=</m:mo>
+                <m:msubsup>
+                  <m:mi>β</m:mi>
+                  <m:mrow>
+                    <m:mi>k</m:mi>
+                    <m:mo>,</m:mo>
+                    <m:mn>26</m:mn>
+                  </m:mrow>
+                  <m:mi>T</m:mi>
+                </m:msubsup>
+                <m:msub>
+                  <m:mi mathvariant="bold">y</m:mi>
+                  <m:mrow>
+                    <m:mi>k</m:mi>
+                    <m:mo>,</m:mo>
+                    <m:mn>26</m:mn>
+                  </m:mrow>
+                </m:msub>
+                <m:mo>+</m:mo>
+                <m:msubsup>
+                  <m:mi>β</m:mi>
+                  <m:mrow>
+                    <m:mi>k</m:mi>
+                    <m:mo>,</m:mo>
+                    <m:mn>25</m:mn>
+                  </m:mrow>
+                  <m:mi>T</m:mi>
+                </m:msubsup>
+                <m:msub>
+                  <m:mi mathvariant="bold">y</m:mi>
+                  <m:mrow>
+                    <m:mi>k</m:mi>
+                    <m:mo>,</m:mo>
+                    <m:mn>25</m:mn>
+                  </m:mrow>
+                </m:msub>
+                <m:mo>+</m:mo>
+                <m:msubsup>
+                  <m:mi>γ</m:mi>
+                  <m:mrow>
+                    <m:mi>k</m:mi>
+                    <m:mo>,</m:mo>
+                    <m:mn>26</m:mn>
+                  </m:mrow>
+                  <m:mi>T</m:mi>
+                </m:msubsup>
+                <m:msub>
+                  <m:mi mathvariant="bold">x</m:mi>
+                  <m:mn>26</m:mn>
+                </m:msub>
+                <m:mo>+</m:mo>
+                <m:msubsup>
+                  <m:mi>γ</m:mi>
+                  <m:mrow>
+                    <m:mi>k</m:mi>
+                    <m:mo>,</m:mo>
+                    <m:mn>25</m:mn>
+                  </m:mrow>
+                  <m:mi>T</m:mi>
+                </m:msubsup>
+                <m:msub>
+                  <m:mi mathvariant="bold">x</m:mi>
+                  <m:mn>25</m:mn>
+                </m:msub>
+                <m:mo>+</m:mo>
+                <m:msub>
+                  <m:mi>ϵ</m:mi>
+                  <m:mn>27</m:mn>
+                </m:msub>
+              </m:mrow>
+            </m:math>
+          </item>
+          <item id="uid29">
+            <m:math overflow="scroll">
+              <m:mo>⋮</m:mo>
+            </m:math>
+          </item>
+          <item id="uid30">
+            <m:math overflow="scroll">
+              <m:msub>
+                <m:mi>M</m:mi>
+                <m:mrow>
+                  <m:mi>k</m:mi>
+                  <m:mo>,</m:mo>
+                  <m:mn>7</m:mn>
+                </m:mrow>
+              </m:msub>
+            </m:math>
+            <m:math overflow="scroll">
+              <m:mrow>
+                <m:mspace width="14.22636pt"/>
+                <m:msub>
+                  <m:mi>ξ</m:mi>
+                  <m:mrow>
+                    <m:mi>k</m:mi>
+                    <m:mo>,</m:mo>
+                    <m:mn>27</m:mn>
+                  </m:mrow>
+                </m:msub>
+                <m:mo>=</m:mo>
+                <m:msubsup>
+                  <m:mi>β</m:mi>
+                  <m:mrow>
+                    <m:mi>k</m:mi>
+                    <m:mo>,</m:mo>
+                    <m:mn>26</m:mn>
+                  </m:mrow>
+                  <m:mi>T</m:mi>
+                </m:msubsup>
+                <m:msub>
+                  <m:mi mathvariant="bold">y</m:mi>
+                  <m:mrow>
+                    <m:mi>k</m:mi>
+                    <m:mo>,</m:mo>
+                    <m:mn>26</m:mn>
+                  </m:mrow>
+                </m:msub>
+                <m:mo>+</m:mo>
+                <m:mo>⋯</m:mo>
+                <m:mo>+</m:mo>
+                <m:msubsup>
+                  <m:mi>β</m:mi>
+                  <m:mrow>
+                    <m:mi>k</m:mi>
+                    <m:mo>,</m:mo>
+                    <m:mn>20</m:mn>
+                  </m:mrow>
+                  <m:mi>T</m:mi>
+                </m:msubsup>
+                <m:msub>
+                  <m:mi mathvariant="bold">y</m:mi>
+                  <m:mrow>
+                    <m:mi>k</m:mi>
+                    <m:mo>,</m:mo>
+                    <m:mn>20</m:mn>
+                  </m:mrow>
+                </m:msub>
+                <m:mo>+</m:mo>
+                <m:msubsup>
+                  <m:mi>γ</m:mi>
+                  <m:mrow>
+                    <m:mi>k</m:mi>
+                    <m:mo>,</m:mo>
+                    <m:mn>26</m:mn>
+                  </m:mrow>
+                  <m:mi>T</m:mi>
+                </m:msubsup>
+                <m:msub>
+                  <m:mi mathvariant="bold">x</m:mi>
+                  <m:mn>26</m:mn>
+                </m:msub>
+                <m:mo>+</m:mo>
+                <m:mo>⋯</m:mo>
+                <m:mo>+</m:mo>
+                <m:msubsup>
+                  <m:mi>γ</m:mi>
+                  <m:mrow>
+                    <m:mi>k</m:mi>
+                    <m:mo>,</m:mo>
+                    <m:mn>20</m:mn>
+                  </m:mrow>
+                  <m:mi>T</m:mi>
+                </m:msubsup>
+                <m:msub>
+                  <m:mi mathvariant="bold">x</m:mi>
+                  <m:mn>20</m:mn>
+                </m:msub>
+                <m:mo>+</m:mo>
+                <m:msub>
+                  <m:mi>ϵ</m:mi>
+                  <m:mn>27</m:mn>
+                </m:msub>
+              </m:mrow>
+            </m:math>
+          </item>
+        </list>
+        <para id="id2267312">Due to the computation time required to compute the lag for each window <footnote id="uid31">(parameters up to lag seven had to be estimated) for each window (over all instruments). On my pc it took over 10 hours.
+</footnote>, I chose to keep the lag order of each instrument fixed to that obtained from the first window, ([<m:math overflow="scroll"><m:mrow><m:mi>t</m:mi><m:mo>=</m:mo><m:mn>1</m:mn><m:mo>,</m:mo><m:mi>t</m:mi><m:mo>=</m:mo><m:mn>26</m:mn></m:mrow></m:math>]).These estimates are shown in Table 2. Since <m:math overflow="scroll"><m:mrow><m:msub><m:mi>l</m:mi><m:mrow><m:mi>E</m:mi><m:mi>U</m:mi><m:mi>R</m:mi></m:mrow></m:msub><m:mo>=</m:mo><m:mn>0</m:mn></m:mrow></m:math> when volatility is included as predictor, I set <m:math overflow="scroll"><m:mrow><m:msub><m:mi>l</m:mi><m:mrow><m:mi>E</m:mi><m:mi>U</m:mi><m:mi>R</m:mi></m:mrow></m:msub><m:mo>≡</m:mo><m:mn>2</m:mn></m:mrow></m:math>.
+</para>
+<!--Table that contain tables are not converted.-->
+<!--Table that contain tables are not converted.-->
+        <para id="id2268693">With the lags estimated from the first six months, the appropriate model <m:math overflow="scroll"><m:msub><m:mi>M</m:mi><m:mrow><m:mi>k</m:mi><m:mo>,</m:mo><m:mi>i</m:mi></m:mrow></m:msub></m:math>, <m:math overflow="scroll"><m:mrow><m:mi>i</m:mi><m:mo>=</m:mo><m:mn>1</m:mn><m:mo>,</m:mo><m:mo>⋯</m:mo><m:mo>,</m:mo><m:mn>7</m:mn></m:mrow></m:math>, <m:math overflow="scroll"><m:mrow><m:mi>k</m:mi><m:mo>=</m:mo><m:mn>1</m:mn><m:mo>,</m:mo><m:mo>⋯</m:mo><m:mo>,</m:mo><m:mn>10</m:mn></m:mrow></m:math>, for each instrument is identified. Then, after each week <emphasis effect="italics">t</emphasis>, the one-step transition probability estimates <m:math overflow="scroll"><m:mrow><m:mover accent="true"><m:mi>P</m:mi><m:mo>^</m:mo></m:mover><m:mrow><m:mo>(</m:mo><m:msub><m:mi>Y</m:mi><m:mrow><m:mi>k</m:mi><m:mo>,</m:mo><m:mi>t</m:mi></m:mrow></m:msub><m:mo>=</m:mo><m:mi>j</m:mi><m:mo>|</m:mo><m:msub><m:mi mathvariant="script">F</m:mi><m:mrow><m:mi>t</m:mi><m:mo>-</m:mo><m:mn>1</m:mn></m:mrow></m:msub><m:mo>)</m:mo></m:mrow></m:mrow></m:math>, are estimated by estimating parameters (<m:math overflow="scroll"><m:msub><m:mi>α</m:mi><m:mrow><m:mi>k</m:mi><m:mo>,</m:mo><m:mi>t</m:mi></m:mrow></m:msub></m:math>, <m:math overflow="scroll"><m:msub><m:mi>β</m:mi><m:mrow><m:mi>k</m:mi><m:mo>,</m:mo><m:mi>t</m:mi></m:mrow></m:msub></m:math>, <m:math overflow="scroll"><m:msub><m:mi>γ</m:mi><m:mrow><m:mi>k</m:mi><m:mo>,</m:mo><m:mi>t</m:mi></m:mrow></m:msub></m:math>) from the past 26 weeks of rank and volatility data then estimate <m:math overflow="scroll"><m:msub><m:mi>ξ</m:mi><m:mrow><m:mi>k</m:mi><m:mo>,</m:mo><m:mi>t</m:mi></m:mrow></m:msub></m:math> using model <m:math overflow="scroll"><m:msub><m:mi>M</m:mi><m:mrow><m:mi>k</m:mi><m:mo>,</m:mo><m:mi>i</m:mi></m:mrow></m:msub></m:math>. Finally estimate
+</para>
+        <equation id="id2268936">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:mover accent="true">
+                <m:mi>P</m:mi>
+                <m:mo>^</m:mo>
+              </m:mover>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:msub>
+                  <m:mi>Y</m:mi>
+                  <m:mrow>
+                    <m:mi>k</m:mi>
+                    <m:mo>,</m:mo>
+                    <m:mi>t</m:mi>
+                  </m:mrow>
+                </m:msub>
+                <m:mo>=</m:mo>
+                <m:mi>j</m:mi>
+                <m:mo>|</m:mo>
+                <m:msub>
+                  <m:mi mathvariant="script">F</m:mi>
+                  <m:mrow>
+                    <m:mi>t</m:mi>
+                    <m:mo>-</m:mo>
+                    <m:mn>1</m:mn>
+                  </m:mrow>
+                </m:msub>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>=</m:mo>
+              <m:mi>F</m:mi>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:msub>
+                  <m:mover accent="true">
+                    <m:mi>α</m:mi>
+                    <m:mo>^</m:mo>
+                  </m:mover>
+                  <m:mi>j</m:mi>
+                </m:msub>
+                <m:mo>-</m:mo>
+                <m:msub>
+                  <m:mover accent="true">
+                    <m:mi>ξ</m:mi>
+                    <m:mo>^</m:mo>
+                  </m:mover>
+                  <m:mrow>
+                    <m:mi>k</m:mi>
+                    <m:mo>,</m:mo>
+                    <m:mi>t</m:mi>
+                  </m:mrow>
+                </m:msub>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>-</m:mo>
+              <m:mi>F</m:mi>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:msub>
+                  <m:mover accent="true">
+                    <m:mi>α</m:mi>
+                    <m:mo>^</m:mo>
+                  </m:mover>
+                  <m:mrow>
+                    <m:mi>j</m:mi>
+                    <m:mo>-</m:mo>
+                    <m:mn>1</m:mn>
+                  </m:mrow>
+                </m:msub>
+                <m:mo>-</m:mo>
+                <m:msub>
+                  <m:mover accent="true">
+                    <m:mi>ξ</m:mi>
+                    <m:mo>^</m:mo>
+                  </m:mover>
+                  <m:mrow>
+                    <m:mi>k</m:mi>
+                    <m:mo>,</m:mo>
+                    <m:mi>t</m:mi>
+                  </m:mrow>
+                </m:msub>
+                <m:mo>)</m:mo>
+              </m:mrow>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id2269092">. These steps are summarized in Figure 1.
+</para>
+        <figure id="uid34">
+          <media id="uid34_media" alt="">
+            <image mime-type="image/png" src="../../media/flowchart-d4c3.png" id="uid34_onlineimage" width="661"><!-- NOTE: attribute width changes image size online (pixels). original width is 661. --></image>
+            <image for="pdf" mime-type="application/postscript" src="../../media/flowchart-7e33.eps" id="uid34_printimage"/>
+          </media>
+          <caption>Steps to obtaining transition estimates
+</caption>
+        </figure>
+        <para id="id2269131">For the periodic transition probability model let <m:math overflow="scroll"><m:mrow><m:msub><m:mi>P</m:mi><m:msub><m:mi>h</m:mi><m:mi>k</m:mi></m:msub></m:msub><m:mrow><m:mo>(</m:mo><m:mi>t</m:mi><m:mo>,</m:mo><m:mi>j</m:mi><m:mo>)</m:mo></m:mrow></m:mrow></m:math> represent the transition probability of currency <emphasis effect="italics">k</emphasis> being in ranking <emphasis effect="italics">j</emphasis> at week t. Obtain <m:math overflow="scroll"><m:mrow><m:msub><m:mover accent="true"><m:mi>P</m:mi><m:mo>^</m:mo></m:mover><m:msub><m:mi>h</m:mi><m:mi>k</m:mi></m:msub></m:msub><m:mrow><m:mo>(</m:mo><m:mi>t</m:mi><m:mo>,</m:mo><m:mi>j</m:mi><m:mo>)</m:mo></m:mrow></m:mrow></m:math> from <m:math overflow="scroll"><m:mrow><m:msub><m:mover accent="true"><m:mi>P</m:mi><m:mo>^</m:mo></m:mover><m:mrow><m:mi>k</m:mi><m:mo>,</m:mo><m:mi>j</m:mi><m:mo>,</m:mo><m:mi>t</m:mi></m:mrow></m:msub><m:mo>=</m:mo><m:mover accent="true"><m:mi>P</m:mi><m:mo>^</m:mo></m:mover><m:mrow><m:mo>(</m:mo><m:msub><m:mi>Y</m:mi><m:mrow><m:mi>k</m:mi><m:mo>,</m:mo><m:mi>t</m:mi></m:mrow></m:msub><m:mo>=</m:mo><m:mi>j</m:mi><m:mo>|</m:mo><m:msub><m:mi mathvariant="script">F</m:mi><m:mrow><m:mi>t</m:mi><m:mo>-</m:mo><m:mn>1</m:mn></m:mrow></m:msub><m:mo>)</m:mo></m:mrow></m:mrow></m:math>, <m:math overflow="scroll"><m:mrow><m:mi>t</m:mi><m:mo>=</m:mo><m:mn>27</m:mn><m:mo>,</m:mo><m:mo>⋯</m:mo><m:mo>,</m:mo><m:mn>250</m:mn></m:mrow></m:math> as follows. Estimate <emphasis effect="italics">h<sub>k</sub></emphasis> as the dominant frequency obtained from spectral analysis of <m:math overflow="scroll"><m:mrow><m:mo>{</m:mo><m:msub><m:mover accent="true"><m:mi>P</m:mi><m:mo>^</m:mo></m:mover><m:mrow><m:mi>k</m:mi><m:mo>,</m:mo><m:mi>j</m:mi></m:mrow></m:msub><m:mo>}</m:mo></m:mrow></m:math> . Suppose the sequence <m:math overflow="scroll"><m:mrow><m:mo>{</m:mo><m:msub><m:mover accent="true"><m:mi>P</m:mi><m:mo>^</m:mo></m:mover><m:mrow><m:mi>k</m:mi><m:mo>,</m:mo><m:mi>j</m:mi></m:mrow></m:msub><m:mo>}</m:mo></m:mrow></m:math> is of length <emphasis effect="italics">N</emphasis>. Let
+<m:math overflow="scroll"><m:mrow><m:mi>M</m:mi><m:mo>=</m:mo><m:mo>⌊</m:mo><m:mfrac><m:mi>N</m:mi><m:msub><m:mi>h</m:mi><m:mi>k</m:mi></m:msub></m:mfrac><m:mo>⌋</m:mo></m:mrow></m:math></para>
+        <para id="id2269454"/>
+        <equation id="id2269462">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:msub>
+                <m:mover accent="true">
+                  <m:mi mathvariant="bold">P</m:mi>
+                  <m:mo>^</m:mo>
+                </m:mover>
+                <m:msub>
+                  <m:mi>h</m:mi>
+                  <m:mi>k</m:mi>
+                </m:msub>
+              </m:msub>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>j</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>=</m:mo>
+              <m:mfrac>
+                <m:mn>1</m:mn>
+                <m:mi>M</m:mi>
+              </m:mfrac>
+              <m:munderover>
+                <m:mo>∑</m:mo>
+                <m:mrow>
+                  <m:mi>i</m:mi>
+                  <m:mo>=</m:mo>
+                  <m:mn>0</m:mn>
+                  <m:mo>;</m:mo>
+                  <m:mi>t</m:mi>
+                  <m:mo>=</m:mo>
+                  <m:mn>27</m:mn>
+                  <m:mo>+</m:mo>
+                  <m:mi>i</m:mi>
+                  <m:msub>
+                    <m:mi>h</m:mi>
+                    <m:mi>k</m:mi>
+                  </m:msub>
+                </m:mrow>
+                <m:mi>M</m:mi>
+              </m:munderover>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:msub>
+                  <m:mover accent="true">
+                    <m:mi>P</m:mi>
+                    <m:mo>^</m:mo>
+                  </m:mover>
+                  <m:mrow>
+                    <m:mi>k</m:mi>
+                    <m:mo>,</m:mo>
+                    <m:mi>j</m:mi>
+                    <m:mo>,</m:mo>
+                    <m:mi>t</m:mi>
+                  </m:mrow>
+                </m:msub>
+                <m:mo>,</m:mo>
+                <m:mo>⋯</m:mo>
+                <m:mo>,</m:mo>
+                <m:msub>
+                  <m:mover accent="true">
+                    <m:mi>P</m:mi>
+                    <m:mo>^</m:mo>
+                  </m:mover>
+                  <m:mrow>
+                    <m:mi>k</m:mi>
+                    <m:mo>,</m:mo>
+                    <m:mi>j</m:mi>
+                    <m:mo>,</m:mo>
+                    <m:mo>(</m:mo>
+                    <m:mi>t</m:mi>
+                    <m:mo>+</m:mo>
+                    <m:msub>
+                      <m:mi>h</m:mi>
+                      <m:mi>k</m:mi>
+                    </m:msub>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                </m:msub>
+                <m:mo>)</m:mo>
+              </m:mrow>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id2269620">Then for some week <emphasis effect="italics">t</emphasis>, if <m:math overflow="scroll"><m:mrow><m:mi>s</m:mi><m:mo>=</m:mo><m:mi>t</m:mi><m:mspace width="4.pt"/><m:mtext>mod</m:mtext><m:mspace width="4.pt"/><m:mo>(</m:mo><m:msub><m:mi>h</m:mi><m:mi>k</m:mi></m:msub><m:mo>)</m:mo></m:mrow></m:math>, then
+</para>
+        <equation id="id2269670">
+          <m:math overflow="scroll" mode="display">
+            <m:mrow>
+              <m:msub>
+                <m:mover accent="true">
+                  <m:mi mathvariant="bold">P</m:mi>
+                  <m:mo>^</m:mo>
+                </m:mover>
+                <m:msub>
+                  <m:mi>h</m:mi>
+                  <m:mi>k</m:mi>
+                </m:msub>
+              </m:msub>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>j</m:mi>
+                <m:mo>,</m:mo>
+                <m:mi>t</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>=</m:mo>
+              <m:msub>
+                <m:mover accent="true">
+                  <m:mi mathvariant="bold">P</m:mi>
+                  <m:mo>^</m:mo>
+                </m:mover>
+                <m:msub>
+                  <m:mi>h</m:mi>
+                  <m:mi>k</m:mi>
+                </m:msub>
+              </m:msub>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi>j</m:mi>
+                <m:mo>,</m:mo>
+                <m:mi>s</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mspace width="14.22636pt"/>
+              <m:mi>s</m:mi>
+              <m:mo>=</m:mo>
+              <m:mn>0</m:mn>
+              <m:mo>,</m:mo>
+              <m:mn>1</m:mn>
+              <m:mo>,</m:mo>
+              <m:mo>⋯</m:mo>
+              <m:mo>,</m:mo>
+              <m:msub>
+                <m:mi>h</m:mi>
+                <m:mi>k</m:mi>
+              </m:msub>
+              <m:mo>-</m:mo>
+              <m:mn>1</m:mn>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id2269782">The flow chart in Figure 2 summarizes the steps followed to obtain the <m:math overflow="scroll"><m:mrow><m:msub><m:mover accent="true"><m:mi mathvariant="bold">P</m:mi><m:mo>^</m:mo></m:mover><m:msub><m:mi>h</m:mi><m:mi>k</m:mi></m:msub></m:msub><m:mrow><m:mo>(</m:mo><m:mi>j</m:mi><m:mo>,</m:mo><m:mi>t</m:mi><m:mo>)</m:mo></m:mrow></m:mrow></m:math> estimates.
+</para>
+        <figure id="uid35">
+          <media id="uid35_media" alt="">
+            <image mime-type="image/png" src="../../media/periodic_flow_chart.png" id="uid35_onlineimage" width="856"><!-- NOTE: attribute width changes image size online (pixels). original width is 856. --></image>
+            <image for="pdf" mime-type="application/postscript" src="../../media/periodic_flow_chart.eps" id="uid35_printimage"/>
+          </media>
+          <caption>Steps to obtaining periodic transition estimates
+</caption>
+        </figure>
+      </section>
+    </section>
+    <section id="cid4">
+      <title>Results</title>
+      <para id="id2269876">Figures 3, 4, 5 and 6 show the estimated transition probabilities for YEN and the AUD from week 27 to week 127. From Figures 5 and 6 we observe that for AUD, on average <m:math overflow="scroll"><m:mrow><m:mover accent="true"><m:mi>P</m:mi><m:mo>^</m:mo></m:mover><m:mrow><m:mo>(</m:mo><m:msub><m:mi>Y</m:mi><m:mrow><m:mi>k</m:mi><m:mo>,</m:mo><m:mi>t</m:mi></m:mrow></m:msub><m:mo>=</m:mo><m:mn>1</m:mn><m:mo>|</m:mo><m:msub><m:mi mathvariant="script">F</m:mi><m:mrow><m:mi>t</m:mi><m:mo>-</m:mo><m:mn>1</m:mn></m:mrow></m:msub><m:mo>)</m:mo></m:mrow></m:mrow></m:math> and <m:math overflow="scroll"><m:mrow><m:mover accent="true"><m:mi>P</m:mi><m:mo>^</m:mo></m:mover><m:mrow><m:mo>(</m:mo><m:msub><m:mi>Y</m:mi><m:mrow><m:mi>k</m:mi><m:mo>,</m:mo><m:mi>t</m:mi></m:mrow></m:msub><m:mo>=</m:mo><m:mn>10</m:mn><m:mo>|</m:mo><m:msub><m:mi mathvariant="script">F</m:mi><m:mrow><m:mi>t</m:mi><m:mo>-</m:mo><m:mn>1</m:mn></m:mrow></m:msub><m:mo>)</m:mo></m:mrow></m:mrow></m:math> tend to have lowest value over the most weeks than any of the other ranking categories. This result matches intuition; if a currency has higher odds of yielding the most (least) return over a long period, more market players will buy (sell) the instrument exerting an upward (downward) pressure on its price thereby reshuffling rankings (and ranking probabilities). However, the estimated transition probabilities for the YEN contradict this assumption (see Figure 5).<m:math overflow="scroll"><m:mrow><m:mover accent="true"><m:mi>P</m:mi><m:mo>^</m:mo></m:mover><m:mrow><m:mo>(</m:mo><m:msub><m:mi>Y</m:mi><m:mrow><m:mi>k</m:mi><m:mo>,</m:mo><m:mi>t</m:mi></m:mrow></m:msub><m:mo>=</m:mo><m:mn>10</m:mn><m:mo>|</m:mo><m:msub><m:mi mathvariant="script">F</m:mi><m:mrow><m:mi>t</m:mi><m:mo>-</m:mo><m:mn>1</m:mn></m:mrow></m:msub><m:mo>)</m:mo></m:mrow></m:mrow></m:math> tended to be much higher on average than <m:math overflow="scroll"><m:mrow><m:mover accent="true"><m:mi>P</m:mi><m:mo>^</m:mo></m:mover><m:mrow><m:mo>(</m:mo><m:msub><m:mi>Y</m:mi><m:mrow><m:mi>k</m:mi><m:mo>,</m:mo><m:mi>t</m:mi></m:mrow></m:msub><m:mo>=</m:mo><m:mn>1</m:mn><m:mo>|</m:mo><m:msub><m:mi mathvariant="script">F</m:mi><m:mrow><m:mi>t</m:mi><m:mo>-</m:mo><m:mn>1</m:mn></m:mrow></m:msub><m:mo>)</m:mo></m:mrow></m:mrow></m:math>, which tended to be least. Overall, Figures 36 highlight two shortcomings: the requirements:
+</para>
+      <list id="id2270122" display="block" list-type="bulleted">
+        <item id="uid36">
+          <m:math overflow="scroll">
+            <m:mrow>
+              <m:msubsup>
+                <m:mo>∑</m:mo>
+                <m:mrow>
+                  <m:mi>j</m:mi>
+                  <m:mo>=</m:mo>
+                  <m:mn>1</m:mn>
+                </m:mrow>
+                <m:mn>10</m:mn>
+              </m:msubsup>
+              <m:mover accent="true">
+                <m:mi>P</m:mi>
+                <m:mo>^</m:mo>
+              </m:mover>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:msub>
+                  <m:mi>Y</m:mi>
+                  <m:mrow>
+                    <m:mi>k</m:mi>
+                    <m:mo>,</m:mo>
+                    <m:mi>t</m:mi>
+                  </m:mrow>
+                </m:msub>
+                <m:mo>=</m:mo>
+                <m:mi>j</m:mi>
+                <m:mo>|</m:mo>
+                <m:msub>
+                  <m:mi mathvariant="script">F</m:mi>
+                  <m:mrow>
+                    <m:mi>t</m:mi>
+                    <m:mo>-</m:mo>
+                    <m:mn>1</m:mn>
+                  </m:mrow>
+                </m:msub>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>=</m:mo>
+              <m:mn>1</m:mn>
+            </m:mrow>
+          </m:math>
+        </item>
+        <item id="uid37"><m:math overflow="scroll"><m:mrow><m:mover accent="true"><m:mi>P</m:mi><m:mo>^</m:mo></m:mover><m:mrow><m:mo>(</m:mo><m:msub><m:mi>Y</m:mi><m:mrow><m:mi>k</m:mi><m:mo>,</m:mo><m:mi>t</m:mi></m:mrow></m:msub><m:mo>=</m:mo><m:mi>j</m:mi><m:mo>|</m:mo><m:msub><m:mi mathvariant="script">F</m:mi><m:mrow><m:mi>t</m:mi><m:mo>-</m:mo><m:mn>1</m:mn></m:mrow></m:msub><m:mo>)</m:mo></m:mrow><m:mo>&gt;</m:mo><m:mn>0</m:mn></m:mrow></m:math>.
+
+</item>
+      </list>
+      <para id="id2270291">are not met for all instruments and for all <emphasis effect="italics">t</emphasis>. Figure 7 compares the periodic and nonperiodic transition probabilities for the YEN. For to simplify the plot only the first 6 rankings are shown over a period of 50 weeks.
+</para>
+      <figure id="uid38">
+        <media id="uid38_media" alt="">
+          <image mime-type="image/png" src="../../media/pJPY1.png" id="uid38_onlineimage" width="1680"><!-- NOTE: attribute width changes image size online (pixels). original width is 1680. --></image>
+          <image for="pdf" mime-type="application/postscript" src="../../media/pJPY1.eps" id="uid38_printimage"/>
+        </media>
+        <caption>Estimated transition probabilities for JPY
+</caption>
+      </figure>
+      <figure id="uid39">
+        <media id="uid39_media" alt="">
+          <image mime-type="image/png" src="../../media/pAUD1.png" id="uid39_onlineimage" width="1680"><!-- NOTE: attribute width changes image size online (pixels). original width is 1680. --></image>
+          <image for="pdf" mime-type="application/postscript" src="../../media/pAUD1.eps" id="uid39_printimage"/>
+        </media>
+        <caption>Estimated transition probabilities for AUD
+</caption>
+      </figure>
+      <figure id="uid40">
+        <media id="uid40_media" alt="">
+          <image mime-type="image/png" src="../../media/pJPY2.png" id="uid40_onlineimage" width="1680"><!-- NOTE: attribute width changes image size online (pixels). original width is 1680. --></image>
+          <image for="pdf" mime-type="application/postscript" src="../../media/pJPY2.eps" id="uid40_printimage"/>
+        </media>
+        <caption>Estimated transition probabilities for JPY
+</caption>
+      </figure>
+      <figure id="uid41">
+        <media id="uid41_media" alt="">
+          <image mime-type="image/png" src="../../media/pAUD2.png" id="uid41_onlineimage" width="1680"><!-- NOTE: attribute width changes image size online (pixels). original width is 1680. --></image>
+          <image for="pdf" mime-type="application/postscript" src="../../media/pAUD2.eps" id="uid41_printimage"/>
+        </media>
+        <caption>Estimated transition probabilities for AUD
+</caption>
+      </figure>
+      <figure id="uid42">
+        <media id="uid42_media" alt="">
+          <image mime-type="image/png" src="../../media/plot4.png" id="uid42_onlineimage" width="1664"><!-- NOTE: attribute width changes image size online (pixels). original width is 1664. --></image>
+          <image for="pdf" mime-type="application/postscript" src="../../media/plot4.eps" id="uid42_printimage"/>
+        </media>
+        <caption>Estimated periodic and non periodic transition probabilities for JPY
+</caption>
+      </figure>
+      <para id="id2270471">To evaluate the accuracy of the estimated onestep transition probabilities, define the following rank predictors
+</para>
+      <list id="id2270480" display="block" list-type="bulleted">
+        <item id="uid43">UL
+<m:math overflow="scroll"><m:mrow><m:msub><m:mi>G</m:mi><m:mrow><m:mi>k</m:mi><m:mo>,</m:mo><m:mi>t</m:mi></m:mrow></m:msub><m:mo>=</m:mo><m:munder><m:mo form="prefix">argmax</m:mo><m:mi>j</m:mi></m:munder><m:mspace width="0.277778em"/><m:mfenced separators="" open="(" close=")"><m:msub><m:mover accent="true"><m:mi>P</m:mi><m:mo>^</m:mo></m:mover><m:mrow><m:mi>k</m:mi><m:mo>,</m:mo><m:mi>j</m:mi><m:mo>,</m:mo><m:mi>t</m:mi></m:mrow></m:msub></m:mfenced></m:mrow></m:math></item>
+        <item id="uid44">Per
+<m:math overflow="scroll"><m:mrow><m:msub><m:mi>G</m:mi><m:mrow><m:mi>k</m:mi><m:mo>,</m:mo><m:mi>t</m:mi></m:mrow></m:msub><m:mo>=</m:mo><m:munder><m:mo form="prefix">argmax</m:mo><m:mi>j</m:mi></m:munder><m:mspace width="0.277778em"/><m:mfenced separators="" open="(" close=")"><m:msub><m:mover accent="true"><m:mi mathvariant="bold">P</m:mi><m:mo>^</m:mo></m:mover><m:msub><m:mi>h</m:mi><m:mi>k</m:mi></m:msub></m:msub><m:mrow><m:mo>(</m:mo><m:mi>j</m:mi><m:mo>,</m:mo><m:mi>t</m:mi><m:mo>)</m:mo></m:mrow></m:mfenced></m:mrow></m:math></item>
+        <item id="uid45">ML
+Let <m:math overflow="scroll"><m:mrow><m:msub><m:mi>C</m:mi><m:mrow><m:mi>j</m:mi><m:mi>t</m:mi></m:mrow></m:msub><m:mo>=</m:mo><m:mrow><m:mo>{</m:mo><m:msub><m:mover accent="true"><m:mi>P</m:mi><m:mo>^</m:mo></m:mover><m:mrow><m:mi>k</m:mi><m:mo>,</m:mo><m:mi>j</m:mi><m:mo>,</m:mo><m:mi>t</m:mi></m:mrow></m:msub><m:mo>}</m:mo></m:mrow></m:mrow></m:math> and <m:math overflow="scroll"><m:mrow><m:msub><m:mi>C</m:mi><m:mrow><m:mi>j</m:mi><m:mi>t</m:mi></m:mrow></m:msub><m:mo>-</m:mo><m:mi>k</m:mi><m:mo>=</m:mo><m:msub><m:mi>C</m:mi><m:mrow><m:mi>j</m:mi><m:mi>t</m:mi></m:mrow></m:msub><m:mrow><m:mo>∖</m:mo></m:mrow><m:msub><m:mover accent="true"><m:mi>P</m:mi><m:mo>^</m:mo></m:mover><m:mrow><m:mi>k</m:mi><m:mo>,</m:mo><m:mi>j</m:mi><m:mo>,</m:mo><m:mi>t</m:mi></m:mrow></m:msub></m:mrow></m:math>.
+
+for <m:math overflow="scroll"><m:mrow><m:mi>j</m:mi><m:mo>=</m:mo><m:mn>1</m:mn></m:mrow></m:math> to 10
+
+<m:math overflow="scroll"><m:mrow><m:mspace width="28.45274pt"/><m:msub><m:mi>k</m:mi><m:mi>j</m:mi></m:msub><m:mo>=</m:mo><m:munder><m:mo form="prefix">argmax</m:mo><m:mi>k</m:mi></m:munder><m:mspace width="0.277778em"/><m:mrow><m:mo>(</m:mo><m:msub><m:mi>C</m:mi><m:mrow><m:mi>j</m:mi><m:mi>t</m:mi></m:mrow></m:msub><m:mo>)</m:mo></m:mrow></m:mrow></m:math><m:math overflow="scroll"><m:mrow><m:mspace width="28.45274pt"/><m:mi>i</m:mi><m:mi>f</m:mi><m:mo>(</m:mo></m:mrow></m:math>currency <emphasis effect="italics">k</emphasis> corresponds to <emphasis effect="italics">k<sub>j</sub></emphasis>) THEN <m:math overflow="scroll"><m:mrow><m:msub><m:mi>G</m:mi><m:mrow><m:mi>k</m:mi><m:mo>,</m:mo><m:mi>t</m:mi></m:mrow></m:msub><m:mo>=</m:mo><m:mi>j</m:mi></m:mrow></m:math><m:math overflow="scroll"><m:mrow><m:mspace width="28.45274pt"/><m:msub><m:mi>C</m:mi><m:mrow><m:mi>j</m:mi><m:mo>+</m:mo><m:mn>1</m:mn><m:mo>,</m:mo><m:mi>t</m:mi></m:mrow></m:msub><m:mo>=</m:mo><m:msub><m:mi>C</m:mi><m:mrow><m:mi>j</m:mi><m:mo>+</m:mo><m:mn>1</m:mn><m:mo>,</m:mo><m:mi>t</m:mi></m:mrow></m:msub><m:mrow><m:mo>∖</m:mo></m:mrow><m:mrow><m:mo>{</m:mo><m:msub><m:mi>k</m:mi><m:mn>1</m:mn></m:msub><m:mo>,</m:mo><m:mo>⋯</m:mo><m:mo>,</m:mo><m:msub><m:mi>k</m:mi><m:mrow><m:mi>j</m:mi><m:mo>-</m:mo><m:mn>1</m:mn></m:mrow></m:msub><m:mo>}</m:mo></m:mrow></m:mrow></m:math>
+
+End
+
+</item>
+      </list>
+      <para id="id2271051">UL classifies the week <emphasis effect="italics">t</emphasis> ranking of currency <emphasis effect="italics">k</emphasis> to the ranking category with the highest week <emphasis effect="italics">t</emphasis> odds based on the non periodic estimated probabilities, <m:math overflow="scroll"><m:msub><m:mover accent="true"><m:mi>P</m:mi><m:mo>^</m:mo></m:mover><m:mrow><m:mi>k</m:mi><m:mo>,</m:mo><m:mi>j</m:mi><m:mo>,</m:mo><m:mi>t</m:mi></m:mrow></m:msub></m:math>. Per assigns currency k's week <emphasis effect="italics">t</emphasis> ranking to the category with the highest week <emphasis effect="italics">t</emphasis> odds but based on the periodic estimated probabilities, <m:math overflow="scroll"><m:mrow><m:msub><m:mover accent="true"><m:mi mathvariant="bold">P</m:mi><m:mo>^</m:mo></m:mover><m:msub><m:mi>h</m:mi><m:mi>k</m:mi></m:msub></m:msub><m:mrow><m:mo>(</m:mo><m:mi>j</m:mi><m:mo>,</m:mo><m:mi>t</m:mi><m:mo>)</m:mo></m:mrow></m:mrow></m:math>. ML predicts currency <emphasis effect="italics">k</emphasis> to ranking <emphasis effect="italics">j</emphasis> at week <emphasis effect="italics">t</emphasis> if <emphasis effect="italics">k</emphasis> is unranked at week <emphasis effect="italics">t</emphasis> and has highest week <emphasis effect="italics">t</emphasis> probability of <emphasis effect="italics">j</emphasis> amongst all currencies unranked at week <emphasis effect="italics">t</emphasis>. One step predictions were compared against true rankings from week 27 to week 126; results from week 27 to 56 (first 30 weeks) are shown in Figure 8. Absolute error estimates for the ML and UL estimators were obtained by non parametric bootstrap for currency k, as follows:
+</para>
+      <list id="id2271259" display="block" list-type="enumerated">
+        <item id="uid46">Sample 100 ranking and volatility observations (with replacement) from k's ranking and volatility series from week 27 to 126, treating each resulting sample as a time series with respect to the ordering observations are sampled.
+
+</item>
+        <item id="uid47">Estimate onestep transition probability <m:math overflow="scroll"><m:msub><m:mover accent="true"><m:mi>P</m:mi><m:mo>˜</m:mo></m:mover><m:mrow><m:mi>k</m:mi><m:mo>,</m:mo><m:mi>j</m:mi><m:mo>,</m:mo><m:mi>t</m:mi></m:mrow></m:msub></m:math> based on sampled rankings.
+
+</item>
+        <item id="uid48">Obtain predictions (UL or ML) based on <m:math overflow="scroll"><m:msub><m:mover accent="true"><m:mi>P</m:mi><m:mo>˜</m:mo></m:mover><m:mrow><m:mi>k</m:mi><m:mo>,</m:mo><m:mi>j</m:mi><m:mo>,</m:mo><m:mi>t</m:mi></m:mrow></m:msub></m:math>'s.
+
+</item>
+        <item id="uid49">Calculate absolute error of each prediction made over the period.
+
+</item>
+      </list>
+      <para id="id2271392">Due to the computation time of each iteration, I was only able to repeated 50 iterations. Averaging the absolute errors accross the period for both estimators (UL and ML). Refer to Figure 5.
+
+</para>
+      <figure id="uid50">
+        <media id="uid50_media" alt="">
+          <image mime-type="image/png" src="../../media/plot3.png" id="uid50_onlineimage" width="1664"><!-- NOTE: attribute width changes image size online (pixels). original width is 1664. --></image>
+          <image for="pdf" mime-type="application/postscript" src="../../media/plot3.eps" id="uid50_printimage"/>
+        </media>
+        <caption>Accuracy of one step predictors UL, ML, and Per.
+</caption>
+      </figure>
+      <figure id="uid51">
+        <media id="uid51_media" alt="">
+          <image mime-type="image/png" src="../../media/variance.png" id="uid51_onlineimage" width="1018"><!-- NOTE: attribute width changes image size online (pixels). original width is 1018. --></image>
+          <image for="pdf" mime-type="application/postscript" src="../../media/variance.eps" id="uid51_printimage"/>
+        </media>
+        <caption>Mean absolute error estimates for UL and ML.
+</caption>
+      </figure>
+      <para id="id2271466">In summary, the UL estimator tends to have lower absolute prediction error than the ML estimator. For the period considered, prediction error varies by currency, with the CAD being most predictable (consistent across the 3 estimators) than the other currencies. The results also highlight 6 to 8 week periods in which Per and UL estimators fail to adjust with the true rankings. This results suggests model parameters for estimating one-step probabilities should be estimated from more recent history (instead of six month ranking history). Additionally, spline based regression functions should be considered to improve accuracy of the one step transition probability estimates.
+</para>
+    </section>
+    <section id="cid5">
+      <title>Acknowledgements</title>
+      <para id="id2271506">The author would like to thank Dr. Kathy Ensor, Department of Statistics, Rice University for her valuable insights.
+This Connexions module describes work conducted as part of Rice University's VIGRE program, supported by National Science Foundation grant 0739420.
+</para>
+    </section>
+    <section id="cid6">
+      <title>References</title>
+      <list id="id2271528" display="block" list-type="enumerated">
+        <item id="uid52">G. Kitagawa. Non-Gaussian state-space modeling of non stationary time series. Journal of the American Statistical Association, 1987, Vol. 82, No. 400.
+
+</item>
+        <item id="uid53">J.D Hamilton. Time Series Analysis. Princeton University Press, New Jersey, 1994.
+
+</item>
+        <item id="uid54">F. Menard, S.Dallot, and G. Thomas. A stochastic model for ordered categorical time series. Application to planktonic abundance data. Ecological Modeling 66(1993)101-112.
+
+</item>
+        <item id="uid55">L. Fahrmeir. State space modeling and conditional estimation for categorical time series. in D.R. Brillinger et al., editor, New Directions in Time Seriest, pages 87-110, new York 1992. Springer.
+
+</item>
+        <item id="uid56">P. McCullagh. Regression Models for Ordinal Data. Journal of Royal Statistical Society B(1980), 42, No. 2, pp 109-142.
+
+</item>
+        <item id="uid57">P. Billingsley. Statistical Inference for Markov processes. The University of Chicago Press, Chicago. 74 pp.
+
+</item>
+        <item id="uid58">R. Durrett. Essentials of Stochastic Processes. Springer-Verlag, New York, 1999.
+
+</item>
+        <item id="uid59">B Kedem and K Fokianos. Regression Models for Time Series Analysis. John Wiley &amp; Sons, New Jersey, 2002.
+
+</item>
+      </list>
+    </section>
+  </content>
+</document>

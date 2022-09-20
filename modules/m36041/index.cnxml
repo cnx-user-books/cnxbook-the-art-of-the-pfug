@@ -1,0 +1,361 @@
+<document xmlns="http://cnx.rice.edu/cnxml" xmlns:m="http://www.w3.org/1998/Math/MathML" xmlns:bib="http://bibtexml.sf.net/">
+  <title>Legendrian knots and links</title>
+<metadata xmlns:md="http://cnx.rice.edu/mdml">
+  <md:content-id>m36041</md:content-id>
+  <md:title>Legendrian knots and links</md:title>
+  <md:abstract>VIGRE is a program sponsored by the National Science Foundation to carry out innovative educational programs in which research and education are integrated and in which undergraduates, graduate students, postdoctoral fellows, and faculty are mutually supportive.  This work outlines the Topology PFUG on Legendrian knots and links offered at Rice University as MATH 499, section 004, in the Fall of 2009.</md:abstract>
+  <md:uuid>3402a979-464b-47e3-a0c5-f14019e54fae</md:uuid>
+</metadata>
+
+<content>
+    <section id="cid1">
+      <title>Introduction</title>
+      <para id="id227406">In studying knots, mathematicians often make the assumption that all knots under consideration are smooth. Yet knots that appear in nature are often rigid. A stick knot, or polygonal knot, is a knot composed of line segments attached at their edges. Much work has been done over the last few decades towards determining the minimum number of sticks necessary to construct a given knot in <m:math overflow="scroll"><m:msup><m:mi mathvariant="double-struck">R</m:mi><m:mn>3</m:mn></m:msup></m:math>. In this PFUG we ask the same question when restrictions are placed on the way the sticks may lay in <m:math overflow="scroll"><m:msup><m:mi mathvariant="double-struck">R</m:mi><m:mn>3</m:mn></m:msup></m:math>. That is, we seek to determine the minimum number of Legendrian sticks necessary to construct a given Legendrian knot.</para>
+    </section>
+    <section id="cid2">
+      <title>Preliminaries</title>
+      <para id="id227793"><emphasis effect="bold">Definition 2.1</emphasis> A <emphasis effect="italics">contact structure</emphasis> <m:math overflow="scroll"><m:mi>ξ</m:mi></m:math> on <m:math overflow="scroll"><m:msup><m:mi mathvariant="double-struck">R</m:mi><m:mn>3</m:mn></m:msup></m:math> assigns to each point <m:math overflow="scroll"><m:mrow><m:mi>p</m:mi><m:mo>∈</m:mo><m:msup><m:mi mathvariant="double-struck">R</m:mi><m:mn>3</m:mn></m:msup></m:mrow></m:math> a plane <m:math overflow="scroll"><m:mrow><m:msub><m:mi>ξ</m:mi><m:mi>p</m:mi></m:msub><m:mo>⊂</m:mo><m:msup><m:mi mathvariant="double-struck">R</m:mi><m:mn>3</m:mn></m:msup></m:mrow></m:math>. The <emphasis effect="italics">standard contact structure</emphasis> assigns to the point <m:math overflow="scroll"><m:mrow><m:mi>p</m:mi><m:mo>=</m:mo><m:mo>(</m:mo><m:mi>x</m:mi><m:mo>,</m:mo><m:mi>y</m:mi><m:mo>,</m:mo><m:mi>z</m:mi><m:mo>)</m:mo></m:mrow></m:math> the plane</para>
+      <equation id="id227910">
+        <m:math overflow="scroll" mode="display">
+          <m:mrow>
+            <m:msub>
+              <m:mi>ξ</m:mi>
+              <m:mi>p</m:mi>
+            </m:msub>
+            <m:mo>=</m:mo>
+            <m:mtext>Span</m:mtext>
+            <m:mrow>
+              <m:mo>{</m:mo>
+              <m:msub>
+                <m:mover accent="true">
+                  <m:mi>e</m:mi>
+                  <m:mo>→</m:mo>
+                </m:mover>
+                <m:mn>2</m:mn>
+              </m:msub>
+              <m:mo>,</m:mo>
+              <m:msub>
+                <m:mover accent="true">
+                  <m:mi>e</m:mi>
+                  <m:mo>→</m:mo>
+                </m:mover>
+                <m:mn>1</m:mn>
+              </m:msub>
+              <m:mo>+</m:mo>
+              <m:mi>y</m:mi>
+              <m:msub>
+                <m:mover accent="true">
+                  <m:mi>e</m:mi>
+                  <m:mo>→</m:mo>
+                </m:mover>
+                <m:mn>3</m:mn>
+              </m:msub>
+              <m:mo>}</m:mo>
+            </m:mrow>
+            <m:mo>,</m:mo>
+          </m:mrow>
+        </m:math>
+      </equation>
+      <para id="id227985">where we orient <m:math overflow="scroll"><m:msup><m:mi mathvariant="double-struck">R</m:mi><m:mn>3</m:mn></m:msup></m:math> via the Right Hand Rule.</para>
+      <para id="id228006"><figure id="id228009"><media id="id228009_media" alt=""><image mime-type="image/png" src="../../media/contact1.png" id="id228009_onlineimage" width="480"><!-- NOTE: attribute width changes image size online (pixels). original width is 480. --></image><image mime-type="application/postscript" for="pdf" src="../../media/contact1.eps" id="id228009_printimage" print-width=".7"><!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)--></image></media><caption>The standard contact structure.  Figure courtesy of the Wikipedia article on contact geometry, http://en.wikipedia.org/wiki/Contact_geometry.</caption></figure>
+
+</para>
+      <para id="id228023"/>
+      <para id="id228030"><emphasis effect="bold">Definition 2.2</emphasis> A <emphasis effect="italics">knot</emphasis> in <m:math overflow="scroll"><m:msup><m:mi mathvariant="double-struck">R</m:mi><m:mn>3</m:mn></m:msup></m:math> is the image of an embedding <m:math overflow="scroll"><m:mrow><m:mi>Φ</m:mi><m:mo>:</m:mo><m:msup><m:mi>S</m:mi><m:mn>1</m:mn></m:msup><m:mo>→</m:mo><m:msup><m:mi mathvariant="double-struck">R</m:mi><m:mn>3</m:mn></m:msup></m:mrow></m:math>. A <emphasis effect="italics">Legendrian knot</emphasis> in <m:math overflow="scroll"><m:mfenced separators="" open="(" close=")"><m:msup><m:mi mathvariant="double-struck">R</m:mi><m:mn>3</m:mn></m:msup><m:mo>,</m:mo><m:mi>ξ</m:mi></m:mfenced></m:math> is a knot such that</para>
+      <equation id="id228124">
+        <m:math overflow="scroll" mode="display">
+          <m:mrow>
+            <m:msup>
+              <m:mi>Φ</m:mi>
+              <m:mo>'</m:mo>
+            </m:msup>
+            <m:mrow>
+              <m:mo>(</m:mo>
+              <m:mi>θ</m:mi>
+              <m:mo>)</m:mo>
+            </m:mrow>
+            <m:mo>∈</m:mo>
+            <m:msub>
+              <m:mi>ξ</m:mi>
+              <m:mrow>
+                <m:mi>Φ</m:mi>
+                <m:mo>(</m:mo>
+                <m:mi>θ</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+            </m:msub>
+          </m:mrow>
+        </m:math>
+      </equation>
+      <para id="id228165">for all <m:math overflow="scroll"><m:mi>θ</m:mi></m:math>.</para>
+      <para id="id228178">Observe that if <m:math overflow="scroll"><m:mrow><m:mi>Φ</m:mi><m:mrow><m:mo>(</m:mo><m:mi>θ</m:mi><m:mo>)</m:mo></m:mrow><m:mo>=</m:mo><m:mfenced separators="" open="(" close=")"><m:mi>x</m:mi><m:mo>(</m:mo><m:mi>θ</m:mi><m:mo>)</m:mo><m:mo>,</m:mo><m:mi>y</m:mi><m:mo>(</m:mo><m:mi>θ</m:mi><m:mo>)</m:mo><m:mo>,</m:mo><m:mi>z</m:mi><m:mo>(</m:mo><m:mi>θ</m:mi><m:mo>)</m:mo></m:mfenced></m:mrow></m:math> parametrizes a knot <m:math overflow="scroll"><m:mi>L</m:mi></m:math> then for <m:math overflow="scroll"><m:mi>L</m:mi></m:math> to be Legendrian in the standard contact structure, <m:math overflow="scroll"><m:mrow><m:msup><m:mi>Φ</m:mi><m:mo>'</m:mo></m:msup><m:mrow><m:mo>(</m:mo><m:mi>θ</m:mi><m:mo>)</m:mo></m:mrow></m:mrow></m:math> must be orthogonal to <m:math overflow="scroll"><m:mrow><m:msub><m:mover accent="true"><m:mi>e</m:mi><m:mo>→</m:mo></m:mover><m:mn>2</m:mn></m:msub><m:mo>×</m:mo><m:mrow><m:mo>(</m:mo><m:msub><m:mover accent="true"><m:mi>e</m:mi><m:mo>→</m:mo></m:mover><m:mn>1</m:mn></m:msub><m:mo>+</m:mo><m:mi>y</m:mi><m:msub><m:mover accent="true"><m:mi>e</m:mi><m:mo>→</m:mo></m:mover><m:mn>3</m:mn></m:msub><m:mo>)</m:mo></m:mrow><m:mo>=</m:mo><m:mi>y</m:mi><m:msub><m:mover accent="true"><m:mi>e</m:mi><m:mo>→</m:mo></m:mover><m:mn>1</m:mn></m:msub><m:mo>-</m:mo><m:msub><m:mover accent="true"><m:mi>e</m:mi><m:mo>→</m:mo></m:mover><m:mn>3</m:mn></m:msub><m:mspace width="4.pt"/><m:mtext>.  In particular, </m:mtext><m:mspace width="4.pt"/><m:mi>y</m:mi><m:mrow><m:mo>(</m:mo><m:mi>θ</m:mi><m:mo>)</m:mo></m:mrow><m:msup><m:mi>x</m:mi><m:mo>'</m:mo></m:msup><m:mrow><m:mo>(</m:mo><m:mi>θ</m:mi><m:mo>)</m:mo></m:mrow><m:mo>-</m:mo><m:msup><m:mi>z</m:mi><m:mo>'</m:mo></m:msup><m:mrow><m:mo>(</m:mo><m:mi>θ</m:mi><m:mo>)</m:mo></m:mrow><m:mo>=</m:mo><m:mn>0</m:mn></m:mrow><m:mspace width="4.pt"/><m:mtext> for all </m:mtext><m:mspace width="4.pt"/>  <m:mi>θ .</m:mi></m:math></para>
+      <para id="id228609">Whenever we draw a knot in <m:math overflow="scroll"><m:msup><m:mi mathvariant="double-struck">R</m:mi><m:mn>3</m:mn></m:msup></m:math> we are actually drawing a projection of the knot in some plane with labeled crossings. We use the <emphasis effect="italics">front</emphasis> and <emphasis effect="italics">Lagrangian</emphasis> projections to draw Legendrian knots.</para>
+      <para id="id228640"><figure id="id228643"><media id="id228643_media" alt=""><image mime-type="image/png" src="../../media/Knots2.png" id="id228643_onlineimage" width="600"><!-- NOTE: attribute width changes image size online (pixels). original width is 750. --></image><image mime-type="application/postscript" for="pdf" src="../../media/Knots2.eps" id="id228643_printimage" print-width=".35"><!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)--></image></media><caption>A Legendrian unknot in the front projection, left, and Lagrangian projection, right.</caption></figure>
+
+</para>
+      <para id="id228658"/>
+      <para id="id228665"><emphasis effect="bold">Definition 2.3</emphasis> Let <m:math overflow="scroll"><m:mrow><m:mi>Π</m:mi><m:mo>:</m:mo><m:msup><m:mi mathvariant="double-struck">R</m:mi><m:mn>3</m:mn></m:msup><m:mo>→</m:mo><m:msup><m:mi mathvariant="double-struck">R</m:mi><m:mn>2</m:mn></m:msup></m:mrow></m:math> such that <m:math overflow="scroll"><m:mrow><m:mi>Π</m:mi><m:mo>(</m:mo><m:mi>x</m:mi><m:mo>,</m:mo><m:mi>y</m:mi><m:mo>,</m:mo><m:mi>z</m:mi><m:mo>)</m:mo><m:mo>=</m:mo><m:mo>(</m:mo><m:mi>x</m:mi><m:mo>,</m:mo><m:mi>z</m:mi><m:mo>)</m:mo></m:mrow></m:math>. The <emphasis effect="italics">front projection of <m:math overflow="scroll"><m:mi>L</m:mi></m:math></emphasis>, denoted <m:math overflow="scroll"><m:mrow><m:mi>Π</m:mi><m:mo>(</m:mo><m:mi>L</m:mi><m:mo>)</m:mo></m:mrow></m:math>, is the image of <m:math overflow="scroll"><m:mi>L</m:mi></m:math> under <m:math overflow="scroll"><m:mi>Π</m:mi></m:math>. If <m:math overflow="scroll"><m:mi>Φ</m:mi></m:math> above parametrizes <m:math overflow="scroll"><m:mi>L</m:mi></m:math> then <m:math overflow="scroll"><m:mrow><m:msub><m:mi>Φ</m:mi><m:mi>Π</m:mi></m:msub><m:mrow><m:mo>(</m:mo><m:mi>θ</m:mi><m:mo>)</m:mo></m:mrow><m:mo>:</m:mo><m:mo>=</m:mo><m:mfenced separators="" open="(" close=")"><m:mi>x</m:mi><m:mo>(</m:mo><m:mi>θ</m:mi><m:mo>)</m:mo><m:mo>,</m:mo><m:mi>z</m:mi><m:mo>(</m:mo><m:mi>θ</m:mi><m:mo>)</m:mo></m:mfenced></m:mrow></m:math> parametrizes <m:math overflow="scroll"><m:mrow><m:mi>Π</m:mi><m:mo>(</m:mo><m:mi>L</m:mi><m:mo>)</m:mo></m:mrow></m:math>.</para>
+      <para id="id228871">We see from the identity <m:math overflow="scroll"><m:mrow><m:mi>y</m:mi><m:mrow><m:mo>(</m:mo><m:mi>θ</m:mi><m:mo>)</m:mo></m:mrow><m:msup><m:mi>x</m:mi><m:mo>'</m:mo></m:msup><m:mrow><m:mo>(</m:mo><m:mi>θ</m:mi><m:mo>)</m:mo></m:mrow><m:mo>-</m:mo><m:msup><m:mi>z</m:mi><m:mo>'</m:mo></m:msup><m:mrow><m:mo>(</m:mo><m:mi>θ</m:mi><m:mo>)</m:mo></m:mrow><m:mo>=</m:mo><m:mn>0</m:mn></m:mrow></m:math> that the front projection of a Legendrian knot cannot have vertical tangencies, and at each crossing the slope of the over-crossing segment must be less than the slope of the under-crossing segment.</para>
+      <para id="id228929"><emphasis effect="bold">Definition 2.4</emphasis> Let <m:math overflow="scroll"><m:mrow><m:mi>π</m:mi><m:mo>:</m:mo><m:msup><m:mi mathvariant="double-struck">R</m:mi><m:mn>3</m:mn></m:msup><m:mo>→</m:mo><m:msup><m:mi mathvariant="double-struck">R</m:mi><m:mn>2</m:mn></m:msup></m:mrow></m:math> such that <m:math overflow="scroll"><m:mrow><m:mi>π</m:mi><m:mo>(</m:mo><m:mi>x</m:mi><m:mo>,</m:mo><m:mi>y</m:mi><m:mo>,</m:mo><m:mi>z</m:mi><m:mo>)</m:mo><m:mo>=</m:mo><m:mo>(</m:mo><m:mi>x</m:mi><m:mo>,</m:mo><m:mi>y</m:mi><m:mo>)</m:mo></m:mrow></m:math>. The <emphasis effect="italics">Lagrangian projection of <m:math overflow="scroll"><m:mi>L</m:mi></m:math></emphasis> is the image of <m:math overflow="scroll"><m:mi>L</m:mi></m:math> under <m:math overflow="scroll"><m:mi>π</m:mi></m:math> and is denoted <m:math overflow="scroll"><m:mrow><m:mi>π</m:mi><m:mo>(</m:mo><m:mi>L</m:mi><m:mo>)</m:mo></m:mrow></m:math>. As with the front projection, <m:math overflow="scroll"><m:mrow><m:mi>π</m:mi><m:mo>(</m:mo><m:mi>L</m:mi><m:mo>)</m:mo></m:mrow></m:math> is parametrized by <m:math overflow="scroll"><m:mrow><m:msub><m:mi>Φ</m:mi><m:mi>π</m:mi></m:msub><m:mrow><m:mo>(</m:mo><m:mi>θ</m:mi><m:mo>)</m:mo></m:mrow><m:mo>:</m:mo><m:mo>=</m:mo><m:mfenced separators="" open="(" close=")"><m:mi>x</m:mi><m:mo>(</m:mo><m:mi>θ</m:mi><m:mo>)</m:mo><m:mo>,</m:mo><m:mi>y</m:mi><m:mo>(</m:mo><m:mi>θ</m:mi><m:mo>)</m:mo></m:mfenced></m:mrow></m:math>.</para>
+    </section>
+    <section id="cid3">
+      <title>Reidemeister Moves</title>
+      <para id="id229131"><emphasis effect="bold">Definition 3.1</emphasis> Two Legendrian knots are <emphasis effect="italics">Legendrian isotopic</emphasis> if there is an isotopy <m:math overflow="scroll"><m:mrow><m:mi>H</m:mi><m:mo>:</m:mo><m:msup><m:mi>S</m:mi><m:mn>1</m:mn></m:msup><m:mo>×</m:mo><m:mi>I</m:mi><m:mo>→</m:mo><m:msup><m:mi mathvariant="double-struck">R</m:mi><m:mn>3</m:mn></m:msup></m:mrow></m:math> between them such that <m:math overflow="scroll"><m:mrow><m:msub><m:mi>H</m:mi><m:mi>t</m:mi></m:msub><m:mo>:</m:mo><m:msup><m:mi>S</m:mi><m:mn>1</m:mn></m:msup><m:mo>→</m:mo><m:msup><m:mi mathvariant="double-struck">R</m:mi><m:mn>3</m:mn></m:msup></m:mrow></m:math> parametrizes a Legendrian knot for each <m:math overflow="scroll"><m:mrow><m:mi>t</m:mi><m:mo>∈</m:mo><m:mi>I</m:mi></m:mrow></m:math>.</para>
+      <para id="id229231"><emphasis effect="bold">Theorem 3.2</emphasis> 
+Two front projections represent Legendrian isotopic Legendrian knots if and only if they are related by regular isotopy and a finite sequence of the moves <m:math overflow="scroll"><m:mrow><m:mi>Ω</m:mi><m:mo>(</m:mo><m:mn>1</m:mn><m:mo>)</m:mo><m:mo>,</m:mo><m:mi>Ω</m:mi><m:mo>(</m:mo><m:mn>2</m:mn><m:mo>)</m:mo><m:mo>,</m:mo><m:mspace width="2.pt"/><m:mtext>and</m:mtext><m:mspace width="2.pt"/><m:mi>Ω</m:mi><m:mo>(</m:mo><m:mn>3</m:mn><m:mo>)</m:mo><m:mo>,</m:mo></m:mrow></m:math> below.</para>
+      <para id="id229290">
+        <figure id="id229294"><media id="id229294_media" alt="">
+            <image mime-type="image/png" src="../../media/FrontRmoves1.png" id="id229294_onlineimage" width="520"><!-- NOTE: attribute width changes image size online (pixels). original width is 720. --></image>
+            <image mime-type="application/postscript" for="pdf" src="../../media/FrontRmoves1.eps" id="id229294_printimage" print-width=".4">
+              <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+            </image>
+          </media>
+        <caption>Reidemeister Moves for the front projection.</caption></figure>
+      </para>
+      <para id="id229302"><emphasis effect="bold">Theorem 3.3</emphasis> 
+If two Lagrangian projections represent Legendrian isotopic Legendrian knots then they are related by a sequence of the moves <m:math overflow="scroll"><m:mrow><m:mi>σ</m:mi><m:mo>(</m:mo><m:mn>1</m:mn><m:mo>)</m:mo></m:mrow></m:math> and <m:math overflow="scroll"><m:mrow><m:mi>σ</m:mi><m:mo>(</m:mo><m:mn>2</m:mn><m:mo>)</m:mo></m:mrow></m:math>, below.</para>
+      <para id="id229345">
+        <figure id="id229348"><media id="id229348_media" alt="">
+            <image mime-type="image/png" src="../../media/LagRmoves1.png" id="id229348_onlineimage" width="400"><!-- NOTE: attribute width changes image size online (pixels). original width is 640. --></image>
+            <image mime-type="application/postscript" for="pdf" src="../../media/LagRmoves1.eps" id="id229348_printimage" print-width=".4">
+              <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+            </image>
+          </media>
+        <caption>Reidemeister Moves for the Lagrangian projection.</caption></figure>
+      </para>
+      <para id="id229356"><emphasis effect="bold">Remark 3.4</emphasis> The converse to Theorem 3.3 is false: there exist non-Legendrian isotopic Legendrian knots whose Lagrangian projections are related by a finite sequence of the moves <m:math overflow="scroll"><m:mrow><m:mi>σ</m:mi><m:mo>(</m:mo><m:mn>1</m:mn><m:mo>)</m:mo></m:mrow></m:math> and <m:math overflow="scroll"><m:mrow><m:mi>σ</m:mi><m:mo>(</m:mo><m:mn>2</m:mn><m:mo>)</m:mo></m:mrow></m:math>.</para>
+    </section>
+    <section id="cid4">
+      <title>Invariants of Legendrian Knots</title>
+      <para id="id229418"><emphasis effect="bold">Definition 4.1</emphasis> The <emphasis effect="italics">rotation number</emphasis> of an oriented Legendrian knot is</para>
+      <equation id="id229436">
+        <m:math overflow="scroll" mode="display">
+          <m:mrow>
+            <m:mi>r</m:mi>
+            <m:mrow>
+              <m:mo>(</m:mo>
+              <m:mi>L</m:mi>
+              <m:mo>)</m:mo>
+            </m:mrow>
+            <m:mo>=</m:mo>
+            <m:mfrac>
+              <m:mn>1</m:mn>
+              <m:mn>2</m:mn>
+            </m:mfrac>
+            <m:mrow>
+              <m:mo>(</m:mo>
+              <m:mi>D</m:mi>
+              <m:mo>-</m:mo>
+              <m:mi>U</m:mi>
+              <m:mo>)</m:mo>
+            </m:mrow>
+            <m:mo>,</m:mo>
+          </m:mrow>
+        </m:math>
+      </equation>
+      <para id="id229478">where <m:math overflow="scroll"><m:mi>D</m:mi></m:math> is the number of down cusps in the front projection and <m:math overflow="scroll"><m:mi>U</m:mi></m:math> is the number of up cusps.</para>
+      <para id="id229502"><emphasis effect="bold">Definition 4.2</emphasis> The <emphasis effect="italics">Thurston-Bennequin invariant</emphasis>, <m:math overflow="scroll"><m:mrow><m:mi>t</m:mi><m:mi>b</m:mi><m:mo>(</m:mo><m:mi>L</m:mi><m:mo>)</m:mo></m:mrow></m:math>, is the linking number between <m:math overflow="scroll"><m:mi>L</m:mi></m:math> and <m:math overflow="scroll"><m:msup><m:mi>L</m:mi><m:mo>'</m:mo></m:msup></m:math>, where <m:math overflow="scroll"><m:msup><m:mi>L</m:mi><m:mo>'</m:mo></m:msup></m:math> is a slight push-off of <m:math overflow="scroll"><m:mi>L</m:mi></m:math> in the <m:math overflow="scroll"><m:mi>z</m:mi></m:math>-direction.</para>
+      <para id="id229595">That is, <m:math overflow="scroll"><m:mrow><m:mi>t</m:mi><m:mi>b</m:mi><m:mo>(</m:mo><m:mi>L</m:mi><m:mo>)</m:mo></m:mrow></m:math> is one-half the signed count of the intersections between <m:math overflow="scroll"><m:mi>L</m:mi></m:math> and <m:math overflow="scroll"><m:msup><m:mi>L</m:mi><m:mo>'</m:mo></m:msup></m:math>, where we assign <m:math overflow="scroll"><m:mrow><m:mo>±</m:mo><m:mn>1</m:mn></m:mrow></m:math> to intersections as in the following diagram:</para>
+      <para id="id229653">
+        <figure id="id229656"><media id="id229656_media" alt="">
+            <image mime-type="image/png" src="../../media/Crossings.png" id="id229656_onlineimage" width="300"><!-- NOTE: attribute width changes image size online (pixels). original width is 640. --></image>
+            <image mime-type="application/postscript" for="pdf" src="../../media/Crossings.eps" id="id229656_printimage" print-width=".3">
+              <!--NOTE: attribute width changes image size in printed PDF (if specified in .tex file)-->
+            </image>
+          </media>
+        <caption>Following the Right Hand Rule, a positive crossing, left, and negative crossing, right.</caption></figure>
+      </para>
+      <para id="id229664"><emphasis effect="bold">Theorem 4.3</emphasis> 
+Two oriented Legendrian torus knots are Legendrian isotopic if and only if their Thurston-Bennequin invariants, rotation numbers, and (topological) knot types agree.</para>
+      <para id="id229678"><emphasis effect="bold">Remark 4.4</emphasis> Theorem 4.3 is not true for all knots. Y. Chekanov and Y. Eliashberg independently gave examples of non-Legendrian isotopic Legendrian knots with the same Thurston-Bennequin invariant, rotation number, and topological knot type.</para>
+    </section>
+    <section id="cid5">
+      <title>Stick Number</title>
+      <para id="id229707"><emphasis effect="bold">Definition 5.1</emphasis> A <emphasis effect="italics">stick knot</emphasis> is the image of a PL-embedding of <m:math overflow="scroll"><m:msup><m:mi>S</m:mi><m:mn>1</m:mn></m:msup></m:math> in <m:math overflow="scroll"><m:msup><m:mi mathvariant="double-struck">R</m:mi><m:mn>3</m:mn></m:msup></m:math>. That is, a knot composed of line segments attached to each other at their endpoints. We call the segments <emphasis effect="italics">edges</emphasis> and the joined endpoints <emphasis effect="italics">vertices</emphasis>, and we require that exactly two edges meet at each vertex. The <emphasis effect="italics">stick number</emphasis> <m:math overflow="scroll"><m:mrow><m:mi>S</m:mi><m:mo>(</m:mo><m:mi>L</m:mi><m:mo>)</m:mo></m:mrow></m:math> of a knot <m:math overflow="scroll"><m:mi>L</m:mi></m:math> is the minimum number of sticks necessary to make <m:math overflow="scroll"><m:mi>L</m:mi></m:math> in <m:math overflow="scroll"><m:msup><m:mi mathvariant="double-struck">R</m:mi><m:mn>3</m:mn></m:msup></m:math>.</para>
+      <para id="id229824"><emphasis effect="bold">Definition 5.2</emphasis> A <emphasis effect="italics">Legendrian stick knot</emphasis> is a stick knot that is Legendrian everywhere except at its vertices. The <emphasis effect="italics">Legendrian stick number</emphasis> of a Legendrian knot <m:math overflow="scroll"><m:mi>L</m:mi></m:math>, denoted <m:math overflow="scroll"><m:mrow><m:mi>L</m:mi><m:mi>S</m:mi><m:mo>(</m:mo><m:mi>L</m:mi><m:mo>)</m:mo></m:mrow></m:math>, is the minimum number of sticks necessary to make a stick knot that is Legendrian isotopic to <m:math overflow="scroll"><m:mi>L</m:mi></m:math> away from its vertices. The <emphasis effect="italics">front stick number</emphasis> of <m:math overflow="scroll"><m:mi>L</m:mi></m:math>, <m:math overflow="scroll"><m:mrow><m:mi>F</m:mi><m:mi>S</m:mi><m:mo>(</m:mo><m:mi>L</m:mi><m:mo>)</m:mo></m:mrow></m:math>, is the minimum number of sticks in a front diagram of <m:math overflow="scroll"><m:mi>L</m:mi></m:math>.</para>
+      <para id="id229928"><emphasis effect="bold">Remark 5.3</emphasis> It is not hard to see that <m:math overflow="scroll"><m:mrow><m:mi>L</m:mi><m:mi>S</m:mi><m:mo>(</m:mo><m:mi>L</m:mi><m:mo>)</m:mo><m:mo>=</m:mo><m:mn>2</m:mn><m:mi>F</m:mi><m:mi>S</m:mi><m:mo>(</m:mo><m:mi>L</m:mi><m:mo>)</m:mo></m:mrow></m:math>. For, if a stick lies in <m:math overflow="scroll"><m:mi>ξ</m:mi></m:math> then it is parametrized by a line segment</para>
+      <equation id="id229982">
+        <m:math overflow="scroll" mode="display">
+          <m:mrow>
+            <m:mi>l</m:mi>
+            <m:mrow>
+              <m:mo>(</m:mo>
+              <m:mi>t</m:mi>
+              <m:mo>)</m:mo>
+            </m:mrow>
+            <m:mo>=</m:mo>
+            <m:mfenced separators="" open="(" close=")">
+              <m:mi>x</m:mi>
+              <m:mo>(</m:mo>
+              <m:mi>t</m:mi>
+              <m:mo>)</m:mo>
+              <m:mo>,</m:mo>
+              <m:mi>y</m:mi>
+              <m:mo>(</m:mo>
+              <m:mi>t</m:mi>
+              <m:mo>)</m:mo>
+              <m:mo>,</m:mo>
+              <m:mi>z</m:mi>
+              <m:mo>(</m:mo>
+              <m:mi>t</m:mi>
+              <m:mo>)</m:mo>
+            </m:mfenced>
+            <m:mo>=</m:mo>
+            <m:mrow>
+              <m:mo>(</m:mo>
+              <m:msub>
+                <m:mi>m</m:mi>
+                <m:mi>x</m:mi>
+              </m:msub>
+              <m:mi>t</m:mi>
+              <m:mo>+</m:mo>
+              <m:msub>
+                <m:mi>x</m:mi>
+                <m:mn>0</m:mn>
+              </m:msub>
+              <m:mo>,</m:mo>
+              <m:msub>
+                <m:mi>m</m:mi>
+                <m:mi>y</m:mi>
+              </m:msub>
+              <m:mi>t</m:mi>
+              <m:mo>+</m:mo>
+              <m:msub>
+                <m:mi>y</m:mi>
+                <m:mn>0</m:mn>
+              </m:msub>
+              <m:mo>,</m:mo>
+              <m:msub>
+                <m:mi>m</m:mi>
+                <m:mi>z</m:mi>
+              </m:msub>
+              <m:mi>t</m:mi>
+              <m:mo>+</m:mo>
+              <m:msub>
+                <m:mi>z</m:mi>
+                <m:mn>0</m:mn>
+              </m:msub>
+              <m:mo>)</m:mo>
+            </m:mrow>
+          </m:mrow>
+        </m:math>
+      </equation>
+      <para id="id230110">for <m:math overflow="scroll"><m:mrow><m:mi>t</m:mi><m:mo>∈</m:mo><m:mi>I</m:mi></m:mrow></m:math> such that <m:math overflow="scroll"><m:mrow><m:mi>y</m:mi><m:mrow><m:mo>(</m:mo><m:mi>t</m:mi><m:mo>)</m:mo></m:mrow><m:msup><m:mi>x</m:mi><m:mo>'</m:mo></m:msup><m:mrow><m:mo>(</m:mo><m:mi>t</m:mi><m:mo>)</m:mo></m:mrow><m:mo>-</m:mo><m:msup><m:mi>z</m:mi><m:mo>'</m:mo></m:msup><m:mrow><m:mo>(</m:mo><m:mi>t</m:mi><m:mo>)</m:mo></m:mrow><m:mo>=</m:mo><m:mn>0</m:mn></m:mrow></m:math>. In particular, either <m:math overflow="scroll"><m:mrow><m:msub><m:mi>m</m:mi><m:mi>x</m:mi></m:msub><m:mo>=</m:mo><m:msub><m:mi>m</m:mi><m:mi>z</m:mi></m:msub><m:mo>=</m:mo><m:mn>0</m:mn></m:mrow></m:math>, in which case the stick runs perpendicular to the <m:math overflow="scroll"><m:mrow><m:mi>x</m:mi><m:mi>z</m:mi></m:mrow></m:math>-plane, or <m:math overflow="scroll"><m:mrow><m:msub><m:mi>m</m:mi><m:mi>y</m:mi></m:msub><m:mo>=</m:mo><m:mn>0</m:mn></m:mrow></m:math>, and the stick lies in a plane parallel to the <m:math overflow="scroll"><m:mrow><m:mi>x</m:mi><m:mi>z</m:mi></m:mrow></m:math>-plane.</para>
+      <para id="id230258">
+        <emphasis effect="bold">Example 5.4</emphasis>
+        <m:math overflow="scroll">
+          <m:mphantom>
+            <m:mi>M</m:mi>
+          </m:mphantom>
+        </m:math>
+      </para>
+      <list id="id230279" display="block" list-type="enumerated">
+        <item id="uid17"><label>a.</label>The minimum <m:math overflow="scroll"><m:mrow><m:mi>F</m:mi><m:mi>S</m:mi></m:mrow></m:math> number over all Legendrian unknots is 3.
+</item>
+        <item id="uid18"><label>b.</label>The Legendrian right-handed trefoil <m:math overflow="scroll"><m:msub><m:mi>T</m:mi><m:mi>R</m:mi></m:msub></m:math> with <m:math overflow="scroll"><m:mrow><m:mi>t</m:mi><m:mi>b</m:mi><m:mo>=</m:mo><m:mn>1</m:mn></m:mrow></m:math> has <m:math overflow="scroll"><m:mrow><m:mi>F</m:mi><m:mi>S</m:mi><m:mo>(</m:mo><m:msub><m:mi>T</m:mi><m:mi>R</m:mi></m:msub><m:mo>)</m:mo><m:mo>=</m:mo><m:mn>6</m:mn></m:mrow></m:math>. The (topological) right-handed trefoil has <m:math overflow="scroll"><m:mrow><m:mi>S</m:mi><m:mo>(</m:mo><m:msub><m:mi>T</m:mi><m:mi>R</m:mi></m:msub><m:mo>)</m:mo><m:mo>=</m:mo><m:mn>6</m:mn></m:mrow></m:math>.
+</item>
+      </list>
+    </section>
+    <section id="cid6">
+      <title>Questions</title>
+      <list id="id230419" display="block" list-type="enumerated"><item id="uid19">Define isotopy for Legendrian stick knots.
+</item>
+        <item id="uid20">Define Reidemeister moves for Legendrian stick knots in the front projection. Is there an analogue of Theorem 3.2?
+</item>
+        <item id="uid21">Are there analogues of the Thurston-Bennequin invariant and rotation number for Legendrian stick knots? How do they behave under the Reidemeister moves?
+</item>
+        <item id="uid22">Is there some relationship between <m:math overflow="scroll"><m:mrow><m:mi>F</m:mi><m:mi>S</m:mi><m:mo>(</m:mo><m:mi>L</m:mi><m:mo>)</m:mo></m:mrow></m:math> and <m:math overflow="scroll"><m:mrow><m:mi>S</m:mi><m:mo>(</m:mo><m:mi>L</m:mi><m:mo>)</m:mo></m:mrow></m:math>?
+</item>
+        <item id="uid23">In an REU with J. Sabloff, J. Ralston and S. Sacchetti showed that for the maximal Thurston-Bennequin representative of the torus knot <m:math overflow="scroll"><m:mrow><m:mi>T</m:mi><m:mo>(</m:mo><m:mn>2</m:mn><m:mo>,</m:mo><m:msub><m:mn>2</m:mn><m:mrow><m:mi>n</m:mi><m:mo>-</m:mo><m:mn>1</m:mn></m:mrow></m:msub><m:mo>)</m:mo></m:mrow></m:math>, <m:math overflow="scroll"><m:mrow><m:mi>F</m:mi><m:mi>S</m:mi><m:mfenced separators="" open="(" close=")"><m:mi>T</m:mi><m:mo>(</m:mo><m:mn>2</m:mn><m:mo>,</m:mo><m:msub><m:mn>2</m:mn><m:mrow><m:mi>n</m:mi><m:mo>-</m:mo><m:mn>1</m:mn></m:mrow></m:msub><m:mo>)</m:mo></m:mfenced><m:mo>≤</m:mo><m:mn>2</m:mn><m:mi>n</m:mi><m:mo>+</m:mo><m:mn>4</m:mn></m:mrow></m:math>. Can this be improved? Is there a bound for general torus knots?
+</item>
+      </list>
+    </section>
+    <section id="cid7">
+      <title>Acknowledgments</title>
+      <para id="id230622">This Connexions module describes work conducted as part of Rice University's VIGRE program, supported by National Science Foundation grant DMS-0739420. We would like to thank Dr. Josh Sabloff for suggesting this problem on Legendrian sticks, Dr. Shelly Harvey for assisting in the organization of our PFUG, and the undergraduate members C. Buenger, A. Jamshidi, S. Kruzick, A. Mehta, and M. Scherf.</para>
+    </section>
+  </content>
+  <bib:file>
+    <bib:entry id="bid4">
+      <bib:article>
+        <!--required fields-->
+        <bib:author>Adams, Colin C. and Brennan, Bevin M. and Greilsheimer, Deborah L. and Woo, Alexander K.</bib:author>
+        <bib:title>Stick numbers and composition of knots and links</bib:title>
+        <bib:journal>J. Knot Theory Ramifications</bib:journal>
+        <bib:year>1997</bib:year>
+        <!--optional fields-->
+        <bib:volume>6</bib:volume>
+        <bib:number>2</bib:number>
+        <bib:pages>149-161</bib:pages>
+        <bib:month/>
+        <bib:note/>
+      </bib:article>
+    </bib:entry>
+    <bib:entry id="bid3">
+      <bib:book>
+        <!--required fields-->
+        <bib:author>Adams, Colin C.</bib:author>
+        <bib:title>The knot book</bib:title>
+        <bib:publisher>American Mathematical Society</bib:publisher>
+        <bib:year>2004</bib:year>
+        <!--optional fields-->
+        <bib:volume/>
+        <bib:series/>
+        <bib:address>Providence, RI</bib:address>
+        <bib:edition>Revised reprint of the 1994 original</bib:edition>
+        <bib:month/>
+        <bib:note/>
+      </bib:book>
+    </bib:entry>
+    <bib:entry id="bid5">
+      <bib:unpublished>
+        <!--required fields-->
+        <bib:author>Etnyre, John</bib:author>
+        <bib:title>Legendrian and Transversal Knots</bib:title>
+        <bib:note>To Appear in the Handbook of Knot Theory</bib:note>
+        <!--optional fields-->
+        <bib:month/>
+        <bib:year/>
+      </bib:unpublished>
+    </bib:entry>
+    <bib:entry id="bid1">
+      <bib:book>
+        <!--required fields-->
+        <bib:author>Livingston, Charles</bib:author>
+        <bib:title>Knot theory</bib:title>
+        <bib:publisher>Mathematical Association of America</bib:publisher>
+        <bib:year>1993</bib:year>
+        <!--optional fields-->
+        <bib:volume>24</bib:volume>
+        <bib:series>Carus Mathematical Monographs</bib:series>
+        <bib:address>Washington, DC</bib:address>
+        <bib:edition/>
+        <bib:month/>
+        <bib:note/>
+      </bib:book>
+    </bib:entry>
+    <bib:entry id="bid0">
+      <bib:unpublished>
+        <!--required fields-->
+        <bib:author>Sabloff, Joshua</bib:author>
+        <bib:title>Invariants for Legendrian knots from contact homology</bib:title>
+        <bib:note>Preprint</bib:note>
+        <!--optional fields-->
+        <bib:month/>
+        <bib:year/>
+      </bib:unpublished>
+    </bib:entry>
+    <bib:entry id="bid2">
+      <bib:misc>
+        <!--required fields-->
+        <!--optional fields-->
+        <bib:author>Sabloff, Joshua</bib:author>
+        <bib:title>Personal correspondence</bib:title>
+        <bib:howpublished/>
+        <bib:month>August</bib:month>
+        <bib:year>2009</bib:year>
+        <bib:note/>
+      </bib:misc>
+    </bib:entry>
+  </bib:file>
+</document>

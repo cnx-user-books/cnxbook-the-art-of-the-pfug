@@ -1,0 +1,129 @@
+<document xmlns="http://cnx.rice.edu/cnxml" xmlns:md="http://cnx.rice.edu/mdml">
+  <title>LaTeX template for VIGRE modules: importing hyperlinks into Connexions</title>
+  <metadata><md:content-id>undefined</md:content-id><md:title/><md:uuid>4e4e3b62-fed0-4fe8-8759-a6dd35a739a0</md:uuid>
+</metadata>
+  <content>
+    <section id="cid1">
+      <title>Introduction</title>
+      <para id="id2253706">This small template is designed to illustrate one way to embed hyperlinks
+in your LaTeX document in a way that Connexions will readily translate.
+This requires use of the html
+ package; you might need to download
+html.sty
+ and supporting .sty
+ files.
+Details are addressed in <link target-id="cid3">"Downloading the html.sty file"</link> below.
+The popular alternative, hyperref.sty, is not presently
+supported by the LaTeX-to-Connexions translator.
+Alternatively, you can embed links manually in Connexions once you
+have imported your document. You might well find this manual route
+to be rather simpler at present.</para>
+      <para id="id2253745">For general advice about LaTeX-to-Connexions translations,
+see the accompanying <!--mode is not biblio--><link document="m18243">Connexions module</link>.</para>
+    </section>
+    <section id="cid2">
+      <title>Examples of hyperlinks</title>
+      <para id="id2253764">The \htmladdnormallink
+ and \htmladdnormallinkfoot
+ commands
+allow you to embed links in your LaTeX document.
+For example, the command</para>
+      <para id="id2253780"> \htmladdnormallink{Rice website}{http://www.rice.edu}
+</para>
+      <para id="id2253790">adds a link to the Rice university website.
+The first argument to the command \htmladdnormallink
+ will be printed
+as text, whereas the second is the web address (URL) itself.
+Thus, the command shown above displays as: <!--mode is not biblio--><link url="http://www.rice.edu">Rice website</link>.</para>
+      <para id="id2253810">In some cases you might like to also include the URL itself as the first argument,
+to get a link such as</para>
+      <para id="id2253815"> \htmladdnormallink{http://www.rice.edu}{http://www.rice.edu}
+</para>
+      <para id="id2253825">which displays as: <!--mode is not biblio--><link url="http://www.rice.edu">http://www.rice.edu</link>.
+If you want the link to appear in the LaTeX document, the
+\htmladdnormallinkfoot
+ command adds the URL as a footnote.
+For example,</para>
+      <para id="id2253844"> \htmladdnormallinkfoot{Rice website}{http://www.rice.edu}
+</para>
+      <para id="id2253854">produces the output: <!--mode is not biblio--><link url="http://www.rice.edu">Rice website</link>.
+The Connexions translator treats \htmladdnormallink
+
+and \htmladdnormallinkfoot
+ identically.</para>
+      <section id="uid1">
+        <title>A word of caution</title>
+        <para id="id2253884">One must beware of one complication: if the URL contains characters
+that have special meaning in LaTeX, then you can get run into frustrating errors.
+For example, if you wish to link to the page http://cnx.org/join_form
+,
+the underscore can cause trouble.</para>
+        <para id="id2253897"> \htmladdnormallink{http://cnx.org/join_form}{http://cnx.org/join_form}  % error!
+</para>
+        <para id="id2253907">will give an error due to the underscore in the <emphasis>first argument</emphasis>.
+(The underscore in the second argument, the link itself, is fine.)
+You can get around this problem by simply using normal next for the first argument,</para>
+        <para id="id2253922"> \htmladdnormallink{Join Connexions}{http://cnx.org/join_form}
+</para>
+        <para id="id2253931">which appears as: <!--mode is not biblio--><link url="http://cnx.org/join_form">Join Connexions</link>.</para>
+        <para id="id2253943">Note that the footnote version,
+htmladdnormallinkfoot
+,
+does not perform well for URLs that contain special characters.
+For example,</para>
+        <para id="id2253954"> \htmladdnormallinkfoot{Join Connexions}{http://cnx.org/join_form}  % error!
+</para>
+        <para id="id2253964">causes an error despite the absence of problematic characters in the first argument.</para>
+      </section>
+    </section>
+    <section id="cid3">
+      <title>Downloading the html.sty file</title>
+      <para id="id2253978">In drafting this guide, we experimented with several versions of
+html.sty
+.</para>
+      <para id="id2253988">First, we worked with version 95.1, which is available from, for example,
+<!--mode is not biblio--><link url="http://www.see.ed.ac.uk/~ltex/latex2e/html.sty">this link</link>.
+This version is easy to work with, but it does not actually embed clickable
+links in your LaTeX output; the links will show up properly in the Connexions
+translation.</para>
+      <para id="id2254003">If you want clickable links in your LaTeX document as well as Connexions,
+you will need a more recent version of html.sty
+.
+We tested with version 1.39 (which, counterintuitively, is newer than
+version 95.1). You can download this version from
+<!--mode is not biblio--><link url="http://www.eng.fsu.edu/~dommelen/l2hfu/notes/html.sty">this link</link>.
+This version requires a number of subordinate files that might not be included
+in your LaTeX installation. You can find most or all
+of these packages in the oberdiek
+ bundle on the
+<emphasis>Comphensive TeX Archive Network</emphasis> (CTAN); follow
+<!--mode is not biblio--><link url="http://tug.ctan.org/pkg/oberdiek">this link</link>
+and download the entire bundle.</para>
+      <para id="id2254045">Which version of html.sty
+ should you use?
+Try version 1.39 first; if it fails, then start
+downloading the missing packages, or just use version 95.1.</para>
+    </section>
+    <section id="cid4">
+      <title>Preparing your LaTeX file for import</title>
+      <para id="id2254066">When you create the .zip
+ file that contains your LaTeX source,
+graphics, and bibliography files, be sure to include the html.sty
+
+file. If this file is missing, the Connexions translator will fail to
+convert your file with minimal details about the error.
+(Note that if you use html.sty
+ version 1.39, you do not need to
+include the subordinate .sty
+ files referred to in the previous section.)</para>
+      <section id="uid2">
+        <title>Acknowledgements</title>
+        <para id="id2254105">We thank Jonathan Emmons and Brian West for their advice concerning
+conversion of LaTeX hyperlinks into Connexions.</para>
+        <para id="id2254110">This Connexions module describes work conducted as part of Rice
+University's VIGRE program, supported by National Science Foundation
+grant DMS–0739420.</para>
+      </section>
+    </section>
+  </content>
+</document>

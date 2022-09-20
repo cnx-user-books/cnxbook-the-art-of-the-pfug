@@ -1,0 +1,923 @@
+<document xmlns="http://cnx.rice.edu/cnxml" xmlns:m="http://www.w3.org/1998/Math/MathML" xmlns:md="http://cnx.rice.edu/mdml" xmlns:bib="http://bibtexml.sf.net/">
+  <title>Image Denoising via the Redundant Wavelet Transform</title>
+  <metadata><md:content-id>undefined</md:content-id><md:title/><md:uuid>acc97f31-f7c8-4502-8ce1-a2b571ada6ae</md:uuid>
+</metadata>
+  <content>
+    
+    
+    <section id="cid1">
+      <title>Introduction</title>
+      <para id="id2253756">The redundant wavelet transform (RWT) is widely used in order to denoise signals and images. Here, we consider two denoising methods used in the literature, to attempt to denoise astronomical images with the aim of obtaining images in which we can search for very faint objects that are not noise.</para>
+      <para id="id2253764">The paper is organized as follows. In <link target-id="cid2">"Redundant Wavelet Transform"</link>, we introduce a few algorithms used to compute the RWT. In <link target-id="cid3">"Denoising Algorithms based on the RWT"</link>, we discuss some denoising methods based on the RWT. In <link target-id="cid4">"Denoising Simulation"</link>, a description of the simulation and the results from the implemented methods can be found, which are further discussed in <link target-id="cid5">"Conclusions"</link>.</para>
+    </section>
+    <section id="cid2">
+      <title>Redundant Wavelet Transform</title>
+      <section id="uid1">
+        <title>Undecimated algorithm</title>
+        <para id="id2253804">The redundant discrete wavelet transform, similar in nature to the discrete wavelet transform, decomposes data into low-pass scaling (trend) and high-pass wavelet (detail) coefficients to obtain a projective decomposition of the data into different scales. More specifically, at each level the transform uses the scaling coefficients to compute the next level of scaling and wavelet coefficients. The difference lies in the fact that none of the latter are discarded through decimation as in the discrete wavelet transform but are instead retained, introducing a redundancy. This transform is good for denoising images, as the noise is usually spread over a small number of neighboring pixels. The Rice Wavelet Toolbox used to compute the transform in the simulation implements the redundant wavelet transform through the undecimated algorithm, which as its name suggests is similar to the discrete wavelet transform but omits downsampling, also known as decimation, in computation of the transform and upsampling in computation of the inverse transform<link target-id="bid0"/>.</para>
+      </section>
+      <section id="uid2">
+        <title><!--Math is not currently allowed in CNXML section title.-->A trous algorithm</title>
+        <para id="id2253854">Another method of computing the redundant wavelet transform, the <m:math><m:mover accent="true"><m:mi>a</m:mi><m:mo>´</m:mo></m:mover></m:math> trous algorithm differs from the undecimated algorithm by modifying the low-pass and high-pass filters at each consecutive level. The algorithm up-samples the low-pass filter at each level by inserting zeros between each of the filter's coefficients. The high-pass coefficients are then computed as the difference between the low-pass images from the two consecutive levels. To compute the inverse transform, the detail coefficients from all levels are added to the final low-resolution image <link target-id="bid0"/>. While inefficient in implementation, the <m:math><m:mover accent="true"><m:mi>a</m:mi><m:mo>´</m:mo></m:mover></m:math> trous algorithm provides additional insight into the redundant discrete wavelet transform.</para>
+      </section>
+    </section>
+    <section id="cid3">
+      <title>Denoising Algorithms based on the RWT</title>
+      <section id="uid3">
+        <title>Soft-Thresholding</title>
+        <para id="id2253919">In the traditional method of soft-thresholding, where the universal threshold is used, coefficients below a specified threshold are shrunk to zero while those above the threshold are shrunk by a factor of <m:math><m:mrow><m:mover accent="true"><m:mi>σ</m:mi><m:mo>^</m:mo></m:mover><m:msqrt><m:mo>(</m:mo></m:msqrt><m:mrow><m:mn>2</m:mn><m:mo form="prefix">log</m:mo><m:mrow><m:mo>(</m:mo><m:mi>N</m:mi><m:mo>)</m:mo></m:mrow><m:mo>)</m:mo></m:mrow></m:mrow></m:math><link target-id="bid1"/>. On the orthogonal wavelet transforms, it has been shown to exhibit the following property:</para>
+        <para id="id2253972">Theorem 1 
+
+For a sequence of i.i.d. random variables <m:math><m:mrow><m:msub><m:mi>z</m:mi><m:mi>i</m:mi></m:msub><m:mo>∼</m:mo><m:mi>N</m:mi><m:mrow><m:mo>(</m:mo><m:mn>0</m:mn><m:mo>,</m:mo><m:mn>1</m:mn><m:mo>)</m:mo></m:mrow></m:mrow></m:math>, <m:math><m:mrow><m:mi>P</m:mi><m:mo>(</m:mo><m:msub><m:mo movablelimits="true" form="prefix">max</m:mo><m:mrow><m:mi>i</m:mi><m:mo>=</m:mo><m:mn>1</m:mn><m:mo>.</m:mo><m:mo>.</m:mo><m:mi>N</m:mi></m:mrow></m:msub><m:mo>≤</m:mo><m:msqrt><m:mo>(</m:mo></m:msqrt><m:mn>2</m:mn><m:mo form="prefix">log</m:mo><m:mi>N</m:mi><m:mo>)</m:mo><m:mo>)</m:mo><m:mo>→</m:mo><m:mn>1</m:mn></m:mrow></m:math> for <m:math><m:mrow><m:mi>N</m:mi><m:mo>→</m:mo><m:mi>∞</m:mi></m:mrow></m:math>.</para>
+      </section>
+      <section id="uid5">
+        <title>Bivariate Shrinkage</title>
+        <para id="id2254330">Sendur and Selesnick <link target-id="bid2"/> proposed a bivariate shrinkage estimator by estimating the marginal variance of the wavelet coefficients via small neighborhoods as well as from the the corresponding neighborhoods of the parent coefficients. The developed method maintains the simplicity and intuition of soft-thresholding.</para>
+        <para id="id2254344">We can write</para>
+        <equation id="id2254347">
+          <m:math mode="display">
+            <m:mrow>
+              <m:msub>
+                <m:mi mathvariant="bold">y</m:mi>
+                <m:mi>k</m:mi>
+              </m:msub>
+              <m:mo>=</m:mo>
+              <m:msub>
+                <m:mi mathvariant="bold">w</m:mi>
+                <m:mi>k</m:mi>
+              </m:msub>
+              <m:mo>+</m:mo>
+              <m:msub>
+                <m:mi mathvariant="bold">n</m:mi>
+                <m:mi>k</m:mi>
+              </m:msub>
+              <m:mo>,</m:mo>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id2254391">where <m:math><m:msub><m:mi mathvariant="bold">w</m:mi><m:mi>k</m:mi></m:msub></m:math> are the parent and child wavelet coefficients of the true, noise-free image and <m:math><m:msub><m:mi mathvariant="bold">n</m:mi><m:mi>k</m:mi></m:msub></m:math> is the noise. We have for our variance, then, that</para>
+        <equation id="uid6">
+          <m:math mode="display">
+            <m:mrow>
+              <m:msubsup>
+                <m:mi>σ</m:mi>
+                <m:mi>y</m:mi>
+                <m:mn>2</m:mn>
+              </m:msubsup>
+              <m:mo>=</m:mo>
+              <m:msubsup>
+                <m:mi>σ</m:mi>
+                <m:mi>k</m:mi>
+                <m:mn>2</m:mn>
+              </m:msubsup>
+              <m:mo>+</m:mo>
+              <m:msubsup>
+                <m:mi>σ</m:mi>
+                <m:mi>n</m:mi>
+                <m:mn>2</m:mn>
+              </m:msubsup>
+              <m:mo>.</m:mo>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id2254481">Noting that we will always be working with one coefficient at a time, we will suppress the <m:math><m:mi>k</m:mi></m:math>.</para>
+        <para id="id2254496">In <link target-id="bid3"/>, Sendur and Selesnick proposed a bivariate pdf for the wavelet coefficient <m:math><m:msub><m:mi>w</m:mi><m:mn>1</m:mn></m:msub></m:math> and the parent <m:math><m:msub><m:mi>w</m:mi><m:mn>2</m:mn></m:msub></m:math> to be</para>
+        <equation id="id2254534">
+          <m:math mode="display">
+            <m:mrow>
+              <m:msub>
+                <m:mi>p</m:mi>
+                <m:mi>w</m:mi>
+              </m:msub>
+              <m:mrow>
+                <m:mo>(</m:mo>
+                <m:mi mathvariant="bold">w</m:mi>
+                <m:mo>)</m:mo>
+              </m:mrow>
+              <m:mo>=</m:mo>
+              <m:mfrac>
+                <m:mn>3</m:mn>
+                <m:mrow>
+                  <m:mn>2</m:mn>
+                  <m:mi>π</m:mi>
+                  <m:msup>
+                    <m:mi>σ</m:mi>
+                    <m:mn>2</m:mn>
+                  </m:msup>
+                </m:mrow>
+              </m:mfrac>
+              <m:mrow>
+                <m:mo form="prefix">exp</m:mo>
+                <m:mo>(</m:mo>
+                <m:mo>-</m:mo>
+              </m:mrow>
+              <m:mfrac>
+                <m:msqrt>
+                  <m:mn>3</m:mn>
+                </m:msqrt>
+                <m:mi>σ</m:mi>
+              </m:mfrac>
+              <m:msqrt>
+                <m:mrow>
+                  <m:mo>(</m:mo>
+                  <m:msubsup>
+                    <m:mi>w</m:mi>
+                    <m:mn>1</m:mn>
+                    <m:mn>2</m:mn>
+                  </m:msubsup>
+                  <m:mo>+</m:mo>
+                  <m:msubsup>
+                    <m:mi>w</m:mi>
+                    <m:mn>2</m:mn>
+                    <m:mn>2</m:mn>
+                  </m:msubsup>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+              </m:msqrt>
+              <m:mo>,</m:mo>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id2254628">where the marginal variance <m:math><m:msup><m:mi>σ</m:mi><m:mn>2</m:mn></m:msup></m:math> is dependent upon the coefficient index <m:math><m:mi>k</m:mi></m:math>. They derived their MAP estimator to be</para>
+        <equation id="uid7">
+          <m:math mode="display">
+            <m:mrow>
+              <m:msub>
+                <m:mover accent="true">
+                  <m:mi>w</m:mi>
+                  <m:mo>^</m:mo>
+                </m:mover>
+                <m:mn>1</m:mn>
+              </m:msub>
+              <m:mo>=</m:mo>
+              <m:mfrac>
+                <m:msub>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:msqrt>
+                      <m:mrow>
+                        <m:msubsup>
+                          <m:mi>y</m:mi>
+                          <m:mn>1</m:mn>
+                          <m:mn>2</m:mn>
+                        </m:msubsup>
+                        <m:mo>+</m:mo>
+                        <m:msubsup>
+                          <m:mi>y</m:mi>
+                          <m:mn>2</m:mn>
+                          <m:mn>2</m:mn>
+                        </m:msubsup>
+                      </m:mrow>
+                    </m:msqrt>
+                    <m:mo>-</m:mo>
+                    <m:mfrac>
+                      <m:mrow>
+                        <m:msqrt>
+                          <m:mn>3</m:mn>
+                        </m:msqrt>
+                        <m:msubsup>
+                          <m:mi>σ</m:mi>
+                          <m:mi>n</m:mi>
+                          <m:mn>2</m:mn>
+                        </m:msubsup>
+                      </m:mrow>
+                      <m:mi>σ</m:mi>
+                    </m:mfrac>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                  <m:mo>+</m:mo>
+                </m:msub>
+                <m:msqrt>
+                  <m:mrow>
+                    <m:msubsup>
+                      <m:mi>y</m:mi>
+                      <m:mn>1</m:mn>
+                      <m:mn>2</m:mn>
+                    </m:msubsup>
+                    <m:mo>+</m:mo>
+                    <m:msubsup>
+                      <m:mi>y</m:mi>
+                      <m:mn>2</m:mn>
+                      <m:mn>2</m:mn>
+                    </m:msubsup>
+                  </m:mrow>
+                </m:msqrt>
+              </m:mfrac>
+              <m:msub>
+                <m:mi>y</m:mi>
+                <m:mn>1</m:mn>
+              </m:msub>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id2254779">To estimate the noise variance <m:math><m:msubsup><m:mi>σ</m:mi><m:mi>n</m:mi><m:mn>2</m:mn></m:msubsup></m:math> from the noisy wavelet coefficients, they used the median absolute deviance (MAD) estimator</para>
+        <equation id="uid8">
+          <m:math mode="display">
+            <m:mrow>
+              <m:msubsup>
+                <m:mover accent="true">
+                  <m:mi>σ</m:mi>
+                  <m:mo>^</m:mo>
+                </m:mover>
+                <m:mi>n</m:mi>
+                <m:mn>2</m:mn>
+              </m:msubsup>
+              <m:mo>=</m:mo>
+              <m:mfrac>
+                <m:mrow>
+                  <m:mi>m</m:mi>
+                  <m:mi>e</m:mi>
+                  <m:mi>d</m:mi>
+                  <m:mi>i</m:mi>
+                  <m:mi>a</m:mi>
+                  <m:mi>n</m:mi>
+                  <m:mo>(</m:mo>
+                  <m:mo>|</m:mo>
+                  <m:msub>
+                    <m:mi>y</m:mi>
+                    <m:mi>i</m:mi>
+                  </m:msub>
+                  <m:mo>|</m:mo>
+                  <m:mo>)</m:mo>
+                </m:mrow>
+                <m:mrow>
+                  <m:mn>0</m:mn>
+                  <m:mo>.</m:mo>
+                  <m:mn>6745</m:mn>
+                </m:mrow>
+              </m:mfrac>
+              <m:mo>,</m:mo>
+              <m:msub>
+                <m:mi>y</m:mi>
+                <m:mi>i</m:mi>
+              </m:msub>
+              <m:mo>∈</m:mo>
+              <m:mi>s</m:mi>
+              <m:mi>u</m:mi>
+              <m:mi>b</m:mi>
+              <m:mi>b</m:mi>
+              <m:mi>a</m:mi>
+              <m:mi>n</m:mi>
+              <m:mi>d</m:mi>
+              <m:mi>H</m:mi>
+              <m:mi>H</m:mi>
+              <m:mo>,</m:mo>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id2254905">where the estimator uses the wavelet coeffiecients from the finest scale.</para>
+        <para id="id2254911">The marginal variance <m:math><m:msubsup><m:mi>σ</m:mi><m:mi>y</m:mi><m:mn>2</m:mn></m:msubsup></m:math> was estimated using neighborhoods around each wavelet coefficient as well as the corresponding neighborhood of the parent wavelet coefficient. For instance, for a 7x7 window, we take the neighborhood around <m:math><m:msub><m:mi>y</m:mi><m:mrow><m:mn>1</m:mn><m:mo>,</m:mo><m:mo>(</m:mo><m:mn>4</m:mn><m:mo>,</m:mo><m:mn>4</m:mn><m:mo>)</m:mo></m:mrow></m:msub></m:math> to be the wavelet coefficients located in the square (1, 1), (1, 7), (7, 7), (7, 1) as well as the coefficients in the second level located in the same square; this square is denoted <m:math><m:mrow><m:mi>N</m:mi><m:mo>(</m:mo><m:mi>k</m:mi><m:mo>)</m:mo></m:mrow></m:math>. The estimate used for <m:math><m:msubsup><m:mi>σ</m:mi><m:mi>y</m:mi><m:mn>2</m:mn></m:msubsup></m:math> is given by</para>
+        <equation id="uid9">
+          <m:math mode="display">
+            <m:mrow>
+              <m:msubsup>
+                <m:mover accent="true">
+                  <m:mi>σ</m:mi>
+                  <m:mo>^</m:mo>
+                </m:mover>
+                <m:mi>y</m:mi>
+                <m:mn>2</m:mn>
+              </m:msubsup>
+              <m:mo>=</m:mo>
+              <m:mfrac>
+                <m:mn>1</m:mn>
+                <m:mi>M</m:mi>
+              </m:mfrac>
+              <m:munder>
+                <m:mo>∑</m:mo>
+                <m:mrow>
+                  <m:msub>
+                    <m:mi>y</m:mi>
+                    <m:mi>i</m:mi>
+                  </m:msub>
+                  <m:mo>∈</m:mo>
+                  <m:mi>N</m:mi>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:mi>k</m:mi>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                </m:mrow>
+              </m:munder>
+              <m:msubsup>
+                <m:mi>y</m:mi>
+                <m:mi>i</m:mi>
+                <m:mn>2</m:mn>
+              </m:msubsup>
+              <m:mo>,</m:mo>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id2255076">where <m:math><m:mi>M</m:mi></m:math> is the size of the neighborhood <m:math><m:mrow><m:mi>N</m:mi><m:mo>(</m:mo><m:mi>k</m:mi><m:mo>)</m:mo></m:mrow></m:math>. We can then estimate the standard deviation of the true wavelet coefficients through <link target-id="uid6"/>:</para>
+        <equation id="uid10">
+          <m:math mode="display">
+            <m:mrow>
+              <m:mover accent="true">
+                <m:mi>σ</m:mi>
+                <m:mo>^</m:mo>
+              </m:mover>
+              <m:mo>=</m:mo>
+              <m:msqrt>
+                <m:msub>
+                  <m:mrow>
+                    <m:mo>(</m:mo>
+                    <m:msubsup>
+                      <m:mover accent="true">
+                        <m:mi>σ</m:mi>
+                        <m:mo>^</m:mo>
+                      </m:mover>
+                      <m:mi>y</m:mi>
+                      <m:mn>2</m:mn>
+                    </m:msubsup>
+                    <m:mo>-</m:mo>
+                    <m:msubsup>
+                      <m:mover accent="true">
+                        <m:mi>σ</m:mi>
+                        <m:mo>^</m:mo>
+                      </m:mover>
+                      <m:mi>n</m:mi>
+                      <m:mn>2</m:mn>
+                    </m:msubsup>
+                    <m:mo>)</m:mo>
+                  </m:mrow>
+                  <m:mo>+</m:mo>
+                </m:msub>
+              </m:msqrt>
+              <m:mo>.</m:mo>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id2255184">We then have the information we need to use equation <link target-id="uid7"/>.</para>
+      </section>
+      <section id="uid11">
+        <title>BLS-GSM</title>
+        <para id="id2255200">Portilla, et. al. <link target-id="bid4"/> propose the BLS-GSM method for denoising digital images, which may be used with orthogonal and redundant wavelet transforms as well as with pyramidal schemes. They model neighborhoods of coefficients at adjacent positions and scales as the product of a Gaussian vector and a hidden positive scalar multiplier, so that the neighborhoods are defined similarly as in the BiShrink algorithm. The coefficient within each neighborhood around a reference coefficient of a subband are modeled with a Gaussian scale mixture (GSM) model. The chosen prior distribution is the Jeffrey's prior, <m:math><m:mrow><m:msub><m:mi>p</m:mi><m:mi>z</m:mi></m:msub><m:mrow><m:mo>(</m:mo><m:mi>z</m:mi><m:mo>)</m:mo></m:mrow><m:mo>∝</m:mo><m:mfrac><m:mn>1</m:mn><m:mi>z</m:mi></m:mfrac></m:mrow></m:math>.</para>
+        <para id="id2255248">They assume the image has additive white Gaussian noise, although the algorithm also allows for nonwhite Gaussian noise. For a vector <m:math><m:mi mathvariant="bold">y</m:mi></m:math> corresponding to a neighborhood of <m:math><m:mi>N</m:mi></m:math> observed coefficients, we have</para>
+        <equation id="id2255274">
+          <m:math mode="display">
+            <m:mrow>
+              <m:mi mathvariant="bold">y</m:mi>
+              <m:mo>=</m:mo>
+              <m:mi mathvariant="bold">x</m:mi>
+              <m:mo>+</m:mo>
+              <m:mi mathvariant="bold">w</m:mi>
+              <m:mo>=</m:mo>
+              <m:msqrt>
+                <m:mi>z</m:mi>
+              </m:msqrt>
+              <m:mi mathvariant="bold">u</m:mi>
+              <m:mo>+</m:mo>
+              <m:mi mathvariant="bold">w</m:mi>
+              <m:mo>.</m:mo>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id2255318">The BLS-GSM algorithm is as follows:</para>
+        <list id="id2255323" list-type="enumerated">
+          <item id="uid12">Decompose the image into subbands
+</item>
+          <item id="uid13">For the HH, HL, and LH subbands:
+<list id="id2255346" list-type="enumerated"><item id="uid14">Compute the noise covariance, <m:math><m:msub><m:mi mathvariant="bold">C</m:mi><m:mi mathvariant="bold">w</m:mi></m:msub></m:math>, from the image-domain noise covariance
+</item><item id="uid15">Estimate <m:math><m:msub><m:mi mathvariant="bold">C</m:mi><m:mi mathvariant="bold">y</m:mi></m:msub></m:math>, the noisy neighborhood covariance
+</item><item id="uid16">Estimate <m:math><m:msub><m:mi mathvariant="bold">C</m:mi><m:mi mathvariant="bold">u</m:mi></m:msub></m:math> using <m:math><m:mrow><m:msub><m:mi mathvariant="bold">C</m:mi><m:mi mathvariant="bold">u</m:mi></m:msub><m:mo>=</m:mo><m:msub><m:mi mathvariant="bold">C</m:mi><m:mi mathvariant="bold">y</m:mi></m:msub><m:mo>+</m:mo><m:msub><m:mi mathvariant="bold">C</m:mi><m:mi mathvariant="bold">w</m:mi></m:msub></m:mrow></m:math></item><item id="uid17">Compute <m:math><m:mi>Λ</m:mi></m:math> and <m:math><m:mi mathvariant="bold">M</m:mi></m:math>, where <m:math><m:mi mathvariant="bold">Q</m:mi></m:math>, <m:math><m:mi>Λ</m:mi></m:math> is the eigenvector/eigenvalue expansion of the matrix <m:math><m:mrow><m:msup><m:mi mathvariant="bold">S</m:mi><m:mrow><m:mo>-</m:mo><m:mn mathvariant="bold">1</m:mn></m:mrow></m:msup><m:msub><m:mi mathvariant="bold">C</m:mi><m:mi mathvariant="bold">u</m:mi></m:msub><m:msup><m:mi mathvariant="bold">S</m:mi><m:mrow><m:mo>-</m:mo><m:mi mathvariant="bold">T</m:mi></m:mrow></m:msup></m:mrow></m:math><m:math><m:mi mathvariant="bold">S</m:mi></m:math> is the symmetric square root of the positive definite matrix <m:math><m:msub><m:mi mathvariant="bold">C</m:mi><m:mi mathvariant="bold">w</m:mi></m:msub></m:math>, and <m:math><m:mrow><m:mi mathvariant="bold">M</m:mi><m:mo>=</m:mo><m:mi mathvariant="bold">SQ</m:mi></m:mrow></m:math></item><item id="uid18">For each neighborhood
+<list id="id2255649" list-type="enumerated"><item id="uid19">For each value <m:math><m:mi>z</m:mi></m:math> in the integration range
+<list id="id2255673" list-type="enumerated"><item id="uid20">Compute <m:math><m:mrow><m:mi mathvariant="double-struck">E</m:mi><m:mrow><m:mo>[</m:mo><m:msub><m:mi>x</m:mi><m:mi>c</m:mi></m:msub><m:mo>|</m:mo><m:mi mathvariant="bold">y</m:mi><m:mo>,</m:mo><m:mi>z</m:mi><m:mo>]</m:mo></m:mrow><m:mo>=</m:mo><m:msubsup><m:mo>∑</m:mo><m:mrow><m:mi>n</m:mi><m:mo>=</m:mo><m:mn>1</m:mn></m:mrow><m:mi>N</m:mi></m:msubsup><m:mfrac><m:mrow><m:mi>z</m:mi><m:msub><m:mi>m</m:mi><m:mrow><m:mi>c</m:mi><m:mi>n</m:mi></m:mrow></m:msub><m:msub><m:mi>λ</m:mi><m:mi>n</m:mi></m:msub><m:msub><m:mi>v</m:mi><m:mi>n</m:mi></m:msub></m:mrow><m:mrow><m:mi>z</m:mi><m:msub><m:mi>λ</m:mi><m:mi>n</m:mi></m:msub><m:mo>+</m:mo><m:mn>1</m:mn></m:mrow></m:mfrac></m:mrow></m:math>, where <m:math><m:mrow><m:msub><m:mi>m</m:mi><m:mrow><m:mi>i</m:mi><m:mi>j</m:mi></m:mrow></m:msub><m:mo>∈</m:mo><m:mi mathvariant="bold">M</m:mi></m:mrow></m:math>, <m:math><m:mrow><m:mi>v</m:mi><m:mo>∈</m:mo><m:mi mathvariant="bold">v</m:mi><m:mo>=</m:mo><m:msup><m:mi mathvariant="bold">M</m:mi><m:mrow><m:mo>-</m:mo><m:mn>1</m:mn></m:mrow></m:msup><m:mi mathvariant="bold">y</m:mi></m:mrow></m:math>, <m:math><m:mrow><m:mi>λ</m:mi><m:mo>=</m:mo><m:mi>d</m:mi><m:mi>i</m:mi><m:mi>a</m:mi><m:mi>g</m:mi><m:mo>(</m:mo><m:mi>λ</m:mi><m:mo>)</m:mo></m:mrow></m:math>, and <m:math><m:mi>c</m:mi></m:math> is the index of the reference coefficient.
+</item><item id="uid21">Compute the conditional density <m:math><m:mrow><m:mi>p</m:mi><m:mo>(</m:mo><m:mi mathvariant="bold">y</m:mi><m:mo>|</m:mo><m:mi>z</m:mi><m:mo>)</m:mo></m:mrow></m:math></item></list></item><item id="uid22">Compute the posterior <m:math><m:mrow><m:mi>p</m:mi><m:mo>(</m:mo><m:mi>z</m:mi><m:mo>|</m:mo><m:mi mathvariant="bold">y</m:mi><m:mo>)</m:mo></m:mrow></m:math></item><item id="uid23">Compute <m:math><m:mrow><m:mi mathvariant="double-struck">E</m:mi><m:mrow><m:mo>[</m:mo><m:msub><m:mi>x</m:mi><m:mi>c</m:mi></m:msub><m:mo>|</m:mo><m:mi mathvariant="bold">y</m:mi><m:mo>]</m:mo></m:mrow></m:mrow></m:math></item></list></item></list>
+Reconstruct the denoised image from the processed subbands and the lowpass residual
+</item>
+        </list>
+      </section>
+    </section>
+    <section id="cid4">
+      <title>Denoising Simulation</title>
+      <section id="uid24">
+        <title>Simulation description</title>
+        <para id="id2256017">In order to compare and evaluate the efficacies of the Bishrink and BLS-GSM algorithms for the purpose of denoising image data, a simulation was developed to quantitatively examine their performance after addition of random noise to otherwise approximately noiseless images with a variety of features representative of those found in astronomical images. Specifically, the images encoded in the widely available files Moon.tif, which primarily demonstrates smoothly curving attributes, and Cameraman.tif, which exhibits a range of both smooth and coarse features, distributed in the MATLAB image processing toolbox were considered.</para>
+        <para id="id2256030">As a preliminary preparation for the simulation, the images were preprocessed such that they were represented in the form of a grayscale pixel matrix taking values on the interval <m:math><m:mrow><m:mo>[</m:mo><m:mn>0</m:mn><m:mo>,</m:mo><m:mn>1</m:mn><m:mo>]</m:mo></m:mrow></m:math> of square dimensions equal to a convenient power of two. Noisy versions of each image were generated by superposition of a random matrix with Gaussian distributed pixel elements on the image matrix, using noise variance values <m:math><m:mrow><m:mo>{</m:mo><m:mo>.</m:mo><m:mn>01</m:mn><m:mo>,</m:mo><m:mo>.</m:mo><m:mn>1</m:mn><m:mo>,</m:mo><m:mn>1</m:mn><m:mo>}</m:mo></m:mrow></m:math>. For each noise variance level and original image, 100 contaminated images were created in this way using a set of 100 different random generator seeds, which was the same for each noise level and original image. A redundant discrete wavelet transform of each of these contaminated images was computed using the length 8 Daubechies filters, and the denoised wavelet coefficients were estimated using both the Bishrink and the BLS-GSM algorithms as previously described. Computation of the inverse redundant discrete wavelet transform using the denoised wavelet coefficients then yielded 100 images denoised with the Bishrink algorithm and 100 images denoised with the BLS-GSM algorithm for each original image and noise variance level.</para>
+        <para id="id2256098">Using this simulated data, the performance of the two denoising methods on each image at each noise contamination level were evaluated using the six statistical measures described here. The first of these was the mean square error <m:math><m:mfenced separators="" open="(" close=")"><m:mi>M</m:mi><m:mi>S</m:mi><m:mi>E</m:mi></m:mfenced></m:math>, which is calculated by the average of</para>
+        <equation id="id2256128">
+          <m:math mode="display">
+            <m:mrow>
+              <m:mfrac>
+                <m:mn>1</m:mn>
+                <m:mi>n</m:mi>
+              </m:mfrac>
+              <m:munderover>
+                <m:mo>∑</m:mo>
+                <m:mrow>
+                  <m:mi>i</m:mi>
+                  <m:mo>=</m:mo>
+                  <m:mn>1</m:mn>
+                </m:mrow>
+                <m:mi>n</m:mi>
+              </m:munderover>
+              <m:msup>
+                <m:mfenced separators="" open="(" close=")">
+                  <m:mi>f</m:mi>
+                  <m:mfenced separators="" open="(" close=")">
+                    <m:msub>
+                      <m:mi>x</m:mi>
+                      <m:mi>i</m:mi>
+                    </m:msub>
+                  </m:mfenced>
+                  <m:mo>-</m:mo>
+                  <m:mover accent="true">
+                    <m:mi>f</m:mi>
+                    <m:mo>^</m:mo>
+                  </m:mover>
+                  <m:mfenced separators="" open="(" close=")">
+                    <m:msub>
+                      <m:mi>x</m:mi>
+                      <m:mi>i</m:mi>
+                    </m:msub>
+                  </m:mfenced>
+                </m:mfenced>
+                <m:mn>2</m:mn>
+              </m:msup>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id2256216">over all 100 denoisings. Related to the above was the root mean square error <m:math><m:mfenced separators="" open="(" close=")"><m:mi>R</m:mi><m:mi>M</m:mi><m:mi>S</m:mi><m:mi>E</m:mi></m:mfenced></m:math>, which is calculated by computing the square root of the mean square error. A third was the root mean square bias <m:math><m:mfenced separators="" open="(" close=")"><m:mi>R</m:mi><m:mi>M</m:mi><m:mi>S</m:mi><m:mi>B</m:mi></m:mfenced></m:math>, which is calculated by</para>
+        <equation id="id2256271">
+          <m:math mode="display">
+            <m:msqrt>
+              <m:mrow>
+                <m:mfrac>
+                  <m:mn>1</m:mn>
+                  <m:mi>n</m:mi>
+                </m:mfrac>
+                <m:msubsup>
+                  <m:mo>∑</m:mo>
+                  <m:mrow>
+                    <m:mi>i</m:mi>
+                    <m:mo>=</m:mo>
+                    <m:mn>1</m:mn>
+                  </m:mrow>
+                  <m:mi>n</m:mi>
+                </m:msubsup>
+                <m:msup>
+                  <m:mfenced separators="" open="(" close=")">
+                    <m:mi>f</m:mi>
+                    <m:mfenced separators="" open="(" close=")">
+                      <m:msub>
+                        <m:mi>x</m:mi>
+                        <m:mi>i</m:mi>
+                      </m:msub>
+                    </m:mfenced>
+                    <m:mo>-</m:mo>
+                    <m:mover accent="true">
+                      <m:mi>f</m:mi>
+                      <m:mo>¯</m:mo>
+                    </m:mover>
+                    <m:mfenced separators="" open="(" close=")">
+                      <m:msub>
+                        <m:mi>x</m:mi>
+                        <m:mi>i</m:mi>
+                      </m:msub>
+                    </m:mfenced>
+                  </m:mfenced>
+                  <m:mn>2</m:mn>
+                </m:msup>
+              </m:mrow>
+            </m:msqrt>
+          </m:math>
+        </equation>
+        <para id="id2256359">where <m:math><m:mrow><m:mover accent="true"><m:mi>f</m:mi><m:mo>¯</m:mo></m:mover><m:mfenced separators="" open="(" close=")"><m:msub><m:mi>x</m:mi><m:mi>i</m:mi></m:msub></m:mfenced></m:mrow></m:math> is the average of <m:math><m:mrow><m:mover accent="true"><m:mi>f</m:mi><m:mo>^</m:mo></m:mover><m:mfenced separators="" open="(" close=")"><m:msub><m:mi>x</m:mi><m:mi>i</m:mi></m:msub></m:mfenced></m:mrow></m:math> over all 100 denoisings. Two more, the maximum deviation <m:math><m:mfenced separators="" open="(" close=")"><m:mi>M</m:mi><m:mi>X</m:mi><m:mi>D</m:mi><m:mi>V</m:mi></m:mfenced></m:math>, calculated by the average of</para>
+        <equation id="id2256453">
+          <m:math mode="display">
+            <m:mrow>
+              <m:munder>
+                <m:mo movablelimits="true" form="prefix">max</m:mo>
+                <m:mrow>
+                  <m:mn>1</m:mn>
+                  <m:mo>&lt;</m:mo>
+                  <m:mi>i</m:mi>
+                  <m:mo>&lt;</m:mo>
+                  <m:mi>n</m:mi>
+                </m:mrow>
+              </m:munder>
+              <m:mfenced separators="" open="|" close="|">
+                <m:mfenced separators="" open="(" close=")">
+                  <m:mi>f</m:mi>
+                  <m:mfenced separators="" open="(" close=")">
+                    <m:msub>
+                      <m:mi>x</m:mi>
+                      <m:mi>i</m:mi>
+                    </m:msub>
+                  </m:mfenced>
+                  <m:mo>-</m:mo>
+                  <m:mover accent="true">
+                    <m:mi>f</m:mi>
+                    <m:mo>^</m:mo>
+                  </m:mover>
+                  <m:mfenced separators="" open="(" close=")">
+                    <m:msub>
+                      <m:mi>x</m:mi>
+                      <m:mi>i</m:mi>
+                    </m:msub>
+                  </m:mfenced>
+                </m:mfenced>
+              </m:mfenced>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id2256542">over all 100 denoisings, and L1, calculated by the average of</para>
+        <equation id="id2256549">
+          <m:math mode="display">
+            <m:mrow>
+              <m:munderover>
+                <m:mo>∑</m:mo>
+                <m:mrow>
+                  <m:mi>i</m:mi>
+                  <m:mo>=</m:mo>
+                  <m:mn>1</m:mn>
+                </m:mrow>
+                <m:mi>n</m:mi>
+              </m:munderover>
+              <m:mfenced separators="" open="|" close="|">
+                <m:mfenced separators="" open="(" close=")">
+                  <m:mi>f</m:mi>
+                  <m:mfenced separators="" open="(" close=")">
+                    <m:msub>
+                      <m:mi>x</m:mi>
+                      <m:mi>i</m:mi>
+                    </m:msub>
+                  </m:mfenced>
+                  <m:mo>-</m:mo>
+                  <m:mover accent="true">
+                    <m:mi>f</m:mi>
+                    <m:mo>^</m:mo>
+                  </m:mover>
+                  <m:mfenced separators="" open="(" close=")">
+                    <m:msub>
+                      <m:mi>x</m:mi>
+                      <m:mi>i</m:mi>
+                    </m:msub>
+                  </m:mfenced>
+                </m:mfenced>
+              </m:mfenced>
+            </m:mrow>
+          </m:math>
+        </equation>
+        <para id="id2256632">over all 100 denoisings, were also examined. The results of this simulation now follow.</para>
+      </section>
+      <section id="uid25">
+        <title>Bishrink results</title>
+        <table id="uid26" summary="">
+          <tgroup cols="3">
+            <tbody>
+              <row>
+                <entry>Measure</entry>
+                <entry>Cameraman</entry>
+                <entry>Moon</entry>
+              </row>
+              <row>
+                <entry>MSE</entry>
+                <entry>0.0019</entry>
+                <entry>0.0004</entry>
+              </row>
+              <row>
+                <entry>RMSE</entry>
+                <entry>0.0442</entry>
+                <entry>0.0188</entry>
+              </row>
+              <row>
+                <entry>L1</entry>
+                <entry>2019.9</entry>
+                <entry>3160.4</entry>
+              </row>
+              <row>
+                <entry>RMSB</entry>
+                <entry>0.0274</entry>
+                <entry>0.0117</entry>
+              </row>
+              <row>
+                <entry>MXDV</entry>
+                <entry>0.3309</entry>
+                <entry>0.2634</entry>
+              </row>
+            </tbody>
+          </tgroup>
+          <caption>Simulation measures for noise variance .01</caption>
+        </table>
+        <figure id="uid27" orient="horizontal">
+          <media id="idm2939200" alt=""><image src="../../media/bicam1.png" mime-type="image/png" width="540"/><image for="pdf" src="../../media/bicam1.eps" mime-type="application/postscript" print-width="4.5in"/></media>
+          <caption>Cameraman with noise variance .01</caption>
+        </figure>
+        <figure id="uid28" orient="horizontal">
+          <media id="idm6690896" alt=""><image src="../../media/bimoon1.png" mime-type="image/png" width="540"/><image for="pdf" src="../../media/bimoon1.eps" mime-type="application/postscript" print-width="4.5in"/></media>
+          <caption>Moon with noise variance .01</caption>
+        </figure>
+        <table id="uid29" summary="">
+          <tgroup cols="3">
+            <tbody>
+              <row>
+                <entry>Measure</entry>
+                <entry>Cameraman</entry>
+                <entry>Moon</entry>
+              </row>
+              <row>
+                <entry>MSE</entry>
+                <entry>0.0063</entry>
+                <entry>0.0012</entry>
+              </row>
+              <row>
+                <entry>RMSE</entry>
+                <entry>0.0296</entry>
+                <entry>0.0345</entry>
+              </row>
+              <row>
+                <entry>L1</entry>
+                <entry>3612.4</entry>
+                <entry>5880.7</entry>
+              </row>
+              <row>
+                <entry>RMSB</entry>
+                <entry>0.0568</entry>
+                <entry>0.0213</entry>
+              </row>
+              <row>
+                <entry>MXDV</entry>
+                <entry>0.6147</entry>
+                <entry>0.4116</entry>
+              </row>
+            </tbody>
+          </tgroup>
+          <caption>Simulation measures for noise variance .1</caption>
+        </table>
+        <figure id="uid30" orient="horizontal">
+          <media id="idm6737600" alt=""><image src="../../media/bicam2.png" mime-type="image/png" width="540"/><image for="pdf" src="../../media/bicam2.eps" mime-type="application/postscript" print-width="4.5in"/></media>
+          <caption>Cameraman with noise variance .1</caption>
+        </figure>
+        <figure id="uid31" orient="horizontal">
+          <media id="idm17505264" alt=""><image src="../../media/bimoon2.png" mime-type="image/png" width="540"/><image for="pdf" src="../../media/bimoon2.eps" mime-type="application/postscript" print-width="4.5in"/></media>
+          <caption>Moon with noise variance .1</caption>
+        </figure>
+        <table id="uid32" summary="">
+          <tgroup cols="3">
+            <tbody>
+              <row>
+                <entry>Measure</entry>
+                <entry>Cameraman</entry>
+                <entry>Moon</entry>
+              </row>
+              <row>
+                <entry>MSE</entry>
+                <entry>0.0173</entry>
+                <entry>0.0052</entry>
+              </row>
+              <row>
+                <entry>RMSE</entry>
+                <entry>0.1315</entry>
+                <entry>0.0722</entry>
+              </row>
+              <row>
+                <entry>L1</entry>
+                <entry>6183.7</entry>
+                <entry>11839</entry>
+              </row>
+              <row>
+                <entry>RMSB</entry>
+                <entry>0.0934</entry>
+                <entry>0.0389</entry>
+              </row>
+              <row>
+                <entry>MXDV</entry>
+                <entry>0.8991</entry>
+                <entry>0.9774</entry>
+              </row>
+            </tbody>
+          </tgroup>
+          <caption>Simulation measures for noise variance 1</caption>
+        </table>
+        <figure id="uid33" orient="horizontal">
+          <media id="idm1953568" alt=""><image src="../../media/bicam3.png" mime-type="image/png" width="540"/><image for="pdf" src="../../media/bicam3.eps" mime-type="application/postscript" print-width="4.5in"/></media>
+          <caption>Cameraman with noise variance 1</caption>
+        </figure>
+        <figure id="uid34" orient="horizontal">
+          <media id="idp1814800" alt=""><image src="../../media/bimoon3.png" mime-type="image/png" width="540"/><image for="pdf" src="../../media/bimoon3.eps" mime-type="application/postscript" print-width="4.5in"/></media>
+          <caption>Moon with noise variance 1</caption>
+        </figure>
+      </section>
+      <section id="uid35">
+        <title>BLS-GSM results</title>
+        <table id="uid36" summary="">
+          <tgroup cols="3">
+            <tbody>
+              <row>
+                <entry>Measure</entry>
+                <entry>Cameraman</entry>
+                <entry>Moon</entry>
+              </row>
+              <row>
+                <entry>MSE</entry>
+                <entry>0.0015</entry>
+                <entry>0.0003</entry>
+              </row>
+              <row>
+                <entry>RMSE</entry>
+                <entry>0.0390</entry>
+                <entry>0.0165</entry>
+              </row>
+              <row>
+                <entry>L1</entry>
+                <entry>1711.0</entry>
+                <entry>2718.6</entry>
+              </row>
+              <row>
+                <entry>RMSB</entry>
+                <entry>0.0283</entry>
+                <entry>0.0141</entry>
+              </row>
+              <row>
+                <entry>MXDV</entry>
+                <entry>0.3192</entry>
+                <entry>0.2635</entry>
+              </row>
+            </tbody>
+          </tgroup>
+          <caption>Simulation measures for noise variance .01</caption>
+        </table>
+        <figure id="uid37" orient="horizontal">
+          <media id="idm820624" alt=""><image src="../../media/blscam1.png" mime-type="image/png" width="539"/><image for="pdf" src="../../media/blscam1.eps" mime-type="application/postscript" print-width="4.5in"/></media>
+          <caption>Cameraman with noise variance .01</caption>
+        </figure>
+        <figure id="uid38" orient="horizontal">
+          <media id="idm241408" alt=""><image src="../../media/blsmoon1.png" mime-type="image/png" width="541"/><image for="pdf" src="../../media/blsmoon1.eps" mime-type="application/postscript" print-width="4.5in"/></media>
+          <caption>Moon with noise variance .01</caption>
+        </figure>
+        <table id="uid39" summary="">
+          <tgroup cols="3">
+            <tbody>
+              <row>
+                <entry>Measure</entry>
+                <entry>Cameraman</entry>
+                <entry>Moon</entry>
+              </row>
+              <row>
+                <entry>MSE</entry>
+                <entry>0.0052</entry>
+                <entry>0.0008</entry>
+              </row>
+              <row>
+                <entry>RMSE</entry>
+                <entry>0.0718</entry>
+                <entry>0.0288</entry>
+              </row>
+              <row>
+                <entry>L1</entry>
+                <entry>3111.5</entry>
+                <entry>4786.5</entry>
+              </row>
+              <row>
+                <entry>RMSB</entry>
+                <entry>0.0583</entry>
+                <entry>0.0224</entry>
+              </row>
+              <row>
+                <entry>MXDV</entry>
+                <entry>0.5862</entry>
+                <entry>0.3337</entry>
+              </row>
+            </tbody>
+          </tgroup>
+          <caption>Simulation measures for noise variance .1</caption>
+        </table>
+        <figure id="uid40" orient="horizontal">
+          <media id="idp1181536" alt=""><image src="../../media/blscam2.png" mime-type="image/png" width="542"/><image for="pdf" src="../../media/blscam2.eps" mime-type="application/postscript" print-width="4.5in"/></media>
+          <caption>Cameraman with noise variance .1</caption>
+        </figure>
+        <figure id="uid41" orient="horizontal">
+          <media id="idm776560" alt=""><image src="../../media/blsmoon2.png" mime-type="image/png" width="540"/><image for="pdf" src="../../media/blsmoon2.eps" mime-type="application/postscript" print-width="4.5in"/></media>
+          <caption>Moon with noise variance .1</caption>
+        </figure>
+        <table id="uid42" summary="">
+          <tgroup cols="3">
+            <tbody>
+              <row>
+                <entry>Measure</entry>
+                <entry>Cameraman</entry>
+                <entry>Moon</entry>
+              </row>
+              <row>
+                <entry>MSE</entry>
+                <entry>0.0136</entry>
+                <entry>0.0017</entry>
+              </row>
+              <row>
+                <entry>RMSE</entry>
+                <entry>0.1167</entry>
+                <entry>0.0410</entry>
+              </row>
+              <row>
+                <entry>L1</entry>
+                <entry>5283.5</entry>
+                <entry>1500.2</entry>
+              </row>
+              <row>
+                <entry>RMSB</entry>
+                <entry>0.0970</entry>
+                <entry>0.0346</entry>
+              </row>
+              <row>
+                <entry>MXDV</entry>
+                <entry>0.7750</entry>
+                <entry>0.4614</entry>
+              </row>
+            </tbody>
+          </tgroup>
+          <caption>Simulation measures for noise variance 1</caption>
+        </table>
+        <figure id="uid43" orient="horizontal">
+          <media id="idp3296816" alt=""><image src="../../media/blscam3.png" mime-type="image/png" width="541"/><image for="pdf" src="../../media/blscam3.eps" mime-type="application/postscript" print-width="4.5in"/></media>
+          <caption>Cameraman with noise variance 1</caption>
+        </figure>
+        <figure id="uid44" orient="horizontal">
+          <media id="idm1229024" alt=""><image src="../../media/blsmoon3.png" mime-type="image/png" width="540"/><image for="pdf" src="../../media/blsmoon3.eps" mime-type="application/postscript" print-width="4.5in"/></media>
+          <caption>Moon with noise variance 1</caption>
+        </figure>
+      </section>
+    </section>
+    <section id="cid5">
+      <title>Conclusions</title>
+      <para id="id2257901">The results obtained from this simulation now allow us to evaluate and comment upon the suitability of each of the two methods examined for the analysis of astronomical image data. As is clearly manifested in the quantitative simulation results, the BLS-GSM algorithm demonstrated more accurate performance than did the Bishrink algorithm in every measure consistently over all pictures and noise levels. That does not, however, indicate that it would be the method of choice in all circumstances. While BLS-GSM outperformed the Bishrink algorithm in the denoising simulation, the measures calculated for the Bishrink algorithm indicate that it also produced a reasonably accurate image estimate. Also, the denoised images produced by the Bishrink simulation exhibit a lesser degree of qualitative smoothing of fine features like the craters of the moon and grass of the field. The smoothing observed with the BLS-GSM algorithm could make classification of fine, dim objects difficult as they are blended into the background. Thus, the success of the Bishrink algorithm in preserving fine signal details while computing an accurate image estimate is likely to outweigh overall accuracy in applications searching for small, faint objects such as extrasolar planets, while the overall accuracy of the BLS-GSM algorithm recommend it for coarse and bright featured images.</para>
+    </section>
+  </content>
+  <bib:file>
+    <bib:entry id="bid0">
+      <bib:techreport>
+<!--required fields-->
+        <bib:author>A. Gyaourove, C. Kamath and Fodor, I.K.</bib:author>
+        <bib:title>Undecimated wavelet transforms for image denoising</bib:title>
+        <bib:institution>Center for Applied Scientific Computing, Lawrence Livermore National Laboratory</bib:institution>
+        <bib:year>2002</bib:year>
+<!--optional fields-->
+        <bib:type>Technical report</bib:type>
+        <bib:number>UCRL-ID-150931</bib:number>
+        <bib:address/>
+        <bib:month/>
+        <bib:note/>
+      </bib:techreport>
+    </bib:entry>
+    <bib:entry id="bid1">
+      <bib:article>
+<!--required fields-->
+        <bib:author>Donoho, D. and Johnstone, J.</bib:author>
+        <bib:title>Ideal spatial adaption by wavelet shrinkage</bib:title>
+        <bib:journal>Biometrika</bib:journal>
+        <bib:year>1994</bib:year>
+<!--optional fields-->
+        <bib:volume>3</bib:volume>
+        <bib:number>81</bib:number>
+        <bib:pages>425-455</bib:pages>
+        <bib:month/>
+        <bib:note/>
+      </bib:article>
+    </bib:entry>
+    <bib:entry id="bid4">
+      <bib:article>
+<!--required fields-->
+        <bib:author>J. Portilla, M.J. Wainwright and Simonccelli, E.P.</bib:author>
+        <bib:title>Image Denoising Using Scale Mixtures of Gaussians in the Wavelet Domain</bib:title>
+        <bib:journal>IEEE Transactions on Image Processing</bib:journal>
+        <bib:year>2003</bib:year>
+<!--optional fields-->
+        <bib:volume>12</bib:volume>
+        <bib:number>11</bib:number>
+        <bib:pages>1338-1351</bib:pages>
+        <bib:month/>
+        <bib:note/>
+      </bib:article>
+    </bib:entry>
+    <bib:entry id="bid3">
+      <bib:article>
+<!--required fields-->
+        <bib:author>Sendur, L. and Selesnick, I. W.</bib:author>
+        <bib:title>A Bivariate Shrinkage Function for Wavelet Based Denoising</bib:title>
+        <bib:journal>IEEE ICASSP</bib:journal>
+        <bib:year>2002</bib:year>
+<!--optional fields-->
+        <bib:volume/>
+        <bib:number>12</bib:number>
+        <bib:pages/>
+        <bib:month/>
+        <bib:note/>
+      </bib:article>
+    </bib:entry>
+    <bib:entry id="bid2">
+      <bib:article>
+<!--required fields-->
+        <bib:author>Sendur, L. and Selesnick, I. W.</bib:author>
+        <bib:title>Bivariate Shrinkage With Local Variance Estimation</bib:title>
+        <bib:journal>IEEE Signal Processing Letters</bib:journal>
+        <bib:year>2002</bib:year>
+<!--optional fields-->
+        <bib:volume/>
+        <bib:number>12</bib:number>
+        <bib:pages>438-441</bib:pages>
+        <bib:month/>
+        <bib:note/>
+      </bib:article>
+    </bib:entry>
+  </bib:file>
+</document>
